@@ -1,0 +1,26 @@
+[
+  {
+    "id": "q1",
+    "name": "더 나은 활용법 (A Better Use)",
+    "location": "843",
+    "type": "메인",
+    "iconpath": "images/logo.png",
+    "filepath": "quests/q1.html"
+  },
+  {
+    "id": "q2",
+    "name": "첫 발판 (A First Foothold)",
+    "location": "444",
+    "type": "서브",
+    "iconpath": "images/logo.png",
+    "filepath": "quests/q2.html"
+  },
+  {
+    "id": "q3",
+    "name": "촬영과 회수 (Snap And Salvage)",
+    "location": "352",
+    "type": "반복",
+    "iconpath": "images/logo.png",
+    "filepath": "quests/q3.html"
+  }
+]

@@ -104,12 +104,25 @@
             </section>
         </div>
 
-        <div id="view-quest" style="display: none;">
-            <section style="padding: 40px; text-align: center; color: #888;">
-                <h3>퀘스트 정보</h3>
-                <p>준비 중입니다.</p>
-            </section>
+   <div id="view-quest" style="display: none;">
+    
+    <section id="quest-list-view">
+        <div class="large-font-chunk" style="margin-bottom: 20px; border:none; background:none; padding-left:0;">
+            <h2 style="color:var(--wuxia-accent-gold); margin:0;">주요 퀘스트</h2>
         </div>
+        
+        <div id="quest-grid-container" class="quest-grid">
+            </div>
+    </section>
+
+    <section id="quest-detail-view" style="display: none;">
+        <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
+        <div id="quest-content-loader" class="detail-content-box">
+            로딩 중...
+        </div>
+    </section>
+
+</div>
 
     </main>
 

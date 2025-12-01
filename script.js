@@ -25,85 +25,68 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// 1. JSON 데이터 로드
-function loadData() {
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            globalData = data;
-            
-            // 데이터 로드 후 초기 렌더링
-            renderQuizTable(globalData.quiz);
-            document.getElementById('quiz-counter-area').innerText = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
-            
-            // (추후 아이템 목록 렌더링 함수도 여기에 추가)
-        })
-        .catch(error => console.error("데이터 로드 실패:", error));
-}
+// [NEW] 퀘스트 리스트 그리기
+function renderQuestList(quests) {
+    const container = document.getElementById('quest-grid-container');
+    container.innerHTML = ''; // 초기화
 
-// 2. 탭 전환 (View Switching)
-function switchTab(tabName) {
-    // 모든 뷰 숨기기
-    document.getElementById('view-home').style.display = 'none';
-    document.getElementById('view-quiz').style.display = 'none';
-    document.getElementById('view-quest').style.display = 'none';
-
-    // 네비게이션 활성 클래스 초기화
-    document.getElementById('nav-home').classList.remove('active');
-    document.getElementById('nav-quest').classList.remove('active');
-    document.getElementById('nav-quiz').classList.remove('active');
-
-    // 선택된 탭 활성화
-    if (tabName === 'home') {
-        document.getElementById('view-home').style.display = 'block';
-        document.getElementById('nav-home').classList.add('active');
-    } else if (tabName === 'quiz') {
-        document.getElementById('view-quiz').style.display = 'block';
-        document.getElementById('nav-quiz').classList.add('active');
-    } else if (tabName === 'quest') {
-        document.getElementById('view-quest').style.display = 'block';
-        document.getElementById('nav-quest').classList.add('active');
-    }
-}
-
-// 3. 족보 테이블 렌더링
-function renderQuizTable(data, keyword = '') {
-    const tbody = document.getElementById('quiz-table-body');
-    tbody.innerHTML = '';
-
-    if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="2" style="padding:20px; color:#888;">검색 결과가 없습니다.</td></tr>`;
+    if (!quests || quests.length === 0) {
+        container.innerHTML = '<div style="padding:20px;">퀘스트 정보가 없습니다.</div>';
         return;
     }
 
-    data.forEach(item => {
-        const tr = document.createElement('tr');
-        let hint = item.hint;
-        let answer = item.answer;
+    quests.forEach(quest => {
+        // 카드 HTML 생성
+        const card = document.createElement('div');
+        card.className = 'quest-card';
+        card.onclick = () => loadQuestDetail(quest.filepath); // 클릭 시 상세 로드
 
-        // 검색어 하이라이트
-        if (keyword) {
-            const regex = new RegExp(`(${keyword})`, 'gi');
-            hint = hint.replace(regex, '<span class="highlight">$1</span>');
-            answer = answer.replace(regex, '<span class="highlight">$1</span>');
-        }
-
-        tr.innerHTML = `<td>${hint}</td><td>${answer}</td>`;
-        tbody.appendChild(tr);
+        card.innerHTML = `
+            <div class="quest-icon-wrapper">
+                <img src="${quest.iconpath}" alt="icon">
+            </div>
+            <div class="quest-info">
+                <div class="quest-name">${quest.name}</div>
+                <div class="quest-type">${quest.type}</div>
+            </div>
+            <div class="quest-badge">${quest.location}</div>
+        `;
+        container.appendChild(card);
     });
 }
 
-// 4. 족보 데이터 필터링 (내부 검색용)
-function filterQuizData(keyword) {
-    keyword = keyword.trim().toLowerCase();
-    if (!keyword) return globalData.quiz;
-    return globalData.quiz.filter(item => 
-        item.hint.toLowerCase().includes(keyword) || 
-        item.answer.toLowerCase().includes(keyword)
-    );
+// [NEW] 퀘스트 상세 내용 로드 (HTML 파일 Fetch)
+function loadQuestDetail(filepath) {
+    const listView = document.getElementById('quest-list-view');
+    const detailView = document.getElementById('quest-detail-view');
+    const contentBox = document.getElementById('quest-content-loader');
+
+    // 화면 전환
+    listView.style.display = 'none';
+    detailView.style.display = 'block';
+    contentBox.innerHTML = '<div style="text-align:center; padding:50px;">로딩 중...</div>';
+
+    // 파일 가져오기
+    fetch(filepath)
+        .then(response => {
+            if (!response.ok) throw new Error("파일을 찾을 수 없습니다.");
+            return response.text();
+        })
+        .then(html => {
+            contentBox.innerHTML = html;
+        })
+        .catch(err => {
+            contentBox.innerHTML = `<div style="text-align:center; color:red;">내용을 불러오지 못했습니다.<br>(${err.message})</div>`;
+        });
 }
 
-// 5. 통합 검색 핸들러 (헤더 검색창)
+// [NEW] 상세에서 목록으로 돌아가기
+function showQuestList() {
+    document.getElementById('quest-list-view').style.display = 'block';
+    document.getElementById('quest-detail-view').style.display = 'none';
+}
+
+// [수정] 통합 검색 핸들러 (퀘스트 추가)
 function handleGlobalSearch(e) {
     const keyword = e.target.value.trim().toLowerCase();
     const resultContainer = document.getElementById("global-search-results");
@@ -115,16 +98,13 @@ function handleGlobalSearch(e) {
 
     let resultsHTML = '';
 
-    // [족보 검색]
+    // 1. 족보 검색
     const quizResults = globalData.quiz.filter(q => 
         q.hint.toLowerCase().includes(keyword) || q.answer.toLowerCase().includes(keyword)
     );
-    
     if (quizResults.length > 0) {
-        resultsHTML += `<div class="search-category-title">족보 (클릭 시 이동)</div>`;
-        // 최대 5개만 노출
-        quizResults.slice(0, 5).forEach(item => {
-            // 클릭 시 1) 족보 탭으로 이동 2) 내부 검색창에 값 입력 3) 테이블 필터링
+        resultsHTML += `<div class="search-category-title">족보</div>`;
+        quizResults.slice(0, 3).forEach(item => {
             resultsHTML += `
                 <div class="search-result-item" onclick="selectGlobalResult('${item.hint}')">
                     <span class="badge quiz">족보</span>
@@ -134,22 +114,27 @@ function handleGlobalSearch(e) {
         });
     }
 
-    // [아이템 검색] (데이터가 있다면)
-    if (globalData.items && globalData.items.length > 0) {
-        const itemResults = globalData.items.filter(i => i.name.toLowerCase().includes(keyword));
-        if (itemResults.length > 0) {
-            resultsHTML += `<div class="search-category-title">아이템</div>`;
-            itemResults.slice(0, 3).forEach(item => {
+    // 2. 퀘스트 검색 (추가됨)
+    if (globalData.quests) {
+        const questResults = globalData.quests.filter(q => 
+            q.name.toLowerCase().includes(keyword) || 
+            q.location.toLowerCase().includes(keyword)
+        );
+
+        if (questResults.length > 0) {
+            resultsHTML += `<div class="search-category-title">퀘스트</div>`;
+            questResults.slice(0, 3).forEach(quest => {
+                // 클릭 시: 퀘스트 탭 이동 -> 상세 로드
                 resultsHTML += `
-                    <div class="search-result-item">
-                        <span class="badge item">아이템</span>
-                        <span class="result-text">${item.name}</span>
+                    <div class="search-result-item" onclick="selectQuestResult('${quest.filepath}')">
+                        <span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span>
                     </div>
                 `;
             });
         }
     }
 
+    // 결과 표시
     if (resultsHTML) {
         resultContainer.innerHTML = resultsHTML;
         resultContainer.style.display = 'block';
@@ -159,18 +144,12 @@ function handleGlobalSearch(e) {
     }
 }
 
-// 6. 통합 검색 결과 클릭 시 동작
-function selectGlobalResult(keyword) {
-    // 1. 족보 탭으로 전환
-    switchTab('quiz');
-    
-    // 2. 족보 내부 검색창에 값 입력
-    const localInput = document.getElementById("quiz-local-search");
-    localInput.value = keyword;
-    
-    // 3. 테이블 필터링 실행
-    renderQuizTable(filterQuizData(keyword), keyword);
-    
-    // 4. 드롭다운 닫기
+// [NEW] 통합 검색에서 퀘스트 클릭 시 동작
+function selectQuestResult(filepath) {
+    // 1. 퀘스트 탭으로 이동
+    switchTab('quest');
+    // 2. 해당 퀘스트 상세 로드
+    loadQuestDetail(filepath);
+    // 3. 검색창 닫기
     document.getElementById("global-search-results").style.display = 'none';
 }

@@ -4,7 +4,7 @@ let globalData = { items: [], quiz: [], quests: [] };
 document.addEventListener("DOMContentLoaded", () => {
     loadData(); // 데이터 가져오기 실행
 
-    // 헤더 통합 검색 이벤트 연결
+    // 1. 헤더 통합 검색 이벤트 연결
     const headerSearch = document.getElementById("header-search-input");
     if (headerSearch) {
         headerSearch.addEventListener("input", handleGlobalSearch);
@@ -16,22 +16,43 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 족보 내부 필터링 이벤트 연결
+    // 2. 족보 내부 필터링 이벤트 연결
     const quizLocalSearch = document.getElementById("quiz-local-search");
     if (quizLocalSearch) {
         quizLocalSearch.addEventListener("input", (e) => {
             renderQuizTable(filterQuizData(e.target.value));
         });
     }
+
+    // [NEW] 3. URL 파라미터 체크하여 탭 자동 전환
+    // 예: wwm.tips?tab=quiz -> 족보 탭 열기
+    // 예: wwm.tips?tab=quest -> 퀘스트 탭 열기
+    checkUrlParams();
 });
+
+// [NEW] URL 파라미터 처리 함수
+function checkUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab'); // ?tab=값 가져오기
+
+    if (tab === 'quiz') {
+        switchTab('quiz');
+    } else if (tab === 'quest') {
+        switchTab('quest');
+    } else {
+        // 파라미터가 없으면 기본값 홈
+        switchTab('home');
+    }
+}
 
 // =========================================
 // 1. 데이터 로드 및 초기화
 // =========================================
 function loadData() {
+    // 로컬/서버 환경에 맞춰 경로 설정 (상대 경로 권장)
     Promise.all([
-        fetch('data.json').then(res => res.json()),
-        fetch('quests.json').then(res => res.json())
+        fetch('json/data.json').then(res => res.json()),
+        fetch('json/quests.json').then(res => res.json())
     ])
     .then(([mainData, questList]) => {
         globalData = {
@@ -50,7 +71,7 @@ function loadData() {
         // 2. 퀘스트 탭 리스트 초기화
         renderQuestList(globalData.quests);
 
-        // [NEW] 3. 홈 화면 "주요 퀘스트" 리스트 초기화
+        // 3. 홈 화면 "주요 퀘스트" 리스트 초기화
         renderHomeQuests(globalData.quests);
     })
     .catch(error => {
@@ -62,12 +83,11 @@ function loadData() {
 // [NEW] 홈 화면 퀘스트 렌더링 함수
 // =========================================
 function renderHomeQuests(quests) {
-    const container = document.getElementById('recent-list'); // 홈 화면의 컨테이너 ID
+    const container = document.getElementById('recent-list');
     if (!container) return;
 
     container.innerHTML = '';
 
-    // 홈 화면에는 최대 6개까지만 보여주기 (원하시면 숫자를 바꾸거나 slice 제거 가능)
     const recentQuests = quests.slice(0, 6);
 
     if (recentQuests.length === 0) {
@@ -77,8 +97,8 @@ function renderHomeQuests(quests) {
 
     recentQuests.forEach(quest => {
         const card = document.createElement('div');
-        card.className = 'quest-card'; // 퀘스트 탭과 동일한 스타일 클래스 사용
-        // 클릭 시: 퀘스트 탭으로 이동 -> 상세 페이지 로드
+        card.className = 'quest-card'; 
+        
         card.onclick = () => {
             switchTab('quest');
             loadQuestDetail(quest.filepath);
@@ -102,24 +122,34 @@ function renderHomeQuests(quests) {
 // 2. 탭 전환 (SPA 방식)
 // =========================================
 function switchTab(tabName) {
-    document.getElementById('view-home').style.display = 'none';
-    document.getElementById('view-quiz').style.display = 'none';
-    document.getElementById('view-quest').style.display = 'none';
+    const views = ['view-home', 'view-quiz', 'view-quest'];
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest'];
 
-    document.getElementById('nav-home').classList.remove('active');
-    document.getElementById('nav-quest').classList.remove('active');
-    document.getElementById('nav-quiz').classList.remove('active');
+    // 모든 뷰 숨기기 & 네비게이션 비활성화
+    views.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+    });
+    navs.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.classList.remove('active');
+    });
 
+    // 선택된 탭 활성화
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
+        // URL 주소 업데이트 (선택 사항: 뒤로가기 지원을 위해)
+        history.pushState(null, null, '?tab=home'); 
     } else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
         document.getElementById('nav-quiz').classList.add('active');
+        history.pushState(null, null, '?tab=quiz');
     } else if (tabName === 'quest') {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
         showQuestList();
+        history.pushState(null, null, '?tab=quest');
     }
 }
 

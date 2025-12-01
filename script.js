@@ -42,9 +42,9 @@ function checkUrlParams() {
 // [기능] 데이터 로드
 function loadData() {
     Promise.all([
-        fetch('json/data.json').then(res => res.json()),
-        fetch('json/quests.json').then(res => res.json()),
-        fetch('json/news.json').then(res => res.json()) // [NEW] 뉴스 로드
+        fetch('/json/data.json').then(res => res.json()),
+        fetch('/json/quests.json').then(res => res.json()),
+        fetch('/json/news.json').then(res => res.json()) // [NEW] 뉴스 로드
     ])
     .then(([mainData, questList, newsList]) => {
         // 퀘스트 역순 정렬

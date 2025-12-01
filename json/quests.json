@@ -85,6 +85,14 @@
     "location": "청하",
     "type": "세계관",
     "iconpath": "images/story.jpg",
-    "filepath": "/quests/act1.html"
+    "filepath": "/quests/q11.html"
+  },
+  {
+    "id": "q12",
+    "name": "조상님 품을 떠나다",
+    "location": "청하",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q12.html"
   }
 ]

@@ -653,3 +653,109 @@ h3 {
     padding: 0 2px;
     font-weight: bold;
 }
+/* =========================================
+   SPA 뷰 제어 및 족보 스타일 보정
+   ========================================= */
+
+/* 뷰 컨테이너들은 기본적으로 block이지만 JS로 제어됨 */
+#view-home, #view-quiz, #view-quest {
+    animation: fadeIn 0.3s ease-in-out; /* 화면 전환 시 부드럽게 */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 족보 검색 결과 클릭 가능한 항목 스타일 보정 */
+.search-result-item {
+    cursor: pointer; /* 손가락 모양 커서 */
+}
+
+/* 기존 style.css에 #answer-container 높이 설정이 있다면
+   index.html 구조에 맞게 화면 꽉 차도록 조정 */
+#answer-container {
+    height: 75vh; 
+    margin-bottom: 0; /* 불필요한 마진 제거 */
+}
+
+/* 족보 내부 검색창 스타일 (기존 코드 재활용) */
+.inner-search-area {
+    background-color: var(--wuxia-bg-deep);
+    border-bottom: 1px solid var(--wuxia-border);
+    padding: 15px;
+}
+.inner-search-box {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--wuxia-bg-input);
+    border: 1px solid #444;
+    color: var(--wuxia-text-main);
+    font-family: inherit;
+}
+
+/* -- 1. 헤더 및 검색 스타일 -- */
+#main-header {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* 배경색 등은 상단바(#fixed-top-bar)가 담당하므로 여기선 투명 혹은 상속 */
+}
+
+/* 로고 스타일 */
+.logo-icon img {
+    padding-top: 6px; 
+    vertical-align: middle;
+    filter: sepia(0.3); 
+}
+
+/* 검색 컨테이너 (원래 스타일 복구 + 드롭다운 기준점 설정) */
+.search-container {
+    display: flex;             /* 내부 요소 가로 정렬 */
+    align-items: center;       /* 수직 중앙 정렬 */
+    flex-grow: 1;              /* 남은 공간 채우기 */
+    background-color: var(--wuxia-bg-input); /* 배경색 */
+    border: 1px solid #444;    /* 테두리 */
+    border-radius: 4px;        /* 둥글기 */
+    padding: 5px 10px;         /* 내부 여백 */
+    margin-left: 20px;         /* 로고와의 간격 */
+    position: relative;        /* [중요] 드롭다운 메뉴 위치 기준점 */
+}
+
+/* 검색 입력창 (ID가 header-search-input으로 바뀌어도 적용되도록 수정) */
+.search-container input[type="text"] {
+    padding: 5px;
+    width: 100%;               /* 가로 꽉 채우기 */
+    border: none;              /* 테두리 제거 */
+    background-color: transparent; /* 배경 투명 */
+    color: var(--wuxia-text-main); /* 글자색 */
+    outline: none;             /* 포커스 테두리 제거 */
+    font-size: 0.95em;
+    font-family: inherit;      /* 폰트 상속 */
+}
+
+.search-arrow {
+    font-size: 1.2em;
+    color: var(--wuxia-accent-gold);
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* -- 통합 검색 드롭다운 스타일 (검색바 디자인을 해치지 않게 절대 위치로 설정) -- */
+.search-dropdown {
+    display: none;             /* 기본 숨김 */
+    position: absolute;        /* 검색바 흐름과 무관하게 둥둥 띄움 */
+    top: 100%;                 /* 검색바 바로 아래 위치 */
+    left: 0;
+    width: 100%;               /* 검색바 너비와 동일 */
+    background-color: var(--wuxia-bg-panel);
+    border: 1px solid var(--wuxia-accent-gold);
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    z-index: 2000;             /* 다른 요소보다 위에 */
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 5px;           /* 검색바와 약간 띄움 */
+    text-align: left;          /* 텍스트 왼쪽 정렬 */
+}

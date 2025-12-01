@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>「연운」한국 위키</title>
+    <title>연운: 한국 위키</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
-    <link rel="apple-touch-icon" sizes="57x57" href="/fav/apple-icon-57x57.png">
+      <link rel="apple-touch-icon" sizes="57x57" href="/fav/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="/fav/apple-icon-60x60.png">
 <link rel="apple-touch-icon" sizes="72x72" href="/fav/apple-icon-72x72.png">
 <link rel="apple-touch-icon" sizes="76x76" href="/fav/apple-icon-76x76.png">
@@ -22,74 +25,98 @@
 <link rel="manifest" href="/manifest.json">
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
-
 </head>
 <body>
 
     <div id="fixed-top-bar">
         <header id="main-header">
             <div class="logo">
-                <span class="logo-icon"><a href="index.html"><img src="images/logo.png" width="34px" height="34px"></a></span> 
+                <span class="logo-icon"><a href="#" onclick="switchTab('home'); return false;"><img src="images/logo.png" width="36px" height="36px" alt="로고"></a></span> 
             </div>
+            
             <div class="search-container">
-                <input type="text" id="search-input" placeholder="검색" onkeyup="filterItems()">
-                <span class="search-arrow">→</span> 
-      </div>
+                <input type="text" id="header-search-input" placeholder="통합 검색 (족보, 아이템...)" autocomplete="off">
+                
+                <div id="global-search-results" class="search-dropdown"></div>
+            </div>
         </header>
 
         <nav id="category-nav">
-            <button class="nav-item active" data-filter="items">
+            <button class="nav-item active" id="nav-home" onclick="switchTab('home')">
                 <span class="icon"></span>홈
             </button>
-            <button class="nav-item" data-filter="quest">
+            <button class="nav-item" id="nav-quest" onclick="switchTab('quest')">
                 <span class="icon"></span>퀘스트
             </button>
-            <button class="nav-item" data-filter="answer">
+            <button class="nav-item" id="nav-quiz" onclick="switchTab('quiz')">
                 <span class="icon"></span>족보
             </button>
         </nav>
     </div>
+
     <main id="main-content">
         
-        <section id="intro-card" class="large-font-chunk">
-            <h2>「연운」한국 위키</h2>
-            <p>
-                넷이즈의 게임 <연운>의 아이템, 퀘스트 및 탐험 정보 등 가능한 정보를 한글화하여 모아둔 데이터베이스입니다.
-            </p>
-            <button class="browse-button">자주 찾는 정보</button>
-        </section>
+        <div id="view-home">
+            <section id="intro-card" class="large-font-chunk">
+                <h2>한국 연운 위키</h2>
+                <p>
+                    넷이즈의 게임 &lt;연운&gt;의 아이템, 퀘스트 및 탐험 정보 등 가능한 정보를 한글화하여 모아둔 데이터베이스입니다.
+                </p>
+                <button class="browse-button" onclick="switchTab('quiz')">스무고개 족보 보러가기</button>
+            </section>
 
-        <section id="recent-items">
-            <h3>최신 업데이트</h3>
-            <div id="recent-list" class="item-list-container">
+            <section id="recent-items">
+                <h3>최신 업데이트</h3>
+                <div id="recent-list" class="item-list-container">
+                    <div style="padding:20px; color:#888;">준비 중인 기능입니다.</div>
                 </div>
-        </section>
+            </section>
+        </div>
 
-        <section id="search-results" style="display: none;">
-             <h3>🔍 검색 결과</h3>
-             <div id="results-list" class="item-list-container">
+        <div id="view-quiz" style="display: none;">
+            <section id="answer-container">
+                <div class="status-bar" id="quiz-counter-area">
+                    데이터 로딩 중...
                 </div>
-        </section>
+
+                <div class="inner-search-area">
+                    <div class="search-input-wrapper">
+                          <input type="text" id="quiz-local-search" class="inner-search-box" placeholder="이 페이지 내에서 필터링 (예: 무궁화)">
+                    </div>
+                </div>
+
+                <div class="list-scroll-area">
+                    <table class="answer-table">
+                        <colgroup>
+                            <col style="width: 40%">
+                            <col style="width: 60%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>단서</th>
+                                <th>정답</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quiz-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div id="view-quest" style="display: none;">
+            <section style="padding: 40px; text-align: center; color: #888;">
+                <h3>퀘스트 정보</h3>
+                <p>준비 중입니다.</p>
+            </section>
+        </div>
 
     </main>
 
     <footer id="main-footer">
         <div class="footer-info">
-            <p class="version-info">
-                한국 연운 위키
-            </p>
-            <p class="copyright-disclaimer">
-                본 사이트는 넷이즈와 무관한 팬 사이트이며, 한글화 정보에 오류가 있을 수 있습니다.
-            </p>
-        </div>
-
-        <div class="footer-links">
-            <a href="#" class="link-item">오픈소스</a>
-            <span class="separator">|</span>
-            <a href="#" class="link-item">개인정보 보호정책</a>
-            <span class="separator">|</span>
-            <a href="#" class="link-item">서비스 약관</a>
+            <p class="version-info">한국 연운 위키</p>
+            <p class="copyright-disclaimer">본 사이트는 팬 사이트입니다.</p>
         </div>
     </footer>
 

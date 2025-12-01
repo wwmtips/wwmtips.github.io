@@ -13,7 +13,7 @@
     "location": "청하",
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
-    "filepath": "quests/q1.html"
+    "filepath": "quests/q2.html"
   },
   {
     "id": "q3",
@@ -21,7 +21,7 @@
     "location": "청하",
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
-    "filepath": "quests/q1.html"
+    "filepath": "quests/q3.html"
   },
   {
     "id": "q4",
@@ -29,7 +29,7 @@
     "location": "청하",
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
-    "filepath": "quests/q1.html"
+    "filepath": "quests/q4.html"
   },
   {
     "id": "q5",
@@ -37,7 +37,7 @@
     "location": "청하",
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
-    "filepath": "quests/q1.html"
+    "filepath": "quests/q5.html"
   },
   {
     "id": "q6",
@@ -45,7 +45,7 @@
     "location": "청하",
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
-    "filepath": "quests/q1.html"
+    "filepath": "quests/q6.html"
   },
   {
     "id": "q7",
@@ -53,7 +53,7 @@
     "location": "청하",
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
-    "filepath": "quests/q1.html"
+    "filepath": "quests/q7.html"
   },
   {
     "id": "q8",
@@ -61,6 +61,6 @@
     "location": "청하",
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
-    "filepath": "quests/q1.html"
+    "filepath": "quests/q8.html"
   }
 ]

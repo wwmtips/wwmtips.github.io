@@ -865,20 +865,26 @@ h3 {
     border-radius: 4px;
     border: 1px solid #333;
 }
-
-/* 상세페이지 스타일 */
+/* 상세페이지 뒤로가기 버튼 스타일 수정 */
 .back-button {
     background: none;
     border: none;
     color: var(--wuxia-accent-gold);
     font-size: 1em;
     cursor: pointer;
+    
+    /* [수정] 상단 여백 추가 */
+    margin-top: 20px; 
+    
     margin-bottom: 20px;
     font-weight: bold;
     padding: 10px 0;
+    font-family: 'Noto Serif KR', serif; /* 폰트 통일 */
 }
-.back-button:hover { text-decoration: underline; }
 
+.back-button:hover {
+    text-decoration: underline;
+}
 .detail-content-box {
     background-color: var(--wuxia-bg-panel);
     padding: 30px;

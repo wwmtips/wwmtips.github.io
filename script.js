@@ -1,15 +1,19 @@
-// 전역 변수
-let globalData = { items: [], quiz: [], quests: [], news: [] };
+/* =========================================
+   script.js (페이지네이션 적용 버전)
+   ========================================= */
 
-// 페이지네이션용 변수
-let currentQuestData = [];
-let currentPage = 1;
-const itemsPerPage = 12;
+// 전역 변수
+let globalData = { items: [], quiz: [], quests: [] };
+
+// [NEW] 페이지네이션용 전역 변수
+let currentQuestData = []; // 현재 필터링된 퀘스트 목록
+let currentPage = 1;       // 현재 페이지 번호
+const itemsPerPage = 12;   // 한 페이지당 보여줄 개수
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadData(); // 데이터 가져오기 실행
+    loadData(); 
 
-    // 1. 헤더 통합 검색 이벤트 연결
+    // 헤더 통합 검색
     const headerSearch = document.getElementById("header-search-input");
     if (headerSearch) {
         headerSearch.addEventListener("input", handleGlobalSearch);
@@ -21,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2. 족보 내부 필터링 이벤트 연결
+    // 족보 검색
     const quizLocalSearch = document.getElementById("quiz-local-search");
     if (quizLocalSearch) {
         quizLocalSearch.addEventListener("input", (e) => {
@@ -29,30 +33,27 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 3. URL 파라미터 체크
     checkUrlParams();
 });
 
-// URL 파라미터 처리
+// URL 파라미터 체크
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab'); 
 
     if (tab === 'quiz') switchTab('quiz');
     else if (tab === 'quest') switchTab('quest');
-    else if (tab === 'news') switchTab('news');
     else switchTab('home');
 }
 
-// [중요 수정] 데이터 로드 함수 (경로 수정 및 뉴스 추가)
+// 데이터 로드
 function loadData() {
     Promise.all([
-        fetch('/json/data.json').then(res => res.json()),   // 절대 경로(도메인) 대신 /json/... 사용
-        fetch('/json/quests.json').then(res => res.json()),
-        fetch('/json/news.json').then(res => res.json())    // 뉴스 데이터 추가
+        fetch('json/data.json').then(res => res.json()),
+        fetch('json/quests.json').then(res => res.json())
     ])
-    .then(([mainData, questList, newsList]) => {
-        // 퀘스트 역순 정렬 (최신순)
+    .then(([mainData, questList]) => {
+        // 퀘스트 ID 역순 정렬 (최신순)
         if (questList && Array.isArray(questList)) {
             questList.sort((a, b) => {
                 const numA = parseInt(a.id.replace('q', ''));
@@ -61,20 +62,14 @@ function loadData() {
             });
         }
 
-        // 뉴스 데이터가 있다면 역순 정렬 (선택사항)
-        if (newsList && Array.isArray(newsList)) {
-            newsList.reverse(); 
-        }
-
         globalData = {
             items: mainData.items || [],
             quiz: mainData.quiz || [],
-            quests: questList || [],
-            news: newsList || []
+            quests: questList || []
         };
 
         // 초기화: 현재 퀘스트 데이터를 전체로 설정
-        currentQuestData = globalData.quests;
+        currentQuestData = globalData.quests; 
 
         console.log("데이터 로드 완료:", globalData);
 
@@ -83,81 +78,20 @@ function loadData() {
         const counter = document.getElementById('quiz-counter-area');
         if(counter) counter.innerText = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
 
-        // 2. 퀘스트 탭 리스트 초기화 (페이지네이션)
-        renderQuestList();
+        // 2. 퀘스트 탭 리스트 초기화 (페이지네이션 적용)
+        renderQuestList(); 
 
-        // 3. 홈 화면 퀘스트 리스트 초기화
+        // 3. 홈 화면 리스트 초기화 (6개 제한)
         renderHomeQuests(globalData.quests);
-
-        // 4. 뉴스 리스트 초기화 (홈 & 전체)
-        renderHomeNews(globalData.news);
-        renderFullNews(globalData.news);
     })
     .catch(error => {
         console.error("데이터 로드 중 오류 발생:", error);
     });
 }
 
-// [기능] 홈 화면 뉴스 렌더링
-function renderHomeNews(newsList) {
-    const container = document.getElementById('home-news-list');
-    if (!container) return;
-    container.innerHTML = '';
-
-    const displayList = newsList.slice(0, 4); // 최대 4개
-
-    if (displayList.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888;">최신 정보가 없습니다.</div>';
-        return;
-    }
-
-    displayList.forEach(item => {
-        const el = createNewsElement(item);
-        container.appendChild(el);
-    });
-}
-
-// [기능] 전체 뉴스 렌더링
-function renderFullNews(newsList) {
-    const container = document.getElementById('full-news-list');
-    if (!container) return;
-    container.innerHTML = '';
-
-    if (!newsList || newsList.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888;">등록된 정보가 없습니다.</div>';
-        return;
-    }
-
-    newsList.forEach(item => {
-        const el = createNewsElement(item);
-        container.appendChild(el);
-    });
-}
-
-// 뉴스 아이템 생성 헬퍼
-function createNewsElement(item) {
-    const div = document.createElement('div');
-    div.className = 'news-item';
-    div.onclick = function() { this.classList.toggle('active'); };
-
-    let linkHtml = '';
-    if (item.link && item.link.trim() !== '') {
-        linkHtml = `<a href="${item.link}" target="_blank" class="news-link-btn" onclick="event.stopPropagation()">바로가기 →</a>`;
-    }
-
-    div.innerHTML = `
-        <div class="news-header">
-            <span class="news-title">${item.title}</span>
-            <span class="news-date">${item.date}</span>
-        </div>
-        <div class="news-content">${item.content}<br>${linkHtml}</div>
-    `;
-    return div;
-}
-
 // 탭 전환
 function switchTab(tabName) {
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news'];
+    const views = ['view-home', 'view-quiz', 'view-quest'];
     const navs = ['nav-home', 'nav-quiz', 'nav-quest'];
 
     views.forEach(id => {
@@ -182,19 +116,16 @@ function switchTab(tabName) {
         document.getElementById('nav-quest').classList.add('active');
         showQuestList();
         history.pushState(null, null, '?tab=quest');
-    } else if (tabName === 'news') {
-        document.getElementById('view-news').style.display = 'block';
-        history.pushState(null, null, '?tab=news');
     }
 }
 
-// 홈 화면 퀘스트 렌더링
+// 홈 화면 퀘스트 렌더링 (6개 제한 유지)
 function renderHomeQuests(quests) {
     const container = document.getElementById('home-quest-list');
     if (!container) return;
 
     container.innerHTML = '';
-    const recentQuests = quests.slice(0, 6);
+    const recentQuests = quests.slice(0, 6); // 여기는 6개 제한 유지
 
     if (recentQuests.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888;">표시할 퀘스트가 없습니다.</div>';
@@ -204,7 +135,7 @@ function renderHomeQuests(quests) {
     recentQuests.forEach(quest => createQuestCard(quest, container));
 }
 
-// 퀘스트 리스트 렌더링 (페이지네이션 포함)
+// [수정] 퀘스트 탭 리스트 렌더링 (페이지네이션 적용)
 function renderQuestList() {
     const container = document.getElementById('quest-grid-container');
     if (!container) return;
@@ -212,28 +143,34 @@ function renderQuestList() {
 
     if (!currentQuestData || currentQuestData.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888;">퀘스트 정보가 없습니다.</div>';
-        const pContainer = document.getElementById('pagination-container');
-        if(pContainer) pContainer.innerHTML = '';
+        document.getElementById('pagination-container').innerHTML = ''; // 버튼도 지움
         return;
     }
 
+    // 페이지네이션 계산
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedQuests = currentQuestData.slice(startIndex, endIndex);
 
+    // 카드 생성
     paginatedQuests.forEach(quest => createQuestCard(quest, container));
+
+    // 페이지네이션 버튼 렌더링
     renderPagination();
 }
 
-// 페이지네이션 버튼 그리기
+// [NEW] 페이지네이션 버튼 그리기
 function renderPagination() {
     const container = document.getElementById('pagination-container');
     if (!container) return;
     container.innerHTML = '';
 
     const totalPages = Math.ceil(currentQuestData.length / itemsPerPage);
+    
+    // 페이지가 1개뿐이면 버튼 안 보여줌
     if (totalPages <= 1) return;
 
+    // 이전 버튼
     const prevBtn = document.createElement('button');
     prevBtn.className = 'pagination-btn';
     prevBtn.innerText = '<';
@@ -241,6 +178,7 @@ function renderPagination() {
     prevBtn.onclick = () => changePage(currentPage - 1);
     container.appendChild(prevBtn);
 
+    // 숫자 버튼
     for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement('button');
         btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
@@ -249,6 +187,7 @@ function renderPagination() {
         container.appendChild(btn);
     }
 
+    // 다음 버튼
     const nextBtn = document.createElement('button');
     nextBtn.className = 'pagination-btn';
     nextBtn.innerText = '>';
@@ -257,18 +196,20 @@ function renderPagination() {
     container.appendChild(nextBtn);
 }
 
+// [NEW] 페이지 변경 함수
 function changePage(page) {
     currentPage = page;
-    renderQuestList();
+    renderQuestList(); // 리스트 다시 그리기
+    // 스크롤 맨 위로 (선택사항)
     document.getElementById('quest-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 
-// 퀘스트 카드 생성 헬퍼
+// 헬퍼 함수: 퀘스트 카드 생성 (중복 제거용)
 function createQuestCard(quest, container) {
     const card = document.createElement('div');
     card.className = 'quest-card';
     card.onclick = () => {
-        switchTab('quest');
+        switchTab('quest'); // 홈에서 클릭했을 때를 대비해 탭 전환
         loadQuestDetail(quest.filepath);
     };
 
@@ -317,12 +258,14 @@ function showQuestList() {
     }
 }
 
-// 퀘스트 타입 필터링
+// [수정] 퀘스트 타입 필터링 (페이지 리셋 포함)
 function filterQuestType(type, btnElement) {
+    // 버튼 UI
     const buttons = document.querySelectorAll('.quest-type-nav .type-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     if (btnElement) btnElement.classList.add('active');
 
+    // 데이터 필터링
     if (!globalData.quests) return;
 
     if (type === 'all') {
@@ -331,7 +274,10 @@ function filterQuestType(type, btnElement) {
         currentQuestData = globalData.quests.filter(q => q.type === type);
     }
 
+    // [중요] 필터 변경 시 1페이지로 리셋
     currentPage = 1;
+    
+    // 리스트 다시 그리기
     renderQuestList();
 }
 
@@ -384,27 +330,6 @@ function handleGlobalSearch(e) {
 
     let resultsHTML = '';
 
-    // [NEW] 1. 뉴스(정보) 검색
-    if (globalData.news) {
-        const newsResults = globalData.news.filter(n => 
-            n.title.toLowerCase().includes(keyword) || 
-            n.content.toLowerCase().includes(keyword)
-        );
-
-        if (newsResults.length > 0) {
-            resultsHTML += `<div class="search-category-title">정보</div>`;
-            newsResults.slice(0, 3).forEach(item => {
-                resultsHTML += `
-                    <div class="search-result-item" onclick="switchTab('news')">
-                        <span class="badge info">정보</span>
-                        <span class="result-text">${item.title}</span>
-                    </div>
-                `;
-            });
-        }
-    }
-
-    // 2. 족보 검색
     const quizResults = globalData.quiz.filter(q => 
         q.hint.toLowerCase().includes(keyword) || q.answer.toLowerCase().includes(keyword)
     );
@@ -420,7 +345,6 @@ function handleGlobalSearch(e) {
         });
     }
 
-    // 3. 퀘스트 검색
     if (globalData.quests) {
         const questResults = globalData.quests.filter(q => 
             q.name.toLowerCase().includes(keyword) || 

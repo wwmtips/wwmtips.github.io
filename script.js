@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 수정: 누락된 함수 복구 완료)
+   script.js (최종 통합본: 퀘스트, 족보, 뉴스, 교환코드)
    ========================================= */
 
 // 전역 변수
@@ -9,6 +9,9 @@ let globalData = { items: [], quiz: [], quests: [], news: [] };
 let currentQuestData = [];
 let currentPage = 1;
 const itemsPerPage = 12;
+
+// 교환 코드 로드 여부 체크 (중복 로드 방지)
+let isCodeLoaded = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadData(); // 데이터 가져오기 실행
@@ -29,16 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const quizLocalSearch = document.getElementById("quiz-local-search");
     if (quizLocalSearch) {
         quizLocalSearch.addEventListener("input", (e) => {
-            // [오류 해결] 이제 함수가 정의되어 있어 정상 작동합니다.
             renderQuizTable(filterQuizData(e.target.value));
         });
     }
 
-    // 3. URL 파라미터 체크하여 탭 자동 전환
+    // 3. URL 파라미터 체크하여 탭 자동 전환 (?tab=...)
     checkUrlParams();
 });
 
-// URL 파라미터 처리 함수
+// [기능] URL 파라미터 처리 함수
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab'); 
@@ -46,18 +48,20 @@ function checkUrlParams() {
     if (tab === 'quiz') switchTab('quiz');
     else if (tab === 'quest') switchTab('quest');
     else if (tab === 'news') switchTab('news');
+    else if (tab === 'code') switchTab('code'); // [추가] 교환 코드
     else switchTab('home');
 }
 
 // [기능] 데이터 로드
 function loadData() {
+    // 로컬/서버 환경에 맞춰 절대 경로 사용 (/json/...)
     Promise.all([
         fetch('/json/data.json').then(res => res.json()),
         fetch('/json/quests.json').then(res => res.json()),
         fetch('/json/news.json').then(res => res.json())
     ])
     .then(([mainData, questList, newsList]) => {
-        // 퀘스트 역순 정렬
+        // 퀘스트 역순 정렬 (최신순)
         if (questList && Array.isArray(questList)) {
             questList.sort((a, b) => {
                 const numA = parseInt(a.id.replace('q', ''));
@@ -66,7 +70,7 @@ function loadData() {
             });
         }
         
-        // 뉴스 역순 정렬
+        // 뉴스 역순 정렬 (최신순)
         if (newsList && Array.isArray(newsList)) {
             newsList.reverse(); 
         }
@@ -83,7 +87,7 @@ function loadData() {
 
         console.log("데이터 로드 완료:", globalData);
 
-        // [오류 해결] 1. 족보 초기화 (이제 함수가 있으므로 실행됨)
+        // 1. 족보 초기화
         renderQuizTable(globalData.quiz);
         const counter = document.getElementById('quiz-counter-area');
         if(counter) counter.innerText = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
@@ -104,51 +108,15 @@ function loadData() {
 }
 
 // =========================================
-// [누락되었던 함수 복구] 족보 관련 로직
+// 탭 전환 및 뷰 제어 (Switch Tab)
 // =========================================
-function renderQuizTable(data, keyword = '') {
-    const tbody = document.getElementById('quiz-table-body');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-
-    if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="2" style="padding:20px; color:#888;">결과가 없습니다.</td></tr>`;
-        return;
-    }
-
-    data.forEach(item => {
-        const tr = document.createElement('tr');
-        let hint = item.hint;
-        let answer = item.answer;
-
-        if (keyword) {
-            const regex = new RegExp(`(${keyword})`, 'gi');
-            hint = hint.replace(regex, '<span class="highlight">$1</span>');
-            answer = answer.replace(regex, '<span class="highlight">$1</span>');
-        }
-
-        tr.innerHTML = `<td>${hint}</td><td>${answer}</td>`;
-        tbody.appendChild(tr);
-    });
-}
-
-function filterQuizData(keyword) {
-    keyword = keyword.trim().toLowerCase();
-    if (!keyword) return globalData.quiz;
-    return globalData.quiz.filter(item => 
-        item.hint.toLowerCase().includes(keyword) || 
-        item.answer.toLowerCase().includes(keyword)
-    );
-}
-
-// =========================================
-// 탭 전환 및 기타 기능 함수들
-// =========================================
-
 function switchTab(tabName) {
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news'];
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest'];
+    // 뷰 ID 목록
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-code'];
+    // 네비게이션 버튼 ID 목록
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code'];
 
+    // 모든 뷰 숨기기 & 버튼 비활성화
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.style.display = 'none';
@@ -158,6 +126,7 @@ function switchTab(tabName) {
         if(el) el.classList.remove('active');
     });
 
+    // 선택된 탭 활성화 로직
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
@@ -172,12 +141,53 @@ function switchTab(tabName) {
         showQuestList();
         history.pushState(null, null, '?tab=quest');
     } else if (tabName === 'news') {
+        // 뉴스는 별도 네비게이션 버튼이 없으므로 뷰만 활성화
         document.getElementById('view-news').style.display = 'block';
         history.pushState(null, null, '?tab=news');
+    } else if (tabName === 'code') {
+        // [NEW] 교환 코드 탭
+        document.getElementById('view-code').style.display = 'block';
+        document.getElementById('nav-code').classList.add('active');
+        loadCodeView(); // 코드 페이지 내용 로드
+        history.pushState(null, null, '?tab=code');
     }
 }
 
-// 홈 화면 뉴스 렌더링
+// =========================================
+// [NEW] 교환 코드 관련 로직
+// =========================================
+function loadCodeView() {
+    if (isCodeLoaded) return; // 이미 로드했으면 중복 요청 방지
+
+    const container = document.getElementById('code-content-loader');
+    
+    fetch('code.html')
+        .then(res => {
+            if(!res.ok) throw new Error("code.html not found");
+            return res.text();
+        })
+        .then(html => {
+            container.innerHTML = html;
+            container.style.textAlign = 'left'; // 로딩 텍스트 정렬 해제
+            container.style.marginTop = '0';
+            isCodeLoaded = true;
+        })
+        .catch(err => {
+            container.innerHTML = `<div style="padding:20px; color:red;">페이지 로드 실패</div>`;
+        });
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert(`코드 [${text}] 가 복사되었습니다!`);
+    }).catch(err => {
+        alert('복사에 실패했습니다. 직접 복사해주세요.');
+    });
+}
+
+// =========================================
+// 뉴스 관련 로직
+// =========================================
 function renderHomeNews(newsList) {
     const container = document.getElementById('home-news-list');
     if (!container) return;
@@ -196,7 +206,6 @@ function renderHomeNews(newsList) {
     });
 }
 
-// 전체 뉴스 렌더링
 function renderFullNews(newsList) {
     const container = document.getElementById('full-news-list');
     if (!container) return;
@@ -213,7 +222,6 @@ function renderFullNews(newsList) {
     });
 }
 
-// 뉴스 아이템 HTML 생성
 function createNewsElement(item) {
     const div = document.createElement('div');
     div.className = 'news-item';
@@ -234,11 +242,15 @@ function createNewsElement(item) {
     return div;
 }
 
-// 홈 화면 퀘스트 렌더링
+// =========================================
+// 퀘스트 관련 로직
+// =========================================
 function renderHomeQuests(quests) {
     const container = document.getElementById('home-quest-list');
     if (!container) return;
     container.innerHTML = '';
+    
+    // 홈 화면은 최신 6개만 표시
     const recentQuests = quests.slice(0, 6);
     if (recentQuests.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888;">표시할 퀘스트가 없습니다.</div>';
@@ -247,7 +259,26 @@ function renderHomeQuests(quests) {
     recentQuests.forEach(quest => createQuestCard(quest, container));
 }
 
-// 퀘스트 탭 리스트 렌더링 (페이지네이션)
+function createQuestCard(quest, container) {
+    const card = document.createElement('div');
+    card.className = 'quest-card';
+    card.onclick = () => {
+        switchTab('quest');
+        loadQuestDetail(quest.filepath);
+    };
+    card.innerHTML = `
+        <div class="quest-icon-wrapper">
+            <img src="${quest.iconpath}" alt="icon" onerror="this.src='images/logo.png'">
+        </div>
+        <div class="quest-info">
+            <div class="quest-name">${quest.name}</div>
+            <div class="quest-type">${quest.type}</div>
+        </div>
+        <div class="quest-badge">${quest.location}</div>
+    `;
+    container.appendChild(card);
+}
+
 function renderQuestList() {
     const container = document.getElementById('quest-grid-container');
     if (!container) return;
@@ -260,6 +291,7 @@ function renderQuestList() {
         return;
     }
 
+    // 페이지네이션 적용
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedQuests = currentQuestData.slice(startIndex, endIndex);
@@ -268,7 +300,6 @@ function renderQuestList() {
     renderPagination();
 }
 
-// 페이지네이션 버튼 그리기
 function renderPagination() {
     const container = document.getElementById('pagination-container');
     if (!container) return;
@@ -306,28 +337,6 @@ function changePage(page) {
     document.getElementById('quest-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 
-// 퀘스트 카드 생성 헬퍼
-function createQuestCard(quest, container) {
-    const card = document.createElement('div');
-    card.className = 'quest-card';
-    card.onclick = () => {
-        switchTab('quest');
-        loadQuestDetail(quest.filepath);
-    };
-    card.innerHTML = `
-        <div class="quest-icon-wrapper">
-            <img src="${quest.iconpath}" alt="icon" onerror="this.src='images/logo.png'">
-        </div>
-        <div class="quest-info">
-            <div class="quest-name">${quest.name}</div>
-            <div class="quest-type">${quest.type}</div>
-        </div>
-        <div class="quest-badge">${quest.location}</div>
-    `;
-    container.appendChild(card);
-}
-
-// 퀘스트 상세 로드
 function loadQuestDetail(filepath) {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
@@ -356,7 +365,6 @@ function showQuestList() {
     }
 }
 
-// 퀘스트 타입 필터링
 function filterQuestType(type, btnElement) {
     const buttons = document.querySelectorAll('.quest-type-nav .type-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
@@ -371,7 +379,47 @@ function filterQuestType(type, btnElement) {
     renderQuestList();
 }
 
+// =========================================
+// 족보 관련 로직
+// =========================================
+function renderQuizTable(data, keyword = '') {
+    const tbody = document.getElementById('quiz-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2" style="padding:20px; color:#888;">결과가 없습니다.</td></tr>`;
+        return;
+    }
+
+    data.forEach(item => {
+        const tr = document.createElement('tr');
+        let hint = item.hint;
+        let answer = item.answer;
+
+        if (keyword) {
+            const regex = new RegExp(`(${keyword})`, 'gi');
+            hint = hint.replace(regex, '<span class="highlight">$1</span>');
+            answer = answer.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        tr.innerHTML = `<td>${hint}</td><td>${answer}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+function filterQuizData(keyword) {
+    keyword = keyword.trim().toLowerCase();
+    if (!keyword) return globalData.quiz;
+    return globalData.quiz.filter(item => 
+        item.hint.toLowerCase().includes(keyword) || 
+        item.answer.toLowerCase().includes(keyword)
+    );
+}
+
+// =========================================
 // 통합 검색 핸들러
+// =========================================
 function handleGlobalSearch(e) {
     const keyword = e.target.value.trim().toLowerCase();
     const resultContainer = document.getElementById("global-search-results");

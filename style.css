@@ -755,3 +755,83 @@ h3 {
 .news-link-btn:hover {
     background-color: #444;
 }
+
+/* =========================================
+   16. 교환 코드 페이지 스타일
+   ========================================= */
+.code-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.code-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--wuxia-bg-panel); /* 패널 배경색 */
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.code-card:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #202124;
+}
+
+.code-info {
+    flex-grow: 1;
+}
+
+.code-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--wuxia-accent-gold); /* 코드명은 금색 */
+    margin-bottom: 5px;
+    font-family: monospace; /* 코드 느낌 폰트 */
+    letter-spacing: 1px;
+}
+
+.code-rewards {
+    font-size: 0.9em;
+    color: #999;
+}
+
+/* 복사 버튼 스타일 (이미지 참고하여 오렌지/금색 계열) */
+.copy-btn {
+    background-color: #d67d3e; /* 약간 주황빛 도는 금색 */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s;
+    margin-left: 15px;
+    flex-shrink: 0;
+}
+
+.copy-btn:hover {
+    background-color: #e59454;
+}
+
+.copy-btn:active {
+    transform: scale(0.95);
+}
+
+.copy-icon {
+    font-size: 1.1em;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .code-text { font-size: 1.1em; }
+    .code-card { padding: 15px; }
+    .copy-btn { padding: 8px 12px; font-size: 0.85em; }
+}

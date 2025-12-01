@@ -1,3 +1,7 @@
+/* =========================================
+   script.js (최종 수정본)
+   ========================================= */
+
 // 전역 변수
 let globalData = { items: [], quiz: [], quests: [] };
 
@@ -24,32 +28,27 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // [NEW] 3. URL 파라미터 체크하여 탭 자동 전환
-    // 예: wwm.tips?tab=quiz -> 족보 탭 열기
-    // 예: wwm.tips?tab=quest -> 퀘스트 탭 열기
+    // 3. URL 파라미터 체크하여 탭 자동 전환
     checkUrlParams();
 });
 
-// [NEW] URL 파라미터 처리 함수
+// [기능] URL 파라미터 처리 함수
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
-    const tab = urlParams.get('tab'); // ?tab=값 가져오기
+    const tab = urlParams.get('tab'); 
 
     if (tab === 'quiz') {
         switchTab('quiz');
     } else if (tab === 'quest') {
         switchTab('quest');
     } else {
-        // 파라미터가 없으면 기본값 홈
         switchTab('home');
     }
 }
 
-// =========================================
-// 1. 데이터 로드 및 초기화
-// =========================================
+// [기능] 데이터 로드 및 초기화
 function loadData() {
-    // 로컬/서버 환경에 맞춰 경로 설정 (상대 경로 권장)
+    // 로컬/서버 환경에 맞춰 경로 설정 (상대 경로)
     Promise.all([
         fetch('json/data.json').then(res => res.json()),
         fetch('json/quests.json').then(res => res.json())
@@ -79,15 +78,46 @@ function loadData() {
     });
 }
 
-// =========================================
-// [NEW] 홈 화면 퀘스트 렌더링 함수
-// =========================================
+// [기능] 탭 전환 (SPA 방식)
+function switchTab(tabName) {
+    const views = ['view-home', 'view-quiz', 'view-quest'];
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest'];
+
+    // 모든 뷰 숨기기 & 네비게이션 비활성화
+    views.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+    });
+    navs.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.classList.remove('active');
+    });
+
+    // 선택된 탭 활성화
+    if (tabName === 'home') {
+        document.getElementById('view-home').style.display = 'block';
+        document.getElementById('nav-home').classList.add('active');
+        history.pushState(null, null, '?tab=home'); 
+    } else if (tabName === 'quiz') {
+        document.getElementById('view-quiz').style.display = 'block';
+        document.getElementById('nav-quiz').classList.add('active');
+        history.pushState(null, null, '?tab=quiz');
+    } else if (tabName === 'quest') {
+        document.getElementById('view-quest').style.display = 'block';
+        document.getElementById('nav-quest').classList.add('active');
+        showQuestList(); // 리스트 보기 모드로 초기화
+        history.pushState(null, null, '?tab=quest');
+    }
+}
+
+// [기능] 홈 화면 퀘스트 렌더링
 function renderHomeQuests(quests) {
     const container = document.getElementById('home-quest-list');
     if (!container) return;
 
     container.innerHTML = '';
 
+    // 상위 6개만 표시
     const recentQuests = quests.slice(0, 6);
 
     if (recentQuests.length === 0) {
@@ -118,44 +148,7 @@ function renderHomeQuests(quests) {
     });
 }
 
-// =========================================
-// 2. 탭 전환 (SPA 방식)
-// =========================================
-function switchTab(tabName) {
-    const views = ['view-home', 'view-quiz', 'view-quest'];
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest'];
-
-    // 모든 뷰 숨기기 & 네비게이션 비활성화
-    views.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.style.display = 'none';
-    });
-    navs.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.classList.remove('active');
-    });
-
-    // 선택된 탭 활성화
-    if (tabName === 'home') {
-        document.getElementById('view-home').style.display = 'block';
-        document.getElementById('nav-home').classList.add('active');
-        // URL 주소 업데이트 (선택 사항: 뒤로가기 지원을 위해)
-        history.pushState(null, null, '?tab=home'); 
-    } else if (tabName === 'quiz') {
-        document.getElementById('view-quiz').style.display = 'block';
-        document.getElementById('nav-quiz').classList.add('active');
-        history.pushState(null, null, '?tab=quiz');
-    } else if (tabName === 'quest') {
-        document.getElementById('view-quest').style.display = 'block';
-        document.getElementById('nav-quest').classList.add('active');
-        showQuestList();
-        history.pushState(null, null, '?tab=quest');
-    }
-}
-
-// =========================================
-// 3. 족보 관련 로직
-// =========================================
+// [기능] 족보 테이블 렌더링
 function renderQuizTable(data, keyword = '') {
     const tbody = document.getElementById('quiz-table-body');
     if (!tbody) return;
@@ -191,9 +184,7 @@ function filterQuizData(keyword) {
     );
 }
 
-// =========================================
-// 4. 퀘스트 탭 관련 로직
-// =========================================
+// [기능] 퀘스트 리스트 렌더링
 function renderQuestList(quests) {
     const container = document.getElementById('quest-grid-container');
     if (!container) return;
@@ -223,37 +214,33 @@ function renderQuestList(quests) {
     });
 }
 
-// [수정] 퀘스트 상세 내용 로드
+// [기능] 퀘스트 상세 내용 로드
 function loadQuestDetail(filepath) {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
     const contentBox = document.getElementById('quest-content-loader');
 
-    // 1. 화면 전환 (리스트 숨김, 상세 보임)
-    // 이 시점에서 '목록으로 돌아가기' 버튼은 이미 화면에 보입니다.
-    listView.style.display = 'none';
-    detailView.style.display = 'block';
+    // 화면 전환
+    if(listView) listView.style.display = 'none';
+    if(detailView) detailView.style.display = 'block';
     
-    // 2. 로딩 표시
-    contentBox.innerHTML = '<div style="text-align:center; padding:50px;">로딩 중...</div>';
+    // 로딩 표시
+    if(contentBox) contentBox.innerHTML = '<div style="text-align:center; padding:50px;">로딩 중...</div>';
 
-    // 3. 파일 가져오기 시도
+    // 파일 가져오기
     fetch(filepath)
         .then(response => {
-            // 파일이 없으면 (404 Not Found) 에러 발생시킴
             if (!response.ok) {
                 throw new Error("File not found"); 
             }
             return response.text();
         })
         .then(html => {
-            // 성공 시 내용 표시
-            contentBox.innerHTML = html;
+            if(contentBox) contentBox.innerHTML = html;
         })
         .catch(err => {
-            // [핵심 수정] 실패 시(파일 없을 때) "준비 중" 메시지 표시
-            // 무협 테마에 맞춰 아이콘과 색상을 지정했습니다.
-            contentBox.innerHTML = `
+            // 실패 시 (파일 없을 때)
+            if(contentBox) contentBox.innerHTML = `
                 <div style="text-align:center; padding: 60px 20px;">
                     <div style="font-size: 3em; margin-bottom: 15px; opacity: 0.5;">📜</div>
                     <h3 style="color: var(--wuxia-accent-gold); margin-bottom: 10px;">
@@ -268,6 +255,7 @@ function loadQuestDetail(filepath) {
         });
 }
 
+// [기능] 퀘스트 상세 -> 리스트로 돌아가기
 function showQuestList() {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
@@ -277,9 +265,33 @@ function showQuestList() {
     }
 }
 
-// =========================================
-// 5. 통합 검색 핸들러
-// =========================================
+// [기능] 퀘스트 타입 필터링 함수 (버튼 클릭 시)
+function filterQuestType(type, btnElement) {
+    // 1. 버튼 활성화 상태 변경 (UI)
+    const buttons = document.querySelectorAll('.quest-type-nav .type-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    if (btnElement) {
+        btnElement.classList.add('active');
+    }
+
+    // 2. 데이터 필터링 (Logic)
+    if (!globalData.quests || globalData.quests.length === 0) return;
+
+    let filteredQuests = [];
+
+    if (type === 'all') {
+        filteredQuests = globalData.quests;
+    } else {
+        // quests.json의 "type" 값과 정확히 일치하는 것만 필터링
+        filteredQuests = globalData.quests.filter(q => q.type === type);
+    }
+
+    // 3. 필터링된 리스트 다시 그리기
+    renderQuestList(filteredQuests);
+}
+
+// [기능] 통합 검색 핸들러
 function handleGlobalSearch(e) {
     const keyword = e.target.value.trim().toLowerCase();
     const resultContainer = document.getElementById("global-search-results");
@@ -351,37 +363,4 @@ function selectQuestResult(filepath) {
     switchTab('quest');
     loadQuestDetail(filepath);
     document.getElementById("global-search-results").style.display = 'none';
-}
-
-// script.js 에 추가 (renderQuestList 함수 아래쯤)
-
-// [NEW] 퀘스트 타입 필터링 함수
-function filterQuestType(type, btnElement) {
-    // 1. 버튼 활성화 상태 변경 (UI)
-    // 모든 버튼에서 active 클래스 제거
-    const buttons = document.querySelectorAll('.quest-type-nav .type-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    
-    // 클릭된 버튼에 active 클래스 추가
-    if (btnElement) {
-        btnElement.classList.add('active');
-    }
-
-    // 2. 데이터 필터링 (Logic)
-    const container = document.getElementById('quest-grid-container');
-    
-    // 데이터가 없으면 중단
-    if (!globalData.quests || globalData.quests.length === 0) return;
-
-    let filteredQuests = [];
-
-    if (type === 'all') {
-        filteredQuests = globalData.quests;
-    } else {
-        // quests.json의 "type" 값과 정확히 일치하는 것만 필터링
-        filteredQuests = globalData.quests.filter(q => q.type === type);
-    }
-
-    // 3. 필터링된 리스트 다시 그리기
-    renderQuestList(filteredQuests);
 }

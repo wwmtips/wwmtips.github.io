@@ -110,22 +110,23 @@
         </div>
 
         <div id="view-quest" style="display: none;">
-            <section id="quest-list-view" style="margin-top: 30px;">
-          
+           <section id="quest-list-view" style="margin-top: 30px;">
+x
+    <div class="quest-type-nav">
+        <button class="type-btn active" onclick="filterQuestType('all', this)">전체</button>        
+        <button class="type-btn" onclick="filterQuestType('세계관', this)">세계관</button>
+        <button class="type-btn" onclick="filterQuestType('인연의 궤적', this)">인연의 궤적</button>
+        <button class="type-btn" onclick="filterQuestType('만사록', this)">만사록</button>
+        <button class="type-btn" onclick="filterQuestType('퀘스트', this)">퀘스트</button>
+        <button class="type-btn" onclick="filterQuestType('이벤트', this)">이벤트</button>
+    </div>
+    
+    <div id="quest-grid-container" class="quest-grid">
+        </div>
 
-                <div class="quest-type-nav">
-                    <button class="type-btn active" onclick="filterQuestType('all', this)">전체</button>
-                    <button class="type-btn" onclick="filterQuestType('세계관', this)">세계관</button>
-                    <button class="type-btn" onclick="filterQuestType('인연의 궤적', this)">인연의 궤적</button>
-                    <button class="type-btn" onclick="filterQuestType('만사록', this)">만사록</button>
-                    <button class="type-btn" onclick="filterQuestType('퀘스트', this)">퀘스트</button>
-                    <button class="type-btn" onclick="filterQuestType('이벤트', this)">이벤트</button>
-                </div>
-                
-                <div id="quest-grid-container" class="quest-grid">
-                    </div>
-            </section>
+    <div id="pagination-container" class="pagination-controls"></div>
 
+</section>
             <section id="quest-detail-view" style="display: none;">
                 <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
                 <div id="quest-content-loader" class="detail-content-box">

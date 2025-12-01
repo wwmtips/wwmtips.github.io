@@ -30,8 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // =========================================
 function loadData() {
     Promise.all([
-        fetch('/json/data.json').then(res => res.json()),
-        fetch('/json/quests.json').then(res => res.json())
+        fetch('https://wwm.tips/json/data.json').then(res => res.json()),
+        fetch('https://wwm.tips/json/quests.json').then(res => res.json())
     ])
     .then(([mainData, questList]) => {
         globalData = {

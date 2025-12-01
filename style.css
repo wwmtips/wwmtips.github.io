@@ -1,73 +1,76 @@
-/* style.css 파일의 전체 내용 */
-:root {
-    /* [유지] 5단계 레어도 및 색상 재정의 (100% Opacity) */
-    --rarity-common: #6c757d;   /* 일반: 회색 계열 */
-    --rarity-uncommon: #28a745; /* 고급: 초록색 계열 */
-    --rarity-rare: #007bff;     /* 희귀: 파란색 계열 */
-    --rarity-epic: #c43198;     /* 에픽: 보라색 계열 */
-    --rarity-legendary: #ffc107; /* 전설: 노란색 계열 */
-    --rarity-card: #ffffff; 
+/* =========================================
+   1. 폰트 및 기본 변수 설정 (무협 테마)
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
 
-    /* [유지] Opacity 50%가 적용된 RGBa 변수 (item-row 테두리용) */
-    --rarity-common-50: rgba(108, 117, 125, 0.5);
-    --rarity-uncommon-50: rgba(40, 167, 69, 0.5);
-    --rarity-rare-50: rgba(0, 123, 255, 0.5);
-    --rarity-epic-50: rgba(196, 49, 152, 0.5);
-    --rarity-legendary-50: rgba(255, 193, 7, 0.5);
+:root {
+    /* [레어도 색상] - 기존 색상을 유지하되 채도를 낮춰 차분하게 조정 */
+    --rarity-common: #8d9399;    /* 일반: 돌 질감 회색 */
+    --rarity-uncommon: #4e9a5d;  /* 고급: 옥색 */
+    --rarity-rare: #4682b4;      /* 희귀: 청색 */
+    --rarity-epic: #9c4dcc;      /* 에픽: 자색 */
+    --rarity-legendary: #d4af37; /* 전설: 황금색 */
+    
+    /* [무협 테마 팔레트] */
+    --wuxia-bg-deep: #0f1012;     /* 배경: 깊은 먹색 */
+    --wuxia-bg-panel: #18191b;    /* 패널: 연한 먹색 */
+    --wuxia-bg-input: #202124;    /* 입력창 배경 */
+    --wuxia-border: #333333;      /* 경계선: 짙은 회색 */
+    --wuxia-accent-gold: #c8a060; /* 강조: 앤티크 골드 (버튼/텍스트) */
+    --wuxia-accent-red: #8a3324;  /* 강조: 진사색 (도장/포인트) */
+    --wuxia-text-main: #e6e6e6;   /* 텍스트: 창호지색 */
+    --wuxia-text-sub: #999999;    /* 보조 텍스트 */
 }
 
+/* =========================================
+   2. 기본 레이아웃 및 리셋
+   ========================================= */
 body {
-    background-color: #121212; /* 완전한 블랙 대신 어두운 배경 */
-    color: #f8f8f8; /* 밝은 텍스트 */
-    font-family: sans-serif;
+    background-color: var(--wuxia-bg-deep);
+    color: var(--wuxia-text-main);
+    font-family: 'Noto Serif KR', serif; /* 명조체 적용 */
     margin: 0;
     padding: 0;
 }
 
-/* -- 상단 고정 영역 설정 -- */
+h2, h3, p, button, input {
+    font-family: inherit; /* 폰트 상속 */
+}
+
+/* =========================================
+   3. 상단 고정 헤더 영역
+   ========================================= */
 #fixed-top-bar {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-    /* [수정] 배경색을 #121212보다 살짝 밝은 #1a1a1a로 설정하여 대비 개선 */
-    background-color: #121212; 
+    background-color: var(--wuxia-bg-deep);
+    border-bottom: 1px solid var(--wuxia-border);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
-/* -- 메인 콘텐츠 영역 여백 설정 -- */
-#main-content {
-    /* 고정된 상단바의 높이(약 100px)만큼 상단 여백을 주어 내용이 가려지지 않도록 합니다. */
-    padding-top: 100px;     
-    max-width: 1000px;
-    margin: 0 auto;
-    padding-left: 15px; /* PC 환경의 좌우 패딩을 15px로 축소 */
-    padding-right: 15px;
-}
-
-
-/* -- 1. 헤더 및 검색 스타일 -- */
 #main-header {
-    /* [수정] 배경색을 #1a1a1a로 통일 */
-    background-color: #000000; 
-    padding: 10px 15px; /* PC 패딩 축소 */
+    padding: 10px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #333; 
 }
 
-.logo-icon {
-    font-size: 1.5em;
-    color: #ffcc00; 
-    margin-right: 10px;
+/* [요청사항 반영] 로고 위치 미세 조정 */
+.logo-icon img {
+    padding-top: 6px; 
+    vertical-align: middle;
+    filter: sepia(0.3); /* 약간의 빈티지 효과 */
 }
 
 .search-container {
     display: flex;
     align-items: center;
-    flex-grow: 1; 
-    background-color: #1f1f1f;
-    border-radius: 8px;
+    flex-grow: 1;
+    background-color: var(--wuxia-bg-input);
+    border: 1px solid #444;
+    border-radius: 4px; /* 각진 느낌 */
     padding: 5px 10px;
     margin-left: 20px;
 }
@@ -77,280 +80,411 @@ body {
     width: 100%;
     border: none;
     background-color: transparent;
-    color: #f8f8f8;
-    outline: none; 
+    color: var(--wuxia-text-main);
+    outline: none;
+    font-size: 0.95em;
 }
 
 .search-arrow {
     font-size: 1.2em;
-    color: #555;
+    color: var(--wuxia-accent-gold);
     margin-left: 10px;
 }
 
-/* -- 2. 카테고리 네비게이션 스타일 -- */
+/* =========================================
+   4. 네비게이션
+   ========================================= */
 #category-nav {
-    /* [유지] 배경색을 #1a1a1a로 통일 */
-    background-color: #1a1a1a;
-    padding-bottom: 10px;
     padding-left: 15px;
-    padding-top: 5px;
-    
-    /* [수정] max-width: 1000px; 제거 */
-    /* [수정] margin: 0 auto; 제거 */
-    
+    padding-top: 10px;
     display: flex;
-    gap: 20px;
-    border-bottom: 1px solid #333;
+    gap: 25px;
+    background-color: var(--wuxia-bg-deep);
 }
+
 .nav-item {
     display: flex;
     align-items: center;
     background: none;
     border: none;
-    color: #999; 
-    font-size: 0.9em;
+    color: var(--wuxia-text-sub);
+    font-size: 1.0em;
     font-weight: bold;
     cursor: pointer;
-    padding: 5px 0;
-    transition: color 0.2s;
+    padding: 10px 5px;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
 }
 
-.nav-item .icon {
-    margin-right: 5px;
-    font-size: 1.2em;
+.nav-item:hover {
+    color: #fff;
 }
 
 .nav-item.active {
-    color: #fff; 
-    border-bottom: 2px solid #ffcc00; 
+    color: var(--wuxia-accent-gold);
+    border-bottom: 2px solid var(--wuxia-accent-red);
 }
-/* -- 3. 소개 청크 스타일 수정 -- */
-#intro-card.large-font-chunk {
-    background-color: #1e1e1e;
-    padding: 30px;
-    border-radius: 8px;
-    
-    margin-top: 40px; 
-    margin-bottom: 40px;
 
-    /* [추가] 백그라운드 이미지 설정 */
-    background-image: url('images/bg.png'); /* 이미지 파일 경로 */
-    background-size: cover; /* 이미지가 요소를 완전히 덮도록 확대/축소 */
-    background-position: center center; /* 이미지를 중앙에 배치 */
-    background-repeat: no-repeat; /* 이미지 반복 방지 */
-    
-    /* 배경 이미지가 너무 밝다면 위에 어두운 오버레이를 추가할 수 있습니다. */
-    position: relative; /* ::before 가상 요소 사용을 위해 */
-    overflow: hidden; /* 이미지 오버레이가 밖으로 나가지 않도록 */
+/* =========================================
+   5. 메인 콘텐츠
+   ========================================= */
+#main-content {
+    padding-top: 110px; /* 헤더 높이만큼 여백 */
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
 }
-/* 배경 위에 어두운 오버레이를 추가하여 텍스트 가독성 높이기 */
+
+/* 소개 카드 */
+#intro-card.large-font-chunk {
+    background-color: var(--wuxia-bg-panel);
+    padding: 30px;
+    border-radius: 4px;
+    margin: 40px 0;
+    border: 1px solid var(--wuxia-border);
+    
+    /* 배경 이미지 */
+    background-image: url('images/bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 오버레이 (텍스트 가독성 확보) */
 #intro-card.large-font-chunk::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* 검은색 50% 투명도 오버레이 */
-    z-index: 1; /* 콘텐츠 뒤에 오도록 */
-    border-radius: 8px; /* 부모와 동일하게 */
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.75); /* 어두운 오버레이 */
+    z-index: 1;
 }
 
-/* 콘텐츠는 오버레이 위에 오도록 z-index 설정 */
 #intro-card.large-font-chunk h2,
 #intro-card.large-font-chunk p,
 #intro-card.large-font-chunk .browse-button {
     position: relative;
-    z-index: 2; /* 오버레이보다 위에 */
+    z-index: 2;
 }
 
-
 #intro-card.large-font-chunk h2 {
-    font-size: 2.0em; 
+    font-size: 2.2em;
     margin-bottom: 10px;
-    color: #ffffff; /* [수정] 배경 이미지 위에서 잘 보이도록 흰색으로 변경 */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* [추가] 텍스트 그림자 */
+    color: var(--wuxia-accent-gold);
+    text-shadow: 2px 2px 4px black;
 }
 
 #intro-card.large-font-chunk p {
-    font-size: 0.8em; 
-    line-height: 1.5;
-    color: #ffffff; /* [수정] 배경 이미지 위에서 잘 보이도록 밝은 색으로 변경 */
-    margin-bottom: 20px;
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: #d0d0d0;
+    margin-bottom: 25px;
 }
 
-
+/* 버튼 스타일 (무협풍) */
 .browse-button {
-    background-color: #ffcc00; 
-    color: #121212;
-    border: none;
-    padding: 12px 25px; /* 버튼 패딩 축소 */
-    font-size: 1.0em; /* 1.1em -> 1.0em로 축소 */
+    background-color: var(--wuxia-accent-gold);
+    color: #1a150e; /* 짙은 갈색 텍스트 */
+    border: 1px solid #b89050;
+    padding: 12px 0;
+    font-size: 1.0em;
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 2px;
     cursor: pointer;
-    transition: background-color 0.2s;
-    
-    /* [수정] 버튼이 카드의 전체 너비를 차지하도록 설정 */
-    width: 100%; 
-    /* 버튼을 블록 요소로 만들어야 width: 100%가 적용됨 (기본 button은 인라인 요소) */
-    display: block; 
+    transition: all 0.2s;
+    width: 100%;
+    display: block;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .browse-button:hover {
-    background-color: #ffb700;
+    background-color: #dcb36a;
 }
-/* -- 4. 아이템 목록 스타일 (모바일 기본: 1열) -- */
+
+/* =========================================
+   6. 아이템 목록 (리스트)
+   ========================================= */
 h3 {
-    /* 기존 폰트 크기보다 살짝 작게 조정 */
-    font-size: 1.0em; 
-    border-left: 4px solid var(--rarity-card);
+    font-size: 1.1em;
+    border-left: 4px solid var(--wuxia-accent-red); /* 붉은색 바 */
     padding-left: 10px;
-    margin-bottom: 15px; /* 제목 아래 간격 축소 */
+    margin-bottom: 15px;
+    color: var(--wuxia-text-main);
 }
+
 .item-list-container {
-    /* 기본(모바일)은 1열 레이아웃 */
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
 .item-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 15px;
-    
-    /* [수정] 배경 그라데이션 적용 */
-    background: linear-gradient(to right, #1a1a1a, #2a2a2a);
-    
-    border-radius: 8px; /* 테두리를 더 둥글게 */
-    transition: background 0.2s, box-shadow 0.2s;
-    
-    /* <a> 태그 초기화 */
-    text-decoration: none; 
-    color: inherit; /* 기본 색상 상속 */
-    
+    background: linear-gradient(to right, #1a1a1c, #242426); /* 먹색 그라데이션 */
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
 }
-
-/* [최종 수정] item-row에 등급별 border 색상(50% 투명도) 및 폰트 색상(100% 진함) 적용 */
-.item-row[data-rarity="Common"] { 
-    color: var(--rarity-common); 
-}
-.item-row[data-rarity="Uncommon"] { 
-    color: var(--rarity-uncommon);
-}
-.item-row[data-rarity="Rare"] { 
-    color: var(--rarity-rare);
-}
-.item-row[data-rarity="Epic"] { 
-    color: var(--rarity-epic);
-}
-.item-row[data-rarity="Legendary"] { 
-    color: var(--rarity-legendary);
-}
-
 
 .item-row:hover {
-    background: linear-gradient(to right, #2a2a2a, #3a3a3a);
+    border-color: var(--wuxia-accent-gold);
+    transform: translateX(2px);
 }
 
-
+/* 레어도별 텍스트 색상 (script.js에서 사용) */
+.item-row[data-rarity="Common"] { color: var(--rarity-common); }
+.item-row[data-rarity="Uncommon"] { color: var(--rarity-uncommon); }
+.item-row[data-rarity="Rare"] { color: var(--rarity-rare); }
+.item-row[data-rarity="Epic"] { color: var(--rarity-epic); }
+.item-row[data-rarity="Legendary"] { color: var(--rarity-legendary); }
 
 .item-info {
     display: flex;
-    flex-direction: column; /* 이름, 사용처를 세로로 정렬 */
+    flex-direction: column;
     justify-content: center;
     flex-grow: 1;
-    align-items: flex-start; /* 좌측 정렬 */
-    
-    /* [제거] item-info에 적용되었던 border-left 스타일 제거 */
-    border-left: none;
-    padding-left: 0; 
 }
 
 .item-image-container {
     width: 36px;
     height: 36px;
-    border-radius: 5px;
-    /* [수정] 간격 축소 */
-    margin-right: 10px; 
+    border-radius: 2px;
+    margin-right: 15px;
     position: relative;
     overflow: hidden;
-    /* [수정] 레어도 관련 테두리 스타일을 다시 적용 (100% 투명도) */
-    border: 2px solid transparent; 
+    border: 2px solid transparent;
 }
 
-/* [최종 해결책] item-image-container에 100% 투명도 레어도 테두리 강제 적용 */
-/* JS가 item-image-container에 data-rarity를 설정하므로 해당 선택자로 강제합니다. */
-.item-image-container[data-rarity="Common"] {
-    border: 2px solid var(--rarity-common) !important;
-}
-.item-image-container[data-rarity="Uncommon"] {
-    border: 2px solid var(--rarity-uncommon) !important;
-}
-.item-image-container[data-rarity="Rare"] {
-    border: 2px solid var(--rarity-rare) !important;
-}
-.item-image-container[data-rarity="Epic"] {
-    border: 2px solid var(--rarity-epic) !important;
-}
-.item-image-container[data-rarity="Legendary"] {
-    border: 2px solid var(--rarity-legendary) !important;
-}
-
+/* 이미지 컨테이너 레어도 테두리 강제 적용 */
+.item-image-container[data-rarity="Common"] { border-color: var(--rarity-common) !important; }
+.item-image-container[data-rarity="Uncommon"] { border-color: var(--rarity-uncommon) !important; }
+.item-image-container[data-rarity="Rare"] { border-color: var(--rarity-rare) !important; }
+.item-image-container[data-rarity="Epic"] { border-color: var(--rarity-epic) !important; }
+.item-image-container[data-rarity="Legendary"] { border-color: var(--rarity-legendary) !important; }
 
 .item-image {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* 이미지 잘림 방지 */
+    object-fit: contain;
     display: block;
 }
 
-
 .item-name {
     font-weight: bold;
-    font-size: 0.9em; /* 폰트 크기 축소 */
+    font-size: 0.95em;
 }
 
-/* [추가] 목록 페이지 사용처 서브 타이틀 스타일 */
-.item-row .item-used-subtitle {
-    font-size: 0.75em; /* 아이템 이름보다 작게 */
-    color: #a8a8a8; 
+.item-used-subtitle {
+    font-size: 0.75em;
+    color: #888;
     margin-top: 3px;
-    font-style: italic;
     line-height: 1.2;
 }
 
 .item-count {
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
-    min-width: 40px; 
+    color: #eee;
+    min-width: 40px;
     text-align: right;
 }
-/* -- 5. 푸터 (Footer) 스타일 -- */
+
+/* =========================================
+   7. 상세 페이지 (Detail) 스타일
+   ========================================= */
+/* 상세 페이지 컨테이너 */
+#detail-content {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 110px 20px 50px 20px;
+}
+
+#detail-header-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+/* 태그 스타일 */
+.rarity-tag, .used-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #fff;
+    margin-right: 8px;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+    background-color: #333;
+}
+.used-tag { margin-right: 15px; background-color: #444; color: #ddd; }
+
+/* 레어도 태그 배경 */
+.rarity-tag[data-rarity="Common"] { background-color: var(--rarity-common); }
+.rarity-tag[data-rarity="Uncommon"] { background-color: var(--rarity-uncommon); }
+.rarity-tag[data-rarity="Rare"] { background-color: var(--rarity-rare); }
+.rarity-tag[data-rarity="Epic"] { background-color: var(--rarity-epic); }
+.rarity-tag[data-rarity="Legendary"] { background-color: var(--rarity-legendary); }
+
+#item-detail-card {
+    background-color: var(--wuxia-bg-panel);
+    border: 1px solid var(--wuxia-border);
+    border-radius: 4px;
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+
+#detail-header-container { padding: 25px 25px 0 25px; }
+
+#detail-item-name-header {
+    font-size: 2.2em;
+    margin: 0 0 20px 0;
+    color: var(--wuxia-accent-gold);
+}
+
+/* 상세 이미지 래퍼 */
+#detail-image-wrapper {
+    position: relative;
+    background-color: #1a1a1c;
+    border: 1px solid var(--wuxia-border);
+    border-radius: 4px;
+    padding: 30px;
+    margin: 0 25px 25px 25px;
+    border-left: 6px solid transparent; /* 레어도 색상 표시용 */
+}
+
+#detail-image-wrapper[data-rarity="Common"] { border-left-color: var(--rarity-common); }
+#detail-image-wrapper[data-rarity="Uncommon"] { border-left-color: var(--rarity-uncommon); }
+#detail-image-wrapper[data-rarity="Rare"] { border-left-color: var(--rarity-rare); }
+#detail-image-wrapper[data-rarity="Epic"] { border-left-color: var(--rarity-epic); }
+#detail-image-wrapper[data-rarity="Legendary"] { border-left-color: var(--rarity-legendary); }
+
+#detail-item-main-image {
+    display: block;
+    width: 100%;
+    max-height: 250px;
+    object-fit: contain;
+}
+
+#item-meta-section { padding: 0 25px; }
+
+.detail-chunk { margin-bottom: 25px; }
+
+.detail-chunk-title {
+    font-size: 1.1em;
+    color: var(--wuxia-accent-gold);
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--wuxia-border);
+    padding-bottom: 5px;
+}
+
+.detail-chunk p {
+    font-size: 1em;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* 재활용 리스트 (동적 생성) */
+.recycling-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.recycling-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: var(--wuxia-bg-input);
+    border: 1px solid var(--wuxia-border);
+    border-radius: 4px;
+}
+
+.recycling-image-container {
+    width: 32px;
+    height: 32px;
+    border-radius: 2px;
+    margin-right: 12px;
+    border: 1px solid #555;
+    position: relative;
+    overflow: hidden;
+}
+
+.recycling-image-container img { width: 100%; height: 100%; object-fit: contain; }
+
+.recycling-item-info { flex-grow: 1; }
+.recycling-item-name { font-weight: normal; color: #ccc; font-size: 0.9em;}
+.recycling-item-count {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--wuxia-accent-gold);
+    text-align: right;
+    width: 40px;
+}
+
+/* 페이지네이션 */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.pagination-button {
+    background-color: #222;
+    color: #888;
+    border: 1px solid #444;
+    padding: 8px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.pagination-button:hover:not(.active) {
+    background-color: #333;
+    border-color: #666;
+}
+
+.pagination-button.active {
+    background-color: var(--wuxia-accent-red);
+    color: #fff;
+    border-color: var(--wuxia-accent-red);
+    cursor: default;
+}
+
+/* =========================================
+   8. 푸터
+   ========================================= */
 #main-footer {
-    background-color: #1f1f1f; /* 푸터 배경색 */
-    color: #999; /* 밝은 회색 텍스트 */
-    padding: 30px 20px;
-    margin-top: 50px; /* 메인 콘텐츠와의 간격 */
-    border-top: 1px solid #333;
+    background-color: #141414;
+    color: #666;
+    padding: 40px 20px;
+    margin-top: 60px;
+    border-top: 1px solid var(--wuxia-border);
     text-align: center;
 }
 
-.footer-info {
-    max-width: 600px;
-    margin: 0 auto 20px auto;
-}
-
 .version-info {
-    font-size: 1.0em; /* 폰트 크기 축소 */
+    font-size: 1.0em;
     font-weight: bold;
-    color: #f8f8f8; 
-    margin-bottom: 15px;
+    color: var(--wuxia-accent-gold);
+    margin-bottom: 10px;
 }
 
 .copyright-disclaimer {
-    font-size: 0.8em; /* 폰트 크기 축소 */
+    font-size: 0.8em;
     line-height: 1.4;
     margin-bottom: 20px;
 }
@@ -360,410 +494,31 @@ h3 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* 링크 사이의 간격 */
+    gap: 15px;
 }
 
 .footer-links .link-item {
-    color: #999;
+    color: #888;
     text-decoration: none;
-    font-size: 0.8em; /* 폰트 크기 축소 */
-    font-weight: bold;
+    font-size: 0.8em;
     transition: color 0.2s;
 }
-.hidden-mobile-item {
-    display: none;
-}
-.footer-links .link-item:hover {
-    color: #fff;
-}
 
-.footer-links .separator {
-    color: #555; /* 구분선 색상 */
-    font-weight: normal;
-}
+.footer-links .link-item:hover { color: var(--wuxia-accent-gold); }
+.footer-links .separator { color: #444; }
 
+/* =========================================
+   9. 반응형 미디어 쿼리 (PC/태블릿)
+   ========================================= */
 @media (min-width: 768px) {
-    /* [핵심] 768px 이상일 때, 숨겨졌던 아이템을 다시 보이게 함 */
-    .hidden-mobile-item {
-        display: flex; 
-    }
-    
-    /* 768px 이상일 때, 3열 Grid 레이아웃 적용 */
-    #recent-list.item-list-container {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr); 
-        gap: 20px; 
-    }
-    /* 최근 획득 아이템 목록(#recent-list)에만 3열 Grid 레이아웃 적용 */
-    #recent-list.item-list-container {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr); 
-        gap: 20px; 
-    }
+    .hidden-mobile-item { display: flex; }
 
-    /* 검색 결과 목록(#results-list)에 3열 Grid 레이아웃 적용 (최대 30개) */
+    #recent-list.item-list-container,
     #results-list.item-list-container {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); 
-        gap: 20px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
     }
-    
-    /* [수정] 세로로 길게 늘어나는 것을 방지하기 위해 height: 100% 제거 */
-    .item-row {
-        height: auto;
-    }
-    
-}
-/* ============================================== */
-/* 상세 정보 페이지 (detail.html) 스타일 */
-/* ============================================== */
 
-#detail-content {
-    /* 상세 페이지는 중앙 집중화를 위해 더 좁게 설정 */
-max-width: 600px; 
-    margin: 0 auto;
-    /* 상단바 높이 고려 및 하단 여백 추가 (패딩은 PC 뷰에서 20px 유지) */
-    padding: 100px 20px 50px 20px;
-}
-
-#detail-header-info {
-    display: flex;
-    align-items: center; /* 아이템 이름과 태그를 수평 정렬 */
-    /* [수정] 태그와 제목이 분리되도록 마진 추가 */
-    margin-bottom: 5px; 
-    margin-top: 15px; /* 헤더 컨테이너 상단 마진 확보 */
-}
-
-.rarity-tag {
-    /* 기존 희귀도 태그 스타일 */
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.8em;
-    font-weight: bold;
-    color: #121212; 
-    margin-right: 8px; 
-    text-shadow: 1px 1px 0 #000;
-}
-
-.used-tag {
-    /* 사용처 태그는 희귀도와 같은 스타일을 따르되, 마진을 줍니다. */
-    margin-right: 15px; 
-}
-
-#item-detail-card {
-    /* 전체를 감싸는 카드 */
-    border-radius: 8px;
-    overflow: hidden;
-    padding-bottom: 20px; 
-}
-
-/* 1. 이미지 및 기본 정보 영역 */
-#detail-header-container {
-    padding: 20px 20px 0 20px;
-}
-
-#detail-header-labels {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding-top: 20px;
-}
-
-.header-label {
-    padding: 4px 8px;
-    font-size: 0.8em;
-    font-weight: bold;
-    border-radius: 4px;
-    color: #1a1a1a; 
-    background-color: #f0f0f0;
-}
-
-/* 레어도 레이블 색상 오버라이드 (5단계 모두 포함) */
-#detail-item-rarity-label[data-rarity="Common"] { background-color: var(--rarity-common); }
-#detail-item-rarity-label[data-rarity="Uncommon"] { background-color: var(--rarity-uncommon); }
-#detail-item-rarity-label[data-rarity="Rare"] { background-color: var(--rarity-rare); }
-#detail-item-rarity-label[data-rarity="Epic"] { background-color: var(--rarity-epic); }
-#detail-item-rarity-label[data-rarity="Legendary"] { background-color: var(--rarity-legendary); }
-
-
-#detail-item-name-header {
-    font-size: 2em;
-    margin: 0 0 15px 0;
-    color: #f8f8f8;
-}
-
-/* 이미지 Wrapper */
-#detail-image-wrapper {
-    position: relative;
-    background-color: #2c2c2c; /* 이미지 배경 */
-    border-radius: 8px;
-    padding: 20px;
-    overflow: hidden;
-    margin: 0 20px 20px 20px;
-    
-    /* 레어도에 따른 왼쪽 코너 장식 */
-    border-left: 10px solid transparent; 
-    transition: border-left-color 0.3s;
-}
-
-#detail-item-main-image {
-    display: block;
-    width: 100%;
-    max-height: 200px;
-    object-fit: contain; /* 이미지가 잘리지 않도록 */
-}
-
-/* 이미지 wrapper 레어도 테두리 (5단계 모두 포함) */
-#detail-image-wrapper[data-rarity="Common"] { border-left-color: var(--rarity-common); }
-#detail-image-wrapper[data-rarity="Uncommon"] { border-left-color: var(--rarity-uncommon); }
-#detail-image-wrapper[data-rarity="Rare"] { border-left-color: var(--rarity-rare); }
-#detail-image-wrapper[data-rarity="Epic"] { border-left-color: var(--rarity-epic); }
-#detail-image-wrapper[data-rarity="Legendary"] { border-left-color: var(--rarity-legendary); }
-
-#detail-find-location {
-    font-size: 0.9em; /* 이전에 0.9em로 줄임 */
-    color: #ccc;
-    line-height: 1.4; 
-    background-color: #2c2c2c; 
-    border-radius: 5px; 
-    padding: 8px 15px; 
-    margin: 0; 
-}
-/* 2. 상세 정보 청크 스타일 */
-#item-meta-section {
-    padding: 0 20px;
-}
-
-.detail-chunk {
-    background: none;
-    padding: 0;
-    margin-bottom: 20px;
-}
-
-.detail-chunk-title {
-    font-size: 1.0em; /* 이미지의 "구할 수 있는 곳" 제목 크기 */
-    color: #f8f8f8;
-    margin-top: 0;
-    margin-bottom: 10px;
-    padding-bottom: 0;
-}
-
-.detail-chunk p {
-    font-size: 1em;
-    color: #ccc;
-    line-height: 1.5;
-    background-color: #1a1a1a;
-    padding: 5px 0;
-}
-
-
-/* 재활용 보상 리스트 스타일 */
-.recycling-items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.recycling-item-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 15px;
-    background-color: #2c2c2c;
-    border-radius: 5px;
-}
-
-.recycling-item-row .item-info {
-    display: flex;
-    align-items: center;
-}
-
-.recycling-item-row .item-image-container {
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
-    margin-right: 10px;
-    /* 등급 테두리 재활용 */
-    border: 2px solid transparent; 
-}
-.recycling-item-row .item-count {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #f8f8f8;
-}
-
-.recycling-item-row .item-name {
-    font-weight: normal;
-}
-
-/* ============================================== */
-/* 페이지네이션 (Pagination) 스타일 추가 */
-/* ============================================== */
-
-.pagination-controls {
-    display: flex;
-    justify-content: center; /* 버튼들을 중앙에 배치 */
-    padding: 20px 0;
-    margin-top: 20px;
-    gap: 10px;
-}
-
-.pagination-button {
-    background-color: #333;
-    color: #f8f8f8;
-    border: 1px solid #555;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.pagination-button:hover:not(.active) {
-    background-color: #555;
-}
-
-.pagination-button.active {
-    background-color: #ffcc00; /* 활성화된 페이지는 강조 */
-    color: #121212;
-    cursor: default;
-}
-#full-list-section {
-    /* 전체 콘텐츠 상단 여백 (index.html의 #intro-card와 유사하게) */
-    margin-top: 40px; 
-    margin-bottom: 40px; /* 하단에도 여백을 추가하여 보기 좋게 만듭니다. */
-}
-
-/* style.css 파일에 다음 CSS를 추가/수정합니다. */
-
-/* === 상세 페이지 (Detail Page) 스타일 === */
-/* 희귀도 태그와 사용처 태그를 이름과 수평으로 정렬 */
-#detail-header-info {
-    display: flex;
-    align-items: center; /* 아이템 이름과 태그를 수평 정렬 */
-    /* 기존 스타일 유지 */
-    margin-bottom: 10px;
-}
-
-.rarity-tag {
-    /* 기존 희귀도 태그 스타일 */
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.8em;
-    font-weight: bold;
-    color: #121212; 
-    margin-right: 8px; 
-    text-shadow: 1px 1px 0 #000;
-}
-
-/* 사용처 태그는 희귀도와 같은 스타일을 사용하되, 희귀도 태그와 살짝 구분되는 마진을 줍니다. */
-.used-tag {
-    /* 희귀도 태그의 스타일(rarity-tag)을 그대로 따르므로 추가 색상 정의는 필요 없습니다. */
-    margin-right: 15px; /* 희귀도 태그와 사용처 태그 사이를 띄웁니다. */
-}
-
-/* === 목록 페이지 (Index/List Page) 스타일 === */
-/* 아이템 이름, 희귀도, 사용처를 세로로 정렬 */
-.item-row .item-info {
-    display: flex;
-    flex-direction: column; /* 이름, 희귀도, 사용처를 세로로 정렬 */
-    align-items: flex-start;
-    flex-grow: 1; 
-}
-
-/* [추가] 목록 페이지 사용처 서브 타이틀 스타일 */
-.item-row .item-used-subtitle {
-    font-size: 0.75em; /* 아이템 이름(1.1em)보다 작게 */
-    color: #a8a8a8; 
-    margin-top: 3px;
-    font-style: italic;
-    line-height: 1.2;
-}
-
-/* [추가] 재활용 목록 아이템 정보 컨테이너 스타일 */
-.recycling-item-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* 개수를 오른쪽 끝으로 밀어냅니다. */
-    padding: 8px 15px;
-    background-color: #2c2c2c;
-    border-radius: 5px;
-}
-
-.recycling-image-container {
-    width: 30px; /* 크기 조정 */
-    height: 30px;
-    border-radius: 4px;
-    /* [수정] 이미지와 이름 사이 간격 조정 */
-    margin-right: 10px; 
-    position: relative;
-    overflow: hidden;
-    /* 레어도 테두리 */
-    border: 2px solid transparent; 
-}
-.recycling-image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.recycling-item-info {
-    display: flex;
-    align-items: center;
-    flex-grow: 1; /* 이름이 최대한 확장되도록 */
-}
-
-.recycling-item-name {
-    font-weight: normal;
-    color: #f8f8f8;
-}
-
-.recycling-item-count {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #f8f8f8;
-    text-align: right;
-    width: 40px; /* 개수 표시 영역 너비 고정 */
-}
-
-/* [추가] 재활용 목록 레어도 테두리 */
-.recycling-image-container[data-rarity="Common"] { border-color: var(--rarity-common); }
-.recycling-image-container[data-rarity="Uncommon"] { border-color: var(--rarity-uncommon); }
-.recycling-image-container[data-rarity="Rare"] { border-color: var(--rarity-rare); }
-.recycling-image-container[data-rarity="Epic"] { border-color: var(--rarity-epic); }
-.recycling-image-container[data-rarity="Legendary"] { border-color: var(--rarity-legendary); }
-.recycling-text-wrapper {
-    display: flex;
-    flex-direction: column; 
-    flex-grow: 1;
-    line-height: 1.2;
-    /* [추가] 텍스트 내용물 자체도 왼쪽 정렬을 보장 */
-    text-align: left !important;
-}
- 
-.recycling-image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.recycling-item-info {
-    display: flex;
-    align-items: center;
-    flex-grow: 1; /* 이름이 최대한 확장되도록 */
-}
-
-/* [추가] 재활용 목록 아이템 이름에 레어도 폰트 색상 적용 */
-.recycling-item-name[data-rarity="Common"] { color: var(--rarity-common); }
-.recycling-item-name[data-rarity="Uncommon"] { color: var(--rarity-uncommon); }
-.recycling-item-name[data-rarity="Rare"] { color: var(--rarity-rare); }
-.recycling-item-name[data-rarity="Epic"] { color: var(--rarity-epic); }
-.recycling-item-name[data-rarity="Legendary"] { color: var(--rarity-legendary); }
-
-
-.recycling-item-name {
-    font-weight: normal;
-    font-size: 0.9em;
+    .item-row { height: auto; }
 }

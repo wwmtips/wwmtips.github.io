@@ -223,25 +223,48 @@ function renderQuestList(quests) {
     });
 }
 
+// [수정] 퀘스트 상세 내용 로드
 function loadQuestDetail(filepath) {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
     const contentBox = document.getElementById('quest-content-loader');
 
+    // 1. 화면 전환 (리스트 숨김, 상세 보임)
+    // 이 시점에서 '목록으로 돌아가기' 버튼은 이미 화면에 보입니다.
     listView.style.display = 'none';
     detailView.style.display = 'block';
+    
+    // 2. 로딩 표시
     contentBox.innerHTML = '<div style="text-align:center; padding:50px;">로딩 중...</div>';
 
+    // 3. 파일 가져오기 시도
     fetch(filepath)
         .then(response => {
-            if (!response.ok) throw new Error("파일 없음");
+            // 파일이 없으면 (404 Not Found) 에러 발생시킴
+            if (!response.ok) {
+                throw new Error("File not found"); 
+            }
             return response.text();
         })
         .then(html => {
+            // 성공 시 내용 표시
             contentBox.innerHTML = html;
         })
         .catch(err => {
-            contentBox.innerHTML = `<div style="text-align:center; color:red; padding:20px;">내용 로드 실패<br><small>(${err.message})</small></div>`;
+            // [핵심 수정] 실패 시(파일 없을 때) "준비 중" 메시지 표시
+            // 무협 테마에 맞춰 아이콘과 색상을 지정했습니다.
+            contentBox.innerHTML = `
+                <div style="text-align:center; padding: 60px 20px;">
+                    <div style="font-size: 3em; margin-bottom: 15px; opacity: 0.5;">📜</div>
+                    <h3 style="color: var(--wuxia-accent-gold); margin-bottom: 10px;">
+                        정보 준비 중입니다
+                    </h3>
+                    <p style="color: #888; font-size: 0.9em;">
+                        아직 해당 퀘스트의 공략이 작성되지 않았습니다.<br>
+                        빠른 시일 내에 업데이트하겠습니다.
+                    </p>
+                </div>
+            `;
         });
 }
 

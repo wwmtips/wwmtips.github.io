@@ -524,16 +524,11 @@ h3 {
 
     /* 퀘스트 타입 필터 버튼 크기 축소 */
     .type-btn {
-        font-size: 0.8em;  /* 글자 크기를 80% 수준으로 줄임 */
+        font-size: 0.5em;  /* 글자 크기를 80% 수준으로 줄임 */
         padding: 4px 8px;  /* 버튼 내부 여백도 살짝 줄여서 공간 확보 */
     }
 
-    /* 버튼 컨테이너 간격 조정 */
-    .quest-type-nav {
-        gap: 5px;          /* 버튼 사이 간격을 10px -> 5px로 좁힘 */
-        flex-wrap: wrap;   /* 공간이 부족하면 줄바꿈 허용 (선택사항) */
-        justify-content: center; /* 모바일에서는 가운데 정렬이 보기 좋음 */
-    }
+
 }
 
 

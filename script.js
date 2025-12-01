@@ -83,7 +83,7 @@ function loadData() {
 // [NEW] 홈 화면 퀘스트 렌더링 함수
 // =========================================
 function renderHomeQuests(quests) {
-    const container = document.getElementById('recent-list');
+    const container = document.getElementById('home-quest-list');
     if (!container) return;
 
     container.innerHTML = '';

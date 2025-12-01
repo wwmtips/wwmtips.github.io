@@ -933,7 +933,7 @@ h3 {
 @media (max-width: 768px) {
     /* 퀘스트 타입 필터 버튼 크기 축소 */
     .type-btn {
-        font-size: 0.8em;  /* 폰트 크기 축소 */
+        font-size: 0.9em;  /* 폰트 크기 축소 */
         padding: 4px 8px;  /* 패딩 축소 */
     }
     

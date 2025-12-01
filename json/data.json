@@ -2,6 +2,9 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "투명", "answer": "해파리" },
+    { "hint": "하리코 베르", "answer": "녹두" },
+    { "hint": "여름", "answer": "나팔꽃" },
     { "hint": "상징", "answer": "무궁화" },
     { "hint": "빛과 그림자", "answer": "칸델라" },
     { "hint": "채소", "answer": "멜론" },

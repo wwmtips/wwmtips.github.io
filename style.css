@@ -527,26 +527,44 @@ h3 {
 /* =========================================
    10. 족보 페이지 (Answer.html) 전용 스타일
    ========================================= */
-
 #answer-container {
-    width: 100%;
-    /* 화면 높이에서 헤더/푸터 대략적인 크기를 뺀 만큼을 기본 높이로 설정 */
+    /* [핵심 1] 부모 요소(#main-content)의 패딩(15px)을 무시하고 화면 끝까지 늘림 */
+    width: calc(100% + 30px); 
+    margin-left: -15px;
+    margin-right: -15px;
+
+    /* [핵심 2] 상단 헤더와 너무 딱 붙지 않도록 여백 추가 */
+    margin-top: 20px; 
+
+    /* [핵심 3] 가로로 꽉 찰 때는 둥근 모서리가 어색하므로 제거 */
+    border-radius: 0; 
+    
+    /* 좌우 테두리 제거 (화면 끝에 붙으므로 불필요) */
+    border-left: none;
+    border-right: none;
+    
+    /* 위아래 테두리는 유지 */
+    border-top: 1px solid var(--wuxia-border);
+    border-bottom: 1px solid var(--wuxia-border);
+
+    /* 기존 스타일 유지 */
     height: 75vh; 
     background-color: var(--wuxia-bg-panel);
-    border: 1px solid var(--wuxia-border);
-    border-radius: 4px;
-    overflow: hidden; /* 내부 스크롤을 위해 오버플로우 숨김 */
     display: flex;
     flex-direction: column;
+    overflow: hidden; 
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-/* 상단 상태바 */
+/* 상태바 ("총 ~개의 족보가...") 디자인 보정 */
 .status-bar {
-    background-color: #111;
+    background-color: #1a1a1c; /* 배경색을 살짝 밝게 */
     color: var(--wuxia-accent-gold);
-    padding: 12px 20px;
-    font-size: 0.9em;
+    
+    /* 내부 여백을 넉넉하게 주어 답답함 해소 */
+    padding: 15px 20px; 
+    
+    font-size: 0.95em;
     font-weight: bold;
     border-bottom: 1px solid var(--wuxia-border);
     text-align: center;

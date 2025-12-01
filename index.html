@@ -1,1 +1,79 @@
-test
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연운: 한국 위키</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="fixed-top-bar">
+        <header id="main-header">
+            <div class="logo">
+                <span class="logo-icon"><a href="index.html"><img src="images/logo.png"></a></span> 
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="검색" onkeyup="filterItems()">
+                <span class="search-arrow">→</span> 
+      </div>
+        </header>
+
+        <nav id="category-nav">
+            <button class="nav-item active" data-filter="items">
+                <span class="icon"></span> 홈
+            </button>
+            <button class="nav-item" data-filter="quest">
+                <span class="icon"></span> 퀘스트
+            </button>
+            <button class="nav-item" data-filter="스무고개">
+                <span class="icon"></span> 스무고개
+            </button>
+        </nav>
+    </div>
+    <main id="main-content">
+        
+        <section id="intro-card" class="large-font-chunk">
+            <h2>연운 DB</h2>
+            <p>
+                넷이즈의 게임 <연운>의 아이템, 퀘스트 및 탐험 정보 등 가능한 정보를 한글화하여 모아둔 데이터베이스입니다.
+            </p>
+            <button class="browse-button">자주 찾는 정보</button>
+        </section>
+
+        <section id="recent-items">
+            <h3>최신 업데이트</h3>
+            <div id="recent-list" class="item-list-container">
+                </div>
+        </section>
+
+        <section id="search-results" style="display: none;">
+             <h3>🔍 검색 결과</h3>
+             <div id="results-list" class="item-list-container">
+                </div>
+        </section>
+
+    </main>
+
+    <footer id="main-footer">
+        <div class="footer-info">
+            <p class="version-info">
+                ARC Raiders DB (한국)
+            </p>
+            <p class="copyright-disclaimer">
+                본 사이트는 넷이즈와 무관한 팬 사이트이며, 한글화 정보에 오류가 있을 수 있습니다.
+            </p>
+        </div>
+
+        <div class="footer-links">
+            <a href="#" class="link-item">오픈소스</a>
+            <span class="separator">|</span>
+            <a href="#" class="link-item">개인정보 보호정책</a>
+            <span class="separator">|</span>
+            <a href="#" class="link-item">서비스 약관</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

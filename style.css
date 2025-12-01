@@ -898,7 +898,7 @@ h3 {
     margin-bottom: 20px;
     border-bottom: 1px solid #333; /* 하단 구분선 */
     padding-bottom: 10px;
-    font-size: 0.5em;
+    font-size: 0.9em;
 }
 
 .type-btn {
@@ -933,7 +933,7 @@ h3 {
 @media (max-width: 768px) {
     /* 퀘스트 타입 필터 버튼 크기 축소 */
     .type-btn {
-        font-size: 0.9em;  /* 폰트 크기 축소 */
+        font-size: 0.8em;  /* 폰트 크기 축소 */
         padding: 4px 8px;  /* 패딩 축소 */
     }
     

@@ -8,7 +8,7 @@ let globalData = { items: [], quiz: [], quests: [] };
 // [NEW] 페이지네이션용 전역 변수
 let currentQuestData = []; // 현재 필터링된 퀘스트 목록
 let currentPage = 1;       // 현재 페이지 번호
-const itemsPerPage = 10;   // 한 페이지당 보여줄 개수
+const itemsPerPage = 12;   // 한 페이지당 보여줄 개수
 
 document.addEventListener("DOMContentLoaded", () => {
     loadData(); 

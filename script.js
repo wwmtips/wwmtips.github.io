@@ -54,6 +54,17 @@ function loadData() {
         fetch('json/quests.json').then(res => res.json())
     ])
     .then(([mainData, questList]) => {
+        
+        // [수정] 퀘스트 데이터를 ID 숫자 기준 내림차순(최신순)으로 정렬
+        if (questList && Array.isArray(questList)) {
+            questList.sort((a, b) => {
+                // "q1", "q2"에서 'q'를 빼고 숫자로 바꿔서 비교
+                const numA = parseInt(a.id.replace('q', ''));
+                const numB = parseInt(b.id.replace('q', ''));
+                return numB - numA; // 큰 숫자가 먼저 오게 (내림차순)
+            });
+        }
+
         globalData = {
             items: mainData.items || [],
             quiz: mainData.quiz || [],
@@ -67,17 +78,16 @@ function loadData() {
         const counter = document.getElementById('quiz-counter-area');
         if(counter) counter.innerText = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
 
-        // 2. 퀘스트 탭 리스트 초기화
+        // 2. 퀘스트 탭 리스트 초기화 (이제 역순으로 나옴)
         renderQuestList(globalData.quests);
 
-        // 3. 홈 화면 "주요 퀘스트" 리스트 초기화
+        // 3. 홈 화면 "주요 퀘스트" 리스트 초기화 (이제 역순으로 나옴)
         renderHomeQuests(globalData.quests);
     })
     .catch(error => {
         console.error("데이터 로드 중 오류 발생:", error);
     });
 }
-
 // [기능] 탭 전환 (SPA 방식)
 function switchTab(tabName) {
     const views = ['view-home', 'view-quiz', 'view-quest'];

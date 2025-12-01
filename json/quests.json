@@ -62,5 +62,13 @@
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
     "filepath": "/quests/q8.html"
+  },
+  {
+    "id": "q9",
+    "name": "귀문 시장 입장 퀘스트",
+    "location": "청하",
+    "type": "퀘스트",
+    "iconpath": "images/world.jpg",
+    "filepath": "/quests/q9.html"
   }
 ]

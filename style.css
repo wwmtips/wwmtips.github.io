@@ -522,3 +522,134 @@ h3 {
 
     .item-row { height: auto; }
 }
+
+
+/* =========================================
+   10. 족보 페이지 (Answer.html) 전용 스타일
+   ========================================= */
+
+#answer-container {
+    width: 100%;
+    /* 화면 높이에서 헤더/푸터 대략적인 크기를 뺀 만큼을 기본 높이로 설정 */
+    height: 75vh; 
+    background-color: var(--wuxia-bg-panel);
+    border: 1px solid var(--wuxia-border);
+    border-radius: 4px;
+    overflow: hidden; /* 내부 스크롤을 위해 오버플로우 숨김 */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+/* 상단 상태바 */
+.status-bar {
+    background-color: #111;
+    color: var(--wuxia-accent-gold);
+    padding: 12px 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-bottom: 1px solid var(--wuxia-border);
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* 내부 검색 영역 */
+.inner-search-area {
+    padding: 15px;
+    background-color: var(--wuxia-bg-deep);
+    border-bottom: 1px solid var(--wuxia-border);
+    flex-shrink: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.search-input-wrapper {
+    flex-grow: 1;
+}
+
+.inner-search-box {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 2px;
+    font-size: 1em;
+    background-color: var(--wuxia-bg-input);
+    color: var(--wuxia-text-main);
+    box-sizing: border-box;
+    font-family: 'Noto Serif KR', serif;
+}
+.inner-search-box:focus {
+    outline: none;
+    border-color: var(--wuxia-accent-gold);
+}
+
+.inner-search-btn {
+    background-color: var(--wuxia-accent-gold);
+    color: #1a150e;
+    border: none;
+    padding: 0 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+    font-family: 'Noto Serif KR', serif;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+.inner-search-btn:hover {
+    background-color: #dcb36a;
+}
+
+/* 테이블 스크롤 영역 */
+.list-scroll-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--wuxia-bg-panel);
+    /* 스크롤바 디자인 (Webkit) */
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1a1a1c;
+}
+.list-scroll-area::-webkit-scrollbar { width: 8px; }
+.list-scroll-area::-webkit-scrollbar-track { background: #1a1a1c; }
+.list-scroll-area::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+/* 족보 테이블 스타일 */
+.answer-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    table-layout: fixed;
+}
+
+.answer-table th {
+    /* 헤더 고정 */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #252629; /* 헤더 배경을 살짝 밝게 */
+    color: var(--wuxia-accent-gold);
+    padding: 15px;
+    border-bottom: 2px solid var(--wuxia-border);
+    font-size: 1.05em;
+}
+
+.answer-table td {
+    padding: 12px;
+    border-bottom: 1px solid #2a2a2a;
+    color: #ccc;
+    word-break: keep-all;
+    font-size: 0.95em;
+}
+
+.answer-table tr:hover {
+    background-color: rgba(200, 160, 96, 0.1); /* 호버 시 아주 옅은 금색 배경 */
+}
+
+/* 검색 하이라이트 (노란 배경 대신 금색 텍스트 강조) */
+.highlight {
+    background-color: var(--wuxia-accent-gold);
+    color: #000;
+    border-radius: 2px;
+    padding: 0 2px;
+    font-weight: bold;
+}

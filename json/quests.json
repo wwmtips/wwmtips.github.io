@@ -78,5 +78,13 @@
     "type": "퀘스트",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q10.html"
+  },
+  {
+    "id": "q11",
+    "name": "제 1막: 시작된 음모",
+    "location": "청하",
+    "type": "세계관",
+    "iconpath": "images/story.jpg",
+    "filepath": "/quests/act1.html"
   }
 ]

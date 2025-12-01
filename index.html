@@ -9,22 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
-      <link rel="apple-touch-icon" sizes="57x57" href="/fav/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="/fav/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="/fav/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="/fav/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="/fav/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="/fav/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/fav/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/fav/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/fav/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="/fav/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/fav/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/fav/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/fav/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/fav/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/fav/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/fav/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/fav/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/fav/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/fav/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/fav/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/fav/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/fav/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 </head>
 <body>
 
@@ -36,7 +36,6 @@
             
             <div class="search-container">
                 <input type="text" id="header-search-input" placeholder="통합 검색 (족보, 아이템...)" autocomplete="off">
-                
                 <div id="global-search-results" class="search-dropdown"></div>
             </div>
         </header>
@@ -56,24 +55,28 @@
 
     <main id="main-content">
         
- <div id="view-home">
-    <section id="intro-card" class="large-font-chunk">
-        </section>
+        <div id="view-home">
+            <section id="intro-card" class="large-font-chunk">
+                <h2>한국 연운 위키</h2>
+                <p>
+                    넷이즈의 게임 &lt;연운&gt;의 아이템, 퀘스트 및 탐험 정보 등 가능한 정보를 한글화하여 모아둔 데이터베이스입니다.
+                </p>
+                <button class="browse-button" onclick="switchTab('quiz')">자주 찾는 정보</button>
+            </section>
 
-    <section id="recent-notice">
-        <h3>최신 업데이트</h3>
-        <div id="recent-list" class="item-list-container">
-            <div style="padding:20px; color:#888;">준비 중인 기능입니다.</div>
+            <section id="recent-notice">
+                <h3>최신 업데이트</h3>
+                <div id="recent-list" class="item-list-container">
+                    <div style="padding:20px; color:#888;">준비 중인 기능입니다.</div>
+                </div>
+            </section>
+
+            <section id="recent-items">
+                <h3>주요 퀘스트</h3>
+                <div id="home-quest-list" class="quest-grid">
+                    </div>
+            </section>
         </div>
-    </section>
-
-    <section id="recent-items">
-        <h3>주요 퀘스트</h3>
-        
-        <div id="home-quest-list" class="quest-grid">
-            </div>
-    </section>
-</div>
 
         <div id="view-quiz" style="display: none;">
             <section id="answer-container">
@@ -106,38 +109,34 @@
             </section>
         </div>
 
-   <div id="view-quest" style="display: none;">
-<div id="view-quest" style="display: none;">
-    
-    <section id="quest-list-view" style="margin-top: 30px;">
-        <div class="large-font-chunk" style="margin-bottom: 10px; border:none; background:none; padding-left:0;">
-            <h2 style="color:var(--wuxia-accent-gold); margin:0;">주요 퀘스트</h2>
+        <div id="view-quest" style="display: none;">
+            <section id="quest-list-view" style="margin-top: 30px;">
+                <div class="large-font-chunk" style="margin-bottom: 10px; border:none; background:none; padding-left:0;">
+                    <h2 style="color:var(--wuxia-accent-gold); margin:0;">주요 퀘스트</h2>
+                </div>
+
+                <div class="quest-type-nav">
+                    <button class="type-btn active" onclick="filterQuestType('all', this)">전체</button>
+                    <button class="type-btn" onclick="filterQuestType('인연의 궤적', this)">인연의 궤적</button>
+                    <button class="type-btn" onclick="filterQuestType('만사록', this)">만사록</button>
+                    <button class="type-btn" onclick="filterQuestType('이벤트', this)">이벤트</button>
+                </div>
+                
+                <div id="quest-grid-container" class="quest-grid">
+                    </div>
+            </section>
+
+            <section id="quest-detail-view" style="display: none;">
+                <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
+                <div id="quest-content-loader" class="detail-content-box">
+                    로딩 중...
+                </div>
+            </section>
         </div>
-
-        <div class="quest-type-nav">
-            <button class="type-btn active" onclick="filterQuestType('all', this)">전체</button>
-            <button class="type-btn" onclick="filterQuestType('인연의 궤적', this)">인연의 궤적</button>
-            <button class="type-btn" onclick="filterQuestType('만사록', this)">만사록</button>
-            <button class="type-btn" onclick="filterQuestType('이벤트', this)">이벤트</button>
-        </div>
-        
-        <div id="quest-grid-container" class="quest-grid">
-            </div>
-    </section>
-
-    <section id="quest-detail-view" style="display: none;">
-        <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
-        <div id="quest-content-loader" class="detail-content-box">
-            로딩 중...
-        </div>
-    </section>
-
-</div>
-
-</div>
 
     </main>
 
+   
 
     <script src="script.js"></script>
 </body>

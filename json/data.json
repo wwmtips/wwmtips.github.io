@@ -2,6 +2,8 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "말린 과일", "answer": "살구꽃" },
+    { "hint": "서랍", "answer": "화장대" },
     { "hint": "투명", "answer": "해파리" },
     { "hint": "하리코 베르", "answer": "녹두" },
     { "hint": "여름", "answer": "나팔꽃" },

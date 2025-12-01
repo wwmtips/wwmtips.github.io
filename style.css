@@ -610,3 +610,45 @@ h3 {
         gap: 5px;
     }
 }
+
+/* =========================================
+   15. 페이지네이션 스타일 (퀘스트 탭)
+   ========================================= */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    padding-bottom: 20px;
+}
+
+.pagination-btn {
+    background-color: #1a1a1c;
+    border: 1px solid #444;
+    color: #888;
+    padding: 8px 12px;
+    min-width: 36px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Noto Serif KR', serif;
+    transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    border-color: var(--wuxia-accent-gold);
+    color: var(--wuxia-accent-gold);
+}
+
+.pagination-btn.active {
+    background-color: var(--wuxia-accent-gold);
+    border-color: var(--wuxia-accent-gold);
+    color: #1a150e; /* 글자색 어둡게 */
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+    border-color: #333;
+}

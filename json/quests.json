@@ -5,7 +5,7 @@
     "location": "청하",
     "type": "인연의 궤적",
     "iconpath": "images/man.jpg",
-    "filepath": "quests/q1.html"
+    "filepath": "/quests/q1.html"
   },
   {
     "id": "q2",

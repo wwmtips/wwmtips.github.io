@@ -329,3 +329,36 @@ function selectQuestResult(filepath) {
     loadQuestDetail(filepath);
     document.getElementById("global-search-results").style.display = 'none';
 }
+
+// script.js 에 추가 (renderQuestList 함수 아래쯤)
+
+// [NEW] 퀘스트 타입 필터링 함수
+function filterQuestType(type, btnElement) {
+    // 1. 버튼 활성화 상태 변경 (UI)
+    // 모든 버튼에서 active 클래스 제거
+    const buttons = document.querySelectorAll('.quest-type-nav .type-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    // 클릭된 버튼에 active 클래스 추가
+    if (btnElement) {
+        btnElement.classList.add('active');
+    }
+
+    // 2. 데이터 필터링 (Logic)
+    const container = document.getElementById('quest-grid-container');
+    
+    // 데이터가 없으면 중단
+    if (!globalData.quests || globalData.quests.length === 0) return;
+
+    let filteredQuests = [];
+
+    if (type === 'all') {
+        filteredQuests = globalData.quests;
+    } else {
+        // quests.json의 "type" 값과 정확히 일치하는 것만 필터링
+        filteredQuests = globalData.quests.filter(q => q.type === type);
+    }
+
+    // 3. 필터링된 리스트 다시 그리기
+    renderQuestList(filteredQuests);
+}

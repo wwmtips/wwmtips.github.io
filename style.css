@@ -881,3 +881,39 @@ h3 {
     color: #ccc;
     line-height: 1.6;
 }
+
+/* =========================================
+   13. 퀘스트 타입 필터 스타일
+   ========================================= */
+.quest-type-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333; /* 하단 구분선 */
+    padding-bottom: 10px;
+}
+
+.type-btn {
+    background: none;
+    border: none;
+    color: #888; /* 기본 회색 */
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 12px;
+    transition: all 0.2s;
+    border-radius: 4px;
+}
+
+.type-btn:hover {
+    color: #ccc;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 활성화된 버튼 스타일 */
+.type-btn.active {
+    color: var(--wuxia-accent-gold); /* 금색 텍스트 */
+    background-color: rgba(200, 160, 96, 0.1); /* 금색 배경 틴트 */
+    box-shadow: 0 0 5px rgba(200, 160, 96, 0.2);
+}

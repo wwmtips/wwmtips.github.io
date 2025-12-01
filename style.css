@@ -527,9 +527,6 @@ h3 {
         font-size: 0.5em;  /* 글자 크기를 80% 수준으로 줄임 */
         padding: 4px 8px;  /* 버튼 내부 여백도 살짝 줄여서 공간 확보 */
     }
-.quest-type-nav {
-    font-size: 0.6em;
-}
 
 }
 
@@ -927,4 +924,27 @@ h3 {
     color: var(--wuxia-accent-gold); /* 금색 텍스트 */
     background-color: rgba(200, 160, 96, 0.1); /* 금색 배경 틴트 */
     box-shadow: 0 0 5px rgba(200, 160, 96, 0.2);
+}
+
+/* =========================================
+   14. 모바일 전용 스타일 (폰: 768px 이하)
+   [NEW] 여기서 폰트 크기를 줄입니다.
+   ========================================= */
+@media (max-width: 768px) {
+    /* 퀘스트 타입 필터 버튼 크기 축소 */
+    .type-btn {
+        font-size: 0.8em;  /* 폰트 크기 축소 */
+        padding: 4px 8px;  /* 패딩 축소 */
+    }
+    
+    /* 버튼 컨테이너 간격 좁히기 */
+    .quest-type-nav {
+        gap: 5px;
+        flex-wrap: wrap; /* 버튼이 많으면 줄바꿈 허용 */
+    }
+
+    /* 퀘스트 카드 모바일에서 1열로 보기 (이미 적용되어 있지만 확실하게) */
+    .quest-grid {
+        grid-template-columns: 1fr; 
+    }
 }

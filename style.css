@@ -57,38 +57,108 @@ h2, h3, p, button, input {
     align-items: center;
 }
 
-/* [요청사항 반영] 로고 위치 미세 조정 */
+/* 로고 위치 미세 조정 */
 .logo-icon img {
     padding-top: 6px; 
     vertical-align: middle;
     filter: sepia(0.3); /* 약간의 빈티지 효과 */
 }
 
+/* 검색 컨테이너 (이모지 제거, 반투명 적용) */
 .search-container {
     display: flex;
     align-items: center;
     flex-grow: 1;
-    background-color: var(--wuxia-bg-input);
+    /* 입력창 배경을 살짝 투명하게 */
+    background-color: rgba(32, 33, 36, 0.8); 
     border: 1px solid #444;
-    border-radius: 4px; /* 각진 느낌 */
-    padding: 5px 10px;
+    border-radius: 4px;
+    padding: 5px 15px;
     margin-left: 20px;
+    position: relative; /* 드롭다운 기준점 */
 }
 
-#search-input {
-    padding: 5px;
+#header-search-input {
+    padding: 5px 0;
     width: 100%;
     border: none;
     background-color: transparent;
     color: var(--wuxia-text-main);
     outline: none;
     font-size: 0.95em;
+    font-family: inherit;
 }
 
-.search-arrow {
-    font-size: 1.2em;
+/* 통합 검색 드롭다운 (반투명 유리 패널 스타일) */
+.search-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    
+    /* 배경을 반투명한 먹색으로 설정 */
+    background-color: rgba(15, 16, 18, 0.95);
+    
+    /* 배경 블러 처리 (유리 효과) */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    border: 1px solid rgba(200, 160, 96, 0.3); 
+    border-top: none;
+    
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+    z-index: 2000;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 0;
+    text-align: left;
+}
+
+/* 검색 결과 아이템 */
+.search-category-title {
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.05);
     color: var(--wuxia-accent-gold);
-    margin-left: 10px;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background-color: rgba(200, 160, 96, 0.15);
+}
+
+/* 검색 결과 뱃지 */
+.badge {
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+}
+.badge.quiz { background-color: var(--wuxia-accent-red); }
+.badge.item { background-color: var(--wuxia-accent-gold); color: #000; }
+
+.result-text {
+    font-size: 0.95em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #eee;
 }
 
 /* =========================================
@@ -126,7 +196,7 @@ h2, h3, p, button, input {
 }
 
 /* =========================================
-   5. 메인 콘텐츠
+   5. 메인 콘텐츠 및 뷰(View) 공통
    ========================================= */
 #main-content {
     padding-top: 110px; /* 헤더 높이만큼 여백 */
@@ -136,6 +206,16 @@ h2, h3, p, button, input {
     padding-right: 15px;
 }
 
+/* 화면 전환 애니메이션 */
+#view-home, #view-quiz, #view-quest {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* 소개 카드 */
 #intro-card.large-font-chunk {
     background-color: var(--wuxia-bg-panel);
@@ -143,9 +223,7 @@ h2, h3, p, button, input {
     border-radius: 4px;
     margin: 40px 0;
     border: 1px solid var(--wuxia-border);
-    
-    /* 배경 이미지 */
-    background-image: url('images/bg.jpg');
+    background-image: url('images/bg.jpg'); /* 배경 이미지 */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -153,12 +231,11 @@ h2, h3, p, button, input {
     overflow: hidden;
 }
 
-/* 오버레이 (텍스트 가독성 확보) */
 #intro-card.large-font-chunk::before {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.75); /* 어두운 오버레이 */
+    background-color: rgba(0, 0, 0, 0.75);
     z-index: 1;
 }
 
@@ -183,10 +260,9 @@ h2, h3, p, button, input {
     margin-bottom: 25px;
 }
 
-/* 버튼 스타일 (무협풍) */
 .browse-button {
     background-color: var(--wuxia-accent-gold);
-    color: #1a150e; /* 짙은 갈색 텍스트 */
+    color: #1a150e;
     border: 1px solid #b89050;
     padding: 12px 0;
     font-size: 1.0em;
@@ -203,265 +279,279 @@ h2, h3, p, button, input {
     background-color: #dcb36a;
 }
 
-/* =========================================
-   6. 아이템 목록 (리스트)
-   ========================================= */
+/* 섹션 제목 스타일 */
 h3 {
     font-size: 1.1em;
-    border-left: 4px solid var(--wuxia-accent-red); /* 붉은색 바 */
+    border-left: 4px solid var(--wuxia-accent-red);
     padding-left: 10px;
     margin-bottom: 15px;
     color: var(--wuxia-text-main);
 }
 
+/* 아이템/공지 리스트 컨테이너 */
 .item-list-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.item-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background: linear-gradient(to right, #1a1a1c, #242426); /* 먹색 그라데이션 */
-    border: 1px solid #2a2a2a;
-    border-radius: 4px;
-    transition: all 0.2s;
-    text-decoration: none;
-    color: inherit;
-}
+/* =========================================
+   6. 족보 페이지 (Answer) 스타일
+   ========================================= */
+#answer-container {
+    /* 부모 패딩 무시하고 꽉 차게 */
+    width: calc(100% + 30px); 
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 20px; 
 
-.item-row:hover {
-    border-color: var(--wuxia-accent-gold);
-    transform: translateX(2px);
-}
+    border-radius: 0; 
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--wuxia-border);
+    border-bottom: 1px solid var(--wuxia-border);
 
-/* 레어도별 텍스트 색상 (script.js에서 사용) */
-.item-row[data-rarity="Common"] { color: var(--rarity-common); }
-.item-row[data-rarity="Uncommon"] { color: var(--rarity-uncommon); }
-.item-row[data-rarity="Rare"] { color: var(--rarity-rare); }
-.item-row[data-rarity="Epic"] { color: var(--rarity-epic); }
-.item-row[data-rarity="Legendary"] { color: var(--rarity-legendary); }
-
-.item-info {
+    height: 75vh; 
+    background-color: var(--wuxia-bg-panel);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    flex-grow: 1;
+    overflow: hidden; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-.item-image-container {
-    width: 36px;
-    height: 36px;
-    border-radius: 2px;
-    margin-right: 15px;
-    position: relative;
-    overflow: hidden;
-    border: 2px solid transparent;
-}
-
-/* 이미지 컨테이너 레어도 테두리 강제 적용 */
-.item-image-container[data-rarity="Common"] { border-color: var(--rarity-common) !important; }
-.item-image-container[data-rarity="Uncommon"] { border-color: var(--rarity-uncommon) !important; }
-.item-image-container[data-rarity="Rare"] { border-color: var(--rarity-rare) !important; }
-.item-image-container[data-rarity="Epic"] { border-color: var(--rarity-epic) !important; }
-.item-image-container[data-rarity="Legendary"] { border-color: var(--rarity-legendary) !important; }
-
-.item-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-}
-
-.item-name {
+.status-bar {
+    background-color: #1a1a1c;
+    color: var(--wuxia-accent-gold);
+    padding: 15px 20px;
+    font-size: 0.95em;
     font-weight: bold;
+    border-bottom: 1px solid var(--wuxia-border);
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.inner-search-area {
+    padding: 15px;
+    background-color: var(--wuxia-bg-deep);
+    border-bottom: 1px solid var(--wuxia-border);
+    flex-shrink: 0;
+}
+
+.inner-search-box {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 2px;
+    font-size: 1em;
+    background-color: var(--wuxia-bg-input);
+    color: var(--wuxia-text-main);
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.list-scroll-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--wuxia-bg-panel);
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1a1a1c;
+}
+
+.answer-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    table-layout: fixed;
+}
+
+.answer-table th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #252629;
+    color: var(--wuxia-accent-gold);
+    padding: 15px;
+    border-bottom: 2px solid var(--wuxia-border);
+    font-size: 1.05em;
+}
+
+.answer-table td {
+    padding: 12px;
+    border-bottom: 1px solid #2a2a2a;
+    color: #ccc;
+    word-break: keep-all;
     font-size: 0.95em;
 }
 
-.item-used-subtitle {
-    font-size: 0.75em;
-    color: #888;
-    margin-top: 3px;
-    line-height: 1.2;
+.answer-table tr:hover {
+    background-color: rgba(200, 160, 96, 0.1);
 }
 
-.item-count {
-    font-size: 1.1em;
+.highlight {
+    background-color: var(--wuxia-accent-gold);
+    color: #000;
+    border-radius: 2px;
+    padding: 0 2px;
     font-weight: bold;
-    color: #eee;
-    min-width: 40px;
-    text-align: right;
 }
 
 /* =========================================
-   7. 상세 페이지 (Detail) 스타일
+   7. 퀘스트 뷰 (Quest) 스타일
    ========================================= */
-/* 상세 페이지 컨테이너 */
-#detail-content {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 110px 20px 50px 20px;
+
+/* 퀘스트 탭 상단 여백 */
+#quest-list-view {
+    margin-top: 30px; 
+    padding-left: 5px;
 }
 
-#detail-header-info {
+/* 퀘스트 타입 필터 (가로 스크롤 적용) */
+.quest-type-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    
+    /* 가로 스크롤 활성화 */
+    overflow-x: auto; 
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; 
+    padding-right: 20px; 
+}
+
+.quest-type-nav::-webkit-scrollbar {
+    height: 4px;
+}
+.quest-type-nav::-webkit-scrollbar-track {
+    background: #1a1a1c;
+}
+.quest-type-nav::-webkit-scrollbar-thumb {
+    background: var(--wuxia-accent-gold);
+    border-radius: 2px;
+}
+
+.type-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 12px;
+    transition: all 0.2s;
+    border-radius: 4px;
+    flex-shrink: 0; /* 버튼 형태 유지 */
+}
+
+.type-btn:hover {
+    color: #ccc;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.type-btn.active {
+    color: var(--wuxia-accent-gold);
+    background-color: rgba(200, 160, 96, 0.1);
+    box-shadow: 0 0 5px rgba(200, 160, 96, 0.2);
+}
+
+/* 퀘스트 카드 그리드 */
+.quest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    padding-bottom: 50px;
+}
+
+.quest-card {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-    margin-top: 15px;
-}
-
-/* 태그 스타일 */
-.rarity-tag, .used-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 2px;
-    font-size: 0.8em;
-    font-weight: bold;
-    color: #fff;
-    margin-right: 8px;
-    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
-    background-color: #333;
-}
-.used-tag { margin-right: 15px; background-color: #444; color: #ddd; }
-
-/* 레어도 태그 배경 */
-.rarity-tag[data-rarity="Common"] { background-color: var(--rarity-common); }
-.rarity-tag[data-rarity="Uncommon"] { background-color: var(--rarity-uncommon); }
-.rarity-tag[data-rarity="Rare"] { background-color: var(--rarity-rare); }
-.rarity-tag[data-rarity="Epic"] { background-color: var(--rarity-epic); }
-.rarity-tag[data-rarity="Legendary"] { background-color: var(--rarity-legendary); }
-
-#item-detail-card {
-    background-color: var(--wuxia-bg-panel);
-    border: 1px solid var(--wuxia-border);
+    background-color: #1a1b1e;
+    border: 1px solid #2a2b2e;
     border-radius: 4px;
-    overflow: hidden;
-    padding-bottom: 20px;
-}
-
-#detail-header-container { padding: 25px 25px 0 25px; }
-
-#detail-item-name-header {
-    font-size: 2.2em;
-    margin: 0 0 20px 0;
-    color: var(--wuxia-accent-gold);
-}
-
-/* 상세 이미지 래퍼 */
-#detail-image-wrapper {
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
     position: relative;
-    background-color: #1a1a1c;
-    border: 1px solid var(--wuxia-border);
-    border-radius: 4px;
-    padding: 30px;
-    margin: 0 25px 25px 25px;
-    border-left: 6px solid transparent; /* 레어도 색상 표시용 */
+    overflow: hidden;
 }
 
-#detail-image-wrapper[data-rarity="Common"] { border-left-color: var(--rarity-common); }
-#detail-image-wrapper[data-rarity="Uncommon"] { border-left-color: var(--rarity-uncommon); }
-#detail-image-wrapper[data-rarity="Rare"] { border-left-color: var(--rarity-rare); }
-#detail-image-wrapper[data-rarity="Epic"] { border-left-color: var(--rarity-epic); }
-#detail-image-wrapper[data-rarity="Legendary"] { border-left-color: var(--rarity-legendary); }
+.quest-card:hover {
+    background-color: #25262a;
+    border-color: var(--wuxia-accent-gold);
+    transform: translateY(-2px);
+}
 
-#detail-item-main-image {
-    display: block;
+.quest-icon-wrapper {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    border: 2px solid #333;
+    flex-shrink: 0;
+}
+
+.quest-icon-wrapper img {
     width: 100%;
-    max-height: 250px;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
 }
 
-#item-meta-section { padding: 0 25px; }
-
-.detail-chunk { margin-bottom: 25px; }
-
-.detail-chunk-title {
-    font-size: 1.1em;
-    color: var(--wuxia-accent-gold);
-    margin-top: 0;
-    margin-bottom: 10px;
-    border-bottom: 1px solid var(--wuxia-border);
-    padding-bottom: 5px;
-}
-
-.detail-chunk p {
-    font-size: 1em;
-    color: #ccc;
-    line-height: 1.6;
-}
-
-/* 재활용 리스트 (동적 생성) */
-.recycling-items-list {
+.quest-info {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-}
-
-.recycling-item-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background-color: var(--wuxia-bg-input);
-    border: 1px solid var(--wuxia-border);
-    border-radius: 4px;
-}
-
-.recycling-image-container {
-    width: 32px;
-    height: 32px;
-    border-radius: 2px;
-    margin-right: 12px;
-    border: 1px solid #555;
-    position: relative;
-    overflow: hidden;
-}
-
-.recycling-image-container img { width: 100%; height: 100%; object-fit: contain; }
-
-.recycling-item-info { flex-grow: 1; }
-.recycling-item-name { font-weight: normal; color: #ccc; font-size: 0.9em;}
-.recycling-item-count {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: var(--wuxia-accent-gold);
-    text-align: right;
-    width: 40px;
-}
-
-/* 페이지네이션 */
-.pagination-controls {
-    display: flex;
     justify-content: center;
-    padding: 20px 0;
-    margin-top: 20px;
-    gap: 10px;
 }
 
-.pagination-button {
-    background-color: #222;
+.quest-name {
+    color: #e0e0e0;
+    font-weight: bold;
+    font-size: 0.95em;
+    margin-bottom: 4px;
+}
+
+.quest-type {
     color: #888;
-    border: 1px solid #444;
-    padding: 8px 16px;
-    border-radius: 2px;
+    font-size: 0.8em;
+}
+
+.quest-badge {
+    background-color: #111;
+    color: #ccc;
+    font-weight: bold;
+    font-size: 0.85em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+
+/* 퀘스트 상세 페이지 스타일 */
+.back-button {
+    background: none;
+    border: none;
+    color: var(--wuxia-accent-gold);
+    font-size: 1em;
     cursor: pointer;
+    margin-top: 20px; /* 상단 여백 */
+    margin-bottom: 20px;
+    font-weight: bold;
+    padding: 10px 0;
     font-family: inherit;
-    transition: all 0.2s;
 }
+.back-button:hover { text-decoration: underline; }
 
-.pagination-button:hover:not(.active) {
-    background-color: #333;
-    border-color: #666;
-}
-
-.pagination-button.active {
-    background-color: var(--wuxia-accent-red);
-    color: #fff;
-    border-color: var(--wuxia-accent-red);
-    cursor: default;
+.detail-content-box {
+    background-color: var(--wuxia-bg-panel);
+    padding: 30px;
+    border-radius: 4px;
+    border: 1px solid var(--wuxia-border);
+    min-height: 400px;
+    color: #ccc;
+    line-height: 1.6;
 }
 
 /* =========================================
@@ -489,468 +579,35 @@ h3 {
     margin-bottom: 20px;
 }
 
-.footer-links {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-}
-
-.footer-links .link-item {
-    color: #888;
-    text-decoration: none;
-    font-size: 0.8em;
-    transition: color 0.2s;
-}
-
-.footer-links .link-item:hover { color: var(--wuxia-accent-gold); }
-.footer-links .separator { color: #444; }
-
 /* =========================================
-   9. 반응형 미디어 쿼리 (PC/태블릿)
+   9. 미디어 쿼리 (반응형)
    ========================================= */
-@media (min-width: 768px) {
-    .hidden-mobile-item { display: flex; }
 
+/* PC 및 태블릿 (768px 이상) */
+@media (min-width: 768px) {
     #recent-list.item-list-container,
-    #results-list.item-list-container {
+    .quest-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 15px;
     }
-
-    .item-row { height: auto; }
-
-    /* 퀘스트 타입 필터 버튼 크기 축소 */
-    .type-btn {
-        font-size: 0.5em;  /* 글자 크기를 80% 수준으로 줄임 */
-        padding: 4px 8px;  /* 버튼 내부 여백도 살짝 줄여서 공간 확보 */
-    }
-
 }
 
-
-/* =========================================
-   10. 족보 페이지 (Answer.html) 전용 스타일
-   ========================================= */
-#answer-container {
-    /* [핵심 1] 부모 요소(#main-content)의 패딩(15px)을 무시하고 화면 끝까지 늘림 */
-    width: calc(100% + 30px); 
-    margin-left: -15px;
-    margin-right: -15px;
-
-    /* [핵심 2] 상단 헤더와 너무 딱 붙지 않도록 여백 추가 */
-    margin-top: 20px; 
-
-    /* [핵심 3] 가로로 꽉 찰 때는 둥근 모서리가 어색하므로 제거 */
-    border-radius: 0; 
-    
-    /* 좌우 테두리 제거 (화면 끝에 붙으므로 불필요) */
-    border-left: none;
-    border-right: none;
-    
-    /* 위아래 테두리는 유지 */
-    border-top: 1px solid var(--wuxia-border);
-    border-bottom: 1px solid var(--wuxia-border);
-
-    /* 기존 스타일 유지 */
-    height: 75vh; 
-    background-color: var(--wuxia-bg-panel);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
-
-/* 상태바 ("총 ~개의 족보가...") 디자인 보정 */
-.status-bar {
-    background-color: #1a1a1c; /* 배경색을 살짝 밝게 */
-    color: var(--wuxia-accent-gold);
-    
-    /* 내부 여백을 넉넉하게 주어 답답함 해소 */
-    padding: 15px 20px; 
-    
-    font-size: 0.95em;
-    font-weight: bold;
-    border-bottom: 1px solid var(--wuxia-border);
-    text-align: center;
-    flex-shrink: 0;
-}
-
-/* 내부 검색 영역 */
-.inner-search-area {
-    padding: 15px;
-    background-color: var(--wuxia-bg-deep);
-    border-bottom: 1px solid var(--wuxia-border);
-    flex-shrink: 0;
-    display: flex;
-    gap: 10px;
-}
-
-.search-input-wrapper {
-    flex-grow: 1;
-}
-
-.inner-search-box {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #444;
-    border-radius: 2px;
-    font-size: 1em;
-    background-color: var(--wuxia-bg-input);
-    color: var(--wuxia-text-main);
-    box-sizing: border-box;
-    font-family: 'Noto Serif KR', serif;
-}
-.inner-search-box:focus {
-    outline: none;
-    border-color: var(--wuxia-accent-gold);
-}
-
-.inner-search-btn {
-    background-color: var(--wuxia-accent-gold);
-    color: #1a150e;
-    border: none;
-    padding: 0 20px;
-    border-radius: 2px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1em;
-    font-family: 'Noto Serif KR', serif;
-    white-space: nowrap;
-    transition: background-color 0.2s;
-}
-.inner-search-btn:hover {
-    background-color: #dcb36a;
-}
-
-/* 테이블 스크롤 영역 */
-.list-scroll-area {
-    flex-grow: 1;
-    overflow-y: auto;
-    background-color: var(--wuxia-bg-panel);
-    /* 스크롤바 디자인 (Webkit) */
-    scrollbar-width: thin;
-    scrollbar-color: #444 #1a1a1c;
-}
-.list-scroll-area::-webkit-scrollbar { width: 8px; }
-.list-scroll-area::-webkit-scrollbar-track { background: #1a1a1c; }
-.list-scroll-area::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
-
-/* 족보 테이블 스타일 */
-.answer-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-    table-layout: fixed;
-}
-
-.answer-table th {
-    /* 헤더 고정 */
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: #252629; /* 헤더 배경을 살짝 밝게 */
-    color: var(--wuxia-accent-gold);
-    padding: 15px;
-    border-bottom: 2px solid var(--wuxia-border);
-    font-size: 1.05em;
-}
-
-.answer-table td {
-    padding: 12px;
-    border-bottom: 1px solid #2a2a2a;
-    color: #ccc;
-    word-break: keep-all;
-    font-size: 0.95em;
-}
-
-.answer-table tr:hover {
-    background-color: rgba(200, 160, 96, 0.1); /* 호버 시 아주 옅은 금색 배경 */
-}
-
-/* 검색 하이라이트 (노란 배경 대신 금색 텍스트 강조) */
-.highlight {
-    background-color: var(--wuxia-accent-gold);
-    color: #000;
-    border-radius: 2px;
-    padding: 0 2px;
-    font-weight: bold;
-}
-/* =========================================
-   SPA 뷰 제어 및 족보 스타일 보정
-   ========================================= */
-
-/* 뷰 컨테이너들은 기본적으로 block이지만 JS로 제어됨 */
-#view-home, #view-quiz, #view-quest {
-    animation: fadeIn 0.3s ease-in-out; /* 화면 전환 시 부드럽게 */
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* 족보 검색 결과 클릭 가능한 항목 스타일 보정 */
-.search-result-item {
-    cursor: pointer; /* 손가락 모양 커서 */
-}
-
-/* 기존 style.css에 #answer-container 높이 설정이 있다면
-   index.html 구조에 맞게 화면 꽉 차도록 조정 */
-#answer-container {
-    height: 75vh; 
-    margin-bottom: 0; /* 불필요한 마진 제거 */
-}
-
-/* 족보 내부 검색창 스타일 (기존 코드 재활용) */
-.inner-search-area {
-    background-color: var(--wuxia-bg-deep);
-    border-bottom: 1px solid var(--wuxia-border);
-    padding: 15px;
-}
-.inner-search-box {
-    width: 100%;
-    padding: 10px;
-    background-color: var(--wuxia-bg-input);
-    border: 1px solid #444;
-    color: var(--wuxia-text-main);
-    font-family: inherit;
-}
-
-/* -- 1. 헤더 및 검색 스타일 -- */
-#main-header {
-    padding: 10px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* 배경색 등은 상단바(#fixed-top-bar)가 담당하므로 여기선 투명 혹은 상속 */
-}
-
-/* 로고 스타일 */
-.logo-icon img {
-    padding-top: 6px; 
-    vertical-align: middle;
-    filter: sepia(0.3); 
-}
-
-/* 검색 컨테이너 (원래 스타일 복구 + 드롭다운 기준점 설정) */
-.search-container {
-    display: flex;             /* 내부 요소 가로 정렬 */
-    align-items: center;       /* 수직 중앙 정렬 */
-    flex-grow: 1;              /* 남은 공간 채우기 */
-    background-color: var(--wuxia-bg-input); /* 배경색 */
-    border: 1px solid #444;    /* 테두리 */
-    border-radius: 4px;        /* 둥글기 */
-    padding: 5px 10px;         /* 내부 여백 */
-    margin-left: 20px;         /* 로고와의 간격 */
-    position: relative;        /* [중요] 드롭다운 메뉴 위치 기준점 */
-}
-
-/* 검색 입력창 (ID가 header-search-input으로 바뀌어도 적용되도록 수정) */
-.search-container input[type="text"] {
-    padding: 5px;
-    width: 100%;               /* 가로 꽉 채우기 */
-    border: none;              /* 테두리 제거 */
-    background-color: transparent; /* 배경 투명 */
-    color: var(--wuxia-text-main); /* 글자색 */
-    outline: none;             /* 포커스 테두리 제거 */
-    font-size: 0.95em;
-    font-family: inherit;      /* 폰트 상속 */
-}
-
-.search-arrow {
-    font-size: 1.2em;
-    color: var(--wuxia-accent-gold);
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-/* -- 통합 검색 드롭다운 스타일 (검색바 디자인을 해치지 않게 절대 위치로 설정) -- */
-.search-dropdown {
-    display: none;             /* 기본 숨김 */
-    position: absolute;        /* 검색바 흐름과 무관하게 둥둥 띄움 */
-    top: 100%;                 /* 검색바 바로 아래 위치 */
-    left: 0;
-    width: 100%;               /* 검색바 너비와 동일 */
-    background-color: var(--wuxia-bg-panel);
-    border: 1px solid var(--wuxia-accent-gold);
-    border-radius: 4px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    z-index: 2000;             /* 다른 요소보다 위에 */
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: 5px;           /* 검색바와 약간 띄움 */
-    text-align: left;          /* 텍스트 왼쪽 정렬 */
-}
-
-/* =========================================
-   12. 퀘스트 리스트 스타일 (이미지 참고)
-   ========================================= */
-
-/* 그리드 레이아웃: PC에선 2열, 모바일에선 1열 */
-.quest-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 15px;
-    padding-bottom: 50px;
-}
-
-/* 퀘스트 카드 디자인 */
-.quest-card {
-    display: flex;
-    align-items: center;
-    background-color: #1a1b1e; /* 아주 어두운 남색 계열 */
-    border: 1px solid #2a2b2e;
-    border-radius: 4px;
-    padding: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-}
-
-.quest-card:hover {
-    background-color: #25262a;
-    border-color: var(--wuxia-accent-gold);
-    transform: translateY(-2px);
-}
-
-/* 아이콘 (동그라미) */
-.quest-icon-wrapper {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-right: 15px;
-    border: 2px solid #333;
-    flex-shrink: 0;
-}
-
-.quest-icon-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* 텍스트 정보 */
-.quest-info {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.quest-name {
-    color: #e0e0e0;
-    font-weight: bold;
-    font-size: 0.95em;
-    margin-bottom: 4px;
-}
-
-.quest-type {
-    color: #888;
-    font-size: 0.8em;
-}
-
-/* 오른쪽 숫자/장소 뱃지 */
-.quest-badge {
-    background-color: #111;
-    color: #ccc;
-    font-weight: bold;
-    font-size: 0.85em;
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: 1px solid #333;
-}
-/* 상세페이지 뒤로가기 버튼 스타일 수정 */
-.back-button {
-    background: none;
-    border: none;
-    color: var(--wuxia-accent-gold);
-    font-size: 1em;
-    cursor: pointer;
-    
-    /* [수정] 상단 여백 추가 */
-    margin-top: 20px; 
-    
-    margin-bottom: 20px;
-    font-weight: bold;
-    padding: 10px 0;
-    font-family: 'Noto Serif KR', serif; /* 폰트 통일 */
-}
-
-.back-button:hover {
-    text-decoration: underline;
-}
-.detail-content-box {
-    background-color: var(--wuxia-bg-panel);
-    padding: 30px;
-    border-radius: 4px;
-    border: 1px solid var(--wuxia-border);
-    min-height: 400px;
-    color: #ccc;
-    line-height: 1.6;
-}
-
-/* =========================================
-   13. 퀘스트 타입 필터 스타일
-   ========================================= */
-.quest-type-nav {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #333; /* 하단 구분선 */
-    padding-bottom: 10px;
-    font-size: 0.9em;
-}
-
-.type-btn {
-    background: none;
-    border: none;
-    color: #888; /* 기본 회색 */
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 5px 12px;
-    transition: all 0.2s;
-    border-radius: 4px;
-}
-
-.type-btn:hover {
-    color: #ccc;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-/* 활성화된 버튼 스타일 */
-.type-btn.active {
-    color: var(--wuxia-accent-gold); /* 금색 텍스트 */
-    background-color: rgba(200, 160, 96, 0.1); /* 금색 배경 틴트 */
-    box-shadow: 0 0 5px rgba(200, 160, 96, 0.2);
-}
-
-/* =========================================
-   14. 모바일 전용 스타일 (폰: 768px 이하)
-   [NEW] 여기서 폰트 크기를 줄입니다.
-   ========================================= */
+/* 모바일 (768px 이하) */
 @media (max-width: 768px) {
-    /* 퀘스트 타입 필터 버튼 크기 축소 */
-    .type-btn {
-        font-size: 0.8em;  /* 폰트 크기 축소 */
-        padding: 4px 8px;  /* 패딩 축소 */
-    }
-    
-    /* 버튼 컨테이너 간격 좁히기 */
-    .quest-type-nav {
-        gap: 5px;
-        flex-wrap: wrap; /* 버튼이 많으면 줄바꿈 허용 */
-    }
-
-    /* 퀘스트 카드 모바일에서 1열로 보기 (이미 적용되어 있지만 확실하게) */
+    /* 퀘스트 카드 1열 배치 */
     .quest-grid {
         grid-template-columns: 1fr; 
+    }
+
+    /* 퀘스트 필터 버튼 글씨 축소 및 패딩 조정 */
+    .type-btn {
+        font-size: 0.9em;
+        padding: 4px 10px;
+    }
+    
+    /* 가로 스크롤을 위해 줄바꿈 금지 유지 */
+    .quest-type-nav {
+        gap: 5px;
     }
 }

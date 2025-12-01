@@ -145,7 +145,7 @@ h2, h3, p, button, input {
     border: 1px solid var(--wuxia-border);
     
     /* 배경 이미지 */
-    background-image: url('images/bg.png');
+    background-image: url('images/bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

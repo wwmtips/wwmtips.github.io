@@ -90,7 +90,7 @@
   {
     "id": "q12",
     "name": "조상님 품을 떠나다",
-    "location": "청하",
+    "location": "풍화촌",
     "type": "만사록",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q12.html"
@@ -99,7 +99,7 @@
   {
     "id": "q13",
     "name": "불꽃은 꺼지지 않으리",
-    "location": "청하",
+    "location": "풍화촌",
     "type": "만사록",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q13.html"

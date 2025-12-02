@@ -455,7 +455,7 @@ function renderQuizTable(data, keyword = '') {
         let answer = item.answer;
         
         // 제보자 이름은 user 필드에서 가져오고, 없으면 비워둡니다.
-        const user = item.user || '';
+        const user = item.user || '-';
 
         if (keyword) {
             const regex = new RegExp(`(${keyword})`, 'gi');

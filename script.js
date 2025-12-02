@@ -177,19 +177,45 @@ function switchTab(tabName) {
 // =========================================
 // [기능] 가이드 및 교환 코드 관련 로직
 // =========================================
-
 function loadGuideView() {
     const container = document.getElementById('guide-content-loader');
     if (!container) return;
 
-    // 1. 이미 가이드 프레임이 로드된 경우 -> 바로 뉴스(news_content.html)를 띄웁니다.
+    // 1. URL 파라미터 확인 및 파일 매핑
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetId = urlParams.get('id'); // URL에서 ?id=값 가져오기
+
+    // [설정] id 값과 연결될 실제 파일명 매핑
+    // 예: ?id=tierlist 로 들어오면 guide_tier.html을 엽니다.
+    const guideMap = {
+        'news': 'news.html',             // ?id=news
+        'tierlist': 'guide_tier.html',   // ?id=tierlist (티어 목록)
+        'weapon': 'tier_weapon.html',    // ?id=weapon (무기 티어)
+        'build': 'build.html',           // ?id=build
+        'map': 'maps.html',              // ?id=map
+        'side': 'beta.html',             // ?id=side (사이드 퀘스트)
+        'npc': 'npc.html',               // ?id=npc
+        'boss': 'boss.html',             // ?id=boss
+        'marts': 'marts.html',           // ?id=marts (무공)
+        'harts': 'harts.html',           // ?id=harts (심법)
+        'skill': 'skils.html',           // ?id=skill (기술)
+        'majang': 'majang.html',         // ?id=majang
+        'code': 'code.html'              // ?id=code
+    };
+
+    // 로드할 파일 결정: ID가 있고 매핑된 파일이 있으면 그 파일, 아니면 기본값 'news.html'
+    let fileToLoad = 'news.html';
+    if (targetId && guideMap[targetId]) {
+        fileToLoad = guideMap[targetId];
+    }
+
+    // 2. 이미 가이드 프레임이 로드된 경우 -> 결정된 파일만 바로 로드
     if (isGuideLoaded) {
-        // [변경점] 기존 loadCodeInGuide(true) -> loadGuideContent('news_content.html')로 변경
-        loadGuideContent('news.html'); 
+        loadGuideContent(fileToLoad);
         return; 
     }
     
-    // 2. 가이드 프레임 최초 로드
+    // 3. 가이드 프레임 최초 로드
     fetch('guide.html') 
         .then(res => {
             if(!res.ok) throw new Error("guide.html not found");
@@ -200,8 +226,8 @@ function loadGuideView() {
             container.style.marginTop = '0';
             isGuideLoaded = true;
             
-            // [변경점] 로드 완료 직후 -> 자동으로 뉴스(news_content.html)를 띄웁니다.
-            loadGuideContent('news.html'); 
+            // 프레임 로드 직후 결정된 파일(fileToLoad)을 띄움
+            loadGuideContent(fileToLoad); 
         })
         .catch(err => {
             container.innerHTML = `<div style="padding:20px; color:red;">가이드 페이지 로드 실패</div>`;

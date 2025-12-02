@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "그늘", 
+      "answer": "이끼",
+      "user":"namaste"
+    },
+    { 
       "hint": "단단한 등", 
       "answer": "바다거북",
       "user":"볼테일"

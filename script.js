@@ -55,7 +55,7 @@ function checkUrlParams() {
 
 // [기능] 데이터 로드
 function loadData() {
-    // 로컬/서버 환경에 맞춰 절대 경로 사용 (/json/...)
+    // 요청하신 절대 경로 사용 (/json/...)
     Promise.all([
         fetch('/json/data.json').then(res => res.json()),
         fetch('/json/quests.json').then(res => res.json()),
@@ -112,10 +112,10 @@ function loadData() {
 // 탭 전환 및 뷰 제어 (Switch Tab)
 // =========================================
 function switchTab(tabName) {
-    // 뷰 ID 목록 (view-code를 가이드 뷰로 사용)
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-code'];
-    // 네비게이션 버튼 ID 목록
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code'];
+    // 뷰 ID 목록 (view-guide 추가)
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide'];
+    // 네비게이션 버튼 ID 목록 (nav-guide 추가)
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code']; // HTML ID는 nav-code로 유지됨
 
     // 모든 뷰 숨기기 & 버튼 비활성화
     views.forEach(id => {
@@ -145,15 +145,15 @@ function switchTab(tabName) {
         document.getElementById('view-news').style.display = 'block';
         history.pushState(null, null, '?tab=news');
     } 
-    // [가이드/코드 탭]
+    // [가이드 탭]
     else if (tabName === 'guide' || tabName === 'code') {
-        // index.html에 있는 view-code를 가이드 화면으로 사용
-        const guideView = document.getElementById('view-code'); 
+        const guideView = document.getElementById('view-guide');
         if (guideView) {
             guideView.style.display = 'block';
             loadGuideView(); // guide.html 로드
         }
         
+        // 네비게이션 버튼 활성화 (ID가 nav-code인 버튼)
         const navBtn = document.getElementById('nav-code');
         if (navBtn) navBtn.classList.add('active');
         
@@ -170,10 +170,9 @@ function loadGuideView() {
     if (isGuideLoaded) return; // 이미 로드했으면 중복 요청 방지
 
     // index.html에 있는 로더 컨테이너
-    const container = document.getElementById('code-content-loader'); 
+    const container = document.getElementById('guide-content-loader'); 
     if (!container) return;
     
-    // guide.html을 불러와서 넣음
     fetch('guide.html')
         .then(res => {
             if(!res.ok) throw new Error("guide.html not found");
@@ -292,6 +291,8 @@ function renderHomeQuests(quests) {
     const container = document.getElementById('home-quest-list');
     if (!container) return;
     container.innerHTML = '';
+    
+    // 홈 화면은 최신 6개만 표시
     const recentQuests = quests.slice(0, 6);
     if (recentQuests.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888;">표시할 퀘스트가 없습니다.</div>';

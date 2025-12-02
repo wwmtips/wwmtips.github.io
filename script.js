@@ -437,13 +437,15 @@ function filterQuestType(type, btnElement) {
 }
 
 // 족보 관련 로직
+// script.js 파일의 renderQuizTable 함수 전체를 이 코드로 대체합니다.
 function renderQuizTable(data, keyword = '') {
     const tbody = document.getElementById('quiz-table-body');
     if (!tbody) return;
     tbody.innerHTML = '';
 
     if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="2" style="padding:20px; color:#888;">결과가 없습니다.</td></tr>`;
+        // 컬럼 개수를 3개(단서, 정답, 제보)로 변경
+        tbody.innerHTML = `<tr><td colspan="3" style="padding:20px; color:#888;">결과가 없습니다.</td></tr>`;
         return;
     }
 
@@ -451,6 +453,9 @@ function renderQuizTable(data, keyword = '') {
         const tr = document.createElement('tr');
         let hint = item.hint;
         let answer = item.answer;
+        
+        // 제보자 이름은 user 필드에서 가져오고, 없으면 비워둡니다.
+        const user = item.user || '';
 
         if (keyword) {
             const regex = new RegExp(`(${keyword})`, 'gi');
@@ -458,10 +463,16 @@ function renderQuizTable(data, keyword = '') {
             answer = answer.replace(regex, '<span class="highlight">$1</span>');
         }
 
-        tr.innerHTML = `<td>${hint}</td><td>${answer}</td>`;
+        // 제보 (user) 열 추가
+        tr.innerHTML = `
+            <td>${hint}</td>
+            <td>${answer}</td>
+            <td class="user-cell">${user}</td>
+        `;
         tbody.appendChild(tr);
     });
 }
+
 
 function filterQuizData(keyword) {
     keyword = keyword.trim().toLowerCase();

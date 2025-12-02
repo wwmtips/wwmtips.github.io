@@ -249,8 +249,8 @@ function loadGuideContent(filename, btnElement) {
     if(!innerContainer) return;
 
     // 만약 code.html이 열려있다면 닫아주기
-    innerContainer.style.display = 'none';
-    innerContainer.innerHTML = '';
+    const codeView = document.querySelector('.code-page-container');
+    if(codeView) codeView.style.display = 'none'; // 혹은 innerHTML 초기화
     
     // 로딩 표시
     innerContainer.style.display = 'block';
@@ -265,14 +265,46 @@ function loadGuideContent(filename, btnElement) {
         .then(html => {
             innerContainer.innerHTML = html;
             innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // [추가된 부분] 뉴스 페이지가 로드되었다면 JS로 리스트를 렌더링
+            if (filename === 'news.html') {
+                renderGuideNewsList(); 
+            }
         })
         .catch(err => {
-            // [요청사항] 파일이 없으면 준비중 메시지 출력
             innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">
                 <h3 style="color:var(--wuxia-accent-gold);">정보 준비 중입니다.</h3>
                 <p>죄송합니다. 해당 공략은 아직 작성 중입니다.</p>
             </div>`;
         });
+}
+
+// [추가] 가이드 내부 뉴스 리스트 렌더링 함수
+function renderGuideNewsList() {
+    const container = document.getElementById('guide-inner-news-list');
+    if (!container) return;
+
+    // globalData.news가 로드되어 있는지 확인
+    if (!globalData.news || globalData.news.length === 0) {
+        container.innerHTML = '<div style="padding:20px; color:#888;">최신 뉴스를 불러올 수 없습니다.</div>';
+        return;
+    }
+
+    container.innerHTML = ''; // 로딩 텍스트 제거
+
+    // 상위 5개 혹은 전체 표시 (여기서는 5개로 제한)
+    const displayList = globalData.news.slice(0, 5); 
+
+    displayList.forEach(item => {
+        // 기존 createNewsElement 함수 재사용 (스타일 통일)
+        const el = createNewsElement(item);
+        
+        // harts.html 스타일과 어울리도록 약간의 커스텀 스타일 추가 (선택사항)
+        el.style.borderBottom = '1px dashed #444'; 
+        el.style.backgroundColor = 'transparent'; // 투명 배경
+        
+        container.appendChild(el);
+    });
 }
 
 // 클립보드 복사 함수

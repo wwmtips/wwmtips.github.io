@@ -853,6 +853,7 @@ h3 {
     /* 간격 8px */
     gap: 8px; 
     margin-bottom: 20px;
+   margin-top: 20px; 
 }
 
 /* [핵심 수정] 개별 버튼 스타일 (다크 테마) */

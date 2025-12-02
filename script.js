@@ -265,7 +265,7 @@ function loadGuideContent(filename, btnElement) {
         })
         .then(html => {
             innerContainer.innerHTML = html;
-            innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          //  innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             // [추가된 부분] 뉴스 페이지가 로드되었다면 JS로 리스트를 렌더링
             if (filename === 'news.html') {

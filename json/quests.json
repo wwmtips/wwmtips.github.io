@@ -94,5 +94,14 @@
     "type": "만사록",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q12.html"
+  },
+  
+  {
+    "id": "q13",
+    "name": "불꽃은 꺼지지 않으리",
+    "location": "청하",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q13.html"
   }
 ]

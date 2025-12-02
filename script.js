@@ -235,7 +235,7 @@ function loadCodeInGuide(isAutoLoad = false) {
                 innerContainer.innerHTML = html;
                 if (!isAutoLoad) {
                     // 수동 클릭 시에만 스크롤 이동
-                    innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                   // innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             })
             .catch(err => {

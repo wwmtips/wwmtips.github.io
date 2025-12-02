@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "조미료", 
+      "answer": "소금",
+      "user":"푸하하"
+    },
+    { 
       "hint": "수분 보습", 
       "answer": "알로에",
       "user":"단목아아"

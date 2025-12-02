@@ -95,7 +95,6 @@
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q12.html"
   },
-  
   {
     "id": "q13",
     "name": "불꽃은 꺼지지 않으리",
@@ -103,5 +102,13 @@
     "type": "만사록",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q13.html"
+  },
+  {
+    "id": "q14",
+    "name": "재물신의 귀환",
+    "location": "풍화촌",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q14.html"
   }
 ]

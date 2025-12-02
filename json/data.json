@@ -2,6 +2,8 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "네덜란드", "answer": "튤립" },
+    
     { "hint": "티베트", "answer": "야크" },
     { "hint": "가려움", "answer": "모기" },
    { "hint": "콩쥐", "answer": "두꺼비" },

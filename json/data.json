@@ -4,8 +4,7 @@
   "quiz": [
     { 
       "hint": "여름", 
-      "answer": "무궁화",
-      "user":""
+      "answer": "무궁화"
     },
     { 
       "hint": "찌릿찌릿", 
@@ -14,8 +13,7 @@
     },
     { 
       "hint": "바삭바삭하고 부드럽다", 
-      "answer": "상추",
-      "user":""
+      "answer":"상추"
     },
     { 
       "hint": "바다", 
@@ -24,8 +22,7 @@
     },
     { 
       "hint": "동물", 
-      "answer": "판다",
-      "user":""
+      "answer": "판다"
     },
     { 
       "hint": "낚시 미끼", 
@@ -49,48 +46,36 @@
     },
     { 
       "hint": "수확고", 
-      "answer": "녹두",
-      "user":""
+      "answer": "녹두"
     },
     { 
       "hint": "파란색", 
-      "answer": "파란새",
-      "user":""
+      "answer": "파란새"
     },
     { 
       "hint": "곧은 의지와 기개", 
-      "answer": "소나무",
-      "user":""
+      "answer": "소나무"
     },
     { 
       "hint": "초록색", 
-      "answer": "개구리",
-      "user":""
+      "answer": "개구리"
     },
     { 
       "hint": "목제", 
-      "answer": "탁자",
-      "user":""
+      "answer": "탁자"
     },
     { 
       "hint": "초원", 
-      "answer": "양",
-      "user":""
+      "answer": "양"
     },
     { 
       "hint": "붉은 색", 
-      "answer": "중국 매듭",
-      "user":""
+      "answer": "중국 매듭"
     },
-    { 
-      "hint": "붉은색", 
-      "answer": "중국 매듭",
-      "user":""
-    },
+
     { 
       "hint": "장신구", 
-      "answer": "허리띠",
-      "user":""
+      "answer": "허리띠"
     },
     { 
       "hint": "조미료", 

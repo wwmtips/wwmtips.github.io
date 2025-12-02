@@ -2,7 +2,17 @@
   "items": [],
   "quests": [],
   "quiz": [
-       { 
+    { 
+      "hint": "뒤뚱뒤뚱", 
+      "answer": "펭귄",
+      "user":"Los"
+    },
+    { 
+      "hint": "은색비늘", 
+      "answer": "갈치",
+      "user":"Los"
+    },
+    { 
       "hint": "주몽", 
       "answer": "활",
       "user":"Demmmop"

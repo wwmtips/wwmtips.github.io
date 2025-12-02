@@ -837,10 +837,10 @@ h3 {
 }
 
 /* =========================================
-   17. 가이드 페이지 스타일 (그리드 메뉴 - 컴팩트 버전)
+   17. 가이드 페이지 스타일 (다크 무협 테마 적용)
    ========================================= */
 
-/* 가이드 컨테이너: 전체 여백 조정 */
+/* 가이드 컨테이너 */
 .guide-page-container {
     padding-bottom: 50px;
 }
@@ -848,73 +848,81 @@ h3 {
 /* 그리드 메뉴 레이아웃 */
 .guide-grid-menu {
     display: grid;
-    /* 3열 고정, 비율 1:1:1 */
+    /* 3열 고정 */
     grid-template-columns: repeat(3, 1fr); 
-    /* 버튼 사이 간격을 좁힘 (15px -> 8px) */
+    /* 간격 8px */
     gap: 8px; 
     margin-bottom: 20px;
 }
 
-/* 개별 버튼 스타일 */
+/* [핵심 수정] 개별 버튼 스타일 (다크 테마) */
 .guide-item-btn {
-    background-color: #e8ecf1; /* 레퍼런스와 비슷한 밝은 회색톤 */
-    color: #333; /* 글자색 진한 회색 */
+    /* 배경을 어두운 패널색보다 조금 더 밝은 톤으로 */
+    background-color: #2a2b2e; 
     
-    /* [핵심] 높이와 패딩을 줄여서 컴팩트하게 */
+    /* 글자색: 은은한 회색 */
+    color: #ccc; 
+    
+    /* 테두리: 아주 얇고 어두운 선 */
+    border: 1px solid #444; 
+    
+    /* 컴팩트한 사이즈 유지 */
     padding: 12px 5px; 
-    min-height: auto; /* 고정 높이 제거 */
+    min-height: auto; 
     
     text-align: center;
     border-radius: 4px;
     font-weight: bold;
-    font-size: 0.9em; /* 글자 크기 약간 축소 */
+    font-size: 0.9em; 
     cursor: pointer;
-    border: 1px solid #d0d4d9; /* 테두리를 은은하게 */
     transition: all 0.2s;
     
-    /* 텍스트 중앙 정렬 */
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Noto Serif KR', serif;
 }
 
+/* 마우스 호버 시 효과: 배경이 밝아지고 테두리가 금색으로 */
 .guide-item-btn:hover {
-    background-color: #d1d5dc;
-    border-color: #bbb;
+    background-color: #333438;
+    color: var(--wuxia-accent-gold); /* 글자 금색 */
+    border-color: var(--wuxia-accent-gold); /* 테두리 금색 */
     transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-/* 교환 코드 등 특별한 버튼은 색상 다르게 */
+/* 교환 코드 등 특별 버튼 (약간의 금색 틴트) */
 .guide-item-btn.special {
-    background-color: #e3e8ee; /* 일반 버튼과 비슷하게 맞추거나 */
-    /* 만약 튀게 하고 싶다면 아래 주석 해제 */
-    /* background-color: rgba(200, 160, 96, 0.15); */
-    /* border-color: var(--wuxia-accent-gold); */
-    /* color: #1a150e; */
+    background-color: rgba(200, 160, 96, 0.1); 
+    border: 1px solid rgba(200, 160, 96, 0.3);
+    color: var(--wuxia-accent-gold);
 }
 
-/* 하단 콘텐츠 영역 (글 들어갈 곳) */
+.guide-item-btn.special:hover {
+    background-color: rgba(200, 160, 96, 0.2);
+    border-color: var(--wuxia-accent-gold);
+}
+
+/* 하단 콘텐츠 영역 */
 #guide-dynamic-content {
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 1px dashed #ccc; /* 구분선 */
+    border-top: 1px dashed #444; /* 구분선도 어둡게 */
 }
 
 /* ------------------------------------
-   모바일 반응형 (화면이 좁을 때) 
+   모바일 반응형
    ------------------------------------ */
 @media (max-width: 768px) {
     .guide-grid-menu {
-        /* 모바일에서도 3열 유지할지, 2열로 할지 결정 */
-        /* 레퍼런스처럼 작게 보이려면 모바일에서도 3열 유지 추천 */
         grid-template-columns: repeat(3, 1fr); 
-        gap: 6px; /* 간격 더 좁힘 */
+        gap: 6px; 
     }
 
     .guide-item-btn {
-        font-size: 0.8em; /* 글자 더 작게 */
-        padding: 10px 2px; /* 패딩 최소화 */
-        word-break: keep-all; /* 단어 중간에 줄바꿈 방지 */
+        font-size: 0.8em; 
+        padding: 10px 2px; 
+        word-break: keep-all; 
     }
 }

@@ -2,6 +2,11 @@
   "items": [],
   "quests": [],
   "quiz": [
+       { 
+      "hint": "주몽", 
+      "answer": "활",
+      "user":"Demmmop"
+    },
    { 
       "hint": "질주", 
       "answer": "말",

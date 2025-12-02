@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "단단한 등", 
+      "answer": "바다거북",
+      "user":"볼테일"
+    },
+    { 
       "hint": "질긴 생명력", 
       "answer": "질경이",
       "user":"짐빔"

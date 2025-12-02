@@ -2,6 +2,21 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { 
+      "hint": "수분 보습", 
+      "answer": "알로에",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "라면", 
+      "answer": "너구리",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "치약", 
+      "answer": "멘톨",
+      "user":"연갤러"
+    },
       { 
       "hint": "긴 팔", 
       "answer": "오랑우탄",

@@ -479,7 +479,7 @@ function handleGlobalSearch(e) {
             questResults.slice(0, 3).forEach(quest => {
                 resultsHTML += `
                     <div class="search-result-item" onclick="selectQuestResult('${quest.filepath}')">
-                        <span class="badge item">퀘스트</span> 
+                        <span class="badge item">무림록</span> 
                         <span class="result-text">${quest.name}</span>
                     </div>
                 `;

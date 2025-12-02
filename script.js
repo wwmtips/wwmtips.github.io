@@ -47,6 +47,12 @@ function checkUrlParams() {
 
 // [기능] 데이터 로드
 function loadData() {
+    // [수정 1] 비동기 요청(fetch) 전에 URL 파라미터를 미리 '캡처'해 둡니다.
+    // 나중에 switchTab이 실행되어 URL이 변경되더라도, 여기 저장된 값은 유지됩니다.
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetTab = urlParams.get('tab');
+    const targetId = urlParams.get('id');
+
     // 로컬/서버 환경에 맞춰 절대 경로 사용 (/json/...)
     Promise.all([
         fetch('/json/data.json').then(res => res.json()),
@@ -96,13 +102,9 @@ function loadData() {
         renderFullNews(globalData.news);
 
         /* ============================================================
-           [NEW] URL 파라미터(id)가 있다면 해당 퀘스트 바로 열기
-           예: ?tab=quest&id=1  또는  ?tab=quest&id=q1
+           [수정 2] 위에서 미리 캡처해둔 targetTab과 targetId 변수를 사용합니다.
+           (window.location.search를 다시 읽지 않음)
            ============================================================ */
-        const urlParams = new URLSearchParams(window.location.search);
-        const targetTab = urlParams.get('tab');
-        const targetId = urlParams.get('id');
-
         if (targetTab === 'quest' && targetId) {
             // 입력받은 id가 숫자면 'q'를 붙여줌 (1 -> q1)
             // 이미 'q1' 형태라면 그대로 사용
@@ -121,6 +123,7 @@ function loadData() {
         console.error("데이터 로드 중 오류 발생:", error);
     });
 }
+
 
 
 // =========================================

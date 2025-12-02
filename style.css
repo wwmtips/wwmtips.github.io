@@ -322,7 +322,7 @@ h3 {
 .status-bar {
     background-color: #1a1a1c;
     color: var(--wuxia-accent-gold);
-    padding: 15px 20px;
+    padding: 0px 20px;
     font-size: 0.95em;
     font-weight: bold;
     border-bottom: 1px solid var(--wuxia-border);

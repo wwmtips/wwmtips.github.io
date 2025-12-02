@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "담벼락 덩굴", 
+      "answer": "능소화",
+      "user":"세라핀"
+    },
+    { 
       "hint": "엄니", 
       "answer": "바다코끼리",
       "user":"세라핀"

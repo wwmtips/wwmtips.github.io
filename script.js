@@ -178,17 +178,18 @@ function switchTab(tabName) {
 // [기능] 가이드 및 교환 코드 관련 로직
 // =========================================
 
-// 가이드 페이지(guide.html) 로드
 function loadGuideView() {
     const container = document.getElementById('guide-content-loader');
     if (!container) return;
 
-    // 이미 로드된 경우, 코드 로딩만 실행 (자동 표시 유지)
+    // 1. 이미 가이드 프레임이 로드된 경우 -> 바로 뉴스(news_content.html)를 띄웁니다.
     if (isGuideLoaded) {
-        loadCodeInGuide(true); 
+        // [변경점] 기존 loadCodeInGuide(true) -> loadGuideContent('news_content.html')로 변경
+        loadGuideContent('news.html'); 
         return; 
     }
     
+    // 2. 가이드 프레임 최초 로드
     fetch('guide.html') 
         .then(res => {
             if(!res.ok) throw new Error("guide.html not found");
@@ -199,8 +200,8 @@ function loadGuideView() {
             container.style.marginTop = '0';
             isGuideLoaded = true;
             
-            // [핵심] 가이드 구조 로드 후, 코드를 자동으로 로드 (토글 없이)
-            loadCodeInGuide(true); 
+            // [변경점] 로드 완료 직후 -> 자동으로 뉴스(news_content.html)를 띄웁니다.
+            loadGuideContent('news.html'); 
         })
         .catch(err => {
             container.innerHTML = `<div style="padding:20px; color:red;">가이드 페이지 로드 실패</div>`;

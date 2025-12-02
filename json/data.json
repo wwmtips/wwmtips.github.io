@@ -2,6 +2,11 @@
   "items": [],
   "quests": [],
   "quiz": [
+      { 
+      "hint": "긴 팔", 
+      "answer": "오랑우탄",
+      "user":"연갤러"
+    },
     { 
       "hint": "뒤뚱뒤뚱", 
       "answer": "펭귄",

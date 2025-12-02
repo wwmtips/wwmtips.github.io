@@ -2,6 +2,7 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "티베트", "answer": "야크" },
     { "hint": "가려움", "answer": "모기" },
    { "hint": "콩쥐", "answer": "두꺼비" },
    { "hint": "북극", "answer": "바다 코끼리" },

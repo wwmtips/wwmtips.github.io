@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 통합본: 가이드 자동 로드 기능 추가)
+   script.js (최종 통합본: 퀘스트, 족보, 뉴스, 가이드/코드)
    ========================================= */
 
 // 전역 변수
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 3. URL 파라미터 체크하여 탭 자동 전환
+    // 3. URL 파라미터 체크하여 탭 자동 전환 (?tab=...)
     checkUrlParams();
 });
 
@@ -55,6 +55,7 @@ function checkUrlParams() {
 
 // [기능] 데이터 로드
 function loadData() {
+    // 로컬/서버 환경에 맞춰 절대 경로 사용 (/json/...)
     Promise.all([
         fetch('/json/data.json').then(res => res.json()),
         fetch('/json/quests.json').then(res => res.json()),
@@ -82,15 +83,23 @@ function loadData() {
             news: newsList || [] 
         };
 
+        // 퀘스트 데이터 초기화
         currentQuestData = globalData.quests;
 
+        console.log("데이터 로드 완료:", globalData);
+
+        // 1. 족보 초기화
         renderQuizTable(globalData.quiz);
         const counter = document.getElementById('quiz-counter-area');
         if(counter) counter.innerText = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
 
+        // 2. 퀘스트 탭 리스트 초기화
         renderQuestList();
+
+        // 3. 홈 화면 퀘스트 리스트 초기화
         renderHomeQuests(globalData.quests);
         
+        // 4. 뉴스 렌더링
         renderHomeNews(globalData.news);
         renderFullNews(globalData.news);
     })
@@ -103,9 +112,12 @@ function loadData() {
 // 탭 전환 및 뷰 제어 (Switch Tab)
 // =========================================
 function switchTab(tabName) {
+    // 뷰 ID 목록 (view-code는 가이드 뷰로 사용)
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-code'];
+    // 네비게이션 버튼 ID 목록
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code'];
 
+    // 모든 뷰 숨기기 & 버튼 비활성화
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.style.display = 'none';
@@ -115,6 +127,7 @@ function switchTab(tabName) {
         if(el) el.classList.remove('active');
     });
 
+    // 탭 활성화 로직
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
@@ -148,21 +161,21 @@ function switchTab(tabName) {
 }
 
 // =========================================
-// [NEW] 가이드 및 교환 코드 관련 로직
+// [기능] 가이드 및 교환 코드 관련 로직
 // =========================================
 
 // 가이드 페이지(guide.html) 로드
 function loadGuideView() {
-    const container = document.getElementById('guide-content-loader');
+    const container = document.getElementById('code-content-loader');
     if (!container) return;
 
     if (isGuideLoaded) {
-        // 이미 로드된 경우, 바로 코드 로딩만 실행 (자동 표시 유지)
+        // 이미 로드된 경우, 코드 로딩만 실행 (자동 표시 유지)
         loadCodeInGuide(true); 
         return; 
     }
     
-    fetch('guide.html') 
+    fetch('guide.html') // guide.html 파일 로드
         .then(res => {
             if(!res.ok) throw new Error("guide.html not found");
             return res.text();
@@ -180,8 +193,7 @@ function loadGuideView() {
         });
 }
 
-// 가이드 페이지 안에서 교환 코드(code.html) 불러오기
-// isAutoLoad: true면 토글 기능 무시하고 무조건 보이게 함
+// 가이드 페이지 안에서 교환 코드(code.html) 불러오기 (자동 로드 및 버튼 클릭)
 function loadCodeInGuide(isAutoLoad = false) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
@@ -199,7 +211,7 @@ function loadCodeInGuide(isAutoLoad = false) {
     if (innerContainer.innerHTML.trim() === '' || isAutoLoad) {
         innerContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">코드를 불러오는 중...</div>';
 
-        fetch('code.html')
+        fetch('code.html') // code.html 파일 로드
             .then(res => {
                 if(!res.ok) throw new Error("code.html not found");
                 return res.text();
@@ -330,6 +342,7 @@ function renderQuestList() {
         return;
     }
 
+    // 페이지네이션 적용
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const paginatedQuests = currentQuestData.slice(startIndex, endIndex);

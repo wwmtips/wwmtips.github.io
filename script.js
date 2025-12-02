@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 통합본: 퀘스트, 족보, 뉴스, 교환코드)
+   script.js (최종 통합본: 퀘스트, 족보, 뉴스, 가이드/코드)
    ========================================= */
 
 // 전역 변수
@@ -10,8 +10,8 @@ let currentQuestData = [];
 let currentPage = 1;
 const itemsPerPage = 12;
 
-// 교환 코드 로드 여부 체크 (중복 로드 방지)
-let isCodeLoaded = false;
+// 로드 상태 체크 (중복 로드 방지)
+let isGuideLoaded = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadData(); // 데이터 가져오기 실행
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 3. URL 파라미터 체크하여 탭 자동 전환 (?tab=...)
+    // 3. URL 파라미터 체크하여 탭 자동 전환
     checkUrlParams();
 });
 
@@ -48,7 +48,8 @@ function checkUrlParams() {
     if (tab === 'quiz') switchTab('quiz');
     else if (tab === 'quest') switchTab('quest');
     else if (tab === 'news') switchTab('news');
-    else if (tab === 'code') switchTab('code'); // [추가] 교환 코드
+    else if (tab === 'guide') switchTab('guide'); // 가이드 탭
+    else if (tab === 'code') switchTab('guide');  // code 파라미터도 가이드로 연결
     else switchTab('home');
 }
 
@@ -111,7 +112,7 @@ function loadData() {
 // 탭 전환 및 뷰 제어 (Switch Tab)
 // =========================================
 function switchTab(tabName) {
-    // 뷰 ID 목록
+    // 뷰 ID 목록 (view-code를 가이드 뷰로 사용)
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-code'];
     // 네비게이션 버튼 ID 목록
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code'];
@@ -126,7 +127,7 @@ function switchTab(tabName) {
         if(el) el.classList.remove('active');
     });
 
-    // 선택된 탭 활성화 로직
+    // 탭 활성화 로직
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
@@ -141,42 +142,84 @@ function switchTab(tabName) {
         showQuestList();
         history.pushState(null, null, '?tab=quest');
     } else if (tabName === 'news') {
-        // 뉴스는 별도 네비게이션 버튼이 없으므로 뷰만 활성화
         document.getElementById('view-news').style.display = 'block';
         history.pushState(null, null, '?tab=news');
-    } else if (tabName === 'code') {
-        // [NEW] 교환 코드 탭
-        document.getElementById('view-code').style.display = 'block';
-        document.getElementById('nav-code').classList.add('active');
-        loadCodeView(); // 코드 페이지 내용 로드
-        history.pushState(null, null, '?tab=code');
+    } 
+    // [가이드/코드 탭]
+    else if (tabName === 'guide' || tabName === 'code') {
+        // index.html에 있는 view-code를 가이드 화면으로 사용
+        const guideView = document.getElementById('view-code'); 
+        if (guideView) {
+            guideView.style.display = 'block';
+            loadGuideView(); // guide.html 로드
+        }
+        
+        const navBtn = document.getElementById('nav-code');
+        if (navBtn) navBtn.classList.add('active');
+        
+        history.pushState(null, null, '?tab=guide');
     }
 }
 
 // =========================================
-// [NEW] 교환 코드 관련 로직
+// [기능] 가이드 및 교환 코드 관련 로직
 // =========================================
-function loadCodeView() {
-    if (isCodeLoaded) return; // 이미 로드했으면 중복 요청 방지
 
-    const container = document.getElementById('code-content-loader');
+// 가이드 페이지(guide.html) 로드
+function loadGuideView() {
+    if (isGuideLoaded) return; // 이미 로드했으면 중복 요청 방지
+
+    // index.html에 있는 로더 컨테이너
+    const container = document.getElementById('code-content-loader'); 
+    if (!container) return;
     
+    // guide.html을 불러와서 넣음
+    fetch('guide.html')
+        .then(res => {
+            if(!res.ok) throw new Error("guide.html not found");
+            return res.text();
+        })
+        .then(html => {
+            container.innerHTML = html;
+            container.style.marginTop = '0';
+            isGuideLoaded = true;
+        })
+        .catch(err => {
+            container.innerHTML = `<div style="padding:20px; color:red;">가이드 페이지 로드 실패</div>`;
+        });
+}
+
+// 가이드 페이지 내에서 교환 코드(code.html) 불러오기 (버튼 클릭 시 실행)
+function loadCodeInGuide() {
+    // guide.html 안에 있는 컨테이너 div
+    const innerContainer = document.getElementById('guide-dynamic-content');
+    if(!innerContainer) return;
+
+    // 이미 열려있고 내용이 있으면 닫기 (토글)
+    if (innerContainer.style.display === 'block' && innerContainer.innerHTML.trim() !== '') {
+        innerContainer.style.display = 'none';
+        return;
+    }
+
+    innerContainer.style.display = 'block';
+    innerContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">코드를 불러오는 중...</div>';
+
     fetch('code.html')
         .then(res => {
             if(!res.ok) throw new Error("code.html not found");
             return res.text();
         })
         .then(html => {
-            container.innerHTML = html;
-            container.style.textAlign = 'left'; // 로딩 텍스트 정렬 해제
-            container.style.marginTop = '0';
-            isCodeLoaded = true;
+            innerContainer.innerHTML = html;
+            // 스크롤을 부드럽게 아래로 이동
+            innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         })
         .catch(err => {
-            container.innerHTML = `<div style="padding:20px; color:red;">페이지 로드 실패</div>`;
+            innerContainer.innerHTML = `<div style="text-align:center; padding:20px; color:red;">코드 목록을 불러오지 못했습니다.</div>`;
         });
 }
 
+// 클립보드 복사 함수
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
         alert(`코드 [${text}] 가 복사되었습니다!`);
@@ -249,8 +292,6 @@ function renderHomeQuests(quests) {
     const container = document.getElementById('home-quest-list');
     if (!container) return;
     container.innerHTML = '';
-    
-    // 홈 화면은 최신 6개만 표시
     const recentQuests = quests.slice(0, 6);
     if (recentQuests.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888;">표시할 퀘스트가 없습니다.</div>';
@@ -479,7 +520,7 @@ function handleGlobalSearch(e) {
             questResults.slice(0, 3).forEach(quest => {
                 resultsHTML += `
                     <div class="search-result-item" onclick="selectQuestResult('${quest.filepath}')">
-                        <span class="badge item">무림록</span> 
+                        <span class="badge item">퀘스트</span> 
                         <span class="result-text">${quest.name}</span>
                     </div>
                 `;

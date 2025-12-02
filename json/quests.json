@@ -110,5 +110,13 @@
     "type": "만사록",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q14.html"
+  },
+  {
+    "id": "q15",
+    "name": "아이들과 놀아주기",
+    "location": "풍화촌",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q15.html"
   }
 ]

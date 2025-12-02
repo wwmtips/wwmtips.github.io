@@ -1,0 +1,157 @@
+<div class="quest-detail-container">
+    
+    <style>
+        /* 이미지 컨테이너 공통 스타일 */
+        .wuxia-image-container {
+            border: 3px double var(--wuxia-border, #444); /* 이중 테두리로 고풍스럽게 */
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4); /* 깊이감 있는 그림자 */
+            background-color: #111;
+            margin: 20px 0;
+            position: relative;
+        }
+        /* 이미지 자체 스타일 */
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            /* 무협 느낌을 위한 필터: 약간의 세피아와 대비 증가 */
+            filter: sepia(0.2) contrast(1.1) brightness(0.9);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        /* 마우스 호버 효과 */
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); /* 살짝 확대 */
+            filter: sepia(0) contrast(1.2) brightness(1); /* 필터 제거로 생생하게 */
+        }
+        /* 이미지 장식용 모서리 (선택사항) */
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(200, 160, 96, 0.2); /* 금색 테두리 장식 */
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
+        /* 나란히 배치 레이아웃 */
+        .wuxia-image-row {
+            display: flex;
+            gap: 15px; /* 이미지 사이 간격 */
+            margin: 20px 0;
+        }
+        .wuxia-image-row .wuxia-image-container {
+            flex: 1; /* 공간 균등 분할 */
+            margin: 0; /* row 내부 마진 초기화 */
+        }
+
+        /* 모바일 반응형: 나란히 배치를 세로로 변경 */
+        @media (max-width: 768px) {
+            .wuxia-image-row {
+                flex-direction: column;
+            }
+            .wuxia-image-row .wuxia-image-container {
+                margin-bottom: 15px;
+            }
+        }
+        
+        /* 이전 파일에 없던 변수들을 위한 기본값 설정 (테스트용) */
+        :root {
+            --wuxia-accent-gold: #FFD700;
+            --wuxia-accent-red: #B03A2E;
+            --wuxia-border: #444;
+        }
+    </style>
+<div class="quest-detail-container">
+    
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            재물신의 귀환
+        </h2>
+        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">잃어버린 재물신 조각상을 찾아서</p>
+    </div>
+
+    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px;">
+        <div style="width: 80px; height: 80px; border: 2px solid #333; border-radius: 4px; overflow: hidden; flex-shrink: 0; background-color: #1a1a1c; display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 2em;">💰</span>
+        </div>
+        <div>
+            <p style="margin: 0 0 10px 0; color: #ccc;">
+                <strong>📍 주요 지역:</strong> <span style="color: var(--wuxia-accent-gold);">풍화촌 (연혜)</span>
+            </p>
+            <p style="margin: 0; color: #ccc; line-height: 1.6;">
+                <strong>💡 개요:</strong> 연혜에게 말을 걸고, 조각상을 찾아 전달하는 간단한 퀘스트입니다.
+            </p>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+        
+        <div class="detail-chunk" style="margin-bottom: 40px;">
+            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
+                1. 퀘스트 시작 (연혜에게 말 걸기)
+            </h3>
+            <p style="color: #bbb; line-height: 1.8;">
+                <strong>풍화촌</strong>에 있는 <strong>'연혜'</strong>에게 말을 걸어,<br>
+                **재물신 조각상**을 분실했다는 이야기를 듣고 퀘스트를 시작합니다.
+            </p>
+            
+            <div class="wuxia-image-container" style="margin-top: 20px;">
+                <img src="../quests/images/q14_1.png" alt="연혜에게 말 걸기" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지1:+퀘스트+시작'">
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+
+        <div class="detail-chunk" style="margin-bottom: 40px;">
+            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
+                2. 조각상 찾기
+            </h3>
+            <p style="color: #bbb; line-height: 1.8;">
+                조각상은 연혜가 알려준 분실 장소, 즉 <strong>풍화촌 아래쪽 건물 지붕 위</strong>에 있습니다.<br>
+                건물 위로 올라가 <strong>'재물신 조각상'</strong>을 획득합니다.
+            </p>
+
+            <div class="wuxia-image-row">
+                <div class="wuxia-image-container">
+                    <img src="../quests/images/q14_2.png" alt="조각상 발견 위치" onerror="this.src='https://via.placeholder.com/400x300/111/333?text=이미지2:+분실+장소'">
+                </div>
+                <div class="wuxia-image-container">
+                    <img src="../quests/images/q14_3.png" alt="건물 지붕 위 조각상" onerror="this.src='https://via.placeholder.com/400x300/111/333?text=이미지3:+조각상+획득'">
+                </div>
+            </div>
+            
+            <p style="color: #999; font-size: 0.9em; margin-top: 10px;">
+                ※ 조각상은 지붕 위에 있어 점프나 경공(이동 스킬)을 이용해 쉽게 도달할 수 있습니다.
+            </p>
+       
+        </div>
+
+        <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+
+        <div class="detail-chunk">
+            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
+                3. 재물신 반환 (완료)
+            </h3>
+            <p style="color: #bbb; line-height: 1.8;">
+                획득한 <strong>재물신 조각상</strong>을 가지고<br>
+                다시 <strong>연혜</strong>에게 돌아가 전달하면 퀘스트가 완료됩니다.
+            </p>
+
+            <div class="wuxia-image-container" style="margin-top: 20px;">
+                <img src="../quests/images/q14_4.png" alt="연혜에게 조각상 전달 및 완료" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지4:+완료'">
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: transparent; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

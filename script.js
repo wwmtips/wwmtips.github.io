@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 통합본: 가이드 로직 완성)
+   script.js (최종 통합본: GuideContent에 News 로직 병합)
    ========================================= */
 
 // 전역 변수
@@ -10,7 +10,9 @@ const itemsPerPage = 12;
 let isGuideLoaded = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadData();
+    loadData(); // 데이터 가져오기 실행
+
+    // 1. 헤더 통합 검색 이벤트 연결
     const headerSearch = document.getElementById("header-search-input");
     if (headerSearch) {
         headerSearch.addEventListener("input", handleGlobalSearch);
@@ -22,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // 2. 족보 내부 필터링 이벤트 연결
     const quizLocalSearch = document.getElementById("quiz-local-search");
     if (quizLocalSearch) {
         quizLocalSearch.addEventListener("input", (e) => {
@@ -29,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // 3. URL 파라미터 체크하여 탭 자동 전환
     checkUrlParams();
 });
 
@@ -41,7 +45,7 @@ function checkUrlParams() {
     else if (tab === 'quest') switchTab('quest');
     else if (tab === 'news') switchTab('news');
     else if (tab === 'guide') switchTab('guide'); 
-    else if (tab === 'code') switchTab('guide'); 
+    else if (tab === 'code') switchTab('guide');  
     else switchTab('home');
 }
 
@@ -53,6 +57,7 @@ function loadData() {
         fetch('/json/news.json').then(res => res.json())
     ])
     .then(([mainData, questList, newsList]) => {
+        // 퀘스트 역순 정렬
         if (questList && Array.isArray(questList)) {
             questList.sort((a, b) => {
                 const numA = parseInt(a.id.replace('q', ''));
@@ -60,6 +65,8 @@ function loadData() {
                 return numB - numA; 
             });
         }
+        
+        // 뉴스 역순 정렬
         if (newsList && Array.isArray(newsList)) {
             newsList.reverse(); 
         }
@@ -73,14 +80,20 @@ function loadData() {
 
         currentQuestData = globalData.quests;
 
+        // 1. 족보 초기화
         renderQuizTable(globalData.quiz);
         const counter = document.getElementById('quiz-counter-area');
         if(counter) counter.innerText = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
 
+        // 2. 퀘스트 탭 리스트 초기화
         renderQuestList();
+
+        // 3. 홈 화면 퀘스트 리스트 초기화
         renderHomeQuests(globalData.quests);
-        renderHomeNews(globalData.news);
-        renderFullNews(globalData.news);
+        
+        // 4. 뉴스 렌더링 (홈 & 전체 탭)
+        renderNewsList(globalData.news, 'home-news-list'); 
+        renderNewsList(globalData.news, 'full-news-list');
     })
     .catch(error => {
         console.error("데이터 로드 중 오류 발생:", error);
@@ -91,7 +104,7 @@ function loadData() {
 // 탭 전환 및 뷰 제어 (Switch Tab)
 // =========================================
 function switchTab(tabName) {
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide'];
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-code'];
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code'];
 
     views.forEach(id => {
@@ -122,10 +135,10 @@ function switchTab(tabName) {
     } 
     // [가이드 탭]
     else if (tabName === 'guide' || tabName === 'code') {
-        const guideView = document.getElementById('view-guide');
+        const guideView = document.getElementById('view-code');
         if (guideView) {
             guideView.style.display = 'block';
-            loadGuideView(); // 가이드 페이지 로드
+            loadGuideView(); 
         }
         
         const navBtn = document.getElementById('nav-code');
@@ -144,13 +157,13 @@ function loadGuideView() {
     const container = document.getElementById('guide-content-loader');
     if (!container) return;
 
-    // 이미 로드된 경우, 코드 로딩만 실행 (자동 표시 유지)
     if (isGuideLoaded) {
+        // 이미 로드된 경우, 코드를 자동으로 로드 (토글 없이)
         loadCodeInGuide(true); 
         return; 
     }
     
-    fetch('guide.html') 
+    fetch('guide.html') // guide.html 파일 로드
         .then(res => {
             if(!res.ok) throw new Error("guide.html not found");
             return res.text();
@@ -160,7 +173,7 @@ function loadGuideView() {
             container.style.marginTop = '0';
             isGuideLoaded = true;
             
-            // [핵심] 가이드 구조 로드 후, 코드를 자동으로 로드 (토글 없이)
+            // 가이드 구조 로드 후, 코드를 자동으로 로드 (교환 코드가 기본으로 뜸)
             loadCodeInGuide(true); 
         })
         .catch(err => {
@@ -173,20 +186,22 @@ function loadCodeInGuide(isAutoLoad = false) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
 
-    // [수동] AND 이미 열려 있으면 닫기 (토글 기능)
-    if (!isAutoLoad && innerContainer.style.display === 'block' && innerContainer.innerHTML.trim() !== '') {
+    // [토글] 자동 로드가 아닐 경우 AND 현재 코드가 열려 있으면 닫기
+    if (!isAutoLoad && innerContainer.style.display === 'block' && innerContainer.dataset.content === 'code') {
         innerContainer.style.display = 'none';
+        innerContainer.dataset.content = '';
         return;
     }
-
-    // 무조건 보이게 설정
+    
+    // 무조건 보이게 설정 및 플래그 변경
     innerContainer.style.display = 'block';
+    innerContainer.dataset.content = 'code';
     
     // 내용이 없거나 자동 로드일 경우에만 fetch 실행
     if (innerContainer.innerHTML.trim() === '' || isAutoLoad) {
         innerContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">코드를 불러오는 중...</div>';
 
-        fetch('code.html') // code.html 파일 로드
+        fetch('code.html') 
             .then(res => {
                 if(!res.ok) throw new Error("code.html not found");
                 return res.text();
@@ -194,7 +209,6 @@ function loadCodeInGuide(isAutoLoad = false) {
             .then(html => {
                 innerContainer.innerHTML = html;
                 if (!isAutoLoad) {
-                    // 수동 클릭 시에만 스크롤 이동
                     innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             })
@@ -204,20 +218,40 @@ function loadCodeInGuide(isAutoLoad = false) {
     }
 }
 
-// [NEW] 일반 가이드 내용 로드 함수
-function loadGuideContent(filename, btnElement) {
+// [NEW/통합] 일반 가이드 컨텐츠 (뉴스, 티어 목록 등) 로드 함수
+function loadGuideContent(filename) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
 
-    // 만약 code.html이 열려있다면 닫아주기
-    innerContainer.style.display = 'none';
-    innerContainer.innerHTML = '';
+    // [토글] 이미 열려있고 같은 파일이면 닫기
+    if (innerContainer.style.display === 'block' && innerContainer.dataset.content === filename) {
+        innerContainer.style.display = 'none';
+        innerContainer.dataset.content = '';
+        return;
+    }
     
-    // 로딩 표시
+    // [1] 초기화 및 표시 설정
     innerContainer.style.display = 'block';
+    innerContainer.dataset.content = filename;
     innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">컨텐츠 로딩 중...</div>';
-    
-    // 파일 가져오기
+    innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // [2] 뉴스 데이터 렌더링 (Fetch 대신 동적 데이터 사용)
+    if (filename === 'news') {
+        innerContainer.innerHTML = `
+            <div style="padding: 0 0 10px 0;">
+                <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px;">
+                    전체 공지사항
+                </h3>
+            </div>
+            <div id="full-news-in-guide-list" class="item-list-container">
+            </div>
+        `;
+        renderNewsList(globalData.news, 'full-news-in-guide-list');
+        return;
+    } 
+
+    // [3] 일반 파일 로드 (준비 중 메시지 처리)
     fetch(filename)
         .then(res => {
             if(!res.ok) throw new Error("File not found");
@@ -225,10 +259,8 @@ function loadGuideContent(filename, btnElement) {
         })
         .then(html => {
             innerContainer.innerHTML = html;
-            innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         })
         .catch(err => {
-            // [요청사항] 파일이 없으면 준비중 메시지 출력
             innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#888;">
                 <h3 style="color:var(--wuxia-accent-gold);">정보 준비 중입니다.</h3>
                 <p>죄송합니다. 해당 공략은 아직 작성 중입니다.</p>
@@ -236,7 +268,7 @@ function loadGuideContent(filename, btnElement) {
         });
 }
 
-// 클립보드 복사 함수
+// 클립보드 복사 함수 (유지)
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
         alert(`코드 [${text}] 가 복사되었습니다!`);
@@ -246,39 +278,25 @@ function copyToClipboard(text) {
 }
 
 // =========================================
-// (나머지 함수들은 이전과 동일)
+// 뉴스 관련 로직 (renderNewsList로 통합)
 // =========================================
-
-// 뉴스 관련 로직
-function renderHomeNews(newsList) {
-    const container = document.getElementById('home-news-list');
+function renderNewsList(newsList, targetContainerId) {
+    const container = document.getElementById(targetContainerId);
     if (!container) return;
     container.innerHTML = '';
 
-    const displayList = newsList.slice(0, 4); 
-
+    // 홈 화면은 4개 제한
+    let displayList = newsList;
+    if (targetContainerId === 'home-news-list') {
+        displayList = newsList.slice(0, 4);
+    }
+    
     if (displayList.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888;">최신 정보가 없습니다.</div>';
         return;
     }
 
     displayList.forEach(item => {
-        const el = createNewsElement(item);
-        container.appendChild(el);
-    });
-}
-
-function renderFullNews(newsList) {
-    const container = document.getElementById('full-news-list');
-    if (!container) return;
-    container.innerHTML = '';
-
-    if (!newsList || newsList.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888;">등록된 정보가 없습니다.</div>';
-        return;
-    }
-
-    newsList.forEach(item => {
         const el = createNewsElement(item);
         container.appendChild(el);
     });
@@ -304,7 +322,9 @@ function createNewsElement(item) {
     return div;
 }
 
-// 퀘스트 관련 로직
+// =========================================
+// 퀘스트 관련 로직 (유지)
+// =========================================
 function renderHomeQuests(quests) {
     const container = document.getElementById('home-quest-list');
     if (!container) return;

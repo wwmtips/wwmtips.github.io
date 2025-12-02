@@ -2,9 +2,21 @@
   "items": [],
   "quests": [],
   "quiz": [
-    { "hint": "바람과 모래", "answer": "포플러 유프라티카" },
-    { "hint": "뿔", "answer": "사슴" },
-    { "hint": "등", "answer": "낙타" },
+    { 
+      "hint": "바람과 모래", 
+      "answer": "포플러 유프라티카",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "뿔", 
+      "answer": "사슴",
+      "user":"연갤러" 
+    },
+    { "hint": "등", 
+      "answer": "낙타",
+      "user":"연갤러"
+      
+    },
     { "hint": "네덜란드", "answer": "튤립" },
     { "hint": "티베트", "answer": "야크" },
     { "hint": "가려움", "answer": "모기" },

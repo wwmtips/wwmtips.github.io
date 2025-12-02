@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "거울", 
+      "answer": "화장대",
+      "user":"도우드"
+    },
+    { 
       "hint": "담벼락 덩굴", 
       "answer": "능소화",
       "user":"세라핀"

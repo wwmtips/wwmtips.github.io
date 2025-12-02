@@ -3,6 +3,16 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "비타민 A", 
+      "answer": "당근",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "가구", 
+      "answer": "탁자",
+      "user":"연갤러"
+    },
+    { 
       "hint": "거울", 
       "answer": "화장대",
       "user":"도우드"

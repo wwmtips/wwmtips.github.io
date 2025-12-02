@@ -47,12 +47,14 @@ function checkUrlParams() {
 
 // [기능] 데이터 로드
 function loadData() {
+    // 로컬/서버 환경에 맞춰 절대 경로 사용 (/json/...)
     Promise.all([
         fetch('/json/data.json').then(res => res.json()),
         fetch('/json/quests.json').then(res => res.json()),
         fetch('/json/news.json').then(res => res.json())
     ])
     .then(([mainData, questList, newsList]) => {
+        // 퀘스트 역순 정렬
         if (questList && Array.isArray(questList)) {
             questList.sort((a, b) => {
                 const numA = parseInt(a.id.replace('q', ''));
@@ -60,6 +62,8 @@ function loadData() {
                 return numB - numA; 
             });
         }
+        
+        // 뉴스 역순 정렬
         if (newsList && Array.isArray(newsList)) {
             newsList.reverse(); 
         }
@@ -71,21 +75,53 @@ function loadData() {
             news: newsList || [] 
         };
 
+        // 퀘스트 데이터 초기화
         currentQuestData = globalData.quests;
 
+        console.log("데이터 로드 완료:", globalData);
+
+        // 1. 족보 초기화
         renderQuizTable(globalData.quiz);
         const counter = document.getElementById('quiz-counter-area');
         if(counter) counter.innerText = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
 
+        // 2. 퀘스트 탭 리스트 초기화
         renderQuestList();
+
+        // 3. 홈 화면 퀘스트 리스트 초기화
         renderHomeQuests(globalData.quests);
+        
+        // 4. 뉴스 렌더링
         renderHomeNews(globalData.news);
         renderFullNews(globalData.news);
+
+        /* ============================================================
+           [NEW] URL 파라미터(id)가 있다면 해당 퀘스트 바로 열기
+           예: ?tab=quest&id=1  또는  ?tab=quest&id=q1
+           ============================================================ */
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetTab = urlParams.get('tab');
+        const targetId = urlParams.get('id');
+
+        if (targetTab === 'quest' && targetId) {
+            // 입력받은 id가 숫자면 'q'를 붙여줌 (1 -> q1)
+            // 이미 'q1' 형태라면 그대로 사용
+            const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
+            
+            // globalData에서 해당 ID를 가진 퀘스트 찾기
+            const foundQuest = globalData.quests.find(q => q.id === formattedId);
+            
+            if (foundQuest) {
+                // 상세 페이지 로드 함수 호출
+                loadQuestDetail(foundQuest.filepath);
+            }
+        }
     })
     .catch(error => {
         console.error("데이터 로드 중 오류 발생:", error);
     });
 }
+
 
 // =========================================
 // 탭 전환 및 뷰 제어 (Switch Tab)

@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "덩이줄기 식물", 
+      "answer": "고구마",
+      "user":"훈자"
+    },
+    { 
       "hint": "그늘", 
       "answer": "이끼",
       "user":"namaste"

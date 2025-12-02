@@ -3,6 +3,31 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "검은색", 
+      "answer": "수박 씨앗",
+      "user":"ddad"
+    },
+    { 
+      "hint": "거대한 과일", 
+      "answer": "잭 프루트",
+      "user":"활잽이"
+    },
+    { 
+      "hint": "목제", 
+      "answer": "침대",
+      "user":"활잽이"
+    },
+    { 
+      "hint": "지중해", 
+      "answer": "올리브",
+      "user":"그걸사네"
+    },
+    { 
+      "hint": "바다", 
+      "answer": "돌고래",
+      "user":"미나링"
+    },
+    { 
       "hint": "비타민 A", 
       "answer": "당근",
       "user":"연갤러"

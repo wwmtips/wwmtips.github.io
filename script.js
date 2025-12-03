@@ -14,6 +14,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const headerSearch = document.getElementById("header-search-input");
     if (headerSearch) {
         headerSearch.addEventListener("input", handleGlobalSearch);
+        // 2. [수정됨] 엔터 키 입력 시 -> 값만 초기화하고 결과창 닫기 (이동 X)
+        headerSearch.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault(); // 기본 동작 방지
+                
+                // 입력값 비우기
+                e.target.value = ''; 
+                
+                // 검색 결과창 즉시 닫기
+                const results = document.getElementById("global-search-results");
+                if (results) results.style.display = 'none';
+            }
+        });
         headerSearch.addEventListener("blur", () => {
             setTimeout(() => {
                 const results = document.getElementById("global-search-results");

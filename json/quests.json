@@ -145,4 +145,13 @@
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q18.html"
   }
+  ,
+  {
+    "id": "q19",
+    "name": "뱀왕의 비밀 보물",
+    "location": "포산 호수",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q19.html"
+  }
 ]

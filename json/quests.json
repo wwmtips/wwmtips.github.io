@@ -136,4 +136,13 @@
     "iconpath": "images/event1.jpg",
     "filepath": "/quests/q17.html"
   }
+  ,
+  {
+    "id": "q18",
+    "name": "포산 호수의 보물",
+    "location": "포산 호수",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q18.html"
+  }
 ]

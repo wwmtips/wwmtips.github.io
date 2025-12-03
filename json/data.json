@@ -3,6 +3,31 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "시간", 
+      "answer": "모래시계",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "호주", 
+      "answer": "오리너구리",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "공원", 
+      "answer": "비둘기",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "아마존", 
+      "answer": "피라냐",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "던지기", 
+      "answer": "투호",
+      "user":"연갤러"
+    },
+    { 
       "hint": "버터", 
       "answer": "야크",
       "user":"단목아아"

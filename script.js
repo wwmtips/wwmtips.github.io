@@ -14,18 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const headerSearch = document.getElementById("header-search-input");
     if (headerSearch) {
         headerSearch.addEventListener("input", handleGlobalSearch);
-        // [추가] 엔터 키 입력 시 처리 (예: 첫 번째 결과 자동 선택)
-        headerSearch.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                const results = document.getElementById("global-search-results");
-                // 결과창에 항목이 하나라도 있다면 첫 번째 항목 클릭 효과
-                if (results && results.children.length > 0) {
-                     const firstItem = results.querySelector('.search-result-item');
-                     if(firstItem) firstItem.click(); // 첫 번째 결과 클릭
-                }
-                e.preventDefault(); // 폼 제출 방지
-            }
-        });
         headerSearch.addEventListener("blur", () => {
             setTimeout(() => {
                 const results = document.getElementById("global-search-results");
@@ -678,14 +666,10 @@ function selectGlobalResult(keyword) {
         renderQuizTable(filterQuizData(keyword), keyword);
     }
     document.getElementById("global-search-results").style.display = 'none';
-    // [추가] 헤더 검색창 초기화
-    document.getElementById("header-search-input").value = '';
 }
 
 function selectQuestResult(filepath) {
     switchTab('quest');
     loadQuestDetail(filepath);
     document.getElementById("global-search-results").style.display = 'none';
-    // [추가] 헤더 검색창 초기화
-    document.getElementById("header-search-input").value = '';
 }

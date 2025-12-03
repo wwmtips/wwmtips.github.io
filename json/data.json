@@ -3,6 +3,16 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "먹보", 
+      "answer": "돼지",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "초록색 과일", 
+      "answer": "멜론",
+      "user":"연갤러"
+    },
+    { 
       "hint": "검은색", 
       "answer": "수박 씨앗",
       "user":"ddad"

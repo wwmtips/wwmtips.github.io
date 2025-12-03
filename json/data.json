@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "버터", 
+      "answer": "야크",
+      "user":"단목아아"
+    },
+    { 
       "hint": "녹색 눈", 
       "answer": "파리",
       "user":"연갤러"

@@ -10,38 +10,69 @@ const itemsPerPage = 12;
 let isGuideLoaded = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+    // 1. 데이터 로드 시작
     loadData();
+
+    // 2. 통합 검색창 관련 요소 가져오기
     const headerSearch = document.getElementById("header-search-input");
+    const clearBtn = document.getElementById("search-clear-btn");       // X 버튼
+    const searchResults = document.getElementById("global-search-results"); // 결과창
+
+    // 3. 통합 검색창 이벤트 리스너 설정
     if (headerSearch) {
-        headerSearch.addEventListener("input", handleGlobalSearch);
-        // 2. [수정됨] 엔터 키 입력 시 -> 값만 초기화하고 결과창 닫기 (이동 X)
-        headerSearch.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault(); // 기본 동작 방지
-                
-                // 입력값 비우기
-                e.target.value = ''; 
-                
-                // 검색 결과창 즉시 닫기
-                const results = document.getElementById("global-search-results");
-                if (results) results.style.display = 'none';
+        
+        // [입력 이벤트] 검색 실행 및 X 버튼 표시 제어
+        headerSearch.addEventListener("input", (e) => {
+            handleGlobalSearch(e); // 검색 함수 실행
+            
+            // 글자가 공백 제외하고 1자라도 있으면 X 버튼 표시
+            if (e.target.value.trim() !== '' && clearBtn) {
+                clearBtn.style.display = 'block';
+            } else if (clearBtn) {
+                clearBtn.style.display = 'none';
             }
         });
+
+        // [키다운 이벤트] 엔터 키 누르면 키보드만 내리기 (Blur)
+        headerSearch.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();  // 폼 제출 등 기본 동작 방지
+                headerSearch.blur(); // 포커스 해제 -> 모바일 키보드 내려감 (내용은 유지)
+            }
+        });
+
+        // [블러 이벤트] 포커스 잃으면 결과창 숨기기 (클릭할 시간 벌기 위해 딜레이)
         headerSearch.addEventListener("blur", () => {
             setTimeout(() => {
-                const results = document.getElementById("global-search-results");
-                if (results) results.style.display = 'none';
+                if (searchResults) searchResults.style.display = 'none';
             }, 200);
         });
     }
 
-    const quizLocalSearch = document.getElementById("quiz-local-search");
-    if (quizLocalSearch) {
-        quizLocalSearch.addEventListener("input", (e) => {
-            renderQuizTable(filterQuizData(e.target.value));
+    // 4. X 버튼 클릭 이벤트: 내용 초기화
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            if (headerSearch) {
+                headerSearch.value = ''; // 1. 입력값 비우기
+                headerSearch.focus();    // 2. 다시 입력할 수 있도록 포커스 유지
+            }
+            clearBtn.style.display = 'none'; // 3. X 버튼 숨기기
+            
+            // 4. 검색 결과창도 닫기
+            if (searchResults) searchResults.style.display = 'none'; 
         });
     }
 
+    // 5. 족보 탭 내부 검색 리스너 (기존 유지)
+    const quizLocalSearch = document.getElementById("quiz-local-search");
+    if (quizLocalSearch) {
+        quizLocalSearch.addEventListener("input", (e) => {
+            // 검색어에 맞춰 필터링하고, 하이라이팅을 위해 키워드도 같이 넘김
+            renderQuizTable(filterQuizData(e.target.value), e.target.value);
+        });
+    }
+
+    // 6. URL 파라미터 체크 (탭 이동 등)
     checkUrlParams();
 });
 

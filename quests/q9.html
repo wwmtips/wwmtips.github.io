@@ -1,13 +1,13 @@
 <div class="quest-detail-container">
     
     <style>
-        /* 이미지 컨테이너 공통 스타일 */
+        /* [수묵화 테마] 이미지 컨테이너 공통 스타일 */
         .wuxia-image-container {
-            border: 3px double var(--wuxia-border, #444); /* 이중 테두리로 고풍스럽게 */
+            border: 1px solid #ddd; /* 얇고 깔끔한 회색 테두리 */
             border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4); /* 깊이감 있는 그림자 */
-            background-color: #111;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* 부드럽고 은은한 그림자 */
+            background-color: #f4f4f2; /* 한지 느낌의 연한 미색 배경 */
             margin: 20px 0;
             position: relative;
         }
@@ -16,21 +16,21 @@
             width: 100%;
             height: auto;
             display: block;
-            /* 무협 느낌을 위한 필터: 약간의 세피아와 대비 증가 */
-            filter: sepia(0.2) contrast(1.1) brightness(0.9);
+            /* 밝은 테마용 필터: 약간의 따뜻함만 추가 */
+            filter: sepia(0.05) contrast(1.02);
             transition: transform 0.5s ease, filter 0.5s ease;
         }
         /* 마우스 호버 효과 */
         .wuxia-image-container:hover img {
-            transform: scale(1.03); /* 살짝 확대 */
-            filter: sepia(0) contrast(1.2) brightness(1); /* 필터 제거로 생생하게 */
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
         }
-        /* 이미지 장식용 모서리 (선택사항) */
+        /* 이미지 장식용 모서리 */
         .wuxia-image-container::after {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            border: 1px solid rgba(200, 160, 96, 0.2); /* 금색 테두리 장식 */
+            border: 1px solid rgba(176, 141, 85, 0.15); /* 금색 테두리 연하게 */
             box-sizing: border-box;
             pointer-events: none;
         }
@@ -38,15 +38,14 @@
         /* 나란히 배치 레이아웃 */
         .wuxia-image-row {
             display: flex;
-            gap: 15px; /* 이미지 사이 간격 */
+            gap: 15px; 
             margin: 20px 0;
         }
         .wuxia-image-row .wuxia-image-container {
-            flex: 1; /* 공간 균등 분할 */
-            margin: 0; /* row 내부 마진 초기화 */
+            flex: 1; 
+            margin: 0; 
         }
 
-        /* 모바일 반응형: 나란히 배치를 세로로 변경 */
         @media (max-width: 768px) {
             .wuxia-image-row {
                 flex-direction: column;
@@ -57,68 +56,63 @@
         }
     </style>
 
-
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">지역 정보</span>
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">지역 정보</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
         귀문 시장 (鬼門市場)
         </h2>
-        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">구현 검술의 필수 코스이자, 독특한 분위기의 장터</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">구현 검술의 필수 코스이자, 독특한 분위기의 장터</p>
     </div>
 
-    <div style="margin-bottom: 30px;">
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
+            구현 검술의 성지
+        </h3>
+        <p style="color: var(--wuxia-text-sub); line-height: 1.8; margin-bottom: 20px;">
+            귀문 시장은 <strong>구현 검술</strong>을 사용한다면 필수적인 <strong>심법</strong>을 얻을 수 있는 곳이라 반드시 진행하는 것이 좋습니다.<br>
+            또한, 특유의 몽환적이고 비밀스러운 분위기가 정말 좋기 때문에 시장이 열릴 때 꼭 가보시는 걸 추천합니다.
+        </p>
+
+        <div class="wuxia-image-container full-width">
+            <img src="../quests/images/q9-1.png" alt="귀문 시장 전경" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=귀문+시장+전경(이미지+준비중)'">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
+            진입 방법
+        </h3>
+        <ol style="color: var(--wuxia-text-sub); line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+            <li>먼저 <strong>강변 역참 결계석</strong>으로 이동합니다.</li>
+            <li>바로 앞 현상 게시판 쪽에서 <strong>한 무리가 대화하는 것</strong>을 엿듣습니다.</li>
+            <li>대화를 다 들은 후, 근처에 있는 <strong>노인</strong>과 대화합니다.</li>
+            <li>노인이 <strong>침식의 숲</strong>에 있는 한 사원으로 가라고 안내합니다.</li>
+            <li>해당 지역(침식의 숲 사원)으로 이동하여, 다시 <strong>왼쪽 건물의 대화</strong>를 듣습니다.</li>
+            <li>이후 벌어지는 <strong>전투를 마치면</strong> 귀문 시장으로 끌려가게 됩니다.</li>
+        </ol>
         
-        <div class="detail-chunk" style="margin-bottom: 40px;">
-            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px;">
-                구현 검술의 성지
-            </h3>
-            <p style="color: #bbb; line-height: 1.8; margin-bottom: 20px;">
-                귀문 시장은 <strong>구현 검술</strong>을 사용한다면 필수적인 <strong>심법</strong>을 얻을 수 있는 곳이라 반드시 진행하는 것이 좋습니다.<br>
-                또한, 특유의 몽환적이고 비밀스러운 분위기가 정말 좋기 때문에 시장이 열릴 때 꼭 가보시는 걸 추천합니다.
+        <div class="wuxia-image-row">
+            <div class="wuxia-image-container half-width">
+                <img src="../quests/images/q9-2.png" alt="강변 역참 대화" onerror="this.src='https://via.placeholder.com/400x300/f4f4f2/ccc?text=Step1:+강변+역참+대화'">
+            </div>
+            <div class="wuxia-image-container half-width">
+                <img src="../quests/images/q9-3.png" alt="대화 위치" onerror="this.src='https://via.placeholder.com/400x300/f4f4f2/ccc?text=Step2:+침식의+숲+대화'">
+            </div>
+        </div>
+
+        <div style="background-color: #fffcf5; border: 1px solid #ddd; border-left: 3px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; margin-top: 20px;">
+            <strong style="color: var(--wuxia-accent-gold);">💡 진행 팁</strong>
+            <p style="margin: 5px 0 0 0; color: var(--wuxia-text-sub); font-size: 0.9em;">
+                대화 트리거가 잘 작동하지 않을 경우, 결계석을 통해 지역을 다시 로드하거나 주변을 조금 더 탐색해보세요. 전투 준비를 단단히 하고 가는 것이 좋습니다.
             </p>
-
-            <div class="wuxia-image-container full-width">
-                <img src="../quests/images/q9-1.png" alt="귀문 시장 전경" onerror="this.src='https://via.placeholder.com/800x400/1a1a1c/c8a060?text=귀문+시장+전경(이미지+준비중)'">
-            </div>
         </div>
-
-        <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
-
-        <div class="detail-chunk">
-            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px;">
-                진입 방법
-            </h3>
-            <ol style="color: #bbb; line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
-                <li>먼저 <strong>강변 역참 결계석</strong>으로 이동합니다.</li>
-                <li>바로 앞 현상 게시판 쪽에서 <strong>한 무리가 대화하는 것</strong>을 엿듣습니다.</li>
-                <li>대화를 다 들은 후, 근처에 있는 <strong>노인</strong>과 대화합니다.</li>
-                <li>노인이 <strong>침식의 숲</strong>에 있는 한 사원으로 가라고 안내합니다.</li>
-                <li>해당 지역(침식의 숲 사원)으로 이동하여, 다시 <strong>왼쪽 건물의 대화</strong>를 듣습니다.</li>
-                <li>이후 벌어지는 <strong>전투를 마치면</strong> 귀문 시장으로 끌려가게 됩니다.</li>
-            </ol>
-            
-            <div class="wuxia-image-row">
-                <div class="wuxia-image-container half-width">
-                    <img src="../quests/images/q9-2.png" alt="강변 역참 대화" onerror="this.src='https://via.placeholder.com/400x300/1a1a1c/c8a060?text=Step1:+강변+역참+대화'">
-                </div>
-                <div class="wuxia-image-container half-width">
-                    <img src="../quests/images/q9-3.png" alt="대화 위치">
-                </div>
-            </div>
-
-            <div style="background-color: #222; border: 1px solid #444; padding: 15px; border-radius: 4px; margin-top: 20px;">
-                <strong style="color: var(--wuxia-accent-gold);">💡 진행 팁</strong>
-                <p style="margin: 5px 0 0 0; color: #999; font-size: 0.9em;">
-                    대화 트리거가 잘 작동하지 않을 경우, 결계석을 통해 지역을 다시 로드하거나 주변을 조금 더 탐색해보세요. 전투 준비를 단단히 하고 가는 것이 좋습니다.
-                </p>
-            </div>
-        </div>
-
     </div>
 
     <div style="text-align: center; margin-top: 40px;">
         <button onclick="showQuestList()" 
-                style="background-color: transparent; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
             목록으로 돌아가기
         </button>
     </div>

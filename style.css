@@ -965,15 +965,28 @@ h3 {
     padding-bottom: 50px; /* 버튼 아래 공간 확보 */
 }
 
-/* 생성된 주소 입력창 스타일 */
+/* [style.css] 생성된 주소 입력창 스타일 수정 */
 #result-url {
-    width: 100%; 
+    /* [핵심 수정] 패딩과 테두리를 너비에 포함시켜 튀어나가지 않게 함 */
+    box-sizing: border-box; 
+    width: 100%;            
+    max-width: 100%;        
+
+    /* 디자인 스타일 */
     margin-top: 10px; 
-    padding: 10px; 
+    padding: 12px; /* 버튼과 비슷하게 높이 맞춤 */
     border: 1px solid var(--wuxia-accent-gold);
     background-color: #f9f9f9;
     color: #555;
     font-size: 0.9em;
     border-radius: 4px;
-    display: none; /* 기본 숨김 */
+    
+    /* 기능 */
+    display: none; /* 평소엔 숨김 */
+    outline: none; /* 클릭 시 파란 테두리 제거 */
+}
+
+#result-url:focus {
+    border-color: var(--wuxia-accent-red); /* 클릭 시 붉은색 강조 */
+    background-color: #fff;
 }

@@ -595,19 +595,29 @@ function showQuestList() {
     }
 }
 
+// [수정된 함수] 필터 버튼 클릭 시 활성화 로직 변경
 function filterQuestType(type, btnElement) {
-    const buttons = document.querySelectorAll('.quest-type-nav .type-btn');
+    // 1. 기존 .type-btn 대신 .guide-item-btn을 찾도록 수정
+    // (만약 버튼 컨테이너에 다른 클래스를 썼다면 그에 맞춰 수정)
+    const buttons = document.querySelectorAll('.guide-grid-menu .guide-item-btn');
+    
+    // 2. 모든 버튼의 active 제거
     buttons.forEach(btn => btn.classList.remove('active'));
+    
+    // 3. 클릭된 버튼에 active 추가
     if (btnElement) btnElement.classList.add('active');
 
     if (!globalData.quests) return;
 
+    // 4. 데이터 필터링 (기존 로직 동일)
     if (type === 'all') currentQuestData = globalData.quests;
     else currentQuestData = globalData.quests.filter(q => q.type === type);
 
+    // 5. 페이지 초기화 및 리스트 다시 그리기 (기존 로직 동일)
     currentPage = 1;
     renderQuestList();
 }
+
 
 // 족보 관련 로직
 // script.js 파일의 renderQuizTable 함수 전체를 이 코드로 대체합니다.

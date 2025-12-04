@@ -63,23 +63,36 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 5. 족보 탭 내부 검색 리스너 (기존 유지)
-    // 5. 족보 탭 내부 검색 리스너
+        // 5. 족보 탭 내부 검색 리스너
     const quizLocalSearch = document.getElementById("quiz-local-search");
+    // 상단 상태바 요소 가져오기
+    const statusBar = document.getElementById("quiz-counter-area"); 
+
     if (quizLocalSearch) {
         
-        // [입력 이벤트] 글자를 칠 때마다 실시간 검색
+        // [기존] 입력 이벤트
         quizLocalSearch.addEventListener("input", (e) => {
-            // 검색어에 맞춰 필터링하고, 하이라이팅을 위해 키워드도 같이 넘김
             renderQuizTable(filterQuizData(e.target.value), e.target.value);
         });
 
-        // [키다운 이벤트] 엔터(Enter) 키를 누르면 키보드 내리기
+        // [기존] 엔터 키 누르면 키보드 내리기 (Blur)
         quizLocalSearch.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
-                e.preventDefault();     // 줄바꿈이나 폼 제출 방지
-                quizLocalSearch.blur(); // 포커스 해제 (모바일 키보드 숨김)
+                e.preventDefault();
+                quizLocalSearch.blur(); // 포커스 해제 -> 아래 'blur' 이벤트가 실행됨
             }
+        });
+
+        // ▼▼▼ [추가] 상단 바 슬라이드 업/다운 로직 ▼▼▼
+
+        // 1. 입력창을 눌렀을 때 (Focus): 상단 바 숨기기 (위로 올라감)
+        quizLocalSearch.addEventListener("focus", () => {
+            if(statusBar) statusBar.classList.add("hidden");
+        });
+
+        // 2. 다른 곳을 누르거나 엔터를 쳤을 때 (Blur): 상단 바 보이기 (내려옴)
+        quizLocalSearch.addEventListener("blur", () => {
+            if(statusBar) statusBar.classList.remove("hidden");
         });
     }
 

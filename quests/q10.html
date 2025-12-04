@@ -1,13 +1,13 @@
 <div class="quest-detail-container">
     
     <style>
-        /* 이미지 컨테이너 공통 스타일 */
+        /* [수묵화 테마] 이미지 컨테이너 스타일 */
         .wuxia-image-container {
-            border: 3px double var(--wuxia-border, #444); /* 이중 테두리로 고풍스럽게 */
+            border: 1px solid #ddd; /* 얇은 회색 테두리 */
             border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4); /* 깊이감 있는 그림자 */
-            background-color: #111;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* 부드러운 그림자 */
+            background-color: #f4f4f2; /* 연한 미색 배경 */
             margin: 20px 0;
             position: relative;
         }
@@ -16,21 +16,21 @@
             width: 100%;
             height: auto;
             display: block;
-            /* 무협 느낌을 위한 필터: 약간의 세피아와 대비 증가 */
-            filter: sepia(0.2) contrast(1.1) brightness(0.9);
+            /* 밝은 테마에 맞게 필터 조정: 약간의 따뜻함만 추가 */
+            filter: sepia(0.05) contrast(1.05);
             transition: transform 0.5s ease, filter 0.5s ease;
         }
         /* 마우스 호버 효과 */
         .wuxia-image-container:hover img {
-            transform: scale(1.03); /* 살짝 확대 */
-            filter: sepia(0) contrast(1.2) brightness(1); /* 필터 제거로 생생하게 */
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.1); /* 선명하게 */
         }
-        /* 이미지 장식용 모서리 (선택사항) */
+        /* 이미지 장식용 모서리 (선택사항 - 금색 테두리 유지) */
         .wuxia-image-container::after {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            border: 1px solid rgba(200, 160, 96, 0.2); /* 금색 테두리 장식 */
+            border: 1px solid rgba(160, 128, 64, 0.1); /* 금색 테두리 연하게 */
             box-sizing: border-box;
             pointer-events: none;
         }
@@ -38,15 +38,15 @@
         /* 나란히 배치 레이아웃 */
         .wuxia-image-row {
             display: flex;
-            gap: 15px; /* 이미지 사이 간격 */
+            gap: 15px; 
             margin: 20px 0;
         }
         .wuxia-image-row .wuxia-image-container {
-            flex: 1; /* 공간 균등 분할 */
-            margin: 0; /* row 내부 마진 초기화 */
+            flex: 1; 
+            margin: 0; 
         }
 
-        /* 모바일 반응형: 나란히 배치를 세로로 변경 */
+        /* 모바일 반응형 */
         @media (max-width: 768px) {
             .wuxia-image-row {
                 flex-direction: column;
@@ -57,128 +57,127 @@
         }
     </style>
 
-<div class="quest-detail-container">
-    
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">지역 공략</span>
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">지역 공략</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
         귀문 시장과 음병 갑옷
         </h2>
-        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">독기를 피해 살아남는 필수 생존 가이드</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">독기를 피해 살아남는 필수 생존 가이드</p>
     </div>
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <p style="color: #bbb; line-height: 1.8;">
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
             귀문 시장은 <strong>독기</strong>로 인해 맨몸으로는 자유롭게 돌아다닐 수 없습니다.<br>
             이를 해결하기 위해서는 <strong>'음병 갑옷'</strong>을 제작해야 합니다.
         </p>
-        <div style="background-color: rgba(138, 51, 36, 0.15); border: 1px solid var(--wuxia-accent-red); padding: 15px; border-radius: 4px; margin-top: 10px;">
+        
+        <div style="background-color: rgba(183, 28, 28, 0.05); border: 1px solid rgba(183, 28, 28, 0.2); padding: 15px; border-radius: 4px; margin-top: 10px;">
             <strong style="color: var(--wuxia-accent-red);">※ 공략 포인트</strong>
-            <p style="margin: 5px 0 0 0; color: #ccc; font-size: 0.9em;">
+            <p style="margin: 5px 0 0 0; color: var(--wuxia-text-sub); font-size: 0.95em;">
                 빠른 시간 내에 움직여야 하는 타임 어택 성격의 퀘스트입니다.<br>
                 아래 공략을 미리 숙지하고 진입하는 것을 추천합니다.
             </p>
         </div>
 
         <div class="wuxia-image-container" style="margin-top: 20px;">
-            <img src="../quests/images/guimun_armor_1.png" alt="귀문 시장 전경" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지1'">
+            <img src="../quests/images/guimun_armor_1.png" alt="귀문 시장 전경" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지1'">
         </div>
     </div>
 
-    <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; font-weight: bold;">
             시작: 노인의 의뢰
         </h3>
-        <p style="color: #ddd; line-height: 1.6;">
+        <p style="color: var(--wuxia-text-sub); line-height: 1.6;">
             시장이 열리지 않는 시간에 귀문 시장에 진입하면 한 <strong>노인</strong>을 만날 수 있습니다.<br>
             노인은 갑옷 제작 재료인 <strong>철창, 산문갑, 투구</strong> 세 가지를 찾아오라고 합니다.
         </p>
     </div>
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h4 style="color: #eee; margin-bottom: 10px;">1. 철창</h4>
-        <ol style="color: #bbb; line-height: 1.8; padding-left: 20px;">
-            <li>노인이 있는 장소에서 나와 <span style="color: var(--wuxia-accent-gold);">왼쪽</span>으로 이동하면 언덕이 나옵니다.</li>
+        <h4 style="color: var(--wuxia-text-main); margin-bottom: 10px; font-weight: bold;">1. 철창</h4>
+        <ol style="color: var(--wuxia-text-sub); line-height: 1.8; padding-left: 20px;">
+            <li>노인이 있는 장소에서 나와 <span style="color: var(--wuxia-accent-gold); font-weight: bold;">왼쪽</span>으로 이동하면 언덕이 나옵니다.</li>
         </ol>
         
         <div class="wuxia-image-container" style="margin: 15px 0;">
-            <img src="../quests/images/guimun_armor_2.png" alt="철창 위치 언덕" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지2'">
+            <img src="../quests/images/guimun_armor_2.png" alt="철창 위치 언덕" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지2'">
         </div>
 
-        <ol start="2" style="color: #bbb; line-height: 1.8; padding-left: 20px;">
+        <ol start="2" style="color: var(--wuxia-text-sub); line-height: 1.8; padding-left: 20px;">
             <li>언덕의 <strong>두 번째 등</strong>이 있는 위치까지 올라갑니다.</li>
-            <li>다시 <span style="color: var(--wuxia-accent-gold);">왼쪽으로 쭉 직진</span>하면 NPC <strong>'향고동'</strong>이 있습니다.</li>
+            <li>다시 <span style="color: var(--wuxia-accent-gold); font-weight: bold;">왼쪽으로 쭉 직진</span>하면 NPC <strong>'향고동'</strong>이 있습니다.</li>
             <li>대화 후, 앞쪽 병사들이 있는 곳의 <strong>상자</strong>를 열면 철창을 획득합니다.</li>
         </ol>
 
         <div class="wuxia-image-container" style="margin-top: 15px;">
-            <img src="../quests/images/guimun_armor_3.png" alt="향고동 NPC" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지3'">
+            <img src="../quests/images/guimun_armor_3.png" alt="향고동 NPC" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지3'">
         </div>
     </div>
 
-    <hr style="border: 0; border-top: 1px solid #333; margin: 30px 0;">
+    <hr style="border: 0; border-top: 1px solid #ddd; margin: 30px 0;">
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h4 style="color: #eee; margin-bottom: 10px;">2. 산문갑</h4>
-        <ul style="color: #bbb; line-height: 1.8; padding-left: 20px;">
-            <li>노인이 있던 장소에서 <span style="color: var(--wuxia-accent-gold);">오른쪽</span>으로 나갑니다.</li>
-            <li>등이 달려 있는 건물이 보이면, 그 위치에서 다시 <span style="color: var(--wuxia-accent-gold);">오른쪽으로 쭉</span> 이동합니다.</li>
+        <h4 style="color: var(--wuxia-text-main); margin-bottom: 10px; font-weight: bold;">2. 산문갑</h4>
+        <ul style="color: var(--wuxia-text-sub); line-height: 1.8; padding-left: 20px;">
+            <li>노인이 있던 장소에서 <span style="color: var(--wuxia-accent-gold); font-weight: bold;">오른쪽</span>으로 나갑니다.</li>
+            <li>등이 달려 있는 건물이 보이면, 그 위치에서 다시 <span style="color: var(--wuxia-accent-gold); font-weight: bold;">오른쪽으로 쭉</span> 이동합니다.</li>
             <li>길을 따라가다 보면 NPC <strong>'금운해'</strong>를 만날 수 있습니다.</li>
             <li>이후 나타나는 <strong>비급 표시</strong>를 따라 움직이면 획득 가능합니다.</li>
         </ul>
 
         <div class="wuxia-image-container" style="margin: 15px 0;">
-            <img src="../quests/images/guimun_armor_4.png" alt="산문갑 이동 경로 1" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지4'">
+            <img src="../quests/images/guimun_armor_4.png" alt="산문갑 이동 경로 1" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지4'">
         </div>
         <div class="wuxia-image-container" style="margin-top: 10px;">
-            <img src="../quests/images/guimun_armor_5.png" alt="산문갑 이동 경로 2" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지5'">
+            <img src="../quests/images/guimun_armor_5.png" alt="산문갑 이동 경로 2" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지5'">
         </div>
     </div>
 
-    <hr style="border: 0; border-top: 1px solid #333; margin: 30px 0;">
+    <hr style="border: 0; border-top: 1px solid #ddd; margin: 30px 0;">
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h4 style="color: #eee; margin-bottom: 10px;">3. 투구</h4>
-        <p style="color: #bbb; line-height: 1.8;">
-            가장 찾기 쉽습니다. 노인이 있던 장소에서 <span style="color: var(--wuxia-accent-gold);">왼쪽</span>으로 가다 보면 <strong>비급 표시</strong>가 바로 뜹니다.<br>
+        <h4 style="color: var(--wuxia-text-main); margin-bottom: 10px; font-weight: bold;">3. 투구</h4>
+        <p style="color: var(--wuxia-text-sub); line-height: 1.8;">
+            가장 찾기 쉽습니다. 노인이 있던 장소에서 <span style="color: var(--wuxia-accent-gold); font-weight: bold;">왼쪽</span>으로 가다 보면 <strong>비급 표시</strong>가 바로 뜹니다.<br>
             해당 표시를 따라가서 획득하세요.
         </p>
 
         <div class="wuxia-image-container" style="margin-top: 15px;">
-            <img src="../quests/images/guimun_armor_6.png" alt="투구 위치" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지6'">
+            <img src="../quests/images/guimun_armor_6.png" alt="투구 위치" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지6'">
         </div>
     </div>
 
     <div class="detail-chunk">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; font-weight: bold;">
             완료: 자유로운 탐험
         </h3>
-        <p style="color: #bbb; line-height: 1.8; margin-bottom: 20px;">
+        <p style="color: var(--wuxia-text-sub); line-height: 1.8; margin-bottom: 20px;">
             세 가지 물건을 모두 모아 노인에게 전달하면 <strong>음병 갑옷</strong>을 제작해 줍니다.<br>
             이제부터는 독기 걱정 없이 귀문 시장을 자유롭게 돌아다닐 수 있습니다.
         </p>
 
         <div class="wuxia-image-container" style="margin-bottom: 30px;">
-            <img src="../quests/images/guimun_armor_7.png" alt="음병 갑옷 획득" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지7'">
+            <img src="../quests/images/guimun_armor_7.png" alt="음병 갑옷 획득" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지7'">
         </div>
 
-        <div style="background-color: #222; border: 1px solid #444; padding: 20px; border-radius: 4px;">
-            <strong style="color: var(--wuxia-accent-gold);">🏃‍♂️ 후속: 음병 추적</strong>
-            <p style="margin: 10px 0 15px 0; color: #bbb; font-size: 0.95em;">
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <strong style="color: var(--wuxia-accent-gold); font-size: 1.1em;">🏃‍♂️ 후속: 음병 추적</strong>
+            <p style="margin: 10px 0 15px 0; color: var(--wuxia-text-main); font-size: 0.95em; line-height: 1.6;">
                 갑옷 획득 후 <strong>음병을 따라가는 퀘스트</strong>가 이어집니다.<br>
-                아까 올라갔던 계단에서 <span style="color: var(--wuxia-accent-red);">왼쪽으로 가지 말고</span>, <strong>계속 위로 쭉 직진</strong>해야 합니다.
+                아까 올라갔던 계단에서 <span style="color: var(--wuxia-accent-red); font-weight: bold;">왼쪽으로 가지 말고</span>, <strong>계속 위로 쭉 직진</strong>해야 합니다.
             </p>
             <div class="wuxia-image-container" style="margin: 0;">
-                <img src="../quests/images/guimun_armor_8.png" alt="음병 추적 경로" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지8'">
+                <img src="../quests/images/guimun_armor_8.png" alt="음병 추적 경로" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지8'">
             </div>
         </div>
     </div>
 
     <div style="text-align: center; margin-top: 40px;">
         <button onclick="showQuestList()" 
-                style="background-color: transparent; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
             목록으로 돌아가기
         </button>
     </div>

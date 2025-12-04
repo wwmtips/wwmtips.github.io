@@ -705,28 +705,52 @@ function generateBuildUrl() {
     navigator.clipboard.writeText(viewerUrl).then(() => alert("빌드 코드가 생성되었습니다!")).catch(() => alert("주소가 생성되었습니다."));
 }
 
+// [script.js] 5. 뷰어 로드 (제목 표시 방식 수정)
 function loadViewer() {
     if (!builderData) {
-        fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data; loadViewer(); });
+        fetch('json/builder_data.json')
+            .then(res => res.json())
+            .then(data => { 
+                builderData = data; 
+                loadViewer(); 
+            });
         return;
     }
+
     const params = new URLSearchParams(window.location.search);
     const encodedData = params.get('b');
-    let w=[], h=[], m=[], creator="";
+
+    let w = [], h = [], m = [];
+    let creator = "";
 
     if (encodedData) {
         try {
             const decodedString = decodeURIComponent(escape(atob(encodedData)));
             const parsedData = JSON.parse(decodedString);
-            w = parsedData.w || []; h = parsedData.h || []; m = parsedData.m || []; creator = parsedData.c || "";
-        } catch (e) { console.error("잘못된 빌드 주소", e); }
+            w = parsedData.w || [];
+            h = parsedData.h || [];
+            m = parsedData.m || [];
+            creator = parsedData.c || "";
+        } catch (e) {
+            console.error("잘못된 빌드 주소입니다.", e);
+            alert("빌드 정보를 불러올 수 없습니다.");
+            return;
+        }
     }
 
-    const authorEl = document.getElementById('build-author');
-    if (authorEl) {
-        authorEl.innerHTML = creator ? `제작자: <strong style="color:var(--wuxia-text-main);">${creator}</strong>` : `제작자: <span style="color:#aaa;">익명의 협객</span>`;
+    // [수정] 제목(H1)에 "{제작자}의 빌드" 표시
+    const titleEl = document.getElementById('build-main-title');
+    if (titleEl) {
+        if (creator) {
+            // 제작자 이름이 있으면 "홍길동의 빌드"
+            titleEl.innerText = `${creator}의 빌드`;
+        } else {
+            // 없으면 "익명의 협객의 빌드"
+            titleEl.innerText = "익명의 협객의 빌드";
+        }
     }
 
+    // 기존 슬롯 렌더링 로직
     const renderSlot = (type, ids, prefix) => {
         ids.forEach((id, idx) => {
             if (!id) return;
@@ -736,14 +760,23 @@ function loadViewer() {
                 const nameId = `name-${prefix}-${type}-${idx}`;
                 const slotEl = document.getElementById(slotId);
                 const nameEl = document.getElementById(nameId);
+
                 if (slotEl) {
                     const img = slotEl.querySelector('img');
-                    if (img) { img.src = itemData.img; img.style.display = 'block'; }
+                    if (img) {
+                        img.src = itemData.img;
+                        img.style.display = 'block';
+                    }
                     slotEl.style.border = '1px solid var(--wuxia-accent-gold)';
                 }
-                if (nameEl) nameEl.innerText = itemData.name;
+                if (nameEl) {
+                    nameEl.innerText = itemData.name;
+                }
             }
         });
     };
-    renderSlot('weapons', w, 'v'); renderSlot('hearts', h, 'v'); renderSlot('marts', m, 'v');
+
+    renderSlot('weapons', w, 'v');
+    renderSlot('hearts', h, 'v');
+    renderSlot('marts', m, 'v');
 }

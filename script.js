@@ -806,46 +806,65 @@ function loadViewer() {
     renderSlot('marts', m, 'v');
 }
 
-/* [script.js] downloadBuildImage 함수 내부 수정 */
-
+/* =========================================
+   [기능] 빌드 이미지 다운로드 (수정됨: 보안 옵션 강화)
+   ========================================= */
 function downloadBuildImage() {
-    const element = document.getElementById("capture-area");
+    const element = document.getElementById("capture-area"); 
     const titleEl = document.getElementById("build-main-title");
     
+    // 파일명 생성
     let fileName = "연운_빌드";
     if (titleEl) {
         fileName = titleEl.innerText.replace(/\s/g, "_");
     }
 
-    // [수정된 옵션]
-    const options = {
-        scale: 2, 
-        backgroundColor: "#ffffff",
-        useCORS: true,       // 외부/로컬 이미지 허용 (서버 환경 필수)
-        allowTaint: false,   // ★중요★ 다운로드를 위해 반드시 false여야 함
-        logging: true,       // 오류 확인을 위해 true로 잠시 변경
-        timeout: 0           // 이미지 로드 대기 시간 제한 없음
-    };
-
+    // 캡처 시작 알림
     const btn = document.querySelector('.download-btn');
     const originalText = btn.innerText;
     btn.innerText = "🖼️ 변환 중...";
     btn.disabled = true;
 
-    html2canvas(element, options).then(canvas => {
-        const imgData = canvas.toDataURL("image/jpeg", 0.9);
-        const link = document.createElement("a");
-        link.download = `${fileName}.jpg`;
-        link.href = imgData;
-        link.click();
+    // [핵심] 캡처 옵션 강화
+    const options = {
+        scale: 2,               // 2배 해상도
+        backgroundColor: "#f4f4f2", // 배경색 (투명 방지, 테마색 적용)
+        useCORS: true,          // [중요] 이미지 로드 보안 허용
+        allowTaint: true,       // [중요] 로컬 이미지 허용 시도
+        logging: true,          // 디버그 로그 켜기 (F12 콘솔에서 확인 가능)
+        imageTimeout: 0,        // 이미지 로딩 대기 시간 제거
+    };
 
-        btn.innerText = originalText;
-        btn.disabled = false;
-    }).catch(err => {
-        console.error("이미지 저장 실패:", err);
-        // 사용자에게 구체적인 에러 메시지를 보여줍니다.
-        alert("이미지 저장 실패: " + err.message + "\n(서버에서 실행 중인지 확인해주세요)");
-        btn.innerText = originalText;
-        btn.disabled = false;
-    });
+    // 약간의 딜레이를 주어 이미지가 확실히 로드된 후 캡처
+    setTimeout(() => {
+        html2canvas(element, options).then(canvas => {
+            try {
+                // 캔버스를 이미지 URL로 변환
+                const imgData = canvas.toDataURL("image/jpeg", 0.9);
+                
+                // 다운로드 트리거
+                const link = document.createElement("a");
+                link.download = `${fileName}.jpg`;
+                link.href = imgData;
+                document.body.appendChild(link); // 파이어폭스 호환성
+                link.click();
+                document.body.removeChild(link);
+
+                // 성공 시 버튼 복구
+                btn.innerText = originalText;
+                btn.disabled = false;
+            } catch (e) {
+                // toDataURL 보안 에러 발생 시 (주로 로컬 파일 실행 시)
+                console.error("보안 에러 발생:", e);
+                alert("브라우저 보안 문제로 저장이 차단되었습니다.\n(파일을 직접 열지 말고 웹 서버/Live Server를 통해 실행하세요.)");
+                btn.innerText = "저장 실패";
+                btn.disabled = false;
+            }
+        }).catch(err => {
+            console.error("html2canvas 캡처 실패:", err);
+            alert("이미지 변환 중 오류가 발생했습니다.\n개발자 도구(F12)의 Console 내용을 확인해주세요.");
+            btn.innerText = originalText;
+            btn.disabled = false;
+        });
+    }, 100);
 }

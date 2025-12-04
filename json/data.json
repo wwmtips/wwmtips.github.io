@@ -3,6 +3,36 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "개울가", 
+      "answer": "개구리",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "분홍색", 
+      "answer": "살구꽃",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "굵고 긴 다리", 
+      "answer": "홍학",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "요리", 
+      "answer": "설탕",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "꿀", 
+      "answer": "벌",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "악취", 
+      "answer": "스컹크",
+      "user":"ㅇㅇ"
+    },
+    { 
       "hint": "도원결의", 
       "answer": "복숭아꽃",
       "user":"연갤러"

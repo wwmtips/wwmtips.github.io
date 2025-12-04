@@ -1,26 +1,79 @@
-<head>
-    <link rel="stylesheet" href="../quests/murim_st.css" />
-</head>
 <div class="quest-detail-container">
     
+    <style>
+        /* [수묵화 테마] 이미지 컨테이너 공통 스타일 */
+        .wuxia-image-container {
+            border: 1px solid #ddd; /* 얇고 깔끔한 회색 테두리 */
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* 부드럽고 은은한 그림자 */
+            background-color: #f4f4f2; /* 한지 느낌의 연한 미색 배경 */
+            margin: 20px 0;
+            position: relative;
+        }
+        /* 이미지 자체 스타일 */
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            /* 밝은 테마용 필터: 약간의 따뜻함만 추가 */
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        /* 마우스 호버 효과 */
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        /* 이미지 장식용 모서리 */
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15); /* 금색 테두리 연하게 */
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
+        /* 나란히 배치 레이아웃 */
+        .wuxia-image-row {
+            display: flex;
+            gap: 15px; 
+            margin: 20px 0;
+        }
+        .wuxia-image-row .wuxia-image-container {
+            flex: 1; 
+            margin: 0; 
+        }
+
+        @media (max-width: 768px) {
+            .wuxia-image-row {
+                flex-direction: column;
+            }
+            .wuxia-image-row .wuxia-image-container {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
             재물신의 귀환
         </h2>
-        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">잃어버린 재물신 조각상을 찾아서</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">잃어버린 재물신 조각상을 찾아서</p>
     </div>
 
-    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px;">
-        <div style="width: 80px; height: 80px; border: 2px solid #333; border-radius: 4px; overflow: hidden; flex-shrink: 0; background-color: #1a1a1c; display: flex; align-items: center; justify-content: center;">
+    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px; background-color: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <div style="width: 60px; height: 60px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; flex-shrink: 0; background-color: #f4f4f2; display: flex; align-items: center; justify-content: center;">
             <span style="font-size: 2em;">💰</span>
         </div>
         <div>
-            <p style="margin: 0 0 10px 0; color: #ccc;">
-                <strong>📍 주요 지역:</strong> <span style="color: var(--wuxia-accent-gold);">풍화촌 (연혜)</span>
+            <p style="margin: 0 0 10px 0; color: var(--wuxia-text-main);">
+                <strong>📍 주요 지역:</strong> <span style="color: var(--wuxia-accent-gold); font-weight: bold;">풍화촌 (연혜)</span>
             </p>
-            <p style="margin: 0; color: #ccc; line-height: 1.6;">
-                <strong>💡 개요:</strong> 연혜에게 말을 걸고, 조각상을 찾아 전달하는 간단한 퀘스트입니다.
+            <p style="margin: 0; color: var(--wuxia-text-sub); line-height: 1.6;">
+                <strong style="color: var(--wuxia-accent-red);">💡 개요:</strong> 연혜에게 말을 걸고, 조각상을 찾아 전달하는 간단한 퀘스트입니다.
             </p>
         </div>
     </div>
@@ -28,58 +81,57 @@
     <div style="margin-bottom: 30px;">
         
         <div class="detail-chunk" style="margin-bottom: 40px;">
-            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
+            <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
                 1. 퀘스트 시작 (연혜에게 말 걸기)
             </h3>
-            <p style="color: #bbb; line-height: 1.8;">
+            <p style="color: var(--wuxia-text-sub); line-height: 1.8;">
                 <strong>풍화촌</strong>에 있는 <strong>'연혜'</strong>에게 말을 걸어,<br>
-                **재물신 조각상**을 분실했다는 이야기를 듣고 퀘스트를 시작합니다.
+                <strong>재물신 조각상</strong>을 분실했다는 이야기를 듣고 퀘스트를 시작합니다.
             </p>
             
             <div class="wuxia-image-container" style="margin-top: 20px;">
-                <img src="../quests/images/q14_1.png" alt="연혜에게 말 걸기" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지1:+퀘스트+시작'">
+                <img src="../quests/images/q14_1.png" alt="연혜에게 말 걸기" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지1:+퀘스트+시작'">
             </div>
         </div>
 
-        <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
         <div class="detail-chunk" style="margin-bottom: 40px;">
-            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
+            <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
                 2. 조각상 찾기
             </h3>
-            <p style="color: #bbb; line-height: 1.8;">
+            <p style="color: var(--wuxia-text-sub); line-height: 1.8;">
                 조각상은 <strong>풍화촌 아래쪽 해안가 벽돌 사이</strong>에 있습니다.<br>
                 자세한 위치는 아래 지도 이미지를 참고하세요.
             </p>
 
             <div class="wuxia-image-row">
                 <div class="wuxia-image-container">
-                    <img src="../quests/images/q14_2.png" alt="조각상 발견 위치" onerror="this.src='https://via.placeholder.com/400x300/111/333?text=이미지2:+분실+장소'">
+                    <img src="../quests/images/q14_2.png" alt="조각상 발견 위치" onerror="this.src='https://via.placeholder.com/400x300/f4f4f2/ccc?text=이미지2:+분실+장소'">
                 </div>
                 <div class="wuxia-image-container">
-                    <img src="../quests/images/q14_3.png" alt="건물 지붕 위 조각상" onerror="this.src='https://via.placeholder.com/400x300/111/333?text=이미지3:+조각상+획득'">
+                    <img src="../quests/images/q14_3.png" alt="건물 지붕 위 조각상" onerror="this.src='https://via.placeholder.com/400x300/f4f4f2/ccc?text=이미지3:+조각상+획득'">
                 </div>
             </div>
             
-            <p style="color: #999; font-size: 0.9em; margin-top: 10px;">
-                ※ 조각상은 구석에 있어 자세히 들여다 봐야 합니다.
+            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 10px; background-color: #f9f9f9; padding: 10px; border-radius: 4px;">
+                ※ 조각상은 구석에 있어 자세히 들여다봐야 합니다.
             </p>
-       
         </div>
 
-        <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
         <div class="detail-chunk">
-            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
+            <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
                 3. 재물신 반환 (완료)
             </h3>
-            <p style="color: #bbb; line-height: 1.8;">
+            <p style="color: var(--wuxia-text-sub); line-height: 1.8;">
                 획득한 <strong>재물신 조각상</strong>을 가지고<br>
                 다시 <strong>연혜</strong>에게 돌아가 전달하면 퀘스트가 완료됩니다.
             </p>
 
             <div class="wuxia-image-container" style="margin-top: 20px;">
-                <img src="../quests/images/q14_4.png" alt="연혜에게 조각상 전달 및 완료" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지4:+완료'">
+                <img src="../quests/images/q14_4.png" alt="연혜에게 조각상 전달 및 완료" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지4:+완료'">
             </div>
         </div>
 
@@ -87,7 +139,7 @@
 
     <div style="text-align: center; margin-top: 40px;">
         <button onclick="showQuestList()" 
-                style="background-color: transparent; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
             목록으로 돌아가기
         </button>
     </div>

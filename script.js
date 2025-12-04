@@ -90,9 +90,9 @@ function checkUrlParams() {
 }
 
 // [기능] 데이터 로드
+// [기능] 데이터 로드
 function loadData() {
     // [수정 1] 비동기 요청(fetch) 전에 URL 파라미터를 미리 '캡처'해 둡니다.
-    // 나중에 switchTab이 실행되어 URL이 변경되더라도, 여기 저장된 값은 유지됩니다.
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab');
     const targetId = urlParams.get('id');
@@ -130,10 +130,43 @@ function loadData() {
 
         console.log("데이터 로드 완료:", globalData);
 
-        // 1. 족보 초기화
+        // 1. 족보 초기화 및 최다 제보자 표시 [수정됨]
         renderQuizTable(globalData.quiz);
+        
         const counter = document.getElementById('quiz-counter-area');
-        if(counter) counter.innerText = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
+        if(counter) {
+            // A. 유저별 카운트 집계
+            const userCounts = {};
+            globalData.quiz.forEach(item => {
+                // user 값이 있고 공백이 아닌 경우만 카운트
+                if (item.user && item.user.trim() !== "") {
+                    const u = item.user.trim();
+                    userCounts[u] = (userCounts[u] || 0) + 1;
+                }
+            });
+
+            // B. 최다 제보자 찾기
+            let topUser = null;
+            let maxCount = 0;
+            for (const [user, count] of Object.entries(userCounts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    topUser = user;
+                }
+            }
+
+            // C. 메시지 생성 (innerHTML 사용)
+            let message = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
+            
+            // 최다 제보자가 존재할 경우 아랫줄에 작게 추가
+            if (topUser) {
+                message += `<br><span style="font-size: 0.8em; color: #888; font-weight: normal;">
+                    (👑 최다 제보: <strong>${topUser}</strong>님 - ${maxCount}개)
+                </span>`;
+            }
+
+            counter.innerHTML = message;
+        }
 
         // 2. 퀘스트 탭 리스트 초기화
         renderQuestList();
@@ -147,11 +180,9 @@ function loadData() {
 
         /* ============================================================
            [수정 2] 위에서 미리 캡처해둔 targetTab과 targetId 변수를 사용합니다.
-           (window.location.search를 다시 읽지 않음)
            ============================================================ */
         if (targetTab === 'quest' && targetId) {
             // 입력받은 id가 숫자면 'q'를 붙여줌 (1 -> q1)
-            // 이미 'q1' 형태라면 그대로 사용
             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
             
             // globalData에서 해당 ID를 가진 퀘스트 찾기

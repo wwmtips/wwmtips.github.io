@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "가득", 
+      "answer": "쌀 항아리",
+      "user":"ㅇㅇ"
+    },
+    { 
       "hint": "안전", 
       "answer": "부적",
       "user":"ㅇㅇ"

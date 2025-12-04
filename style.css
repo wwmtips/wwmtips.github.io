@@ -6,26 +6,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
 
 :root {
-    /* [레어도 색상] */
-    --rarity-common: #757575;    /* 일반: 짙은 회색 */
+    /* [레어도 색상] - 흰 배경 가독성을 위해 전체적으로 톤 다운(진하게) */
+    --rarity-common: #555555;    /* 일반: 연한 회색 -> 진한 쥐색으로 변경 */
     --rarity-uncommon: #2e7d32;  /* 고급: 짙은 녹색 */
     --rarity-rare: #1565c0;      /* 희귀: 짙은 청색 */
     --rarity-epic: #7b1fa2;      /* 에픽: 짙은 자색 */
-    --rarity-legendary: #ff8f00; /* 전설: 호박색 */
+    --rarity-legendary: #e65100; /* 전설: 진한 주황색 (가독성 UP) */
     
-    /* [NEW: 수묵화(한지) 라이트 테마 팔레트] */
-    --wuxia-bg-deep: #f4f4f2;     /* 배경: 한지 느낌의 미색 (아주 연한 회색) */
-    --wuxia-bg-panel: #ffffff;    /* 패널: 순백색 (종이) */
-    --wuxia-bg-input: #e0e0e0;    /* 입력창: 연한 회색 */
+    /* [수묵화(한지) 라이트 테마 팔레트] */
+    --wuxia-bg-deep: #f4f4f2;     /* 배경: 미색 */
+    --wuxia-bg-panel: #ffffff;    /* 패널: 순백색 */
+    --wuxia-bg-input: #e0e0e0;    /* 입력창 */
     
-    --wuxia-border: #dcdcdc;      /* 경계선: 은은한 회색 */
+    --wuxia-border: #dcdcdc;      /* 경계선 */
     
-    --wuxia-accent-gold: #b08d55; /* 강조: 앤티크 골드 (흰 배경에 잘 보이게 톤다운) */
-    --wuxia-accent-red: #9e2a2b;  /* 강조: 인주색 (붉은 도장 색) */
+    --wuxia-accent-gold: #a08040; /* 강조: 기존보다 약간 더 어두운 금색 (글씨 잘 보이게) */
+    --wuxia-accent-red: #b71c1c;  /* 강조: 더 선명한 인주색 */
     
-    --wuxia-text-main: #222222;   /* 텍스트: 먹색 (진한 검정) */
-    --wuxia-text-sub: #666666;    /* 보조 텍스트: 연한 먹색 */
+    --wuxia-text-main: #1a1a1a;   /* 텍스트: 거의 검정에 가까운 색 */
+    --wuxia-text-sub: #555555;    /* 보조 텍스트: 너무 흐리지 않게 진한 회색으로 변경 */
 }
+
 
 /* =========================================
    2. 기본 레이아웃 및 리셋

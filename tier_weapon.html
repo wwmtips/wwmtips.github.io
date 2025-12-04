@@ -1,63 +1,93 @@
 <div class="quest-detail-container" style="text-align: left;">
     
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
             무기 및 무술 등급표
         </h2>
-        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">현재 메타에서 가장 강력한 무기와 무술 정보</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">현재 메타에서 가장 강력한 무기와 무술 정보</p>
     </div>
 
     <style>
-        /* 티어 테이블 전용 스타일 */
+        /* [수묵화 테마] 티어 테이블 스타일 */
         .tier-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 10px;
             font-size: 0.95em;
+            background-color: #fff; /* 흰색 배경 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
+        
         .tier-table th {
-            border: 1px solid #444;
+            border: 1px solid #ddd;
             padding: 12px;
-            background-color: rgba(200, 160, 96, 0.1); /* 골드 배경 투명도 */
-            color: #ccc;
+            /* 은은한 한지 느낌의 배경색 */
+            background-color: #fffcf5; 
+            color: var(--wuxia-text-main);
             font-weight: bold;
             text-align: center;
+            border-bottom: 2px solid var(--wuxia-accent-gold); /* 헤더 강조 */
         }
+        
         .tier-table td {
-            border: 1px solid #444;
+            border: 1px solid #eee;
             padding: 15px;
             vertical-align: middle;
-            color: #bbb;
+            color: var(--wuxia-text-sub); /* 본문은 진한 회색 */
             line-height: 1.6;
         }
+
+        /* 마우스 올렸을 때 줄 강조 */
+        .tier-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
         .weapon-cell {
             text-align: center;
-            width: 120px; /* 좌측 셀 너비 고정 */
+            width: 120px; 
             min-width: 100px;
+            background-color: #fdfdfd; /* 이름 칸만 아주 살짝 구분 */
+            border-right: 1px solid #eee;
         }
+
         .weapon-icon-box {
             width: 64px;
             height: 64px;
-            background-color: #222;
-            border: 1px solid #555;
+            background-color: #f4f4f2; /* 아이콘 배경: 연한 미색 */
+            border: 1px solid #ddd;
             margin: 0 auto 10px auto;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 4px;
         }
+
         .weapon-name {
             display: block;
-            color: var(--wuxia-accent-gold);
+            color: var(--wuxia-text-main); /* 무기 이름: 진한 색 */
             font-weight: bold;
             font-size: 0.9em;
+        }
+        
+        /* 등급별 섹션 제목 스타일 */
+        .tier-heading {
+            color: var(--wuxia-text-main);
+            font-size: 1.3em; 
+            border-left: 4px solid var(--wuxia-accent-red); 
+            padding-left: 10px; 
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .tier-heading span {
+            color: var(--wuxia-accent-gold); /* S, A, B 글자만 금색 */
         }
     </style>
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 20px;">
-            S 티어 무기 및 무술
+        <h3 class="tier-heading">
+            <span>S</span> 티어 무기 및 무술
         </h3>
         
         <table class="tier-table">
@@ -118,8 +148,8 @@
     </div>
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 20px;">
-            A 티어 무기 및 무술
+        <h3 class="tier-heading">
+            <span>A</span> 티어 무기 및 무술
         </h3>
         
         <table class="tier-table">
@@ -179,8 +209,8 @@
     </div>
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 20px;">
-            B 티어 무기 및 무술
+        <h3 class="tier-heading">
+            <span>B</span> 티어 무기 및 무술
         </h3>
         
         <table class="tier-table">

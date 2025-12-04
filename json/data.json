@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "암살", 
+      "answer": "단검",
+      "user":"단목아아"
+    },
+    { 
       "hint": "최강의 초식동물", 
       "answer": "코끼리",
       "user":"ㅇㅇ"

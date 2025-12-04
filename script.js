@@ -805,3 +805,52 @@ function loadViewer() {
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');
 }
+
+/* =========================================
+   [기능] 빌드 이미지 다운로드 (html2canvas)
+   ========================================= */
+function downloadBuildImage() {
+    const element = document.getElementById("capture-area"); // 캡처할 영역
+    const titleEl = document.getElementById("build-main-title");
+    
+    // 파일명 생성 (예: 홍길동의_빌드.jpg)
+    let fileName = "연운_빌드";
+    if (titleEl) {
+        fileName = titleEl.innerText.replace(/\s/g, "_"); // 공백을 언더바(_)로 변경
+    }
+
+    // 캡처 옵션 설정
+    const options = {
+        scale: 2, // 2배 해상도로 캡처 (선명하게)
+        backgroundColor: "#ffffff", // 배경색 강제 지정 (투명 방지)
+        useCORS: true, // 크로스 도메인 이미지 허용 (중요)
+        logging: false, // 디버그 로그 끄기
+        allowTaint: true // 로컬 이미지 허용
+    };
+
+    // 캡처 시작 알림
+    const btn = document.querySelector('.download-btn');
+    const originalText = btn.innerText;
+    btn.innerText = "🖼️ 변환 중...";
+    btn.disabled = true;
+
+    html2canvas(element, options).then(canvas => {
+        // 캔버스를 이미지 URL로 변환 (JPG, 품질 0.9)
+        const imgData = canvas.toDataURL("image/jpeg", 0.9);
+        
+        // 가상의 링크를 만들어 다운로드 트리거
+        const link = document.createElement("a");
+        link.download = `${fileName}.jpg`;
+        link.href = imgData;
+        link.click();
+
+        // 버튼 복구
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }).catch(err => {
+        console.error("이미지 저장 실패:", err);
+        alert("이미지 저장 중 오류가 발생했습니다.");
+        btn.innerText = originalText;
+        btn.disabled = false;
+    });
+}

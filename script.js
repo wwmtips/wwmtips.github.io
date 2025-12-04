@@ -873,11 +873,12 @@ function selectQuestResult(filepath) {
     loadQuestDetail(filepath);
     document.getElementById("global-search-results").style.display = 'none';
 }
+
 /* =========================================
-   [기능] 빌더 관련 로직
+   [기능] 빌더 관련 로직 (수정됨)
    ========================================= */
 
-// 모달 열기
+// 1. 모달 열기 (수정: onclick에 이름(item.name)도 전달)
 function openBuilderModal(type, index) {
     if (!builderData) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
     
@@ -892,20 +893,22 @@ function openBuilderModal(type, index) {
     
     list.innerHTML = '';
 
-    // '해제' 버튼 추가
+    // '해제' 버튼
     const emptyDiv = document.createElement('div');
     emptyDiv.className = 'select-item';
     emptyDiv.innerHTML = '<div style="width:48px;height:48px;background:#eee;line-height:48px;margin:0 auto;">X</div><p>해제</p>';
-    emptyDiv.onclick = () => selectBuilderItem(null);
+    emptyDiv.onclick = () => selectBuilderItem(null, '', ''); // 이름도 비움
     list.appendChild(emptyDiv);
 
-    // 아이템 목록 생성
+    // 아이템 목록
     if (builderData[type]) {
         builderData[type].forEach(item => {
             const div = document.createElement('div');
             div.className = 'select-item';
             div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
-            div.onclick = () => selectBuilderItem(item.id, item.img);
+            
+            // [수정] itemName 추가 전달 (따옴표 주의)
+            div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
             list.appendChild(div);
         });
     }
@@ -913,13 +916,14 @@ function openBuilderModal(type, index) {
     modal.style.display = 'flex';
 }
 
-// 아이템 선택 처리
-function selectBuilderItem(itemId, imgSrc) {
+// 2. 아이템 선택 처리 (수정: itemName 인자 추가 및 텍스트 업데이트)
+function selectBuilderItem(itemId, imgSrc, itemName) {
     const { type, index } = currentSlot;
-    currentBuild[type][index] = itemId; // 데이터 저장
+    currentBuild[type][index] = itemId;
 
-    // UI 업데이트 (이미지 표시/숨김)
+    // 슬롯 요소들 가져오기
     const imgEl = document.getElementById(`slot-${type}-${index}`);
+    const nameEl = document.getElementById(`name-${type}-${index}`); // [NEW] 이름 요소
     const slotEl = imgEl.parentElement;
     const plusSpan = slotEl.querySelector('span');
 
@@ -928,37 +932,69 @@ function selectBuilderItem(itemId, imgSrc) {
         imgEl.style.display = 'block';
         if(plusSpan) plusSpan.style.display = 'none';
         slotEl.style.borderStyle = 'solid';
+        
+        // [NEW] 이름 표시
+        if(nameEl) nameEl.innerText = itemName;
     } else {
         imgEl.src = '';
         imgEl.style.display = 'none';
         if(plusSpan) plusSpan.style.display = 'block';
         slotEl.style.borderStyle = 'dashed';
+        
+        // [NEW] 이름 지우기
+        if(nameEl) nameEl.innerText = '';
     }
 
-    closeBuilderModal(null); // 모달 닫기
+    closeBuilderModal(null);
 }
 
-// 모달 닫기
-function closeBuilderModal(e) {
-    if (e === null || e.target.classList.contains('modal-overlay')) {
-        document.getElementById('builder-modal').style.display = 'none';
+// 3. 뷰어 로드 (수정: 이름 표시 로직 추가)
+function loadViewer() {
+    if (!builderData) {
+        // 데이터가 없으면 json 로드 후 재실행 (경로 주의)
+        fetch('../json/builder_data.json')
+            .then(res => res.json())
+            .then(data => { 
+                builderData = data; 
+                db = data; // script.js 변수명 호환
+                loadViewer(); 
+            });
+        return;
     }
+
+    const params = new URLSearchParams(window.location.search);
+    const w = (params.get('w') || ',').split(',');
+    const h = (params.get('h') || ',,,').split(',');
+    const m = (params.get('m') || ',,,,,,,').split(',');
+
+    // 슬롯 렌더링 헬퍼
+    const renderSlot = (type, ids, prefix) => {
+        ids.forEach((id, idx) => {
+            if (!id) return;
+            const itemData = builderData[type].find(i => i.id === id);
+            if (itemData) {
+                const slotId = `${prefix}-${type}-${idx}`; // ex: v-weapons-0
+                const nameId = `name-${prefix}-${type}-${idx}`; // ex: name-v-weapons-0
+                
+                const slotEl = document.getElementById(slotId);
+                const nameEl = document.getElementById(nameId);
+
+                if (slotEl) {
+                    const img = slotEl.querySelector('img');
+                    img.src = itemData.img;
+                    img.style.display = 'block';
+                    slotEl.style.border = '1px solid var(--wuxia-accent-gold)';
+                }
+                // [NEW] 이름 표시
+                if (nameEl) {
+                    nameEl.innerText = itemData.name;
+                }
+            }
+        });
+    };
+
+    renderSlot('weapons', w, 'v');
+    renderSlot('hearts', h, 'v');
+    renderSlot('marts', m, 'v');
 }
 
-// 주소 생성 (간이 버전)
-function generateBuildUrl() {
-    const w = currentBuild.weapons.join(',');
-    const h = currentBuild.hearts.join(',');
-    const m = currentBuild.marts.join(',');
-    
-    // 뷰어 페이지로 이동하는 주소 생성 (가정: viewer.html이 같은 폴더에 있음)
-    // 실제 서비스시에는 도메인에 맞춰 수정 필요
-    const baseUrl = window.location.origin + '/builder/viewer.html';
-    const finalUrl = `${baseUrl}?w=${w}&h=${h}&m=${m}`;
-    
-    navigator.clipboard.writeText(finalUrl).then(() => {
-        alert("빌드 주소가 복사되었습니다!\n" + finalUrl);
-    }).catch(() => {
-        prompt("주소를 복사하세요:", finalUrl);
-    });
-}

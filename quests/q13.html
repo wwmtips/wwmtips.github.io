@@ -1,13 +1,13 @@
 <div class="quest-detail-container">
     
     <style>
-        /* 이미지 컨테이너 공통 스타일 */
+        /* [수묵화 테마] 이미지 컨테이너 공통 스타일 */
         .wuxia-image-container {
-            border: 3px double var(--wuxia-border, #444); /* 이중 테두리로 고풍스럽게 */
+            border: 1px solid #ddd; /* 얇고 깔끔한 회색 테두리 */
             border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4); /* 깊이감 있는 그림자 */
-            background-color: #111;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* 부드럽고 은은한 그림자 */
+            background-color: #f4f4f2; /* 한지 느낌의 연한 미색 배경 */
             margin: 20px 0;
             position: relative;
         }
@@ -16,21 +16,21 @@
             width: 100%;
             height: auto;
             display: block;
-            /* 무협 느낌을 위한 필터: 약간의 세피아와 대비 증가 */
-            filter: sepia(0.2) contrast(1.1) brightness(0.9);
+            /* 밝은 테마용 필터: 약간의 따뜻함만 추가 */
+            filter: sepia(0.05) contrast(1.02);
             transition: transform 0.5s ease, filter 0.5s ease;
         }
         /* 마우스 호버 효과 */
         .wuxia-image-container:hover img {
-            transform: scale(1.03); /* 살짝 확대 */
-            filter: sepia(0) contrast(1.2) brightness(1); /* 필터 제거로 생생하게 */
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
         }
-        /* 이미지 장식용 모서리 (선택사항) */
+        /* 이미지 장식용 모서리 */
         .wuxia-image-container::after {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            border: 1px solid rgba(200, 160, 96, 0.2); /* 금색 테두리 장식 */
+            border: 1px solid rgba(176, 141, 85, 0.15); /* 금색 테두리 연하게 */
             box-sizing: border-box;
             pointer-events: none;
         }
@@ -38,15 +38,14 @@
         /* 나란히 배치 레이아웃 */
         .wuxia-image-row {
             display: flex;
-            gap: 15px; /* 이미지 사이 간격 */
+            gap: 15px; 
             margin: 20px 0;
         }
         .wuxia-image-row .wuxia-image-container {
-            flex: 1; /* 공간 균등 분할 */
-            margin: 0; /* row 내부 마진 초기화 */
+            flex: 1; 
+            margin: 0; 
         }
 
-        /* 모바일 반응형: 나란히 배치를 세로로 변경 */
         @media (max-width: 768px) {
             .wuxia-image-row {
                 flex-direction: column;
@@ -57,78 +56,75 @@
         }
     </style>
     
-    
-<div class="quest-detail-container">
-    
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">불꽃은 꺼지지 않으리
         </h2>
-        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">풍화촌 촌장의 밀서를 찾아서</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">풍화촌 촌장의 밀서를 찾아서</p>
     </div>
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <p style="color: #bbb; line-height: 1.8;">
-            이번 만사록은 **풍화촌 마을**의 식량을 모아둔 곡식 창고와 관련 있습니다.<br>
-            이곳에는 단순한 곡식 외에 촌장의 중요한 **밀서(密書)**가 숨겨져 있습니다.<br>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            이번 만사록은 <strong>풍화촌 마을</strong>의 식량을 모아둔 곡식 창고와 관련 있습니다.<br>
+            이곳에는 단순한 곡식 외에 촌장의 중요한 <strong>밀서(密書)</strong>가 숨겨져 있습니다.<br>
             밀서를 회수하여 촌장에게 돌려주면 되는 비교적 간단한 내용의 퀘스트입니다.
             <br>
-            시작은 촌장 집앞에서 촌장의 대화를 엿들은 후 곡식창고로 이동하면 됩니다.
+            시작은 촌장 집 앞에서 촌장의 대화를 엿들은 후 곡식 창고로 이동하면 됩니다.
         </p>
         
         <div class="wuxia-image-container" style="margin-top: 20px;">
-            <img src="../quests/images/q13_0.png" alt="곡식 창고 위치" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지1:+곡식+창고+위치'">
+            <img src="../quests/images/q13_0.png" alt="곡식 창고 위치" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지1:+곡식+창고+위치'">
         </div>
         <div class="wuxia-image-container" style="margin-top: 20px;">
-            <img src="../quests/images/q13_1.png" alt="곡식 창고 위치" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지1:+곡식+창고+위치'">
+            <img src="../quests/images/q13_1.png" alt="곡식 창고 위치 상세" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지2:+곡식+창고+위치'">
         </div>
     </div>
 
-    <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
             1. 열쇠 탈취 (허공섭물)
         </h3>
         
-        <p style="color: #ddd; line-height: 1.6; margin-bottom: 10px;">
+        <p style="color: var(--wuxia-text-sub); line-height: 1.6; margin-bottom: 10px;">
             곡식 창고 입구는 동굴 아래에 있지만, 열쇠가 없어 진입이 불가능합니다.
         </p>
 
         <div class="wuxia-image-container" style="margin: 15px 0;">
-            <img src="../quests/images/q13_2.png" alt="열쇠를 가진 NPC 위치" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지2:+열쇠+탈취+위치'">
+            <img src="../quests/images/q13_2.png" alt="열쇠를 가진 NPC 위치" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지3:+열쇠+탈취+위치'">
         </div>
         
-        <div style="background-color: rgba(200, 160, 96, 0.1); border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px;">
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <strong style="color: var(--wuxia-accent-gold);">🔑 열쇠 획득 방법</strong>
-            <ol style="margin: 10px 0 0 0; padding-left: 20px; color: #ccc; font-size: 0.95em;">
-                <li>위 동굴 사진에서 <span style="color: var(--wuxia-accent-red);">오른쪽</span>으로 이동합니다.</li>
+            <ol style="margin: 10px 0 0 0; padding-left: 20px; color: var(--wuxia-text-sub); font-size: 0.95em; line-height: 1.6;">
+                <li>위 동굴 사진에서 <span style="color: var(--wuxia-accent-red); font-weight: bold;">오른쪽</span>으로 이동합니다.</li>
                 <li>식량을 모아둔 곳에 있는 NPC <strong>'연봉우'</strong>를 찾습니다.</li>
-                <li>NPC에게 **<span style="color: var(--wuxia-accent-red);">허공섭물</span>** 스킬을 사용하여 열쇠를 훔치면 됩니다.</li>
+                <li>NPC에게 <strong><span style="color: var(--wuxia-accent-red);">허공섭물</span></strong> 스킬을 사용하여 열쇠를 훔치면 됩니다.</li>
             </ol>
         </div>
     </div>
 
-    <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
     <div class="detail-chunk">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
             2. 밀서 회수 및 보고
         </h3>
-        <ol style="color: #bbb; line-height: 1.8; padding-left: 20px;">
+        <ol style="color: var(--wuxia-text-sub); line-height: 1.8; padding-left: 20px;">
             <li>곡식 창고에 진입하여 안에 있는 <strong>녹림(盜賊)</strong>들을 처치합니다.</li>
             <li><strong>밀서</strong>를 획득합니다.</li>
             <li>밀서를 촌장에게 돌려주면 퀘스트가 완료됩니다.</li>
         </ol>
 
         <div class="wuxia-image-container" style="margin-top: 20px;">
-            <img src="../quests/images/q13_3.png" alt="녹림 처치" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지3:+밀서+획득'">
+            <img src="../quests/images/q13_3.png" alt="녹림 처치" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지4:+밀서+획득'">
         </div>
     </div>
 
     <div style="text-align: center; margin-top: 40px;">
         <button onclick="showQuestList()" 
-                style="background-color: transparent; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
             목록으로 돌아가기
         </button>
     </div>

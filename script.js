@@ -806,50 +806,45 @@ function loadViewer() {
     renderSlot('marts', m, 'v');
 }
 
-/* =========================================
-   [기능] 빌드 이미지 다운로드 (html2canvas)
-   ========================================= */
+/* [script.js] downloadBuildImage 함수 내부 수정 */
+
 function downloadBuildImage() {
-    const element = document.getElementById("capture-area"); // 캡처할 영역
+    const element = document.getElementById("capture-area");
     const titleEl = document.getElementById("build-main-title");
     
-    // 파일명 생성 (예: 홍길동의_빌드.jpg)
     let fileName = "연운_빌드";
     if (titleEl) {
-        fileName = titleEl.innerText.replace(/\s/g, "_"); // 공백을 언더바(_)로 변경
+        fileName = titleEl.innerText.replace(/\s/g, "_");
     }
 
-    // 캡처 옵션 설정
+    // [수정된 옵션]
     const options = {
-        scale: 2, // 2배 해상도로 캡처 (선명하게)
-        backgroundColor: "#ffffff", // 배경색 강제 지정 (투명 방지)
-        useCORS: true, // 크로스 도메인 이미지 허용 (중요)
-        logging: false, // 디버그 로그 끄기
-        allowTaint: true // 로컬 이미지 허용
+        scale: 2, 
+        backgroundColor: "#ffffff",
+        useCORS: true,       // 외부/로컬 이미지 허용 (서버 환경 필수)
+        allowTaint: false,   // ★중요★ 다운로드를 위해 반드시 false여야 함
+        logging: true,       // 오류 확인을 위해 true로 잠시 변경
+        timeout: 0           // 이미지 로드 대기 시간 제한 없음
     };
 
-    // 캡처 시작 알림
     const btn = document.querySelector('.download-btn');
     const originalText = btn.innerText;
     btn.innerText = "🖼️ 변환 중...";
     btn.disabled = true;
 
     html2canvas(element, options).then(canvas => {
-        // 캔버스를 이미지 URL로 변환 (JPG, 품질 0.9)
         const imgData = canvas.toDataURL("image/jpeg", 0.9);
-        
-        // 가상의 링크를 만들어 다운로드 트리거
         const link = document.createElement("a");
         link.download = `${fileName}.jpg`;
         link.href = imgData;
         link.click();
 
-        // 버튼 복구
         btn.innerText = originalText;
         btn.disabled = false;
     }).catch(err => {
         console.error("이미지 저장 실패:", err);
-        alert("이미지 저장 중 오류가 발생했습니다.");
+        // 사용자에게 구체적인 에러 메시지를 보여줍니다.
+        alert("이미지 저장 실패: " + err.message + "\n(서버에서 실행 중인지 확인해주세요)");
         btn.innerText = originalText;
         btn.disabled = false;
     });

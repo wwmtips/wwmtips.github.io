@@ -6,7 +6,23 @@
     <title>연운 추천 빌드</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css"> 
-    
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="apple-touch-icon" sizes="57x57" href="/fav/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/fav/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/fav/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/fav/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/fav/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/fav/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/fav/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/fav/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/fav/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/fav/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/fav/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <style>
         /* 뷰어 전용 스타일 */
         body.viewer-mode {
@@ -133,6 +149,33 @@
         .action-btn:hover {
             background-color: #8d6e35;
         }
+        /* [NEW] 버튼 그룹 스타일 (버튼 두 개를 나란히 배치) */
+        .viewer-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* 버튼 사이 간격 */
+        }
+
+        /* [NEW] 다운로드 버튼 색상 (진한 먹색) */
+        .download-btn {
+            background-color: var(--wuxia-text-main, #1a1a1a);
+        }
+        .download-btn:hover {
+            background-color: #333;
+        }
+        
+        /* 모바일에서 버튼 세로 배치 */
+        @media (max-width: 600px) {
+            .viewer-footer {
+                flex-direction: column;
+            }
+            .action-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body class="viewer-mode">
@@ -179,7 +222,8 @@
             <div class="slot-wrapper"><div class="item-slot" id="v-marts-7"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-7"></div></div>
         </div>
 
-        <div class="viewer-footer">
+       <div class="viewer-footer" data-html2canvas-ignore="true">
+            <button class="action-btn download-btn" onclick="downloadBuildImage()">💾 이미지로 저장</button>
             <button class="action-btn" onclick="location.href='index.html?tab=builder'">⚔️ 나만의 빌드 만들기</button>
         </div>
     </div>

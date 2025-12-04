@@ -3,6 +3,51 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "러시아", 
+      "answer": "곰",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "붉고 긴 다리", 
+      "answer": "홍학",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "큰입자", 
+      "answer": "잠두",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "오형제", 
+      "answer": "독수리",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "노란색", 
+      "answer": "레몬",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "공부", 
+      "answer": "책",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "부자", 
+      "answer": "잭프루트",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "달콤", 
+      "answer": "복숭아",
+      "user":"연갤러"
+    },
+    { 
+      "hint": "", 
+      "answer": "",
+      "user":"연갤러"
+    },
+    { 
       "hint": "암살", 
       "answer": "단검",
       "user":"단목아아"

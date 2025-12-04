@@ -743,7 +743,7 @@ function loadViewer() {
     if (titleEl) {
         if (creator) {
             // 제작자 이름이 있으면 "홍길동의 빌드"
-            titleEl.innerText = `${creator}의 빌드`;
+            titleEl.innerText = `${creator}`;
         } else {
             // 없으면 "익명의 협객의 빌드"
             titleEl.innerText = "익명의 협객의 빌드";

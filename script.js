@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 통합본)
+   script.js (최종 수정본: 데이터 로드 오류 해결 + 빌더 통합)
    ========================================= */
 
 // 전역 변수
@@ -20,14 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1. 데이터 로드 시작
     loadData();
 
-    // 2. 통합 검색창 관련 요소 가져오기
+    // 2. 통합 검색창 설정
     const headerSearch = document.getElementById("header-search-input");
-    const clearBtn = document.getElementById("search-clear-btn");       // X 버튼
-    const searchResults = document.getElementById("global-search-results"); // 결과창
+    const clearBtn = document.getElementById("search-clear-btn");       
+    const searchResults = document.getElementById("global-search-results"); 
 
-    // 3. 통합 검색창 이벤트 리스너 설정
     if (headerSearch) {
-        // [입력 이벤트] 검색 실행 및 X 버튼 표시 제어
+        // 입력 시 검색
         headerSearch.addEventListener("input", (e) => {
             handleGlobalSearch(e); 
             if (e.target.value.trim() !== '' && clearBtn) {
@@ -37,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // [키다운 이벤트] 엔터 키 누르면 키보드 내리기
+        // 엔터 키 처리
         headerSearch.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
@@ -45,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // [블러 이벤트] 포커스 잃으면 결과창 숨기기
+        // 포커스 해제 시 닫기
         headerSearch.addEventListener("blur", () => {
             setTimeout(() => {
                 if (searchResults) searchResults.style.display = 'none';
@@ -53,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 4. X 버튼 클릭 이벤트
+    // X 버튼 클릭
     if (clearBtn) {
         clearBtn.addEventListener("click", () => {
             if (headerSearch) {
@@ -65,17 +64,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 5. 족보 탭 내부 검색 리스너
+    // 3. 족보 탭 검색 리스너
     const quizLocalSearch = document.getElementById("quiz-local-search");
     const statusBar = document.getElementById("quiz-counter-area"); 
 
     if (quizLocalSearch) {
-        // 입력 이벤트
         quizLocalSearch.addEventListener("input", (e) => {
             renderQuizTable(filterQuizData(e.target.value), e.target.value);
         });
 
-        // 엔터 키 처리
         quizLocalSearch.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
@@ -83,87 +80,79 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // 상단 바 슬라이드 업 (공간 확보)
         quizLocalSearch.addEventListener("focus", () => {
             if(statusBar) statusBar.classList.add("hidden");
         });
 
-        // 상단 바 슬라이드 다운 (복구)
         quizLocalSearch.addEventListener("blur", () => {
             if(statusBar) statusBar.classList.remove("hidden");
         });
     }
 
-    // 6. 뷰어 모드인지 체크 (빌더 뷰어)
-    if (window.location.pathname.includes('viewer.html') || new URLSearchParams(window.location.search).get('b')) {
-        // 뷰어 로직이 필요하다면 여기서 실행 (현재 구조상 switchTab에서 처리하거나 별도 호출)
-        // viewer.html이 따로 있다면 거기서 호출하겠지만, 탭 방식이므로 switchTab에서 처리됨
-    }
-
-    // 7. URL 파라미터 체크 (탭 이동)
+    // 4. URL 파라미터 체크
     checkUrlParams();
 });
 
-// [기능] URL 파라미터 처리
-function checkUrlParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tab = urlParams.get('tab'); 
-    
-    // 빌드 공유 주소(파라미터 b)가 있으면 빌더 탭으로 이동 및 로드
-    if (urlParams.get('b')) {
-        switchTab('builder');
-        loadViewer(); // 빌드 데이터 로드
-        return;
-    }
-
-    if (tab === 'quiz') switchTab('quiz');
-    else if (tab === 'quest') switchTab('quest');
-    else if (tab === 'news') switchTab('news');
-    else if (tab === 'guide') switchTab('guide'); 
-    else if (tab === 'builder') switchTab('builder');
-    else switchTab('home');
-}
-
-// [기능] 데이터 로드
+// =========================================
+// [핵심 수정] 데이터 로드 (오류 방지 로직 적용)
+// =========================================
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab');
     const targetId = urlParams.get('id');
 
     Promise.all([
-        fetch('/json/data.json').then(res => res.json()),
-        fetch('/json/quests.json').then(res => res.json()),
-        fetch('/json/news.json').then(res => res.json())
+        fetch('json/data.json').then(res => res.json()),
+        fetch('json/quests.json').then(res => res.json()),
+        fetch('json/news.json').then(res => res.json())
     ])
-    .then(([mainData, questList, newsList]) => {
-        // 퀘스트 정렬
-        if (questList && Array.isArray(questList)) {
-            questList.sort((a, b) => {
-                const numA = parseInt(a.id.replace('q', ''));
-                const numB = parseInt(b.id.replace('q', ''));
+    .then(([mainData, questData, newsData]) => {
+        console.log("데이터 로드 성공");
+
+        // 1. 퀘스트 데이터 구조 처리 (배열/객체 모두 호환되도록 수정)
+        let quests = [];
+        if (Array.isArray(questData)) {
+            quests = questData;
+        } else if (questData.quests) {
+            quests = questData.quests;
+        }
+
+        // 2. 뉴스 데이터 구조 처리
+        let news = [];
+        if (Array.isArray(newsData)) {
+            news = newsData;
+        } else if (newsData.news) {
+            news = newsData.news;
+        }
+
+        // 3. 정렬 (ID 기준 역순)
+        if (quests.length > 0) {
+            quests.sort((a, b) => {
+                const numA = parseInt((a.id || "").replace('q', '')) || 0;
+                const numB = parseInt((b.id || "").replace('q', '')) || 0;
                 return numB - numA; 
             });
         }
         
-        // 뉴스 정렬
-        if (newsList && Array.isArray(newsList)) {
-            newsList.reverse(); 
+        if (news.length > 0) {
+            news.reverse(); 
         }
 
+        // 4. 전역 변수에 저장
         globalData = {
             items: mainData.items || [],
             quiz: mainData.quiz || [],
-            quests: questList || [],
-            news: newsList || [] 
+            quests: quests, // 안전하게 처리된 배열 저장
+            news: news 
         };
 
         currentQuestData = globalData.quests;
 
-        // 1. 족보 초기화 및 최다 제보자 표시
+        // 5. 화면 렌더링
         renderQuizTable(globalData.quiz);
         
         const counter = document.getElementById('quiz-counter-area');
-        if(counter) {
+        if(counter && globalData.quiz.length > 0) {
             const userCounts = {};
             globalData.quiz.forEach(item => {
                 if (item.user && item.user.trim() !== "") {
@@ -190,13 +179,12 @@ function loadData() {
             counter.innerHTML = message;
         }
 
-        // 2. 퀘스트/뉴스 초기화
         renderQuestList();
         renderHomeQuests(globalData.quests);
         renderHomeNews(globalData.news);
         renderFullNews(globalData.news);
 
-        // 3. 특정 퀘스트로 바로 이동
+        // 6. 바로가기
         if (targetTab === 'quest' && targetId) {
             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
             const foundQuest = globalData.quests.find(q => q.id === formattedId);
@@ -211,7 +199,7 @@ function loadData() {
 }
 
 // =========================================
-// 탭 전환 및 뷰 제어 (Switch Tab)
+// 탭 전환 및 뷰 제어
 // =========================================
 function switchTab(tabName) {
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
@@ -226,37 +214,32 @@ function switchTab(tabName) {
         if(el) el.classList.remove('active');
     });
 
-    // 1. 홈
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
         history.pushState(null, null, '?tab=home'); 
     } 
-    // 2. 족보
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
         document.getElementById('nav-quiz').classList.add('active');
         history.pushState(null, null, '?tab=quiz');
     } 
-    // 3. 무림록 (항상 초기화)
     else if (tabName === 'quest') {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
         
-        showQuestList(); // 상세화면 끄기
+        showQuestList();
         
-        // '전체' 버튼 찾아서 클릭 (필터 초기화)
+        // 초기화: '전체' 버튼 클릭
         const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
         if (allBtn) filterQuestType('all', allBtn);
         
         history.pushState(null, null, '?tab=quest');
     } 
-    // 4. 뉴스
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
         history.pushState(null, null, '?tab=news');
     } 
-    // 5. 가이드 (항상 최신 뉴스로 초기화)
     else if (tabName === 'guide' || tabName === 'code') {
         const guideView = document.getElementById('view-guide');
         if (guideView) {
@@ -271,7 +254,7 @@ function switchTab(tabName) {
         document.getElementById('nav-code').classList.add('active');
         history.pushState(null, null, '?tab=guide');
     }
-    // 6. 빌더
+    // 빌더 탭 추가
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
         document.getElementById('nav-builder').classList.add('active');
@@ -282,17 +265,36 @@ function switchTab(tabName) {
                 .then(data => { builderData = data; })
                 .catch(err => console.error("빌더 데이터 로드 실패:", err));
         }
-        // 공유된 주소로 들어온 경우 뷰어 로드
+        
+        // 공유된 주소 확인
         if (new URLSearchParams(window.location.search).get('b')) {
             loadViewer();
         }
-        
         history.pushState(null, null, '?tab=builder');
     }
 }
 
+// [기능] URL 파라미터 처리 함수 (빌더 뷰어 체크 추가)
+function checkUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab'); 
+    
+    // 빌더 공유 주소면 빌더 탭으로
+    if (urlParams.get('b')) {
+        switchTab('builder');
+        return;
+    }
+
+    if (tab === 'quiz') switchTab('quiz');
+    else if (tab === 'quest') switchTab('quest');
+    else if (tab === 'news') switchTab('news');
+    else if (tab === 'guide') switchTab('guide'); 
+    else if (tab === 'builder') switchTab('builder');
+    else switchTab('home');
+}
+
 // =========================================
-// [기능] 가이드 관련 로직
+// [기능] 가이드 관련
 // =========================================
 function loadGuideView() {
     const container = document.getElementById('guide-content-loader');
@@ -362,7 +364,7 @@ function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
 
-    // [버튼 활성화] 가이드 탭 범위 내에서만 처리
+    // 가이드 탭 버튼만 활성화
     if (btnElement) {
         const allButtons = document.querySelectorAll('#view-guide .guide-item-btn');
         allButtons.forEach(btn => btn.classList.remove('active'));
@@ -405,18 +407,9 @@ function renderGuideNewsList() {
 
     displayList.forEach(item => {
         const el = createNewsElement(item);
-        el.style.borderBottom = '1px dashed #ddd'; 
-        el.style.backgroundColor = 'transparent';
+        el.style.borderBottom = '1px dashed #444'; 
+        el.style.backgroundColor = 'transparent'; 
         container.appendChild(el);
-    });
-}
-
-// 교환 코드 복사
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        alert(`코드 [${text}] 가 복사되었습니다!`);
-    }).catch(err => {
-        alert('복사에 실패했습니다. 직접 복사해주세요.');
     });
 }
 
@@ -430,6 +423,8 @@ function renderQuestList() {
 
     if (!currentQuestData || currentQuestData.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888;">퀘스트 정보가 없습니다.</div>';
+        const pContainer = document.getElementById('pagination-container');
+        if(pContainer) pContainer.innerHTML = '';
         return;
     }
 
@@ -478,6 +473,25 @@ function changePage(page) {
     document.getElementById('quest-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 
+function createQuestCard(quest, container) {
+    const card = document.createElement('div');
+    card.className = 'quest-card';
+    card.onclick = () => {
+        loadQuestDetail(quest.filepath);
+    };
+    card.innerHTML = `
+        <div class="quest-icon-wrapper">
+            <img src="${quest.iconpath}" alt="icon" onerror="this.src='images/logo.png'">
+        </div>
+        <div class="quest-info">
+            <div class="quest-name">${quest.name}</div>
+            <div class="quest-type">${quest.type}</div>
+        </div>
+        <div class="quest-badge">${quest.location}</div>
+    `;
+    container.appendChild(card);
+}
+
 function loadQuestDetail(filepath) {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
@@ -506,7 +520,7 @@ function showQuestList() {
     }
 }
 
-// [무림록] 카테고리 필터 (범위 한정)
+// 무림록 필터 버튼
 function filterQuestType(type, btnElement) {
     const buttons = document.querySelectorAll('#view-quest .guide-item-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
@@ -522,7 +536,7 @@ function filterQuestType(type, btnElement) {
 }
 
 // =========================================
-// [기능] 족보 & 뉴스 등 공통 로직
+// [기능] 공통 렌더링 (뉴스, 족보, 검색)
 // =========================================
 function renderQuizTable(data, keyword = '') {
     const tbody = document.getElementById('quiz-table-body');
@@ -631,7 +645,6 @@ function selectQuestResult(filepath) {
     document.getElementById("global-search-results").style.display = 'none';
 }
 
-// 홈 화면용
 function renderHomeNews(newsList) {
     const container = document.getElementById('home-news-list');
     if (!container) return;
@@ -655,24 +668,6 @@ function renderFullNews(newsList) {
     newsList.forEach(item => container.appendChild(createNewsElement(item)));
 }
 
-function createNewsElement(item) {
-    const div = document.createElement('div');
-    div.className = 'news-item';
-    div.onclick = function() { this.classList.toggle('active'); };
-    let linkHtml = '';
-    if (item.link && item.link.trim() !== '') {
-        linkHtml = `<a href="${item.link}" target="_blank" class="news-link-btn" onclick="event.stopPropagation()">바로가기 →</a>`;
-    }
-    div.innerHTML = `
-        <div class="news-header">
-            <span class="news-title">${item.title}</span>
-            <span class="news-date">${item.date}</span>
-        </div>
-        <div class="news-content">${item.content}<br>${linkHtml}</div>
-    `;
-    return div;
-}
-
 function renderHomeQuests(quests) {
     const container = document.getElementById('home-quest-list');
     if (!container) return;
@@ -683,6 +678,15 @@ function renderHomeQuests(quests) {
         return;
     }
     recentQuests.forEach(quest => createQuestCard(quest, container));
+}
+
+// 클립보드 복사
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert(`코드 [${text}] 가 복사되었습니다!`);
+    }).catch(err => {
+        alert('복사에 실패했습니다. 직접 복사해주세요.');
+    });
 }
 
 
@@ -728,7 +732,6 @@ function selectBuilderItem(itemId, imgSrc, itemName) {
     const { type, index } = currentSlot;
     currentBuild[type][index] = itemId;
 
-    // 슬롯 업데이트
     const imgEl = document.getElementById(`slot-${type}-${index}`);
     const nameEl = document.getElementById(`name-${type}-${index}`);
     const slotEl = imgEl.parentElement;
@@ -790,7 +793,7 @@ function generateBuildUrl() {
     });
 }
 
-// 5. 뷰어 로드 (viewer.html 전용)
+// 5. 뷰어 로드
 function loadViewer() {
     if (!builderData) {
         fetch('json/builder_data.json')

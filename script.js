@@ -3,11 +3,14 @@
    ========================================= */
 
 // 전역 변수
-let globalData = { items: [], quiz: [], quests: [], news: [] };
 let currentQuestData = [];
 let currentPage = 1;
 const itemsPerPage = 12;
 let isGuideLoaded = false;
+let globalData = { items: [], quiz: [], quests: [], news: [] };
+let builderData = null; // [NEW] 빌더 데이터 저장용
+let currentBuild = { weapons: [null,null], hearts: [null,null,null,null], marts: new Array(8).fill(null) };
+let currentSlot = { type: '', index: 0 };
 
 document.addEventListener("DOMContentLoaded", () => {
     // 1. 데이터 로드 시작
@@ -224,12 +227,15 @@ function loadData() {
 }
 
 
-// 탭 전환 및 뷰 제어 (초기화 로직 추가됨)
+// =========================================
+// 탭 전환 및 뷰 제어 (Switch Tab)
+// =========================================
 function switchTab(tabName) {
-    // 1. 모든 뷰 숨기기 & 네비게이션 활성화 초기화
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide'];
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code'];
+    // 1. 관리할 뷰(View)와 네비게이션 버튼(Nav) ID 목록
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
 
+    // 2. 모든 뷰 숨기기 & 네비게이션 활성화 상태 제거
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.style.display = 'none';
@@ -239,22 +245,33 @@ function switchTab(tabName) {
         if(el) el.classList.remove('active');
     });
 
-    // 2. 탭별 동작 설정
+    // 3. 탭별 동작 설정
+    
+    // [홈 탭]
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
-        document.getElementById('nav-home').classList.add('active');
+        const navBtn = document.getElementById('nav-home');
+        if (navBtn) navBtn.classList.add('active');
+        
         history.pushState(null, null, '?tab=home'); 
     } 
+    
+    // [족보 탭]
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
-        document.getElementById('nav-quiz').classList.add('active');
+        const navBtn = document.getElementById('nav-quiz');
+        if (navBtn) navBtn.classList.add('active');
+        
         history.pushState(null, null, '?tab=quiz');
     } 
+    
+    // [무림록(퀘스트) 탭]
     else if (tabName === 'quest') {
         document.getElementById('view-quest').style.display = 'block';
-        document.getElementById('nav-quest').classList.add('active');
+        const navBtn = document.getElementById('nav-quest');
+        if (navBtn) navBtn.classList.add('active');
         
-        // [수정] 무림록 탭 클릭 시 항상 '전체' 목록 & '리스트 화면'으로 초기화
+        // [초기화] 탭 진입 시 항상 '목록 화면' & '전체 필터'로 리셋
         showQuestList(); // 상세페이지 보고 있었으면 리스트로 복귀
         
         // '전체' 버튼을 찾아서 강제로 클릭(필터링) 처리
@@ -265,22 +282,25 @@ function switchTab(tabName) {
         
         history.pushState(null, null, '?tab=quest');
     } 
+    
+    // [뉴스 탭] (홈 화면에서 진입)
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
         history.pushState(null, null, '?tab=news');
     } 
+    
     // [가이드 탭]
     else if (tabName === 'guide' || tabName === 'code') {
         const guideView = document.getElementById('view-guide');
         if (guideView) {
             guideView.style.display = 'block';
             
-            // [수정] 가이드 탭 클릭 시 항상 '최신 뉴스'로 초기화
+            // [초기화] 탭 진입 시 항상 '최신 뉴스'로 리셋
             if (!isGuideLoaded) {
-                loadGuideView(); // 처음 로드라면 기본 로직 실행 (news.html 로드됨)
+                // 처음 로드라면 기본 로직 실행 (loadGuideView 내부에서 기본값 news.html 로드됨)
+                loadGuideView(); 
             } else {
-                // 이미 로드된 상태라면 강제로 'news.html' 로드 및 버튼 활성화
-                // (findButtonByFile 함수는 script.js 하단에 있어야 합니다)
+                // 이미 로드된 상태라면 강제로 'news.html'을 띄우고 버튼 활성화
                 const newsBtn = findButtonByFile('news.html'); 
                 loadGuideContent('news.html', newsBtn);
             }
@@ -290,6 +310,26 @@ function switchTab(tabName) {
         if (navBtn) navBtn.classList.add('active');
         
         history.pushState(null, null, '?tab=guide');
+    }
+
+    // [빌더 탭]
+    else if (tabName === 'builder') {
+        document.getElementById('view-builder').style.display = 'block';
+        const navBtn = document.getElementById('nav-builder');
+        if (navBtn) navBtn.classList.add('active');
+        
+        // 데이터가 로드되지 않았다면 로드 실행
+        if (!builderData) {
+            fetch('/json/builder_data.json')
+                .then(res => {
+                    if(!res.ok) throw new Error("JSON load failed");
+                    return res.json();
+                })
+                .then(data => { builderData = data; })
+                .catch(err => console.error("빌더 데이터 로드 실패:", err));
+        }
+        
+        history.pushState(null, null, '?tab=builder');
     }
 }
 
@@ -832,4 +872,93 @@ function selectQuestResult(filepath) {
     switchTab('quest');
     loadQuestDetail(filepath);
     document.getElementById("global-search-results").style.display = 'none';
+}
+/* =========================================
+   [기능] 빌더 관련 로직
+   ========================================= */
+
+// 모달 열기
+function openBuilderModal(type, index) {
+    if (!builderData) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
+    
+    currentSlot = { type, index };
+    const modal = document.getElementById('builder-modal');
+    const list = document.getElementById('builder-modal-list');
+    const title = document.getElementById('builder-modal-title');
+    
+    // 타이틀 설정
+    const typeNames = { 'weapons': '무기/무술', 'hearts': '심법', 'marts': '비결' };
+    title.innerText = `${typeNames[type]} 선택`;
+    
+    list.innerHTML = '';
+
+    // '해제' 버튼 추가
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'select-item';
+    emptyDiv.innerHTML = '<div style="width:48px;height:48px;background:#eee;line-height:48px;margin:0 auto;">X</div><p>해제</p>';
+    emptyDiv.onclick = () => selectBuilderItem(null);
+    list.appendChild(emptyDiv);
+
+    // 아이템 목록 생성
+    if (builderData[type]) {
+        builderData[type].forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'select-item';
+            div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
+            div.onclick = () => selectBuilderItem(item.id, item.img);
+            list.appendChild(div);
+        });
+    }
+
+    modal.style.display = 'flex';
+}
+
+// 아이템 선택 처리
+function selectBuilderItem(itemId, imgSrc) {
+    const { type, index } = currentSlot;
+    currentBuild[type][index] = itemId; // 데이터 저장
+
+    // UI 업데이트 (이미지 표시/숨김)
+    const imgEl = document.getElementById(`slot-${type}-${index}`);
+    const slotEl = imgEl.parentElement;
+    const plusSpan = slotEl.querySelector('span');
+
+    if (itemId) {
+        imgEl.src = imgSrc;
+        imgEl.style.display = 'block';
+        if(plusSpan) plusSpan.style.display = 'none';
+        slotEl.style.borderStyle = 'solid';
+    } else {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+        if(plusSpan) plusSpan.style.display = 'block';
+        slotEl.style.borderStyle = 'dashed';
+    }
+
+    closeBuilderModal(null); // 모달 닫기
+}
+
+// 모달 닫기
+function closeBuilderModal(e) {
+    if (e === null || e.target.classList.contains('modal-overlay')) {
+        document.getElementById('builder-modal').style.display = 'none';
+    }
+}
+
+// 주소 생성 (간이 버전)
+function generateBuildUrl() {
+    const w = currentBuild.weapons.join(',');
+    const h = currentBuild.hearts.join(',');
+    const m = currentBuild.marts.join(',');
+    
+    // 뷰어 페이지로 이동하는 주소 생성 (가정: viewer.html이 같은 폴더에 있음)
+    // 실제 서비스시에는 도메인에 맞춰 수정 필요
+    const baseUrl = window.location.origin + '/builder/viewer.html';
+    const finalUrl = `${baseUrl}?w=${w}&h=${h}&m=${m}`;
+    
+    navigator.clipboard.writeText(finalUrl).then(() => {
+        alert("빌드 주소가 복사되었습니다!\n" + finalUrl);
+    }).catch(() => {
+        prompt("주소를 복사하세요:", finalUrl);
+    });
 }

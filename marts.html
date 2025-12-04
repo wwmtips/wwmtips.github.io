@@ -1,63 +1,63 @@
 <div class="quest-detail-container" style="text-align: left;">
     
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">게임 가이드</span>
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">게임 가이드</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
             비결
         </h2>
-        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">비결 정보 및 획득 방법 소개</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">비결 정보 및 획득 방법 소개</p>
     </div>
 
     <style>
-    /* ------------------------------------------- */
-    /* [수정 및 추가된 내용] */
-    /* 1. .arts-table에 table-layout: fixed; 추가 */
-    /* 2. .arts-table th에 20%, 40%, 40% 너비 지정 */
-    /* 3. .art-icon-cell의 너비를 140px에서 20%로 수정 */
-    /* ------------------------------------------- */
-
+    /* [수묵화 테마] 비결 테이블 스타일 */
     .arts-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.9em;
         margin-bottom: 10px;
-        /* [추가] 열 너비를 고정된 비율로 설정 */
         table-layout: fixed; 
+        background-color: #fff; /* 흰색 배경 */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03); /* 연한 그림자 */
     }
+    
     .arts-table th {
-        background-color: rgba(200, 160, 96, 0.15);
-        color: var(--wuxia-accent-gold);
+        background-color: #fffcf5; /* 연한 미색 헤더 */
+        color: var(--wuxia-text-main);
         padding: 12px;
-        border: 1px solid #444;
+        border: 1px solid #ddd;
+        border-bottom: 2px solid var(--wuxia-accent-gold); /* 헤더 강조 */
         white-space: nowrap;
+        font-weight: bold;
     }
-    /* [수정/추가] 각 열의 너비 20%, 40%, 40% 설정 */
+    
+    /* 열 너비 설정 (30%, 40%, 30%) */
     .arts-table th:nth-child(1) { width: 30%; }
     .arts-table th:nth-child(2) { width: 40%; }
     .arts-table th:nth-child(3) { width: 30%; }
 
     .arts-table td {
-        border: 1px solid #444;
+        border: 1px solid #eee;
         padding: 12px;
         vertical-align: middle;
-        color: #ccc;
+        color: var(--wuxia-text-sub); /* 진한 회색 */
         line-height: 1.5;
     }
+    
     .art-icon-cell {
         text-align: center;
-        /* [수정] 고정 px 대신 % 사용 */
-       /* width: 20%; */
-        background-color: #222;
-        vertical-align: top; /* 상단 정렬 */
+        background-color: #fdfdfd; /* 이름 칸만 아주 살짝 구분 */
+        vertical-align: top;
         padding-top: 20px;
+        border-right: 1px solid #eee;
     }
+    
     /* 이미지 박스 스타일 */
     .art-img-box {
         width: 64px;
         height: 64px;
-        background-color: #111;
-        border: 1px solid #444;
-        margin: 0 auto 10px auto; /* 중앙 정렬 및 아래 여백 */
+        background-color: #f4f4f2; /* 아이콘 배경: 연한 미색 */
+        border: 1px solid #ddd;
+        margin: 0 auto 10px auto; 
         display: flex;
         align-items: center;
         justify-content: center;
@@ -69,42 +69,50 @@
         height: 100%;
         object-fit: cover;
     }
+    
     .art-name {
         display: block;
-        color: #e0e0e0;
+        color: var(--wuxia-text-main); /* 진한 색 */
         font-weight: bold;
         margin-bottom: 4px;
         font-size: 1.0em;
     }
+    
     .art-type {
         display: block;
         font-size: 0.8em;
-        color: var(--wuxia-accent-gold);
-        opacity: 0.8;
+        color: #888;
     }
+    
     .art-effect strong {
-        color: var(--wuxia-accent-gold);
+        color: var(--wuxia-accent-red); /* 강조색 */
     }
+    
     .art-obtain {
-        color: #999;
+        color: #666;
         font-size: 0.9em;
     }
+    
+    /* 섹션 제목 스타일 */
     .section-title {
-        color: var(--wuxia-accent-gold);
+        color: var(--wuxia-text-main);
         font-size: 1.3em;
         border-left: 4px solid var(--wuxia-accent-red);
         padding-left: 10px;
         margin-bottom: 15px;
         margin-top: 40px;
+        font-weight: bold;
     }
-        a {
-    /* 1. 텍스트 색상을 흰색으로 설정 */
-    color: white;
     
-    /* 2. 밑줄(언더라인)을 명시적으로 유지 */
-    text-decoration: underline;
-}
-
+    /* 링크 스타일 (배경이 흰색이므로 어두운 색으로 변경) */
+    a {
+        color: var(--wuxia-accent-gold); /* 금색/갈색 톤 */
+        text-decoration: underline;
+        font-weight: bold;
+    }
+    a:hover {
+        color: var(--wuxia-accent-red);
+    }
 </style>
 
 
@@ -325,7 +333,7 @@
                         <span class="art-name">청풍명월</span>
                         <span class="art-type">속박 해제</span>
                     </td>
-                    <td class="art-effect">피격 시 빠르게 회복합니다. 명중 시 8초간 목표의 인내력 회복량이 감소하고 지속 피해를 입습니다.</td>
+                    <td class="art-effect">피격 시 빠르게 회복합니다. 명중 시 8초간 목표의 인내력 회복량 감소하고 지속 피해를 입습니다.</td>
                     <td class="art-obtain">천부 포인트로 잠금 해제</td>
                 </tr>
                  <tr>
@@ -452,13 +460,10 @@
         </table>
     </div>
 
-    
-
     <div class="detail-chunk" style="margin-bottom: 40px;">
         <h3 class="section-title">비결 강화</h3>
-        <div style="background-color: rgba(200, 160, 96, 0.1); border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px;">
-       
-            <p style="margin: 0; color: #bbb; font-size: 0.95em; line-height: 1.6;">
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <p style="margin: 0; color: var(--wuxia-text-sub); font-size: 0.95em; line-height: 1.6;">
                 비결은 <strong>흑철</strong>을 사용하여 등급과 레벨을 올릴 수 있습니다.<br>
                 <br>
                 - <strong>1단계:</strong> 9등급까지 업그레이드 가능<br>

@@ -959,3 +959,32 @@ h3 {
 .search-clear-btn:hover {
     color: var(--wuxia-accent-gold);
 }
+
+/* 닉네임 무지개 반짝임 효과 */
+.rainbow-text {
+    /* 1. 여러 색상의 그라데이션 정의 (빨-주-노-초-파-남-보) */
+    background: linear-gradient(to right, 
+        #ff0000, #ffa500, #ffff00, #008000, #0000ff, #4b0082, #ee82ee, #ff0000);
+    
+    /* 2. 배경 크기를 넓게 잡아서 애니메이션이 흐를 공간 확보 */
+    background-size: 200% auto;
+    
+    /* 3. 글자 모양대로 배경 잘라내기 (Text Masking) */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+
+    /* 4. 굵게 표시 */
+    font-weight: bold;
+
+    /* 5. 애니메이션 실행 (2초 동안 무한 반복) */
+    animation: shine 2s linear infinite;
+}
+
+/* 애니메이션 동작 정의 (배경을 옆으로 이동시킴) */
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}

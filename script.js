@@ -345,14 +345,27 @@ function loadCodeInGuide(isAutoLoad = false) {
     }
 }
 
-// [NEW] 일반 가이드 내용 로드 함수
+// [script.js] loadGuideContent 함수 전체 교체
+
 function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
 
-    // 만약 code.html이 열려있다면 닫아주기
+    // [추가된 로직] 버튼 활성화 처리 (Visual Feedback)
+    if (btnElement) {
+        // 1. 가이드 메뉴의 모든 버튼에서 active 제거
+        const allButtons = document.querySelectorAll('.guide-grid-menu .guide-item-btn');
+        allButtons.forEach(btn => btn.classList.remove('active'));
+
+        // 2. 지금 클릭된 버튼에만 active 추가
+        btnElement.classList.add('active');
+    }
+
+    // --- 아래는 기존 로직과 동일 ---
+
+    // 만약 code.html(교환코드)이 열려있다면 닫아주기
     const codeView = document.querySelector('.code-page-container');
-    if(codeView) codeView.style.display = 'none'; // 혹은 innerHTML 초기화
+    if(codeView) codeView.style.display = 'none';
     
     // 로딩 표시
     innerContainer.style.display = 'block';
@@ -366,9 +379,7 @@ function loadGuideContent(filename, btnElement) {
         })
         .then(html => {
             innerContainer.innerHTML = html;
-          //  innerContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            // [추가된 부분] 뉴스 페이지가 로드되었다면 JS로 리스트를 렌더링
+            // 뉴스 페이지가 로드되었다면 리스트 렌더링
             if (filename === 'news.html') {
                 renderGuideNewsList(); 
             }
@@ -380,6 +391,7 @@ function loadGuideContent(filename, btnElement) {
             </div>`;
         });
 }
+
 
 // [추가] 가이드 내부 뉴스 리스트 렌더링 함수
 function renderGuideNewsList() {

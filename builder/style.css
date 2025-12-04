@@ -1,0 +1,141 @@
+/* 기본 수묵화 테마 변수 가져오기 (메인 style.css와 동일) */
+:root {
+    --wuxia-bg-deep: #f4f4f2;
+    --wuxia-bg-panel: #ffffff;
+    --wuxia-border: #dcdcdc;
+    --wuxia-accent-gold: #a08040;
+    --wuxia-accent-red: #b71c1c;
+    --wuxia-text-main: #1a1a1a;
+}
+
+body {
+    background-color: var(--wuxia-bg-deep);
+    color: var(--wuxia-text-main);
+    font-family: 'Noto Serif KR', serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.builder-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--wuxia-bg-panel);
+    padding: 30px;
+    border: 1px solid var(--wuxia-border);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+h2, h3 {
+    border-left: 4px solid var(--wuxia-accent-red);
+    padding-left: 10px;
+    color: var(--wuxia-text-main);
+}
+
+/* 슬롯 그리드 */
+.slot-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+/* 개별 슬롯 (카드 형태) */
+.item-slot {
+    width: 80px;
+    height: 80px;
+    border: 1px dashed var(--wuxia-accent-gold);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.item-slot:hover {
+    background-color: #fffcf5;
+    border-style: solid;
+}
+
+.item-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    display: none; /* 이미지가 없으면 숨김 */
+}
+
+.item-slot.filled img {
+    display: block;
+}
+
+.item-slot.filled span {
+    display: none; /* 이미지가 있으면 텍스트(+) 숨김 */
+}
+
+.slot-label {
+    font-size: 0.8em;
+    color: #999;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* 모달 (아이템 선택 창) */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+.item-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+}
+
+.select-item {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+.select-item:hover { border-color: var(--wuxia-accent-gold); }
+.select-item img { width: 50px; height: 50px; }
+.select-item p { font-size: 0.75em; margin: 5px 0 0 0; word-break: keep-all; }
+
+/* 버튼 스타일 */
+.action-btn {
+    background-color: var(--wuxia-accent-gold);
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 4px;
+}
+.action-btn:hover { background-color: #8d6e35; }
+
+/* 뷰어 전용: 클릭 방지 */
+.viewer-mode .item-slot {
+    cursor: default;
+    border-style: solid;
+}

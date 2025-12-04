@@ -1,44 +1,51 @@
 <div class="quest-detail-container" style="text-align: left;">
     
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
             추천 빌드
         </h2>
-        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">상황별 최고의 효율을 내는 무공 조합 가이드</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">상황별 최고의 효율을 내는 무공 조합 가이드</p>
     </div>
 
     <style>
-        /* 빌드 페이지 전용 스타일 */
+        /* [수묵화 테마] 빌드 페이지 스타일 */
         .build-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            border: 1px solid #444;
+            border: 1px solid #ddd;
+            background-color: #fff; /* 흰색 배경 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03); /* 연한 그림자 */
         }
+        
         .build-table th {
             padding: 12px;
-            background-color: rgba(200, 160, 96, 0.1); /* 골드 배경 투명도 */
-            color: #ccc;
+            background-color: #fffcf5; /* 연한 미색 배경 */
+            color: var(--wuxia-text-main);
             font-weight: bold;
             text-align: center;
-            border-bottom: 1px solid #444;
+            border-bottom: 2px solid var(--wuxia-accent-gold); /* 헤더 강조 */
         }
+        
         .build-table td {
             width: 50%; /* 2분할 */
             padding: 20px 10px;
             vertical-align: top;
             text-align: center;
-            border-right: 1px solid #444;
+            border-right: 1px solid #eee; /* 세로 구분선 연하게 */
+            color: var(--wuxia-text-sub);
         }
+        
         .build-table td:last-child {
             border-right: none;
         }
+
         .build-weapon-icon {
             width: 64px;
             height: 64px;
-            background-color: #222;
-            border: 1px solid #555;
+            background-color: #f4f4f2; /* 아이콘 배경: 연한 미색 */
+            border: 1px solid #ddd;
             margin: 0 auto 10px auto;
             display: flex;
             align-items: center;
@@ -46,31 +53,49 @@
             border-radius: 4px;
             font-size: 24px;
         }
+        
         .build-weapon-name {
             display: block;
-            color: var(--wuxia-accent-gold);
+            color: var(--wuxia-text-main); /* 무기 이름 진하게 */
             font-weight: bold;
             font-size: 0.95em;
         }
+        
         .build-desc {
-            color: #bbb;
+            color: var(--wuxia-text-sub); /* 설명글 진한 회색 */
             line-height: 1.8;
             font-size: 0.95em;
+            background-color: #f9f9f9; /* 설명 박스 배경 */
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #eee;
         }
+        
         .build-desc strong {
-            color: #e0e0e0;
+            color: var(--wuxia-accent-red); /* 강조 텍스트 붉은색 */
+            font-weight: bold;
+        }
+
+        /* 섹션 제목 스타일 */
+        .build-heading {
+            color: var(--wuxia-text-main);
+            font-size: 1.3em; 
+            border-left: 4px solid var(--wuxia-accent-red); 
+            padding-left: 10px; 
+            margin-bottom: 20px;
+            font-weight: bold;
         }
     </style>
 
     <div class="detail-chunk" style="margin-bottom: 50px;">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 20px;">
-        우산-부채 빌드
+        <h3 class="build-heading">
+            우산-부채 빌드
         </h3>
         
         <table class="build-table">
             <thead>
                 <tr>
-                    <th colspan="2">무술</th>
+                    <th colspan="2">무술 조합</th>
                 </tr>
             </thead>
             <tbody>
@@ -101,29 +126,29 @@
         </div>
     </div>
 
- <div class="detail-chunk" style="margin-bottom: 50px;">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 20px;">
-        검-창 빌드
+    <div class="detail-chunk" style="margin-bottom: 50px;">
+        <h3 class="build-heading">
+            검-창 빌드
         </h3>
         
         <table class="build-table">
             <thead>
                 <tr>
-                    <th colspan="2">무술</th>
+                    <th colspan="2">무술 조합</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
                         <div class="build-weapon-icon">
-                            <img src="images/w4.PNG" alt="소생의 향" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🏺'">
+                            <img src="images/w4.PNG" alt="무명의 검무" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='⚔️'">
                         </div>
                         <span class="build-weapon-name">무명의 검무</span>
                     </td>
                     
                     <td>
                         <div class="build-weapon-icon">
-                            <img src="images/w8.PNG" alt="천계의 수호" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🛡️'">
+                            <img src="images/w8.PNG" alt="무명 창법" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🔱'">
                         </div>
                         <span class="build-weapon-name">무명 창법</span>
                     </td>
@@ -133,36 +158,36 @@
 
         <div class="build-desc">
             <p>
-               근접 공격뿐 아니라 이동기를 통해 빠르게 적에게 근접하며 빠르게 전투에 돌입하고 쉽게 빠져나올 수 있는 높은 기동성 빌드입니다. 
-               이 빌드는 빠르게 전투를 마무리할 수 있는 데미지를 제공하지만, 다른 빌드보다 더 높은 돌파를 요구하고 더 나은 스태미나 관리가 필요하면서도 유사한 수준의 효과를 제공하기 때문입니다. <br>
-               하지만 이 빌드는 스킬 조합과 콤보를 최대한 활용할수록 더욱 빛을 발합니다.
+               근접 공격뿐 아니라 이동기를 통해 <strong>빠르게 적에게 근접</strong>하며, 전투에 돌입하고 쉽게 빠져나올 수 있는 <strong>높은 기동성 빌드</strong>입니다. 
+               이 빌드는 빠르게 전투를 마무리할 수 있는 데미지를 제공하지만, 다른 빌드보다 더 높은 돌파를 요구하고 더 나은 스태미나 관리가 필요합니다.<br>
+               하지만 스킬 조합과 콤보를 최대한 활용할수록 <strong>폭발적인 딜링 능력</strong>을 발휘합니다.
             </p>
         </div>
     </div>
 
     <div class="detail-chunk" style="margin-bottom: 50px;">
-        <h3 style="color: var(--wuxia-accent-gold); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 20px;">
-        맥도-창 빌드
+        <h3 class="build-heading">
+            맥도-창 빌드
         </h3>
         
         <table class="build-table">
             <thead>
                 <tr>
-                    <th colspan="2">무술</th>
+                    <th colspan="2">무술 조합</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
                         <div class="build-weapon-icon">
-                            <img src="images/w7.PNG" alt="소생의 향" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🏺'">
+                            <img src="images/w7.PNG" alt="탄식의 검기" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
                         </div>
                         <span class="build-weapon-name">탄식의 검기</span>
                     </td>
                     
                     <td>
                         <div class="build-weapon-icon">
-                            <img src="images/w12.PNG" alt="천계의 수호" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🛡️'">
+                            <img src="images/w12.PNG" alt="격류의 파동" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🌊'">
                         </div>
                         <span class="build-weapon-name">격류의 파동</span>
                     </td>
@@ -172,9 +197,9 @@
 
         <div class="build-desc">
             <p>
-               강력한 피해량과 적의 공격을 탱킹하는 데 중점을 둔 빌드입니다. 격루의 파동의 포효를 사용하여 받는 피해를 줄이고, 적에게 입히는 피해를 증가시킬 수 있습니다. <br>
-               탱킹 역할임에도 불구하고 여전히 많은 피해를 입힐 수 있지만, 다른 무기에 비해 매우 느립니다. 
-               멀티플레이어에서 진가를 발휘하지만, 실크바인드 델루지의 치유 빌드와는 달리 피해량은 적지만, 솔로 플레이에서 느린 플레이를 지탱할 수 있는 지속력이 부족한 편입니다.
+               강력한 피해량과 <strong>적의 공격을 탱킹</strong>하는 데 중점을 둔 빌드입니다. 격류의 파동의 포효를 사용하여 받는 피해를 줄이고, 적에게 입히는 피해를 증가시킬 수 있습니다.<br>
+               탱킹 역할임에도 불구하고 여전히 많은 피해를 입힐 수 있지만, 공격 속도가 매우 느립니다. 
+               <strong>멀티플레이어에서 진가</strong>를 발휘하지만, 솔로 플레이에서는 답답함을 느낄 수 있습니다.
             </p>
         </div>
     </div>

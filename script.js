@@ -96,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // =========================================
 // [핵심 수정] 데이터 로드 (오류 방지 로직 적용)
 // =========================================
+// [기능] 데이터 로드 (뉴스/퀘스트 데이터 구조 자동 감지 수정)
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab');
@@ -107,25 +108,29 @@ function loadData() {
         fetch('json/news.json').then(res => res.json())
     ])
     .then(([mainData, questData, newsData]) => {
-        console.log("데이터 로드 성공");
+        console.log("데이터 로드 성공:", { mainData, questData, newsData });
 
-        // 1. 퀘스트 데이터 구조 처리 (배열/객체 모두 호환되도록 수정)
+        // 1. 퀘스트 데이터 파싱 (배열/객체 자동 감지)
         let quests = [];
         if (Array.isArray(questData)) {
             quests = questData;
-        } else if (questData.quests) {
-            quests = questData.quests;
+        } else if (questData.quests && Array.isArray(questData.quests)) {
+            quests = questData.quests; // { "quests": [...] } 형태일 경우
+        } else {
+            console.warn("퀘스트 데이터 형식을 확인할 수 없습니다.");
         }
 
-        // 2. 뉴스 데이터 구조 처리
+        // 2. 뉴스 데이터 파싱 (배열/객체 자동 감지)
         let news = [];
         if (Array.isArray(newsData)) {
             news = newsData;
-        } else if (newsData.news) {
-            news = newsData.news;
+        } else if (newsData.news && Array.isArray(newsData.news)) {
+            news = newsData.news; // { "news": [...] } 형태일 경우
+        } else {
+            console.warn("뉴스 데이터 형식을 확인할 수 없습니다.");
         }
 
-        // 3. 정렬 (ID 기준 역순)
+        // 3. 정렬 로직 (ID 기준 역순)
         if (quests.length > 0) {
             quests.sort((a, b) => {
                 const numA = parseInt((a.id || "").replace('q', '')) || 0;
@@ -134,7 +139,9 @@ function loadData() {
             });
         }
         
+        // 뉴스 최신순 정렬
         if (news.length > 0) {
+            // 날짜가 있다면 날짜순, 없다면 그냥 역순
             news.reverse(); 
         }
 
@@ -142,15 +149,16 @@ function loadData() {
         globalData = {
             items: mainData.items || [],
             quiz: mainData.quiz || [],
-            quests: quests, // 안전하게 처리된 배열 저장
-            news: news 
+            quests: quests, // 안전하게 추출된 배열
+            news: news      // 안전하게 추출된 배열
         };
 
         currentQuestData = globalData.quests;
 
-        // 5. 화면 렌더링
+        // 5. 화면 렌더링 시작
         renderQuizTable(globalData.quiz);
         
+        // 족보 카운터
         const counter = document.getElementById('quiz-counter-area');
         if(counter && globalData.quiz.length > 0) {
             const userCounts = {};
@@ -160,7 +168,6 @@ function loadData() {
                     userCounts[u] = (userCounts[u] || 0) + 1;
                 }
             });
-
             let topUser = null;
             let maxCount = 0;
             for (const [user, count] of Object.entries(userCounts)) {
@@ -169,7 +176,6 @@ function loadData() {
                     topUser = user;
                 }
             }
-
             let message = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
             if (topUser) {
                 message += `<br><span style="font-size: 0.8em; color: #888; font-weight: normal;">
@@ -179,12 +185,13 @@ function loadData() {
             counter.innerHTML = message;
         }
 
+        // ★ 여기서 리스트를 그립니다
         renderQuestList();
         renderHomeQuests(globalData.quests);
         renderHomeNews(globalData.news);
         renderFullNews(globalData.news);
 
-        // 6. 바로가기
+        // 6. 바로가기 처리
         if (targetTab === 'quest' && targetId) {
             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
             const foundQuest = globalData.quests.find(q => q.id === formattedId);

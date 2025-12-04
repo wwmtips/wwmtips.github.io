@@ -248,11 +248,18 @@
         <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 7)"><span>+</span><img id="slot-marts-7" style="display:none;"></div><div class="slot-name" id="name-marts-7"></div></div>
     </div>
 </div>
-
 <div class="builder-footer">
+    
+    <div style="margin-bottom: 10px; text-align: left;">
+        <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px;">✍️ 제작자 (선택)</span>
+        <input type="text" id="creator-name" placeholder="이름을 입력하세요 (예: 강호의고수)" maxlength="10" 
+               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+    </div>
+
     <button class="browse-button" onclick="generateBuildUrl()">🔗 빌드 주소 생성</button>
     <input type="text" id="result-url" readonly onclick="this.select()">
 </div>
+
 
 
 <div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)" style="display:none;">

@@ -627,33 +627,58 @@ function selectQuestResult(filepath) {
 /* =========================================
    [기능] 빌더 (Builder)
    ========================================= */
+// [script.js] 1. 모달 열기 (중복 방지 로직 추가됨)
 function openBuilderModal(type, index) {
     if (!builderData) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
+    
     currentSlot = { type, index };
     const modal = document.getElementById('builder-modal');
     const list = document.getElementById('builder-modal-list');
     const title = document.getElementById('builder-modal-title');
+    
+    // 타이틀 설정
     const typeNames = { 'weapons': '무기/무술', 'hearts': '심법', 'marts': '비결' };
     title.innerText = `${typeNames[type]} 선택`;
+    
     list.innerHTML = '';
 
+    // [중요] 현재 카테고리에서 이미 사용 중인 아이템 ID 목록 추출
+    // (단, '현재 클릭한 슬롯(index)'에 있는 아이템은 제외 -> 그래야 교체나 해제가 가능)
+    const currentList = currentBuild[type];
+    const usedIds = currentList.filter((id, idx) => {
+        // 현재 슬롯(index)이 아닌 다른 슬롯들에 있는 ID만 수집
+        return id !== null && idx !== parseInt(index);
+    });
+
+    // '해제' 버튼 추가
     const emptyDiv = document.createElement('div');
     emptyDiv.className = 'select-item';
     emptyDiv.innerHTML = '<div style="width:48px;height:48px;background:#eee;line-height:48px;margin:0 auto;font-weight:bold;color:#888;">X</div><p>해제</p>';
     emptyDiv.onclick = () => selectBuilderItem(null, '', '');
     list.appendChild(emptyDiv);
 
+    // 아이템 목록 생성
     if (builderData[type]) {
         builderData[type].forEach(item => {
             const div = document.createElement('div');
             div.className = 'select-item';
             div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
-            div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
+            
+            // [중복 체크] 이미 다른 슬롯에 장착된 아이템인가?
+            if (usedIds.includes(item.id)) {
+                div.classList.add('disabled'); // 스타일 적용 (흐리게)
+                // pointer-events: none이 CSS에 있지만, 혹시 모르니 클릭 이벤트 연결 안 함
+            } else {
+                div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
+            }
+            
             list.appendChild(div);
         });
     }
+
     modal.style.display = 'flex';
 }
+
 
 function selectBuilderItem(itemId, imgSrc, itemName) {
     const { type, index } = currentSlot;

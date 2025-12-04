@@ -1038,6 +1038,90 @@ function loadViewer() {
             const itemData = builderData[type].find(i => i.id === id);
             
             if (itemData) {
+// [script.js] 4. 주소 생성 및 복사 (루트 경로 대응 수정)
+function generateBuildUrl() {
+    const creatorName = document.getElementById('creator-name').value.trim();
+
+    const buildData = {
+        w: currentBuild.weapons,
+        h: currentBuild.hearts,
+        m: currentBuild.marts,
+        c: creatorName
+    };
+
+    const jsonString = JSON.stringify(buildData);
+    const encodedString = btoa(unescape(encodeURIComponent(jsonString)));
+
+    const origin = window.location.origin;
+    // 현재 페이지 경로에서 파일명(index.html) 제거
+    let basePath = window.location.pathname.replace('index.html', ''); 
+    if (!basePath.endsWith('/')) basePath += '/';
+    
+    // [수정] builder/ 폴더가 없으므로 바로 viewer.html 연결
+    const viewerUrl = `${origin}${basePath}viewer.html?b=${encodedString}`;
+    
+    const urlInput = document.getElementById('result-url');
+    urlInput.value = viewerUrl;
+    urlInput.style.display = 'block';
+    
+    navigator.clipboard.writeText(viewerUrl).then(() => {
+        alert("빌드 코드가 생성되었습니다! (클립보드 복사됨)");
+    }).catch(() => {
+        alert("주소가 생성되었습니다. 아래 창에서 복사하세요.");
+    });
+}
+
+// [script.js] 5. 뷰어 로드 (JSON 경로 수정)
+function loadViewer() {
+    if (!builderData) {
+        // [수정] ../json/ 대신 json/ (루트 기준)으로 변경
+        fetch('json/builder_data.json')
+            .then(res => res.json())
+            .then(data => { 
+                builderData = data; 
+                loadViewer(); 
+            });
+        return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const encodedData = params.get('b');
+
+    let w = [], h = [], m = [];
+    let creator = "";
+
+    if (encodedData) {
+        try {
+            const decodedString = decodeURIComponent(escape(atob(encodedData)));
+            const parsedData = JSON.parse(decodedString);
+            
+            w = parsedData.w || [];
+            h = parsedData.h || [];
+            m = parsedData.m || [];
+            creator = parsedData.c || "";
+        } catch (e) {
+            console.error("잘못된 빌드 주소입니다.", e);
+            alert("빌드 정보를 불러올 수 없습니다.");
+            return;
+        }
+    }
+
+    // 제작자 표시
+    const authorEl = document.getElementById('build-author');
+    if (authorEl) {
+        if (creator) {
+            authorEl.innerHTML = `제작자: <strong style="color:var(--wuxia-text-main);">${creator}</strong>`;
+        } else {
+            authorEl.innerHTML = `제작자: <span style="color:#aaa;">익명의 협객</span>`;
+        }
+    }
+
+    // 렌더링 헬퍼
+    const renderSlot = (type, ids, prefix) => {
+        ids.forEach((id, idx) => {
+            if (!id) return;
+            const itemData = builderData[type].find(i => i.id === id);
+            if (itemData) {
                 const slotId = `${prefix}-${type}-${idx}`;
                 const nameId = `name-${prefix}-${type}-${idx}`;
                 
@@ -1059,11 +1143,11 @@ function loadViewer() {
         });
     };
 
-    // 화면 그리기
     renderSlot('weapons', w, 'v');
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');
 }
+
 
 
 

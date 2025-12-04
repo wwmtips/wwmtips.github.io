@@ -200,11 +200,9 @@ function loadData() {
 }
 
 
-
-// =========================================
-// 탭 전환 및 뷰 제어 (Switch Tab)
-// =========================================
+// 탭 전환 및 뷰 제어 (초기화 로직 추가됨)
 function switchTab(tabName) {
+    // 1. 모든 뷰 숨기기 & 네비게이션 활성화 초기화
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide'];
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code'];
 
@@ -217,20 +215,33 @@ function switchTab(tabName) {
         if(el) el.classList.remove('active');
     });
 
+    // 2. 탭별 동작 설정
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
         history.pushState(null, null, '?tab=home'); 
-    } else if (tabName === 'quiz') {
+    } 
+    else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
         document.getElementById('nav-quiz').classList.add('active');
         history.pushState(null, null, '?tab=quiz');
-    } else if (tabName === 'quest') {
+    } 
+    else if (tabName === 'quest') {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
-        showQuestList();
+        
+        // [수정] 무림록 탭 클릭 시 항상 '전체' 목록 & '리스트 화면'으로 초기화
+        showQuestList(); // 상세페이지 보고 있었으면 리스트로 복귀
+        
+        // '전체' 버튼을 찾아서 강제로 클릭(필터링) 처리
+        const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
+        if (allBtn) {
+            filterQuestType('all', allBtn);
+        }
+        
         history.pushState(null, null, '?tab=quest');
-    } else if (tabName === 'news') {
+    } 
+    else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
         history.pushState(null, null, '?tab=news');
     } 
@@ -239,7 +250,16 @@ function switchTab(tabName) {
         const guideView = document.getElementById('view-guide');
         if (guideView) {
             guideView.style.display = 'block';
-            loadGuideView(); // 가이드 페이지 로드
+            
+            // [수정] 가이드 탭 클릭 시 항상 '최신 뉴스'로 초기화
+            if (!isGuideLoaded) {
+                loadGuideView(); // 처음 로드라면 기본 로직 실행 (news.html 로드됨)
+            } else {
+                // 이미 로드된 상태라면 강제로 'news.html' 로드 및 버튼 활성화
+                // (findButtonByFile 함수는 script.js 하단에 있어야 합니다)
+                const newsBtn = findButtonByFile('news.html'); 
+                loadGuideContent('news.html', newsBtn);
+            }
         }
         
         const navBtn = document.getElementById('nav-code');
@@ -249,44 +269,45 @@ function switchTab(tabName) {
     }
 }
 
-// =========================================
-// [기능] 가이드 및 교환 코드 관련 로직
-// =========================================
+
+// [script.js] loadGuideView 함수 수정
+
 function loadGuideView() {
     const container = document.getElementById('guide-content-loader');
     if (!container) return;
 
     // 1. URL 파라미터 확인 및 파일 매핑
     const urlParams = new URLSearchParams(window.location.search);
-    const targetId = urlParams.get('id'); // URL에서 ?id=값 가져오기
+    const targetId = urlParams.get('id');
 
-    // [설정] id 값과 연결될 실제 파일명 매핑
-    // 예: ?id=tierlist 로 들어오면 guide_tier.html을 엽니다.
+    // ID와 파일명 매핑
     const guideMap = {
-        'news': 'news.html',             // ?id=news
-        'tierlist': 'guide_tier.html',   // ?id=tierlist (티어 목록)
-        'weapon': 'tier_weapon.html',    // ?id=weapon (무기 티어)
-        'build': 'build.html',           // ?id=build
-        'map': 'maps.html',              // ?id=map
-        'side': 'beta.html',             // ?id=side (사이드 퀘스트)
-        'npc': 'npc.html',               // ?id=npc
-        'boss': 'boss.html',             // ?id=boss
-        'marts': 'marts.html',           // ?id=marts (무공)
-        'harts': 'harts.html',           // ?id=harts (심법)
-        'skill': 'skils.html',           // ?id=skill (기술)
-        'majang': 'majang.html',         // ?id=majang
-        'code': 'code.html'              // ?id=code
+        'news': 'news.html',
+        'tierlist': 'guide_tier.html',
+        'weapon': 'tier_weapon.html',
+        'build': 'build.html',
+        'map': 'maps.html',
+        'side': 'beta.html',
+        'npc': 'npc.html',
+        'boss': 'boss.html',
+        'marts': 'marts.html',
+        'harts': 'harts.html',
+        'skill': 'skils.html',
+        'majang': 'majang.html',
+        'code': 'code.html'
     };
 
-    // 로드할 파일 결정: ID가 있고 매핑된 파일이 있으면 그 파일, 아니면 기본값 'news.html'
+    // 로드할 파일 결정 (기본값: news.html)
     let fileToLoad = 'news.html';
     if (targetId && guideMap[targetId]) {
         fileToLoad = guideMap[targetId];
     }
 
-    // 2. 이미 가이드 프레임이 로드된 경우 -> 결정된 파일만 바로 로드
+    // 2. 이미 가이드 프레임이 로드된 경우 -> 바로 컨텐츠 로드
     if (isGuideLoaded) {
-        loadGuideContent(fileToLoad);
+        // [수정 포인트 A] 이미 로드된 상태에서도 버튼을 찾아 활성화해야 함
+        const targetBtn = findButtonByFile(fileToLoad);
+        loadGuideContent(fileToLoad, targetBtn);
         return; 
     }
     
@@ -301,13 +322,31 @@ function loadGuideView() {
             container.style.marginTop = '0';
             isGuideLoaded = true;
             
-            // 프레임 로드 직후 결정된 파일(fileToLoad)을 띄움
-            loadGuideContent(fileToLoad); 
+            // [수정 포인트 B] 파일명에 해당하는 버튼을 찾아서 함께 넘겨줌
+            const targetBtn = findButtonByFile(fileToLoad);
+            loadGuideContent(fileToLoad, targetBtn); 
         })
         .catch(err => {
             container.innerHTML = `<div style="padding:20px; color:red;">가이드 페이지 로드 실패</div>`;
         });
 }
+
+// [추가] 파일명을 가진 버튼을 찾아내는 헬퍼 함수
+function findButtonByFile(filename) {
+    const buttons = document.querySelectorAll('.guide-grid-menu .guide-item-btn');
+    let foundBtn = null;
+    
+    buttons.forEach(btn => {
+        // 버튼의 onclick 속성 문자열에 파일명이 포함되어 있는지 확인
+        const onClickText = btn.getAttribute('onclick');
+        if (onClickText && onClickText.includes(filename)) {
+            foundBtn = btn;
+        }
+    });
+    
+    return foundBtn;
+}
+
 
 // 가이드 페이지 안에서 교환 코드(code.html) 불러오기 (자동 로드 및 버튼 클릭)
 function loadCodeInGuide(isAutoLoad = false) {

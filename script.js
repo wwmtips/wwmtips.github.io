@@ -131,9 +131,9 @@ function loadData() {
     const targetId = urlParams.get('id');
 
     Promise.all([
-        fetch('json/data.json').then(res => res.json()),
-        fetch('json/quests.json').then(res => res.json()),
-        fetch('json/news.json').then(res => res.json())
+        fetch('/json/data.json').then(res => res.json()),
+        fetch('/json/quests.json').then(res => res.json()),
+        fetch('/json/news.json').then(res => res.json())
     ])
     .then(([mainData, questList, newsList]) => {
         // 퀘스트 정렬

@@ -161,7 +161,7 @@ function loadData() {
             // 최다 제보자가 존재할 경우 아랫줄에 작게 추가
             if (topUser) {
                 message += `<br><span style="font-size: 0.8em; color: #888; font-weight: normal;">
-                    (👑 최다 제보: <strong>${topUser}</strong>님 - ${maxCount}개)
+                    (👑 강호의 고수: <strong>${topUser}</strong>님 - ${maxCount}개)
                 </span>`;
             }
 

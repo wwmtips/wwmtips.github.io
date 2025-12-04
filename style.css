@@ -460,7 +460,7 @@ h3 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 15px;
-    padding-bottom: 50px;
+    padding-bottom: 0px;
 }
 
 .quest-card {
@@ -619,7 +619,7 @@ h3 {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 30px;
+    margin-top: 15px;
     padding-bottom: 20px;
 }
 

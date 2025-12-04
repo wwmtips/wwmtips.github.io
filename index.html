@@ -117,20 +117,7 @@
     </section>
 </div>
 
-        
-<div id="view-news" style="display: none;">
-    <section style="margin-top: 30px;">
-        <div class="large-font-chunk" style="margin-bottom: 20px; border:none; background:none; padding-left:0;">
-            <h2 style="color:var(--wuxia-accent-gold); margin:0;">공지사항</h2>
-        </div>
-        
-        <div id="full-news-list" class="item-list-container">
-            </div>
-    </section>
-</div>
-
 <div id="view-quest" style="display: none;">
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
     
     <section id="quest-list-view" style="margin-top: 30px;">
 
@@ -155,29 +142,42 @@
             </div>
         </div>
 
-                <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">공략</span>
+        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+            <span style="background-color: var(--wuxia-accent-gold); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
             <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
                 무림록
             </h2>
             <p style="color: #666; font-size: 0.9em; margin-top: 5px;">
-                퀘스트, 세계관, 만사록 등 주요 컨텐츠 공략
+                게임 내 퀘스트, 세계관, 만사록 정보를 확인하세요.
             </p>
-    </div>
+        </div>
         
         <div id="quest-grid-container" class="quest-grid">
             </div>
 
         <div id="pagination-container" class="pagination-controls"></div>
 
-    </section>
-    
-    <section id="quest-detail-view" style="display: none;">
+    </section> <section id="quest-detail-view" style="display: none;">
         <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
         <div id="quest-content-loader" class="detail-content-box">
             로딩 중...
         </div>
     </section>
+
 </div>
+
+        
+<div id="view-news" style="display: none;">
+    <section style="margin-top: 30px;">
+        <div class="large-font-chunk" style="margin-bottom: 20px; border:none; background:none; padding-left:0;">
+            <h2 style="color:var(--wuxia-accent-gold); margin:0;">공지사항</h2>
+        </div>
+        
+        <div id="full-news-list" class="item-list-container">
+            </div>
+    </section>
+</div>
+
 
 
 <div id="view-guide" style="display: none;">

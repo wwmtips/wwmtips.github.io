@@ -3,6 +3,16 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "안전", 
+      "answer": "부적",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "불꽃", 
+      "answer": "봉황",
+      "user":"ㅇㅇ"
+    },
+    { 
       "hint": "거대한 뿌리", 
       "answer": "벵골보리수",
       "user":"풍사향"

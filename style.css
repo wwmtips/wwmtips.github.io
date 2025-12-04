@@ -566,9 +566,10 @@ h3 {
 
 /* 활성화된 버튼 */
 .guide-item-btn.active {
-    background-color: var(--wuxia-accent-gold);
-    color: #fff;
-    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5; /* 아주 연한 미색 (또는 #fff) */
+    color: var(--wuxia-accent-gold); /* 글자색 금색 */
+    border: 1px solid var(--wuxia-accent-gold); /* 테두리 금색 */
+    box-shadow: 0 0 5px rgba(160, 128, 64, 0.2); /* 은은한 금색 그림자 */
 }
 
 .guide-item-btn.special {

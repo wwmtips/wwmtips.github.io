@@ -9,80 +9,96 @@
     </div>
 
     <style>
-        .arts-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-        }
-        .arts-table th {
-            background-color: rgba(200, 160, 96, 0.15);
-            color: var(--wuxia-accent-gold);
-            padding: 12px;
-            border: 1px solid #444;
-            white-space: nowrap;
-        }
-        .arts-table td {
-            border: 1px solid #444;
-            padding: 12px;
-            vertical-align: middle;
-            color: #ccc;
-            line-height: 1.5;
-        }
-        .art-icon-cell {
-            text-align: center;
-            width: 140px; /* 이미지 공간 확보를 위해 너비 조정 */
-            background-color: #222;
-            vertical-align: top; /* 상단 정렬 */
-            padding-top: 20px;
-        }
-        /* 이미지 박스 스타일 */
-        .art-img-box {
-            width: 64px;
-            height: 64px;
-            background-color: #111;
-            border: 1px solid #444;
-            margin: 0 auto 10px auto; /* 중앙 정렬 및 아래 여백 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .art-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .art-name {
-            display: block;
-            color: #e0e0e0;
-            font-weight: bold;
-            margin-bottom: 4px;
-            font-size: 1.0em;
-        }
-        .art-type {
-            display: block;
-            font-size: 0.8em;
-            color: var(--wuxia-accent-gold);
-            opacity: 0.8;
-        }
-        .art-effect strong {
-            color: var(--wuxia-accent-gold);
-        }
-        .art-obtain {
-            color: #999;
-            font-size: 0.9em;
-        }
-        .section-title {
-            color: var(--wuxia-accent-gold);
-            font-size: 1.3em;
-            border-left: 4px solid var(--wuxia-accent-red);
-            padding-left: 10px;
-            margin-bottom: 15px;
-            margin-top: 40px;
-        }
-    </style>
+    /* ------------------------------------------- */
+    /* [수정 및 추가된 내용] */
+    /* 1. .arts-table에 table-layout: fixed; 추가 */
+    /* 2. .arts-table th에 20%, 40%, 40% 너비 지정 */
+    /* 3. .art-icon-cell의 너비를 140px에서 20%로 수정 */
+    /* ------------------------------------------- */
+
+    .arts-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+        /* [추가] 열 너비를 고정된 비율로 설정 */
+        table-layout: fixed; 
+    }
+    .arts-table th {
+        background-color: rgba(200, 160, 96, 0.15);
+        color: var(--wuxia-accent-gold);
+        padding: 12px;
+        border: 1px solid #444;
+        white-space: nowrap;
+    }
+    /* [수정/추가] 각 열의 너비 20%, 40%, 40% 설정 */
+    .arts-table th:nth-child(1) { width: 20%; }
+    .arts-table th:nth-child(2) { width: 40%; }
+    .arts-table th:nth-child(3) { width: 40%; }
+
+    .arts-table td {
+        border: 1px solid #444;
+        padding: 12px;
+        vertical-align: middle;
+        color: #ccc;
+        line-height: 1.5;
+    }
+    .art-icon-cell {
+        text-align: center;
+        /* [수정] 고정 px 대신 % 사용 */
+        width: 20%; 
+        background-color: #222;
+        vertical-align: top; /* 상단 정렬 */
+        padding-top: 20px;
+    }
+    /* 이미지 박스 스타일 */
+    .art-img-box {
+        width: 64px;
+        height: 64px;
+        background-color: #111;
+        border: 1px solid #444;
+        margin: 0 auto 10px auto; /* 중앙 정렬 및 아래 여백 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .art-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .art-name {
+        display: block;
+        color: #e0e0e0;
+        font-weight: bold;
+        margin-bottom: 4px;
+        font-size: 1.0em;
+    }
+    .art-type {
+        display: block;
+        font-size: 0.8em;
+        color: var(--wuxia-accent-gold);
+        opacity: 0.8;
+    }
+    .art-effect strong {
+        color: var(--wuxia-accent-gold);
+    }
+    .art-obtain {
+        color: #999;
+        font-size: 0.9em;
+    }
+    .section-title {
+        color: var(--wuxia-accent-gold);
+        font-size: 1.3em;
+        border-left: 4px solid var(--wuxia-accent-red);
+        padding-left: 10px;
+        margin-bottom: 15px;
+        margin-top: 40px;
+    }
+</style>
+
 
     <div class="detail-chunk">
         <h3 class="section-title">공격 비결</h3>

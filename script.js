@@ -957,34 +957,47 @@ function closeBuilderModal(e) {
 }
 
 // 4. 주소 생성 및 복사
+// [script.js] 4. 주소 생성 및 복사 (Base64 인코딩 적용)
 function generateBuildUrl() {
-    const w = currentBuild.weapons.join(',');
-    const h = currentBuild.hearts.join(',');
-    const m = currentBuild.marts.join(',');
-    
-    // 뷰어 페이지 주소 생성
-    // (현재 페이지가 index.html이면 builder/viewer.html로 변경)
+    // 1. 데이터를 하나의 객체로 묶음 (빈 값 제거 로직 포함)
+    const buildData = {
+        w: currentBuild.weapons, // 무기 배열
+        h: currentBuild.hearts,  // 심법 배열
+        m: currentBuild.marts    // 비결 배열
+    };
+
+    // 2. JSON 문자열로 변환 후 Base64로 인코딩 (암호화)
+    const jsonString = JSON.stringify(buildData);
+    const encodedString = btoa(jsonString);
+
+    // 3. 뷰어 페이지 주소 생성 (파라미터 이름을 'b' 하나로 통일)
     const origin = window.location.origin;
-    const path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+    // 현재 경로에서 /builder/ 앞부분까지만 가져오거나, 구조에 맞게 수정
+    // (예: https://site.com/builder/index.html -> https://site.com)
+    // 여기서는 상대 경로 이슈를 피하기 위해 절대 경로 조합을 추천
     
-    // viewer.html 파일이 builder 폴더 안에 있다고 가정
-    const finalUrl = `${origin}${path}/builder/viewer.html?w=${w}&h=${h}&m=${m}`;
+    // 만약 현재 파일이 /builder/index.html 이라면:
+    let basePath = window.location.pathname.replace('index.html', ''); 
+    if (!basePath.endsWith('/')) basePath += '/';
     
-    // 화면의 입력창에 표시
+    const viewerUrl = `${origin}${basePath}viewer.html?b=${encodedString}`;
+    
+    // 4. 화면 표시 및 복사
     const urlInput = document.getElementById('result-url');
-    urlInput.value = finalUrl;
+    urlInput.value = viewerUrl;
     urlInput.style.display = 'block';
     
-    // 클립보드 복사 시도
-    navigator.clipboard.writeText(finalUrl).then(() => {
-        alert("빌드 주소가 생성되었습니다!\n아래 주소창을 눌러 복사하거나, 이미 클립보드에 복사되었습니다.");
+    navigator.clipboard.writeText(viewerUrl).then(() => {
+        alert("빌드 코드가 생성되었습니다! (클립보드 복사됨)");
     }).catch(() => {
-        alert("주소가 생성되었습니다. 아래 입력창의 주소를 복사해서 사용하세요.");
+        alert("주소가 생성되었습니다. 아래 창에서 복사하세요.");
     });
 }
 
-// 5. 뷰어 로드 (viewer.html에서만 사용)
+
+// [script.js] 5. 뷰어 로드 (Base64 디코딩 적용)
 function loadViewer() {
+    // DB 데이터 로드 대기
     if (!builderData) {
         fetch('../json/builder_data.json')
             .then(res => res.json())
@@ -996,14 +1009,34 @@ function loadViewer() {
     }
 
     const params = new URLSearchParams(window.location.search);
-    const w = (params.get('w') || ',').split(',');
-    const h = (params.get('h') || ',,,').split(',');
-    const m = (params.get('m') || ',,,,,,,').split(',');
+    const encodedData = params.get('b'); // 'b' 파라미터 가져오기
 
+    // 기본값 설정
+    let w = [], h = [], m = [];
+
+    // 암호 코드가 있다면 해석 (디코딩)
+    if (encodedData) {
+        try {
+            const decodedString = atob(encodedData); // Base64 디코딩
+            const parsedData = JSON.parse(decodedString); // JSON 객체로 변환
+            
+            w = parsedData.w || [];
+            h = parsedData.h || [];
+            m = parsedData.m || [];
+        } catch (e) {
+            console.error("잘못된 빌드 주소입니다.", e);
+            alert("빌드 정보를 불러올 수 없습니다.");
+            return;
+        }
+    }
+
+    // 슬롯 렌더링 헬퍼 함수 (기존과 동일)
     const renderSlot = (type, ids, prefix) => {
         ids.forEach((id, idx) => {
             if (!id) return;
+            // 데이터에서 아이템 정보 찾기
             const itemData = builderData[type].find(i => i.id === id);
+            
             if (itemData) {
                 const slotId = `${prefix}-${type}-${idx}`;
                 const nameId = `name-${prefix}-${type}-${idx}`;
@@ -1013,7 +1046,7 @@ function loadViewer() {
 
                 if (slotEl) {
                     const img = slotEl.querySelector('img');
-                    if(img) {
+                    if (img) {
                         img.src = itemData.img;
                         img.style.display = 'block';
                     }
@@ -1026,6 +1059,7 @@ function loadViewer() {
         });
     };
 
+    // 화면 그리기
     renderSlot('weapons', w, 'v');
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');

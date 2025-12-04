@@ -64,11 +64,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 5. 족보 탭 내부 검색 리스너 (기존 유지)
+    // 5. 족보 탭 내부 검색 리스너
     const quizLocalSearch = document.getElementById("quiz-local-search");
     if (quizLocalSearch) {
+        
+        // [입력 이벤트] 글자를 칠 때마다 실시간 검색
         quizLocalSearch.addEventListener("input", (e) => {
             // 검색어에 맞춰 필터링하고, 하이라이팅을 위해 키워드도 같이 넘김
             renderQuizTable(filterQuizData(e.target.value), e.target.value);
+        });
+
+        // [키다운 이벤트] 엔터(Enter) 키를 누르면 키보드 내리기
+        quizLocalSearch.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();     // 줄바꿈이나 폼 제출 방지
+                quizLocalSearch.blur(); // 포커스 해제 (모바일 키보드 숨김)
+            }
         });
     }
 

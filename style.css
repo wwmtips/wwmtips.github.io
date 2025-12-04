@@ -835,3 +835,106 @@ h3 {
     .code-card { flex-direction: column; align-items: flex-start; gap: 10px; }
     .copy-btn { width: 100%; justify-content: center; margin-left: 0; }
 }
+/* =========================================
+   빌더 (Builder) 스타일
+   ========================================= */
+.slot-label {
+    display: block;
+    font-weight: bold;
+    color: var(--wuxia-text-main);
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-size: 0.95em;
+    border-left: 3px solid var(--wuxia-accent-gold);
+    padding-left: 8px;
+}
+
+.slot-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.item-slot {
+    width: 64px;
+    height: 64px;
+    background-color: #fff;
+    border: 1px dashed var(--wuxia-accent-gold);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5em;
+    color: #ccc;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.item-slot:hover {
+    background-color: #fffcf5;
+    border-style: solid;
+    color: var(--wuxia-accent-gold);
+}
+
+.item-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* 모달 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 500px;
+    max-height: 70vh;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border: 1px solid var(--wuxia-accent-gold);
+}
+
+.item-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+}
+
+.select-item {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    background: #f9f9f9;
+}
+.select-item:hover {
+    border-color: var(--wuxia-accent-gold);
+    background: #fffcf5;
+}
+.select-item img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+.select-item p {
+    font-size: 0.7em;
+    margin: 5px 0 0 0;
+    color: #333;
+    word-break: keep-all;
+    line-height: 1.2;
+}

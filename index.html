@@ -117,7 +117,57 @@
     </section>
 </div>
 
+<div id="view-quest" style="display: none;">
+    
+    <section id="quest-list-view" style="margin-top: 0; padding: 0;">
+
+        <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 30px; margin-top: 20px;">
+            <div class="guide-item-btn active" onclick="filterQuestType('all', this)">
+                <span class="guide-title">전체</span>
+            </div>
+            <div class="guide-item-btn" onclick="filterQuestType('세계관', this)">
+                <span class="guide-title">세계관</span>
+            </div>
+            <div class="guide-item-btn" onclick="filterQuestType('인연의 궤적', this)">
+                <span class="guide-title">인연의 궤적</span>
+            </div>
+            <div class="guide-item-btn" onclick="filterQuestType('만사록', this)">
+                <span class="guide-title">만사록</span>
+            </div>
+            <div class="guide-item-btn" onclick="filterQuestType('퀘스트', this)">
+                <span class="guide-title">퀘스트</span>
+            </div>
+            <div class="guide-item-btn" onclick="filterQuestType('이벤트', this)">
+                <span class="guide-title">이벤트</span>
+            </div>
+        </div>
+
+        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 10px;">
+            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
+            <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                무림록
+            </h2>
+            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 2px;">
+                게임 내 퀘스트, 세계관, 만사록 정보를 확인하세요.
+            </p>
+        </div>
         
+        <div id="quest-grid-container" class="quest-grid">
+            </div>
+
+        <div id="pagination-container" class="pagination-controls"></div>
+
+    </section>
+    
+    <section id="quest-detail-view" style="display: none;">
+        <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
+        <div id="quest-content-loader" class="detail-content-box">
+            로딩 중...
+        </div>
+    </section>
+
+</div>
+
 <div id="view-news" style="display: none;">
     <section style="margin-top: 30px;">
         <div class="large-font-chunk" style="margin-bottom: 20px; border:none; background:none; padding-left:0;">
@@ -128,31 +178,7 @@
             </div>
     </section>
 </div>
-        <div id="view-quest" style="display: none;">
-           <section id="quest-list-view" style="margin-top: 30px;">
-
-    <div class="quest-type-nav">
-        <button class="type-btn active" onclick="filterQuestType('all', this)">전체</button>        
-        <button class="type-btn" onclick="filterQuestType('세계관', this)">세계관</button>
-        <button class="type-btn" onclick="filterQuestType('인연의 궤적', this)">인연의 궤적</button>
-        <button class="type-btn" onclick="filterQuestType('만사록', this)">만사록</button>
-        <button class="type-btn" onclick="filterQuestType('퀘스트', this)">퀘스트</button>
-        <button class="type-btn" onclick="filterQuestType('이벤트', this)">이벤트</button>
-    </div>
-    
-    <div id="quest-grid-container" class="quest-grid">
-        </div>
-
-    <div id="pagination-container" class="pagination-controls"></div>
-
-</section>
-            <section id="quest-detail-view" style="display: none;">
-                <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
-                <div id="quest-content-loader" class="detail-content-box">
-                    로딩 중...
-                </div>
-            </section>
-        </div>
+        
 
 <div id="view-guide" style="display: none;">
     <div id="guide-content-loader" style="margin-top: 30px; text-align: center;">

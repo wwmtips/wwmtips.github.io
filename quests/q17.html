@@ -1,121 +1,173 @@
-<head>
-    <link rel="stylesheet" href="../quests/murim_st.css" />
-</head>
 <div class="quest-detail-container">
     
+    <style>
+        /* [수묵화 테마] 이미지 컨테이너 공통 스타일 */
+        .wuxia-image-container {
+            border: 1px solid #ddd; /* 얇고 깔끔한 회색 테두리 */
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* 부드럽고 은은한 그림자 */
+            background-color: #f4f4f2; /* 한지 느낌의 연한 미색 배경 */
+            margin: 20px 0;
+            position: relative;
+        }
+        /* 이미지 자체 스타일 */
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            /* 밝은 테마용 필터: 약간의 따뜻함만 추가 */
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        /* 마우스 호버 효과 */
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        /* 이미지 장식용 모서리 */
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15); /* 금색 테두리 연하게 */
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
+        /* 나란히 배치 레이아웃 */
+        .wuxia-image-row {
+            display: flex;
+            gap: 15px; 
+            margin: 20px 0;
+        }
+        .wuxia-image-row .wuxia-image-container {
+            flex: 1; 
+            margin: 0; 
+        }
+
+        @media (max-width: 768px) {
+            .wuxia-image-row {
+                flex-direction: column;
+            }
+            .wuxia-image-row .wuxia-image-container {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+    
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-red); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;"><b>이벤트</b></span>
+        <span style="background-color: var(--wuxia-accent-red); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">이벤트</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            <b>달빛 속 칼날</b>
+            달빛 속 칼날
         </h2>
-        <b style="color: #666; font-size: 0.9em; margin-top: 5px; display: block;">유료 재화 '음의 선율'을 얻는 기간 한정 이벤트</b>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">유료 재화 '음의 선율'을 얻는 기간 한정 이벤트</p>
     </div>
 
-    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px;">
-        <div style="width: 80px; height: 80px; border: 2px solid #333; border-radius: 4px; overflow: hidden; flex-shrink: 0; background-color: #1a1a1c; display: flex; align-items: center; justify-content: center;">
-            <span style="font-size: 2em; color: var(--wuxia-accent-red);"><b>🌙</b></span>
+    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 30px; background-color: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <div style="width: 60px; height: 60px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; flex-shrink: 0; background-color: #f4f4f2; display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 2em; color: var(--wuxia-accent-red);">🌙</span>
         </div>
         <div>
-            <b style="margin: 0 0 10px 0; color: #ccc; display: block;">
-                <b>📍 주요 지역:</b> <span style="color: var(--wuxia-accent-gold);"><b>불야채</b></span>
-            </b>
-            <b style="margin: 0; color: #ccc; line-height: 1.6; display: block;">
-                <b>💡 개요:</b> 유료 의상 뽑기 재화인 <b>'음의 선율'</b>을 주는 매우 가치가 높은 퀘스트입니다. 기간 제한이 있으므로 <b>가장 먼저 진행하는 것을 추천합니다.</b> 퀘스트의 주 내용은 천잠한의와 관련된 강호 이야기입니다.
-            </b>
+            <p style="margin: 0 0 10px 0; color: var(--wuxia-text-main);">
+                <strong>📍 주요 지역:</strong> <span style="color: var(--wuxia-accent-gold); font-weight: bold;">불야채</span>
+            </p>
+            <p style="margin: 0; color: var(--wuxia-text-sub); line-height: 1.6;">
+                <strong style="color: var(--wuxia-accent-red);">💡 개요:</strong> 유료 의상 뽑기 재화인 <strong>'음의 선율'</strong>을 주는 매우 가치가 높은 퀘스트입니다. 기간 제한이 있으므로 <strong>가장 먼저 진행하는 것을 추천합니다.</strong> 퀘스트의 주 내용은 천잠한의와 관련된 강호 이야기입니다.
+            </p>
         </div>
     </div>
 
     <div style="margin-bottom: 30px;">
         
         <div class="detail-chunk" style="margin-bottom: 40px;">
-            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
-                <b>1. 퀘스트 시작 (불야채 서생)</b>
+            <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
+                1. 퀘스트 시작 (불야채 서생)
             </h3>
-            <b style="color: #bbb; line-height: 1.8; display: block;">
-                퀘스트를 받기 위해서는 <b>불야채 지역</b>에서 아래 커서가 있는 위치의 <b>서생</b>과 대화를 하면 시작됩니다.
-            </b>
+            <p style="color: var(--wuxia-text-sub); line-height: 1.8;">
+                퀘스트를 받기 위해서는 <strong>불야채 지역</strong>에서 아래 커서가 있는 위치의 <strong>서생</strong>과 대화를 하면 시작됩니다.
+            </p>
             
             <div class="wuxia-image-row">
                 <div class="wuxia-image-container">
-                    <img src="../quests/images/q17_1.png" alt="퀘스트 시작 위치 지도" onerror="this.src='https://via.placeholder.com/400x300/111/333?text=이미지1:+퀘스트+시작+커서+위치'">
+                    <img src="../quests/images/q17_1.png" alt="퀘스트 시작 위치 지도" onerror="this.src='https://via.placeholder.com/400x300/f4f4f2/ccc?text=이미지1:+퀘스트+시작+커서+위치'">
                 </div>
                 <div class="wuxia-image-container">
-                    <img src="../quests/images/q17_3.png" alt="서생 위치 지도" onerror="this.src='https://via.placeholder.com/400x300/111/333?text=이미지3:+서생+위치+지도'">
+                    <img src="../quests/images/q17_3.png" alt="서생 위치 지도" onerror="this.src='https://via.placeholder.com/400x300/f4f4f2/ccc?text=이미지3:+서생+위치+지도'">
                 </div>
             </div>
 
             <div class="wuxia-image-container" style="margin-top: 20px;">
-                <img src="../quests/images/q17_2.png" alt="퀘스트를 주는 서생의 모습" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지2:+서생+모습'">
+                <img src="../quests/images/q17_2.png" alt="퀘스트를 주는 서생의 모습" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지2:+서생+모습'">
             </div>
             
-            <b style="color: #bbb; line-height: 1.8; margin-top: 20px; display: block;">
-                퀘스트의 대략적인 내용은 강호에 <b>천잠한의(천잠비룡포)</b>가 나왔고 그것을 차지하기 위해 있었던 이야기들입니다.
-            </b>
+            <p style="color: var(--wuxia-text-sub); line-height: 1.8; margin-top: 20px;">
+                퀘스트의 대략적인 내용은 강호에 <strong>천잠한의(천잠비룡포)</strong>가 나왔고 그것을 차지하기 위해 있었던 이야기들입니다.
+            </p>
         </div>
 
-        <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
         <div class="detail-chunk" style="margin-bottom: 40px;">
-            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
-                <b>2. 가짜 천잠한의 만들기</b>
+            <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
+                2. 가짜 천잠한의 만들기
             </h3>
-            <b style="color: #bbb; line-height: 1.8; display: block;">
-                서생과 대화 후, 천잠한의와 비슷한 옷을 만들어오라고 합니다. 퀘스트가 시키는 위치로 가서 <b>재봉사 꼬마</b>와 대화를 진행하면 됩니다.
-            </b>
+            <p style="color: var(--wuxia-text-sub); line-height: 1.8;">
+                서생과 대화 후, 천잠한의와 비슷한 옷을 만들어오라고 합니다. 퀘스트가 시키는 위치로 가서 <strong>재봉사 꼬마</strong>와 대화를 진행하면 됩니다.
+            </p>
             
-            <div style="background-color: #1a1a1a; padding: 15px; border-left: 3px solid var(--wuxia-accent-gold); margin-top: 15px;">
-                <b style="color: #ccc; margin: 0; display: block;">
-                    <b>💡 재료 팁:</b> 다른 재료는 쉽게 찾을 수 있지만, <b>숯불 화로</b>의 경우는 오른쪽 문이 아닌 <b>정면에서 왼쪽 문으로 들어가야</b> 있으니 참고하세요.
-                </b>
+            <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; margin-top: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <p style="color: var(--wuxia-text-main); margin: 0;">
+                    <strong style="color: var(--wuxia-accent-gold);">💡 재료 팁:</strong> 다른 재료는 쉽게 찾을 수 있지만, <strong>숯불 화로</strong>의 경우는 오른쪽 문이 아닌 <strong>정면에서 왼쪽 문으로 들어가야</strong> 있으니 참고하세요.
+                </p>
             </div>
 
             <div class="wuxia-image-container" style="margin-top: 20px;">
-                <img src="../quests/images/q17_4.png" alt="숯불 화로가 있는 건물 문 위치" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지4:+재료+획득+위치+문'">
+                <img src="../quests/images/q17_4.png" alt="숯불 화로가 있는 건물 문 위치" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지4:+재료+획득+위치+문'">
             </div>
-       
         </div>
 
-        <hr style="border: 0; border-top: 1px dashed #444; margin: 30px 0;">
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
         <div class="detail-chunk">
-            <h3 style="color: var(--wuxia-accent-gold); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px;">
-                <b>3. 스토리 진행 및 보상 획득</b>
+            <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
+                3. 스토리 진행 및 보상 획득
             </h3>
-            <b style="color: #bbb; line-height: 1.8; display: block;">
-                천잠한의(짭)을 만들어서 서생이 있던 위치로 돌아가면 상점 <b>'검심의 그림자'에서 나왔던 여자 캐릭터</b>가 등장하며 스토리가 진행됩니다.
-            </b>
+            <p style="color: var(--wuxia-text-sub); line-height: 1.8;">
+                천잠한의(짭)을 만들어서 서생이 있던 위치로 돌아가면 상점 <strong>'검심의 그림자'에서 나왔던 여자 캐릭터</strong>가 등장하며 스토리가 진행됩니다.
+            </p>
 
             <div class="wuxia-image-row">
                 <div class="wuxia-image-container">
-                    <img src="../quests/images/q17_5.png" alt="스토리 장면 1" onerror="this.src='https://via.placeholder.com/300x200/111/333?text=이미지5:+사건+장면1'">
+                    <img src="../quests/images/q17_5.png" alt="스토리 장면 1" onerror="this.src='https://via.placeholder.com/300x200/f4f4f2/ccc?text=이미지5:+사건+장면1'">
                 </div>
                 <div class="wuxia-image-container">
-                    <img src="../quests/images/q17_6.png" alt="스토리 장면 2" onerror="this.src='https://via.placeholder.com/300x200/111/333?text=이미지6:+사건+장면2'">
+                    <img src="../quests/images/q17_6.png" alt="스토리 장면 2" onerror="this.src='https://via.placeholder.com/300x200/f4f4f2/ccc?text=이미지6:+사건+장면2'">
                 </div>
                 <div class="wuxia-image-container">
-                    <img src="../quests/images/q17_7.png" alt="스토리 장면 3" onerror="this.src='https://via.placeholder.com/300x200/111/333?text=이미지7:+사건+장면3'">
+                    <img src="../quests/images/q17_7.png" alt="스토리 장면 3" onerror="this.src='https://via.placeholder.com/300x200/f4f4f2/ccc?text=이미지7:+사건+장면3'">
                 </div>
             </div>
             
-            <b style="color: #bbb; line-height: 1.8; margin-top: 10px; display: block;">
-                대략적으로는 저 여자 캐릭터가 특정 사건에 휘말려 복수를 하고 있는 내용입니다. 자세한 것은 직접 확인해보세요. 총 <b>세 명의 인물</b>에 대한 스토리를 모두 마치고 나면 해당 캐릭터들과 작별을 하게 됩니다.
-            </b>
+            <p style="color: var(--wuxia-text-sub); line-height: 1.8; margin-top: 10px;">
+                대략적으로는 저 여자 캐릭터가 특정 사건에 휘말려 복수를 하고 있는 내용입니다. 자세한 것은 직접 확인해보세요. 총 <strong>세 명의 인물</strong>에 대한 스토리를 모두 마치고 나면 해당 캐릭터들과 작별을 하게 됩니다.
+            </p>
 
             <div class="wuxia-image-container" style="margin-top: 20px;">
-                <img src="../quests/images/q17_8.png" alt="퀘스트 완료 컷씬 및 보상" onerror="this.src='https://via.placeholder.com/800x400/111/333?text=이미지8:+엔딩+컷씬'">
+                <img src="../quests/images/q17_8.png" alt="퀘스트 완료 컷씬 및 보상" onerror="this.src='https://via.placeholder.com/800x400/f4f4f2/ccc?text=이미지8:+엔딩+컷씬'">
             </div>
             
-            <b style="color: var(--wuxia-accent-red); font-weight: bold; margin-top: 15px; display: block;">
-                짧은 컷씬 후 <b>'음의 선율'</b>을 보상으로 받을 수 있습니다.
-            </b>
+            <p style="color: var(--wuxia-accent-red); font-weight: bold; margin-top: 15px; font-size: 1.1em;">
+                짧은 컷씬 후 <strong>'음의 선율'</strong>을 보상으로 받을 수 있습니다.
+            </p>
         </div>
 
     </div>
 
     <div style="text-align: center; margin-top: 40px;">
         <button onclick="showQuestList()" 
-                style="background-color: transparent; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
-            <b>목록으로 돌아가기</b>
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
         </button>
     </div>
 

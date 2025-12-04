@@ -424,9 +424,19 @@ h3 {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
+/* [style.css] .status-bar 수정 */
+
 .status-bar {
     background-color: #f9f9f9;
     color: var(--wuxia-text-main);
+    
+    /* [수정] 자연스러운 슬라이딩 애니메이션 추가 */
+    transition: all 0.3s ease-in-out;
+    max-height: 100px; /* 넉넉한 최대 높이 */
+    opacity: 1;
+    overflow: hidden; /* 높이 변화 시 내용 숨김 */
+    
+    /* 기존 스타일 유지 */
     padding: 15px 20px;
     font-size: 0.95em;
     font-weight: bold;
@@ -434,6 +444,16 @@ h3 {
     text-align: center;
     flex-shrink: 0;
 }
+
+/* [추가] 숨겨졌을 때의 스타일 (높이 0, 패딩 0, 투명) */
+.status-bar.hidden {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    opacity: 0;
+}
+
 
 .inner-search-area {
     padding: 15px;

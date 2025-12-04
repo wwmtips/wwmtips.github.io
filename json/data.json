@@ -3,6 +3,21 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "최강의 초식동물", 
+      "answer": "코끼리",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "설날", 
+      "answer": "까치",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "플라밍고", 
+      "answer": "홍학",
+      "user":"ㅇㅇ"
+    },
+    { 
       "hint": "개울가", 
       "answer": "개구리",
       "user":"연갤러"

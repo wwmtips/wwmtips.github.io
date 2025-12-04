@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "고기", 
+      "answer": "소",
+      "user":"연갤러"
+    },
+    { 
       "hint": "러시아", 
       "answer": "곰",
       "user":"연갤러"

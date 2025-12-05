@@ -158,7 +158,7 @@
     "id": "q20",
     "name": "은빛 송곳니 해금",
     "location": "포산 호수",
-    "type": "세계관",
+    "type": "퀘스트",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q20.html"
   }

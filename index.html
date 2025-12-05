@@ -55,8 +55,8 @@
         <span class="icon"></span>족보
     </button>
     <button class="nav-item" id="nav-builder" onclick="switchTab('builder')">
-        <span class="icon"></span>빌더
-    </button>
+        <span class="icon"></span>도구
+        </button>
 </nav>
     </div>
 
@@ -189,86 +189,122 @@
 </div>
 
 <div id="view-builder" style="display: none;">
-    <div class="quest-detail-container" style="margin-top: 30px;">
+    
+    <div id="tools-menu" style="margin-top: 30px;">
+        <section class="large-font-chunk" style="cursor: pointer; margin-bottom: 20px;" 
+                 onclick="document.getElementById('tools-menu').style.display='none'; document.getElementById('builder-interface').style.display='block';">
+            <h2>나만의 빌드</h2>
+            <p>
+                무기, 심법, 비결 등 자유롭게 자신만의 빌드를 만들고 공유 하세요.
+            </p>
+            <button class="browse-button" style="pointer-events: none;">빌드 생성하기</button>
+        </section>
+
+        <section class="large-font-chunk" style="cursor: pointer;"
+                 onclick="window.open('https://yhellos3327-eng.github.io/wwmkoreamap/', '_blank')">
+            <h2>지도</h2>
+            <p>
+                지도를 통해 연운의 세계를 보다 자세히 들여다보세요.
+            </p>
+            <button class="browse-button" style="pointer-events: none;">지도 보러가기</button>
+        </section>
+    </div>
+
+    <div id="builder-interface" style="display: none;">
         
-        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">도구</span>
-            <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-                나만의 빌드
-            </h2>
-            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">원하는 장비와 무공을 조합하여 공유하세요.</p>
-        </div>
+        <button class="back-button" 
+                onclick="document.getElementById('builder-interface').style.display='none'; document.getElementById('tools-menu').style.display='block';">
+            ← 도구 선택으로 돌아가기
+        </button>
 
-        <div style="margin-bottom: 30px;">
+        <div class="quest-detail-container" style="margin-top: 10px;">
+            
+            <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+                <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">도구</span>
+                <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                    나만의 빌드
+                </h2>
+                <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">원하는 장비와 무공을 조합하여 공유하세요.</p>
+            </div>
     
-    <span class="slot-label">무기 및 무술 (2)</span>
-    <div class="slot-group">
-        <div class="slot-wrapper">
-            <div class="item-slot" onclick="openBuilderModal('weapons', 0)"><span>+</span><img id="slot-weapons-0" style="display:none;"></div>
-            <div class="slot-name" id="name-weapons-0"></div>
+            <div style="margin-bottom: 30px;">
+        
+        <span class="slot-label">무기 및 무술 (2)</span>
+        <div class="slot-group">
+            <div class="slot-wrapper">
+                <div class="item-slot" onclick="openBuilderModal('weapons', 0)"><span>+</span><img id="slot-weapons-0" style="display:none;"></div>
+                <div class="slot-name" id="name-weapons-0"></div>
+            </div>
+            <div class="slot-wrapper">
+                <div class="item-slot" onclick="openBuilderModal('weapons', 1)"><span>+</span><img id="slot-weapons-1" style="display:none;"></div>
+                <div class="slot-name" id="name-weapons-1"></div>
+            </div>
         </div>
-        <div class="slot-wrapper">
-            <div class="item-slot" onclick="openBuilderModal('weapons', 1)"><span>+</span><img id="slot-weapons-1" style="display:none;"></div>
-            <div class="slot-name" id="name-weapons-1"></div>
-        </div>
-    </div>
-
-    <span class="slot-label">심법 (4)</span>
-    <div class="slot-group">
-        <div class="slot-wrapper">
-            <div class="item-slot" onclick="openBuilderModal('hearts', 0)"><span>+</span><img id="slot-hearts-0" style="display:none;"></div>
-            <div class="slot-name" id="name-hearts-0"></div>
-        </div>
-        <div class="slot-wrapper">
-            <div class="item-slot" onclick="openBuilderModal('hearts', 1)"><span>+</span><img id="slot-hearts-1" style="display:none;"></div>
-            <div class="slot-name" id="name-hearts-1"></div>
-        </div>
-        <div class="slot-wrapper">
-            <div class="item-slot" onclick="openBuilderModal('hearts', 2)"><span>+</span><img id="slot-hearts-2" style="display:none;"></div>
-            <div class="slot-name" id="name-hearts-2"></div>
-        </div>
-        <div class="slot-wrapper">
-            <div class="item-slot" onclick="openBuilderModal('hearts', 3)"><span>+</span><img id="slot-hearts-3" style="display:none;"></div>
-            <div class="slot-name" id="name-hearts-3"></div>
-        </div>
-    </div>
-
-    <span class="slot-label">비결 (8)</span>
-    <div class="slot-group">
-        <div class="slot-wrapper">
-            <div class="item-slot" onclick="openBuilderModal('marts', 0)"><span>+</span><img id="slot-marts-0" style="display:none;"></div>
-            <div class="slot-name" id="name-marts-0"></div>
-        </div>
-        <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 1)"><span>+</span><img id="slot-marts-1" style="display:none;"></div><div class="slot-name" id="name-marts-1"></div></div>
-        <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 2)"><span>+</span><img id="slot-marts-2" style="display:none;"></div><div class="slot-name" id="name-marts-2"></div></div>
-        <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 3)"><span>+</span><img id="slot-marts-3" style="display:none;"></div><div class="slot-name" id="name-marts-3"></div></div>
-        <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 4)"><span>+</span><img id="slot-marts-4" style="display:none;"></div><div class="slot-name" id="name-marts-4"></div></div>
-        <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 5)"><span>+</span><img id="slot-marts-5" style="display:none;"></div><div class="slot-name" id="name-marts-5"></div></div>
-        <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 6)"><span>+</span><img id="slot-marts-6" style="display:none;"></div><div class="slot-name" id="name-marts-6"></div></div>
-        <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 7)"><span>+</span><img id="slot-marts-7" style="display:none;"></div><div class="slot-name" id="name-marts-7"></div></div>
-    </div>
-</div>
-<div class="builder-footer">
     
-    <div style="margin-bottom: 10px; text-align: left;">
-        <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px;">✍️ 빌드 이름 (선택)</span>
-        <input type="text" id="creator-name" placeholder="빌드명을 입력하세요." maxlength="10" 
-               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+        <span class="slot-label">심법 (4)</span>
+        <div class="slot-group">
+            <div class="slot-wrapper">
+                <div class="item-slot" onclick="openBuilderModal('hearts', 0)"><span>+</span><img id="slot-hearts-0" style="display:none;"></div>
+                <div class="slot-name" id="name-hearts-0"></div>
+            </div>
+            <div class="slot-wrapper">
+                <div class="item-slot" onclick="openBuilderModal('hearts', 1)"><span>+</span><img id="slot-hearts-1" style="display:none;"></div>
+                <div class="slot-name" id="name-hearts-1"></div>
+            </div>
+            <div class="slot-wrapper">
+                <div class="item-slot" onclick="openBuilderModal('hearts', 2)"><span>+</span><img id="slot-hearts-2" style="display:none;"></div>
+                <div class="slot-name" id="name-hearts-2"></div>
+            </div>
+            <div class="slot-wrapper">
+                <div class="item-slot" onclick="openBuilderModal('hearts', 3)"><span>+</span><img id="slot-hearts-3" style="display:none;"></div>
+                <div class="slot-name" id="name-hearts-3"></div>
+            </div>
+        </div>
+    
+        <span class="slot-label">비결 (8)</span>
+        <div class="slot-group">
+            <div class="slot-wrapper">
+                <div class="item-slot" onclick="openBuilderModal('marts', 0)"><span>+</span><img id="slot-marts-0" style="display:none;"></div>
+                <div class="slot-name" id="name-marts-0"></div>
+            </div>
+            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 1)"><span>+</span><img id="slot-marts-1" style="display:none;"></div><div class="slot-name" id="name-marts-1"></div></div>
+            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 2)"><span>+</span><img id="slot-marts-2" style="display:none;"></div><div class="slot-name" id="name-marts-2"></div></div>
+            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 3)"><span>+</span><img id="slot-marts-3" style="display:none;"></div><div class="slot-name" id="name-marts-3"></div></div>
+            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 4)"><span>+</span><img id="slot-marts-4" style="display:none;"></div><div class="slot-name" id="name-marts-4"></div></div>
+            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 5)"><span>+</span><img id="slot-marts-5" style="display:none;"></div><div class="slot-name" id="name-marts-5"></div></div>
+            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 6)"><span>+</span><img id="slot-marts-6" style="display:none;"></div><div class="slot-name" id="name-marts-6"></div></div>
+            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 7)"><span>+</span><img id="slot-marts-7" style="display:none;"></div><div class="slot-name" id="name-marts-7"></div></div>
+        </div>
     </div>
-
-    <button class="browse-button" onclick="generateBuildUrl()">🔗 빌드 주소 생성</button>
-    <input type="text" id="result-url" readonly onclick="this.select()">
-</div>
-
-
-
-<div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)" style="display:none;">
-    <div class="modal-content">
-        <h3 id="builder-modal-title" style="margin-top:0;">아이템 선택</h3>
-        <div id="builder-modal-list" class="item-list-grid"></div>
-        <button onclick="closeBuilderModal(null)" style="margin-top:20px; width:100%; padding:10px;">닫기</button>
+    <div class="builder-footer">
+        
+        <div style="margin-bottom: 10px; text-align: left;">
+            <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px;">✍️ 빌드 이름 (선택)</span>
+            <input type="text" id="creator-name" placeholder="빌드명을 입력하세요." maxlength="10" 
+                   style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+        </div>
+    
+        <button class="browse-button" onclick="generateBuildUrl()">🔗 빌드 주소 생성</button>
+        <input type="text" id="result-url" readonly onclick="this.select()">
     </div>
-</div>
+    
+    <div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)" style="display:none;">
+        <div class="modal-content">
+            <h3 id="builder-modal-title" style="margin-top:0;">아이템 선택</h3>
+            <div id="builder-modal-list" class="item-list-grid"></div>
+            <button onclick="closeBuilderModal(null)" style="margin-top:20px; width:100%; padding:10px;">닫기</button>
+        </div>
+    </div>
+    </div> </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if (new URLSearchParams(window.location.search).get('b')) {
+            document.getElementById('tools-menu').style.display = 'none';
+            document.getElementById('builder-interface').style.display = 'block';
+        }
+    });
+</script>
 
 
     </main>

@@ -3,6 +3,26 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "오각형", 
+      "answer": "불가사리",
+      "user":"당유련"
+    },
+    { 
+      "hint": "무술", 
+      "answer": "태극권",
+      "user":"당유련"
+    },
+    { 
+      "hint": "동서남북", 
+      "answer": "나침반",
+      "user":"슴치고도"
+    },
+    { 
+      "hint": "넓은 잎", 
+      "answer": "군자란",
+      "user":"슴치고도"
+    },
+    { 
       "hint": "혀", 
       "answer": "뱀",
       "user":"ㅇㅇ"

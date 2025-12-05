@@ -1,0 +1,166 @@
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-red); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">기연</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            흔들리는 붉은 꿈
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">지도 품고 있는 수수께끼를 풀어보자</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 기연의 시작</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            이번 기연은 <b>신선 나루의 주조장</b>에 진입하면 보물지도를 찾으라는 메세지와 함께 시작됩니다.<br>
+            주조장 입구로 들어가 오른쪽에 보이는 건물의 <b>두 번째 창고</b>로 들어가면 선반 위에 보물지도가 있습니다.
+        </p>
+    </div>
+
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q23_1.jpg" alt="트리거 위치">
+    </div>
+    
+    <div style="display: flex; gap: 10px;">
+        <div class="wuxia-image-container" style="flex: 1; margin-top: 0;">
+            <img src="../quests/images/q23_2.jpg" alt="창고">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            첫 번째 단서: 낚시꾼
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            해당 보물지도를 읽은 뒤 지도가 가리키는 곳으로 가면 <b>낚시꾼</b>이 있습니다.(아래 지도의 포인터 위치)<br>
+            말을 건 뒤 <b>낚시 대결</b>에서 이기면 다음 지도를 받을 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_4.jpg" alt="낚시꾼">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_5.jpg" alt="낚시꾼 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            두 번째 단서: 장군 사당
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            받은 보물지도를 읽어보면 <b>장군 사당</b>임을 알 수 있습니다.<br>
+            해당 위치에 있는 건물 앞 <b>장독대</b>를 파괴하면 다음 지도를 받을 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_6.jpg" alt="장군사당">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_7.jpg" alt="장군사당 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            세 번째 단서: 나무꾼
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            다음으로는 <b>소자령</b>에 위치한 아래 위치로 이동해 <b>나무꾼</b>과 대화 후 다음 지도를 받으면 됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_8.jpg" alt="나무꾼">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_9.jpg" alt="나무꾼 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            마지막 단서와 보상
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            받은 보물 지도를 읽어보면 <b>북쪽 대나무 숲</b>을 가리키고 있습니다.<br>
+            아래 위치로 가 <b>사냥꾼</b>과 대화하고, <b>활 쏘기 시합</b>에서 이기면 마지막 단서를 받을 수 있습니다.
+        </p>
+             <div class="wuxia-image-container">
+            <img src="../quests/images/q23_11.jpg" alt="나무꾼">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_12.jpg" alt="나무꾼 위치">
+        </div>
+        <div style="text-align: center; margin: 30px 0; padding: 20px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5;">
+            <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+                마지막 단서는 <b>주인공이 살던 은거지</b>를 가리키는데,<br>
+                은거지 뒤쪽으로 가면 마지막 편지와 함께 이 퀘스트의 비밀이 밝혀집니다.
+            </p>
+            
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_13.jpg" alt="의상">
+        </div>
+            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 10px;">
+                <i>! 퀘스트 내용 자체에 반전이 있어 자세한 내용은 생략합니다.</i>
+            </p>
+        </div>
+
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            퀘스트를 모두 완료하면 아래와 같은 <b>의상</b>이 해금됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q23_10.jpg" alt="의상">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

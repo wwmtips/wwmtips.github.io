@@ -1,17 +1,17 @@
 /* =========================================
-   style.css (최종 수정본: 수묵화/한지 라이트 테마)
+   style.css (최종 수정본: 도구 탭 카드 디자인 통합)
    ========================================= */
 
 /* 1. 폰트 및 기본 변수 설정 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
 
 :root {
-    /* [레어도 색상] - 흰 배경 가독성을 위해 전체적으로 톤 다운(진하게) */
-    --rarity-common: #555555;    /* 일반: 연한 회색 -> 진한 쥐색으로 변경 */
-    --rarity-uncommon: #2e7d32;  /* 고급: 짙은 녹색 */
-    --rarity-rare: #1565c0;      /* 희귀: 짙은 청색 */
-    --rarity-epic: #7b1fa2;      /* 에픽: 짙은 자색 */
-    --rarity-legendary: #e65100; /* 전설: 진한 주황색 (가독성 UP) */
+    /* [레어도 색상] */
+    --rarity-common: #555555;    
+    --rarity-uncommon: #2e7d32;  
+    --rarity-rare: #1565c0;      
+    --rarity-epic: #7b1fa2;      
+    --rarity-legendary: #e65100; 
     
     /* [수묵화(한지) 라이트 테마 팔레트] */
     --wuxia-bg-deep: #f4f4f2;     /* 배경: 미색 */
@@ -20,11 +20,11 @@
     
     --wuxia-border: #dcdcdc;      /* 경계선 */
     
-    --wuxia-accent-gold: #a08040; /* 강조: 기존보다 약간 더 어두운 금색 (글씨 잘 보이게) */
-    --wuxia-accent-red: #b71c1c;  /* 강조: 더 선명한 인주색 */
+    --wuxia-accent-gold: #a08040; /* 강조: 금색 */
+    --wuxia-accent-red: #b71c1c;  /* 강조: 인주색 */
     
-    --wuxia-text-main: #1a1a1a;   /* 텍스트: 거의 검정에 가까운 색 */
-    --wuxia-text-sub: #555555;    /* 보조 텍스트: 너무 흐리지 않게 진한 회색으로 변경 */
+    --wuxia-text-main: #1a1a1a;   /* 텍스트: 진한 검정 */
+    --wuxia-text-sub: #555555;    /* 보조 텍스트: 진한 회색 */
 }
 
 
@@ -34,7 +34,7 @@
 body {
     background-color: var(--wuxia-bg-deep);
     color: var(--wuxia-text-main);
-    font-family: 'Noto Serif KR', serif; /* 명조체 */
+    font-family: 'Noto Serif KR', serif;
     margin: 0;
     padding: 0;
 }
@@ -51,9 +51,9 @@ h2, h3, p, button, input {
     top: 0;
     width: 100%;
     z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.95); /* 배경: 반투명 흰색 */
+    background-color: rgba(255, 255, 255, 0.95);
     border-bottom: 1px solid var(--wuxia-border);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* 아주 연한 그림자 */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     backdrop-filter: blur(5px);
 }
 
@@ -64,11 +64,9 @@ h2, h3, p, button, input {
     align-items: center;
 }
 
-/* 로고: 어두운 배경용 필터 제거 */
 .logo-icon img {
     padding-top: 6px; 
     vertical-align: middle;
-    /* filter: sepia(0.3); <- 제거 */
 }
 
 /* 검색 컨테이너 */
@@ -76,7 +74,7 @@ h2, h3, p, button, input {
     display: flex;
     align-items: center;
     flex-grow: 1;
-    background-color: var(--wuxia-bg-deep); /* 배경색 변경 */
+    background-color: var(--wuxia-bg-deep);
     border: 1px solid transparent;
     border-radius: 4px;
     padding: 5px 15px;
@@ -92,7 +90,7 @@ h2, h3, p, button, input {
 
 #header-search-input {
     padding: 5px 0;
-    padding-right: 30px; /* X버튼 여백 */
+    padding-right: 30px;
     width: 100%;
     border: none;
     background-color: transparent;
@@ -102,7 +100,6 @@ h2, h3, p, button, input {
     font-family: inherit;
 }
 
-/* 검색창 X 버튼 */
 .search-clear-btn {
     position: absolute;
     right: 10px;
@@ -127,7 +124,7 @@ h2, h3, p, button, input {
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: #ffffff; /* 흰색 배경 */
+    background-color: #ffffff;
     border: 1px solid var(--wuxia-accent-gold); 
     border-top: none;
     border-radius: 0 0 4px 4px;
@@ -137,15 +134,6 @@ h2, h3, p, button, input {
     overflow-y: auto;
     margin-top: 5px;
     text-align: left;
-}
-
-.search-category-title {
-    padding: 10px 15px;
-    background-color: #f9f9f9;
-    color: var(--wuxia-accent-gold);
-    font-size: 0.8em;
-    font-weight: bold;
-    border-bottom: 1px solid #eee;
 }
 
 .search-result-item {
@@ -159,7 +147,7 @@ h2, h3, p, button, input {
 }
 
 .search-result-item:hover {
-    background-color: #fffcf5; /* 연한 금색 틴트 */
+    background-color: #fffcf5;
 }
 
 .result-text {
@@ -170,7 +158,6 @@ h2, h3, p, button, input {
     text-overflow: ellipsis;
 }
 
-/* 뱃지 */
 .badge {
     font-size: 0.7em;
     padding: 2px 6px;
@@ -193,7 +180,7 @@ h2, h3, p, button, input {
     padding-top: 10px;
     display: flex;
     gap: 25px;
-    background-color: rgba(255, 255, 255, 0.95); /* 헤더와 동일하게 */
+    background-color: rgba(255, 255, 255, 0.95);
 }
 
 .nav-item {
@@ -211,12 +198,12 @@ h2, h3, p, button, input {
 }
 
 .nav-item:hover {
-    color: var(--wuxia-text-main); /* 호버 시 검정 */
+    color: var(--wuxia-text-main);
 }
 
 .nav-item.active {
     color: var(--wuxia-text-main);
-    border-bottom: 3px solid var(--wuxia-accent-red); /* 인주색 밑줄 */
+    border-bottom: 3px solid var(--wuxia-accent-red);
 }
 
 /* =========================================
@@ -231,7 +218,7 @@ h2, h3, p, button, input {
 }
 
 /* 화면 전환 애니메이션 */
-#view-home, #view-quiz, #view-quest {
+#view-home, #view-quiz, #view-quest, #view-builder {
     animation: fadeIn 0.3s ease-in-out;
 }
 
@@ -239,53 +226,98 @@ h2, h3, p, button, input {
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* -----------------------------------------------------------
+   [중요] 소개 카드 및 도구(빌드/지도) 카드 스타일
+   ----------------------------------------------------------- */
 
-/* 소개 카드 (배경 이미지는 유지하되 오버레이 조정) */
-#intro-card.large-font-chunk {
+/* 1. 공통 레이아웃 및 텍스트 설정 (배경 이미지는 제외) */
+#intro-card.large-font-chunk,
+#tool-build-card.large-font-chunk,
+#tool-map-card.large-font-chunk {
     background-color: #fff;
     padding: 30px;
     border-radius: 4px;
     margin: 30px 0;
     border: 1px solid var(--wuxia-border);
-    background-image: url('images/bg.jpg'); 
+    
+    /* 공통 배경 설정 (이미지 URL은 개별 설정) */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* 그림자 추가 */
+    
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-#intro-card.large-font-chunk::before {
+/* 2. [수정] 개별 배경 이미지 설정 */
+/* (1) 홈 화면 메인 카드 */
+#intro-card.large-font-chunk {
+    background-image: url('images/bg_build.jpg'); 
+
+}
+
+/* (2) 도구: 나만의 빌드 카드 */
+#tool-build-card.large-font-chunk {
+    background-image: url('images/bg.png'); /* 여기에 '빌드'용 이미지 파일명을 넣으세요 */
+}
+
+/* (3) 도구: 지도 카드 */
+#tool-map-card.large-font-chunk {
+    background-image: url('images/bg.jpg');   /* 여기에 '지도'용 이미지 파일명을 넣으세요 */
+}
+
+
+/* 3. 배경 어둡게 처리 (오버레이) - 공통 유지 */
+#intro-card.large-font-chunk::before,
+#tool-build-card.large-font-chunk::before,
+#tool-map-card.large-font-chunk::before {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    /* 배경 이미지가 너무 튀지 않게 어두운 오버레이 유지 (텍스트 가독성 위해) */
     background-color: rgba(0, 0, 0, 0.6); 
     z-index: 1;
 }
 
-#intro-card.large-font-chunk h2,
-#intro-card.large-font-chunk p,
-#intro-card.large-font-chunk .browse-button {
+/* 4. 내부 컨텐츠를 오버레이 위로 올리기 - 공통 유지 */
+#intro-card.large-font-chunk > *,
+#tool-build-card.large-font-chunk > *,
+#tool-map-card.large-font-chunk > * {
     position: relative;
     z-index: 2;
 }
 
-#intro-card.large-font-chunk h2 {
+/* 5. 제목 및 본문 스타일 - 공통 유지 */
+#intro-card.large-font-chunk h2,
+#tool-build-card.large-font-chunk h2,
+#tool-map-card.large-font-chunk h2 {
     font-size: 2.2em;
     margin-bottom: 10px;
-    color: #fff; /* 배경 이미지 위라 흰색 유지 */
+    color: #fff; 
     text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
 }
 
-#intro-card.large-font-chunk p {
+#intro-card.large-font-chunk p,
+#tool-build-card.large-font-chunk p,
+#tool-map-card.large-font-chunk p {
     font-size: 0.9em;
     line-height: 1.6;
     color: #e0e0e0;
     margin-bottom: 25px;
 }
 
+/* 6. 도구 카드 호버 효과 */
+#tool-build-card.large-font-chunk:hover,
+#tool-map-card.large-font-chunk:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    border-color: var(--wuxia-accent-gold);
+}
+/* ----------------------------------------------------------- */
+
+
+/* 버튼 공통 스타일 */
 .browse-button {
     background-color: var(--wuxia-accent-gold);
     color: #fff;
@@ -302,7 +334,7 @@ h2, h3, p, button, input {
 }
 
 .browse-button:hover {
-    background-color: #9e7d4a; /* 조금 더 진하게 */
+    background-color: #9e7d4a;
 }
 
 /* 섹션 헤더 */
@@ -342,7 +374,7 @@ h3 {
     gap: 10px;
 }
 
-/* 뉴스 아이템 (카드 형태) */
+/* 뉴스 아이템 */
 .news-item {
     background-color: var(--wuxia-bg-panel);
     border: 1px solid var(--wuxia-border);
@@ -350,7 +382,7 @@ h3 {
     padding: 15px;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* 연한 그림자 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .news-item:hover {
@@ -424,19 +456,13 @@ h3 {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-/* [style.css] .status-bar 수정 */
-
 .status-bar {
     background-color: #f9f9f9;
     color: var(--wuxia-text-main);
-    
-    /* [수정] 자연스러운 슬라이딩 애니메이션 추가 */
     transition: all 0.3s ease-in-out;
-    max-height: 100px; /* 넉넉한 최대 높이 */
+    max-height: 100px; 
     opacity: 1;
-    overflow: hidden; /* 높이 변화 시 내용 숨김 */
-    
-    /* 기존 스타일 유지 */
+    overflow: hidden;
     padding: 15px 20px;
     font-size: 0.95em;
     font-weight: bold;
@@ -445,7 +471,6 @@ h3 {
     flex-shrink: 0;
 }
 
-/* [추가] 숨겨졌을 때의 스타일 (높이 0, 패딩 0, 투명) */
 .status-bar.hidden {
     max-height: 0;
     padding-top: 0;
@@ -453,7 +478,6 @@ h3 {
     border-bottom: none;
     opacity: 0;
 }
-
 
 .inner-search-area {
     padding: 15px;
@@ -518,14 +542,13 @@ h3 {
 }
 
 .highlight {
-    background-color: #ffe082; /* 형광펜 느낌 (노랑) */
+    background-color: #ffe082;
     color: #000;
     border-radius: 2px;
     padding: 0 2px;
     font-weight: bold;
 }
 
-/* 닉네임 무지개 반짝임 효과 */
 .rainbow-text {
     background: linear-gradient(to right, #ff0000, #ffa500, #ffff00, #008000, #0000ff, #4b0082, #ee82ee, #ff0000);
     background-size: 200% auto;
@@ -540,10 +563,8 @@ h3 {
 
 
 /* =========================================
-   7. 퀘스트 뷰 & 가이드 공통 (버튼 그리드 등)
+   7. 퀘스트 뷰 & 가이드 공통
    ========================================= */
-
-/* 가이드 그리드 메뉴 */
 .guide-grid-menu {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
@@ -552,16 +573,13 @@ h3 {
     margin-top: 20px; 
 }
 
-/* [NEW] 밝은 테마 버튼 스타일 (종이 카드 느낌) */
 .guide-item-btn {
     background-color: #ffffff;
     color: #333;
     border: 1px solid #ddd;
-    
     height: auto; 
     min-height: auto;
     padding: 12px 5px;
-    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -573,33 +591,30 @@ h3 {
     cursor: pointer;
     transition: all 0.2s;
     font-family: 'Noto Serif KR', serif;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* 미세한 그림자 */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .guide-item-btn:hover {
-    background-color: #fffcf5; /* 금색 틴트 */
+    background-color: #fffcf5;
     border-color: var(--wuxia-accent-gold);
     color: #8a6d3b;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* 활성화된 버튼 */
 .guide-item-btn.active {
-    background-color: #fffcf5; /* 아주 연한 미색 (또는 #fff) */
-    color: var(--wuxia-accent-gold); /* 글자색 금색 */
-    border: 1px solid var(--wuxia-accent-gold); /* 테두리 금색 */
-    box-shadow: 0 0 5px rgba(160, 128, 64, 0.2); /* 은은한 금색 그림자 */
+    background-color: #fffcf5;
+    color: var(--wuxia-accent-gold);
+    border: 1px solid var(--wuxia-accent-gold);
+    box-shadow: 0 0 5px rgba(160, 128, 64, 0.2);
 }
 
 .guide-item-btn.special {
-    background-color: #fff8e1; /* 아주 연한 노랑 */
+    background-color: #fff8e1;
     border: 1px solid #ffe082;
     color: #f57f17;
 }
 
-
-/* 퀘스트 리스트 영역 */
 #quest-list-view {
     margin-top: 0;
     padding-left: 0;
@@ -612,7 +627,6 @@ h3 {
     padding-bottom: 0px;
 }
 
-/* [NEW] 밝은 테마 퀘스트 카드 */
 .quest-card {
     display: flex;
     align-items: center;
@@ -676,7 +690,6 @@ h3 {
     border: 1px solid #ddd;
 }
 
-/* 상세 페이지 */
 .back-button {
     background: none;
     border: none;
@@ -702,7 +715,6 @@ h3 {
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* 페이지네이션 */
 .pagination-controls {
     display: flex;
     justify-content: center;
@@ -763,7 +775,6 @@ h3 {
     margin-bottom: 20px;
 }
 
-/* 교환 코드 리스트 */
 .code-list { display: flex; flex-direction: column; gap: 15px; }
 
 .code-card {
@@ -787,7 +798,7 @@ h3 {
 .code-text {
     font-size: 1.2em;
     font-weight: bold;
-    color: var(--wuxia-accent-red); /* 코드는 붉은색으로 강조 */
+    color: var(--wuxia-accent-red);
     margin-bottom: 5px;
     font-family: monospace;
     letter-spacing: 1px;
@@ -813,15 +824,12 @@ h3 {
 .copy-btn:hover { background-color: #e0e0e0; }
 .copy-btn:active { transform: scale(0.95); }
 
-/* 가이드 콘텐츠 영역 */
 .guide-page-container { padding-bottom: 50px; }
 #guide-dynamic-content {
     margin-top: 20px;
     padding-top: 20px;
-    /* border-top 제거됨 */
 }
 
-/* 반응형 */
 @media (min-width: 768px) {
     #recent-list.item-list-container, .quest-grid {
         display: grid;
@@ -835,6 +843,7 @@ h3 {
     .code-card { flex-direction: column; align-items: flex-start; gap: 10px; }
     .copy-btn { width: 100%; justify-content: center; margin-left: 0; }
 }
+
 /* =========================================
    빌더 (Builder) 스타일
    ========================================= */
@@ -938,73 +947,62 @@ h3 {
     word-break: keep-all;
     line-height: 1.2;
 }
-/* [style.css] 빌더 수정 및 추가 스타일 */
 
-/* 1. 슬롯과 이름을 감싸는 래퍼 (정렬용) */
 .slot-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 64px; /* 슬롯 너비와 맞춤 */
+    width: 64px; 
 }
 
-/* 2. 아이템 이름 스타일 */
 .slot-name {
     font-size: 0.75em;
     color: var(--wuxia-text-main);
     text-align: center;
     margin-top: 5px;
     line-height: 1.2;
-    word-break: keep-all; /* 단어 단위 줄바꿈 */
-    min-height: 2.4em;    /* 이름이 없어도 공간 확보 (레이아웃 틀어짐 방지) */
+    word-break: keep-all; 
+    min-height: 2.4em;
 }
 
-/* 3. 빌더 하단 버튼 영역 (여백 확보) */
 .builder-footer {
     margin-top: 30px;
-    padding-bottom: 50px; /* 버튼 아래 공간 확보 */
+    padding-bottom: 50px; 
 }
 
-/* [style.css] 생성된 주소 입력창 스타일 수정 */
 #result-url {
-    /* [핵심 수정] 패딩과 테두리를 너비에 포함시켜 튀어나가지 않게 함 */
     box-sizing: border-box; 
     width: 100%;            
     max-width: 100%;        
-
-    /* 디자인 스타일 */
     margin-top: 10px; 
-    padding: 12px; /* 버튼과 비슷하게 높이 맞춤 */
+    padding: 12px;
     border: 1px solid var(--wuxia-accent-gold);
     background-color: #f9f9f9;
     color: #555;
     font-size: 0.9em;
     border-radius: 4px;
-    
-    /* 기능 */
-    display: none; /* 평소엔 숨김 */
-    outline: none; /* 클릭 시 파란 테두리 제거 */
+    display: none; 
+    outline: none; 
 }
 
 #result-url:focus {
-    border-color: var(--wuxia-accent-red); /* 클릭 시 붉은색 강조 */
+    border-color: var(--wuxia-accent-red); 
     background-color: #fff;
 }
-/* [style.css] 모달창 내 이미 선택된 아이템 스타일 */
+
 .select-item.disabled {
-    opacity: 0.4;              /* 흐리게 처리 */
-    cursor: not-allowed;       /* 금지 커서 */
-    background-color: #e0e0e0; /* 회색 배경 */
-    border-color: #ccc;        /* 회색 테두리 */
-    pointer-events: none;      /* 클릭 방지 (중요) */
+    opacity: 0.4;              
+    cursor: not-allowed;       
+    background-color: #e0e0e0; 
+    border-color: #ccc;        
+    pointer-events: none;      
 }
 
-/* (선택 사항) 비활성화된 아이템 위에 '사용 중' 텍스트 표시 */
 .select-item.disabled::after {
     content: "사용 중";
     display: block;
     font-size: 0.7em;
-    color: #d32f2f; /* 붉은색 */
+    color: #d32f2f; 
     font-weight: bold;
     margin-top: 2px;
 }

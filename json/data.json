@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "매운맛", 
+      "answer": "마늘",
+      "user":"연갤러"
+    },
+    { 
       "hint": "오각형", 
       "answer": "불가사리",
       "user":"당유련"

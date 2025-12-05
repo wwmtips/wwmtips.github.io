@@ -185,5 +185,13 @@
     "type": "퀘스트",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q23.html"
+  },
+  {
+    "id": "q24",
+    "name": "고양이 우두머리의 고충",
+    "location": "자심선원",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q24.html"
   }
 ]

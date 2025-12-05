@@ -182,7 +182,7 @@
     "id": "q23",
     "name": "흔들리는 붉은 꿈",
     "location": "신선 나루",
-    "type": "기연",
+    "type": "퀘스트",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q23.html"
   }

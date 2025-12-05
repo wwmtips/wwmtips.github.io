@@ -4,7 +4,7 @@
     "name": "불광정 헛된 전설",
     "location": "청하",
     "type": "인연의 궤적",
-    "iconpath": "images/man.png",
+    "iconpath": "images/man.jpg",
     "filepath": "/quests/q1.html"
   },
   {
@@ -12,7 +12,7 @@
     "name": "은월산의 종 조각",
     "location": "청하",
     "type": "인연의 궤적",
-    "iconpath": "images/man.png",
+    "iconpath": "images/man.jpg",
     "filepath": "/quests/q2.html"
   },
   {
@@ -20,7 +20,7 @@
     "name": "청풍역의 변란",
     "location": "청하",
     "type": "인연의 궤적",
-    "iconpath": "images/man.png",
+    "iconpath": "images/man.jpg",
     "filepath": "/quests/q3.html"
   },
   {
@@ -28,7 +28,7 @@
     "name": "수금루 침공",
     "location": "청하",
     "type": "인연의 궤적",
-    "iconpath": "images/man.png",
+    "iconpath": "images/man.jpg",
     "filepath": "/quests/q4.html"
   },
   {
@@ -36,7 +36,7 @@
     "name": "현검",
     "location": "청하",
     "type": "인연의 궤적",
-    "iconpath": "images/man.png",
+    "iconpath": "images/man.jpg",
     "filepath": "/quests/q5.html"
   },
   {
@@ -44,7 +44,7 @@
     "name": "형연",
     "location": "청하",
     "type": "인연의 궤적",
-    "iconpath": "images/man.png",
+    "iconpath": "images/man.jpg",
     "filepath": "/quests/q6.html"
   },
   {
@@ -52,7 +52,7 @@
     "name": "전영이라는 자",
     "location": "청하",
     "type": "인연의 궤적",
-    "iconpath": "images/man.png",
+    "iconpath": "images/man.jpg",
     "filepath": "/quests/q7.html"
   },
   {
@@ -60,7 +60,7 @@
     "name": "최종 이야기",
     "location": "청하",
     "type": "인연의 궤적",
-    "iconpath": "images/man.png",
+    "iconpath": "images/man.jpg",
     "filepath": "/quests/q8.html"
   },
   {

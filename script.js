@@ -805,9 +805,8 @@ function loadViewer() {
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');
 }
-
 /* =========================================
-   [기능] 빌드 이미지 다운로드 (수정됨: 보안 옵션 강화)
+   [기능] 빌드 이미지 다운로드 (수정됨: 출처 추가)
    ========================================= */
 function downloadBuildImage() {
     const element = document.getElementById("capture-area"); 
@@ -825,44 +824,57 @@ function downloadBuildImage() {
     btn.innerText = "🖼️ 변환 중...";
     btn.disabled = true;
 
-    // [핵심] 캡처 옵션 강화
     const options = {
-        scale: 2,               // 2배 해상도
-        backgroundColor: "#f4f4f2", // 배경색 (투명 방지, 테마색 적용)
-        useCORS: true,          // [중요] 이미지 로드 보안 허용
-        allowTaint: true,       // [중요] 로컬 이미지 허용 시도
-        logging: true,          // 디버그 로그 켜기 (F12 콘솔에서 확인 가능)
-        imageTimeout: 0,        // 이미지 로딩 대기 시간 제거
+        scale: 2,               
+        backgroundColor: "#f4f4f2", 
+        useCORS: true,          
+        allowTaint: true,       
+        logging: false,          
+        
+        // [핵심] 캡처 직전, 복제된 화면(Clone)을 조작하여 출처 추가
+        onclone: (clonedDoc) => {
+            const clonedArea = clonedDoc.getElementById("capture-area");
+            
+            // 출처 푸터 생성
+            const footer = clonedDoc.createElement('div');
+            footer.style.marginTop = "30px";
+            footer.style.paddingTop = "15px";
+            footer.style.borderTop = "1px solid #ccc";
+            footer.style.textAlign = "center";
+            footer.style.color = "#555";
+            footer.style.fontFamily = "'Noto Serif KR', serif";
+            footer.style.fontSize = "0.9em";
+            
+            // 텍스트 내용 설정
+            footer.innerHTML = "출처: <strong style='color:#a08040;'>연운 한국 위키</strong> (wwm.tips)";
+            
+            // 복제된 영역 맨 아래에 추가 (화면엔 안 보이고 이미지에만 찍힘)
+            clonedArea.appendChild(footer);
+        }
     };
 
-    // 약간의 딜레이를 주어 이미지가 확실히 로드된 후 캡처
     setTimeout(() => {
         html2canvas(element, options).then(canvas => {
             try {
-                // 캔버스를 이미지 URL로 변환
                 const imgData = canvas.toDataURL("image/jpeg", 0.9);
-                
-                // 다운로드 트리거
                 const link = document.createElement("a");
                 link.download = `${fileName}.jpg`;
                 link.href = imgData;
-                document.body.appendChild(link); // 파이어폭스 호환성
+                document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
 
-                // 성공 시 버튼 복구
                 btn.innerText = originalText;
                 btn.disabled = false;
             } catch (e) {
-                // toDataURL 보안 에러 발생 시 (주로 로컬 파일 실행 시)
                 console.error("보안 에러 발생:", e);
-                alert("브라우저 보안 문제로 저장이 차단되었습니다.\n(파일을 직접 열지 말고 웹 서버/Live Server를 통해 실행하세요.)");
+                alert("브라우저 보안 문제로 저장이 차단되었습니다.\n(서버 환경에서 실행해주세요.)");
                 btn.innerText = "저장 실패";
                 btn.disabled = false;
             }
         }).catch(err => {
             console.error("html2canvas 캡처 실패:", err);
-            alert("이미지 변환 중 오류가 발생했습니다.\n개발자 도구(F12)의 Console 내용을 확인해주세요.");
+            alert("이미지 변환 중 오류가 발생했습니다.");
             btn.innerText = originalText;
             btn.disabled = false;
         });

@@ -169,5 +169,13 @@
     "type": "세계관",
     "iconpath": "images/story.jpg",
     "filepath": "/quests/q21.html"
+  },
+  {
+    "id": "q22",
+    "name": "대협의 시련",
+    "location": "대나무 숲",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q22.html"
   }
 ]

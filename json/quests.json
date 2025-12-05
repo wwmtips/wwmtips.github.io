@@ -161,5 +161,13 @@
     "type": "퀘스트",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q20.html"
+  },
+  {
+    "id": "q21",
+    "name": "구오대사 - 왕청 전",
+    "location": "후진",
+    "type": "세계관",
+    "iconpath": "images/story.jpg",
+    "filepath": "/quests/q21.html"
   }
 ]

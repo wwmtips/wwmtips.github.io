@@ -177,5 +177,13 @@
     "type": "만사록",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q22.html"
+  },
+  {
+    "id": "q23",
+    "name": "흔들리는 붉은 꿈",
+    "location": "신선 나루",
+    "type": "기연",
+    "iconpath": "images/world.jpg",
+    "filepath": "/quests/q20.html"
   }
 ]

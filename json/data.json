@@ -2,6 +2,13 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "푸른 잎", "answer": "시금치", "user": "무명" },
+{ "hint": "여성 장군", "answer": "뮬란", "user": "3성갈리오" },
+  { "hint": "초밥", "answer": "참치", "user": "ㅇㅇ" },
+  { "hint": "늑대", "answer": "허스키", "user": "ㅇㅇ" },
+  { "hint": "검은 머리카락", "answer": "폴리고눔 멀티플로룸", "user": "ㅇㅇ" },
+  { "hint": "대나무 생선 용기", "answer": "생선 바구니", "user": "ㅇㅇ" },
+  { "hint": "질긴 생명력", "answer": "차전초", "user": "ㅇㅇ" },
     { 
       "hint": "활동", 
       "answer": "비글",

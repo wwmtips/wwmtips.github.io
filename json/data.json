@@ -3,6 +3,21 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "둥근 꽃", 
+      "answer": "수국",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "붉은 살", 
+      "answer": "연어",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "목제", 
+      "answer": "상자",
+      "user":"ㅇㅇ"
+    },
+    { 
       "hint": "달콤한 향기", 
       "answer": "자스민",
       "user":"연갤러"

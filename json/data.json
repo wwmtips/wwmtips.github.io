@@ -2,7 +2,11 @@
   "items": [],
   "quests": [],
   "quiz": [
-    
+    { 
+      "hint": "왜소한", 
+      "answer": "땃쥐",
+      "user":"네로씨"
+    },
   { "hint": "흰색 과육", "answer": "배", "user": "Los" },
   { "hint": "튀김", "answer": "감자", "user": "Los" },
   { "hint": "유인원", "answer": "고릴라", "user": "Los" },

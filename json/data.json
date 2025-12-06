@@ -2,7 +2,31 @@
   "items": [],
   "quests": [],
   "quiz": [
-    
+{ 
+      "hint": "복숭아", 
+      "answer": "복숭아 꽃",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "놀이터", 
+      "answer": "그네",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "야행성", 
+      "answer": "올빼미",
+      "user":"ㅇㅇ"
+    },
+    { 
+      "hint": "싹", 
+      "answer": "정향",
+      "user":"ㅇㅇ"
+    },
+  { 
+      "hint": "공부", 
+      "answer": "탁자",
+      "user":"네로씨"
+    },
   {
     "hint": "먹을 수 있는",
     "answer": "잠두",

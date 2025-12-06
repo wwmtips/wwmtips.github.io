@@ -2,6 +2,157 @@
   "items": [],
   "quests": [],
   "quiz": [
+    
+  {
+    "hint": "먹을 수 있는",
+    "answer": "잠두",
+    "user": "Los"
+  },
+  {
+    "hint": "양몰이",
+    "answer": "웰시코기",
+    "user": "Los"
+  },
+  {
+    "hint": "무기",
+    "answer": "채찍",
+    "user": "Los"
+  },
+  {
+    "hint": "바늘",
+    "answer": "나침반",
+    "user": "Los"
+  },
+  {
+    "hint": "향기",
+    "answer": "녹나무",
+    "user": "Los"
+  },
+  {
+    "hint": "땅의 달걀",
+    "answer": "토란",
+    "user": "Los"
+  },
+  {
+    "hint": "라이딩",
+    "answer": "헬멧",
+    "user": "Los"
+  },
+  {
+    "hint": "녹색",
+    "answer": "군자란",
+    "user": "Los"
+  },
+  {
+    "hint": "약재",
+    "answer": "계피",
+    "user": "Los"
+  },
+  {
+    "hint": "초원",
+    "answer": "얼룩말",
+    "user": "Los"
+  },
+  {
+    "hint": "바다 포유류",
+    "answer": "물범",
+    "user": "Los"
+  },
+  {
+    "hint": "여러해살이",
+    "answer": "만년청",
+    "user": "Los"
+  },
+  {
+    "hint": "무늬",
+    "answer": "치타",
+    "user": "Los"
+  },
+  {
+    "hint": "미용",
+    "answer": "빗",
+    "user": "Los"
+  },
+  {
+    "hint": "여름",
+    "answer": "수국",
+    "user": "Los"
+  },
+  {
+    "hint": "보석",
+    "answer": "진주",
+    "user": "Los"
+  },
+  {
+    "hint": "한쪽으로 몰린 눈",
+    "answer": "광어",
+    "user": "Los"
+  },
+  {
+    "hint": "건강",
+    "answer": "마늘",
+    "user": "Los"
+  },
+  {
+    "hint": "스포츠",
+    "answer": "승마",
+    "user": "Los"
+  },
+  {
+    "hint": "스팀",
+    "answer": "다리미",
+    "user": "Los"
+  },
+  {
+    "hint": "가을에 피는 꽃",
+    "answer": "국화",
+    "user": "Los"
+  },
+  {
+    "hint": "괴력",
+    "answer": "고릴라",
+    "user": "Los"
+  },
+  {
+    "hint": "여름",
+    "answer": "풍경",
+    "user": "Los"
+  },
+  {
+    "hint": "Y자 손잡이",
+    "answer": "새총",
+    "user": "Los"
+  },
+  {
+    "hint": "점프",
+    "answer": "귀뚜라미",
+    "user": "Los"
+  },
+  {
+    "hint": "태극",
+    "answer": "음양",
+    "user": "Los"
+  },
+  {
+    "hint": "흑백 줄무늬",
+    "answer": "얼룩말",
+    "user": "Los"
+  },
+  {
+    "hint": "꽃의 왕",
+    "answer": "모란",
+    "user": "Los"
+  },
+  {
+    "hint": "탈피",
+    "answer": "뱀",
+    "user": "Los"
+  },
+  {
+    "hint": "검은 씨앗",
+    "answer": "수박 씨앗",
+    "user": "Los"
+  },
     { 
       "hint": "둥근 꽃", 
       "answer": "수국",

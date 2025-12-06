@@ -173,34 +173,52 @@ function loadData() {
     });
 }
 
-// 족보 카운터 업데이트 함수 분리
+// 족보 카운터 업데이트 함수 (1~3위 표시 수정)
 function updateQuizCounter() {
     const counter = document.getElementById('quiz-counter-area');
-    if(counter && globalData.quiz.length > 0) {
+    if (counter && globalData.quiz.length > 0) {
         const userCounts = {};
+        
+        // 유저별 개수 집계
         globalData.quiz.forEach(item => {
-            if (item.user && item.user.trim() !== "") {
+            if (item.user && item.user.trim() !== "" && item.user !== "-") {
                 const u = item.user.trim();
                 userCounts[u] = (userCounts[u] || 0) + 1;
             }
         });
-        let topUser = null;
-        let maxCount = 0;
-        for (const [user, count] of Object.entries(userCounts)) {
-            if (count > maxCount) {
-                maxCount = count;
-                topUser = user;
-            }
-        }
+
+        // 내림차순 정렬 후 상위 3명 추출
+        const sortedUsers = Object.entries(userCounts)
+            .sort((a, b) => b[1] - a[1]) // 개수 많은 순 정렬
+            .slice(0, 3); // 상위 3명만 자르기
+
         let message = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
-        if (topUser) {
-            message += `<br><span style="font-size: 0.8em; color: #888; font-weight: normal;">
-                (👑 강호의 고수: <strong class="rainbow-text">${topUser}</strong>님 - ${maxCount}개)
-            </span>`;
+
+        if (sortedUsers.length > 0) {
+            message += `<br><div style="font-size: 0.9em; margin-top: 5px; color: #888; font-weight: normal;">`;
+
+            // 1위 (무지개 이펙트 적용)
+            const [user1, count1] = sortedUsers[0];
+            message += `👑 <strong class="rainbow-text">${user1}</strong> <span style="font-size:0.8em">(${count1})</span>`;
+
+            // 2위 (이펙트 없음)
+            if (sortedUsers.length > 1) {
+                const [user2, count2] = sortedUsers[1];
+                message += ` &nbsp;|&nbsp; 🥈 ${user2} <span style="font-size:0.8em">(${count2})</span>`;
+            }
+
+            // 3위 (이펙트 없음)
+            if (sortedUsers.length > 2) {
+                const [user3, count3] = sortedUsers[2];
+                message += ` &nbsp;|&nbsp; 🥉 ${user3} <span style="font-size:0.8em">(${count3})</span>`;
+            }
+
+            message += `</div>`;
         }
         counter.innerHTML = message;
     }
 }
+
 
 // =========================================
 // 탭 전환 및 뷰 제어

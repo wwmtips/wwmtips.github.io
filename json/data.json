@@ -3,6 +3,11 @@
   "quests": [],
   "quiz": [
     { 
+      "hint": "활동", 
+      "answer": "비글",
+      "user":"윤곰"
+    },
+    { 
       "hint": "왜소한", 
       "answer": "땃쥐",
       "user":"네로씨"

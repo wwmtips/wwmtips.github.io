@@ -2,6 +2,18 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "완전변태", 
+      "answer": "나비", 
+      "user": "맹글" 
+    },
+    { "hint": "대나무 새싹", 
+      "answer": "죽순", 
+      "user": "맹글" 
+    },
+    { "hint": "애완동물", 
+      "answer": "앵무새", 
+      "user": "ㅇㅇ" 
+    },
     { "hint": "히말라야", 
       "answer": "야크", 
       "user": "ㅇㅇ" 

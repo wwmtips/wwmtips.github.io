@@ -2,6 +2,15 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "비오는날", 
+      "answer": "지렁이", 
+      "user": "ㅇㅇ" 
+    },
+    { "hint": "장마철", 
+      "answer": "수국", 
+      "user": "ㅇㅇ" 
+    },
+
     { "hint": "손바닥 모양", "answer": "단풍나무", "user": "ㅇㄱㅆㄷ" },
 { "hint": "은은한 향", "answer": "찔레꽃", "user": "ㅇㄱㅆㄷ" },
 { "hint": "긴 주둥이", "answer": "해마", "user": "ㅇㄱㅆㄷ" },

@@ -201,5 +201,13 @@
     "type": "만사록",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q25.html"
+  },
+  {
+    "id": "q26",
+    "name": "잎생죽",
+    "location": "남문대로",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q26.html"
   }
 ]

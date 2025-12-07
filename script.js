@@ -152,14 +152,11 @@ function loadHomeSlider() {
             return response.json();
         })
         .then(data => {
-         // 데이터 형식이 배열인지 객체인지 확인 후 처리
-const newsList = Array.isArray(data) ? data : (data.news || []);
+            // 데이터 형식이 배열인지 객체인지 확인 후 처리
+            const newsList = Array.isArray(data) ? data : (data.news || []);
+            const sliderData = newsList.slice(0, 3); // 최신 5개
 
-// [수정됨] 데이터를 역순으로 뒤집고 최대 3개만 가져오기
-// ([...newsList]를 사용하여 원본 배열 손상 방지)
-const sliderData = [...newsList].reverse().slice(0, 3); 
-
-if (sliderData.length === 0) return;
+            if (sliderData.length === 0) return;
 
             sliderData.forEach((news, index) => {
                 // 태그 자동 생성

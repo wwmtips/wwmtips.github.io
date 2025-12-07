@@ -259,7 +259,7 @@ function switchTab(tabName) {
     } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
-        history.pushState(null, null, '?tab=news');
+        history.pushState(null, null, '?tab=guide');
     } 
     else if (tabName === 'guide' || tabName === 'code') {
         const guideView = document.getElementById('view-guide');

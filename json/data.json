@@ -2,6 +2,11 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "손바닥 모양", "answer": "단풍나무", "user": "ㅇㄱㅆㄷ" },
+{ "hint": "은은한 향", "answer": "찔레꽃", "user": "ㅇㄱㅆㄷ" },
+{ "hint": "긴 주둥이", "answer": "해마", "user": "ㅇㄱㅆㄷ" },
+{ "hint": "다홍색", "answer": "봉선화", "user": "ㅇㄱㅆㄷ" },
+
     { "hint": "시간의 흐름", "answer": "모래시계", "user": "ㅇㅇ" },
 { "hint": "음주", "answer": "술주전자", "user": "ㅇㅇ" },
 { "hint": "반얀나무", "answer": "벵골보리수", "user": "ㅇㅇ" },

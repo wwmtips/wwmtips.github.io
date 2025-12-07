@@ -2,6 +2,10 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "히말라야", 
+      "answer": "야크", 
+      "user": "ㅇㅇ" 
+    },
     { "hint": "쌀 밥", 
       "answer": "벼", 
       "user": "ㅇㅇ" 

@@ -160,7 +160,7 @@ function loadHomeSlider() {
 
             sliderData.forEach((news, index) => {
                 // 태그 자동 생성
-                let tag = "NEWS";
+                let tag = "공지";
                 if (news.title.includes("업데이트")) tag = "업데이트";
                 else if (news.title.includes("이벤트")) tag = "이벤트";
                 else if (news.title.includes("출시") || news.title.includes("공지")) tag = "공지";

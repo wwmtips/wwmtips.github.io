@@ -8,6 +8,27 @@ let currentPage = 1;
 const itemsPerPage = 12;
 let isGuideLoaded = false;
 
+// [최적화] URL 파라미터 업데이트 함수 (주소가 바뀔 때만 기록)
+function updateUrlQuery(tab, id) {
+    const url = new URL(window.location);
+    
+    // tab 설정
+    if (tab) url.searchParams.set('tab', tab);
+    
+    // id 설정 (있으면 넣고, 없으면 지움)
+    if (id) {
+        url.searchParams.set('id', id);
+    } else {
+        url.searchParams.delete('id');
+    }
+    
+    // [중요] 현재 주소와 다를 때만 pushState 실행 (뒤로가기 지옥 방지)
+    if (url.toString() !== window.location.href) {
+        history.pushState(null, '', url);
+    }
+}
+
+
 // 데이터 저장소
 let globalData = { items: [], quiz: [], quests: [], news: [] };
 let builderData = null; 
@@ -239,7 +260,7 @@ function switchTab(tabName) {
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
-        history.pushState(null, null, '?tab=home'); 
+        updateUrlQuery('home');  
     } 
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
@@ -255,7 +276,7 @@ function switchTab(tabName) {
         const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
         if (allBtn) filterQuestType('all', allBtn);
         
-        history.pushState(null, null, '?tab=quest');
+updateUrlQuery('quest', null);
     } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
@@ -483,7 +504,13 @@ function renderHomeQuests(quests) {
 function createQuestCard(quest, container) {
     const card = document.createElement('div');
     card.className = 'quest-card';
-    card.onclick = () => { switchTab('quest'); loadQuestDetail(quest.filepath); };
+    
+    // [수정] onclick에서 quest.id도 함께 전달
+    card.onclick = () => { 
+        switchTab('quest'); 
+        loadQuestDetail(quest.filepath, quest.id); 
+    };
+    
     card.innerHTML = `
         <div class="quest-icon-wrapper">
             <img src="${quest.iconpath}" alt="icon" onerror="this.src='images/logo.png'">
@@ -534,10 +561,16 @@ function changePage(page) {
     document.getElementById('quest-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 
-function loadQuestDetail(filepath) {
+// [수정] id 파라미터 추가 및 URL 업데이트 호출
+function loadQuestDetail(filepath, id) { // id 파라미터 추가됨
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
     const contentBox = document.getElementById('quest-content-loader');
+
+    // 주소창 업데이트 (예: ?tab=quest&id=q1)
+    if (id) {
+        updateUrlQuery('quest', id);
+    }
 
     if(listView) listView.style.display = 'none';
     if(detailView) detailView.style.display = 'block';
@@ -545,8 +578,11 @@ function loadQuestDetail(filepath) {
 
     fetch(filepath).then(res => res.text()).then(html => {
         if(contentBox) contentBox.innerHTML = html;
+        // 상세 페이지 로드 시 스크롤 최상단으로 이동 (선택사항)
+        window.scrollTo(0, 0);
     });
 }
+
 
 function showQuestList() {
     const listView = document.getElementById('quest-list-view');
@@ -620,10 +656,12 @@ function handleGlobalSearch(e) {
         .slice(0, 3).forEach(item => {
             resultsHTML += `<div class="search-result-item" onclick="selectGlobalResult('${item.hint}')"><span class="badge quiz">족보</span><span class="result-text">${item.hint} - ${item.answer}</span></div>`;
         });
-    globalData.quests.filter(q => q.name.toLowerCase().includes(keyword) || q.location.toLowerCase().includes(keyword))
-        .slice(0, 3).forEach(quest => {
-            resultsHTML += `<div class="search-result-item" onclick="selectQuestResult('${quest.filepath}')"><span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span></div>`;
-        });
+    // [수정] onclick에 quest.id 추가
+globalData.quests.filter(q => q.name.toLowerCase().includes(keyword) || q.location.toLowerCase().includes(keyword))
+    .slice(0, 3).forEach(quest => {
+        resultsHTML += `<div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')"><span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span></div>`;
+    });
+
 
     resultContainer.innerHTML = resultsHTML || `<div class="no-result" style="padding:15px; text-align:center; color:#888;">결과 없음</div>`;
     resultContainer.style.display = 'block';
@@ -636,11 +674,13 @@ function selectGlobalResult(keyword) {
     document.getElementById("global-search-results").style.display = 'none';
 }
 
-function selectQuestResult(filepath) {
+// [수정] id 파라미터 추가
+function selectQuestResult(filepath, id) {
     switchTab('quest');
-    loadQuestDetail(filepath);
+    loadQuestDetail(filepath, id); // id 전달
     document.getElementById("global-search-results").style.display = 'none';
 }
+
 
 /* =========================================
    [기능] 빌더 (Builder)

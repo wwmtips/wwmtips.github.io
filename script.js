@@ -1149,69 +1149,148 @@ slideDiv.onclick = () => {
 
     startSlider();
 }
+// 슬라이더 상태 변수
+let currentSlideIndex = 0;
+let slideInterval;
 
-/* script.js 내 loadHomeMaps 함수 수정 */
-
-function loadHomeMaps() {
-    const mapList = document.getElementById('home-map-list');
-    if (!mapList) return;
+// 1. news.json 데이터를 불러와 슬라이더 생성
+function loadHomeSlider() {
+    const track = document.getElementById('hero-slider-track');
+    const indicators = document.getElementById('slider-indicators');
     
-    mapList.innerHTML = ''; // 초기화
+    if (!track) return;
 
-    dummyMapData.forEach(map => {
-        const card = document.createElement('a');
-        card.className = 'map-card'; // CSS 클래스
-        card.href = map.link;
-        card.target = "_blank";
+    // 초기화
+    track.innerHTML = '';
+    indicators.innerHTML = '';
 
-        // [수정 포인트] img 태그 대신 div에 background-image 적용
-        card.innerHTML = `
-            <div class="map-hero-bg" style="background-image: url('${map.image}');"></div>
-            <div class="map-content">
-                <div class="map-title">${map.title}</div>
-                <p class="map-desc">${map.desc}</p>
-            </div>
-        `;
-        mapList.appendChild(card);
-    });
+    // 실제 데이터 Fetch
+    fetch('news.json')
+        .then(response => {
+            if (!response.ok) throw new Error("네트워크 응답 실패");
+            return response.json();
+        })
+        .then(data => {
+            // 최신 5개만 슬라이더에 표시
+            const sliderData = data.slice(0, 5);
+            
+            if (sliderData.length === 0) return;
+
+            sliderData.forEach((news, index) => {
+                // 1) 태그 자동 생성 로직 (news.json에 tag가 없으므로 제목기반 추론)
+                let tag = "NEWS";
+                if (news.title.includes("업데이트")) tag = "업데이트";
+                else if (news.title.includes("이벤트")) tag = "이벤트";
+                else if (news.title.includes("출시") || news.title.includes("공지")) tag = "공지";
+                else if (news.title.includes("노트")) tag = "개발자 노트";
+
+                // 2) 본문 미리보기 텍스트 정리 (HTML 태그 제거)
+                const cleanDesc = news.content.replace(/<[^>]*>?/gm, ' ').substring(0, 80) + '...';
+                
+                // 3) 슬라이드 요소 생성
+                const slideDiv = document.createElement('div');
+                slideDiv.className = 'hero-slide';
+                // 이미지 경로가 없으면 기본 이미지 사용
+                const bgImage = news.image ? news.image : 'images/bg.jpg';
+                slideDiv.style.backgroundImage = `url('${bgImage}')`;
+                
+                slideDiv.innerHTML = `
+                    <div class="slide-content">
+                        <span class="slide-tag">${tag}</span>
+                        <h2 class="slide-title">${news.title}</h2>
+                        <p class="slide-desc">${cleanDesc}</p>
+                        <button class="slide-link-btn">자세히 보기 ↗</button>
+                    </div>
+                `;
+                
+                // 4) 클릭 이벤트 처리 (외부링크, 탭이동, 가이드로드)
+                slideDiv.onclick = () => {
+                    const link = news.link || '#';
+
+                    if (link.startsWith('guide:')) {
+                        // "guide:파일명.html" 형식
+                        const fileName = link.split(':')[1];
+                        switchTab('guide');
+                        setTimeout(() => {
+                            if (typeof loadGuideContent === 'function') loadGuideContent(fileName);
+                        }, 100);
+                    } else if (link.startsWith('tab:')) {
+                        // "tab:탭이름" 형식
+                        const targetTab = link.split(':')[1];
+                        switchTab(targetTab);
+                    } else {
+                        // 일반 URL
+                        window.open(link, '_blank');
+                    }
+                };
+
+                track.appendChild(slideDiv);
+
+                // 5) 인디케이터(점) 생성
+                const dot = document.createElement('div');
+                dot.className = `indicator ${index === 0 ? 'active' : ''}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation(); // 버블링 방지
+                    goToSlide(index);
+                };
+                indicators.appendChild(dot);
+            });
+
+            // 데이터 로딩 후 슬라이더 시작
+            startSlider();
+        })
+        .catch(error => {
+            console.error('뉴스 데이터를 불러오는데 실패했습니다:', error);
+            track.innerHTML = '<div style="color:white; text-align:center; padding-top:100px;">데이터를 불러올 수 없습니다.</div>';
+        });
 }
 
-// (3) 슬라이더 조작 함수들
+// 2. 슬라이드 이동 (DOM 요소 개수 기반으로 수정됨)
 function moveSlide(direction) {
-    const totalSlides = dummyNewsData.length;
+    const track = document.getElementById('hero-slider-track');
+    if (!track || track.children.length === 0) return;
+
+    const totalSlides = track.children.length; // 실제 생성된 슬라이드 개수
     currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+    
     updateSliderPosition();
     resetSliderTimer();
 }
 
+// 3. 특정 슬라이드로 점프
 function goToSlide(index) {
     currentSlideIndex = index;
     updateSliderPosition();
     resetSliderTimer();
 }
 
+// 4. 화면 업데이트
 function updateSliderPosition() {
     const track = document.getElementById('hero-slider-track');
     const indicators = document.querySelectorAll('.indicator');
+    
     if (track) {
         track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
     }
+    
     indicators.forEach((dot, idx) => {
         if (idx === currentSlideIndex) dot.classList.add('active');
         else dot.classList.remove('active');
     });
 }
 
+// 5. 타이머 제어
 function startSlider() {
     if (slideInterval) clearInterval(slideInterval);
-    slideInterval = setInterval(() => moveSlide(1), 5000);
+    slideInterval = setInterval(() => {
+        moveSlide(1);
+    }, 5000); // 5초 대기
 }
 
 function resetSliderTimer() {
     if (slideInterval) clearInterval(slideInterval);
     startSlider();
 }
-
 // === [초기화] 페이지 로드 시 실행 ===
 // 이 부분은 script.js 하단 혹은 switchTab 함수 내에 위치해야 합니다.
 document.addEventListener("DOMContentLoaded", () => {

@@ -47,7 +47,7 @@
     <div id="fixed-top-bar">
         <header id="main-header">
             <div class="logo">
-                <span class="logo-icon"><a href="#" onclick="switchTab('guide'); return false;"><img src="images/logo.png" width="36px" height="36px" alt="로고"></a></span> 
+                <span class="logo-icon"><a href="#" onclick="switchTab('home'); return false;"><img src="images/logo.png" width="36px" height="36px" alt="로고"></a></span> 
             </div>
             
          <div class="search-container">
@@ -58,26 +58,51 @@
         </header>
 
      <nav id="category-nav">
-    <button class="nav-item active" id="nav-code" onclick="switchTab('guide')">
+    <button class="nav-item active" id="nav-home" onclick="switchTab('home')">
         <span class="icon"></span>홈
     </button>
-    
+<button class="nav-item" id="nav-code" onclick="switchTab('guide')">
+        <span class="icon"></span>가이드
+ </button>
     <button class="nav-item" id="nav-quest" onclick="switchTab('quest')">
         <span class="icon"></span>무림록
     </button>
     <button class="nav-item" id="nav-quiz" onclick="switchTab('quiz')">
         <span class="icon"></span>족보
     </button>
-    
     <button class="nav-item" id="nav-builder" onclick="switchTab('builder')">
         <span class="icon"></span>도구
-    </button>
+        </button>
 </nav>
     </div>
 
     <main id="main-content">
         
-    
+        <div id="view-home">
+            <section id="intro-card" class="large-font-chunk">
+                <h2>연운:한국 위키</h2>
+                <p>
+                    &lt;연운&gt;에 대한 최신 소식과 무림록, 지도, 스무고개 족보 등 다양한 게임 정보를 쉽게 확인 할 수 있도록 모아둔 위키입니다.
+                </p>
+                <button class="browse-button" onclick="switchTab('guide')">자주 찾는 정보</button>
+            </section>
+
+        <section id="recent-notice">
+        <div class="section-header-clickable" onclick="switchTab('news')" style="margin-bottom: 10px;">
+            <h3>최신 뉴스</h3>
+        </div>
+        
+        <div id="home-news-list" class="item-list-container">
+            </div>
+    </section>
+
+            <section id="recent-items" style="margin-bottom: 10x;">
+                <h3>최근 업데이트</h3>
+                <div id="home-quest-list" class="quest-grid">
+                    </div>
+            </section>
+        </div>
+
 
 <div id="view-quiz" style="display: none;">
     <section id="answer-container">
@@ -172,7 +197,7 @@
 </div>
         
 
-<div id="view-guide">
+<div id="view-guide" style="display: none;">
     <div id="guide-content-loader" style="margin-top: 30px; text-align: center;">
         로딩 중...
     </div>

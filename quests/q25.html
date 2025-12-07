@@ -1,0 +1,146 @@
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (q24와 동일) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            도박왕의 비밀 보물
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">숨겨진 도박왕의 보물을 찾아서</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            이 퀘스트는 <b>일품 객잔</b>에서 시작됩니다. 객잔 안팎의 대화를 엿듣고 단서를 수집하여 전설적인 도박왕의 보물을 찾는 여정입니다.<br>
+            주사위 놀이 미니게임과 허공 섭물을 활용해야 하는 흥미로운 퀘스트입니다.
+        </p>
+    </div>
+
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q25_1.jpg" alt="일품 객잔 시작">
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            객잔의 단서 수집
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            일품 객잔 앞에 있는 NPC의 대화를 엿들은 후, 객잔 안으로 들어가 사람들의 대화도 엿들으세요.<br>
+            이후 주인장과 대화하면 가장 좋은 객실(3층)을 빌릴 수 있게 됩니다. 방 안을 조사하여 도박왕에 대한 단서를 모두 찾으세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q25_2.jpg" alt="방안의 단서">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            보물 사냥꾼과 첫 번째 승부
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            단서를 얻었다면 아래 위치로 이동해 보물 사냥꾼들과 대화하세요. 그 후 뒤에 앉아 있는 할아버지와 대화를 나누어야 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q25_3.jpg" alt="할아버지">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q25_4.jpg" alt="할아버지 위치">
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 15px;">
+            대화를 마치면 구류문 제자 <b>'하궁'</b>과 주사위 놀이를 하게 됩니다. <b>허공 섭물</b>을 이용해 주사위를 조작하여 목표 값을 맞추면 승리합니다.
+        </p>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            연속된 승부 (하반, 하집)
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            다음으로 아래 위치로 이동해 NPC <b>'하반'</b>과 두 번째 주사위 놀이를 진행하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q25_5.jpg" alt="두 번째 위치 하반">
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 15px;">
+            마지막으로 아래 위치로 이동하여 구류문 제자 <b>'하집'</b>과 대화 후, 옆에 있는 NPC <b>'올고린'</b>과 주사위 게임을 승리해야 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q25_6.jpg" alt="세 번째 위치 올고린">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            열쇠 획득
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            모든 단서를 모았다면 아래 위치로 이동해 <b>전백만</b>과 대화하세요. 나무 위에 있는 할아버지를 발견할 수 있습니다.<br>
+            <b>허공 섭물</b>을 사용하여 할아버지가 가진 소지품을 훔치면 쪽지 한 장과 <b>열쇠</b>를 획득할 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q25_7.jpg" alt="네 번째 위치 전백만">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            다시 일품 객잔의 <b>천의 1호실</b>로 돌아가<br>
+            잠겨있던 곳을 열면 <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

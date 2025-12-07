@@ -256,13 +256,11 @@ function updateQuizCounter() {
     }
 }
 
-
-// =========================================
-// 탭 전환 및 뷰 제어
-// =========================================
 function switchTab(tabName) {
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
+    // 1. view-home 삭제됨
+    const views = ['view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
+    // 2. nav-home 삭제됨
+    const navs = ['nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
 
     views.forEach(id => {
         const el = document.getElementById(id);
@@ -273,31 +271,8 @@ function switchTab(tabName) {
         if(el) el.classList.remove('active');
     });
 
-    if (tabName === 'home') {
-        document.getElementById('view-home').style.display = 'block';
-        document.getElementById('nav-home').classList.add('active');
-        updateUrlQuery('home');  
-    } 
-    else if (tabName === 'quiz') {
-        document.getElementById('view-quiz').style.display = 'block';
-        document.getElementById('nav-quiz').classList.add('active');
-        updateUrlQuery('quiz');
-    } 
-    else if (tabName === 'quest') {
-        document.getElementById('view-quest').style.display = 'block';
-        document.getElementById('nav-quest').classList.add('active');
-        showQuestList();
-        
-        const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
-        if (allBtn) filterQuestType('all', allBtn);
-        
-        updateUrlQuery('quest', null);
-    } 
-    else if (tabName === 'news') {
-        document.getElementById('view-news').style.display = 'block';
-        updateUrlQuery('guide', 'news'); // 가이드(뉴스) 단축 URL 호출됨 -> ?g=news
-    } 
-    else if (tabName === 'guide' || tabName === 'code') {
+    // [수정] 'home'으로 요청이 오거나 'guide'면 가이드 탭 실행
+    if (tabName === 'home' || tabName === 'guide' || tabName === 'code') {
         const guideView = document.getElementById('view-guide');
         if (guideView) {
             guideView.style.display = 'block';
@@ -308,18 +283,37 @@ function switchTab(tabName) {
                 loadGuideContent('news.html', newsBtn);
             }
         }
+        // 버튼 활성화 (가이드 버튼 ID인 nav-code 사용)
         document.getElementById('nav-code').classList.add('active');
         
-        // [수정] 이미 URL에 g 또는 id가 있는지 확인 후 없을 때만 업데이트
+        // URL 업데이트 (파라미터가 없을 때만 clean하게 유지)
         const params = new URLSearchParams(window.location.search);
         if(!params.get('id') && !params.get('g')) {
-            updateUrlQuery('guide');
+            updateUrlQuery(null); // ?tab=guide 도 굳이 안 보여줘도 됨 (메인이므로)
         }
     }
+    // ... 나머지 탭(quiz, quest, news, builder) 로직은 기존 유지 ...
+    else if (tabName === 'quiz') {
+        document.getElementById('view-quiz').style.display = 'block';
+        document.getElementById('nav-quiz').classList.add('active');
+        updateUrlQuery('quiz');
+    } 
+    else if (tabName === 'quest') {
+        document.getElementById('view-quest').style.display = 'block';
+        document.getElementById('nav-quest').classList.add('active');
+        showQuestList();
+        const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
+        if (allBtn) filterQuestType('all', allBtn);
+        updateUrlQuery('quest', null);
+    } 
+    else if (tabName === 'news') {
+        // 뉴스는 가이드 내의 일부로 처리
+        document.getElementById('view-news').style.display = 'block';
+        updateUrlQuery('guide', 'news'); 
+    } 
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
         document.getElementById('nav-builder').classList.add('active');
-        
         if (!builderData) {
             fetch('json/builder_data.json')
                 .then(res => res.json())
@@ -333,25 +327,22 @@ function switchTab(tabName) {
     }
 }
 
-// URL 체크 (q= 및 g= 파라미터 확인)
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab'); 
-    const shortQuest = urlParams.get('q'); // 퀘스트 단축 ID
-    const shortGuide = urlParams.get('g'); // 가이드 단축 ID [추가]
+    const shortQuest = urlParams.get('q');
+    const shortGuide = urlParams.get('g');
 
-    // 단축 URL 우선 처리
     if (shortQuest) { switchTab('quest'); return; }
-    if (shortGuide) { switchTab('guide'); return; } // [추가] g= 있으면 가이드 탭으로
-
+    if (shortGuide) { switchTab('guide'); return; }
     if (urlParams.get('b')) { switchTab('builder'); return; }
 
     if (tab === 'quiz') switchTab('quiz');
     else if (tab === 'quest') switchTab('quest');
-    else if (tab === 'news') switchTab('news');
-    else if (tab === 'guide') switchTab('guide'); 
     else if (tab === 'builder') switchTab('builder');
-    else switchTab('home');
+    
+    // [중요] 나머지는 모두 가이드(홈)로 이동
+    else switchTab('guide'); 
 }
 
 // =========================================

@@ -179,10 +179,10 @@
     </div>
 
     <script>
+    <script>
         function copyToClipboard(text, btnElement) {
-            // 1. 클립보드 API 사용
-            navigator.clipboard.writeText(text).then(() => {
-                // 성공 시 버튼 UI 변경
+            // 성공 시 UI 변경 처리를 위한 내부 함수
+            const handleSuccess = () => {
                 const originalContent = btnElement.innerHTML;
                 
                 // 버튼 스타일 및 텍스트 변경
@@ -198,12 +198,53 @@
                     btnElement.style.color = '';
                     btnElement.style.borderColor = '';
                 }, 2000);
+            };
 
+            // 구형 브라우저 및 모바일 호환성을 위한 Fallback 함수
+            const fallbackCopyTextToClipboard = (text) => {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                
+                // 모바일에서 화면이 튀는 것을 방지하기 위한 스타일
+                textArea.style.top = "0";
+                textArea.style.left = "0";
+                textArea.style.position = "fixed";
+                textArea.style.opacity = "0";
+
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        handleSuccess();
+                    } else {
+                        alert('이 기기에서는 복사를 지원하지 않습니다.');
+                    }
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                    alert('복사에 실패했습니다.');
+                }
+
+                document.body.removeChild(textArea);
+            };
+
+            // 1. 최신 API가 없거나 보안 컨텍스트가 아닌 경우 Fallback 사용
+            if (!navigator.clipboard) {
+                fallbackCopyTextToClipboard(text);
+                return;
+            }
+
+            // 2. 최신 API 시도
+            navigator.clipboard.writeText(text).then(() => {
+                handleSuccess();
             }).catch(err => {
-                // 실패 시 (보안 설정 등으로 인해)
-                console.error('복사 실패:', err);
-                alert('복사에 실패했습니다. 직접 코드를 복사해주세요.');
+                // 3. 최신 API 실패 시(권한 문제 등) Fallback으로 재시도
+                // console.error('Async: Could not copy text: ', err);
+                fallbackCopyTextToClipboard(text);
             });
         }
     </script>
+
 </div>

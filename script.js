@@ -1062,13 +1062,13 @@ const dummyNewsData = [
 const dummyMapData = [
     {
         title: "청하",
-        desc: "맑은 물이 흐르는 평화로운 호수지만, 깊은 곳에는 잊혀진 수룡의 전설이 잠들어 있습니다. 초보 협객들의 수련 장소로 적합합니다.",
+        desc: "초보 협객들의 수련 장소로 적합합니다.",
         link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
         image: "https://via.placeholder.com/600x300/263238/ffffff?text=Blue+Lake"
     },
     {
         title: "개봉",
-        desc: "일년 내내 눈보라가 치는 극한의 땅. 고대 무공 비급이 숨겨져 있다는 소문이 있어 수많은 고수들이 도전했으나 돌아오지 못했습니다.",
+        desc: "수많은 고수들이 도전했으나 돌아오지 못했습니다.",
         link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
         image: "https://via.placeholder.com/600x300/455a64/ffffff?text=Frozen+Peak"
     }

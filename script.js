@@ -1,43 +1,22 @@
 /* =========================================
-   script.js (최종 수정본: 단축 URL ?q= 및 ?g= 적용)
+   script.js (최종 통합본)
+   - news.json 연동 슬라이더
+   - 지도(Map) 섹션
+   - 단축 URL (q=, g=) 지원
+   - 퀘스트, 족보, 가이드, 빌더 기능 통합
    ========================================= */
 
-// 전역 변수
+// =========================================
+// 1. 전역 변수 및 데이터 저장소
+// =========================================
 let currentQuestData = [];
 let currentPage = 1;
 const itemsPerPage = 12;
 let isGuideLoaded = false;
 
-// [최적화] URL 파라미터 업데이트 함수 (단축 URL q= 및 g= 지원)
-function updateUrlQuery(tab, id) {
-    const url = new URL(window.location);
-    
-    // 기존 파라미터 초기화 (충돌 방지)
-    url.searchParams.delete('tab');
-    url.searchParams.delete('id');
-    url.searchParams.delete('q');
-    url.searchParams.delete('g'); // [추가] 가이드 단축 파라미터 초기화
-
-    // 1. 퀘스트 탭인 경우 -> 단축 주소 (?q=숫자) 사용
-    if (tab === 'quest' && id) {
-        const shortId = id.toLowerCase().replace('q', '');
-        url.searchParams.set('q', shortId);
-    } 
-    // 2. 가이드 탭인 경우 -> 단축 주소 (?g=ID) 사용 [추가됨]
-    else if (tab === 'guide' && id) {
-        url.searchParams.set('g', id);
-    }
-    // 3. 그 외 (빌더 등) -> 기존 방식 유지
-    else {
-        if (tab && tab !== 'home') url.searchParams.set('tab', tab);
-        if (id) url.searchParams.set('id', id);
-    }
-    
-    // 주소가 실제로 변경되었을 때만 히스토리 기록
-    if (url.toString() !== window.location.href) {
-        history.pushState(null, '', url);
-    }
-}
+// 슬라이더 관련 변수
+let currentSlideIndex = 0;
+let slideInterval;
 
 // 데이터 저장소
 let globalData = { items: [], quiz: [], quests: [], news: [] };
@@ -47,11 +26,510 @@ let builderData = null;
 let currentBuild = { weapons: [null,null], hearts: [null,null,null,null], marts: new Array(8).fill(null) };
 let currentSlot = { type: '', index: 0 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. 데이터 로드 시작
-    loadData();
+// [지도 더미 데이터] (지도 JSON이 없으므로 내장 데이터 사용)
+const dummyMapData = [
+    {
+        title: "청명 호수 (Blue Lake)",
+        desc: "맑은 물이 흐르는 평화로운 호수지만, 깊은 곳에는 잊혀진 수룡의 전설이 잠들어 있습니다.",
+        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
+        image: "https://via.placeholder.com/600x300/263238/ffffff?text=Blue+Lake" // 실제 이미지 경로로 변경 권장
+    },
+    {
+        title: "만년설산 (Frozen Peak)",
+        desc: "일년 내내 눈보라가 치는 극한의 땅. 고대 무공 비급이 숨겨져 있다는 소문이 있습니다.",
+        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
+        image: "https://via.placeholder.com/600x300/455a64/ffffff?text=Frozen+Peak"
+    },
+    {
+        title: "황철 광산 (Iron Mine)",
+        desc: "희귀 광석이 채굴되는 곳입니다. 최근 산적들의 점거로 인해 일반인의 출입이 통제되고 있습니다.",
+        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
+        image: "https://via.placeholder.com/600x300/3e2723/ffffff?text=Iron+Mine"
+    }
+];
 
-    // 2. 통합 검색창 설정
+// =========================================
+// 2. 초기화 (DOMContentLoaded)
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+    // A. 데이터 로드
+    loadData();
+    loadHomeSlider(); // 뉴스 JSON 기반 슬라이더 로드
+    loadHomeMaps();   // 지도 섹션 로드
+
+    // B. 통합 검색창 설정
+    setupGlobalSearch();
+
+    // C. 족보 탭 로컬 검색 설정
+    setupQuizSearch();
+
+    // D. URL 파라미터 체크 및 탭 이동
+    checkUrlParams();
+});
+
+// =========================================
+// 3. 데이터 로딩 및 처리
+// =========================================
+function loadData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetTab = urlParams.get('tab');
+    const targetId = urlParams.get('id');
+    const shortQuestId = urlParams.get('q'); 
+
+    Promise.all([
+        fetch('json/data.json').then(res => res.json()),
+        fetch('json/quests.json').then(res => res.json()),
+        fetch('json/news.json').then(res => res.json())
+    ])
+    .then(([mainData, questData, newsData]) => {
+        console.log("데이터 로드 성공");
+
+        // 1. 퀘스트 데이터 파싱
+        let quests = Array.isArray(questData) ? questData : (questData.quests || []);
+        
+        // 2. 뉴스 데이터 파싱
+        let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
+
+        // 3. 정렬 (ID 기준 역순)
+        if (quests.length > 0) {
+            quests.sort((a, b) => {
+                const numA = parseInt((a.id || "").replace('q', '')) || 0;
+                const numB = parseInt((b.id || "").replace('q', '')) || 0;
+                return numB - numA; 
+            });
+        }
+        if (news.length > 0) {
+            // news.json이 최신순이 아니라면 역순 정렬 필요 (보통 JSON을 최신순으로 작성함)
+            // news.reverse(); 
+        }
+
+        // 4. 전역 변수 저장
+        globalData = {
+            items: mainData.items || [],
+            quiz: mainData.quiz || [],
+            quests: quests, 
+            news: news 
+        };
+
+        currentQuestData = globalData.quests;
+
+        // 5. 화면 렌더링
+        renderQuizTable(globalData.quiz);
+        updateQuizCounter();
+        renderQuestList();                
+        renderHomeQuests(globalData.quests); 
+        renderHomeNews(globalData.news);     
+        renderFullNews(globalData.news);
+
+        // 6. 딥링크 처리 (퀘스트 상세)
+        if (shortQuestId) {
+            const fullId = 'q' + shortQuestId;
+            const foundQuest = globalData.quests.find(q => q.id === fullId);
+            if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); 
+        }
+        else if (targetTab === 'quest' && targetId) {
+            const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
+            const foundQuest = globalData.quests.find(q => q.id === formattedId);
+            if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
+        }
+    })
+    .catch(error => {
+        console.error("데이터 로드 중 오류 발생:", error);
+    });
+}
+
+// =========================================
+// 4. 홈 화면 로직 (슬라이더 & 지도)
+// =========================================
+
+// [핵심] news.json 연동 슬라이더
+function loadHomeSlider() {
+    const track = document.getElementById('hero-slider-track');
+    const indicators = document.getElementById('slider-indicators');
+    
+    if (!track) return;
+
+    track.innerHTML = '';
+    indicators.innerHTML = '';
+
+    fetch('json/news.json')
+        .then(response => {
+            if (!response.ok) throw new Error("뉴스 데이터 로드 실패");
+            return response.json();
+        })
+        .then(data => {
+            // 데이터 형식이 배열인지 객체인지 확인 후 처리
+            const newsList = Array.isArray(data) ? data : (data.news || []);
+            const sliderData = newsList.slice(0, 5); // 최신 5개
+
+            if (sliderData.length === 0) return;
+
+            sliderData.forEach((news, index) => {
+                // 태그 자동 생성
+                let tag = "NEWS";
+                if (news.title.includes("업데이트")) tag = "업데이트";
+                else if (news.title.includes("이벤트")) tag = "이벤트";
+                else if (news.title.includes("출시") || news.title.includes("공지")) tag = "공지";
+                else if (news.title.includes("노트")) tag = "개발자 노트";
+
+                // 본문 HTML 태그 제거 및 말줄임
+                const cleanDesc = news.content.replace(/<[^>]*>?/gm, ' ').substring(0, 80) + '...';
+                
+                // 슬라이드 요소 생성
+                const slideDiv = document.createElement('div');
+                slideDiv.className = 'hero-slide';
+                const bgImage = news.image ? news.image : 'images/bg.jpg';
+                slideDiv.style.backgroundImage = `url('${bgImage}')`;
+                
+                slideDiv.innerHTML = `
+                    <div class="slide-content">
+                        <span class="slide-tag">${tag}</span>
+                        <h2 class="slide-title">${news.title}</h2>
+                        <p class="slide-desc">${cleanDesc}</p>
+                        <button class="slide-link-btn">자세히 보기 ↗</button>
+                    </div>
+                `;
+                
+                // 클릭 이벤트 (가이드/탭/외부링크 분기)
+                slideDiv.onclick = () => {
+                    const link = news.link || '#';
+                    if (link.startsWith('guide:')) {
+                        const fileName = link.split(':')[1];
+                        switchTab('guide');
+                        setTimeout(() => {
+                            if (typeof loadGuideContent === 'function') loadGuideContent(fileName);
+                        }, 100);
+                    } else if (link.startsWith('tab:')) {
+                        const targetTab = link.split(':')[1];
+                        switchTab(targetTab);
+                    } else {
+                        window.open(link, '_blank');
+                    }
+                };
+
+                // 커서 스타일
+                slideDiv.style.cursor = 'pointer';
+
+                track.appendChild(slideDiv);
+
+                // 인디케이터 생성
+                const dot = document.createElement('div');
+                dot.className = `indicator ${index === 0 ? 'active' : ''}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    goToSlide(index);
+                };
+                indicators.appendChild(dot);
+            });
+
+            startSlider();
+        })
+        .catch(error => {
+            console.error('슬라이더 로드 실패:', error);
+            track.innerHTML = '<div style="color:white; text-align:center; padding-top:100px;">데이터를 불러올 수 없습니다.</div>';
+        });
+}
+
+// 슬라이더 이동 함수
+function moveSlide(direction) {
+    const track = document.getElementById('hero-slider-track');
+    if (!track || track.children.length === 0) return;
+
+    const totalSlides = track.children.length;
+    currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+    
+    updateSliderPosition();
+    resetSliderTimer();
+}
+
+function goToSlide(index) {
+    currentSlideIndex = index;
+    updateSliderPosition();
+    resetSliderTimer();
+}
+
+function updateSliderPosition() {
+    const track = document.getElementById('hero-slider-track');
+    const indicators = document.querySelectorAll('.indicator');
+    
+    if (track) {
+        track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+    }
+    
+    indicators.forEach((dot, idx) => {
+        if (idx === currentSlideIndex) dot.classList.add('active');
+        else dot.classList.remove('active');
+    });
+}
+
+function startSlider() {
+    if (slideInterval) clearInterval(slideInterval);
+    slideInterval = setInterval(() => {
+        moveSlide(1);
+    }, 5000);
+}
+
+function resetSliderTimer() {
+    if (slideInterval) clearInterval(slideInterval);
+    startSlider();
+}
+
+// [지도] 더미 데이터 기반 렌더링
+function loadHomeMaps() {
+    const mapList = document.getElementById('home-map-list');
+    if (!mapList) return;
+    
+    mapList.innerHTML = '';
+
+    dummyMapData.forEach(map => {
+        const card = document.createElement('a');
+        card.className = 'map-card';
+        card.href = map.link;
+        card.target = "_blank";
+
+        card.innerHTML = `
+            <div class="map-hero-bg" style="background-image: url('${map.image}');"></div>
+            <div class="map-content">
+                <div class="map-title">${map.title}</div>
+                <p class="map-desc">${map.desc}</p>
+            </div>
+        `;
+        mapList.appendChild(card);
+    });
+}
+
+
+// =========================================
+// 5. 탭 전환 및 URL 관리
+// =========================================
+function switchTab(tabName) {
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
+
+    views.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+    });
+    navs.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.classList.remove('active');
+    });
+
+    // 탭별 로직
+    if (tabName === 'home') {
+        document.getElementById('view-home').style.display = 'block';
+        document.getElementById('nav-home').classList.add('active');
+        updateUrlQuery('home');
+    } 
+    else if (tabName === 'quiz') {
+        document.getElementById('view-quiz').style.display = 'block';
+        document.getElementById('nav-quiz').classList.add('active');
+        updateUrlQuery('quiz');
+    } 
+    else if (tabName === 'quest') {
+        document.getElementById('view-quest').style.display = 'block';
+        document.getElementById('nav-quest').classList.add('active');
+        showQuestList();
+        const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
+        if (allBtn) filterQuestType('all', allBtn);
+        updateUrlQuery('quest', null);
+    } 
+    else if (tabName === 'news') {
+        document.getElementById('view-news').style.display = 'block';
+        updateUrlQuery('guide', 'news');
+    } 
+    else if (tabName === 'guide' || tabName === 'code') {
+        const guideView = document.getElementById('view-guide');
+        if (guideView) {
+            guideView.style.display = 'block';
+            if (!isGuideLoaded) {
+                loadGuideView(); 
+            } else {
+                const newsBtn = findButtonByFile('news.html'); 
+                loadGuideContent('news.html', newsBtn);
+            }
+        }
+        document.getElementById('nav-code').classList.add('active');
+        
+        const params = new URLSearchParams(window.location.search);
+        if(!params.get('id') && !params.get('g')) {
+            updateUrlQuery('guide');
+        }
+    }
+    else if (tabName === 'builder') {
+        document.getElementById('view-builder').style.display = 'block';
+        document.getElementById('nav-builder').classList.add('active');
+        if (!builderData) {
+            fetch('json/builder_data.json')
+                .then(res => res.json())
+                .then(data => { builderData = data; })
+                .catch(err => console.error("빌더 데이터 로드 실패:", err));
+        }
+        if (new URLSearchParams(window.location.search).get('b')) {
+            loadViewer();
+        }
+        updateUrlQuery('builder');
+    }
+}
+
+function updateUrlQuery(tab, id) {
+    const url = new URL(window.location);
+    url.searchParams.delete('tab');
+    url.searchParams.delete('id');
+    url.searchParams.delete('q');
+    url.searchParams.delete('g');
+
+    if (tab === 'quest' && id) {
+        const shortId = id.toLowerCase().replace('q', '');
+        url.searchParams.set('q', shortId);
+    } 
+    else if (tab === 'guide' && id) {
+        url.searchParams.set('g', id);
+    }
+    else {
+        if (tab && tab !== 'home') url.searchParams.set('tab', tab);
+        if (id) url.searchParams.set('id', id);
+    }
+    
+    if (url.toString() !== window.location.href) {
+        history.pushState(null, '', url);
+    }
+}
+
+function checkUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab'); 
+    const shortQuest = urlParams.get('q');
+    const shortGuide = urlParams.get('g');
+
+    if (shortQuest) { switchTab('quest'); return; }
+    if (shortGuide) { switchTab('guide'); return; }
+    if (urlParams.get('b')) { switchTab('builder'); return; }
+
+    if (tab === 'quiz') switchTab('quiz');
+    else if (tab === 'quest') switchTab('quest');
+    else if (tab === 'news') switchTab('news');
+    else if (tab === 'guide') switchTab('guide'); 
+    else if (tab === 'builder') switchTab('builder');
+    else switchTab('home');
+}
+
+
+// =========================================
+// 6. 가이드(Guide) 기능
+// =========================================
+const GUIDE_MAP = {
+    'news': 'news.html',
+    'tierlist': 'guide_tier.html',
+    'weapon': 'tier_weapon.html', 
+    'build': 'build.html',
+    'map': 'maps.html',
+    'side': 'beta.html',
+    'hw': 'npc.html',        
+    'boss': 'boss.html',     
+    'marts': 'marts.html',   
+    'harts': 'harts.html',   
+    'skill': 'skils.html',
+    'majang': 'majang.html', 
+    'code': 'code.html'      
+};
+
+function loadGuideView() {
+    const container = document.getElementById('guide-content-loader');
+    if (!container) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetId = urlParams.get('id') || urlParams.get('g');
+    
+    let fileToLoad = 'news.html';
+    if (targetId && GUIDE_MAP[targetId]) {
+        fileToLoad = GUIDE_MAP[targetId];
+    }
+
+    if (isGuideLoaded) {
+        const targetBtn = findButtonByFile(fileToLoad);
+        loadGuideContent(fileToLoad, targetBtn);
+        return; 
+    }
+    
+    fetch('guide.html') 
+        .then(res => res.text())
+        .then(html => {
+            container.innerHTML = html;
+            container.style.marginTop = '0';
+            isGuideLoaded = true;
+            const targetBtn = findButtonByFile(fileToLoad);
+            loadGuideContent(fileToLoad, targetBtn); 
+        });
+}
+
+function findButtonByFile(filename) {
+    const buttons = document.querySelectorAll('#view-guide .guide-item-btn');
+    let foundBtn = null;
+    buttons.forEach(btn => {
+        if (btn.getAttribute('onclick')?.includes(filename)) foundBtn = btn;
+    });
+    return foundBtn;
+}
+
+function loadGuideContent(filename, btnElement) {
+    const innerContainer = document.getElementById('guide-dynamic-content');
+    if(!innerContainer) return;
+
+    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
+    if (foundId) {
+        updateUrlQuery('guide', foundId);
+    }
+
+    if (btnElement) {
+        document.querySelectorAll('#view-guide .guide-item-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+    }
+
+    const codeView = document.querySelector('.code-page-container');
+    if(codeView) codeView.style.display = 'none';
+    
+    innerContainer.style.display = 'block';
+    innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
+    
+    fetch(filename)
+        .then(res => {
+            if (!res.ok) throw new Error("파일을 찾을 수 없습니다.");
+            return res.text();
+        })
+        .then(html => {
+            innerContainer.innerHTML = html;
+            if (filename === 'news.html') renderGuideNewsList(); 
+        })
+        .catch(err => {
+            innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br>(${filename})</div>`;
+        });
+}
+
+function renderGuideNewsList() {
+    const container = document.getElementById('guide-inner-news-list');
+    if (!container) return;
+
+    if (!globalData.news || globalData.news.length === 0) {
+        container.innerHTML = '<div style="padding:20px; color:#888;">최신 뉴스를 불러올 수 없습니다.</div>';
+        return;
+    }
+
+    container.innerHTML = ''; 
+    const displayList = globalData.news.slice(0, 5); 
+    displayList.forEach(item => {
+        const el = createNewsElement(item);
+        el.style.borderBottom = '1px dashed #444'; 
+        el.style.backgroundColor = 'transparent'; 
+        container.appendChild(el);
+    });
+}
+
+
+// =========================================
+// 7. 검색 및 유틸리티 설정
+// =========================================
+function setupGlobalSearch() {
     const headerSearch = document.getElementById("header-search-input");
     const clearBtn = document.getElementById("search-clear-btn");       
     const searchResults = document.getElementById("global-search-results"); 
@@ -90,8 +568,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (searchResults) searchResults.style.display = 'none'; 
         });
     }
+}
 
-    // 3. 족보 탭 검색 리스너
+function setupQuizSearch() {
     const quizLocalSearch = document.getElementById("quiz-local-search");
     const statusBar = document.getElementById("quiz-counter-area"); 
 
@@ -115,404 +594,120 @@ document.addEventListener("DOMContentLoaded", () => {
             if(statusBar) statusBar.classList.remove("hidden");
         });
     }
+}
 
-    // 4. URL 파라미터 체크
-    checkUrlParams();
-});
+function handleGlobalSearch(e) {
+    const keyword = e.target.value.trim().toLowerCase();
+    const resultContainer = document.getElementById("global-search-results");
+    if (!resultContainer) return;
+    if (!keyword) { resultContainer.style.display = 'none'; return; }
 
-// =========================================
-// [기능] 데이터 로드
-// =========================================
-function loadData() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const targetTab = urlParams.get('tab');
-    const targetId = urlParams.get('id');
-    const shortQuestId = urlParams.get('q'); 
-
-    Promise.all([
-        fetch('json/data.json').then(res => res.json()),
-        fetch('json/quests.json').then(res => res.json()),
-        fetch('json/news.json').then(res => res.json())
-    ])
-    .then(([mainData, questData, newsData]) => {
-        console.log("데이터 로드 성공:", { questData, newsData });
-
-        // 1. 퀘스트 데이터 파싱
-        let quests = [];
-        if (Array.isArray(questData)) {
-            quests = questData;
-        } else if (questData.quests) {
-            quests = questData.quests;
-        }
-
-        // 2. 뉴스 데이터 파싱
-        let news = [];
-        if (Array.isArray(newsData)) {
-            news = newsData;
-        } else if (newsData.news) {
-            news = newsData.news;
-        }
-
-        // 3. 정렬 (ID 기준 역순)
-        if (quests.length > 0) {
-            quests.sort((a, b) => {
-                const numA = parseInt((a.id || "").replace('q', '')) || 0;
-                const numB = parseInt((b.id || "").replace('q', '')) || 0;
-                return numB - numA; 
+    let resultsHTML = '';
+    
+    // 뉴스 검색
+    if (globalData.news) {
+        globalData.news.filter(n => n.title.toLowerCase().includes(keyword) || n.content.toLowerCase().includes(keyword))
+            .slice(0, 3).forEach(item => {
+                resultsHTML += `<div class="search-result-item" onclick="switchTab('news')"><span class="badge info">정보</span> <span class="result-text">${item.title}</span></div>`;
             });
-        }
-        
-        if (news.length > 0) {
-            news.reverse(); 
-        }
+    }
+    // 족보 검색
+    globalData.quiz.filter(q => q.hint.toLowerCase().includes(keyword) || q.answer.toLowerCase().includes(keyword))
+        .slice(0, 3).forEach(item => {
+            resultsHTML += `<div class="search-result-item" onclick="selectGlobalResult('${item.hint}')"><span class="badge quiz">족보</span><span class="result-text">${item.hint} - ${item.answer}</span></div>`;
+        });
+    // 퀘스트 검색
+    globalData.quests.filter(q => q.name.toLowerCase().includes(keyword) || q.location.toLowerCase().includes(keyword))
+        .slice(0, 3).forEach(quest => {
+            resultsHTML += `<div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')"><span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span></div>`;
+        });
 
-        // 4. 전역 변수에 저장
-        globalData = {
-            items: mainData.items || [],
-            quiz: mainData.quiz || [],
-            quests: quests, 
-            news: news 
-        };
+    resultContainer.innerHTML = resultsHTML || `<div class="no-result" style="padding:15px; text-align:center; color:#888;">결과 없음</div>`;
+    resultContainer.style.display = 'block';
+}
 
-        currentQuestData = globalData.quests;
+function selectGlobalResult(keyword) {
+    switchTab('quiz');
+    const localInput = document.getElementById("quiz-local-search");
+    if(localInput) { localInput.value = keyword; renderQuizTable(filterQuizData(keyword), keyword); }
+    document.getElementById("global-search-results").style.display = 'none';
+}
 
-        // 5. 화면 렌더링
-        renderQuizTable(globalData.quiz);
-        updateQuizCounter();
+function selectQuestResult(filepath, id) {
+    switchTab('quest');
+    loadQuestDetail(filepath, id); 
+    document.getElementById("global-search-results").style.display = 'none';
+}
 
-        renderQuestList();                
-        renderHomeQuests(globalData.quests); 
-        renderHomeNews(globalData.news);     
-        
-        if (typeof renderNews === 'function') {
-            renderNews(globalData.news);
-        } else {
-            renderFullNews(globalData.news);
+function copyToClipboard(text, btnElement) {
+    const handleSuccess = () => {
+        if (!btnElement) return;
+        const originalContent = btnElement.innerHTML;
+        const originalBg = btnElement.style.backgroundColor;
+
+        btnElement.innerHTML = '<span class="copy-icon">✓</span> 완료';
+        btnElement.style.backgroundColor = '#b08d55';
+        btnElement.style.color = '#fff';
+
+        setTimeout(() => {
+            btnElement.innerHTML = originalContent;
+            btnElement.style.backgroundColor = originalBg;
+            btnElement.style.color = '';
+        }, 2000);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(handleSuccess).catch(() => prompt("복사하세요:", text));
+    } else {
+        prompt("복사하세요:", text);
+    }
+}
+
+
+// =========================================
+// 8. 퀘스트, 족보, 뉴스 렌더링 (서브 함수들)
+// =========================================
+
+// 족보 테이블
+function renderQuizTable(data, keyword = '') {
+    const tbody = document.getElementById('quiz-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="padding:20px; color:#888;">결과가 없습니다.</td></tr>`;
+        return;
+    }
+    data.forEach(item => {
+        const tr = document.createElement('tr');
+        let hint = item.hint, answer = item.answer;
+        if (keyword) {
+            const regex = new RegExp(`(${keyword})`, 'gi');
+            hint = hint.replace(regex, '<span class="highlight">$1</span>');
+            answer = answer.replace(regex, '<span class="highlight">$1</span>');
         }
-
-        // 6. 바로가기 실행
-        
-        // Case A: 퀘스트 단축 주소 (?q=1)
-        if (shortQuestId) {
-            const fullId = 'q' + shortQuestId;
-            const foundQuest = globalData.quests.find(q => q.id === fullId);
-            if (foundQuest) {
-                loadQuestDetail(foundQuest.filepath, fullId); 
-            }
-        }
-        // Case B: 기존 긴 주소 (?tab=quest&id=q1)
-        else if (targetTab === 'quest' && targetId) {
-            const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
-            const foundQuest = globalData.quests.find(q => q.id === formattedId);
-            if (foundQuest) {
-                loadQuestDetail(foundQuest.filepath, formattedId);
-            }
-        }
-        // Case C: 가이드 단축 주소 (?g=...)는 checkUrlParams -> loadGuideView에서 처리됨
-    })
-    .catch(error => {
-        console.error("데이터 로드 중 오류 발생:", error);
+        tr.innerHTML = `<td>${hint}</td><td>${answer}</td><td class="user-cell">${item.user || '-'}</td>`;
+        tbody.appendChild(tr);
     });
 }
 
-// 족보 카운터 업데이트 함수
 function updateQuizCounter() {
     const counter = document.getElementById('quiz-counter-area');
     if (counter && globalData.quiz.length > 0) {
-        const userCounts = {};
-        
-        globalData.quiz.forEach(item => {
-            if (item.user && item.user.trim() !== "" && item.user !== "-") {
-                const u = item.user.trim();
-                userCounts[u] = (userCounts[u] || 0) + 1;
-            }
-        });
-
-        const sortedUsers = Object.entries(userCounts)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 3);
-
-        let message = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
-
-        if (sortedUsers.length > 0) {
-            message += `<br><div style="font-size: 0.9em; margin-top: 5px; color: #888; font-weight: normal;">`;
-            
-            const [user1, count1] = sortedUsers[0];
-            message += `👑 <strong class="rainbow-text">${user1}</strong> <span style="font-size:0.8em">(${count1})</span>`;
-
-            if (sortedUsers.length > 1) {
-                const [user2, count2] = sortedUsers[1];
-                message += ` &nbsp;|&nbsp; 🥈 ${user2} <span style="font-size:0.8em">(${count2})</span>`;
-            }
-
-            if (sortedUsers.length > 2) {
-                const [user3, count3] = sortedUsers[2];
-                message += ` &nbsp;|&nbsp; 🥉 ${user3} <span style="font-size:0.8em">(${count3})</span>`;
-            }
-
-            message += `</div>`;
-        }
-        counter.innerHTML = message;
+        // (랭킹 로직 생략 - 필요시 추가 가능)
+        counter.innerHTML = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
     }
 }
 
-
-// =========================================
-// 탭 전환 및 뷰 제어
-// =========================================
-function switchTab(tabName) {
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
-
-    views.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.style.display = 'none';
-    });
-    navs.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.classList.remove('active');
-    });
-
-    if (tabName === 'home') {
-        document.getElementById('view-home').style.display = 'block';
-        document.getElementById('nav-home').classList.add('active');
-        updateUrlQuery('home');  
-    } 
-    else if (tabName === 'quiz') {
-        document.getElementById('view-quiz').style.display = 'block';
-        document.getElementById('nav-quiz').classList.add('active');
-        updateUrlQuery('quiz');
-    } 
-    else if (tabName === 'quest') {
-        document.getElementById('view-quest').style.display = 'block';
-        document.getElementById('nav-quest').classList.add('active');
-        showQuestList();
-        
-        const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
-        if (allBtn) filterQuestType('all', allBtn);
-        
-        updateUrlQuery('quest', null);
-    } 
-    else if (tabName === 'news') {
-        document.getElementById('view-news').style.display = 'block';
-        updateUrlQuery('guide', 'news'); // 가이드(뉴스) 단축 URL 호출됨 -> ?g=news
-    } 
-    else if (tabName === 'guide' || tabName === 'code') {
-        const guideView = document.getElementById('view-guide');
-        if (guideView) {
-            guideView.style.display = 'block';
-            if (!isGuideLoaded) {
-                loadGuideView(); 
-            } else {
-                const newsBtn = findButtonByFile('news.html'); 
-                loadGuideContent('news.html', newsBtn);
-            }
-        }
-        document.getElementById('nav-code').classList.add('active');
-        
-        // [수정] 이미 URL에 g 또는 id가 있는지 확인 후 없을 때만 업데이트
-        const params = new URLSearchParams(window.location.search);
-        if(!params.get('id') && !params.get('g')) {
-            updateUrlQuery('guide');
-        }
-    }
-    else if (tabName === 'builder') {
-        document.getElementById('view-builder').style.display = 'block';
-        document.getElementById('nav-builder').classList.add('active');
-        
-        if (!builderData) {
-            fetch('json/builder_data.json')
-                .then(res => res.json())
-                .then(data => { builderData = data; })
-                .catch(err => console.error("빌더 데이터 로드 실패:", err));
-        }
-        if (new URLSearchParams(window.location.search).get('b')) {
-            loadViewer();
-        }
-        updateUrlQuery('builder');
-    }
+function filterQuizData(keyword) {
+    keyword = keyword.trim().toLowerCase();
+    if (!keyword) return globalData.quiz;
+    return globalData.quiz.filter(item => 
+        item.hint.toLowerCase().includes(keyword) || 
+        item.answer.toLowerCase().includes(keyword)
+    );
 }
 
-// URL 체크 (q= 및 g= 파라미터 확인)
-function checkUrlParams() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tab = urlParams.get('tab'); 
-    const shortQuest = urlParams.get('q'); // 퀘스트 단축 ID
-    const shortGuide = urlParams.get('g'); // 가이드 단축 ID [추가]
-
-    // 단축 URL 우선 처리
-    if (shortQuest) { switchTab('quest'); return; }
-    if (shortGuide) { switchTab('guide'); return; } // [추가] g= 있으면 가이드 탭으로
-
-    if (urlParams.get('b')) { switchTab('builder'); return; }
-
-    if (tab === 'quiz') switchTab('quiz');
-    else if (tab === 'quest') switchTab('quest');
-    else if (tab === 'news') switchTab('news');
-    else if (tab === 'guide') switchTab('guide'); 
-    else if (tab === 'builder') switchTab('builder');
-    else switchTab('home');
-}
-
-// =========================================
-// [기능] 가이드 관련
-// =========================================
-
-const GUIDE_MAP = {
-    'news': 'news.html',
-    'tierlist': 'guide_tier.html',
-    'weapon': 'tier_weapon.html', 
-    'build': 'build.html',
-    'map': 'maps.html',
-    'side': 'beta.html',
-    'hw': 'npc.html',        
-    'boss': 'boss.html',     
-    'marts': 'marts.html',   
-    'harts': 'harts.html',   
-    'skill': 'skils.html',
-    'majang': 'majang.html', 
-    'code': 'code.html'      
-};
-
-function loadGuideView() {
-    const container = document.getElementById('guide-content-loader');
-    if (!container) return;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    // [수정] id 또는 g 파라미터 확인
-    const targetId = urlParams.get('id') || urlParams.get('g');
-
-    // ID로 파일명 찾기 (없으면 기본값 news.html)
-    let fileToLoad = 'news.html';
-    if (targetId && GUIDE_MAP[targetId]) {
-        fileToLoad = GUIDE_MAP[targetId];
-    }
-
-    if (isGuideLoaded) {
-        const targetBtn = findButtonByFile(fileToLoad);
-        loadGuideContent(fileToLoad, targetBtn);
-        return; 
-    }
-    
-    fetch('guide.html') 
-        .then(res => res.text())
-        .then(html => {
-            container.innerHTML = html;
-            container.style.marginTop = '0';
-            isGuideLoaded = true;
-            const targetBtn = findButtonByFile(fileToLoad);
-            loadGuideContent(fileToLoad, targetBtn); 
-        });
-}
-
-function findButtonByFile(filename) {
-    const buttons = document.querySelectorAll('#view-guide .guide-item-btn');
-    let foundBtn = null;
-    buttons.forEach(btn => {
-        if (btn.getAttribute('onclick')?.includes(filename)) foundBtn = btn;
-    });
-    return foundBtn;
-}
-
-function loadGuideContent(filename, btnElement) {
-    const innerContainer = document.getElementById('guide-dynamic-content');
-    if(!innerContainer) return;
-
-    // 파일명 -> ID 역추적 및 URL 업데이트 (여기서 g=... 로 변환됨)
-    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
-    if (foundId) {
-        updateUrlQuery('guide', foundId);
-    }
-
-    if (btnElement) {
-        const allButtons = document.querySelectorAll('#view-guide .guide-item-btn');
-        allButtons.forEach(btn => btn.classList.remove('active'));
-        btnElement.classList.add('active');
-    }
-
-    const codeView = document.querySelector('.code-page-container');
-    if(codeView) codeView.style.display = 'none';
-    
-    innerContainer.style.display = 'block';
-    innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">컨텐츠 로딩 중...</div>';
-    
-    fetch(filename)
-        .then(res => res.text())
-        .then(html => {
-            innerContainer.innerHTML = html;
-            if (filename === 'news.html') renderGuideNewsList(); 
-        });
-}
-
-function renderGuideNewsList() {
-    const container = document.getElementById('guide-inner-news-list');
-    if (!container) return;
-
-    if (!globalData.news || globalData.news.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888;">최신 뉴스를 불러올 수 없습니다.</div>';
-        return;
-    }
-
-    container.innerHTML = ''; 
-    const displayList = globalData.news.slice(0, 5); 
-    displayList.forEach(item => {
-        const el = createNewsElement(item);
-        el.style.borderBottom = '1px dashed #444'; 
-        el.style.backgroundColor = 'transparent'; 
-        container.appendChild(el);
-    });
-}
-
-// =========================================
-// [기능] 무림록 및 뉴스 공통 렌더링
-// =========================================
-
-function renderNews(newsList) {
-    renderFullNews(newsList);
-}
-
-function renderFullNews(newsList) {
-    const container = document.getElementById('full-news-list');
-    if (!container) return;
-    container.innerHTML = '';
-    if (!newsList || newsList.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888;">등록된 정보가 없습니다.</div>';
-        return;
-    }
-    newsList.forEach(item => container.appendChild(createNewsElement(item)));
-}
-
-function renderHomeNews(newsList) {
-    const container = document.getElementById('home-news-list');
-    if (!container) return;
-    container.innerHTML = '';
-    const displayList = newsList.slice(0, 4); 
-    if (displayList.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888;">최신 정보가 없습니다.</div>';
-        return;
-    }
-    displayList.forEach(item => container.appendChild(createNewsElement(item)));
-}
-
-function createNewsElement(item) {
-    const div = document.createElement('div');
-    div.className = 'news-item';
-    div.onclick = function() { this.classList.toggle('active'); };
-    let linkHtml = '';
-    if (item.link && item.link.trim() !== '') {
-        linkHtml = `<a href="${item.link}" target="_blank" class="news-link-btn" onclick="event.stopPropagation()">바로가기 →</a>`;
-    }
-    div.innerHTML = `
-        <div class="news-header">
-            <span class="news-title">${item.title}</span>
-            <span class="news-date">${item.date}</span>
-        </div>
-        <div class="news-content">${item.content}<br>${linkHtml}</div>
-    `;
-    return div;
-}
-
-// 퀘스트 리스트
+// 퀘스트 리스트 & 상세
 function renderQuestList() {
     const container = document.getElementById('quest-grid-container');
     if (!container) return;
@@ -550,8 +745,6 @@ function renderHomeQuests(quests) {
 function createQuestCard(quest, container) {
     const card = document.createElement('div');
     card.className = 'quest-card';
-    
-    // 클릭 시 단축 URL로 이동하도록 ID 전달
     card.onclick = () => { 
         switchTab('quest'); 
         loadQuestDetail(quest.filepath, quest.id); 
@@ -570,7 +763,45 @@ function createQuestCard(quest, container) {
     container.appendChild(card);
 }
 
-// 페이지네이션
+function loadQuestDetail(filepath, id) {
+    const listView = document.getElementById('quest-list-view');
+    const detailView = document.getElementById('quest-detail-view');
+    const contentBox = document.getElementById('quest-content-loader');
+
+    if (id) updateUrlQuery('quest', id);
+
+    if(listView) listView.style.display = 'none';
+    if(detailView) detailView.style.display = 'block';
+    if(contentBox) contentBox.innerHTML = '<div style="text-align:center; padding:50px;">로딩 중...</div>';
+
+    fetch(filepath).then(res => res.text()).then(html => {
+        if(contentBox) contentBox.innerHTML = html;
+        window.scrollTo(0, 0);
+    });
+}
+
+function showQuestList() {
+    const listView = document.getElementById('quest-list-view');
+    const detailView = document.getElementById('quest-detail-view');
+    if(listView && detailView) {
+        listView.style.display = 'block';
+        detailView.style.display = 'none';
+    }
+}
+
+function filterQuestType(type, btnElement) {
+    const buttons = document.querySelectorAll('#view-quest .guide-item-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+
+    if (!globalData.quests) return;
+    if (type === 'all') currentQuestData = globalData.quests;
+    else currentQuestData = globalData.quests.filter(q => q.type === type);
+
+    currentPage = 1;
+    renderQuestList();
+}
+
 function renderPagination() {
     const container = document.getElementById('pagination-container');
     if (!container) return;
@@ -607,126 +838,53 @@ function changePage(page) {
     document.getElementById('quest-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 
-function loadQuestDetail(filepath, id) {
-    const listView = document.getElementById('quest-list-view');
-    const detailView = document.getElementById('quest-detail-view');
-    const contentBox = document.getElementById('quest-content-loader');
 
-    // ID가 있으면 URL 업데이트 (단축 로직 적용)
-    if (id) {
-        updateUrlQuery('quest', id);
-    }
-
-    if(listView) listView.style.display = 'none';
-    if(detailView) detailView.style.display = 'block';
-    if(contentBox) contentBox.innerHTML = '<div style="text-align:center; padding:50px;">로딩 중...</div>';
-
-    fetch(filepath).then(res => res.text()).then(html => {
-        if(contentBox) contentBox.innerHTML = html;
-        window.scrollTo(0, 0);
-    });
-}
-
-
-function showQuestList() {
-    const listView = document.getElementById('quest-list-view');
-    const detailView = document.getElementById('quest-detail-view');
-    if(listView && detailView) {
-        listView.style.display = 'block';
-        detailView.style.display = 'none';
-    }
-}
-
-// 필터 버튼
-function filterQuestType(type, btnElement) {
-    const buttons = document.querySelectorAll('#view-quest .guide-item-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    if (btnElement) btnElement.classList.add('active');
-
-    if (!globalData.quests) return;
-    if (type === 'all') currentQuestData = globalData.quests;
-    else currentQuestData = globalData.quests.filter(q => q.type === type);
-
-    currentPage = 1;
-    renderQuestList();
-}
-
-// 족보 테이블
-function renderQuizTable(data, keyword = '') {
-    const tbody = document.getElementById('quiz-table-body');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="padding:20px; color:#888;">결과가 없습니다.</td></tr>`;
+// 뉴스 렌더링
+function renderHomeNews(newsList) {
+    const container = document.getElementById('home-news-list');
+    if (!container) return;
+    container.innerHTML = '';
+    const displayList = newsList.slice(0, 4); 
+    if (displayList.length === 0) {
+        container.innerHTML = '<div style="padding:20px; color:#888;">최신 정보가 없습니다.</div>';
         return;
     }
-    data.forEach(item => {
-        const tr = document.createElement('tr');
-        let hint = item.hint, answer = item.answer;
-        if (keyword) {
-            const regex = new RegExp(`(${keyword})`, 'gi');
-            hint = hint.replace(regex, '<span class="highlight">$1</span>');
-            answer = answer.replace(regex, '<span class="highlight">$1</span>');
-        }
-        tr.innerHTML = `<td>${hint}</td><td>${answer}</td><td class="user-cell">${item.user || '-'}</td>`;
-        tbody.appendChild(tr);
-    });
+    displayList.forEach(item => container.appendChild(createNewsElement(item)));
 }
 
-function filterQuizData(keyword) {
-    keyword = keyword.trim().toLowerCase();
-    if (!keyword) return globalData.quiz;
-    return globalData.quiz.filter(item => 
-        item.hint.toLowerCase().includes(keyword) || 
-        item.answer.toLowerCase().includes(keyword)
-    );
-}
-
-// 통합 검색
-function handleGlobalSearch(e) {
-    const keyword = e.target.value.trim().toLowerCase();
-    const resultContainer = document.getElementById("global-search-results");
-    if (!resultContainer) return;
-    if (!keyword) { resultContainer.style.display = 'none'; return; }
-
-    let resultsHTML = '';
-    if (globalData.news) {
-        globalData.news.filter(n => n.title.toLowerCase().includes(keyword) || n.content.toLowerCase().includes(keyword))
-            .slice(0, 3).forEach(item => {
-                resultsHTML += `<div class="search-result-item" onclick="switchTab('news')"><span class="badge info">정보</span> <span class="result-text">${item.title}</span></div>`;
-            });
+function renderFullNews(newsList) {
+    const container = document.getElementById('full-news-list');
+    if (!container) return;
+    container.innerHTML = '';
+    if (!newsList || newsList.length === 0) {
+        container.innerHTML = '<div style="padding:20px; color:#888;">등록된 정보가 없습니다.</div>';
+        return;
     }
-    globalData.quiz.filter(q => q.hint.toLowerCase().includes(keyword) || q.answer.toLowerCase().includes(keyword))
-        .slice(0, 3).forEach(item => {
-            resultsHTML += `<div class="search-result-item" onclick="selectGlobalResult('${item.hint}')"><span class="badge quiz">족보</span><span class="result-text">${item.hint} - ${item.answer}</span></div>`;
-        });
-    globalData.quests.filter(q => q.name.toLowerCase().includes(keyword) || q.location.toLowerCase().includes(keyword))
-        .slice(0, 3).forEach(quest => {
-            resultsHTML += `<div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')"><span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span></div>`;
-        });
-
-
-    resultContainer.innerHTML = resultsHTML || `<div class="no-result" style="padding:15px; text-align:center; color:#888;">결과 없음</div>`;
-    resultContainer.style.display = 'block';
+    newsList.forEach(item => container.appendChild(createNewsElement(item)));
 }
 
-function selectGlobalResult(keyword) {
-    switchTab('quiz');
-    const localInput = document.getElementById("quiz-local-search");
-    if(localInput) { localInput.value = keyword; renderQuizTable(filterQuizData(keyword), keyword); }
-    document.getElementById("global-search-results").style.display = 'none';
-}
-
-function selectQuestResult(filepath, id) {
-    switchTab('quest');
-    loadQuestDetail(filepath, id); 
-    document.getElementById("global-search-results").style.display = 'none';
+function createNewsElement(item) {
+    const div = document.createElement('div');
+    div.className = 'news-item';
+    div.onclick = function() { this.classList.toggle('active'); };
+    let linkHtml = '';
+    if (item.link && item.link.trim() !== '') {
+        linkHtml = `<a href="${item.link}" target="_blank" class="news-link-btn" onclick="event.stopPropagation()">바로가기 →</a>`;
+    }
+    div.innerHTML = `
+        <div class="news-header">
+            <span class="news-title">${item.title}</span>
+            <span class="news-date">${item.date}</span>
+        </div>
+        <div class="news-content">${item.content}<br>${linkHtml}</div>
+    `;
+    return div;
 }
 
 
-/* =========================================
-   [기능] 빌더 (Builder)
-   ========================================= */
+// =========================================
+// 9. 빌더(Builder) 기능
+// =========================================
 function openBuilderModal(type, index) {
     if (!builderData) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
     
@@ -762,14 +920,12 @@ function openBuilderModal(type, index) {
             } else {
                 div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
             }
-            
             list.appendChild(div);
         });
     }
 
     modal.style.display = 'flex';
 }
-
 
 function selectBuilderItem(itemId, imgSrc, itemName) {
     const { type, index } = currentSlot;
@@ -834,7 +990,6 @@ function loadViewer() {
 
     const params = new URLSearchParams(window.location.search);
     const encodedData = params.get('b');
-
     let w = [], h = [], m = [];
     let creator = "";
 
@@ -854,13 +1009,7 @@ function loadViewer() {
     }
 
     const titleEl = document.getElementById('build-main-title');
-    if (titleEl) {
-        if (creator) {
-            titleEl.innerText = `${creator}`;
-        } else {
-            titleEl.innerText = "익명의 협객의 빌드";
-        }
-    }
+    if (titleEl) titleEl.innerText = creator ? `${creator}` : "익명의 협객의 빌드";
 
     const renderSlot = (type, ids, prefix) => {
         ids.forEach((id, idx) => {
@@ -890,449 +1039,4 @@ function loadViewer() {
     renderSlot('weapons', w, 'v');
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');
-}
-
-function downloadBuildImage() {
-    const element = document.getElementById("capture-area"); 
-    const titleEl = document.getElementById("build-main-title");
-    
-    let fileName = "연운_빌드";
-    if (titleEl) {
-        fileName = titleEl.innerText.replace(/\s/g, "_");
-    }
-
-    const btn = document.querySelector('.download-btn');
-    const originalText = btn.innerText;
-    btn.innerText = "🖼️ 변환 중...";
-    btn.disabled = true;
-
-    const options = {
-        scale: 2,               
-        backgroundColor: "#f4f4f2", 
-        useCORS: true,          
-        allowTaint: true,       
-        logging: false,          
-        
-        onclone: (clonedDoc) => {
-            const clonedArea = clonedDoc.getElementById("capture-area");
-            
-            const footer = clonedDoc.createElement('div');
-            footer.style.marginTop = "30px";
-            footer.style.paddingTop = "15px";
-            footer.style.borderTop = "1px solid #ccc";
-            footer.style.textAlign = "center";
-            footer.style.color = "#555";
-            footer.style.fontFamily = "'Noto Serif KR', serif";
-            footer.style.fontSize = "0.9em";
-            
-            footer.innerHTML = "출처: <strong style='color:#a08040;'>연운 한국 위키</strong> (wwm.tips)";
-            
-            clonedArea.appendChild(footer);
-        }
-    };
-
-    setTimeout(() => {
-        html2canvas(element, options).then(canvas => {
-            try {
-                const imgData = canvas.toDataURL("image/jpeg", 0.9);
-                const link = document.createElement("a");
-                link.download = `${fileName}.jpg`;
-                link.href = imgData;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                btn.innerText = originalText;
-                btn.disabled = false;
-            } catch (e) {
-                console.error("보안 에러 발생:", e);
-                alert("브라우저 보안 문제로 저장이 차단되었습니다.\n(서버 환경에서 실행해주세요.)");
-                btn.innerText = "저장 실패";
-                btn.disabled = false;
-            }
-        }).catch(err => {
-            console.error("html2canvas 캡처 실패:", err);
-            alert("이미지 변환 중 오류가 발생했습니다.");
-            btn.innerText = originalText;
-            btn.disabled = false;
-        });
-    }, 100);
-}
-
-/* =========================================
-   [추가] 쿠폰 코드 복사 기능 (전역 함수)
-   설명: code.html이 동적으로 로드되므로, 함수는 메인 스크립트에 있어야 합니다.
-   ========================================= */
-function copyToClipboard(text, btnElement) {
-    // 1. 성공 시 버튼 UI 변경 효과 함수
-    const handleSuccess = () => {
-        if (!btnElement) return;
-        const originalContent = btnElement.innerHTML;
-        const originalBg = btnElement.style.backgroundColor;
-        const originalColor = btnElement.style.color;
-        const originalBorder = btnElement.style.borderColor;
-
-        // 완료 스타일 적용
-        btnElement.innerHTML = '<span class="copy-icon">✓</span> 완료';
-        btnElement.style.backgroundColor = '#b08d55'; // var(--wuxia-accent-gold) 직접 적용
-        btnElement.style.color = '#fff';
-        btnElement.style.borderColor = '#b08d55';
-
-        // 2초 후 원상복구
-        setTimeout(() => {
-            btnElement.innerHTML = originalContent;
-            btnElement.style.backgroundColor = originalBg;
-            btnElement.style.color = originalColor;
-            btnElement.style.borderColor = originalBorder;
-        }, 2000);
-    };
-
-    // 2. 모바일/PC 호환 복사 로직
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        // 최신 방식 (빌더에서 작동했던 방식)
-        navigator.clipboard.writeText(text)
-            .then(handleSuccess)
-            .catch(err => {
-                // 권한 문제 등으로 실패 시 fallback 실행
-                fallbackCopy(text, btnElement, handleSuccess);
-            });
-    } else {
-        // 구형 방식 (fallback)
-        fallbackCopy(text, btnElement, handleSuccess);
-    }
-}
-
-// 구형 브라우저 및 일부 인앱 브라우저용 Fallback
-function fallbackCopy(text, btnElement, successCallback) {
-    try {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        
-        // 화면 튐 방지 스타일
-        textArea.style.position = "fixed";
-        textArea.style.left = "-9999px";
-        textArea.style.top = "0";
-        
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        
-        // iOS 대응
-        textArea.setSelectionRange(0, 99999); 
-
-        const successful = document.execCommand('copy');
-        document.body.removeChild(textArea);
-        
-        if (successful) {
-            successCallback();
-        } else {
-            prompt("복사하기: 아래 텍스트를 복사하세요.", text);
-        }
-    } catch (err) {
-        prompt("복사하기: 아래 텍스트를 복사하세요.", text);
-    }
-}
-
-
-/* =========================================
-   [script.js - 더미 데이터 포함 버전]
-   ========================================= */
-
-// 1. [더미 데이터] 슬라이더 뉴스 (이미지가 없으면 색상 박스로 대체됨)
-const dummyNewsData = [
-    {
-        id: "d1",
-        title: "12월 12일 모바일 정식 출시",
-        tag: "공지",
-        content: "PC와 모바일의 경계를 허무는 크로스 플랫폼 지원. <br>지금 사전 예약하고 한정판 의상을 받으세요!",
-        link: "#",
-        image: "" // 테스트용 이미지 URL
-    },
-    {
-        id: "d2",
-        title: "12월 12일 모바일 업데이트 노트",
-        tag: "업데이트",
-        content: "플레이스테이션 환경이 보다 쾌적하게 개선됩니다.",
-        link: "#",
-        image: ""
-    }
-];
-
-// 2. [더미 데이터] 지도 정보 (첨부 이미지 스타일 테스트용)
-const dummyMapData = [
-    {
-        title: "청하",
-        desc: "초보 협객들의 수련 장소로 적합합니다.",
-        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
-        image: "https://via.placeholder.com/600x300/263238/ffffff?text=Blue+Lake"
-    },
-    {
-        title: "개봉",
-        desc: "수많은 고수들이 도전했으나 돌아오지 못했습니다.",
-        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
-        image: "https://via.placeholder.com/600x300/455a64/ffffff?text=Frozen+Peak"
-    }
-];
-
-
-// === [기능 로직] ===
-
-let currentSlideIndex = 0;
-let slideInterval;
-
-// (1) 메인 슬라이더 로딩 (더미 데이터 사용)
-function loadHomeSlider() {
-    const track = document.getElementById('hero-slider-track');
-    const indicators = document.getElementById('slider-indicators');
-    
-    if (!track) return;
-
-    // 초기화
-    track.innerHTML = '';
-    indicators.innerHTML = '';
-
-    dummyNewsData.forEach((news, index) => {
-        // 슬라이드 생성
-        const slideDiv = document.createElement('div');
-        slideDiv.className = 'hero-slide';
-        // 실제 이미지가 있다면 url('images/...') 형식이 됩니다.
-        slideDiv.style.backgroundImage = `url('${news.image}')`; 
-        
-        slideDiv.innerHTML = `
-            <div class="slide-content">
-                <span class="slide-tag">${news.tag}</span>
-                <h2 class="slide-title">${news.title}</h2>
-                <p class="slide-desc">${news.content.replace(/<br>/g, ' ')}</p>
-                <a href="${news.link}" class="slide-link-btn">자세히 보기 ↗</a>
-            </div>
-        `;
-        
-      /* script.js 내 loadHomeSlider 함수 내부의 slideDiv.onclick 부분 수정 */
-
-slideDiv.onclick = () => {
-    // 1. 가이드 파일 로드 (예: guide:build.html)
-    if (news.link.startsWith('guide:')) {
-        const fileName = news.link.split(':')[1]; // 'beginner_guide.html' 추출
-        
-        switchTab('guide'); // ① 가이드 탭으로 화면 전환
-        
-        // ② 탭 전환 후 약간의 딜레이(0.1초)를 두고 콘텐츠 로드 (안정성 확보)
-        setTimeout(() => {
-            // 만약 loadGuideContent 함수가 정의되어 있다면 실행
-            if (typeof loadGuideContent === 'function') {
-                loadGuideContent(fileName); 
-            } else {
-                console.error('loadGuideContent 함수가 없습니다.');
-            }
-        }, 100);
-    } 
-    // 2. 기존 탭 이동 (예: tab:quest)
-    else if (news.link.startsWith('tab:')) {
-        const targetTab = news.link.split(':')[1];
-        switchTab(targetTab); 
-    } 
-    // 3. 외부 링크 (새 창)
-    else {
-        window.open(news.link, '_blank');
-    }
-};
-        slideDiv.style.cursor = 'pointer';
-
-        track.appendChild(slideDiv);
-
-        // 인디케이터 생성
-        const dot = document.createElement('div');
-        dot.className = `indicator ${index === 0 ? 'active' : ''}`;
-        dot.onclick = () => goToSlide(index);
-        indicators.appendChild(dot);
-    });
-
-    startSlider();
-}
-// 슬라이더 상태 변수
-let currentSlideIndex = 0;
-let slideInterval;
-
-// 1. news.json 데이터를 불러와 슬라이더 생성
-function loadHomeSlider() {
-    const track = document.getElementById('hero-slider-track');
-    const indicators = document.getElementById('slider-indicators');
-    
-    if (!track) return;
-
-    // 초기화
-    track.innerHTML = '';
-    indicators.innerHTML = '';
-
-    // 실제 데이터 Fetch
-    fetch('news.json')
-        .then(response => {
-            if (!response.ok) throw new Error("네트워크 응답 실패");
-            return response.json();
-        })
-        .then(data => {
-            // 최신 5개만 슬라이더에 표시
-            const sliderData = data.slice(0, 5);
-            
-            if (sliderData.length === 0) return;
-
-            sliderData.forEach((news, index) => {
-                // 1) 태그 자동 생성 로직 (news.json에 tag가 없으므로 제목기반 추론)
-                let tag = "NEWS";
-                if (news.title.includes("업데이트")) tag = "업데이트";
-                else if (news.title.includes("이벤트")) tag = "이벤트";
-                else if (news.title.includes("출시") || news.title.includes("공지")) tag = "공지";
-                else if (news.title.includes("노트")) tag = "개발자 노트";
-
-                // 2) 본문 미리보기 텍스트 정리 (HTML 태그 제거)
-                const cleanDesc = news.content.replace(/<[^>]*>?/gm, ' ').substring(0, 80) + '...';
-                
-                // 3) 슬라이드 요소 생성
-                const slideDiv = document.createElement('div');
-                slideDiv.className = 'hero-slide';
-                // 이미지 경로가 없으면 기본 이미지 사용
-                const bgImage = news.image ? news.image : 'images/bg.jpg';
-                slideDiv.style.backgroundImage = `url('${bgImage}')`;
-                
-                slideDiv.innerHTML = `
-                    <div class="slide-content">
-                        <span class="slide-tag">${tag}</span>
-                        <h2 class="slide-title">${news.title}</h2>
-                        <p class="slide-desc">${cleanDesc}</p>
-                        <button class="slide-link-btn">자세히 보기 ↗</button>
-                    </div>
-                `;
-                
-                // 4) 클릭 이벤트 처리 (외부링크, 탭이동, 가이드로드)
-                slideDiv.onclick = () => {
-                    const link = news.link || '#';
-
-                    if (link.startsWith('guide:')) {
-                        // "guide:파일명.html" 형식
-                        const fileName = link.split(':')[1];
-                        switchTab('guide');
-                        setTimeout(() => {
-                            if (typeof loadGuideContent === 'function') loadGuideContent(fileName);
-                        }, 100);
-                    } else if (link.startsWith('tab:')) {
-                        // "tab:탭이름" 형식
-                        const targetTab = link.split(':')[1];
-                        switchTab(targetTab);
-                    } else {
-                        // 일반 URL
-                        window.open(link, '_blank');
-                    }
-                };
-
-                track.appendChild(slideDiv);
-
-                // 5) 인디케이터(점) 생성
-                const dot = document.createElement('div');
-                dot.className = `indicator ${index === 0 ? 'active' : ''}`;
-                dot.onclick = (e) => {
-                    e.stopPropagation(); // 버블링 방지
-                    goToSlide(index);
-                };
-                indicators.appendChild(dot);
-            });
-
-            // 데이터 로딩 후 슬라이더 시작
-            startSlider();
-        })
-        .catch(error => {
-            console.error('뉴스 데이터를 불러오는데 실패했습니다:', error);
-            track.innerHTML = '<div style="color:white; text-align:center; padding-top:100px;">데이터를 불러올 수 없습니다.</div>';
-        });
-}
-
-// 2. 슬라이드 이동 (DOM 요소 개수 기반으로 수정됨)
-function moveSlide(direction) {
-    const track = document.getElementById('hero-slider-track');
-    if (!track || track.children.length === 0) return;
-
-    const totalSlides = track.children.length; // 실제 생성된 슬라이드 개수
-    currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
-    
-    updateSliderPosition();
-    resetSliderTimer();
-}
-
-// 3. 특정 슬라이드로 점프
-function goToSlide(index) {
-    currentSlideIndex = index;
-    updateSliderPosition();
-    resetSliderTimer();
-}
-
-// 4. 화면 업데이트
-function updateSliderPosition() {
-    const track = document.getElementById('hero-slider-track');
-    const indicators = document.querySelectorAll('.indicator');
-    
-    if (track) {
-        track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
-    }
-    
-    indicators.forEach((dot, idx) => {
-        if (idx === currentSlideIndex) dot.classList.add('active');
-        else dot.classList.remove('active');
-    });
-}
-
-// 5. 타이머 제어
-function startSlider() {
-    if (slideInterval) clearInterval(slideInterval);
-    slideInterval = setInterval(() => {
-        moveSlide(1);
-    }, 5000); // 5초 대기
-}
-
-function resetSliderTimer() {
-    if (slideInterval) clearInterval(slideInterval);
-    startSlider();
-}
-// === [초기화] 페이지 로드 시 실행 ===
-// 이 부분은 script.js 하단 혹은 switchTab 함수 내에 위치해야 합니다.
-document.addEventListener("DOMContentLoaded", () => {
-    // 홈 화면일 때 로딩
-    loadHomeSlider();
-    loadHomeMaps();
-    // loadRecentItems(); // 기존 퀘스트 로딩 함수 (있다면 유지)
-});
-
-
-/* script.js 하단에 추가 */
-
-function loadGuideContent(fileName, btnElement) {
-    const loader = document.getElementById('guide-content-loader');
-    if (!loader) return;
-
-    // 1. 로딩 표시
-    loader.innerHTML = '<div style="padding:20px; text-align:center;">비급을 펼치는 중...</div>';
-
-    // 2. fetch로 HTML 파일 가져오기
-    // (실제 서버나 로컬 파일이 있어야 작동합니다. 없으면 에러 메시지 표시)
-    fetch(fileName)
-        .then(response => {
-            if (!response.ok) throw new Error("파일을 찾을 수 없습니다.");
-            return response.text();
-        })
-        .then(html => {
-            loader.innerHTML = html; // 내용 집어넣기
-        })
-        .catch(error => {
-            console.error(error);
-            loader.innerHTML = `
-                <div style="padding:20px; text-align:center; color:var(--wuxia-accent-red);">
-                    <h3>내용을 불러올 수 없습니다.</h3>
-                    <p>파일 경로(${fileName})를 확인해주세요.</p>
-                </div>`;
-        });
-
-    // 3. (선택사항) 사이드바 버튼 활성화 스타일 처리
-    // 슬라이더에서 호출했을 때는 btnElement가 없으므로 무시
-    if (btnElement) {
-        document.querySelectorAll('.guide-item-btn').forEach(btn => btn.classList.remove('active'));
-        btnElement.classList.add('active');
-    }
 }

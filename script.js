@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 수정본: 단축 URL ?q= 적용)
+   script.js (최종 수정본: 단축 URL ?q= 및 ?g= 적용)
    ========================================= */
 
 // 전역 변수
@@ -8,7 +8,7 @@ let currentPage = 1;
 const itemsPerPage = 12;
 let isGuideLoaded = false;
 
-// [최적화] URL 파라미터 업데이트 함수 (단축 URL q= 지원)
+// [최적화] URL 파라미터 업데이트 함수 (단축 URL q= 및 g= 지원)
 function updateUrlQuery(tab, id) {
     const url = new URL(window.location);
     
@@ -16,20 +16,24 @@ function updateUrlQuery(tab, id) {
     url.searchParams.delete('tab');
     url.searchParams.delete('id');
     url.searchParams.delete('q');
+    url.searchParams.delete('g'); // [추가] 가이드 단축 파라미터 초기화
 
     // 1. 퀘스트 탭인 경우 -> 단축 주소 (?q=숫자) 사용
     if (tab === 'quest' && id) {
-        // 'q1' -> '1'로 변환
         const shortId = id.toLowerCase().replace('q', '');
         url.searchParams.set('q', shortId);
     } 
-    // 2. 그 외 (가이드, 뉴스, 빌더 등) -> 기존 방식 (?tab=...&id=...)
+    // 2. 가이드 탭인 경우 -> 단축 주소 (?g=ID) 사용 [추가됨]
+    else if (tab === 'guide' && id) {
+        url.searchParams.set('g', id);
+    }
+    // 3. 그 외 (빌더 등) -> 기존 방식 유지
     else {
         if (tab && tab !== 'home') url.searchParams.set('tab', tab);
         if (id) url.searchParams.set('id', id);
     }
     
-    // 주소가 실제로 변경되었을 때만 히스토리 기록 (뒤로가기 문제 해결)
+    // 주소가 실제로 변경되었을 때만 히스토리 기록
     if (url.toString() !== window.location.href) {
         history.pushState(null, '', url);
     }
@@ -117,13 +121,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================
-// [기능] 데이터 로드 (단축 URL 로직 추가됨)
+// [기능] 데이터 로드
 // =========================================
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab');
     const targetId = urlParams.get('id');
-    const shortQuestId = urlParams.get('q'); // 단축 URL 파라미터
+    const shortQuestId = urlParams.get('q'); 
 
     Promise.all([
         fetch('json/data.json').then(res => res.json()),
@@ -186,18 +190,17 @@ function loadData() {
             renderFullNews(globalData.news);
         }
 
-        // 6. 바로가기 실행 (단축 URL 우선 확인)
+        // 6. 바로가기 실행
         
-        // Case A: 단축 주소 (?q=1)로 들어온 경우
+        // Case A: 퀘스트 단축 주소 (?q=1)
         if (shortQuestId) {
-            const fullId = 'q' + shortQuestId; // 1 -> q1 변환
+            const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
             if (foundQuest) {
-                // 주소창은 변경하지 않고(이미 q=1이므로) 내용만 로드
                 loadQuestDetail(foundQuest.filepath, fullId); 
             }
         }
-        // Case B: 기존 긴 주소 (?tab=quest&id=q1) 호환성 유지
+        // Case B: 기존 긴 주소 (?tab=quest&id=q1)
         else if (targetTab === 'quest' && targetId) {
             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
             const foundQuest = globalData.quests.find(q => q.id === formattedId);
@@ -205,6 +208,7 @@ function loadData() {
                 loadQuestDetail(foundQuest.filepath, formattedId);
             }
         }
+        // Case C: 가이드 단축 주소 (?g=...)는 checkUrlParams -> loadGuideView에서 처리됨
     })
     .catch(error => {
         console.error("데이터 로드 중 오류 발생:", error);
@@ -291,7 +295,7 @@ function switchTab(tabName) {
     } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
-        updateUrlQuery('guide', 'news'); 
+        updateUrlQuery('guide', 'news'); // 가이드(뉴스) 단축 URL 호출됨 -> ?g=news
     } 
     else if (tabName === 'guide' || tabName === 'code') {
         const guideView = document.getElementById('view-guide');
@@ -306,8 +310,11 @@ function switchTab(tabName) {
         }
         document.getElementById('nav-code').classList.add('active');
         
-        const currentId = new URLSearchParams(window.location.search).get('id');
-        if(!currentId) updateUrlQuery('guide');
+        // [수정] 이미 URL에 g 또는 id가 있는지 확인 후 없을 때만 업데이트
+        const params = new URLSearchParams(window.location.search);
+        if(!params.get('id') && !params.get('g')) {
+            updateUrlQuery('guide');
+        }
     }
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
@@ -326,14 +333,16 @@ function switchTab(tabName) {
     }
 }
 
-// URL 체크 (q= 파라미터 확인 추가)
+// URL 체크 (q= 및 g= 파라미터 확인)
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab'); 
-    const shortQuest = urlParams.get('q'); // 단축 퀘스트 ID
+    const shortQuest = urlParams.get('q'); // 퀘스트 단축 ID
+    const shortGuide = urlParams.get('g'); // 가이드 단축 ID [추가]
 
-    // q= 값이 있으면 무조건 퀘스트 탭으로
+    // 단축 URL 우선 처리
     if (shortQuest) { switchTab('quest'); return; }
+    if (shortGuide) { switchTab('guide'); return; } // [추가] g= 있으면 가이드 탭으로
 
     if (urlParams.get('b')) { switchTab('builder'); return; }
 
@@ -370,7 +379,8 @@ function loadGuideView() {
     if (!container) return;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const targetId = urlParams.get('id');
+    // [수정] id 또는 g 파라미터 확인
+    const targetId = urlParams.get('id') || urlParams.get('g');
 
     // ID로 파일명 찾기 (없으면 기본값 news.html)
     let fileToLoad = 'news.html';
@@ -408,7 +418,7 @@ function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
 
-    // 파일명 -> ID 역추적 및 URL 업데이트
+    // 파일명 -> ID 역추적 및 URL 업데이트 (여기서 g=... 로 변환됨)
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
     if (foundId) {
         updateUrlQuery('guide', foundId);

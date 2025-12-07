@@ -958,3 +958,77 @@ function downloadBuildImage() {
         });
     }, 100);
 }
+
+/* =========================================
+   [추가] 쿠폰 코드 복사 기능 (전역 함수)
+   설명: code.html이 동적으로 로드되므로, 함수는 메인 스크립트에 있어야 합니다.
+   ========================================= */
+function copyToClipboard(text, btnElement) {
+    // 1. 성공 시 버튼 UI 변경 효과 함수
+    const handleSuccess = () => {
+        if (!btnElement) return;
+        const originalContent = btnElement.innerHTML;
+        const originalBg = btnElement.style.backgroundColor;
+        const originalColor = btnElement.style.color;
+        const originalBorder = btnElement.style.borderColor;
+
+        // 완료 스타일 적용
+        btnElement.innerHTML = '<span class="copy-icon">✓</span> 완료';
+        btnElement.style.backgroundColor = '#b08d55'; // var(--wuxia-accent-gold) 직접 적용
+        btnElement.style.color = '#fff';
+        btnElement.style.borderColor = '#b08d55';
+
+        // 2초 후 원상복구
+        setTimeout(() => {
+            btnElement.innerHTML = originalContent;
+            btnElement.style.backgroundColor = originalBg;
+            btnElement.style.color = originalColor;
+            btnElement.style.borderColor = originalBorder;
+        }, 2000);
+    };
+
+    // 2. 모바일/PC 호환 복사 로직
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        // 최신 방식 (빌더에서 작동했던 방식)
+        navigator.clipboard.writeText(text)
+            .then(handleSuccess)
+            .catch(err => {
+                // 권한 문제 등으로 실패 시 fallback 실행
+                fallbackCopy(text, btnElement, handleSuccess);
+            });
+    } else {
+        // 구형 방식 (fallback)
+        fallbackCopy(text, btnElement, handleSuccess);
+    }
+}
+
+// 구형 브라우저 및 일부 인앱 브라우저용 Fallback
+function fallbackCopy(text, btnElement, successCallback) {
+    try {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // 화면 튐 방지 스타일
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        // iOS 대응
+        textArea.setSelectionRange(0, 99999); 
+
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        if (successful) {
+            successCallback();
+        } else {
+            prompt("복사하기: 아래 텍스트를 복사하세요.", text);
+        }
+    } catch (err) {
+        prompt("복사하기: 아래 텍스트를 복사하세요.", text);
+    }
+}

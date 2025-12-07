@@ -1107,10 +1107,35 @@ function loadHomeSlider() {
             </div>
         `;
         
-        // 배경 클릭 시 이동
-        slideDiv.onclick = (e) => {
-            if(e.target.tagName !== 'A') window.open(news.link, '_blank');
-        };
+      /* script.js 내 loadHomeSlider 함수 내부의 slideDiv.onclick 부분 수정 */
+
+slideDiv.onclick = () => {
+    // 1. 가이드 파일 로드 (예: guide:build.html)
+    if (news.link.startsWith('guide:')) {
+        const fileName = news.link.split(':')[1]; // 'beginner_guide.html' 추출
+        
+        switchTab('guide'); // ① 가이드 탭으로 화면 전환
+        
+        // ② 탭 전환 후 약간의 딜레이(0.1초)를 두고 콘텐츠 로드 (안정성 확보)
+        setTimeout(() => {
+            // 만약 loadGuideContent 함수가 정의되어 있다면 실행
+            if (typeof loadGuideContent === 'function') {
+                loadGuideContent(fileName); 
+            } else {
+                console.error('loadGuideContent 함수가 없습니다.');
+            }
+        }, 100);
+    } 
+    // 2. 기존 탭 이동 (예: tab:quest)
+    else if (news.link.startsWith('tab:')) {
+        const targetTab = news.link.split(':')[1];
+        switchTab(targetTab); 
+    } 
+    // 3. 외부 링크 (새 창)
+    else {
+        window.open(news.link, '_blank');
+    }
+};
         slideDiv.style.cursor = 'pointer';
 
         track.appendChild(slideDiv);
@@ -1195,3 +1220,40 @@ document.addEventListener("DOMContentLoaded", () => {
     loadHomeMaps();
     // loadRecentItems(); // 기존 퀘스트 로딩 함수 (있다면 유지)
 });
+
+
+/* script.js 하단에 추가 */
+
+function loadGuideContent(fileName, btnElement) {
+    const loader = document.getElementById('guide-content-loader');
+    if (!loader) return;
+
+    // 1. 로딩 표시
+    loader.innerHTML = '<div style="padding:20px; text-align:center;">비급을 펼치는 중...</div>';
+
+    // 2. fetch로 HTML 파일 가져오기
+    // (실제 서버나 로컬 파일이 있어야 작동합니다. 없으면 에러 메시지 표시)
+    fetch(fileName)
+        .then(response => {
+            if (!response.ok) throw new Error("파일을 찾을 수 없습니다.");
+            return response.text();
+        })
+        .then(html => {
+            loader.innerHTML = html; // 내용 집어넣기
+        })
+        .catch(error => {
+            console.error(error);
+            loader.innerHTML = `
+                <div style="padding:20px; text-align:center; color:var(--wuxia-accent-red);">
+                    <h3>내용을 불러올 수 없습니다.</h3>
+                    <p>파일 경로(${fileName})를 확인해주세요.</p>
+                </div>`;
+        });
+
+    // 3. (선택사항) 사이드바 버튼 활성화 스타일 처리
+    // 슬라이더에서 호출했을 때는 btnElement가 없으므로 무시
+    if (btnElement) {
+        document.querySelectorAll('.guide-item-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+    }
+}

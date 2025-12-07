@@ -2,6 +2,14 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "쌀 밥", 
+      "answer": "벼", 
+      "user": "ㅇㅇ" 
+    },
+    { "hint": "여자 장군", 
+      "answer": "뮬란", 
+      "user": "ㅇㅇ" 
+    },
     { "hint": "비오는날", 
       "answer": "지렁이", 
       "user": "ㅇㅇ" 

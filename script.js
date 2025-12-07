@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 수정본: 단축 URL ?q= 및 ?g= 적용)
+   script.js (최종 수정본: 메인 주소 최적화 적용)
    ========================================= */
 
 // 전역 변수
@@ -8,28 +8,34 @@ let currentPage = 1;
 const itemsPerPage = 12;
 let isGuideLoaded = false;
 
-// [최적화] URL 파라미터 업데이트 함수 (단축 URL q= 및 g= 지원)
+// [최적화] URL 파라미터 업데이트 함수 (news는 기본값이므로 파라미터 제거)
 function updateUrlQuery(tab, id) {
     const url = new URL(window.location);
     
-    // 기존 파라미터 초기화 (충돌 방지)
+    // 기존 파라미터 초기화
     url.searchParams.delete('tab');
     url.searchParams.delete('id');
     url.searchParams.delete('q');
-    url.searchParams.delete('g'); // [추가] 가이드 단축 파라미터 초기화
+    url.searchParams.delete('g');
 
-    // 1. 퀘스트 탭인 경우 -> 단축 주소 (?q=숫자) 사용
+    // 1. 퀘스트 탭인 경우 -> 단축 주소 (?q=숫자)
     if (tab === 'quest' && id) {
         const shortId = id.toLowerCase().replace('q', '');
         url.searchParams.set('q', shortId);
     } 
-    // 2. 가이드 탭인 경우 -> 단축 주소 (?g=ID) 사용 [추가됨]
+    // 2. 가이드 탭인 경우 -> 단축 주소 (?g=ID)
     else if (tab === 'guide' && id) {
-        url.searchParams.set('g', id);
+        // [핵심 수정] 'news'는 메인 화면이므로 g=news 파라미터를 붙이지 않음
+        if (id !== 'news') {
+            url.searchParams.set('g', id);
+        }
     }
-    // 3. 그 외 (빌더 등) -> 기존 방식 유지
+    // 3. 그 외
     else {
-        if (tab && tab !== 'home') url.searchParams.set('tab', tab);
+        // 'guide'도 이제 기본(홈) 탭이므로 ?tab=guide 표시 안 함
+        if (tab && tab !== 'home' && tab !== 'guide') {
+            url.searchParams.set('tab', tab);
+        }
         if (id) url.searchParams.set('id', id);
     }
     
@@ -191,8 +197,6 @@ function loadData() {
         }
 
         // 6. 바로가기 실행
-        
-        // Case A: 퀘스트 단축 주소 (?q=1)
         if (shortQuestId) {
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
@@ -200,7 +204,6 @@ function loadData() {
                 loadQuestDetail(foundQuest.filepath, fullId); 
             }
         }
-        // Case B: 기존 긴 주소 (?tab=quest&id=q1)
         else if (targetTab === 'quest' && targetId) {
             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
             const foundQuest = globalData.quests.find(q => q.id === formattedId);
@@ -208,7 +211,6 @@ function loadData() {
                 loadQuestDetail(foundQuest.filepath, formattedId);
             }
         }
-        // Case C: 가이드 단축 주소 (?g=...)는 checkUrlParams -> loadGuideView에서 처리됨
     })
     .catch(error => {
         console.error("데이터 로드 중 오류 발생:", error);
@@ -256,10 +258,13 @@ function updateQuizCounter() {
     }
 }
 
+
+// =========================================
+// 탭 전환 및 뷰 제어
+// =========================================
 function switchTab(tabName) {
-    // 1. view-home 삭제됨
+    // view-home, nav-home 관련 제거
     const views = ['view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
-    // 2. nav-home 삭제됨
     const navs = ['nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
 
     views.forEach(id => {
@@ -271,7 +276,7 @@ function switchTab(tabName) {
         if(el) el.classList.remove('active');
     });
 
-    // [수정] 'home'으로 요청이 오거나 'guide'면 가이드 탭 실행
+    // 홈(home)이나 가이드(guide, code)는 모두 가이드 뷰로 통합
     if (tabName === 'home' || tabName === 'guide' || tabName === 'code') {
         const guideView = document.getElementById('view-guide');
         if (guideView) {
@@ -283,16 +288,14 @@ function switchTab(tabName) {
                 loadGuideContent('news.html', newsBtn);
             }
         }
-        // 버튼 활성화 (가이드 버튼 ID인 nav-code 사용)
         document.getElementById('nav-code').classList.add('active');
         
-        // URL 업데이트 (파라미터가 없을 때만 clean하게 유지)
+        // URL 업데이트 (기본 상태면 파라미터 없이)
         const params = new URLSearchParams(window.location.search);
         if(!params.get('id') && !params.get('g')) {
-            updateUrlQuery(null); // ?tab=guide 도 굳이 안 보여줘도 됨 (메인이므로)
+            updateUrlQuery('guide'); 
         }
     }
-    // ... 나머지 탭(quiz, quest, news, builder) 로직은 기존 유지 ...
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
         document.getElementById('nav-quiz').classList.add('active');
@@ -302,18 +305,21 @@ function switchTab(tabName) {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
         showQuestList();
+        
         const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
         if (allBtn) filterQuestType('all', allBtn);
+        
         updateUrlQuery('quest', null);
     } 
     else if (tabName === 'news') {
-        // 뉴스는 가이드 내의 일부로 처리
+        // 뉴스도 가이드의 일부로 처리
         document.getElementById('view-news').style.display = 'block';
         updateUrlQuery('guide', 'news'); 
     } 
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
         document.getElementById('nav-builder').classList.add('active');
+        
         if (!builderData) {
             fetch('json/builder_data.json')
                 .then(res => res.json())
@@ -327,6 +333,7 @@ function switchTab(tabName) {
     }
 }
 
+// URL 체크 (기본값: guide)
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab'); 
@@ -341,7 +348,7 @@ function checkUrlParams() {
     else if (tab === 'quest') switchTab('quest');
     else if (tab === 'builder') switchTab('builder');
     
-    // [중요] 나머지는 모두 가이드(홈)로 이동
+    // 나머지는 모두 가이드(홈)
     else switchTab('guide'); 
 }
 
@@ -370,10 +377,8 @@ function loadGuideView() {
     if (!container) return;
 
     const urlParams = new URLSearchParams(window.location.search);
-    // [수정] id 또는 g 파라미터 확인
     const targetId = urlParams.get('id') || urlParams.get('g');
 
-    // ID로 파일명 찾기 (없으면 기본값 news.html)
     let fileToLoad = 'news.html';
     if (targetId && GUIDE_MAP[targetId]) {
         fileToLoad = GUIDE_MAP[targetId];
@@ -409,7 +414,6 @@ function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
 
-    // 파일명 -> ID 역추적 및 URL 업데이트 (여기서 g=... 로 변환됨)
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
     if (foundId) {
         updateUrlQuery('guide', foundId);
@@ -542,7 +546,6 @@ function createQuestCard(quest, container) {
     const card = document.createElement('div');
     card.className = 'quest-card';
     
-    // 클릭 시 단축 URL로 이동하도록 ID 전달
     card.onclick = () => { 
         switchTab('quest'); 
         loadQuestDetail(quest.filepath, quest.id); 
@@ -603,7 +606,6 @@ function loadQuestDetail(filepath, id) {
     const detailView = document.getElementById('quest-detail-view');
     const contentBox = document.getElementById('quest-content-loader');
 
-    // ID가 있으면 URL 업데이트 (단축 로직 적용)
     if (id) {
         updateUrlQuery('quest', id);
     }
@@ -948,78 +950,4 @@ function downloadBuildImage() {
             btn.disabled = false;
         });
     }, 100);
-}
-
-/* =========================================
-   [추가] 쿠폰 코드 복사 기능 (전역 함수)
-   설명: code.html이 동적으로 로드되므로, 함수는 메인 스크립트에 있어야 합니다.
-   ========================================= */
-function copyToClipboard(text, btnElement) {
-    // 1. 성공 시 버튼 UI 변경 효과 함수
-    const handleSuccess = () => {
-        if (!btnElement) return;
-        const originalContent = btnElement.innerHTML;
-        const originalBg = btnElement.style.backgroundColor;
-        const originalColor = btnElement.style.color;
-        const originalBorder = btnElement.style.borderColor;
-
-        // 완료 스타일 적용
-        btnElement.innerHTML = '<span class="copy-icon">✓</span> 완료';
-        btnElement.style.backgroundColor = '#b08d55'; // var(--wuxia-accent-gold) 직접 적용
-        btnElement.style.color = '#fff';
-        btnElement.style.borderColor = '#b08d55';
-
-        // 2초 후 원상복구
-        setTimeout(() => {
-            btnElement.innerHTML = originalContent;
-            btnElement.style.backgroundColor = originalBg;
-            btnElement.style.color = originalColor;
-            btnElement.style.borderColor = originalBorder;
-        }, 2000);
-    };
-
-    // 2. 모바일/PC 호환 복사 로직
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        // 최신 방식 (빌더에서 작동했던 방식)
-        navigator.clipboard.writeText(text)
-            .then(handleSuccess)
-            .catch(err => {
-                // 권한 문제 등으로 실패 시 fallback 실행
-                fallbackCopy(text, btnElement, handleSuccess);
-            });
-    } else {
-        // 구형 방식 (fallback)
-        fallbackCopy(text, btnElement, handleSuccess);
-    }
-}
-
-// 구형 브라우저 및 일부 인앱 브라우저용 Fallback
-function fallbackCopy(text, btnElement, successCallback) {
-    try {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        
-        // 화면 튐 방지 스타일
-        textArea.style.position = "fixed";
-        textArea.style.left = "-9999px";
-        textArea.style.top = "0";
-        
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        
-        // iOS 대응
-        textArea.setSelectionRange(0, 99999); 
-
-        const successful = document.execCommand('copy');
-        document.body.removeChild(textArea);
-        
-        if (successful) {
-            successCallback();
-        } else {
-            prompt("복사하기: 아래 텍스트를 복사하세요.", text);
-        }
-    } catch (err) {
-        prompt("복사하기: 아래 텍스트를 복사하세요.", text);
-    }
 }

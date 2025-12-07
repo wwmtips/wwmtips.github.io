@@ -1174,7 +1174,7 @@ body {
 @media (max-width: 768px) {
     .hero-slider-wrapper { height: 250px; } /* 모바일 높이 더 축소 */
     .slide-title { font-size: 1.5em; }
-    .slide-desc { display: none; } /* 모바일에서 설명 숨김 */
+   
     .slide-link-btn { display: none; } /* 모바일에서 버튼 숨김 (이미지 클릭 유도) */
     .slide-content { padding: 0 20px 30px 20px; }
     .prev, .next { display: none; } /* 모바일에서 화살표 숨김 */
@@ -1274,3 +1274,4 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+

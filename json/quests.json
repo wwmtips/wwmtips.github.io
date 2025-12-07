@@ -193,5 +193,13 @@
     "type": "만사록",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q24.html"
+  },
+  {
+    "id": "q25",
+    "name": "도박왕의 비밀 보물",
+    "location": "남문대로",
+    "type": "만사록",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q25.html"
   }
 ]

@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 수정본: renderNews 추가 및 빌더 통합)
+   script.js (최종 수정본: 단축 URL ?q= 적용)
    ========================================= */
 
 // 전역 변수
@@ -8,26 +8,32 @@ let currentPage = 1;
 const itemsPerPage = 12;
 let isGuideLoaded = false;
 
-// [최적화] URL 파라미터 업데이트 함수 (주소가 바뀔 때만 기록)
+// [최적화] URL 파라미터 업데이트 함수 (단축 URL q= 지원)
 function updateUrlQuery(tab, id) {
     const url = new URL(window.location);
     
-    // tab 설정
-    if (tab) url.searchParams.set('tab', tab);
-    
-    // id 설정 (있으면 넣고, 없으면 지움)
-    if (id) {
-        url.searchParams.set('id', id);
-    } else {
-        url.searchParams.delete('id');
+    // 기존 파라미터 초기화 (충돌 방지)
+    url.searchParams.delete('tab');
+    url.searchParams.delete('id');
+    url.searchParams.delete('q');
+
+    // 1. 퀘스트 탭인 경우 -> 단축 주소 (?q=숫자) 사용
+    if (tab === 'quest' && id) {
+        // 'q1' -> '1'로 변환
+        const shortId = id.toLowerCase().replace('q', '');
+        url.searchParams.set('q', shortId);
+    } 
+    // 2. 그 외 (가이드, 뉴스, 빌더 등) -> 기존 방식 (?tab=...&id=...)
+    else {
+        if (tab && tab !== 'home') url.searchParams.set('tab', tab);
+        if (id) url.searchParams.set('id', id);
     }
     
-    // [중요] 현재 주소와 다를 때만 pushState 실행 (뒤로가기 지옥 방지)
+    // 주소가 실제로 변경되었을 때만 히스토리 기록 (뒤로가기 문제 해결)
     if (url.toString() !== window.location.href) {
         history.pushState(null, '', url);
     }
 }
-
 
 // 데이터 저장소
 let globalData = { items: [], quiz: [], quests: [], news: [] };
@@ -111,12 +117,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================
-// [기능] 데이터 로드 (강력한 오류 방지 적용)
+// [기능] 데이터 로드 (단축 URL 로직 추가됨)
 // =========================================
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab');
     const targetId = urlParams.get('id');
+    const shortQuestId = urlParams.get('q'); // 단축 URL 파라미터
 
     Promise.all([
         fetch('json/data.json').then(res => res.json()),
@@ -126,7 +133,7 @@ function loadData() {
     .then(([mainData, questData, newsData]) => {
         console.log("데이터 로드 성공:", { questData, newsData });
 
-        // 1. 퀘스트 데이터 파싱 (배열/객체 자동 감지)
+        // 1. 퀘스트 데이터 파싱
         let quests = [];
         if (Array.isArray(questData)) {
             quests = questData;
@@ -134,7 +141,7 @@ function loadData() {
             quests = questData.quests;
         }
 
-        // 2. 뉴스 데이터 파싱 (배열/객체 자동 감지)
+        // 2. 뉴스 데이터 파싱
         let news = [];
         if (Array.isArray(newsData)) {
             news = newsData;
@@ -165,27 +172,37 @@ function loadData() {
 
         currentQuestData = globalData.quests;
 
-        // 5. 화면 렌더링 (순서 중요)
+        // 5. 화면 렌더링
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
 
-        renderQuestList();                // 무림록 리스트
-        renderHomeQuests(globalData.quests); // 홈 화면 퀘스트
-        renderHomeNews(globalData.news);     // 홈 화면 뉴스
+        renderQuestList();                
+        renderHomeQuests(globalData.quests); 
+        renderHomeNews(globalData.news);     
         
-        // [수정] renderNews가 없어서 문제가 되었다면 여기서 해결
         if (typeof renderNews === 'function') {
             renderNews(globalData.news);
         } else {
-            renderFullNews(globalData.news); // 대체 함수 실행
+            renderFullNews(globalData.news);
         }
 
-        // 6. 바로가기
-        if (targetTab === 'quest' && targetId) {
+        // 6. 바로가기 실행 (단축 URL 우선 확인)
+        
+        // Case A: 단축 주소 (?q=1)로 들어온 경우
+        if (shortQuestId) {
+            const fullId = 'q' + shortQuestId; // 1 -> q1 변환
+            const foundQuest = globalData.quests.find(q => q.id === fullId);
+            if (foundQuest) {
+                // 주소창은 변경하지 않고(이미 q=1이므로) 내용만 로드
+                loadQuestDetail(foundQuest.filepath, fullId); 
+            }
+        }
+        // Case B: 기존 긴 주소 (?tab=quest&id=q1) 호환성 유지
+        else if (targetTab === 'quest' && targetId) {
             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
             const foundQuest = globalData.quests.find(q => q.id === formattedId);
             if (foundQuest) {
-                loadQuestDetail(foundQuest.filepath);
+                loadQuestDetail(foundQuest.filepath, formattedId);
             }
         }
     })
@@ -194,13 +211,12 @@ function loadData() {
     });
 }
 
-// 족보 카운터 업데이트 함수 (1~3위 표시 수정)
+// 족보 카운터 업데이트 함수
 function updateQuizCounter() {
     const counter = document.getElementById('quiz-counter-area');
     if (counter && globalData.quiz.length > 0) {
         const userCounts = {};
         
-        // 유저별 개수 집계
         globalData.quiz.forEach(item => {
             if (item.user && item.user.trim() !== "" && item.user !== "-") {
                 const u = item.user.trim();
@@ -208,27 +224,23 @@ function updateQuizCounter() {
             }
         });
 
-        // 내림차순 정렬 후 상위 3명 추출
         const sortedUsers = Object.entries(userCounts)
-            .sort((a, b) => b[1] - a[1]) // 개수 많은 순 정렬
-            .slice(0, 3); // 상위 3명만 자르기
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 3);
 
         let message = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
 
         if (sortedUsers.length > 0) {
             message += `<br><div style="font-size: 0.9em; margin-top: 5px; color: #888; font-weight: normal;">`;
-
-            // 1위 (무지개 이펙트 적용)
+            
             const [user1, count1] = sortedUsers[0];
             message += `👑 <strong class="rainbow-text">${user1}</strong> <span style="font-size:0.8em">(${count1})</span>`;
 
-            // 2위 (이펙트 없음)
             if (sortedUsers.length > 1) {
                 const [user2, count2] = sortedUsers[1];
                 message += ` &nbsp;|&nbsp; 🥈 ${user2} <span style="font-size:0.8em">(${count2})</span>`;
             }
 
-            // 3위 (이펙트 없음)
             if (sortedUsers.length > 2) {
                 const [user3, count3] = sortedUsers[2];
                 message += ` &nbsp;|&nbsp; 🥉 ${user3} <span style="font-size:0.8em">(${count3})</span>`;
@@ -265,22 +277,21 @@ function switchTab(tabName) {
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
         document.getElementById('nav-quiz').classList.add('active');
-        history.pushState(null, null, '?tab=quiz');
+        updateUrlQuery('quiz');
     } 
     else if (tabName === 'quest') {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
         showQuestList();
         
-        // 무림록 필터 초기화
         const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
         if (allBtn) filterQuestType('all', allBtn);
         
-updateUrlQuery('quest', null);
+        updateUrlQuery('quest', null);
     } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
-        history.pushState(null, null, '?tab=guide');
+        updateUrlQuery('guide', 'news'); 
     } 
     else if (tabName === 'guide' || tabName === 'code') {
         const guideView = document.getElementById('view-guide');
@@ -294,7 +305,9 @@ updateUrlQuery('quest', null);
             }
         }
         document.getElementById('nav-code').classList.add('active');
-        history.pushState(null, null, '?tab=guide');
+        
+        const currentId = new URLSearchParams(window.location.search).get('id');
+        if(!currentId) updateUrlQuery('guide');
     }
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
@@ -309,14 +322,19 @@ updateUrlQuery('quest', null);
         if (new URLSearchParams(window.location.search).get('b')) {
             loadViewer();
         }
-        history.pushState(null, null, '?tab=builder');
+        updateUrlQuery('builder');
     }
 }
 
-// URL 체크
+// URL 체크 (q= 파라미터 확인 추가)
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab'); 
+    const shortQuest = urlParams.get('q'); // 단축 퀘스트 ID
+
+    // q= 값이 있으면 무조건 퀘스트 탭으로
+    if (shortQuest) { switchTab('quest'); return; }
+
     if (urlParams.get('b')) { switchTab('builder'); return; }
 
     if (tab === 'quiz') switchTab('quiz');
@@ -330,21 +348,35 @@ function checkUrlParams() {
 // =========================================
 // [기능] 가이드 관련
 // =========================================
+
+const GUIDE_MAP = {
+    'news': 'news.html',
+    'tierlist': 'guide_tier.html',
+    'weapon': 'tier_weapon.html', 
+    'build': 'build.html',
+    'map': 'maps.html',
+    'side': 'beta.html',
+    'hw': 'npc.html',        
+    'boss': 'boss.html',     
+    'marts': 'marts.html',   
+    'harts': 'harts.html',   
+    'skill': 'skils.html',
+    'majang': 'majang.html', 
+    'code': 'code.html'      
+};
+
 function loadGuideView() {
     const container = document.getElementById('guide-content-loader');
     if (!container) return;
 
     const urlParams = new URLSearchParams(window.location.search);
     const targetId = urlParams.get('id');
-    const guideMap = {
-        'news': 'news.html', 'tierlist': 'guide_tier.html', 'weapon': 'tier_weapon.html',
-        'build': 'build.html', 'map': 'maps.html', 'side': 'beta.html', 'hw': 'npc.html',
-        'boss': 'boss.html', 'marts': 'marts.html', 'harts': 'harts.html', 'skill': 'skils.html',
-        'majang': 'majang.html', 'code': 'code.html'
-    };
 
+    // ID로 파일명 찾기 (없으면 기본값 news.html)
     let fileToLoad = 'news.html';
-    if (targetId && guideMap[targetId]) fileToLoad = guideMap[targetId];
+    if (targetId && GUIDE_MAP[targetId]) {
+        fileToLoad = GUIDE_MAP[targetId];
+    }
 
     if (isGuideLoaded) {
         const targetBtn = findButtonByFile(fileToLoad);
@@ -375,6 +407,12 @@ function findButtonByFile(filename) {
 function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
+
+    // 파일명 -> ID 역추적 및 URL 업데이트
+    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
+    if (foundId) {
+        updateUrlQuery('guide', foundId);
+    }
 
     if (btnElement) {
         const allButtons = document.querySelectorAll('#view-guide .guide-item-btn');
@@ -419,7 +457,6 @@ function renderGuideNewsList() {
 // [기능] 무림록 및 뉴스 공통 렌더링
 // =========================================
 
-// [추가] renderNews 함수 (renderFullNews의 별칭)
 function renderNews(newsList) {
     renderFullNews(newsList);
 }
@@ -472,7 +509,6 @@ function renderQuestList() {
     container.innerHTML = '';
 
     if (!currentQuestData || currentQuestData.length === 0) {
-        // 데이터가 없으면 전체 데이터로 재시도
         if(globalData.quests && globalData.quests.length > 0) {
             currentQuestData = globalData.quests;
         } else {
@@ -505,7 +541,7 @@ function createQuestCard(quest, container) {
     const card = document.createElement('div');
     card.className = 'quest-card';
     
-    // [수정] onclick에서 quest.id도 함께 전달
+    // 클릭 시 단축 URL로 이동하도록 ID 전달
     card.onclick = () => { 
         switchTab('quest'); 
         loadQuestDetail(quest.filepath, quest.id); 
@@ -561,13 +597,12 @@ function changePage(page) {
     document.getElementById('quest-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 
-// [수정] id 파라미터 추가 및 URL 업데이트 호출
-function loadQuestDetail(filepath, id) { // id 파라미터 추가됨
+function loadQuestDetail(filepath, id) {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
     const contentBox = document.getElementById('quest-content-loader');
 
-    // 주소창 업데이트 (예: ?tab=quest&id=q1)
+    // ID가 있으면 URL 업데이트 (단축 로직 적용)
     if (id) {
         updateUrlQuery('quest', id);
     }
@@ -578,7 +613,6 @@ function loadQuestDetail(filepath, id) { // id 파라미터 추가됨
 
     fetch(filepath).then(res => res.text()).then(html => {
         if(contentBox) contentBox.innerHTML = html;
-        // 상세 페이지 로드 시 스크롤 최상단으로 이동 (선택사항)
         window.scrollTo(0, 0);
     });
 }
@@ -593,7 +627,7 @@ function showQuestList() {
     }
 }
 
-// 필터 버튼 (범위 한정)
+// 필터 버튼
 function filterQuestType(type, btnElement) {
     const buttons = document.querySelectorAll('#view-quest .guide-item-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
@@ -656,11 +690,10 @@ function handleGlobalSearch(e) {
         .slice(0, 3).forEach(item => {
             resultsHTML += `<div class="search-result-item" onclick="selectGlobalResult('${item.hint}')"><span class="badge quiz">족보</span><span class="result-text">${item.hint} - ${item.answer}</span></div>`;
         });
-    // [수정] onclick에 quest.id 추가
-globalData.quests.filter(q => q.name.toLowerCase().includes(keyword) || q.location.toLowerCase().includes(keyword))
-    .slice(0, 3).forEach(quest => {
-        resultsHTML += `<div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')"><span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span></div>`;
-    });
+    globalData.quests.filter(q => q.name.toLowerCase().includes(keyword) || q.location.toLowerCase().includes(keyword))
+        .slice(0, 3).forEach(quest => {
+            resultsHTML += `<div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')"><span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span></div>`;
+        });
 
 
     resultContainer.innerHTML = resultsHTML || `<div class="no-result" style="padding:15px; text-align:center; color:#888;">결과 없음</div>`;
@@ -674,10 +707,9 @@ function selectGlobalResult(keyword) {
     document.getElementById("global-search-results").style.display = 'none';
 }
 
-// [수정] id 파라미터 추가
 function selectQuestResult(filepath, id) {
     switchTab('quest');
-    loadQuestDetail(filepath, id); // id 전달
+    loadQuestDetail(filepath, id); 
     document.getElementById("global-search-results").style.display = 'none';
 }
 
@@ -685,7 +717,6 @@ function selectQuestResult(filepath, id) {
 /* =========================================
    [기능] 빌더 (Builder)
    ========================================= */
-// [script.js] 1. 모달 열기 (중복 방지 로직 추가됨)
 function openBuilderModal(type, index) {
     if (!builderData) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
     
@@ -694,38 +725,30 @@ function openBuilderModal(type, index) {
     const list = document.getElementById('builder-modal-list');
     const title = document.getElementById('builder-modal-title');
     
-    // 타이틀 설정
     const typeNames = { 'weapons': '무기/무술', 'hearts': '심법', 'marts': '비결' };
     title.innerText = `${typeNames[type]} 선택`;
     
     list.innerHTML = '';
 
-    // [중요] 현재 카테고리에서 이미 사용 중인 아이템 ID 목록 추출
-    // (단, '현재 클릭한 슬롯(index)'에 있는 아이템은 제외 -> 그래야 교체나 해제가 가능)
     const currentList = currentBuild[type];
     const usedIds = currentList.filter((id, idx) => {
-        // 현재 슬롯(index)이 아닌 다른 슬롯들에 있는 ID만 수집
         return id !== null && idx !== parseInt(index);
     });
 
-    // '해제' 버튼 추가
     const emptyDiv = document.createElement('div');
     emptyDiv.className = 'select-item';
     emptyDiv.innerHTML = '<div style="width:48px;height:48px;background:#eee;line-height:48px;margin:0 auto;font-weight:bold;color:#888;">X</div><p>해제</p>';
     emptyDiv.onclick = () => selectBuilderItem(null, '', '');
     list.appendChild(emptyDiv);
 
-    // 아이템 목록 생성
     if (builderData[type]) {
         builderData[type].forEach(item => {
             const div = document.createElement('div');
             div.className = 'select-item';
             div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
             
-            // [중복 체크] 이미 다른 슬롯에 장착된 아이템인가?
             if (usedIds.includes(item.id)) {
-                div.classList.add('disabled'); // 스타일 적용 (흐리게)
-                // pointer-events: none이 CSS에 있지만, 혹시 모르니 클릭 이벤트 연결 안 함
+                div.classList.add('disabled');
             } else {
                 div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
             }
@@ -788,7 +811,6 @@ function generateBuildUrl() {
     navigator.clipboard.writeText(viewerUrl).then(() => alert("빌드 코드가 생성되었습니다!")).catch(() => alert("주소가 생성되었습니다."));
 }
 
-// [script.js] 5. 뷰어 로드 (제목 표시 방식 수정)
 function loadViewer() {
     if (!builderData) {
         fetch('json/builder_data.json')
@@ -821,19 +843,15 @@ function loadViewer() {
         }
     }
 
-    // [수정] 제목(H1)에 "{제작자}의 빌드" 표시
     const titleEl = document.getElementById('build-main-title');
     if (titleEl) {
         if (creator) {
-            // 제작자 이름이 있으면 "홍길동의 빌드"
             titleEl.innerText = `${creator}`;
         } else {
-            // 없으면 "익명의 협객의 빌드"
             titleEl.innerText = "익명의 협객의 빌드";
         }
     }
 
-    // 기존 슬롯 렌더링 로직
     const renderSlot = (type, ids, prefix) => {
         ids.forEach((id, idx) => {
             if (!id) return;
@@ -863,20 +881,16 @@ function loadViewer() {
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');
 }
-/* =========================================
-   [기능] 빌드 이미지 다운로드 (수정됨: 출처 추가)
-   ========================================= */
+
 function downloadBuildImage() {
     const element = document.getElementById("capture-area"); 
     const titleEl = document.getElementById("build-main-title");
     
-    // 파일명 생성
     let fileName = "연운_빌드";
     if (titleEl) {
         fileName = titleEl.innerText.replace(/\s/g, "_");
     }
 
-    // 캡처 시작 알림
     const btn = document.querySelector('.download-btn');
     const originalText = btn.innerText;
     btn.innerText = "🖼️ 변환 중...";
@@ -889,11 +903,9 @@ function downloadBuildImage() {
         allowTaint: true,       
         logging: false,          
         
-        // [핵심] 캡처 직전, 복제된 화면(Clone)을 조작하여 출처 추가
         onclone: (clonedDoc) => {
             const clonedArea = clonedDoc.getElementById("capture-area");
             
-            // 출처 푸터 생성
             const footer = clonedDoc.createElement('div');
             footer.style.marginTop = "30px";
             footer.style.paddingTop = "15px";
@@ -903,10 +915,8 @@ function downloadBuildImage() {
             footer.style.fontFamily = "'Noto Serif KR', serif";
             footer.style.fontSize = "0.9em";
             
-            // 텍스트 내용 설정
             footer.innerHTML = "출처: <strong style='color:#a08040;'>연운 한국 위키</strong> (wwm.tips)";
             
-            // 복제된 영역 맨 아래에 추가 (화면엔 안 보이고 이미지에만 찍힘)
             clonedArea.appendChild(footer);
         }
     };

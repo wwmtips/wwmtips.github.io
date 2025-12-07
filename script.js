@@ -1032,3 +1032,166 @@ function fallbackCopy(text, btnElement, successCallback) {
         prompt("복사하기: 아래 텍스트를 복사하세요.", text);
     }
 }
+
+
+/* =========================================
+   [script.js - 더미 데이터 포함 버전]
+   ========================================= */
+
+// 1. [더미 데이터] 슬라이더 뉴스 (이미지가 없으면 색상 박스로 대체됨)
+const dummyNewsData = [
+    {
+        id: "d1",
+        title: "12월 12일 모바일 정식 출시",
+        tag: "공지",
+        content: "PC와 모바일의 경계를 허무는 크로스 플랫폼 지원. <br>지금 사전 예약하고 한정판 의상을 받으세요!",
+        link: "#",
+        image: "" // 테스트용 이미지 URL
+    },
+    {
+        id: "d2",
+        title: "12월 12일 모바일 업데이트 노트",
+        tag: "업데이트",
+        content: "플레이스테이션 환경이 보다 쾌적하게 개선됩니다.",
+        link: "#",
+        image: ""
+    }
+];
+
+// 2. [더미 데이터] 지도 정보 (첨부 이미지 스타일 테스트용)
+const dummyMapData = [
+    {
+        title: "청하",
+        desc: "맑은 물이 흐르는 평화로운 호수지만, 깊은 곳에는 잊혀진 수룡의 전설이 잠들어 있습니다. 초보 협객들의 수련 장소로 적합합니다.",
+        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
+        image: "https://via.placeholder.com/600x300/263238/ffffff?text=Blue+Lake"
+    },
+    {
+        title: "개봉",
+        desc: "일년 내내 눈보라가 치는 극한의 땅. 고대 무공 비급이 숨겨져 있다는 소문이 있어 수많은 고수들이 도전했으나 돌아오지 못했습니다.",
+        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
+        image: "https://via.placeholder.com/600x300/455a64/ffffff?text=Frozen+Peak"
+    }
+];
+
+
+// === [기능 로직] ===
+
+let currentSlideIndex = 0;
+let slideInterval;
+
+// (1) 메인 슬라이더 로딩 (더미 데이터 사용)
+function loadHomeSlider() {
+    const track = document.getElementById('hero-slider-track');
+    const indicators = document.getElementById('slider-indicators');
+    
+    if (!track) return;
+
+    // 초기화
+    track.innerHTML = '';
+    indicators.innerHTML = '';
+
+    dummyNewsData.forEach((news, index) => {
+        // 슬라이드 생성
+        const slideDiv = document.createElement('div');
+        slideDiv.className = 'hero-slide';
+        // 실제 이미지가 있다면 url('images/...') 형식이 됩니다.
+        slideDiv.style.backgroundImage = `url('${news.image}')`; 
+        
+        slideDiv.innerHTML = `
+            <div class="slide-content">
+                <span class="slide-tag">${news.tag}</span>
+                <h2 class="slide-title">${news.title}</h2>
+                <p class="slide-desc">${news.content.replace(/<br>/g, ' ')}</p>
+                <a href="${news.link}" class="slide-link-btn">자세히 보기 ↗</a>
+            </div>
+        `;
+        
+        // 배경 클릭 시 이동
+        slideDiv.onclick = (e) => {
+            if(e.target.tagName !== 'A') window.open(news.link, '_blank');
+        };
+        slideDiv.style.cursor = 'pointer';
+
+        track.appendChild(slideDiv);
+
+        // 인디케이터 생성
+        const dot = document.createElement('div');
+        dot.className = `indicator ${index === 0 ? 'active' : ''}`;
+        dot.onclick = () => goToSlide(index);
+        indicators.appendChild(dot);
+    });
+
+    startSlider();
+}
+
+/* script.js 내 loadHomeMaps 함수 수정 */
+
+function loadHomeMaps() {
+    const mapList = document.getElementById('home-map-list');
+    if (!mapList) return;
+    
+    mapList.innerHTML = ''; // 초기화
+
+    dummyMapData.forEach(map => {
+        const card = document.createElement('a');
+        card.className = 'map-card'; // CSS 클래스
+        card.href = map.link;
+        card.target = "_blank";
+
+        // [수정 포인트] img 태그 대신 div에 background-image 적용
+        card.innerHTML = `
+            <div class="map-hero-bg" style="background-image: url('${map.image}');"></div>
+            <div class="map-content">
+                <div class="map-title">${map.title}</div>
+                <p class="map-desc">${map.desc}</p>
+            </div>
+        `;
+        mapList.appendChild(card);
+    });
+}
+
+// (3) 슬라이더 조작 함수들
+function moveSlide(direction) {
+    const totalSlides = dummyNewsData.length;
+    currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
+    updateSliderPosition();
+    resetSliderTimer();
+}
+
+function goToSlide(index) {
+    currentSlideIndex = index;
+    updateSliderPosition();
+    resetSliderTimer();
+}
+
+function updateSliderPosition() {
+    const track = document.getElementById('hero-slider-track');
+    const indicators = document.querySelectorAll('.indicator');
+    if (track) {
+        track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+    }
+    indicators.forEach((dot, idx) => {
+        if (idx === currentSlideIndex) dot.classList.add('active');
+        else dot.classList.remove('active');
+    });
+}
+
+function startSlider() {
+    if (slideInterval) clearInterval(slideInterval);
+    slideInterval = setInterval(() => moveSlide(1), 5000);
+}
+
+function resetSliderTimer() {
+    if (slideInterval) clearInterval(slideInterval);
+    startSlider();
+}
+
+// === [초기화] 페이지 로드 시 실행 ===
+// 이 부분은 script.js 하단 혹은 switchTab 함수 내에 위치해야 합니다.
+document.addEventListener("DOMContentLoaded", () => {
+    // 홈 화면일 때 로딩
+    loadHomeSlider();
+    loadHomeMaps();
+    // loadRecentItems(); // 기존 퀘스트 로딩 함수 (있다면 유지)
+});

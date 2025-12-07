@@ -77,32 +77,38 @@
     </div>
 
     <main id="main-content">
+   <div id="view-home">
+    
+    <div class="hero-slider-wrapper">
+        <div id="hero-slider-track" class="slider-track">
+            </div>
         
-        <div id="view-home">
-            <section id="intro-card" class="large-font-chunk">
-                <h2>연운:한국 위키</h2>
-                <p>
-                    &lt;연운&gt;에 대한 최신 소식과 무림록, 지도, 스무고개 족보 등 다양한 게임 정보를 쉽게 확인 할 수 있도록 모아둔 위키입니다.
-                </p>
-                <button class="browse-button" onclick="switchTab('guide')">자주 찾는 정보</button>
-            </section>
-
-        <section id="recent-notice">
-        <div class="section-header-clickable" onclick="switchTab('news')" style="margin-bottom: 10px;">
-            <h3>최신 뉴스</h3>
+        <div class="slider-controls">
+            <button class="slider-btn prev" onclick="moveSlide(-1)">❮</button>
+            <button class="slider-btn next" onclick="moveSlide(1)">❯</button>
         </div>
-        
-        <div id="home-news-list" class="item-list-container">
+        <div id="slider-indicators" class="slider-indicators"></div>
+    </div>
+
+    <section class="recent-updates-section">
+        <div class="section-header-clickable" onclick="switchTab('quest')">
+            <h3><span class="deco-bar"></span>최근 발견된 비급</h3>
+            <span class="more-link">더보기 +</span>
+        </div>
+        <div id="home-quest-list" class="quest-grid">
             </div>
     </section>
 
-            <section id="recent-items" style="margin-bottom: 10x;">
-                <h3>최근 업데이트</h3>
-                <div id="home-quest-list" class="quest-grid">
-                    </div>
-            </section>
+    <section class="map-section">
+        <div class="section-header-clickable" onclick="window.open('https://yhellos3327-eng.github.io/wwmkoreamap/', '_blank')">
+            <h3><span class="deco-bar"></span>대동여지도 (지역 정보)</h3>
+            <span class="more-link">지도 전체보기 ↗</span>
         </div>
+        <div id="home-map-list" class="map-grid">
+            </div>
+    </section>
 
+</div>
 
 <div id="view-quiz" style="display: none;">
     <section id="answer-container">

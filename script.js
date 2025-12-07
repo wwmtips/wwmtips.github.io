@@ -29,22 +29,16 @@ let currentSlot = { type: '', index: 0 };
 // [지도 더미 데이터] (지도 JSON이 없으므로 내장 데이터 사용)
 const dummyMapData = [
     {
-        title: "청명 호수 (Blue Lake)",
-        desc: "맑은 물이 흐르는 평화로운 호수지만, 깊은 곳에는 잊혀진 수룡의 전설이 잠들어 있습니다.",
+        title: "청하",
+        desc: "",
         link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
         image: "https://via.placeholder.com/600x300/263238/ffffff?text=Blue+Lake" // 실제 이미지 경로로 변경 권장
     },
     {
-        title: "만년설산 (Frozen Peak)",
-        desc: "일년 내내 눈보라가 치는 극한의 땅. 고대 무공 비급이 숨겨져 있다는 소문이 있습니다.",
+        title: "개봉",
+        desc: "",
         link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
         image: "https://via.placeholder.com/600x300/455a64/ffffff?text=Frozen+Peak"
-    },
-    {
-        title: "황철 광산 (Iron Mine)",
-        desc: "희귀 광석이 채굴되는 곳입니다. 최근 산적들의 점거로 인해 일반인의 출입이 통제되고 있습니다.",
-        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
-        image: "https://via.placeholder.com/600x300/3e2723/ffffff?text=Iron+Mine"
     }
 ];
 

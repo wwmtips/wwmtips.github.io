@@ -1,40 +1,168 @@
-<div class="code-page-container">
+<div class="code-page-container" style="text-align: left;">
     
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #c92a2a;   /* 짙은 적색 포인트 */
+            --wuxia-accent-gold: #b08d55;  /* 금색 포인트 */
+            --wuxia-text-main: #333333;    /* 본문 진한색 */
+            --wuxia-text-sub: #666666;     /* 본문 연한색 */
+            --wuxia-bg-light: #f4f4f2;     /* 배경 연한색 */
+        }
 
-    <div style="background-color: rgba(138, 51, 36, 0.15); border: 1px solid var(--wuxia-accent-red); padding: 15px; border-radius: 4px; margin-bottom: 25px;">
-        <strong style="color: var(--wuxia-accent-red);">※ 중요 참고사항</strong>
-        <p style="margin: 5px 0 0 0; color: #ccc; font-size: 0.9em;">
-            일부 코드는 사용이 불가 할 수 있습니다. </p>
+        .code-page-container {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            max-width: 100%;
+        }
+
+        /* 공지 박스 스타일 */
+        .notice-box {
+            background-color: #fffcf5; 
+            border: 1px solid var(--wuxia-accent-red); 
+            padding: 15px; 
+            border-radius: 4px; 
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        /* 코드 카드 스타일 */
+        .code-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .code-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+
+        .code-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-color: var(--wuxia-accent-gold);
+        }
+
+        /* 텍스트 영역 */
+        .code-info {
+            flex-grow: 1;
+        }
+
+        .code-text {
+            font-size: 1.25em;
+            font-weight: bold;
+            color: var(--wuxia-accent-red);
+            font-family: 'Consolas', 'Courier New', monospace; /* 코드는 고정폭 폰트 추천 */
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .code-rewards {
+            font-size: 0.9em;
+            color: var(--wuxia-text-sub);
+        }
+
+        /* 복사 버튼 스타일 */
+        .copy-btn {
+            background-color: #fff;
+            border: 1px solid var(--wuxia-accent-gold);
+            color: var(--wuxia-accent-gold);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--wuxia-accent-gold);
+            color: #fff;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .copy-icon {
+            font-size: 1.1em;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 500px) {
+            .code-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .copy-btn {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">이벤트</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            쿠폰 코드
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">강호 생활에 도움이 되는 보급품입니다.</p>
+    </div>
+
+    <div class="notice-box">
+        <span style="font-size: 1.5em;">⚠️</span>
+        <div>
+            <strong style="color: var(--wuxia-accent-red); display: block; margin-bottom: 5px;">중요 참고사항</strong>
+            <p style="margin: 0; color: var(--wuxia-text-main); font-size: 0.9em;">
+                일부 코드는 기간 만료 등으로 인해 사용이 불가할 수 있습니다.
+            </p>
+        </div>
     </div>
 
     <div class="code-list">
-<div class="code-card">
+        
+        <div class="code-card">
             <div class="code-info">
                 <div class="code-text">WWMDEVTALK</div>
                 <div class="code-rewards">장명옥 x40, 연운통보 x20000</div>
             </div>
-            <button class="copy-btn" onclick="copyToClipboard('WWMDEVTALK')">
+            <button class="copy-btn" onclick="copyToClipboard('WWMDEVTALK', this)">
                 <span class="copy-icon">❐</span> 복사
             </button>
-</div>
+        </div>
+
         <div class="code-card">
             <div class="code-info">
                 <div class="code-text">WWM251115</div>
                 <div class="code-rewards">장명옥 x10, 연운통보 x5000</div>
             </div>
-            <button class="copy-btn" onclick="copyToClipboard('WWM251115')">
+            <button class="copy-btn" onclick="copyToClipboard('WWM251115', this)">
                 <span class="copy-icon">❐</span> 복사
             </button>
         </div>
-
-        
 
         <div class="code-card">
             <div class="code-info">
                 <div class="code-text">WWMGLyoutube</div>
                 <div class="code-rewards">장명옥 x20, 연운통보 x5000, 심법심득-단편집 x1</div>
             </div>
-            <button class="copy-btn" onclick="copyToClipboard('WWMGLyoutube')">
+            <button class="copy-btn" onclick="copyToClipboard('WWMGLyoutube', this)">
                 <span class="copy-icon">❐</span> 복사
             </button>
         </div>
@@ -44,10 +172,39 @@
                 <div class="code-text">WWMGLtiktok</div>
                 <div class="code-rewards">장명옥 x10, 연운통보 x10000</div>
             </div>
-            <button class="copy-btn" onclick="copyToClipboard('WWMGLtiktok')">
+            <button class="copy-btn" onclick="copyToClipboard('WWMGLtiktok', this)">
                 <span class="copy-icon">❐</span> 복사
             </button>
         </div>
 
     </div>
+
+    <script>
+        function copyToClipboard(text, btnElement) {
+            // 1. 클립보드 API 사용
+            navigator.clipboard.writeText(text).then(() => {
+                // 성공 시 버튼 UI 변경
+                const originalContent = btnElement.innerHTML;
+                
+                // 버튼 스타일 및 텍스트 변경
+                btnElement.innerHTML = '<span class="copy-icon">✓</span> 완료';
+                btnElement.style.backgroundColor = 'var(--wuxia-accent-gold)';
+                btnElement.style.color = '#fff';
+                btnElement.style.borderColor = 'var(--wuxia-accent-gold)';
+                
+                // 2초 후 원상복구
+                setTimeout(() => {
+                    btnElement.innerHTML = originalContent;
+                    btnElement.style.backgroundColor = '';
+                    btnElement.style.color = '';
+                    btnElement.style.borderColor = '';
+                }, 2000);
+
+            }).catch(err => {
+                // 실패 시 (보안 설정 등으로 인해)
+                console.error('복사 실패:', err);
+                alert('복사에 실패했습니다. 직접 코드를 복사해주세요.');
+            });
+        }
+    </script>
 </div>

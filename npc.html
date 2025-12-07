@@ -1,1 +1,151 @@
+<div class="quest-detail-container" style="text-align: left;">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #c92a2a;   /* 짙은 적색 포인트 */
+            --wuxia-accent-gold: #b08d55;  /* 금색 포인트 */
+            --wuxia-text-main: #333333;    /* 본문 진한색 */
+            --wuxia-text-sub: #666666;     /* 본문 연한색 */
+        }
 
+        .quest-detail-container {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            max-width: 100%;
+        }
+
+        /* 구분선 스타일 */
+        .wuxia-divider {
+            border: 0; 
+            border-top: 1px dashed #ccc; 
+            margin: 30px 0;
+        }
+
+        /* 할 일 박스 스타일 */
+        .task-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+            border-color: var(--wuxia-accent-gold);
+        }
+
+        /* 경로(위치) 텍스트 스타일 */
+        .task-path {
+            color: var(--wuxia-accent-red);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        /* 이미지 스타일 (images/n_x.jpg 적용) */
+        .task-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 10px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">성장 가이드</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            할 일
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">숙제는 아니지만 숙제 같은 것</p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 30px;">
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+            <p style="margin: 0 0 10px 0; color: var(--wuxia-accent-red);">
+                <strong>📍 가이드 안내</strong>
+            </p>
+            <p style="margin: 0; color: var(--wuxia-text-main); font-size: 0.95em; line-height: 1.6;">
+                강호의 고수가 되기 위해 매일, 그리고 매주 챙겨야 할 목록입니다.<br>
+                꾸준함이 곧 <span style="color:var(--wuxia-accent-gold); font-weight:bold;">무공의 깊이</span>가 됩니다.
+            </p>
+        </div>
+    </div>
+
+    <hr class="wuxia-divider">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
+            일간 
+        </h3>
+        
+        <div class="task-card">
+            <span class="task-path">[문파 > 강호 호령]</span>
+            <p style="margin: 0; color: var(--wuxia-text-sub);">
+                개당 60점, 주당 1200점을 채워 각 문파별 아이템을 구매할 수 있습니다.
+            </p>
+            <img src="images/n_1.jpg" alt="강호 호령" class="task-img">
+        </div>
+
+        <div class="task-card">
+            <span class="task-path">[강호행 > 복수/수배]</span>
+            <p style="margin: 0; color: var(--wuxia-text-sub);">
+                복수와 수배에서 매일 NPC를 처치하면 외형 아이템을 얻을 수 있습니다.
+            </p>
+            <img src="images/n_2.jpg" alt="복수/수배" class="task-img">
+        </div>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
+            주간 
+        </h3>
+
+        <div class="task-card">
+            <span class="task-path">[상점 > 아이템 > 강호 백전]</span>
+            <p style="margin: 0; color: var(--wuxia-text-sub);">
+                음의 선율 2개를 구매할 수 있습니다.
+            </p>
+            <img src="images/n_3.jpg" alt="강호 백전" class="task-img">
+        </div>
+
+        <div class="task-card">
+            <span class="task-path">[시즌 > 시즌 상점]</span>
+            <p style="margin: 0; color: var(--wuxia-text-sub);">
+                매주 심득, 장비, 기술 상자를 구매할 수 있습니다.
+            </p>
+            <img src="images/n_4.jpg" alt="시즌 상점" class="task-img">
+        </div>
+
+        <div class="task-card">
+            <span class="task-path">[강호행 > 도전 > 협경/검무장]</span>
+            <p style="margin: 0; color: var(--wuxia-text-sub);">
+                1회 클리어 합니다.
+            </p>
+            <img src="images/n_5.jpg" alt="협경/검무장" class="task-img">
+        </div>
+
+        <div class="task-card">
+            <span class="task-path">[동맹 > 이벤트]</span>
+            <p style="margin: 0; color: var(--wuxia-text-sub);">
+                이벤트를 통해 보주를 매주 2500개 획득할 수 있습니다.
+            </p>
+            <img src="images/n_6.jpg" alt="동맹 이벤트" class="task-img">
+        </div>
+
+        <div class="task-card">
+            <span class="task-path">[강호행 > 지과 > 각장림]</span>
+            <p style="margin: 0; color: var(--wuxia-text-sub);">
+                매주 죄엽 2천개를 획득할 수 있습니다.
+            </p>
+            <img src="images/n_7.jpg" alt="각장림" class="task-img">
+        </div>
+    </div>
+
+</div>

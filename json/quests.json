@@ -191,6 +191,8 @@
     "name": "고양이 우두머리의 고충",
     "location": "자심선원",
     "type": "만사록",
+    "bgimg": "quests/images/q26_1.jpg",
+  
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q24.html"
   },
@@ -199,6 +201,8 @@
     "name": "도박왕의 비밀 보물",
     "location": "남문대로",
     "type": "만사록",
+    "bgimg": "quests/images/q26_1.jpg",
+  
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q25.html"
   },

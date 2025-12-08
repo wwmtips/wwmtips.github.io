@@ -1,5 +1,6 @@
+  
 /* =========================================
-   script.js (최종 수정본 - 경로 수정 & 슬라이더 정보 교체)
+   script.js (최종 수정본 - 커뮤니티 알림 추가)
    ========================================= */
 
 // =========================================
@@ -14,8 +15,8 @@ let isGuideLoaded = false;
 let currentSlideIndex = 0;
 let slideInterval;
 
-// 데이터 저장소
-let globalData = { items: [], quiz: [], quests: [], news: [] };
+// 데이터 저장소 (cnews 추가됨)
+let globalData = { items: [], quiz: [], quests: [], news: [], cnews: [] };
 let builderData = null; 
 
 // 빌더 상태 관리
@@ -65,13 +66,14 @@ function loadData() {
     const targetId = urlParams.get('id');
     const shortQuestId = urlParams.get('q'); 
 
-    // [수정됨] quests.json 경로를 json/ 폴더 내부로 변경
+    // [수정됨] cnews.json 추가 로드
     Promise.all([
         fetch('json/data.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
         fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }), 
-        fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; })
+        fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
+        fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; })
     ])
-    .then(([mainData, questData, newsData]) => {
+    .then(([mainData, questData, newsData, cnewsData]) => {
         console.log("데이터 로드 완료");
 
         // 1. 퀘스트 데이터 파싱
@@ -80,7 +82,10 @@ function loadData() {
         // 2. 뉴스 데이터 파싱
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
 
-        // 3. 정렬 (ID 기준 역순: q26 -> q1)
+        // 3. 커뮤니티 뉴스 데이터 파싱
+        let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
+
+        // 4. 정렬 (ID 기준 역순: q26 -> q1)
         if (quests.length > 0) {
             quests.sort((a, b) => {
                 const numA = parseInt((a.id || "").replace('q', '')) || 0;
@@ -89,17 +94,18 @@ function loadData() {
             });
         }
         
-        // 4. 전역 변수 저장
+        // 5. 전역 변수 저장
         globalData = {
             items: mainData.items || [],
             quiz: mainData.quiz || [],
             quests: quests, 
-            news: news 
+            news: news,
+            cnews: cnews // 저장
         };
 
         currentQuestData = globalData.quests;
 
-        // 5. 화면 렌더링
+        // 6. 화면 렌더링
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
         renderQuestList();                
@@ -107,10 +113,11 @@ function loadData() {
         // [홈 화면 렌더링]
         renderHomeSlider(globalData.quests); 
         renderHomeRecentNews(globalData.news);     
+        renderHomeCommunityNews(globalData.cnews); // [신규] 커뮤니티 알림 렌더링
         
         renderFullNews(globalData.news);
 
-        // 6. 딥링크 처리
+        // 7. 딥링크 처리
         if (shortQuestId) {
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
@@ -128,10 +135,10 @@ function loadData() {
 }
 
 // =========================================
-// 4. 홈 화면 로직 (슬라이더 & 뉴스 & 지도)
+// 4. 홈 화면 로직 (슬라이더 & 뉴스 & 커뮤니티 & 지도)
 // =========================================
 
-// [슬라이더] 퀘스트 데이터 기반 + 이미지 경로 자동화 + 정보 교체
+// [슬라이더] 
 function renderHomeSlider(quests) {
     const track = document.getElementById('hero-slider-track');
     const indicators = document.getElementById('slider-indicators');
@@ -141,7 +148,7 @@ function renderHomeSlider(quests) {
     track.innerHTML = '';
     indicators.innerHTML = '';
 
-    const sliderData = quests.slice(0, 3); // 최신 3개
+    const sliderData = quests.slice(0, 3);
 
     if (sliderData.length === 0) {
         track.innerHTML = '<div style="color:white; text-align:center; padding-top:100px;">불러올 소식이 없습니다.</div>';
@@ -149,14 +156,10 @@ function renderHomeSlider(quests) {
     }
 
     sliderData.forEach((quest, index) => {
-        // [수정됨] 정보 교체
-        // 태그: type (예: 만사록)
-        // 설명: location (예: 남문대로)
         const tag = quest.type || "분류 없음";
         const title = quest.name;
         const desc = quest.location || "지역 정보 없음"; 
         
-        // [경로 자동화] bgimg가 있으면 'quests/images/'를 붙임. 없으면 기본 이미지.
         const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : 'images/bg.jpg';
         
         const slideDiv = document.createElement('div');
@@ -192,37 +195,40 @@ function renderHomeSlider(quests) {
     startSlider();
 }
 
-// [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일)
-// [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일 + 간격 줄임)
+// [홈 하단 목록 1] 최근 소식
 function renderHomeRecentNews(newsList) {
     const container = document.getElementById('home-recent-news') || document.getElementById('home-quest-list');
-    
     if (!container) return;
     
-    container.innerHTML = '';
+    renderNewsListGeneric(newsList, container, 'news');
+}
 
-    // 컨테이너 스타일
+// [홈 하단 목록 2] 커뮤니티 알림 (신규)
+function renderHomeCommunityNews(cnewsList) {
+    const container = document.getElementById('home-community-news');
+    if (!container) return;
+
+    renderNewsListGeneric(cnewsList, container, 'cnews');
+}
+
+// [공통 함수] 뉴스 리스트 렌더링 로직 (최근 소식 & 커뮤니티 알림 공용)
+function renderNewsListGeneric(dataList, container, type) {
+    container.innerHTML = '';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
-    container.style.gap = '0'; // 아이템 사이의 추가 간격 없음
+    container.style.gap = '0';
 
-    const recentNews = newsList.slice(0, 3); // 최신 5개
+    const listToRender = dataList.slice(0, 5); // 최신 5개
 
-    if (recentNews.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">최신 소식이 없습니다.</div>';
+    if (listToRender.length === 0) {
+        container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">등록된 내용이 없습니다.</div>';
         return;
     }
 
-    recentNews.forEach(news => {
+    listToRender.forEach(item => {
         const itemDiv = document.createElement('div');
-        
-        // CSS 클래스 적용 (style.css 사용)
-        itemDiv.className = 'recent-news-item';
-        
-        // [수정됨] 위아래 여백(padding)을 15px -> 10px로 줄임
+        itemDiv.className = 'recent-news-item'; // CSS 클래스 재사용
         itemDiv.style.padding = '10px 5px'; 
-        
-        // 밑줄 스타일 등 기본 설정
         itemDiv.style.borderBottom = '1px solid #eee';
         itemDiv.style.cursor = 'pointer';
         itemDiv.style.display = 'flex';
@@ -230,32 +236,32 @@ function renderHomeRecentNews(newsList) {
         itemDiv.style.alignItems = 'center';
         itemDiv.style.transition = 'background-color 0.2s';
 
-        // 마우스 호버 효과
         itemDiv.onmouseover = () => { itemDiv.style.backgroundColor = '#f9f9f9'; };
         itemDiv.onmouseout = () => { itemDiv.style.backgroundColor = 'transparent'; };
         
         // 클릭 이벤트
         itemDiv.onclick = () => { 
-            if (news.link && news.link.trim() !== "") {
-                window.open(news.link, '_blank'); 
+            if (item.link && item.link.trim() !== "") {
+                window.open(item.link, '_blank'); 
             } else {
-                switchTab('news'); 
+                // 링크가 없으면 일단 아무 동작도 안하거나, 
+                // type에 따라 분기 가능 (현재는 그냥 둠)
+                // alert('준비 중입니다.'); 
             }
         };
 
-        // 내용 구성 (폰트 크기 및 색상 유지)
         itemDiv.innerHTML = `
             <div class="news-title-text" style="font-size: 16px; color: #333; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px; flex: 1;">
-                ${news.title}
+                ${item.title}
             </div>
             <div class="news-date-text" style="font-size: 14px; color: #999; min-width: 80px; text-align: right; white-space: nowrap;">
-                ${news.date}
+                ${item.date}
             </div>
         `;
-        
         container.appendChild(itemDiv);
     });
 }
+
 
 // 슬라이더 이동 함수
 function moveSlide(direction) {

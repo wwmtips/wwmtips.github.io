@@ -2,6 +2,18 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "위장", "answer": "카멜레온", "user": "백지연" },
+{ "hint": "친구", "answer": "숨바꼭질", "user": "백지연" },
+{ "hint": "장난감", "answer": "오뚝이", "user": "MrGoo" },
+{ "hint": "장수", "answer": "구기자", "user": "?" },
+{ "hint": "푸른 죽순", "answer": "상추", "user": "잭맨" },
+{ "hint": "공예품", "answer": "도자기", "user": "" },
+{ "hint": "화상", "answer": "알로에", "user": "정체불명" },
+{ "hint": "공격", "answer": "상어", "user": "바람風" },
+{ "hint": "왜소함", "answer": "땃쥐", "user": "바람風" },
+{ "hint": "약용", "answer": "영지버섯", "user": "Dall" },
+{ "hint": "강력한 앞니", "answer": "비버", "user": "고궁진" },
+
     { "hint": "툰드라", "answer": "순록", "user": "한예리" },
 { "hint": "느린 성장", "answer": "회양목", "user": "주우지" },
 { "hint": "늪", "answer": "악어", "user": "익명" },

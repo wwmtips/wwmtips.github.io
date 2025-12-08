@@ -2,6 +2,14 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "큰 눈", 
+      "answer": "올빼미", 
+      "user": "ㅇㅇ" 
+    },
+    { "hint": "기침", 
+      "answer": "비파", 
+      "user": "ㅇㅇ" 
+    },
     { "hint": "완전변태", 
       "answer": "나비", 
       "user": "맹글" 

@@ -2,6 +2,13 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "솔방울", "answer": "소나무", "user": "블커" },
+{ "hint": "향신료", "answer": "계피", "user": "블커" },
+{ "hint": "매실", "answer": "매화", "user": "블커" },
+{ "hint": "기도", "answer": "부적", "user": "블커" },
+{ "hint": "손목", "answer": "팔찌", "user": "블커" },
+{ "hint": "버섯류", "answer": "표고버섯", "user": "블커" },
+{ "hint": "강치", "answer": "바다사자", "user": "블커" },
     { "hint": "큰 눈", 
       "answer": "올빼미", 
       "user": "ㅇㅇ" 

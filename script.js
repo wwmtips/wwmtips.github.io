@@ -733,7 +733,7 @@ function renderQuizTable(data, keyword = '') {
 
     // 클릭 시 아까 만든 이슈 페이지로 이동
     reportTr.onclick = () => {
-        window.open('https://github.com/arcdbkr/server_chat/issues/new?template=quiz.yaml', '_blank');
+        window.open('moveSlidwwm.tips/report/', '_blank');
     };
 
     reportTr.innerHTML = `

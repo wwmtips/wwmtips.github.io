@@ -159,7 +159,7 @@ function renderHomeSlider(quests) {
         const title = quest.name;
         const desc = quest.type; 
         // bgimg가 없으면 기본 이미지 사용
-        const bgImage = quest.bgimg ? quest.bgimg : 'images/bg.jpg';
+          const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : 'images/bg.jpg';
         
         const slideDiv = document.createElement('div');
         slideDiv.className = 'hero-slide';

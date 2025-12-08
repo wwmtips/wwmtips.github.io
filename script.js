@@ -193,6 +193,7 @@ function renderHomeSlider(quests) {
 }
 
 // [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일)
+// [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일 + 링크 이동 기능)
 function renderHomeRecentNews(newsList) {
     const container = document.getElementById('home-recent-news') || document.getElementById('home-quest-list');
     
@@ -200,44 +201,39 @@ function renderHomeRecentNews(newsList) {
     
     container.innerHTML = '';
 
-    // 기존 CSS(Grid) 속성을 무시하고 리스트 형태로 변경하기 위해 인라인 스타일 적용
+    // 컨테이너 스타일 초기화 (기존 Grid 무시)
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
-    container.style.gap = '0'; // 간격 조정
+    container.style.gap = '0';
 
     const recentNews = newsList.slice(0, 5); // 최신 5개
 
     if (recentNews.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888;">최신 소식이 없습니다.</div>';
+        container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">최신 소식이 없습니다.</div>';
         return;
     }
 
     recentNews.forEach(news => {
-        // [스타일 변경] 썸네일/태그 제거 -> 텍스트 리스트 형태
         const itemDiv = document.createElement('div');
         
-        // 리스트 아이템 스타일 설정
-        itemDiv.style.padding = '15px 10px';
-        itemDiv.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
-        itemDiv.style.cursor = 'pointer';
-        itemDiv.style.display = 'flex';
-        itemDiv.style.justifyContent = 'space-between';
-        itemDiv.style.alignItems = 'center';
-        itemDiv.style.transition = 'background-color 0.2s';
-
-        // 마우스 호버 효과
-        itemDiv.onmouseover = () => { itemDiv.style.backgroundColor = 'rgba(255,255,255,0.05)'; };
-        itemDiv.onmouseout = () => { itemDiv.style.backgroundColor = 'transparent'; };
+        // CSS 클래스 적용 (style.css에 정의된 스타일 사용)
+        itemDiv.className = 'recent-news-item';
         
-        // 클릭 시 뉴스 탭으로 이동
-        itemDiv.onclick = () => { switchTab('news'); };
+        // [기능 추가] 클릭 시 링크가 있으면 새 창으로 이동, 없으면 뉴스 탭으로 이동
+        itemDiv.onclick = () => { 
+            if (news.link && news.link.trim() !== "") {
+                window.open(news.link, '_blank'); 
+            } else {
+                switchTab('news'); 
+            }
+        };
 
-        // [내용] 제목(왼쪽) + 날짜(오른쪽)
+        // 내용 구성 (제목 + 날짜)
         itemDiv.innerHTML = `
-            <div style="font-size: 1.05em; color: #e0e0e0; font-weight:500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px;">
+            <div class="news-title-text">
                 ${news.title}
             </div>
-            <div style="font-size: 0.9em; color: #888; min-width: 80px; text-align: right; white-space: nowrap;">
+            <div class="news-date-text">
                 ${news.date}
             </div>
         `;

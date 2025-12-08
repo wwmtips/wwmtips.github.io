@@ -71,7 +71,7 @@ function loadData() {
     // Promise.allSettled를 사용하거나 개별 catch를 사용하여 하나가 실패해도 멈추지 않게 함
     Promise.all([
         fetch('json/data.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
-        fetch('quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패. 경로를 확인하세요.', err); return []; }),
+        fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패. 경로를 확인하세요.', err); return []; }),
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; })
     ])
     .then(([mainData, questData, newsData]) => {

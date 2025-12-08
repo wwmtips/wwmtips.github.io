@@ -2,6 +2,7 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "신발류", "answer": "부츠", "user": "-" },
     { "hint": "관상용", "answer": "베고니아", "user": "ㅇㅇ" },
 { "hint": "엉덩이", "answer": "복숭아", "user": "ㅇㅇ" },
 

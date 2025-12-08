@@ -2,6 +2,9 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "관상용", "answer": "베고니아", "user": "ㅇㅇ" },
+{ "hint": "엉덩이", "answer": "복숭아", "user": "ㅇㅇ" },
+
     { "hint": "여름철", "answer": "오이", "user": "본좌" },
 { "hint": "가을", "answer": "잠자리", "user": "CubePapa" },
 { "hint": "저항", "answer": "협죽도", "user": "휘문령" },

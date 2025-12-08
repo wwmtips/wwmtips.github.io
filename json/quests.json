@@ -223,5 +223,14 @@
     "bgimg": "q27_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q27.html"
+  },
+  {
+    "id": "q28",
+    "name": "영령 위로의 말",
+    "location": "칠벌 고개",
+    "type": "만사록",
+    "bgimg": "q28_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q28.html"
   }
 ]

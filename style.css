@@ -1363,3 +1363,7 @@ body {
 .map-section {
     margin-top: 10px !important; /* 이 숫자를 늘리면 간격이 더 넓어집니다 */
 }
+/* 1. 커뮤니티 알림 섹션 위쪽 간격 */
+.community-updates-section {
+    margin-top: 10px !important; /* 30px -> 20px로 축소 */
+}

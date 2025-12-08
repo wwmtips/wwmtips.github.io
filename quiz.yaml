@@ -1,1 +1,34 @@
+name: 스무고개 문제 일괄 제보
+description: 여러 개의 스무고개 문제(힌트-정답)를 한 번에 제보합니다.
+title: "[제보] 스무고개 문제 데이터 제보"
+labels: ["제보", "스무고개", "데이터"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 스무고개 문제 제보
+        여러 문제를 한 번에 등록하기 쉽도록 정해진 양식으로 입력해주세요.
+        나중에 JSON으로 자동 변환하기 위해 **구분자(-)**를 꼭 지켜주세요.
 
+  - type: textarea
+    id: data_pairs
+    attributes:
+      label: 힌트와 정답 입력
+      description: |
+        한 줄에 하나씩 **'힌트-정답'** 형식으로 입력해주세요.
+      placeholder: |
+        가시-장미
+        빨간 망토-늑대
+        배관공-마리오
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: reporter
+    attributes:
+      label: 제보자
+      description: 닉네임이나 이름을 적어주세요.
+      placeholder: 홍길동
+    validations:
+      required: true

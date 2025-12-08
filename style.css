@@ -1357,3 +1357,9 @@ body {
 #view-home .section-header-clickable {
     border-bottom: none !important;
 }
+/* =========================================
+   지역 정보 섹션 간격 조정
+   ========================================= */
+.map-section {
+    margin-top: 10px !important; /* 이 숫자를 늘리면 간격이 더 넓어집니다 */
+}

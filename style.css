@@ -1353,3 +1353,7 @@ body {
 .section-header-clickable h3 {
     margin-bottom: 0 !important;
 }
+/* 홈 화면의 모든 제목 밑줄 제거 */
+#view-home .section-header-clickable {
+    border-bottom: none !important;
+}

@@ -1,8 +1,5 @@
 /* =========================================
-   script.js (최종 통합본 - 오류 방지 강화)
-   - 슬라이더: 퀘스트 데이터 (bgimg 사용)
-   - 하단 목록: 뉴스 데이터 (HTML ID 자동 감지)
-   - 데이터 로드 실패 시에도 나머지 작동하도록 수정
+   script.js (최종 수정본 - 리스트 스타일 뉴스 + 이미지 경로 자동화)
    ========================================= */
 
 // =========================================
@@ -60,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================
-// 3. 데이터 로딩 및 처리 (오류 방지 강화)
+// 3. 데이터 로딩 및 처리
 // =========================================
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -68,10 +65,10 @@ function loadData() {
     const targetId = urlParams.get('id');
     const shortQuestId = urlParams.get('q'); 
 
-    // Promise.allSettled를 사용하거나 개별 catch를 사용하여 하나가 실패해도 멈추지 않게 함
+    // 데이터 로드 실패 방지 (하나라도 실패해도 나머지는 로드됨)
     Promise.all([
         fetch('json/data.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
-        fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패. 경로를 확인하세요.', err); return []; }),
+        fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }),
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; })
     ])
     .then(([mainData, questData, newsData]) => {
@@ -83,7 +80,7 @@ function loadData() {
         // 2. 뉴스 데이터 파싱
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
 
-        // 3. 정렬 (ID 기준 역순: q26 -> q1) *중요: 최신 데이터가 bgimg가 있으므로 역순 필수
+        // 3. 정렬 (ID 기준 역순: q26 -> q1)
         if (quests.length > 0) {
             quests.sort((a, b) => {
                 const numA = parseInt((a.id || "").replace('q', '')) || 0;
@@ -107,7 +104,7 @@ function loadData() {
         updateQuizCounter();
         renderQuestList();                
         
-        // [핵심] 홈 화면 렌더링
+        // [홈 화면 렌더링]
         renderHomeSlider(globalData.quests); 
         renderHomeRecentNews(globalData.news);     
         
@@ -126,7 +123,7 @@ function loadData() {
         }
     })
     .catch(error => {
-        console.error("데이터 처리 중 치명적 오류:", error);
+        console.error("데이터 처리 중 오류 발생:", error);
     });
 }
 
@@ -134,7 +131,7 @@ function loadData() {
 // 4. 홈 화면 로직 (슬라이더 & 뉴스 & 지도)
 // =========================================
 
-// [슬라이더] 퀘스트 데이터 기반
+// [슬라이더] 퀘스트 데이터 기반 + 이미지 경로 자동화
 function renderHomeSlider(quests) {
     const track = document.getElementById('hero-slider-track');
     const indicators = document.getElementById('slider-indicators');
@@ -144,22 +141,20 @@ function renderHomeSlider(quests) {
     track.innerHTML = '';
     indicators.innerHTML = '';
 
-    // 최신 3개만 사용 (bgimg가 있는 q26, q25, q24가 먼저 오도록 정렬됨)
-    const sliderData = quests.slice(0, 3);
+    const sliderData = quests.slice(0, 3); // 최신 3개
 
     if (sliderData.length === 0) {
-        // 데이터가 없을 경우 표시
         track.innerHTML = '<div style="color:white; text-align:center; padding-top:100px;">불러올 소식이 없습니다.</div>';
         return;
     }
 
     sliderData.forEach((quest, index) => {
-        // quests.json 필드 매핑
         const tag = quest.location || "지역 정보";
         const title = quest.name;
         const desc = quest.type; 
-        // bgimg가 없으면 기본 이미지 사용
-          const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : 'images/bg.jpg';
+        
+        // [경로 자동화] bgimg가 있으면 'quests/images/'를 붙임. 없으면 기본 이미지.
+        const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : 'images/bg.jpg';
         
         const slideDiv = document.createElement('div');
         slideDiv.className = 'hero-slide';
@@ -194,19 +189,20 @@ function renderHomeSlider(quests) {
     startSlider();
 }
 
-// [홈 하단 목록] 뉴스 데이터 기반
+// [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일로 변경)
 function renderHomeRecentNews(newsList) {
-    // 1. ID가 변경되었는지 확인 (home-recent-news 우선, 없으면 home-quest-list 사용)
     const container = document.getElementById('home-recent-news') || document.getElementById('home-quest-list');
     
-    if (!container) {
-        console.error("뉴스를 표시할 컨테이너(ID)를 찾을 수 없습니다.");
-        return;
-    }
+    if (!container) return;
     
     container.innerHTML = '';
 
-    const recentNews = newsList.slice(0, 6); // 최신 6개
+    // 기존 CSS(Grid) 속성을 무시하고 리스트 형태로 변경하기 위해 인라인 스타일 적용
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.gap = '0'; // 간격 조정
+
+    const recentNews = newsList.slice(0, 5); // 최신 5개
 
     if (recentNews.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888;">최신 소식이 없습니다.</div>';
@@ -214,29 +210,36 @@ function renderHomeRecentNews(newsList) {
     }
 
     recentNews.forEach(news => {
-        const card = document.createElement('div');
-        card.className = 'quest-card'; // 스타일 유지를 위해 클래스 재사용
-        card.onclick = () => { switchTab('news'); };
+        // [스타일 변경] 썸네일/태그 제거 -> 텍스트 리스트 형태
+        const itemDiv = document.createElement('div');
         
-        // 태그 자동 분류
-        let tag = "공지";
-        if (news.title.includes("업데이트")) tag = "업데이트";
-        else if (news.title.includes("이벤트")) tag = "이벤트";
+        // 리스트 아이템 스타일 설정
+        itemDiv.style.padding = '15px 10px';
+        itemDiv.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+        itemDiv.style.cursor = 'pointer';
+        itemDiv.style.display = 'flex';
+        itemDiv.style.justifyContent = 'space-between';
+        itemDiv.style.alignItems = 'center';
+        itemDiv.style.transition = 'background-color 0.2s';
 
-        // 이미지 처리
-        const iconPath = news.image ? news.image : "images/story.jpg";
+        // 마우스 호버 효과
+        itemDiv.onmouseover = () => { itemDiv.style.backgroundColor = 'rgba(255,255,255,0.05)'; };
+        itemDiv.onmouseout = () => { itemDiv.style.backgroundColor = 'transparent'; };
+        
+        // 클릭 시 뉴스 탭으로 이동
+        itemDiv.onclick = () => { switchTab('news'); };
 
-        card.innerHTML = `
-            <div class="quest-icon-wrapper">
-                <img src="${iconPath}" alt="news icon" onerror="this.src='images/logo.png'">
+        // [내용] 제목(왼쪽) + 날짜(오른쪽)
+        itemDiv.innerHTML = `
+            <div style="font-size: 1.05em; color: #e0e0e0; font-weight:500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px;">
+                ${news.title}
             </div>
-            <div class="quest-info">
-                <div class="quest-name">${news.title}</div>
-                <div class="quest-type">${news.date}</div>
+            <div style="font-size: 0.9em; color: #888; min-width: 80px; text-align: right; white-space: nowrap;">
+                ${news.date}
             </div>
-            <div class="quest-badge">${tag}</div>
         `;
-        container.appendChild(card);
+        
+        container.appendChild(itemDiv);
     });
 }
 

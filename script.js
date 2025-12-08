@@ -193,7 +193,7 @@ function renderHomeSlider(quests) {
 }
 
 // [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일)
-// [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일 + 링크 이동 기능)
+// [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일 + 간격 줄임)
 function renderHomeRecentNews(newsList) {
     const container = document.getElementById('home-recent-news') || document.getElementById('home-quest-list');
     
@@ -201,12 +201,12 @@ function renderHomeRecentNews(newsList) {
     
     container.innerHTML = '';
 
-    // 컨테이너 스타일 초기화 (기존 Grid 무시)
+    // 컨테이너 스타일
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
-    container.style.gap = '0';
+    container.style.gap = '0'; // 아이템 사이의 추가 간격 없음
 
-    const recentNews = newsList.slice(0, 5); // 최신 5개
+    const recentNews = newsList.slice(0, 3); // 최신 5개
 
     if (recentNews.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">최신 소식이 없습니다.</div>';
@@ -216,10 +216,25 @@ function renderHomeRecentNews(newsList) {
     recentNews.forEach(news => {
         const itemDiv = document.createElement('div');
         
-        // CSS 클래스 적용 (style.css에 정의된 스타일 사용)
+        // CSS 클래스 적용 (style.css 사용)
         itemDiv.className = 'recent-news-item';
         
-        // [기능 추가] 클릭 시 링크가 있으면 새 창으로 이동, 없으면 뉴스 탭으로 이동
+        // [수정됨] 위아래 여백(padding)을 15px -> 10px로 줄임
+        itemDiv.style.padding = '10px 5px'; 
+        
+        // 밑줄 스타일 등 기본 설정
+        itemDiv.style.borderBottom = '1px solid #eee';
+        itemDiv.style.cursor = 'pointer';
+        itemDiv.style.display = 'flex';
+        itemDiv.style.justifyContent = 'space-between';
+        itemDiv.style.alignItems = 'center';
+        itemDiv.style.transition = 'background-color 0.2s';
+
+        // 마우스 호버 효과
+        itemDiv.onmouseover = () => { itemDiv.style.backgroundColor = '#f9f9f9'; };
+        itemDiv.onmouseout = () => { itemDiv.style.backgroundColor = 'transparent'; };
+        
+        // 클릭 이벤트
         itemDiv.onclick = () => { 
             if (news.link && news.link.trim() !== "") {
                 window.open(news.link, '_blank'); 
@@ -228,12 +243,12 @@ function renderHomeRecentNews(newsList) {
             }
         };
 
-        // 내용 구성 (제목 + 날짜)
+        // 내용 구성 (폰트 크기 및 색상 유지)
         itemDiv.innerHTML = `
-            <div class="news-title-text">
+            <div class="news-title-text" style="font-size: 16px; color: #333; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px; flex: 1;">
                 ${news.title}
             </div>
-            <div class="news-date-text">
+            <div class="news-date-text" style="font-size: 14px; color: #999; min-width: 80px; text-align: right; white-space: nowrap;">
                 ${news.date}
             </div>
         `;

@@ -702,22 +702,48 @@ function renderQuizTable(data, keyword = '') {
     const tbody = document.getElementById('quiz-table-body');
     if (!tbody) return;
     tbody.innerHTML = '';
-    if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="padding:20px; color:#888;">결과가 없습니다.</td></tr>`;
-        return;
+
+    // 1. 데이터가 있을 경우 목록 출력
+    if (data && data.length > 0) {
+        data.forEach(item => {
+            const tr = document.createElement('tr');
+            let hint = item.hint, answer = item.answer;
+            if (keyword) {
+                const regex = new RegExp(`(${keyword})`, 'gi');
+                hint = hint.replace(regex, '<span class="highlight">$1</span>');
+                answer = answer.replace(regex, '<span class="highlight">$1</span>');
+            }
+            tr.innerHTML = `<td>${hint}</td><td>${answer}</td><td class="user-cell">${item.user || '-'}</td>`;
+            tbody.appendChild(tr);
+        });
+    } else {
+        // 2. 데이터가 없을 경우 '결과 없음' 메시지 표시
+        const noResultTr = document.createElement('tr');
+        noResultTr.innerHTML = `<td colspan="3" style="padding:20px; color:#888; text-align:center;">일치하는 족보가 없습니다.</td>`;
+        tbody.appendChild(noResultTr);
     }
-    data.forEach(item => {
-        const tr = document.createElement('tr');
-        let hint = item.hint, answer = item.answer;
-        if (keyword) {
-            const regex = new RegExp(`(${keyword})`, 'gi');
-            hint = hint.replace(regex, '<span class="highlight">$1</span>');
-            answer = answer.replace(regex, '<span class="highlight">$1</span>');
-        }
-        tr.innerHTML = `<td>${hint}</td><td>${answer}</td><td class="user-cell">${item.user || '-'}</td>`;
-        tbody.appendChild(tr);
-    });
+
+    // 3. [추가됨] 항상 마지막에 표시되는 제보하기 버튼
+    const reportTr = document.createElement('tr');
+    reportTr.className = 'quiz-report-row'; // 나중에 CSS로 꾸밀 수 있게 클래스 지정
+    reportTr.style.cursor = 'pointer';
+    reportTr.style.backgroundColor = '#fff8e1'; // 살짝 눈에 띄는 연한 노란색 배경
+    reportTr.style.fontWeight = 'bold';
+    reportTr.style.color = '#d48806';
+
+    // 클릭 시 아까 만든 이슈 페이지로 이동
+    reportTr.onclick = () => {
+        window.open('https://github.com/arcdbkr/server_chat/issues/new?template=quiz.yaml', '_blank');
+    };
+
+    reportTr.innerHTML = `
+        <td colspan="3" style="text-align: center; padding: 15px;">
+            📢 찾는 족보가 없나요? 여기를 눌러 제보해주세요!
+        </td>
+    `;
+    tbody.appendChild(reportTr);
 }
+
 
 function updateQuizCounter() {
     const counter = document.getElementById('quiz-counter-area');

@@ -778,7 +778,7 @@ function updateQuizCounter() {
                 // 1위인 경우 클래스 적용
                 return `<span class="rainbow-text">${text}</span>`;
             }
-            return text; // 2, 3위는 그냥 텍스트
+            return `<span style="color: #888;">${text}</span>`; // 2, 3위는 그냥 텍스트
         });
 
         // 구분자(·)로 연결

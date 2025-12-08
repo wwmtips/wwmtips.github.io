@@ -1339,3 +1339,17 @@ body {
 .section-header-clickable h3 {
     margin-top: 10px !important;
 }
+/* =========================================
+   '최근 소식' 제목과 리스트 사이 간격 줄이기
+   ========================================= */
+
+/* 제목을 감싸는 박스의 아래 여백 줄이기 */
+.section-header-clickable {
+    margin-bottom: 5px !important; /* 이 숫자를 0으로 하면 더 딱 붙습니다 */
+    padding-bottom: 0 !important;
+}
+
+/* 제목 글자(h3) 자체의 아래 여백 제거 */
+.section-header-clickable h3 {
+    margin-bottom: 0 !important;
+}

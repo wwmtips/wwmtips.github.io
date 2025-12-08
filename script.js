@@ -218,7 +218,7 @@ function renderNewsListGeneric(dataList, container, type) {
     container.style.flexDirection = 'column';
     container.style.gap = '0';
 
-    const listToRender = dataList.slice(0, 5); // 최신 5개
+    const listToRender = dataList.slice(0, 3); // 최신 5개
 
     if (listToRender.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">등록된 내용이 없습니다.</div>';

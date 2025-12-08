@@ -214,5 +214,14 @@
     "bgimg": "q26_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q26.html"
+  },
+  {
+    "id": "q27",
+    "name": "묘묘 사원",
+    "location": "장군사당",
+    "type": "만사록",
+    "bgimg": "q27_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q27.html"
   }
 ]

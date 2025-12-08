@@ -1320,3 +1320,22 @@ body {
     white-space: nowrap;
 }
 
+/* =========================================
+   홈 화면 섹션 간격 조정 (슬라이더 - 최근 소식 사이)
+   ========================================= */
+
+/* 슬라이더 아래쪽 여백 줄이기 */
+.hero-slider-wrapper {
+    margin-bottom: 10px !important; /* 필요에 따라 숫자 조절 (기존 값보다 작게) */
+}
+
+/* 최근 소식 섹션 위쪽 여백 줄이기 */
+.recent-updates-section {
+    margin-top: 10px !important;    /* 필요에 따라 숫자 조절 */
+    padding-top: 0 !important;      /* 내부 여백 제거 */
+}
+
+/* '최근 소식' 제목 자체의 위쪽 여백 제거 */
+.section-header-clickable h3 {
+    margin-top: 0 !important;
+}

@@ -32,7 +32,7 @@ const dummyMapData = [
         title: "청하",
         desc: "어린 주인공이 많은 가족들과 함께 생활하던 지역으로 이야기의 시작지입니다.",
         link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
-        image: "images/map2.jpg" // 실제 이미지 경로로 변경 권장
+        image: "images/map2.jpeg" // 실제 이미지 경로로 변경 권장
     },
     {
         title: "개봉",

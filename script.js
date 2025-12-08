@@ -733,7 +733,7 @@ function renderQuizTable(data, keyword = '') {
 
     // 클릭 시 아까 만든 이슈 페이지로 이동
     reportTr.onclick = () => {
-        window.open('wwm.tips/report/', '_blank');
+        window.open('report/', '_blank');
     };
 
     reportTr.innerHTML = `

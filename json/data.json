@@ -2,6 +2,8 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "엉덩이", "answer": "원숭이" },
+
     { "hint": "솔방울", "answer": "소나무", "user": "블커" },
 { "hint": "향신료", "answer": "계피", "user": "블커" },
 { "hint": "매실", "answer": "매화", "user": "블커" },

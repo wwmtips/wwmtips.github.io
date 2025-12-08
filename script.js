@@ -745,12 +745,50 @@ function renderQuizTable(data, keyword = '') {
 }
 
 
+// [수정됨] 족보 카운터 및 랭킹 표시 함수
+// [수정됨] 족보 카운터 및 기여 랭킹 (1위 무지개 효과 적용)
 function updateQuizCounter() {
     const counter = document.getElementById('quiz-counter-area');
-    if (counter && globalData.quiz.length > 0) {
-        counter.innerHTML = `총 ${globalData.quiz.length}개의 족보가 등록되었습니다.`;
+    // 데이터가 없으면 중단
+    if (!counter || !globalData.quiz) return;
+
+    // 1. 전체 개수 계산
+    const totalCount = globalData.quiz.length;
+
+    // 2. 제보자 랭킹 계산 (유저별 제보 수 집계)
+    const userCounts = {};
+    globalData.quiz.forEach(item => {
+        if (item.user && item.user.trim() !== '' && item.user !== '-') {
+            userCounts[item.user] = (userCounts[item.user] || 0) + 1;
+        }
+    });
+
+    // 내림차순 정렬 후 상위 3명 추출
+    const sortedUsers = Object.entries(userCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+
+    // 3. 화면 표시 HTML 생성
+    let rankHtml = '';
+    if (sortedUsers.length > 0) {
+        // 랭킹별로 텍스트 생성 (1위는 span.rainbow-text로 감싸기)
+        const rankParts = sortedUsers.map((u, i) => {
+            const text = `${i+1}위 ${u[0]}(${u[1]})`;
+            if (i === 0) {
+                // 1위인 경우 클래스 적용
+                return `<span class="rainbow-text">${text}</span>`;
+            }
+            return text; // 2, 3위는 그냥 텍스트
+        });
+
+        // 구분자(·)로 연결
+        rankHtml = `<br><span style="font-size:0.85em; color:#ffd700; margin-top:5px; display:inline-block;">🏆${rankParts.join(' · ')}</span>`;
     }
+
+    // 최종 적용
+    counter.innerHTML = `총 <b>${totalCount}</b>개의 족보가 등록되었습니다.${rankHtml}`;
 }
+
 
 function filterQuizData(keyword) {
     keyword = keyword.trim().toLowerCase();

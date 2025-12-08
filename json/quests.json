@@ -207,6 +207,7 @@
     "name": "생잎죽",
     "location": "남문대로",
     "type": "만사록",
+    "bgimg": "quests/images/q26_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q26.html"
   }

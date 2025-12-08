@@ -1337,5 +1337,5 @@ body {
 
 /* '최근 소식' 제목 자체의 위쪽 여백 제거 */
 .section-header-clickable h3 {
-    margin-top: 0 !important;
+    margin-top: 10px !important;
 }

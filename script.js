@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 수정본 - 리스트 스타일 뉴스 + 이미지 경로 자동화)
+   script.js (최종 수정본 - 경로 수정 & 슬라이더 정보 교체)
    ========================================= */
 
 // =========================================
@@ -65,10 +65,10 @@ function loadData() {
     const targetId = urlParams.get('id');
     const shortQuestId = urlParams.get('q'); 
 
-    // 데이터 로드 실패 방지 (하나라도 실패해도 나머지는 로드됨)
+    // [수정됨] quests.json 경로를 json/ 폴더 내부로 변경
     Promise.all([
         fetch('json/data.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
-        fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }),
+        fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }), 
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; })
     ])
     .then(([mainData, questData, newsData]) => {
@@ -131,7 +131,7 @@ function loadData() {
 // 4. 홈 화면 로직 (슬라이더 & 뉴스 & 지도)
 // =========================================
 
-// [슬라이더] 퀘스트 데이터 기반 + 이미지 경로 자동화
+// [슬라이더] 퀘스트 데이터 기반 + 이미지 경로 자동화 + 정보 교체
 function renderHomeSlider(quests) {
     const track = document.getElementById('hero-slider-track');
     const indicators = document.getElementById('slider-indicators');
@@ -149,9 +149,12 @@ function renderHomeSlider(quests) {
     }
 
     sliderData.forEach((quest, index) => {
-        const tag = quest.location || "지역 정보";
+        // [수정됨] 정보 교체
+        // 태그: type (예: 만사록)
+        // 설명: location (예: 남문대로)
+        const tag = quest.type || "분류 없음";
         const title = quest.name;
-        const desc = quest.type; 
+        const desc = quest.location || "지역 정보 없음"; 
         
         // [경로 자동화] bgimg가 있으면 'quests/images/'를 붙임. 없으면 기본 이미지.
         const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : 'images/bg.jpg';
@@ -189,7 +192,7 @@ function renderHomeSlider(quests) {
     startSlider();
 }
 
-// [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일로 변경)
+// [홈 하단 목록] 뉴스 데이터 (심플 리스트 스타일)
 function renderHomeRecentNews(newsList) {
     const container = document.getElementById('home-recent-news') || document.getElementById('home-quest-list');
     

@@ -262,34 +262,24 @@ function renderHomeCommunityNews(cnewsList) {
         }, 100 + (index * 100));
     });
 }
-
-// [공통 함수] 뉴스 리스트 렌더링 로직
+// [공통 함수] 뉴스 리스트 렌더링 로직 (인라인 스타일 제거 및 클래스 기반)
 function renderNewsListGeneric(dataList, container, type) {
     container.innerHTML = '';
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.gap = '0';
+    
+    // 스타일 초기화 (JS에서 flex 설정을 강제하지 않고 CSS에 맡김)
+    // container.style.display = 'flex'; ... 등 제거
 
-    const listToRender = dataList.slice(0, 3); // 최신 3개
+    // 최대 표시 개수 설정 (최근 소식은 5개 정도가 적당)
+    const listToRender = dataList.slice(0, 5); 
 
     if (listToRender.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">등록된 내용이 없습니다.</div>';
+        container.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:0.9em;">등록된 내용이 없습니다.</div>';
         return;
     }
 
     listToRender.forEach(item => {
         const itemDiv = document.createElement('div');
-        itemDiv.className = 'recent-news-item'; 
-        itemDiv.style.padding = '10px 5px'; 
-        itemDiv.style.borderBottom = '1px solid #eee';
-        itemDiv.style.cursor = 'pointer';
-        itemDiv.style.display = 'flex';
-        itemDiv.style.justifyContent = 'space-between';
-        itemDiv.style.alignItems = 'center';
-        itemDiv.style.transition = 'background-color 0.2s';
-
-        itemDiv.onmouseover = () => { itemDiv.style.backgroundColor = '#f9f9f9'; };
-        itemDiv.onmouseout = () => { itemDiv.style.backgroundColor = 'transparent'; };
+        itemDiv.className = 'recent-news-item'; // CSS 클래스 적용
         
         // 클릭 이벤트
         itemDiv.onclick = () => { 
@@ -298,18 +288,18 @@ function renderNewsListGeneric(dataList, container, type) {
             }
         };
 
+        // HTML 구조 (인라인 스타일 제거됨)
         itemDiv.innerHTML = `
-            <div class="news-title-text" style="font-size: 16px; color: #333; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 15px; flex: 1;">
+            <div class="news-title-text">
                 ${item.title}
             </div>
-            <div class="news-date-text" style="font-size: 14px; color: #999; min-width: 80px; text-align: right; white-space: nowrap;">
+            <div class="news-date-text">
                 ${item.date}
             </div>
         `;
         container.appendChild(itemDiv);
     });
 }
-
 
 // 슬라이더 이동 함수
 function moveSlide(direction) {

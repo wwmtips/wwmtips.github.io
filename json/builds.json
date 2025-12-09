@@ -12,7 +12,7 @@
       "description": "파티 플레이 시 아군을 지원하고 적을 견제하는 서포트형 하이브리드 빌드입니다.",
       "type": "PvE",
       "weapons": ["w1", "w11"],
-      "link": "viewer.html?b=..."
+      "link": "viewer.html?b=eyJ3IjpbIncyIiwidzEiXSwiaCI6WyJoMjYiLCJoMTQiLCJoMjkiLCJoMjciXSwibSI6WyJtMTAiLCJtMTQiLCJtMjAiLCJtMTIiLCJtNyIsIm0yMSIsIm0xOCIsIm0xMyJdLCJjIjoi7Z6Q65+s67mM65OcIn0="
     }
   ]
 }

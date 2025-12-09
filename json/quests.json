@@ -277,5 +277,14 @@
     "bgimg": "q33_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q33.html"
+  },
+  {
+    "id": "q34",
+    "name": "진짜와 가짜 소당주",
+    "location": "신선 나루",
+    "type": "만사록",
+    "bgimg": "q34_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q34.html"
   }
 ]

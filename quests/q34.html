@@ -1,0 +1,117 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            진짜와 가짜 소당주
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">이 시대에도 가짜 술이라는게 존재했단 말인가</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            플레이어의 이름을 팔아 가짜 고별주를 유통하는 사기꾼이 나타났습니다.<br>
+            자신과 똑같은 옷을 입은 <b>가짜 소당주</b>를 찾아내어 정체를 밝히고 응징해야 합니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            가짜 소당주 응징
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 위치로 이동하면 플레이어와 똑같은 복장을 한 가짜를 발견할 수 있습니다.<br>
+            대화를 걸어 <b>화술</b>을 통해 가짜임을 밝혀내세요.<br>
+            <span style="color: var(--wuxia-text-sub); font-size: 0.9em;">(정체가 탄로나면 가짜는 도망가고 패거리가 공격해옵니다. 모두 처치하세요.)</span>
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q34_1.jpg" alt="가짜 소당주">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q34_2.jpg" alt="가짜 소당주 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            몰락한 사기꾼
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            패거리를 소탕한 후 <b>풍화촌</b>으로 이동하세요.<br>
+            진품 상인 <b>학안</b> 옆에서 거지꼴이 된 가짜 소당주를 다시 만날 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q34_3.jpg" alt="거지꼴이 된 가짜">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q34_4.jpg" alt="풍화촌 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            거지가 된 가짜와 대화를 마치면<br>
+            그의 최후를 확인하며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

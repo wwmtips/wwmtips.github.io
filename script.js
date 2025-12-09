@@ -221,7 +221,7 @@ function renderHomeRecentNews(newsList) {
     renderNewsListGeneric(newsList, container, 'news');
 }
 
-// [홈 하단 목록 2] 커뮤니티 업데이트 (단순 진행도 표시)
+// [홈 하단 목록 2] 커뮤니티 업데이트 (컴팩트 버전)
 function renderHomeCommunityNews(cnewsList) {
     const container = document.getElementById('home-community-news');
     if (!container) return;
@@ -230,34 +230,32 @@ function renderHomeCommunityNews(cnewsList) {
     
     // 데이터가 없을 경우
     if (!cnewsList || cnewsList.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">진행 중인 작업이 없습니다.</div>';
+        container.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:0.9em;">진행 중인 작업이 없습니다.</div>';
         return;
     }
 
-    // 최대 4개 표시
-    const listToRender = cnewsList.slice(0, 4);
+    // 최대 5개까지 보여줘도 충분한 공간이 확보됨
+    const listToRender = cnewsList.slice(0, 5);
 
     listToRender.forEach((item, index) => {
         const progress = item.progress || 0; 
         const isComplete = progress >= 100;
         
         const itemDiv = document.createElement('div');
-        // 클릭 관련 클래스나 스타일 제거
         itemDiv.className = `progress-update-item ${isComplete ? 'completed' : ''}`;
         
+        // HTML 구조 변경: 제목 -> 바 -> 퍼센트 순서로 나열
         itemDiv.innerHTML = `
-            <div class="progress-header-row">
-                <span class="progress-title">${item.title}</span>
-                <span class="progress-percent-text">${progress}%</span>
-            </div>
+            <span class="progress-title">${item.title}</span>
             <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="prog-fill-${index}" style="width: 0%"></div>
             </div>
+            <span class="progress-percent-text">${progress}%</span>
         `;
         
         container.appendChild(itemDiv);
 
-        // 애니메이션 효과 (바 차오르기)
+        // 애니메이션 효과
         setTimeout(() => {
             const bar = document.getElementById(`prog-fill-${index}`);
             if (bar) bar.style.width = `${progress}%`;

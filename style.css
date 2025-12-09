@@ -1458,62 +1458,65 @@ h3 {
     .prev, .next { display: none; }
 }
 /* =========================================
-   [수정됨] 커뮤니티 진행도 (단순 표시용)
+   [수정됨] 커뮤니티 진행도 (한 줄 컴팩트 스타일)
    ========================================= */
 .progress-update-item {
-    padding: 15px 10px; /* 좌우 여백 약간 축소 */
+    display: flex;               /* 가로 배치 */
+    align-items: center;         /* 수직 중앙 정렬 */
+    padding: 8px 12px;           /* 패딩 축소 (위아래 8px) */
     border-bottom: 1px solid #eee;
     background-color: #fff;
-    cursor: default; /* 마우스 올려도 기본 커서 유지 */
+    gap: 10px;                   /* 요소 사이 간격 */
+    height: 30px;                /* 전체 높이 고정 (선택사항) */
+    cursor: default;
 }
 
-/* 호버 효과 제거 (단순 표시이므로 배경색 변경 없음) */
-/* .progress-update-item:hover { background-color: #f9f9f9; } 삭제됨 */
-
-.progress-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
+/* 제목 영역: 남은 공간을 차지하되 너무 길면 ... 처리 */
 .progress-title {
-    font-size: 0.95em;
+    font-size: 0.9em;
     font-weight: bold;
     color: var(--wuxia-text-main);
+    flex: 1;                     /* 가변 너비 */
+    white-space: nowrap;         /* 줄바꿈 방지 */
+    overflow: hidden;
+    text-overflow: ellipsis;     /* 말줄임표(...) */
+    margin-right: 5px;
 }
 
-.progress-percent-text {
-    font-family: 'Noto Serif KR', serif;
-    font-weight: bold;
-    font-size: 0.9em;
-    color: var(--wuxia-accent-gold);
-}
-
-/* 완료(100%) 상태일 때 텍스트 색상 (초록색) */
-.progress-update-item.completed .progress-percent-text {
-    color: var(--rarity-uncommon);
-}
-
-/* 프로그레스 바 트랙 (배경) */
+/* 프로그레스 바 트랙: 고정 너비 사용 */
 .progress-bar-track {
-    width: 100%;
+    width: 80px;                 /* 바 길이 고정 (필요시 조절) */
     height: 6px;
     background-color: #e0e0e0;
     border-radius: 3px;
     overflow: hidden;
+    flex-shrink: 0;              /* 화면이 좁아져도 줄어들지 않음 */
 }
 
-/* 프로그레스 바 채움 (Fill) */
+/* 프로그레스 바 채움 */
 .progress-bar-fill {
     height: 100%;
     background-color: var(--wuxia-accent-gold);
-    width: 0%; /* JS로 제어 */
+    width: 0%;
     border-radius: 3px;
     transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* 완료(100%) 상태일 때 바 색상 (초록색) */
+/* 퍼센트 텍스트: 우측 끝 고정 */
+.progress-percent-text {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: bold;
+    font-size: 0.85em;           /* 폰트 크기 약간 축소 */
+    color: var(--wuxia-accent-gold);
+    width: 35px;                 /* 숫자 흔들림 방지 고정 폭 */
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* 완료(100%) 상태 스타일 */
+.progress-update-item.completed .progress-percent-text {
+    color: var(--rarity-uncommon);
+}
 .progress-update-item.completed .progress-bar-fill {
     background-color: var(--rarity-uncommon);
 }

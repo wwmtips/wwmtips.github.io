@@ -1270,3 +1270,104 @@ function openGuideSheet() {
 function closeGuideSheet() {
     document.body.classList.remove('sheet-open');
 }
+// =========================================
+// 12. 빌드 상세 보기 바텀시트 기능
+// =========================================
+
+// 아이템 ID를 받아 상세 정보를 반환하는 헬퍼 함수
+function getItemDetail(type, id) {
+    if (!builderData || !id) return { name: '없음', img: 'images/logo.png' };
+    const list = builderData[type];
+    const item = list ? list.find(i => i.id === id) : null;
+    return item || { name: '미지정', img: 'images/logo.png' };
+}
+
+// 빌드 상세 바텀시트 열기
+function openBuildDetailSheet(build) {
+    const sheet = document.getElementById('build-detail-sheet');
+    const contentArea = sheet.querySelector('.sheet-content');
+    
+    // 1. 데이터 디코딩
+    const linkParts = build.link.split('?b=');
+    const encodedData = linkParts.length > 1 ? linkParts[1] : null;
+
+    if (!encodedData || !builderData) {
+        contentArea.innerHTML = `<div style="padding: 50px; text-align: center; color: var(--wuxia-accent-red);">🚨 상세 빌드 정보를 불러올 수 없습니다.</div>`;
+        openBuildDetailSheetView();
+        return;
+    }
+
+    try {
+        const decodedString = decodeURIComponent(escape(atob(encodedData)));
+        const parsedData = JSON.parse(decodedString);
+        
+        // 2. 상세 정보 HTML 생성
+        let html = `
+            <div style="border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 20px;">
+                <p style="margin: 0; color: #999; font-size: 0.9em;">
+                    ${build.description || '작성된 설명이 없습니다.'}
+                </p>
+            </div>
+        `;
+        
+        // 섹션 렌더링 헬퍼
+        const renderSection = (typeKey, title, slots) => {
+            html += `<h4 style="color: #333; margin-top: 20px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 8px;">${title}</h4><div class="slot-group" style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 15px;">`;
+            
+            slots.forEach(id => {
+                const item = getItemDetail(typeKey, id);
+                html += `
+                    <div style="width: 80px; text-align: center;">
+                        <img src="${item.img}" style="width: 60px; height: 60px; border: 1px solid #ddd; border-radius: 4px; object-fit: cover;">
+                        <p style="font-size: 0.75em; color: #333; margin: 5px 0 0 0; line-height: 1.2;">${item.name}</p>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        };
+
+        // 무기/무술
+        if (parsedData.w && parsedData.w.filter(id => id).length > 0) {
+            renderSection('weapons', '무기 및 무술', parsedData.w);
+        }
+        
+        // 심법
+        if (parsedData.h && parsedData.h.filter(id => id).length > 0) {
+            renderSection('hearts', '심법', parsedData.h);
+        }
+
+        // 비결
+        if (parsedData.m && parsedData.m.filter(id => id).length > 0) {
+            renderSection('marts', '비결', parsedData.m);
+        }
+        
+        // 빌드 공유 링크 버튼 (원래 뷰어로 이동 기능 복구)
+        html += `
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="window.open('${build.link}', '_blank')" class="guide-action-btn" style="background-color: var(--wuxia-accent-gold); color: #000; border: none; padding: 10px 25px; border-radius: 20px;">
+                    원본 뷰어에서 전체 보기 →
+                </button>
+            </div>
+        `;
+
+        // 3. 내용 삽입 및 시트 열기
+        document.getElementById('build-sheet-title').innerText = build.title;
+        contentArea.innerHTML = html;
+        openBuildDetailSheetView();
+
+    } catch (e) {
+        console.error("Decoding error:", e);
+        contentArea.innerHTML = `<div style="padding: 50px; text-align: center; color: var(--wuxia-accent-red);">🚨 잘못된 빌드 코드 형식입니다.</div>`;
+        openBuildDetailSheetView();
+    }
+}
+
+// 바텀시트 열기 (토글 클래스 적용)
+function openBuildDetailSheetView() {
+    document.body.classList.add('build-sheet-open');
+}
+
+// 바텀시트 닫기
+function closeBuildDetailSheet() {
+    document.body.classList.remove('build-sheet-open');
+}

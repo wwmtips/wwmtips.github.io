@@ -1656,3 +1656,14 @@ body {
 .sheet-open .bottom-sheet {
     bottom: 0;
 }
+/* style.css에 추가 */
+
+/* 빌드 상세 바텀시트 활성화 클래스 */
+.build-sheet-open .bottom-sheet-overlay {
+    display: block;
+    opacity: 1;
+}
+
+.build-sheet-open #build-detail-sheet {
+    bottom: 0;
+}

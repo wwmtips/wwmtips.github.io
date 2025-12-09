@@ -241,5 +241,14 @@
     "bgimg": "q29_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q29.html"
+  },
+  {
+    "id": "q30",
+    "name": "불길한 밤",
+    "location": "신선 나루",
+    "type": "만사록",
+    "bgimg": "q30_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q30.html"
   }
 ]

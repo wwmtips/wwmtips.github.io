@@ -1,21 +1,14 @@
 {
   "builds": [
     {
-      "title": "천계의 수호 & 윤회의 가르침 PvE 빌드",
-      "description": "광역 딜링과 생존력을 동시에 챙긴 안정적인 사냥용 세팅입니다.",
+      "title": "구현의 검무 & 격류의 파동 빌드",
+      "description": "출현으로 인한 지속피해와 높은 DPS",
       "type": "PvE",
-      "weapons": ["w2", "w6"],
-      "link": "viewer.html?b=..."
-    },
-    {
-      "title": "구현의 검무 & 격류의 파동 PvP 빌드",
-      "description": "상대의 빈틈을 파고들어 순식간에 제압하는 1:1 특화 비무 세팅입니다.",
-      "type": "PvP",
       "weapons": ["w3", "w5"],
-      "link": "viewer.html?b=..."
+      "link": "viewer.html?b=eyJ3IjpbInczIiwidzUiXSwiaCI6WyJoMTQiLCJoNSIsImgxMiIsImgxMCJdLCJtIjpbIm0yIiwibTMiLCJtOCIsIm00IiwibTE0IiwibTE1IiwibTE5IiwibTExIl0sImMiOiLqtaztmITqsoAm6rKp66WY7LC9IOu5jOuTnCJ9"
     },
     {
-      "title": "우산 & 부채 범용 세팅",
+      "title": "우산 & 부채 힐러 빌드",
       "description": "파티 플레이 시 아군을 지원하고 적을 견제하는 서포트형 하이브리드 빌드입니다.",
       "type": "PvE",
       "weapons": ["w1", "w11"],

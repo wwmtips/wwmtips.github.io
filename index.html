@@ -302,41 +302,61 @@
                 </div>
             
                 <span class="slot-label">비결 (8)</span>
-                <div class="slot-group">
-                    <div class="slot-wrapper">
-                        <div class="item-slot" onclick="openBuilderModal('marts', 0)"><span>+</span><img id="slot-marts-0" style="display:none;"></div>
-                        <div class="slot-name" id="name-marts-0"></div>
-                    </div>
-                    <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 1)"><span>+</span><img id="slot-marts-1" style="display:none;"></div><div class="slot-name" id="name-marts-1"></div></div>
-                    <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 2)"><span>+</span><img id="slot-marts-2" style="display:none;"></div><div class="slot-name" id="name-marts-2"></div></div>
-                    <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 3)"><span>+</span><img id="slot-marts-3" style="display:none;"></div><div class="slot-name" id="name-marts-3"></div></div>
-                    <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 4)"><span>+</span><img id="slot-marts-4" style="display:none;"></div><div class="slot-name" id="name-marts-4"></div></div>
-                    <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 5)"><span>+</span><img id="slot-marts-5" style="display:none;"></div><div class="slot-name" id="name-marts-5"></div></div>
-                    <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 6)"><span>+</span><img id="slot-marts-6" style="display:none;"></div><div class="slot-name" id="name-marts-6"></div></div>
-                    <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 7)"><span>+</span><img id="slot-marts-7" style="display:none;"></div><div class="slot-name" id="name-marts-7"></div></div>
-                </div>
-            </div>
+<div id="view-builder" style="display: none;">
+    
+    <div id="tools-menu" style="margin-top: 20px;">
+        
+        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 20px;">
+            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">비급</span>
+            <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                무공전수
+            </h2>
+            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">
+                강호의 고수들이 남긴 비급을 전수받거나, 나만의 무공을 창시하세요.
+            </p>
+        </div>
 
-            <div class="builder-footer">
-                <div style="margin-bottom: 10px; text-align: left;">
-                    <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px;">✍️ 빌드 이름 (선택)</span>
-                    <input type="text" id="creator-name" placeholder="빌드명을 입력하세요." maxlength="10" 
-                           style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
-                </div>
-                <button class="browse-button" onclick="generateBuildUrl()">🔗 빌드 주소 생성</button>
-                <input type="text" id="result-url" readonly onclick="this.select()">
+        <section class="create-build-banner" onclick="openBuilderInterface()">
+            <div class="banner-content">
+                <h3>✍️ 나만의 비급 창시하기</h3>
+                <p>원하는 무기와 심법을 조합하여 새로운 무공을 정립합니다.</p>
             </div>
+            <div class="banner-arrow">→</div>
+        </section>
+
+        <div style="margin-top: 30px;">
+            <h3 style="color: #fff; font-size: 1.1em; margin-bottom: 15px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
+                전수받을 비급 선택
+            </h3>
             
-            <div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)" style="display:none;">
-                <div class="modal-content">
-                    <h3 id="builder-modal-title" style="margin-top:0;">아이템 선택</h3>
-                    <div id="builder-modal-list" class="item-list-grid"></div>
-                    <button onclick="closeBuilderModal(null)" style="margin-top:20px; width:100%; padding:10px;">닫기</button>
-                </div>
+            <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 15px;">
+                <div class="guide-item-btn active" onclick="filterBuilds('all', this)">전체</div>
+                <div class="guide-item-btn" onclick="filterBuilds('PvE', this)">사냥 (PvE)</div>
+                <div class="guide-item-btn" onclick="filterBuilds('PvP', this)">비무 (PvP)</div>
             </div>
 
-        </div> 
+            <div id="build-list-container" class="build-list-wrapper">
+                <div style="text-align:center; padding: 30px; color: #666;">
+                    비급을 불러오는 중...
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div id="builder-interface" style="display: none;">
+        <button class="back-button" onclick="closeBuilderInterface()">
+            ← 비급 목록으로 돌아가기
+        </button>
+        <div class="quest-detail-container" style="margin-top: 10px;">
+             <div class="builder-footer">
+                </div>
+             <div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)" style="display:none;">
+                </div>
+         </div>
+    </div>
+
+</div>
+
 
 </div>
 <br>

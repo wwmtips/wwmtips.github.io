@@ -26,12 +26,14 @@ let currentSlot = { type: '', index: 0 };
 const dummyMapData = [
     {
         title: "청하",
+       key:"qinghe",
         desc: "어린 주인공이 많은 가족들과 함께 생활하던 지역으로 이야기의 시작지입니다.",
         link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
         image: "images/map2.jpeg" 
     },
     {
         title: "개봉",
+        key: "kaifeng",
         desc: "강호로 한 발 다가간 주인공은 개봉에서 수많은 강호인들과 인연을 쌓습니다.",
         link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
         image: "images/map1.jpeg"
@@ -327,10 +329,15 @@ function loadHomeMaps() {
     mapList.innerHTML = '';
 
     dummyMapData.forEach(map => {
-        const card = document.createElement('a');
+        // [수정] a 태그 대신 div 사용, 클릭 시 함수 호출
+        const card = document.createElement('div');
         card.className = 'map-card';
-        card.href = map.link;
-        card.target = "_blank";
+        card.style.cursor = 'pointer'; // 마우스 올렸을 때 손가락 모양
+
+        // 클릭 이벤트 연결
+        card.onclick = () => {
+            openMapDetail(map.title, map.key);
+        };
 
         card.innerHTML = `
             <div class="map-hero-bg" style="background-image: url('${map.image}');"></div>
@@ -344,11 +351,12 @@ function loadHomeMaps() {
 }
 
 
+
 // =========================================
 // 5. 탭 전환 및 URL 관리
 // =========================================
 function switchTab(tabName) {
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
+    nst views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail'];
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
 
     views.forEach(id => {
@@ -1368,43 +1376,52 @@ function openBuildDetailSheetView() {
 function closeBuildDetailSheet() {
     document.body.classList.remove('build-sheet-open');
 }
-// 지도 상세 뷰 열기
-// 사용법: openMapDetail('개봉', 'kaifeng');
+// =========================================
+// 13. 지도 상세 뷰 기능 (신규 추가)
+// =========================================
+
 function openMapDetail(mapName, mapKey) {
-    // 1. 현재 열려있는 모든 뷰 숨기기 (main > div 직계 자식들)
-    const views = document.querySelectorAll('#main-content > div[id^="view-"]');
-    views.forEach(view => view.style.display = 'none');
+    // 1. 모든 뷰 숨기기 (switchTab 로직과 유사하게 처리하거나 직접 숨김)
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
+    views.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+    });
 
     // 2. 지도 뷰 보이기
     const mapDiv = document.getElementById('view-map-detail');
     if(mapDiv) {
         mapDiv.style.display = 'block';
         
-        // 3. 제목 및 URL 설정
-        document.getElementById('map-detail-title').innerText = mapName;
+        // 3. 제목 설정
+        const titleEl = document.getElementById('map-detail-title');
+        if(titleEl) titleEl.innerText = mapName;
         
-        // iframe src 설정 (embed=true 파라미터 포함)
+        // 4. iframe src 설정 (embed=true 포함)
         const targetUrl = `https://yhellos3327-eng.github.io/wwmkoreamap/?map=${mapKey}&embed=true`;
         const iframe = document.getElementById('map-iframe');
         
-        // 이미 같은 지도가 로딩되어 있지 않을 때만 새로고침 (불필요한 로딩 방지)
-        if (iframe.src !== targetUrl) {
-            iframe.src = targetUrl;
+        if(iframe) {
+            // 이미 같은 지도가 로딩되어 있지 않을 때만 새로고침 (깜빡임 방지)
+            if (iframe.src !== targetUrl) {
+                iframe.src = targetUrl;
+            }
         }
     }
     
-    // 4. 스크롤 최상단으로 이동
+    // 5. 스크롤 최상단 이동
     window.scrollTo(0, 0);
 }
 
-// 지도 상세 뷰 닫기 (홈으로 돌아가기)
 function closeMapDetail() {
     // 지도 뷰 숨기기
-    document.getElementById('view-map-detail').style.display = 'none';
+    const mapDiv = document.getElementById('view-map-detail');
+    if(mapDiv) mapDiv.style.display = 'none';
     
-    // iframe 초기화 (메모리 절약 및 소리/동작 중단)
-    document.getElementById('map-iframe').src = 'about:blank';
+    // iframe 초기화 (메모리 절약 및 동작 중단)
+    const iframe = document.getElementById('map-iframe');
+    if(iframe) iframe.src = 'about:blank';
 
-    // 홈 탭 보이기 (또는 원래 있던 탭으로 복귀 로직 구현 가능)
+    // 홈으로 돌아가기
     switchTab('home'); 
 }

@@ -331,5 +331,14 @@
     "bgimg": "q39_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q39.html"
+  },
+  {
+    "id": "q39",
+    "name": "꽃 속의 소원",
+    "location": "내세의 언덕",
+    "type": "만사록",
+    "bgimg": "q40_3.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q40.html"
   }
 ]

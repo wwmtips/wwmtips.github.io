@@ -1343,9 +1343,7 @@ function openBuildDetailSheet(build) {
         // 빌드 공유 링크 버튼 (원래 뷰어로 이동 기능 복구)
         html += `
             <div style="text-align: center; margin-top: 30px;">
-                <button onclick="window.open('${build.link}', '_blank')" class="guide-action-btn" style="background-color: var(--wuxia-accent-gold); color: #000; border: none; padding: 10px 25px; border-radius: 20px;">
-                    원본 뷰어에서 전체 보기 →
-                </button>
+             
             </div>
         `;
 

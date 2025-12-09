@@ -556,12 +556,20 @@ function loadGuideContent(filename, btnElement) {
         })
         .then(html => {
             innerContainer.innerHTML = html;
+            
+            // [기존] 뉴스 탭일 때 처리
             if (filename === 'news.html') renderGuideNewsList(); 
+            
+            // [추가됨] 심법(harts.html) 탭일 때 데이터 렌더링 실행
+            if (filename === 'harts.html') {
+                renderHeartLibrary();
+            }
         })
         .catch(err => {
             innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br>(${filename})</div>`;
         });
 }
+
 
 function renderGuideNewsList() {
     const container = document.getElementById('guide-inner-news-list');

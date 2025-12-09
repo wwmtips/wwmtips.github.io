@@ -270,7 +270,7 @@ function renderNewsListGeneric(dataList, container, type) {
     // container.style.display = 'flex'; ... 등 제거
 
     // 최대 표시 개수 설정 (최근 소식은 5개 정도가 적당)
-    const listToRender = dataList.slice(0, 5); 
+    const listToRender = dataList.slice(0, 3); 
 
     if (listToRender.length === 0) {
         container.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:0.9em;">등록된 내용이 없습니다.</div>';

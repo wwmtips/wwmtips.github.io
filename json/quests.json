@@ -268,5 +268,14 @@
     "bgimg": "q32_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q32.html"
+  },
+  {
+    "id": "q33",
+    "name": "청천문 특훈",
+    "location": "신선 나루",
+    "type": "만사록",
+    "bgimg": "q33_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q33.html"
   }
 ]

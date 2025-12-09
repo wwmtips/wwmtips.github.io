@@ -4,21 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>「연운」한국 위키</title>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-5SMVDZTDST');
-</script>
+      gtag('config', 'G-5SMVDZTDST');
+    </script>
     <meta property="og:type" content="website">
     <meta property="og:description" content="강호의 고수가 되기 위한 필수 지침서. 일일/주간 숙제, 무림록, 최신 쿠폰 코드를 한눈에 확인하세요.">
-<meta name="description" content="강호의 고수가 되기 위한 필수 지침서. 일일/주간 숙제, 무림록, 최신 쿠폰 코드를 한눈에 확인하세요.">
+    <meta name="description" content="강호의 고수가 되기 위한 필수 지침서. 일일/주간 숙제, 무림록, 최신 쿠폰 코드를 한눈에 확인하세요.">
 
     <meta property="og:title" content="「연운」한국 위키">    
-    <meta property="og:description" content="강호의 고수가 되기 위한 필수 지침서. 일일/주간 숙제, 무림록, 최신 쿠폰 코드를 한눈에 확인하세요.">    
     <meta property="og:image" content="https://wwm.tips/images/story.jpg">    
     <meta property="og:url" content="https://wwm.tips/">
 
@@ -52,327 +50,261 @@
                 <span class="logo-icon"><a href="#" onclick="switchTab('home'); return false;"><img src="images/logo.png" width="36px" height="36px" alt="로고"></a></span> 
             </div>
             
-         <div class="search-container">
-    <input type="text" id="header-search-input" placeholder="통합 검색 (무림록, 족보 등)" autocomplete="off">
-    <button id="search-clear-btn" class="search-clear-btn" style="display:none;">X</button>
-    <div id="global-search-results" class="search-dropdown"></div>
-</div>
+            <div class="search-container">
+                <input type="text" id="header-search-input" placeholder="통합 검색 (무림록, 족보 등)" autocomplete="off">
+                <button id="search-clear-btn" class="search-clear-btn" style="display:none;">X</button>
+                <div id="global-search-results" class="search-dropdown"></div>
+            </div>
         </header>
 
-     <nav id="category-nav">
-    <button class="nav-item active" id="nav-home" onclick="switchTab('home')">
-        <span class="icon"></span>홈
-    </button>
-<button class="nav-item" id="nav-code" onclick="switchTab('guide')">
-        <span class="icon"></span>비급
- </button>
-    <button class="nav-item" id="nav-quest" onclick="switchTab('quest')">
-        <span class="icon"></span>무림록
-    </button>
-    <button class="nav-item" id="nav-quiz" onclick="switchTab('quiz')">
-        <span class="icon"></span>족보
-    </button>
-      <button class="nav-item" id="nav-builder" onclick="switchTab('builder')">
-        <span class="icon"></span>전수
-      </button>
-</nav>
+        <nav id="category-nav">
+            <button class="nav-item active" id="nav-home" onclick="switchTab('home')">
+                <span class="icon"></span>홈
+            </button>
+            <button class="nav-item" id="nav-code" onclick="switchTab('guide')">
+                <span class="icon"></span>비급
+            </button>
+            <button class="nav-item" id="nav-quest" onclick="switchTab('quest')">
+                <span class="icon"></span>무림록
+            </button>
+            <button class="nav-item" id="nav-quiz" onclick="switchTab('quiz')">
+                <span class="icon"></span>족보
+            </button>
+            <button class="nav-item" id="nav-builder" onclick="switchTab('builder')">
+                <span class="icon"></span>전수
+            </button>
+        </nav>
     </div>
 
     <main id="main-content">
 
-   <div id="view-home">
-    
-    <div class="hero-slider-wrapper">
-        <div id="hero-slider-track" class="slider-track">
-            </div>
-        
-        <div class="slider-controls">
-            <button class="slider-btn prev" onclick="moveSlide(-1)">❮</button>
-            <button class="slider-btn next" onclick="moveSlide(1)">❯</button>
-        </div>
-        <div id="slider-indicators" class="slider-indicators"></div>
-    </div>
-
-    <section class="recent-updates-section">
-        <div class="section-header-clickable" onclick="switchTab('guide')">
-            <h3><span class="deco-bar"></span>최근 소식</h3>
-        </div>
-        <div id="home-recent-news" class="quest-grid">
-            </div>
-    </section>
-       
-  <section class="community-updates-section" style="margin-top: 30px;">
-        <div class="section-header-clickable">
-            <h3><span class="deco-bar"></span>커뮤니티 업데이트</h3>
-        </div>
-        <div id="home-community-news" class="quest-grid">
-            </div>
-  </section>
-       
-    <section class="map-section">
-        <div class="section-header-clickable" onclick="window.open('https://yhellos3327-eng.github.io/wwmkoreamap/', '_blank')">
-            <h3><span class="deco-bar"></span>지역 정보</h3>
-        </div>
-        <div id="home-map-list" class="map-grid">
-        </div>
-    </section>
-
-</div>
-
-<div id="view-quiz" style="display: none;">
-    <section id="answer-container">
-        <div class="status-bar" id="quiz-counter-area">
-                    데이터 로딩 중...
+        <div id="view-home">
+            <div class="hero-slider-wrapper">
+                <div id="hero-slider-track" class="slider-track"></div>
+                <div class="slider-controls">
+                    <button class="slider-btn prev" onclick="moveSlide(-1)">❮</button>
+                    <button class="slider-btn next" onclick="moveSlide(1)">❯</button>
                 </div>
+                <div id="slider-indicators" class="slider-indicators"></div>
+            </div>
 
+            <section class="recent-updates-section">
+                <div class="section-header-clickable" onclick="switchTab('guide')">
+                    <h3><span class="deco-bar"></span>최근 소식</h3>
+                </div>
+                <div id="home-recent-news" class="quest-grid"></div>
+            </section>
+            
+            <section class="community-updates-section" style="margin-top: 30px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>커뮤니티 업데이트</h3>
+                </div>
+                <div id="home-community-news" class="quest-grid"></div>
+            </section>
+            
+            <section class="map-section">
+                <div class="section-header-clickable" onclick="window.open('https://yhellos3327-eng.github.io/wwmkoreamap/', '_blank')">
+                    <h3><span class="deco-bar"></span>지역 정보</h3>
+                </div>
+                <div id="home-map-list" class="map-grid"></div>
+            </section>
+        </div>
+
+        <div id="view-quiz" style="display: none;">
+            <section id="answer-container">
+                <div class="status-bar" id="quiz-counter-area">데이터 로딩 중...</div>
                 <div class="inner-search-area">
                     <div class="search-input-wrapper">
-                          <input type="text" id="quiz-local-search" class="inner-search-box" placeholder="단서를 입력하세요. (예: 가시)">
+                        <input type="text" id="quiz-local-search" class="inner-search-box" placeholder="단서를 입력하세요. (예: 가시)">
                     </div>
                 </div>
-        <div class="list-scroll-area">
-            <table class="answer-table">
-                <colgroup>
-                    <col style="width: 30%">
-                    <col style="width: 30%"> 
-                    <col style="width: 40%"> </colgroup>
-                <thead>
-                    <tr>
-                        <th>단서</th>
-                        <th>정답</th>
-                        <th>제보</th> </tr>
-                </thead>
-                <tbody id="quiz-table-body">
-                </tbody>
-            </table>
-        </div>
-    </section>
-</div>
-
-<div id="view-quest" style="display: none;">
-    
-    <section id="quest-list-view" style="margin-top: 0; padding: 0;">
-
-        <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 30px; margin-top: 20px;">
-            <div class="guide-item-btn active" onclick="filterQuestType('all', this)">
-                <span class="guide-title">전체</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterQuestType('세계관', this)">
-                <span class="guide-title">세계관</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterQuestType('인연의 궤적', this)">
-                <span class="guide-title">인연의 궤적</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterQuestType('만사록', this)">
-                <span class="guide-title">만사록</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterQuestType('퀘스트', this)">
-                <span class="guide-title">퀘스트</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterQuestType('이벤트', this)">
-                <span class="guide-title">이벤트</span>
-            </div>
+                <div class="list-scroll-area">
+                    <table class="answer-table">
+                        <colgroup>
+                            <col style="width: 30%">
+                            <col style="width: 30%"> 
+                            <col style="width: 40%"> 
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>단서</th>
+                                <th>정답</th>
+                                <th>제보</th> 
+                            </tr>
+                        </thead>
+                        <tbody id="quiz-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
         </div>
 
-        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 10px;">
-            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
-            <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-                무림록
-            </h2>
-            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 2px;">
-                게임 내 퀘스트, 세계관, 만사록 정보를 확인하세요.
-            </p>
-        </div>
-        
-        <div id="quest-grid-container" class="quest-grid">
-            </div>
+        <div id="view-quest" style="display: none;">
+            <section id="quest-list-view" style="margin-top: 0; padding: 0;">
+                <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 30px; margin-top: 20px;">
+                    <div class="guide-item-btn active" onclick="filterQuestType('all', this)"><span class="guide-title">전체</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('세계관', this)"><span class="guide-title">세계관</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('인연의 궤적', this)"><span class="guide-title">인연의 궤적</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('만사록', this)"><span class="guide-title">만사록</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('퀘스트', this)"><span class="guide-title">퀘스트</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('이벤트', this)"><span class="guide-title">이벤트</span></div>
+                </div>
 
-        <div id="pagination-container" class="pagination-controls"></div>
-
-    </section>
-    
-    <section id="quest-detail-view" style="display: none;">
-        <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
-        <div id="quest-content-loader" class="detail-content-box">
-            로딩 중...
-        </div>
-    </section>
-
-</div>
-
-<div id="view-news" style="display: none;">
-    <section style="margin-top: 30px;">
-        <div class="large-font-chunk" style="margin-bottom: 20px; border:none; background:none; padding-left:0;">
-            <h2 style="color:var(--wuxia-accent-gold); margin:0;">공지사항</h2>
-        </div>
-        
-        <div id="full-news-list" class="item-list-container">
-            </div>
-    </section>
-</div>
-        
-
-<div id="view-guide" style="display: none;">
-    <div id="guide-content-loader" style="margin-top: 30px; text-align: center;">
-        로딩 중...
-    </div>
-</div>
-
-
-<div id="view-builder" style="display: none;">
-    
-    <div id="tools-menu" style="margin-top: 30px;">
-        <!--<section id="tool-build-card" class="large-font-chunk" style="cursor: pointer;"
-                 onclick="document.getElementById('tools-menu').style.display='none'; document.getElementById('builder-interface').style.display='block';">
-            <h2>만상집</h2>
-            <p>
-                다양한 커스터마이징을 확인하고 코드를 공유 받으세요.
-            </p>
-            <button class="browse-button" style="pointer-events: none;">빌드 생성하기</button>
-        </section>-->
-        
-        <section id="tool-build-card" class="large-font-chunk" style="cursor: pointer;"
-                 onclick="document.getElementById('tools-menu').style.display='none'; document.getElementById('builder-interface').style.display='block';">
-            <h2>나만의 빌드</h2>
-            <p>
-                자유롭게 자신만의 빌드를 만들고 공유 하세요.
-            </p>
-            <button class="browse-button" style="pointer-events: none;">빌드 생성하기</button>
-        </section>
-
-        <section id="tool-map-card" class="large-font-chunk" style="cursor: pointer;"
-                 onclick="window.open('https://yhellos3327-eng.github.io/wwmkoreamap/', '_blank')">
-            <h2>지도</h2>
-            <p>
-                지도를 통해 보다 연운의 세계를 보다 자세히 들여다보세요.
-            </p>
-            <button class="browse-button" style="pointer-events: none;">지도 보러가기</button>
-        </section>
-
-    </div>
-
-    <div id="builder-interface" style="display: none;">
-        
-        <button class="back-button" 
-                onclick="document.getElementById('builder-interface').style.display='none'; document.getElementById('tools-menu').style.display='block';">
-            ← 도구 메뉴로 돌아가기
-        </button>
-
-        <div class="quest-detail-container" style="margin-top: 10px;">
+                <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 10px;">
+                    <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
+                    <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">무림록</h2>
+                    <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 2px;">게임 내 퀘스트, 세계관, 만사록 정보를 확인하세요.</p>
+                </div>
+                
+                <div id="quest-grid-container" class="quest-grid"></div>
+                <div id="pagination-container" class="pagination-controls"></div>
+            </section>
             
-            <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-                <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">도구</span>
-                <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-                    나만의 빌드
-                </h2>
-                <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">원하는 장비와 무공을 조합하여 공유하세요.</p>
-            </div>
-    
-            <div style="margin-bottom: 30px;">
-                <span class="slot-label">무기 및 무술 (2)</span>
-                <div class="slot-group">
-                    <div class="slot-wrapper">
-                        <div class="item-slot" onclick="openBuilderModal('weapons', 0)"><span>+</span><img id="slot-weapons-0" style="display:none;"></div>
-                        <div class="slot-name" id="name-weapons-0"></div>
-                    </div>
-                    <div class="slot-wrapper">
-                        <div class="item-slot" onclick="openBuilderModal('weapons', 1)"><span>+</span><img id="slot-weapons-1" style="display:none;"></div>
-                        <div class="slot-name" id="name-weapons-1"></div>
-                    </div>
+            <section id="quest-detail-view" style="display: none;">
+                <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
+                <div id="quest-content-loader" class="detail-content-box">로딩 중...</div>
+            </section>
+        </div>
+
+        <div id="view-news" style="display: none;">
+            <section style="margin-top: 30px;">
+                <div class="large-font-chunk" style="margin-bottom: 20px; border:none; background:none; padding-left:0;">
+                    <h2 style="color:var(--wuxia-accent-gold); margin:0;">공지사항</h2>
                 </div>
-            
-                <span class="slot-label">심법 (4)</span>
-                <div class="slot-group">
-                    <div class="slot-wrapper">
-                        <div class="item-slot" onclick="openBuilderModal('hearts', 0)"><span>+</span><img id="slot-hearts-0" style="display:none;"></div>
-                        <div class="slot-name" id="name-hearts-0"></div>
-                    </div>
-                    <div class="slot-wrapper">
-                        <div class="item-slot" onclick="openBuilderModal('hearts', 1)"><span>+</span><img id="slot-hearts-1" style="display:none;"></div>
-                        <div class="slot-name" id="name-hearts-1"></div>
-                    </div>
-                    <div class="slot-wrapper">
-                        <div class="item-slot" onclick="openBuilderModal('hearts', 2)"><span>+</span><img id="slot-hearts-2" style="display:none;"></div>
-                        <div class="slot-name" id="name-hearts-2"></div>
-                    </div>
-                    <div class="slot-wrapper">
-                        <div class="item-slot" onclick="openBuilderModal('hearts', 3)"><span>+</span><img id="slot-hearts-3" style="display:none;"></div>
-                        <div class="slot-name" id="name-hearts-3"></div>
-                    </div>
-                </div>
-            
-                <span class="slot-label">비결 (8)</span>
-<div id="view-builder" style="display: none;">
-    
-    <div id="tools-menu" style="margin-top: 20px;">
+                <div id="full-news-list" class="item-list-container"></div>
+            </section>
+        </div>
         
-        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 20px;">
-            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">비급</span>
-            <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-                무공전수
-            </h2>
-            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">
-                강호의 고수들이 남긴 비급을 전수받거나, 나만의 무공을 창시하세요.
-            </p>
+        <div id="view-guide" style="display: none;">
+            <div id="guide-content-loader" style="margin-top: 30px; text-align: center;">로딩 중...</div>
         </div>
 
-        <section class="create-build-banner" onclick="openBuilderInterface()">
-            <div class="banner-content">
-                <h3>✍️ 나만의 비급 창시하기</h3>
-                <p>원하는 무기와 심법을 조합하여 새로운 무공을 정립합니다.</p>
-            </div>
-            <div class="banner-arrow">→</div>
-        </section>
-
-        <div style="margin-top: 30px;">
-            <h3 style="color: #fff; font-size: 1.1em; margin-bottom: 15px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
-                전수받을 비급 선택
-            </h3>
+        <div id="view-builder" style="display: none;">
             
-            <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 15px;">
-                <div class="guide-item-btn active" onclick="filterBuilds('all', this)">전체</div>
-                <div class="guide-item-btn" onclick="filterBuilds('PvE', this)">사냥 (PvE)</div>
-                <div class="guide-item-btn" onclick="filterBuilds('PvP', this)">비무 (PvP)</div>
-            </div>
+            <div id="tools-menu" style="margin-top: 20px;">
+                <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 20px;">
+                    <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">비급</span>
+                    <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                        무공전수
+                    </h2>
+                    <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">
+                        강호의 고수들이 남긴 비급을 전수받거나, 나만의 무공을 창시하세요.
+                    </p>
+                </div>
 
-            <div id="build-list-container" class="build-list-wrapper">
-                <div style="text-align:center; padding: 30px; color: #666;">
-                    비급을 불러오는 중...
+                <section class="create-build-banner" onclick="openBuilderInterface()">
+                    <div class="banner-content">
+                        <h3>✍️ 나만의 비급 창시하기</h3>
+                        <p>원하는 무기와 심법을 조합하여 새로운 무공을 정립합니다.</p>
+                    </div>
+                    <div class="banner-arrow">→</div>
+                </section>
+
+                <div style="margin-top: 30px;">
+                    <h3 style="color: #fff; font-size: 1.1em; margin-bottom: 15px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
+                        전수받을 비급 선택
+                    </h3>
+                    
+                    <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 15px;">
+                        <div class="guide-item-btn active" onclick="filterBuilds('all', this)">전체</div>
+                        <div class="guide-item-btn" onclick="filterBuilds('PvE', this)">사냥 (PvE)</div>
+                        <div class="guide-item-btn" onclick="filterBuilds('PvP', this)">비무 (PvP)</div>
+                    </div>
+
+                    <div id="build-list-container" class="build-list-wrapper">
+                        <div style="text-align:center; padding: 30px; color: #666;">
+                            비급을 불러오는 중...
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div id="builder-interface" style="display: none;">
+                
+                <button class="back-button" onclick="closeBuilderInterface()">
+                    ← 비급 목록으로 돌아가기
+                </button>
+
+                <div class="quest-detail-container" style="margin-top: 10px;">
+                    
+                    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+                        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">도구</span>
+                        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                            나만의 빌드
+                        </h2>
+                        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">원하는 장비와 무공을 조합하여 공유하세요.</p>
+                    </div>
+            
+                    <div style="margin-bottom: 30px;">
+                        <span class="slot-label">무기 및 무술 (2)</span>
+                        <div class="slot-group">
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('weapons', 0)"><span>+</span><img id="slot-weapons-0" style="display:none;"></div>
+                                <div class="slot-name" id="name-weapons-0"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('weapons', 1)"><span>+</span><img id="slot-weapons-1" style="display:none;"></div>
+                                <div class="slot-name" id="name-weapons-1"></div>
+                            </div>
+                        </div>
+                    
+                        <span class="slot-label">심법 (4)</span>
+                        <div class="slot-group">
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('hearts', 0)"><span>+</span><img id="slot-hearts-0" style="display:none;"></div>
+                                <div class="slot-name" id="name-hearts-0"></div>
+                            </div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('hearts', 1)"><span>+</span><img id="slot-hearts-1" style="display:none;"></div><div class="slot-name" id="name-hearts-1"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('hearts', 2)"><span>+</span><img id="slot-hearts-2" style="display:none;"></div><div class="slot-name" id="name-hearts-2"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('hearts', 3)"><span>+</span><img id="slot-hearts-3" style="display:none;"></div><div class="slot-name" id="name-hearts-3"></div></div>
+                        </div>
+                    
+                        <span class="slot-label">비결 (8)</span>
+                        <div class="slot-group">
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 0)"><span>+</span><img id="slot-marts-0" style="display:none;"></div><div class="slot-name" id="name-marts-0"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 1)"><span>+</span><img id="slot-marts-1" style="display:none;"></div><div class="slot-name" id="name-marts-1"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 2)"><span>+</span><img id="slot-marts-2" style="display:none;"></div><div class="slot-name" id="name-marts-2"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 3)"><span>+</span><img id="slot-marts-3" style="display:none;"></div><div class="slot-name" id="name-marts-3"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 4)"><span>+</span><img id="slot-marts-4" style="display:none;"></div><div class="slot-name" id="name-marts-4"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 5)"><span>+</span><img id="slot-marts-5" style="display:none;"></div><div class="slot-name" id="name-marts-5"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 6)"><span>+</span><img id="slot-marts-6" style="display:none;"></div><div class="slot-name" id="name-marts-6"></div></div>
+                            <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 7)"><span>+</span><img id="slot-marts-7" style="display:none;"></div><div class="slot-name" id="name-marts-7"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="builder-footer">
+                        <div style="margin-bottom: 10px; text-align: left;">
+                            <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px;">✍️ 빌드 이름 (선택)</span>
+                            <input type="text" id="creator-name" placeholder="빌드명을 입력하세요." maxlength="10" 
+                                   style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                        </div>
+                        <button class="browse-button" onclick="generateBuildUrl()">🔗 빌드 주소 생성</button>
+                        <input type="text" id="result-url" readonly onclick="this.select()">
+                    </div>
+                    
+                    <div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)" style="display:none;">
+                        <div class="modal-content">
+                            <h3 id="builder-modal-title" style="margin-top:0;">아이템 선택</h3>
+                            <div id="builder-modal-list" class="item-list-grid"></div>
+                            <button onclick="closeBuilderModal(null)" style="margin-top:20px; width:100%; padding:10px;">닫기</button>
+                        </div>
+                    </div>
+
+                </div> 
+            </div>
+
         </div>
-    </div>
-
-    <div id="builder-interface" style="display: none;">
-        <button class="back-button" onclick="closeBuilderInterface()">
-            ← 비급 목록으로 돌아가기
-        </button>
-        <div class="quest-detail-container" style="margin-top: 10px;">
-             <div class="builder-footer">
-                </div>
-             <div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)" style="display:none;">
-                </div>
-         </div>
-    </div>
-
-</div>
-
-
-</div>
-<br>
-<!--
-<a href="https://hits.sh/wwm.tips/"><img alt="Hits" src="https://hits.sh/wwm.tips.svg?style=flat-square&extraCount=15001&color=d3bb5f&labelColor=000000"/></a>-->
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        if (new URLSearchParams(window.location.search).get('b')) {
-            document.getElementById('tools-menu').style.display = 'none';
-            document.getElementById('builder-interface').style.display = 'block';
-        }
-    });
-</script>
+        
+        <br>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                if (new URLSearchParams(window.location.search).get('b')) {
+                    document.getElementById('tools-menu').style.display = 'none';
+                    document.getElementById('builder-interface').style.display = 'block';
+                }
+            });
+        </script>
 
     </main>
-
 
     <script src="script.js"></script>
 </body>

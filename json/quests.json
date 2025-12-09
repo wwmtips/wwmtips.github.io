@@ -313,5 +313,14 @@
     "bgimg": "q37_3.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q37.html"
+  },
+  {
+    "id": "q38",
+    "name": "강호 은어",
+    "location": "불선선",
+    "type": "만사록",
+    "bgimg": "q38_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q38.html"
   }
 ]

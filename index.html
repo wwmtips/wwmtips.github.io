@@ -293,17 +293,33 @@
 
         </div> 
     </div>
-    <div id="build-detail-overlay" class="bottom-sheet-overlay" onclick="closeBuildDetailSheet()"></div>
-<div id="build-detail-sheet" class="bottom-sheet">
+    <style>
+    /* 오버레이가 활성화(.active)될 때, 0.3초 동안 클릭 이벤트를 무시함 (깜빡임 해결 핵심) */
+    #build-detail-overlay.active {
+        animation: preventGhostClick 0.3s forwards;
+    }
+    @keyframes preventGhostClick {
+        0% { pointer-events: none; }
+        99% { pointer-events: none; }
+        100% { pointer-events: auto; }
+    }
+</style>
+
+<div id="build-detail-overlay" class="bottom-sheet-overlay" onclick="closeBuildDetailSheet(event)"></div>
+
+<div id="build-detail-sheet" class="bottom-sheet" onclick="event.stopPropagation()">
     
     <div class="sheet-header">
         <h3 id="build-sheet-title">빌드 상세 정보</h3>
-        <button onclick="closeBuildDetailSheet()" class="close-sheet-btn">✕</button>
+        <button onclick="closeBuildDetailSheet(null)" class="close-sheet-btn">✕</button>
     </div>
 
     <div class="sheet-content build-detail-content">
         <div style="text-align: center; padding: 50px; color: #999;">데이터 로딩 중...</div>
     </div>
+
+</div>
+
 
 </div>
 

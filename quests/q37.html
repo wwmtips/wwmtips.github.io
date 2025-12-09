@@ -1,0 +1,138 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            신비한 서신
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">향선이모에게 비밀 서신이?</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            향선 이모의 집에서 우연히 발견한 <b>서신</b> 한 통.<br>
+            이 서신을 올바른 주인에게 전달해야 합니다. 불선선의 상태에 따라 전달 대상이 달라집니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            서신 습득
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>향선 이모의 집</b>으로 이동하여 바닥에 떨어진 서신을 습득하면 퀘스트가 시작됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q37_1.jpg" alt="서신">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q35_5.jpg" alt="이모집 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="warning-box">
+        <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 주의: 위치 변경</h4>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6; font-size: 0.95em;">
+            습득한 서신을 전달해야 하는 대상은 <b>불선선 화재 여부</b>에 따라 달라집니다.<br>
+            현재 자신의 게임 진행 상황에 맞는 곳을 찾아가세요.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            서신 전달
+        </h3>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 20px;">1. 불선선이 불타기 전 (화재 전)</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-bottom: 20px;">
+            향선 이모 집 <b>바로 아래에 있는 대형 저택</b>으로 이동하세요.<br>
+            그곳에 있는 NPC와 대화하면 전달이 완료됩니다.
+        </p>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">2. 불선선이 불타고 난 후 (화재 후)</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 위치로 이동하여 <b>고양이 전문가</b>를 찾으세요.<br>
+            그와 대화하면 서신을 전달할 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q37_3.jpg" alt="고양이 전문가">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q37_4.jpg" alt="고양이 전문가 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            올바른 대상에게 서신을 전달하면<br>
+            비밀스러운 사연이 전해지며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

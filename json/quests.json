@@ -304,5 +304,14 @@
     "bgimg": "q36_3.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q36.html"
+  },
+  {
+    "id": "q37",
+    "name": "신비한 서신",
+    "location": "불선선",
+    "type": "만사록",
+    "bgimg": "q37_3.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q37.html"
   }
 ]

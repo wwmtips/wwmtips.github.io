@@ -1189,8 +1189,7 @@ function renderBuildList(filterType) {
         const row = document.createElement('div');
         row.className = 'build-row-card';
         row.onclick = () => {
-             if (build.link) window.open(build.link, '_blank');
-        };
+             openBuildDetailSheet(build);    };
 
         const typeClass = build.type.toUpperCase() === 'PVP' ? 'type-pvp' : 'type-pve';
         // 설명이 없으면 기본 텍스트 처리

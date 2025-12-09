@@ -3,7 +3,7 @@
     {
       "title": "쌍도 PvP 빌드",
       "description": "뛰어난 이동성과 높은 DPS를 가진 PvP 빌드입니다.",
-      "type": "PvE",
+      "type": "PvP",
       "weapons": ["w6", "w9"],
       "link": "viewer.html?b=eyJ3IjpbInc2IiwidzkiXSwiaCI6WyJoMSIsImgxNCIsImgzNSIsImgxOCJdLCJtIjpbIm02IiwibTE5IiwibTE2IiwibTE1IiwibTE0IiwibTIwIiwibTEyIiwibTEwIl0sImMiOiLsjI3rj4QgUHZQIn0="
     },

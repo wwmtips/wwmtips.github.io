@@ -1518,3 +1518,12 @@ body {
     border-color: #ef9a9a;
     background: #ffebee; /* 아주 연한 적색 배경 */
 }
+/* 나만의 무공 창시하기 배너 내부 타이틀 스타일 수정 */
+.create-build-banner h3 {
+    border-left: none !important; /* 왼쪽 붉은 선 제거 */
+    padding-left: 0 !important;   /* 선이 있던 자리의 여백 제거 */
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 1.1em;
+    font-weight: bold;
+}

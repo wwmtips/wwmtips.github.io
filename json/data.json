@@ -2,6 +2,13 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "가죽", "answer": "부츠", "user": "EllaHolic" },
+{ "hint": "길다란 꼭지", "answer": "체리", "user": "연강호" },
+{ "hint": "칠석", "answer": "견우", "user": "관백" },
+{ "hint": "피", "answer": "모기", "user": "돼지박" },
+{ "hint": "인테리어 소품", "answer": "꽃병", "user": "" },
+{ "hint": "어부", "answer": "낚싯대", "user": "꽃병" },
+
     { "hint": "군자의 상징", "answer": "봉황", "user": "공명의함정" },
 { "hint": "바다", "answer": "인어", "user": "ㅇㅇ" },
 { "hint": "공예품", "answer": "도자기", "user": "화웅선생" },

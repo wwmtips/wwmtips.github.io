@@ -356,7 +356,7 @@ function loadHomeMaps() {
 // 5. 탭 전환 및 URL 관리
 // =========================================
 function switchTab(tabName) {
-    nst views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail'];
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail'];
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
 
     views.forEach(id => {

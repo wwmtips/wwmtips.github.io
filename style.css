@@ -1489,102 +1489,13 @@ body {
 /* 설명 텍스트 */
 .build-desc {
     color: #757575; /* 설명 중간 회색 */
-
-/* 나만의 무공 창시하기 /* =========================================
-   무공전수 (Builds) 리스트 스타일 수정
-   ========================================= */
-
-/* 카드 전체 레이아웃 */
-.build-row-card {
-    display: flex;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    margin-bottom: 12px;
-    padding: 12px; /* 패딩 약간 축소 */
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    align-items: center; /* 수직 중앙 정렬 */
-}
-
-.build-row-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--wuxia-accent-gold);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* 아이콘 영역 (세로 배치로 변경) */
-.build-icons-area {
-    display: flex;
-    flex-direction: column; /* [핵심] 세로 정렬 */
-    gap: 4px; /* 아이콘 간 간격 좁힘 */
-    margin-right: 15px; /* 텍스트와의 간격 */
-    flex-shrink: 0;
-    align-items: center;
-}
-
-/* 아이콘 박스 (사이즈 축소) */
-.build-icon-box {
-    width: 36px; /* [핵심] 48px -> 36px로 축소 */
-    height: 36px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.build-icon-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* 텍스트 정보 영역 (공간 확보) */
-.build-info-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0; /* 텍스트 말줄임표 작동을 위한 필수 속성 */
-}
-
-.build-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* 뱃지와 제목 높이 맞춤 */
-    margin-bottom: 4px;
-}
-
-/* 제목 스타일 */
-.build-title {
-    color: #333;
-    font-size: 1.05em;
-    font-weight: bold;
-    line-height: 1.3;
-    margin-right: 8px;
-    white-space: nowrap;      /* [추가] 한 줄 표시 */
-    overflow: hidden;         /* [추가] 넘침 숨김 */
-    text-overflow: ellipsis;  /* [추가] 말줄임표 (...) */
-    flex: 1;                  /* [추가] 남은 공간 차지 */
-}
-
-/* 설명 텍스트 */
-.build-desc {
-    color: #757575;
     font-size: 0.9em;
     line-height: 1.4;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 최대 2줄 */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-top: 2px;
 }
 
 /* 뱃지 스타일 (기존 유지) */
@@ -1595,21 +1506,20 @@ body {
     font-weight: bold;
     white-space: nowrap;
     border: 1px solid;
-    flex-shrink: 0; /* 뱃지 크기 유지 */
 }
 
 .type-pve {
-    color: #2e7d32;
+    color: #2e7d32; /* 진한 녹색 텍스트 */
     border-color: #a5d6a7;
-    background: #e8f5e9;
+    background: #e8f5e9; /* 아주 연한 녹색 배경 */
 }
 
 .type-pvp {
-    color: #c62828;
+    color: #c62828; /* 진한 적색 텍스트 */
     border-color: #ef9a9a;
-    background: #ffebee;
+    background: #ffebee; /* 아주 연한 적색 배경 */
 }
-배너 내부 타이틀 스타일 수정 */
+/* 나만의 무공 창시하기 배너 내부 타이틀 스타일 수정 */
 .create-build-banner h3 {
     border-left: none !important; /* 왼쪽 붉은 선 제거 */
     padding-left: 0 !important;   /* 선이 있던 자리의 여백 제거 */

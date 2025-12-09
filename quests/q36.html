@@ -1,0 +1,136 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            도난당한 개연주
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">잃어버린 개연주를 찾아서</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            누군가에게 귀한 술 <b>'개연주'</b>를 도난당한 <b>배양</b>을 돕는 의뢰입니다.<br>
+            범인이 숨겨둔 술을 찾아 배양에게 돌려주어야 합니다.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 주의: 위치 변경</h4>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6; font-size: 0.95em;">
+            이 퀘스트는 <b>메인 퀘스트 진행도(불선선 화재 여부)</b>에 따라 배양의 위치가 달라집니다.<br>
+            자신의 진행 상황에 맞는 위치를 참고하세요.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            배양과의 만남
+        </h3>
+        
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 20px;">1. 불선선이 불타기 전 위치</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-bottom: 10px;">아래 커서가 있는 곳을 확인하세요.</p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q36_1.jpg" alt="불타기 전 위치">
+        </div>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">2. 불선선이 불타고 난 후 위치</p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q36_2.jpg" alt="불탄 후 위치">
+        </div>
+
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            해당 위치에 있는 배양과 대화하면, 누군가 술을 훔쳐갔다며 찾아달라고 부탁합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q36_3.jpg" alt="배양">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            탑 꼭대기의 술
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            대화를 마친 후 <b>바로 앞에 있는 탑</b>을 바라보세요.<br>
+            탑의 <b>꼭대기</b>로 올라가면 잃어버린 술을 발견할 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q36_4.jpg" alt="술 위치(탑 꼭대기)">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            회수한 술을 배양에게 가져다주면<br>
+            그는 크게 기뻐하며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

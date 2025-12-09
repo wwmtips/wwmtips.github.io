@@ -295,5 +295,14 @@
     "bgimg": "q35_3.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q35.html"
+  },
+  {
+    "id": "q36",
+    "name": "도난당한 개연주",
+    "location": "불선선",
+    "type": "만사록",
+    "bgimg": "q36_3.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q36.html"
   }
 ]

@@ -2,6 +2,8 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "강한 부리", "answer": "딱따구리", "user": "NowMad" },
+
     { "hint": "기력 보강", "answer": "인삼", "user": "" },
 { "hint": "양념", "answer": "마늘", "user": "관백" },
 { "hint": "정화", "answer": "호피란", "user": "소은이" },

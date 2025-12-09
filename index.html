@@ -180,39 +180,48 @@
 
 <div id="view-builder" style="display: none;">
     
-    <div id="tools-menu" style="margin-top: 20px;">
+    <div id="tools-menu" style="margin-top: 20px; padding: 0 5px;">
+    
+    <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 30px;">
+        
+        <div onclick="document.getElementById('tools-menu').style.display='none'; document.getElementById('builder-interface').style.display='block';" 
+             style="padding: 18px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;"
+             onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='#fff'">
+            <span style="font-size: 1.05em; font-weight: bold; color: #333;">✍️ 나만의 빌드 만들기</span>
+            <span style="color: var(--wuxia-accent-gold); font-size: 1.2em; font-weight:bold;">→</span>
+        </div>
 
-        <section class="create-build-banner" onclick="openBuilderInterface()">
-            <div class="banner-content">
-                <h3>나만의 빌드</h3>
-                     </div>
-            <div class="banner-arrow">→</div>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 0;">
+        <hr style="margin: 0; border: 0; border-top: 1px solid #eee;">
 
-                <a href="https://wwm.tips/suggest" target="_blank" 
-                   style="display: block; padding: 15px 5px; text-decoration: none; color: #666; font-size: 0.95em;">
-                    📤 빌드 제안하기
-                </a>
-        </section>
+        <div onclick="window.open('https://wwm.tips/suggest', '_blank')" 
+             style="padding: 18px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;"
+             onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='#fff'">
+            <span style="font-size: 1.05em; font-weight: bold; color: #333;">📤 빌드 제안하기</span>
+            <span style="color: #ccc; font-size: 1.2em;">↗</span>
+        </div>
 
-        <div style="margin-top: 30px;">
-            <h3 style="color: #333; font-size: 1.1em; margin-bottom: 15px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
-             추천 빌드
-            </h3>
-            
-            <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 15px;">
-                <div class="guide-item-btn active" onclick="filterBuilds('all', this)">전체</div>
-                <div class="guide-item-btn" onclick="filterBuilds('PvE', this)">탐험</div>
-                <div class="guide-item-btn" onclick="filterBuilds('PvP', this)">논검</div>
-            </div>
+    </div>
 
-            <div id="build-list-container" class="build-list-wrapper">
-                <div style="text-align:center; padding: 30px; color: #666;">
-                    무공을 불러오는 중...
-                </div>
-            </div>
+    <div style="margin-bottom: 15px;">
+        <h3 style="margin: 0; font-size: 1.1em; color: #333; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px; font-weight: bold;">
+            추천 빌드
+        </h3>
+    </div>
+
+    <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 15px;">
+        <div class="guide-item-btn active" onclick="filterBuilds('all', this)">전체</div>
+        <div class="guide-item-btn" onclick="filterBuilds('PvE', this)">사냥 (PvE)</div>
+        <div class="guide-item-btn" onclick="filterBuilds('PvP', this)">비무 (PvP)</div>
+    </div>
+
+    <div id="build-list-container" class="build-list-wrapper">
+        <div style="text-align:center; padding: 30px; color: #999;">
+            불러오는 중...
         </div>
     </div>
+
+</div>
+
 
     <div id="builder-interface" style="display: none;">
         

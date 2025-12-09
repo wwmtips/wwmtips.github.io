@@ -65,15 +65,17 @@ function loadData() {
     const targetId = urlParams.get('id');
     const shortQuestId = urlParams.get('q'); 
 
-    // [수정] builds.json 추가 로드
+    // [수정] builds.json 및 builder_data.json 추가 로드
     Promise.all([
         fetch('json/data.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
         fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }), 
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
         fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),
-        fetch('json/builds.json').then(res => res.json()).catch(err => { console.warn('builds.json 로드 실패', err); return { builds: [] }; })
+        fetch('json/builds.json').then(res => res.json()).catch(err => { console.warn('builds.json 로드 실패', err); return { builds: [] }; }),
+        // [신규] 아이콘/심법 데이터 미리 로드
+        fetch('json/builder_data.json').then(res => res.json()).catch(err => { console.warn('builder_data.json 로드 실패', err); return null; }) 
     ])
-    .then(([mainData, questData, newsData, cnewsData, buildsData]) => {
+    .then(([mainData, questData, newsData, cnewsData, buildsData, builderDataResult]) => {
         console.log("데이터 로드 완료");
 
         // 1. 퀘스트 데이터 파싱
@@ -104,8 +106,11 @@ function loadData() {
             quests: quests, 
             news: news,
             cnews: cnews,
-            builds: builds // 저장
+            builds: builds 
         };
+
+        // [신규] 빌더/심법 데이터 전역 변수에 저장
+        builderData = builderDataResult; 
 
         currentQuestData = globalData.quests;
 
@@ -122,18 +127,9 @@ function loadData() {
         renderFullNews(globalData.news);
 
         // [빌더 탭일 경우 리스트 렌더링]
+        // 위에서 builderData를 미리 로드했으므로 중복 fetch 로직 제거
         if (targetTab === 'builder') {
-             // 아이콘 데이터(builder_data)가 필요하므로 로드 후 렌더링 시도
-             if(!builderData) {
-                 fetch('json/builder_data.json')
-                    .then(res => res.json())
-                    .then(data => { 
-                        builderData = data;
-                        renderBuildList('all');
-                    });
-             } else {
-                 renderBuildList('all');
-             }
+             renderBuildList('all');
         }
 
         // 8. 딥링크 처리
@@ -152,6 +148,7 @@ function loadData() {
         console.error("데이터 처리 중 오류 발생:", error);
     });
 }
+
 
 // =========================================
 // 4. 홈 화면 로직 (슬라이더 & 뉴스 & 커뮤니티 & 지도)
@@ -1213,4 +1210,55 @@ function filterBuilds(type, btn) {
     buttons.forEach(b => b.classList.remove('active'));
     if(btn) btn.classList.add('active');
     renderBuildList(type);
+}
+// =========================================
+// 11. 심법 도감 및 바텀시트 기능
+// =========================================
+
+function renderHeartLibrary() {
+    const container = document.getElementById('heart-library-list');
+    if (!container) return;
+
+    // builderData가 없으면 로드 시도
+    if (!builderData) {
+        fetch('json/builder_data.json')
+            .then(res => res.json())
+            .then(data => {
+                builderData = data;
+                renderHeartLibrary(); // 재실행
+            })
+            .catch(err => {
+                container.innerHTML = "데이터를 불러올 수 없습니다.";
+            });
+        return;
+    }
+
+    // hearts 데이터 확인
+    if (!builderData.hearts || builderData.hearts.length === 0) {
+        container.innerHTML = "등록된 심법이 없습니다.";
+        return;
+    }
+
+    container.innerHTML = '';
+
+    builderData.hearts.forEach(heart => {
+        const item = document.createElement('div');
+        item.className = 'heart-lib-item';
+        
+        item.innerHTML = `
+            <img src="${heart.img}" class="heart-lib-img" onerror="this.src='images/logo.png'">
+            <div class="heart-lib-name">${heart.name}</div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+// 바텀시트 열기
+function openGuideSheet() {
+    document.body.classList.add('sheet-open');
+}
+
+// 바텀시트 닫기
+function closeGuideSheet() {
+    document.body.classList.remove('sheet-open');
 }

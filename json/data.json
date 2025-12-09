@@ -2,6 +2,10 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "군자의 상징", "answer": "봉황", "user": "공명의함정" },
+{ "hint": "바다", "answer": "인어", "user": "ㅇㅇ" },
+{ "hint": "공예품", "answer": "도자기", "user": "화웅선생" },
+
     { "hint": "신발류", "answer": "부츠", "user": "-" },
     { "hint": "관상용", "answer": "베고니아", "user": "ㅇㅇ" },
 { "hint": "엉덩이", "answer": "복숭아", "user": "ㅇㅇ" },

@@ -232,5 +232,14 @@
     "bgimg": "q28_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q28.html"
+  },
+  {
+    "id": "q29",
+    "name": "대박의 기회",
+    "location": "신선 나루",
+    "type": "만사록",
+    "bgimg": "q29_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q29.html"
   }
 ]

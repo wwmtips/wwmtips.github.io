@@ -1,6 +1,13 @@
 {
   "builds": [
     {
+      "title": "쌍도 PvP 빌드",
+      "description": "뛰어난 이동성과 높은 DPS를 가진 PvP 빌드입니다.",
+      "type": "PvE",
+      "weapons": ["w6", "w9"],
+      "link": "viewer.html?b=eyJ3IjpbInc2IiwidzkiXSwiaCI6WyJoMSIsImgxNCIsImgzNSIsImgxOCJdLCJtIjpbIm02IiwibTE5IiwibTE2IiwibTE1IiwibTE0IiwibTIwIiwibTEyIiwibTEwIl0sImMiOiLsjI3rj4QgUHZQIn0="
+    },
+    {
       "title": "구현검&격류창 딜러 빌드",
       "description": "출현으로 인한 지속피해와 높은 DPS",
       "type": "PvE",

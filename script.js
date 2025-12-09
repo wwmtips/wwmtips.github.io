@@ -1368,3 +1368,43 @@ function openBuildDetailSheetView() {
 function closeBuildDetailSheet() {
     document.body.classList.remove('build-sheet-open');
 }
+// 지도 상세 뷰 열기
+// 사용법: openMapDetail('개봉', 'kaifeng');
+function openMapDetail(mapName, mapKey) {
+    // 1. 현재 열려있는 모든 뷰 숨기기 (main > div 직계 자식들)
+    const views = document.querySelectorAll('#main-content > div[id^="view-"]');
+    views.forEach(view => view.style.display = 'none');
+
+    // 2. 지도 뷰 보이기
+    const mapDiv = document.getElementById('view-map-detail');
+    if(mapDiv) {
+        mapDiv.style.display = 'block';
+        
+        // 3. 제목 및 URL 설정
+        document.getElementById('map-detail-title').innerText = mapName;
+        
+        // iframe src 설정 (embed=true 파라미터 포함)
+        const targetUrl = `https://yhellos3327-eng.github.io/wwmkoreamap/?map=${mapKey}&embed=true`;
+        const iframe = document.getElementById('map-iframe');
+        
+        // 이미 같은 지도가 로딩되어 있지 않을 때만 새로고침 (불필요한 로딩 방지)
+        if (iframe.src !== targetUrl) {
+            iframe.src = targetUrl;
+        }
+    }
+    
+    // 4. 스크롤 최상단으로 이동
+    window.scrollTo(0, 0);
+}
+
+// 지도 상세 뷰 닫기 (홈으로 돌아가기)
+function closeMapDetail() {
+    // 지도 뷰 숨기기
+    document.getElementById('view-map-detail').style.display = 'none';
+    
+    // iframe 초기화 (메모리 절약 및 소리/동작 중단)
+    document.getElementById('map-iframe').src = 'about:blank';
+
+    // 홈 탭 보이기 (또는 원래 있던 탭으로 복귀 로직 구현 가능)
+    switchTab('home'); 
+}

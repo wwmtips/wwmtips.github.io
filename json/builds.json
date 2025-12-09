@@ -9,7 +9,7 @@
     },
     {
       "title": "구현검&격류창 빌드",
-      "description": "출현으로 인한 지속피해와 높은 DPS를 가진 빌드입니다.",
+      "description": "출혈과 버프를 이용해 지속피해를 주고 심법에 따라 순간적이 데미지로 높은 DPS를 가진 빌드입니다.",
       "type": "PvE",
       "weapons": ["w3", "w5"],
       "link": "viewer.html?b=eyJ3IjpbInczIiwidzUiXSwiaCI6WyJoMTQiLCJoNSIsImgxMiIsImgxMCJdLCJtIjpbIm0yIiwibTMiLCJtOCIsIm00IiwibTE0IiwibTE1IiwibTE5IiwibTExIl0sImMiOiLqtaztmITqsoAm6rKp66WY7LC9IOu5jOuTnCJ9"

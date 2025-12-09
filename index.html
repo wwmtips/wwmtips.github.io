@@ -283,12 +283,13 @@
             </div>
             
             <div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)" style="display:none;">
-                <div class="modal-content">
-                    <h3 id="builder-modal-title" style="margin-top:0;">아이템 선택</h3>
-                    <div id="builder-modal-list" class="item-list-grid"></div>
-                    <button onclick="closeBuilderModal(null)" style="margin-top:20px; width:100%; padding:10px;">닫기</button>
-                </div>
-            </div>
+    <div class="modal-content" onclick="event.stopPropagation()"> 
+        <h3 id="builder-modal-title" style="margin-top:0;">아이템 선택</h3>
+        <div id="builder-modal-list" class="item-list-grid"></div>
+        <button onclick="closeBuilderModal(null)" style="margin-top:20px; width:100%; padding:10px;">닫기</button>
+    </div>
+</div>
+
 
         </div> 
     </div>

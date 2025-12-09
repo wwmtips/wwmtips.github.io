@@ -1,0 +1,152 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            욕망의 심연
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">또 고별주인가?</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            술만 있으면 무엇이든 할 수 있다고 호언장담하는 <b>목백</b>과의 끈질긴 거래가 시작됩니다.<br>
+            그의 끝없는 술 욕심을 채워주며, 숨겨진 정보를 얻어내는 것이 이번 퀘스트의 목표입니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            술주정뱅이 목백
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 위치에 있는 목백과 대화하세요.<br>
+            그는 술만 주면 뭐든 다 할 수 있다며, 대가로 <b>고별주</b>를 요구합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q31_1.jpg" alt="목백">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q31_2.jpg" alt="목백 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            첫 번째 배달: 고별주
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            안내된 위치로 이동하여 <b>고별주</b>를 획득한 후, 목백에게 선물해주세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q31_3.jpg" alt="고별주">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q31_4.jpg" alt="고별주 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            두 번째 배달: 특제 고별주
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            술을 건넸지만 그는 만족하지 않습니다. 더 많은 정보를 원한다면 <b>정제된(특제) 고별주</b>를 가져오라고 합니다.<br>
+            <span style="color: var(--wuxia-text-sub); font-size: 0.9em;">(완벽한 술주정뱅이가 확실합니다.)</span><br>
+            아래 위치에서 특제 고별주를 구해 목백에게 전달하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q31_5.jpg" alt="특제 고별주">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q31_6.jpg" alt="특제 고별주 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            마지막 배달: 고별주 단지
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            특제 고별주를 마신 목백은 여자 보스에 대한 정보를 흘리다가, 이번엔 아예 <b>고별주 한 단지</b>를 요구합니다.<br>
+            아래 위치에서 술 단지를 찾아 목백에게 가져다주세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q31_7.jpg" alt="고별주 단지">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q31_8.jpg" alt="고별주 단지 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            목백에게 마지막으로 고별주 단지를 전달하면<br>
+            그의 길고 긴 술 심부름이 끝나며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

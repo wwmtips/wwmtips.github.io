@@ -1,7 +1,7 @@
 {
   "builds": [
     {
-      "title": "구현의 검무 & 격류의 파동 빌드",
+      "title": "구현검&격류창 딜러 빌드",
       "description": "출현으로 인한 지속피해와 높은 DPS",
       "type": "PvE",
       "weapons": ["w3", "w5"],

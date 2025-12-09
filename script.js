@@ -1,6 +1,5 @@
-  
 /* =========================================
-   script.js (최종 수정본 - 커뮤니티 알림 추가)
+   script.js (최종 수정본 - 무공전수 및 추천 빌드 통합)
    ========================================= */
 
 // =========================================
@@ -15,8 +14,8 @@ let isGuideLoaded = false;
 let currentSlideIndex = 0;
 let slideInterval;
 
-// 데이터 저장소 (cnews 추가됨)
-let globalData = { items: [], quiz: [], quests: [], news: [], cnews: [] };
+// 데이터 저장소 (builds 추가됨)
+let globalData = { items: [], quiz: [], quests: [], news: [], cnews: [], builds: [] };
 let builderData = null; 
 
 // 빌더 상태 관리
@@ -66,14 +65,15 @@ function loadData() {
     const targetId = urlParams.get('id');
     const shortQuestId = urlParams.get('q'); 
 
-    // [수정됨] cnews.json 추가 로드
+    // [수정] builds.json 추가 로드
     Promise.all([
         fetch('json/data.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
         fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }), 
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
-        fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; })
+        fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),
+        fetch('json/builds.json').then(res => res.json()).catch(err => { console.warn('builds.json 로드 실패', err); return { builds: [] }; })
     ])
-    .then(([mainData, questData, newsData, cnewsData]) => {
+    .then(([mainData, questData, newsData, cnewsData, buildsData]) => {
         console.log("데이터 로드 완료");
 
         // 1. 퀘스트 데이터 파싱
@@ -85,7 +85,10 @@ function loadData() {
         // 3. 커뮤니티 뉴스 데이터 파싱
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
 
-        // 4. 정렬 (ID 기준 역순: q26 -> q1)
+        // 4. 추천 빌드 데이터 파싱
+        let builds = buildsData.builds || [];
+
+        // 5. 정렬 (ID 기준 역순: q26 -> q1)
         if (quests.length > 0) {
             quests.sort((a, b) => {
                 const numA = parseInt((a.id || "").replace('q', '')) || 0;
@@ -94,18 +97,19 @@ function loadData() {
             });
         }
         
-        // 5. 전역 변수 저장
+        // 6. 전역 변수 저장
         globalData = {
             items: mainData.items || [],
             quiz: mainData.quiz || [],
             quests: quests, 
             news: news,
-            cnews: cnews // 저장
+            cnews: cnews,
+            builds: builds // 저장
         };
 
         currentQuestData = globalData.quests;
 
-        // 6. 화면 렌더링
+        // 7. 화면 렌더링
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
         renderQuestList();                
@@ -113,11 +117,26 @@ function loadData() {
         // [홈 화면 렌더링]
         renderHomeSlider(globalData.quests); 
         renderHomeRecentNews(globalData.news);     
-        renderHomeCommunityNews(globalData.cnews); // [신규] 커뮤니티 알림 렌더링
+        renderHomeCommunityNews(globalData.cnews);
         
         renderFullNews(globalData.news);
 
-        // 7. 딥링크 처리
+        // [빌더 탭일 경우 리스트 렌더링]
+        if (targetTab === 'builder') {
+             // 아이콘 데이터(builder_data)가 필요하므로 로드 후 렌더링 시도
+             if(!builderData) {
+                 fetch('json/builder_data.json')
+                    .then(res => res.json())
+                    .then(data => { 
+                        builderData = data;
+                        renderBuildList('all');
+                    });
+             } else {
+                 renderBuildList('all');
+             }
+        }
+
+        // 8. 딥링크 처리
         if (shortQuestId) {
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
@@ -203,7 +222,7 @@ function renderHomeRecentNews(newsList) {
     renderNewsListGeneric(newsList, container, 'news');
 }
 
-// [홈 하단 목록 2] 커뮤니티 알림 (신규)
+// [홈 하단 목록 2] 커뮤니티 알림
 function renderHomeCommunityNews(cnewsList) {
     const container = document.getElementById('home-community-news');
     if (!container) return;
@@ -211,14 +230,14 @@ function renderHomeCommunityNews(cnewsList) {
     renderNewsListGeneric(cnewsList, container, 'cnews');
 }
 
-// [공통 함수] 뉴스 리스트 렌더링 로직 (최근 소식 & 커뮤니티 알림 공용)
+// [공통 함수] 뉴스 리스트 렌더링 로직
 function renderNewsListGeneric(dataList, container, type) {
     container.innerHTML = '';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.gap = '0';
 
-    const listToRender = dataList.slice(0, 3); // 최신 5개
+    const listToRender = dataList.slice(0, 3); // 최신 3개
 
     if (listToRender.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">등록된 내용이 없습니다.</div>';
@@ -227,7 +246,7 @@ function renderNewsListGeneric(dataList, container, type) {
 
     listToRender.forEach(item => {
         const itemDiv = document.createElement('div');
-        itemDiv.className = 'recent-news-item'; // CSS 클래스 재사용
+        itemDiv.className = 'recent-news-item'; 
         itemDiv.style.padding = '10px 5px'; 
         itemDiv.style.borderBottom = '1px solid #eee';
         itemDiv.style.cursor = 'pointer';
@@ -243,10 +262,6 @@ function renderNewsListGeneric(dataList, container, type) {
         itemDiv.onclick = () => { 
             if (item.link && item.link.trim() !== "") {
                 window.open(item.link, '_blank'); 
-            } else {
-                // 링크가 없으면 일단 아무 동작도 안하거나, 
-                // type에 따라 분기 가능 (현재는 그냥 둠)
-                // alert('준비 중입니다.'); 
             }
         };
 
@@ -390,13 +405,27 @@ function switchTab(tabName) {
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
         document.getElementById('nav-builder').classList.add('active');
+        
+        // [수정] 무공전수 탭 진입 시 메인 메뉴(리스트)를 먼저 보여줌
+        document.getElementById('tools-menu').style.display = 'block';
+        document.getElementById('builder-interface').style.display = 'none';
+
+        // 데이터 로드
         if (!builderData) {
             fetch('json/builder_data.json')
                 .then(res => res.json())
-                .then(data => { builderData = data; })
+                .then(data => { 
+                    builderData = data; 
+                    renderBuildList('all'); // 데이터 로드 후 리스트 렌더링
+                })
                 .catch(err => console.error("빌더 데이터 로드 실패:", err));
+        } else {
+            renderBuildList('all'); // 이미 있으면 바로 렌더링
         }
+        
+        // 공유 링크로 들어온 경우 바로 뷰어 모드(빌더 인터페이스) 실행
         if (new URLSearchParams(window.location.search).get('b')) {
+            openBuilderInterface();
             loadViewer();
         }
         updateUrlQuery('builder');
@@ -723,15 +752,14 @@ function renderQuizTable(data, keyword = '') {
         tbody.appendChild(noResultTr);
     }
 
-    // 3. [추가됨] 항상 마지막에 표시되는 제보하기 버튼
+    // 3. 제보하기 버튼
     const reportTr = document.createElement('tr');
-    reportTr.className = 'quiz-report-row'; // 나중에 CSS로 꾸밀 수 있게 클래스 지정
+    reportTr.className = 'quiz-report-row'; 
     reportTr.style.cursor = 'pointer';
-    reportTr.style.backgroundColor = '#fff8e1'; // 살짝 눈에 띄는 연한 노란색 배경
+    reportTr.style.backgroundColor = '#fff8e1'; 
     reportTr.style.fontWeight = 'bold';
     reportTr.style.color = '#d48806';
 
-    // 클릭 시 아까 만든 이슈 페이지로 이동
     reportTr.onclick = () => {
         window.open('report/', '_blank');
     };
@@ -745,17 +773,15 @@ function renderQuizTable(data, keyword = '') {
 }
 
 
-// [수정됨] 족보 카운터 및 랭킹 표시 함수
-// [수정됨] 족보 카운터 및 기여 랭킹 (1위 무지개 효과 적용)
+// 족보 카운터 및 랭킹 표시 함수
 function updateQuizCounter() {
     const counter = document.getElementById('quiz-counter-area');
-    // 데이터가 없으면 중단
     if (!counter || !globalData.quiz) return;
 
     // 1. 전체 개수 계산
     const totalCount = globalData.quiz.length;
 
-    // 2. 제보자 랭킹 계산 (유저별 제보 수 집계)
+    // 2. 제보자 랭킹 계산
     const userCounts = {};
     globalData.quiz.forEach(item => {
         if (item.user && item.user.trim() !== '' && item.user !== '-') {
@@ -763,7 +789,6 @@ function updateQuizCounter() {
         }
     });
 
-    // 내림차순 정렬 후 상위 3명 추출
     const sortedUsers = Object.entries(userCounts)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 3);
@@ -771,21 +796,17 @@ function updateQuizCounter() {
     // 3. 화면 표시 HTML 생성
     let rankHtml = '';
     if (sortedUsers.length > 0) {
-        // 랭킹별로 텍스트 생성 (1위는 span.rainbow-text로 감싸기)
         const rankParts = sortedUsers.map((u, i) => {
             const text = `${i+1}위 ${u[0]}(${u[1]})`;
             if (i === 0) {
-                // 1위인 경우 클래스 적용
                 return `<span class="rainbow-text">${text}</span>`;
             }
-            return `<span style="color: #888;">${text}</span>`; // 2, 3위는 그냥 텍스트
+            return `<span style="color: #888;">${text}</span>`; 
         });
 
-        // 구분자(·)로 연결
         rankHtml = `<br><span style="font-size:0.85em; color:#ffd700; margin-top:5px; display:inline-block;">🏆${rankParts.join(' · ')}</span>`;
     }
 
-    // 최종 적용
     counter.innerHTML = `총 <b>${totalCount}</b>개의 족보가 등록되었습니다.${rankHtml}`;
 }
 
@@ -950,8 +971,27 @@ function createNewsElement(item) {
 
 
 // =========================================
-// 9. 빌더(Builder) 기능
+// 9. 빌더(Builder) 기능 - 무공전수
 // =========================================
+
+// 화면 전환 함수
+function openBuilderInterface() {
+    document.getElementById('tools-menu').style.display = 'none';
+    document.getElementById('builder-interface').style.display = 'block';
+    
+    // 빌더 데이터 로드 보장
+    if (!builderData) {
+         fetch('json/builder_data.json')
+            .then(res => res.json())
+            .then(data => { builderData = data; });
+    }
+}
+
+function closeBuilderInterface() {
+    document.getElementById('builder-interface').style.display = 'none';
+    document.getElementById('tools-menu').style.display = 'block';
+}
+
 function openBuilderModal(type, index) {
     if (!builderData) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
     
@@ -1106,4 +1146,71 @@ function loadViewer() {
     renderSlot('weapons', w, 'v');
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');
+}
+
+// =========================================
+// 10. 추천 빌드 (Recommended Builds) 리스트 기능
+// =========================================
+
+function renderBuildList(filterType) {
+    const container = document.getElementById('build-list-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // 데이터 확인
+    if (!globalData.builds || globalData.builds.length === 0) {
+        container.innerHTML = '<div style="padding:30px; text-align:center; color:#666;">등록된 비급이 없습니다.</div>';
+        return;
+    }
+
+    // 필터링
+    let targetBuilds = globalData.builds;
+    if (filterType !== 'all') {
+        targetBuilds = globalData.builds.filter(b => b.type.toUpperCase() === filterType.toUpperCase());
+    }
+
+    targetBuilds.forEach(build => {
+        // 무기 ID를 이용해 builderData에서 정보 찾기
+        const w1Id = build.weapons[0];
+        const w2Id = build.weapons[1];
+        
+        // builderData가 로드되지 않았을 경우를 대비한 안전장치
+        const getImg = (id) => {
+            if (!builderData || !builderData.weapons) return 'images/logo.png';
+            const item = builderData.weapons.find(w => w.id === id);
+            return item ? item.img : 'images/logo.png';
+        };
+
+        const row = document.createElement('div');
+        row.className = 'build-row-card';
+        row.onclick = () => {
+             if (build.link) window.open(build.link, '_blank');
+        };
+
+        const typeClass = build.type.toUpperCase() === 'PVP' ? 'type-pvp' : 'type-pve';
+        // 설명이 없으면 기본 텍스트 처리
+        const descText = build.description || "설명이 없는 비급입니다.";
+
+        row.innerHTML = `
+            <div class="build-icons-area">
+                <div class="build-icon-box"><img src="${getImg(w1Id)}" alt="무기1"></div>
+                <div class="build-icon-box"><img src="${getImg(w2Id)}" alt="무기2"></div>
+            </div>
+            <div class="build-info-area">
+                <div class="build-header-row">
+                    <span class="build-title">${build.title}</span>
+                    <span class="build-type-badge ${typeClass}">${build.type}</span>
+                </div>
+                <div class="build-desc">${descText}</div>
+            </div>
+        `;
+        container.appendChild(row);
+    });
+}
+
+function filterBuilds(type, btn) {
+    const buttons = document.querySelectorAll('#tools-menu .guide-item-btn');
+    buttons.forEach(b => b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    renderBuildList(type);
 }

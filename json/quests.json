@@ -250,5 +250,14 @@
     "bgimg": "q30_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q30.html"
+  },
+  {
+    "id": "q31",
+    "name": "욕망의 심연",
+    "location": "신선 나루",
+    "type": "만사록",
+    "bgimg": "q31_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q31.html"
   }
 ]

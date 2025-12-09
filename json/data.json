@@ -2,6 +2,10 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "수경재배", "answer": "행운목", "user": "밥먹공자" },
+{ "hint": "무도회", "answer": "가면", "user": "NowMad" },
+{ "hint": "향신료", "answer": "고수", "user": "월화" },
+
     { "hint": "강한 부리", "answer": "딱따구리", "user": "NowMad" },
 
     { "hint": "기력 보강", "answer": "인삼", "user": "" },

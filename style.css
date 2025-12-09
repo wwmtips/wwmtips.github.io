@@ -1369,14 +1369,14 @@ body {
 }
 
 /* =========================================
-   무공전수 (Builds) 스타일
+   무공전수 (Builds) - 밝은 테마 스타일 수정
    ========================================= */
 
 /* 1. 상단 배너 (나만의 비급 만들기) */
 .create-build-banner {
-    background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
-    border: 1px solid #444;
-    border-left: 4px solid var(--wuxia-accent-red); /* 붉은색 포인트 */
+    background: #fff; /* 배경을 흰색으로 변경 */
+    border: 1px solid #e0e0e0; /* 테두리를 연한 회색으로 */
+    border-left: 4px solid var(--wuxia-accent-red); /* 붉은색 포인트 유지 */
     padding: 20px;
     border-radius: 4px;
     cursor: pointer;
@@ -1384,28 +1384,30 @@ body {
     justify-content: space-between;
     align-items: center;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* 그림자 연하게 */
 }
 
 .create-build-banner:hover {
     border-color: var(--wuxia-accent-gold);
-    background: #252525;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
 }
 
 .create-build-banner h3 {
     margin: 0 0 5px 0;
-    color: var(--wuxia-accent-gold);
+    color: #333; /* 제목 검은색 */
     font-size: 1.1em;
+    font-weight: bold;
 }
 
 .create-build-banner p {
     margin: 0;
-    color: #999;
+    color: #666; /* 설명 회색 */
     font-size: 0.9em;
 }
 
 .banner-arrow {
-    color: #666;
+    color: var(--wuxia-accent-gold); /* 화살표 금색 */
     font-weight: bold;
     font-size: 1.2em;
 }
@@ -1413,30 +1415,22 @@ body {
 /* 2. 빌드 리스트 아이템 카드 */
 .build-row-card {
     display: flex;
-    background-color: #121212; /* 아주 어두운 배경 */
-    border: 1px solid #333;
+    background-color: #fff; /* 배경 흰색 */
+    border: 1px solid #e0e0e0; /* 테두리 연한 회색 */
     margin-bottom: 12px;
     padding: 15px;
     border-radius: 4px;
     cursor: pointer;
-    transition: transform 0.2s, border-color 0.2s;
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
-}
-
-.build-row-card::before {
-    /* 수묵화 느낌의 은은한 배경 효과 (선택 사항) */
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at top right, rgba(211, 187, 95, 0.05), transparent 40%);
-    pointer-events: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .build-row-card:hover {
     transform: translateY(-2px);
-    border-color: var(--wuxia-accent-gold); /* 금색 테두리 */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    border-color: var(--wuxia-accent-gold); /* 호버 시 금색 테두리 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* 아이콘 영역 */
@@ -1445,14 +1439,14 @@ body {
     gap: 8px;
     margin-right: 15px;
     flex-shrink: 0;
-    align-items: flex-start; /* 상단 정렬 */
+    align-items: flex-start;
 }
 
 .build-icon-box {
     width: 48px;
     height: 48px;
-    background-color: #000;
-    border: 1px solid #444;
+    background-color: #f5f5f5; /* 아이콘 배경 연한 회색 */
+    border: 1px solid #ddd;
     border-radius: 4px;
     overflow: hidden;
     display: flex;
@@ -1464,7 +1458,6 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.9;
 }
 
 /* 텍스트 정보 영역 */
@@ -1482,8 +1475,9 @@ body {
     margin-bottom: 6px;
 }
 
+/* 제목 스타일 */
 .build-title {
-    color: var(--wuxia-accent-gold);
+    color: #333; /* 제목 진한 회색/검정 */
     font-size: 1.05em;
     font-weight: bold;
     line-height: 1.3;
@@ -1491,7 +1485,19 @@ body {
     word-break: keep-all;
 }
 
-/* 뱃지 스타일 (도장 느낌) */
+/* 설명 텍스트 */
+.build-desc {
+    color: #757575; /* 설명 중간 회색 */
+    font-size: 0.9em;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 뱃지 스타일 (기존 유지) */
 .build-type-badge {
     font-size: 0.75em;
     padding: 2px 6px;
@@ -1499,30 +1505,16 @@ body {
     font-weight: bold;
     white-space: nowrap;
     border: 1px solid;
-    letter-spacing: 1px;
 }
 
 .type-pve {
-    color: #81c784; /* 연한 녹색 */
-    border-color: #2e7d32;
-    background: rgba(46, 125, 50, 0.1);
+    color: #2e7d32; /* 진한 녹색 텍스트 */
+    border-color: #a5d6a7;
+    background: #e8f5e9; /* 아주 연한 녹색 배경 */
 }
 
 .type-pvp {
-    color: #e57373; /* 연한 적색 */
-    border-color: #c62828;
-    background: rgba(198, 40, 40, 0.1);
+    color: #c62828; /* 진한 적색 텍스트 */
+    border-color: #ef9a9a;
+    background: #ffebee; /* 아주 연한 적색 배경 */
 }
-
-/* 설명 텍스트 */
-.build-desc {
-    color: #888; /* 회색 텍스트 */
-    font-size: 0.9em;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* 2줄까지만 표시 */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-

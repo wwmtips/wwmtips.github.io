@@ -286,5 +286,14 @@
     "bgimg": "q34_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q34.html"
+  },
+  {
+    "id": "q35",
+    "name": "거위들의 경쟁",
+    "location": "불선선",
+    "type": "만사록",
+    "bgimg": "q35_3.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q35.html"
   }
 ]

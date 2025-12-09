@@ -2,6 +2,11 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "기력 보강", "answer": "인삼", "user": "" },
+{ "hint": "양념", "answer": "마늘", "user": "관백" },
+{ "hint": "정화", "answer": "호피란", "user": "소은이" },
+{ "hint": "도구", "answer": "가위", "user": "화웅선생" },
+
     { "hint": "가죽", "answer": "부츠", "user": "EllaHolic" },
 { "hint": "길다란 꼭지", "answer": "체리", "user": "연강호" },
 { "hint": "칠석", "answer": "견우", "user": "관백" },

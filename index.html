@@ -294,18 +294,27 @@
         </div> 
     </div>
     <style>
-    /* 오버레이가 활성화(.active)될 때, 0.3초 동안 클릭 이벤트를 무시함 (깜빡임 해결 핵심) */
-    #build-detail-overlay.active {
-        animation: preventGhostClick 0.3s forwards;
+    /* display가 none에서 block으로 바뀔 때마다 이 애니메이션이 실행됨 */
+    #build-detail-overlay {
+        animation: safeOpen 0.5s forwards; /* 0.5초 동안 실행 */
     }
-    @keyframes preventGhostClick {
-        0% { pointer-events: none; }
-        99% { pointer-events: none; }
-        100% { pointer-events: auto; }
+
+    @keyframes safeOpen {
+        0% { 
+            pointer-events: none; /* 클릭 불가 */
+            opacity: 0; 
+        }
+        80% { 
+            pointer-events: none; /* 0.4초 시점까지도 클릭 절대 불가 (이게 핵심) */
+        }
+        100% { 
+            pointer-events: auto; /* 0.5초 뒤에 클릭 가능 */
+            opacity: 1; 
+        }
     }
 </style>
 
-<div id="build-detail-overlay" class="bottom-sheet-overlay" onclick="closeBuildDetailSheet(event)"></div>
+<div id="build-detail-overlay" class="bottom-sheet-overlay" onclick="if(event.target === this) closeBuildDetailSheet(event)"></div>
 
 <div id="build-detail-sheet" class="bottom-sheet" onclick="event.stopPropagation()">
     
@@ -317,6 +326,9 @@
     <div class="sheet-content build-detail-content">
         <div style="text-align: center; padding: 50px; color: #999;">데이터 로딩 중...</div>
     </div>
+
+</div>
+
 
 </div>
 

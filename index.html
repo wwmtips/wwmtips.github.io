@@ -181,27 +181,18 @@
 <div id="view-builder" style="display: none;">
     
     <div id="tools-menu" style="margin-top: 20px;">
-        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 20px;">
-            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">무공</span>
-            <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-                무공전수
-            </h2>
-            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">
-                강호의 고수들이 남긴 무공을 전수받거나, 나만의 무공을 창시하세요.
-            </p>
-        </div>
 
         <section class="create-build-banner" onclick="openBuilderInterface()">
             <div class="banner-content">
-                <h3>✍️ 나만의 무공 창시하기</h3>
-                <p>원하는 무기와 심법을 조합하여 새로운 무공을 정립합니다.</p>
+                <h3>✍️ 나만의 빌드</h3>
+                <p>원하는 무기와 심법을 조합하여 새로운 조합을 정립합니다.</p>
             </div>
             <div class="banner-arrow">→</div>
         </section>
 
         <div style="margin-top: 30px;">
             <h3 style="color: #333; font-size: 1.1em; margin-bottom: 15px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
-                전수받을 무공 선택
+             추천 빌드
             </h3>
             
             <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 15px;">
@@ -221,7 +212,7 @@
     <div id="builder-interface" style="display: none;">
         
         <button class="back-button" onclick="closeBuilderInterface()">
-            ← 무공 목록으로 돌아가기
+            ← 목록으로 돌아가기
         </button>
 
         <div class="quest-detail-container" style="margin-top: 10px;">
@@ -229,7 +220,7 @@
             <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
                 <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">도구</span>
                 <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-                    나만의 무공
+                    나만의 빌드
                 </h2>
                 <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">원하는 장비와 무공을 조합하여 공유하세요.</p>
             </div>
@@ -277,7 +268,7 @@
                     <input type="text" id="creator-name" placeholder="무공명을 입력하세요." maxlength="10" 
                            style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
                 </div>
-                <button class="browse-button" onclick="generateBuildUrl()">🔗 무공 주소 생성</button>
+                <button class="browse-button" onclick="generateBuildUrl()">🔗 주소 생성</button>
                 <input type="text" id="result-url" readonly onclick="this.select()">
             </div>
             

@@ -385,5 +385,14 @@
     "bgimg": "q45_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q45.html"
+  },
+  {
+    "id": "q46",
+    "name": "액막이 돈주머니",
+    "location": "불광정",
+    "type": "만사록",
+    "bgimg": "q46_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q46.html"
   }
 ]

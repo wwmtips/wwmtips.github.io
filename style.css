@@ -660,8 +660,14 @@ h3 {
     font-weight: bold;
     font-size: 0.95em;
     margin-bottom: 4px;
+    
+    /* 아래 내용 추가 */
+    white-space: nowrap;      /* 줄바꿈 금지 */
+    overflow: hidden;         /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis;  /* 넘치는 부분 ... 처리 */
+    max-width: 150px;         /* (선택사항) 말줄임표가 시작될 최대 너비 지정 */
+    display: block;           /* 블록 요소로 동작하게 함 */
 }
-
 .quest-type {
     color: #777;
     font-size: 0.8em;

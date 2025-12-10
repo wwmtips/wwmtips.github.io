@@ -1,0 +1,132 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            종치는 노인
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">3년 전 태평종루에서 격전한 협객은 누구일까?</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            이번 퀘스트는 <b>태평종루</b> 지역 내에서만 진행되는 비교적 간단한 의뢰입니다.<br>
+            종루의 층을 오르며 과거에 있었던 격전의 흔적을 조사하고 그 진실을 파헤쳐보세요.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            종루의 노인과 만남
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>태평종루 경계석</b>으로 이동한 뒤, 탑 안으로 들어가 <b>종치는 노인</b>과 대화하세요.<br>
+            대화를 마친 후 밖으로 나와 왼쪽으로 이동하면 2층으로 이어지는 길을 찾을 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q43_1.jpg" alt="종치는 노인과 이동 경로">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            격전의 흔적 조사
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            2층으로 가는 길목에서 첫 번째 <b>격전의 흔적</b>을 발견할 수 있습니다. 이를 조사하세요.<br>
+            이후 밖으로 나와 경공(점프)을 이용해 한 층씩 위로 올라가야 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q43_2.jpg" alt="격전의 흔적 조사">
+        </div>
+        
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            각 층마다 남아있는 흔적들을 조사하면 3년 전 이곳에서 있었던 이야기(컷신/대화)를 볼 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q43_3.jpg" alt="층별 조사 1">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            마지막 층: 낙신의 흔적
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            계속해서 탑을 올라가 마지막 층에 도달하세요.<br>
+            그곳에서 <b>낙신의 흔적</b>을 최종적으로 확인하면 됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q43_4.jpg" alt="층별 조사 2">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            탑의 꼭대기에서 모든 조사를 마치면<br>
+            과거의 격전에 대한 진실이 밝혀지며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

@@ -358,5 +358,14 @@
     "bgimg": "q42_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q42.html"
+  },
+  {
+    "id": "q43",
+    "name": "종치는 노인",
+    "location": "태평종루",
+    "type": "만사록",
+    "bgimg": "q42_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q43.html"
   }
 ]

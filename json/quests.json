@@ -511,5 +511,14 @@
     "bgimg": "q59_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q59.html"
+  },
+  {
+    "id": "q60",
+    "name": "옛 친구 찾기 어렵다",
+    "location": "귀문시장",
+    "type": "만사록",
+    "bgimg": "q60_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q60.html"
   }
 ]

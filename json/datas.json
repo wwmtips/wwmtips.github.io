@@ -2,6 +2,14 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "넙치", "answer": "광어", "user": "oor" },
+{ "hint": "안전", "answer": "헬멧", "user": "ㅇㅇ" },
+{ "hint": "꼬리", "answer": "전갈", "user": "광풍검호" },
+{ "hint": "북극", "answer": "바다코끼리", "user": "" },
+{ "hint": "과일", "answer": "무화과", "user": "광풍검호" },
+{ "hint": "안전", "answer": "헬멧", "user": "StorM" },
+{ "hint": "바다표범", "answer": "물범", "user": "Haomoon" },
+
     { "hint": "활달함", "answer": "비글", "user": "카구야" },
 
     { "hint": "필드", "answer": "쑥갓", "user": "숭커벨" },

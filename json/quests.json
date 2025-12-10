@@ -430,5 +430,14 @@
     "bgimg": "q50_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q50.html"
+  },
+  {
+    "id": "q51",
+    "name": "사라진 어록",
+    "location": "보리고해",
+    "type": "만사록",
+    "bgimg": "q51_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q51.html"
   }
 ]

@@ -493,5 +493,14 @@
     "bgimg": "q57_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q57.html"
+  },
+  {
+    "id": "q58",
+    "name": "본심 묘선",
+    "location": "자심산원",
+    "type": "만사록",
+    "bgimg": "q58_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q58.html"
   }
 ]

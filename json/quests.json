@@ -364,8 +364,17 @@
     "name": "종치는 노인",
     "location": "태평종루",
     "type": "만사록",
-    "bgimg": "q42_1.jpg",
+    "bgimg": "q43_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q43.html"
+  },
+  {
+    "id": "q44",
+    "name": "장생 녹선인",
+    "location": "용호령",
+    "type": "만사록",
+    "bgimg": "q44_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q44.html"
   }
 ]

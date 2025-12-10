@@ -466,5 +466,14 @@
     "bgimg": "q54_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q54.html"
+  },
+  {
+    "id": "q55",
+    "name": "업화는 꺼지지 않네",
+    "location": "자심촌",
+    "type": "만사록",
+    "bgimg": "q55_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q55.html"
   }
 ]

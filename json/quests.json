@@ -448,5 +448,14 @@
     "bgimg": "q52_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q52.html"
+  },
+  {
+    "id": "q53",
+    "name": "지워진 이름",
+    "location": "자심촌",
+    "type": "만사록",
+    "bgimg": "q53_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q53.html"
   }
 ]

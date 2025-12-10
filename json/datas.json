@@ -2,6 +2,8 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "활달함", "answer": "비글", "user": "카구야" },
+
     { "hint": "필드", "answer": "쑥갓", "user": "숭커벨" },
 
     { "hint": "인주", "answer": "도장", "user": "유태월" },

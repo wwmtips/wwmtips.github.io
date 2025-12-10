@@ -1,6 +1,13 @@
 {
   "builds": [
     {
+      "title": "우산 원거리 빌드",
+      "description": "이 빌드는 원거리에서 게임을 즐기고 싶은 플레이어에게 좋은 선택지를 제공합니다. 때로는 어려울 수 있지만, 솔로 플레이부터 파티 플레이, 보스, 또는 단순히 오픈 월드 탐험까지 모든 콘텐츠에서 활용할 수 있는 매우 강력한 빌드입니다. 이 조합은 특히 초보자에게 유용하지만, 빌드의 최고 수준에 도달할 수 있는 숙련된 플레이어의 손에 특히 잘 맞습니다.",
+      "type": "PvE",
+      "weapons": ["w10", "w11"],
+      "link": "viewer.html?b=eyJ3IjpbIncxMCIsIncxMSJdLCJoIjpbImgxNCIsImgzMCIsImgzIiwiaDIxIl0sIm0iOlsibTEyIiwibTEwIiwibTE0IiwibTE2IiwibTciLCJtNCIsIm04IiwibTEzIl0sImMiOiLsm5DqsbDrpqzruYzrk5wifQ=="
+    },
+    {
       "title": "맥도 탱커 빌드",
       "description": "이 탱킹 빌드는 두 가지 주요 탱킹 무기인 맥도와창의 무공을 조합하여 그룹 PVE 콘텐츠에서 탱커 역할을 수행하는 데 중점을 둡니다. 이 빌드는 공격력이 높지는 않지만, PVE에서 충분히 좋은 성과를 낼 수 있으며, 순수 DPS 빌드에 비해 공격력이 부족하더라도 모든 솔로 콘텐츠를 완료할 수 있습니다.",
       "type": "PvE",

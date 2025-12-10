@@ -860,16 +860,24 @@ function filterQuizData(keyword) {
 // 퀘스트 리스트 & 상세
 function renderQuestList() {
     const container = document.getElementById('quest-grid-container');
+    const paginationContainer = document.getElementById('pagination-container'); // 페이지네이션 컨테이너도 가져옴
+    
     if (!container) return;
     container.innerHTML = '';
 
+    // [수정됨] 데이터가 없거나 길이가 0일 때, 강제로 전체 데이터를 불러오는 로직을 삭제하고
+    // 요청하신 안내 메시지를 출력하도록 변경
     if (!currentQuestData || currentQuestData.length === 0) {
-        if(globalData.quests && globalData.quests.length > 0) {
-            currentQuestData = globalData.quests;
-        } else {
-            container.innerHTML = '<div style="padding:20px; color:#888;">퀘스트 정보가 없습니다.</div>';
-            return;
-        }
+        // 그리드 레이아웃(grid-template-columns)을 무시하고 중앙에 메시지를 띄우기 위해 grid-column 속성 사용
+        container.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align:center; padding:80px 0; color:#888; font-size: 1.1em;">
+                아직 강호의 이야기가 전달되지 않았습니다.
+            </div>
+        `;
+        
+        // 데이터가 없으므로 페이지네이션도 비움
+        if (paginationContainer) paginationContainer.innerHTML = '';
+        return;
     }
 
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -879,6 +887,7 @@ function renderQuestList() {
     paginatedQuests.forEach(quest => createQuestCard(quest, container));
     renderPagination();
 }
+
 
 function createQuestCard(quest, container) {
     const card = document.createElement('div');

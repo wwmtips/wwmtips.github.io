@@ -42,7 +42,8 @@
 { "hint": "목제", "answer": "침대", "user": "석문리" },
 { "hint": "의약품 및 식품", "answer": "구기자", "user": "석문리" },
 { "hint": "보안", "answer": "자물쇠", "user": "임하연" },
-
+{ "hint": "검집", "answer": "검", "user": "ㅇㅇ" },
+    
     { "hint": "수경재배", "answer": "행운목", "user": "밥먹공자" },
 { "hint": "무도회", "answer": "가면", "user": "NowMad" },
 { "hint": "향신료", "answer": "고수", "user": "월화" },
@@ -1305,7 +1306,7 @@
     { "hint": "서명", "answer": "도장" },
     { "hint": "세균 전파", "answer": "파리" },
     { "hint": "손 씻기", "answer": "너구리" },
-    { "hint": "손 씻지", "answer": "너구리" },
+    
     { "hint": "손톱 같은 새싹", "answer": "정향" },
     { "hint": "손톱 물들이기, 여름에 피는 꽃", "answer": "봉선화" },
     { "hint": "수면", "answer": "침대" },

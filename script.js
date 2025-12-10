@@ -69,7 +69,7 @@ function loadData() {
 
     // [수정] builds.json 및 builder_data.json 추가 로드
     Promise.all([
-        fetch('json/data.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
+        fetch('json/datas.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
         fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }), 
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
         fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),

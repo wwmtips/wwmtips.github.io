@@ -475,5 +475,14 @@
     "bgimg": "q55_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q55.html"
+  },
+  {
+    "id": "q56",
+    "name": "부서진 불상은 말이 없네",
+    "location": "자심촌",
+    "type": "만사록",
+    "bgimg": "q56_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q56.html"
   }
 ]

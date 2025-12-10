@@ -1,171 +1,146 @@
 <style>
-    /* [수묵화 테마] 스타일 정의 */
-    /* :root 변수는 메인 페이지에 있다면 생략 가능하지만, 안전을 위해 유지 */
-    :root {
-        --wuxia-accent-red: #c92a2a;
-        --wuxia-accent-gold: #b08d55;
-        --wuxia-text-main: #333333;
-        --wuxia-text-sub: #666666;
-        --wuxia-bg-light: #fffcf5;
+    /* 1. 제목 영역 스타일 (박스 밖) */
+    .page-header-area {
+        text-align: left;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-left: 5px; /* 약간의 여백 */
     }
 
-    /* 주의: body 태그 스타일은 제거했습니다. (메인 페이지 레이아웃 보호) */
+    .header-badge {
+        background-color: #b08d55; /* 금색 */
+        color: #fff;
+        padding: 3px 8px;
+        border-radius: 2px;
+        font-weight: bold;
+        font-size: 0.85em;
+        vertical-align: middle;
+    }
 
-    .quest-detail-container {
+    .header-title {
+        color: #b08d55; /* 금색 */
+        font-size: 1.6rem;
+        font-weight: bold;
+        vertical-align: middle;
+        margin-left: 8px;
+        font-family: 'Noto Serif KR', serif; /* 명조체 느낌 */
+    }
+
+    .header-subtitle {
+        color: #888;
+        font-size: 0.95rem;
+        margin-top: 8px;
+        margin-left: 2px;
+    }
+
+    /* 2. 빨간색 구분선 */
+    .red-divider {
+        border-top: 2px solid #c92a2a; /* 짙은 적색 */
+        margin-bottom: 25px;
         width: 100%;
-        max-width: 400px; /* 모바일 뷰 최적화 */
+    }
+
+    /* 3. 내용 박스 스타일 (흰색 배경) */
+    .calc-content-box {
         background-color: #fff;
-        padding: 30px 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        padding: 30px 25px;
         border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.03); /* 부드러운 그림자 */
         text-align: center;
-        /* 불러왔을 때 가운데 정렬을 위해 추가 */
-        margin: 0 auto; 
+        max-width: 100%;
         box-sizing: border-box;
     }
 
-    /* 제목 스타일 */
-    .title-area {
-        border-bottom: 2px solid var(--wuxia-accent-red);
-        padding-bottom: 15px;
-        margin-bottom: 30px;
-        text-align: left;
-    }
-    
-    .badge {
-        background-color: var(--wuxia-accent-gold);
-        color: #fff;
-        padding: 2px 8px;
-        border-radius: 2px;
-        font-weight: bold;
-        font-size: 0.8em;
-        vertical-align: middle;
-    }
-
-    h2 {
-        color: var(--wuxia-accent-gold);
-        display: inline-block;
-        margin: 0 0 0 10px;
-        vertical-align: middle;
-        font-size: 1.4rem;
-    }
-
-    /* 입력 폼 스타일 */
-    .input-group {
-        margin-bottom: 25px;
-        text-align: left;
-    }
-
-    label {
+    /* 입력창 및 버튼 스타일 */
+    .calc-label {
         display: block;
-        color: var(--wuxia-text-main);
+        text-align: left;
         font-weight: bold;
-        margin-bottom: 10px;
-        font-size: 1.1em;
+        color: #333;
+        margin-bottom: 12px;
+        font-size: 1.1rem;
     }
 
-    input[type="number"] {
+    .calc-input {
         width: 100%;
         padding: 15px;
         font-size: 1.2rem;
-        border: 1px solid #ccc;
+        border: 1px solid #ddd;
         border-radius: 4px;
         box-sizing: border-box;
         outline: none;
-        transition: border-color 0.3s;
+        transition: border-color 0.2s;
+        margin-bottom: 20px;
     }
 
-    input[type="number"]:focus {
-        border-color: var(--wuxia-accent-gold);
-        box-shadow: 0 0 5px rgba(176, 141, 85, 0.3);
+    .calc-input:focus {
+        border-color: #b08d55;
     }
 
-    /* 버튼 스타일 */
-    .btn-wuxia {
+    .calc-btn {
         width: 100%;
-        padding: 15px;
-        background-color: var(--wuxia-accent-red);
+        padding: 16px;
+        background-color: #c92a2a;
         color: white;
         border: none;
         border-radius: 4px;
         font-size: 1.1rem;
         font-weight: bold;
         cursor: pointer;
-        transition: background-color 0.2s, transform 0.1s;
+    }
+    
+    .calc-btn:hover { background-color: #a01d1d; }
+
+    .calc-btn.reset {
+        background-color: #666;
+        margin-top: 15px;
     }
 
-    .btn-wuxia:hover {
-        background-color: #a01d1d;
-    }
-
-    .btn-wuxia:active {
-        transform: scale(0.98);
-    }
-
-    .btn-secondary {
-        background-color: var(--wuxia-text-sub);
-        margin-top: 20px;
-    }
-    .btn-secondary:hover {
-        background-color: #444;
-    }
-
-    /* 결과 화면 스타일 */
-    #result-screen {
-        display: none; /* 기본적으로 숨김 */
-        animation: fadeIn 0.5s ease-out;
-    }
-
-    .result-box {
-        background-color: var(--wuxia-bg-light);
-        border: 1px solid var(--wuxia-accent-gold);
-        padding: 30px 20px;
-        border-radius: 4px;
-        margin-bottom: 20px;
-    }
-
-    .time-remaining {
-        font-size: 1.8rem;
+    /* 결과 텍스트 */
+    .result-text-big {
+        font-size: 2rem;
         font-weight: bold;
-        color: var(--wuxia-text-main);
-        margin-bottom: 10px;
+        color: #333;
+        margin-bottom: 8px;
         word-break: keep-all;
     }
-
-    .completion-date {
-        font-size: 0.95rem;
-        color: var(--wuxia-text-sub);
+    .result-text-small {
+        font-size: 1rem;
+        color: #777;
     }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    
+    /* 결과 박스 강조 (선택사항) */
+    .result-highlight {
+        background-color: #fffcf5;
+        border: 1px solid #b08d55;
+        padding: 20px;
+        border-radius: 6px;
+        margin-bottom: 20px;
     }
 </style>
 
-<div class="quest-detail-container">
-    <div class="title-area">
-        <span class="badge">도구</span>
-        <h2>운기조식</h2>
-    </div>
-
-    <div id="input-screen">
-        <div class="input-group">
-            <label for="currentPoint">현재 수치 (0 ~ 499)</label>
-            <input type="number" id="currentPoint" placeholder="숫자를 입력하시오" min="0" max="499">
-        </div>
-        <button class="btn-wuxia" onclick="calculateTime()">계산하기</button>
-    </div>
-
-    <div id="result-screen">
-        <div class="result-box">
-            <div class="time-remaining" id="remainText">
-                </div>
-            <div class="completion-date" id="dateText">
-                </div>
-        </div>
-        <button class="btn-wuxia btn-secondary" onclick="resetCalculator()">다시 계산하기</button>
-    </div>
+<div class="page-header-area">
+    <span class="header-badge">도구</span>
+    <span class="header-title">운기조식</span>
+    <div class="header-subtitle">내공이 가득 찰 때까지 남은 시간을 계산합니다.</div>
 </div>
 
-<script src="calc.js"></script>
+<div class="red-divider"></div>
+
+<div class="calc-content-box">
+    
+    <div id="input-screen">
+        <label for="currentPoint" class="calc-label">현재 수치 (0 ~ 499)</label>
+        <input type="number" id="currentPoint" class="calc-input" placeholder="숫자를 입력하시오" min="0" max="499">
+        <button class="calc-btn" onclick="calculateTime()">계산하기</button>
+    </div>
+
+    <div id="result-screen" style="display: none; animation: fadeIn 0.3s;">
+        <div class="result-highlight">
+            <div id="remainText" class="result-text-big"></div>
+            <div id="dateText" class="result-text-small"></div>
+        </div>
+        <button class="calc-btn reset" onclick="resetCalculator()">다시 계산하기</button>
+    </div>
+
+</div>

@@ -340,5 +340,14 @@
     "bgimg": "q40_3.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q40.html"
+  },
+  {
+    "id": "q41",
+    "name": "근심 퇴치법",
+    "location": "적색 절벽",
+    "type": "만사록",
+    "bgimg": "q41_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q41.html"
   }
 ]

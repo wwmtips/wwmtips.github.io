@@ -874,7 +874,7 @@ function renderQuestList() {
                 <img src="images/gs.jpg" alt="알림" 
                      style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 1px solid #eee;">
                 <br>
-                아직 강호의 이야기가 전달되지 않았습니다.
+                구..구구..구우...스?
             </div>
         `;
         

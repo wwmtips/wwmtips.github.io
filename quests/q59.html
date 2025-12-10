@@ -1,0 +1,144 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            불야채 첩자
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">부호 만관이 불야채 거처에 나타난 이유가 뭘까</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            불야채 거점에 나타난 부호 <b>만관</b>을 돕는 의뢰입니다.<br>
+            곳곳에 숨겨진 <b>화전</b>을 찾아 그에게 전달해야 합니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            부호 만관과 첫 번째 화전
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>불야채 거점 왼쪽</b>에 있는 만관의 거처로 이동하세요.<br>
+            만관에게 말을 건 뒤, <b>바로 옆 술단지</b>를 조사하여 첫 번째 화전을 획득하고 다시 대화하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_1.jpg" alt="부호 만관">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_2.jpg" alt="만관 위치 및 술단지">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            나머지 화전 찾기
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            이제 흩어진 3개의 화전을 추가로 찾아야 합니다.
+        </p>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">1. 절벽 위 연못</p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_3.jpg" alt="절벽 위 연못">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_4.jpg" alt="연못 위치">
+        </div>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">2. 거점 아래 동굴</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            거점 아래쪽 동굴로 이동하여 <b>모든 적을 처치</b>하세요.<br>
+            그 후 <b>불화살</b>로 길을 막고 있는 장애물을 태우면 안쪽에서 화전을 획득할 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_5.jpg" alt="동굴 입구 및 전투">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_6.jpg" alt="불화살 사용">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_7.jpg" alt="동굴 안 화전">
+        </div>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">3. 망루 중간 칸막이</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            경계석 아래쪽에 있는 <b>망루</b>로 이동하세요.<br>
+            망루의 중간 칸막이 부분에서 마지막 화전을 찾을 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_8.jpg" alt="망루 화전">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q59_9.jpg" alt="망루 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            모든 화전을 모아 만관에게 돌아가면<br>
+            그의 진짜 목적을 알게 되며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

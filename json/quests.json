@@ -502,5 +502,14 @@
     "bgimg": "q58_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q58.html"
+  },
+  {
+    "id": "q59",
+    "name": "불야채 첩자",
+    "location": "불야채",
+    "type": "만사록",
+    "bgimg": "q59_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q59.html"
   }
 ]

@@ -1,151 +1,147 @@
-  <style>
-        /* [수묵화 테마] 스타일 정의 (제공해주신 코드 기반) */
-        :root {
-            --wuxia-accent-red: #c92a2a;   /* 짙은 적색 포인트 */
-            --wuxia-accent-gold: #b08d55;  /* 금색 포인트 */
-            --wuxia-text-main: #333333;    /* 본문 진한색 */
-            --wuxia-text-sub: #666666;     /* 본문 연한색 */
-            --wuxia-bg-light: #fffcf5;     /* 연한 종이색 배경 */
-        }
+<style>
+    /* [수묵화 테마] 스타일 정의 */
+    /* :root 변수는 메인 페이지에 있다면 생략 가능하지만, 안전을 위해 유지 */
+    :root {
+        --wuxia-accent-red: #c92a2a;
+        --wuxia-accent-gold: #b08d55;
+        --wuxia-text-main: #333333;
+        --wuxia-text-sub: #666666;
+        --wuxia-bg-light: #fffcf5;
+    }
 
-        body {
-            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-            background-color: #f9f9f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
+    /* 주의: body 태그 스타일은 제거했습니다. (메인 페이지 레이아웃 보호) */
 
-        .quest-detail-container {
-            width: 100%;
-            max-width: 400px; /* 모바일 뷰에 최적화 */
-            background-color: #fff;
-            padding: 30px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-radius: 8px;
-            text-align: center;
-        }
+    .quest-detail-container {
+        width: 100%;
+        max-width: 400px; /* 모바일 뷰 최적화 */
+        background-color: #fff;
+        padding: 30px 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border-radius: 8px;
+        text-align: center;
+        /* 불러왔을 때 가운데 정렬을 위해 추가 */
+        margin: 0 auto; 
+        box-sizing: border-box;
+    }
 
-        /* 제목 스타일 */
-        .title-area {
-            border-bottom: 2px solid var(--wuxia-accent-red);
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-        
-        .badge {
-            background-color: var(--wuxia-accent-gold);
-            color: #fff;
-            padding: 2px 8px;
-            border-radius: 2px;
-            font-weight: bold;
-            font-size: 0.8em;
-            vertical-align: middle;
-        }
+    /* 제목 스타일 */
+    .title-area {
+        border-bottom: 2px solid var(--wuxia-accent-red);
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+        text-align: left;
+    }
+    
+    .badge {
+        background-color: var(--wuxia-accent-gold);
+        color: #fff;
+        padding: 2px 8px;
+        border-radius: 2px;
+        font-weight: bold;
+        font-size: 0.8em;
+        vertical-align: middle;
+    }
 
-        h2 {
-            color: var(--wuxia-accent-gold);
-            display: inline-block;
-            margin: 0 0 0 10px;
-            vertical-align: middle;
-            font-size: 1.4rem;
-        }
+    h2 {
+        color: var(--wuxia-accent-gold);
+        display: inline-block;
+        margin: 0 0 0 10px;
+        vertical-align: middle;
+        font-size: 1.4rem;
+    }
 
-        /* 입력 폼 스타일 */
-        .input-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
+    /* 입력 폼 스타일 */
+    .input-group {
+        margin-bottom: 25px;
+        text-align: left;
+    }
 
-        label {
-            display: block;
-            color: var(--wuxia-text-main);
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
+    label {
+        display: block;
+        color: var(--wuxia-text-main);
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
 
-        input[type="number"] {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.3s;
-        }
+    input[type="number"] {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        outline: none;
+        transition: border-color 0.3s;
+    }
 
-        input[type="number"]:focus {
-            border-color: var(--wuxia-accent-gold);
-            box-shadow: 0 0 5px rgba(176, 141, 85, 0.3);
-        }
+    input[type="number"]:focus {
+        border-color: var(--wuxia-accent-gold);
+        box-shadow: 0 0 5px rgba(176, 141, 85, 0.3);
+    }
 
-        /* 버튼 스타일 */
-        .btn-wuxia {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--wuxia-accent-red);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-        }
+    /* 버튼 스타일 */
+    .btn-wuxia {
+        width: 100%;
+        padding: 15px;
+        background-color: var(--wuxia-accent-red);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+    }
 
-        .btn-wuxia:hover {
-            background-color: #a01d1d;
-        }
+    .btn-wuxia:hover {
+        background-color: #a01d1d;
+    }
 
-        .btn-wuxia:active {
-            transform: scale(0.98);
-        }
+    .btn-wuxia:active {
+        transform: scale(0.98);
+    }
 
-        .btn-secondary {
-            background-color: var(--wuxia-text-sub);
-            margin-top: 20px;
-        }
-        .btn-secondary:hover {
-            background-color: #444;
-        }
+    .btn-secondary {
+        background-color: var(--wuxia-text-sub);
+        margin-top: 20px;
+    }
+    .btn-secondary:hover {
+        background-color: #444;
+    }
 
-        /* 결과 화면 스타일 */
-        #result-screen {
-            display: none; /* 기본적으로 숨김 */
-            animation: fadeIn 0.5s ease-out;
-        }
+    /* 결과 화면 스타일 */
+    #result-screen {
+        display: none; /* 기본적으로 숨김 */
+        animation: fadeIn 0.5s ease-out;
+    }
 
-        .result-box {
-            background-color: var(--wuxia-bg-light);
-            border: 1px solid var(--wuxia-accent-gold);
-            padding: 30px 20px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
+    .result-box {
+        background-color: var(--wuxia-bg-light);
+        border: 1px solid var(--wuxia-accent-gold);
+        padding: 30px 20px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
 
-        .time-remaining {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--wuxia-text-main);
-            margin-bottom: 10px;
-            word-break: keep-all;
-        }
+    .time-remaining {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--wuxia-text-main);
+        margin-bottom: 10px;
+        word-break: keep-all;
+    }
 
-        .completion-date {
-            font-size: 0.95rem;
-            color: var(--wuxia-text-sub);
-        }
+    .completion-date {
+        font-size: 0.95rem;
+        color: var(--wuxia-text-sub);
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 
 <div class="quest-detail-container">
     <div class="title-area">
@@ -173,4 +169,3 @@
 </div>
 
 <script src="calc.js"></script>
-

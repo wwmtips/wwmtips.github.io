@@ -439,5 +439,14 @@
     "bgimg": "q51_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q51.html"
+  },
+  {
+    "id": "q52",
+    "name": "영약을 훔친 것을 후회하리",
+    "location": "자심촌",
+    "type": "만사록",
+    "bgimg": "q52_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q52.html"
   }
 ]

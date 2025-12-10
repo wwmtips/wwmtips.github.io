@@ -349,5 +349,14 @@
     "bgimg": "q41_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q41.html"
+  },
+  {
+    "id": "q42",
+    "name": "최고의 진미",
+    "location": "태평종루",
+    "type": "만사록",
+    "bgimg": "q42_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q42.html"
   }
 ]

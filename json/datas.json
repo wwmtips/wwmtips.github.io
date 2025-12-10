@@ -2,6 +2,9 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "인주", "answer": "도장", "user": "유태월" },
+{ "hint": "시계", "answer": "뻐꾸기", "user": "만휘" },
+
     { "hint": "인연", "answer": "자등", "user": "풀무" },
 { "hint": "우아함", "answer": "석곡", "user": "평택제일검" },
 { "hint": "은색 비늘", "answer": "꽁치", "user": "구밀" },

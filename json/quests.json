@@ -421,5 +421,14 @@
     "bgimg": "q49_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q49.html"
+  },
+  {
+    "id": "q50",
+    "name": "처음으로 실력을 드러내다",
+    "location": "보리고해",
+    "type": "만사록",
+    "bgimg": "q50_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q50.html"
   }
 ]

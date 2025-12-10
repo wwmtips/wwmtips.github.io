@@ -874,7 +874,7 @@ function renderQuestList() {
                 <img src="images/gs.jpg" alt="알림" 
                      style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 1px solid #eee;">
                 <br>
-                구..구구..구우...스?
+                구..구구..구우...스?<br>(큰 거위가 서신 위에 올라가 있다. 이건 볼 수 없겠는걸?)
             </div>
         `;
         

@@ -1,0 +1,200 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            장생 녹선인
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">불멸의 사슴에 대한 비밀</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            사슴 탈을 쓴 기이한 노인과 만난 후 시작되는 긴 여정입니다.<br>
+            <b>장생과</b>를 모으고, 특정 시간에 맞춰 제사를 지내 불멸의 비밀을 파헤쳐보세요.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            사슴 그림과 노인
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 위치로 이동하면 큰 돌에 그려진 사슴 그림 뒤에서 절을 하고 있는 사람을 볼 수 있습니다.<br>
+            사슴 탈을 쓴 노인과 대화하여 퀘스트를 시작하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_1.jpg" alt="사슴 돌과 노인">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_2.jpg" alt="시작 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            장생과 수집
+        </h3>
+        
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 20px;">1. 첫 번째 장생과</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>황혼촌 경계석</b> 바로 왼쪽에 있는 집 <b>2층</b>에서 획득할 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_3.jpg" alt="첫 번째 장생과">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_4.jpg" alt="첫 번째 위치">
+        </div>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">2. 두 번째 장생과</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 위치의 부처님 석상 앞으로 가세요. 덩굴이 막고 있으니 <b>불화살</b>로 태운 뒤 획득하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_5.jpg" alt="두 번째 장생과">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_6.jpg" alt="두 번째 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            파종과 공양 (시간 주의)
+        </h3>
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b> 아래 단계들은 반드시 시진을 <b>자시(23:00~01:00)</b>로 변경한 후 진행해야 합니다.
+            </p>
+        </div>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold);">1. 씨앗 심기</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            첫 번째 장소(노인이 있던 곳)로 돌아가 <b>자시</b>에 석상 앞 중에게 '재배하기'를 선택해 씨앗을 심으세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_7.jpg" alt="씨앗 심기">
+        </div>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">2. 제단 공양</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 두 곳의 제단으로 이동하여, 마찬가지로 <b>자시</b>에 공양을 올리세요.
+        </p>
+        
+        <p style="color: var(--wuxia-text-sub); margin-top: 10px;">첫 번째 제단</p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_8.jpg" alt="제단 1">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_9.jpg" alt="제단 1 위치">
+        </div>
+
+        <p style="color: var(--wuxia-text-sub); margin-top: 20px;">두 번째 제단</p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_10.jpg" alt="제단 2">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_11.jpg" alt="제단 2 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            마지막 비밀
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            공양을 마치고 첫 장소로 돌아가면 나무가 자라있습니다. 나무 앞의 행인과 대화하세요.<br>
+            그 후 안내된 위치로 이동하면 덩굴이 길을 막고 있습니다.
+        </p>
+        <div style="background-color: #f0f8ff; padding: 10px 15px; border-left: 3px solid #4682b4; margin: 15px 0; border-radius: 0 4px 4px 0;">
+            <p style="margin: 0; color: #333; font-size: 0.9em;">
+                <b>💡 Tip:</b> 아무런 상호작용 표시가 없더라도 <b>상호작용 키를 계속 누르고 있으면</b> 대화가 진행됩니다.
+            </p>
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_12.jpg" alt="마지막 덩굴">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q44_13.jpg" alt="덩굴 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            숨겨진 대화 이벤트를 완료하면<br>
+            녹선인의 비밀이 밝혀지며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

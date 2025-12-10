@@ -457,5 +457,14 @@
     "bgimg": "q53_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q53.html"
+  },
+  {
+    "id": "q54",
+    "name": "누가 자애로운 아버지의 마음을",
+    "location": "자심촌",
+    "type": "만사록",
+    "bgimg": "q54_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q54.html"
   }
 ]

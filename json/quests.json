@@ -132,7 +132,7 @@
     "id": "q17",
     "name": "달빛 속 칼날",
     "location": "불야채",
-    "type": "이벤트",
+    "type": "퀘스트",
     "iconpath": "images/event1.jpg",
     "filepath": "/quests/q17.html"
   }

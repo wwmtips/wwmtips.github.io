@@ -403,5 +403,14 @@
     "bgimg": "q47_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q47.html"
+  },
+  {
+    "id": "q48",
+    "name": "구원의 언덕",
+    "location": "보리고해",
+    "type": "만사록",
+    "bgimg": "q48_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q48.html"
   }
 ]

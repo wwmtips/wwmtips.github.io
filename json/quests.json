@@ -412,5 +412,14 @@
     "bgimg": "q48_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q48.html"
+  },
+  {
+    "id": "q49",
+    "name": "무쇠 심장의 파동",
+    "location": "보리고해",
+    "type": "만사록",
+    "bgimg": "q49_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q49.html"
   }
 ]

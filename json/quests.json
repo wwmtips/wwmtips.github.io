@@ -484,5 +484,14 @@
     "bgimg": "q56_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q56.html"
+  },
+  {
+    "id": "q57",
+    "name": "세 번째 불광",
+    "location": "자심촌",
+    "type": "만사록",
+    "bgimg": "q57_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q57.html"
   }
 ]

@@ -870,7 +870,7 @@ function renderQuestList() {
     if (!currentQuestData || currentQuestData.length === 0) {
         // 그리드 레이아웃(grid-template-columns)을 무시하고 중앙에 메시지를 띄우기 위해 grid-column 속성 사용
         container.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align:center; padding:80px 0; color:#888; font-size: 1.1em;">
+            <div style="grid-column: 1 / -1; text-align:center; padding:80px 0; color:#888; font-size: 0.95em;">
                 아직 강호의 이야기가 전달되지 않았습니다.
             </div>
         `;

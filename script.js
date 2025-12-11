@@ -1224,3 +1224,88 @@ function closeMapDetail() {
 
 function openGuideSheet() { document.body.classList.add('sheet-open'); }
 function closeGuideSheet() { document.body.classList.remove('sheet-open'); }
+
+
+// =========================================
+// 14. 비결(Mart) 도감 및 바텀시트 기능 (추가됨)
+// =========================================
+function renderMartLibrary() {
+    const container = document.getElementById('mart-library-list');
+    if (!container) return;
+
+    // 데이터가 없으면 로드 시도
+    if (!builderData) {
+        fetch('json/builder_data.json')
+            .then(res => res.json())
+            .then(data => { 
+                builderData = data; 
+                renderMartLibrary(); 
+            })
+            .catch(err => { container.innerHTML = "데이터를 불러올 수 없습니다."; });
+        return;
+    }
+
+    if (!builderData.marts || builderData.marts.length === 0) {
+        container.innerHTML = "등록된 비결이 없습니다.";
+        return;
+    }
+
+    container.innerHTML = '';
+    builderData.marts.forEach(mart => {
+        const item = document.createElement('div');
+        item.className = 'heart-lib-item'; // 스타일은 심법과 공유
+        item.onclick = () => openMartDetailSheet(mart.id);
+        
+        // 이미지가 없으면 기본 로고 사용
+        const imgPath = mart.img ? mart.img : 'images/logo.png';
+        
+        item.innerHTML = `
+            <img src="${imgPath}" class="heart-lib-img" onerror="this.src='images/logo.png'">
+            <div class="heart-lib-name">${mart.name}</div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+function openMartDetailSheet(martId) {
+    if (!builderData || !builderData.marts) return;
+    const mart = builderData.marts.find(m => m.id === martId);
+    if (!mart) return;
+
+    const titleEl = document.getElementById('mart-sheet-title');
+    const contentEl = document.getElementById('mart-sheet-content');
+
+    if (titleEl) titleEl.innerText = mart.name;
+    
+    if (contentEl) {
+        // 유튜브 변환 기능 재사용 (convertYoutubeToEmbed 함수가 이미 존재해야 함)
+        const acquireContent = typeof convertYoutubeToEmbed === 'function' 
+            ? convertYoutubeToEmbed(mart.acquire) 
+            : (mart.acquire || '획득 방법 정보가 없습니다.');
+
+        const imgPath = mart.img ? mart.img : 'images/logo.png';
+
+        contentEl.innerHTML = `
+            <div style="text-align:center; margin-bottom:20px; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
+                <img src="${imgPath}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
+            </div>
+            <div class="detail-chunk" style="margin-bottom: 25px;">
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">📜 설명</h4>
+                <p style="color: #555; line-height: 1.6; background: #fff; padding: 10px; border: 1px dashed #ddd; border-radius: 4px;">
+                    ${mart.desc || '설명 정보가 없습니다.'}
+                </p>
+            </div>
+            <div class="detail-chunk">
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">🗝 획득 방법</h4>
+                <div style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+                    ${acquireContent}
+                </div>
+            </div>
+        `;
+    }
+    document.body.classList.add('mart-sheet-open');
+}
+
+function closeMartDetailSheet() {
+    document.body.classList.remove('mart-sheet-open');
+}

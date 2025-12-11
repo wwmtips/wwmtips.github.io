@@ -547,5 +547,14 @@
     "bgimg": "q63_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q63.html"
+  },
+  {
+    "id": "q64",
+    "name": "신룡 가면",
+    "location": "백공방",
+    "type": "만사록",
+    "bgimg": "q64_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q64.html"
   }
 ]

@@ -34,7 +34,13 @@
       "acquire": "https://youtu.be/-QiZL7Pjhv0"
 
     },
-    { "id": "h26", "name": "군신의 묘약", "img": "images/h26.png" },
+    { "id": "h26", 
+      "name": "군신의 묘약", 
+      "img": "images/h26.png",
+      "desc": "천계의 수호의 무술 스킬 무위자연으로 소환한 물의 환영의 치유 효과가 증가하고 추가로 이슬을 회복한다.",
+      "acquire": "https://youtu.be/15BJ3p4TTQ8"
+
+    },
     { "id": "h30", "name": "월광의 계율", "img": "images/h30.png" },
     { "id": "h34", "name": "지축의 분노", "img": "images/h34.png" },
     { "id": "h12", "name": "굶주린 늑대", "img": "images/h12.png" },

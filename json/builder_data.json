@@ -317,124 +317,208 @@
   ],
   "marts": [
     {
-      "id": "m1",
-      "name": "태극",
-      "img": "images/m1.png"
+        "id": "m1",
+        "name": "태극",
+        "img": "images/m1.png",
+        "desc": "나뭇잎을 모으고 수면에 파동을 일으킵니다. 전투 시 적을 끌어당기고 휘둘러 틈을 만듭니다. 방패를 든 적에게 효과적입니다.",
+        "acquire": "곰 동작 이해 튜토리얼 완료"
     },
     {
-      "id": "m2",
-      "name": "금옥점혈수",
-      "img": "images/m2.png"
+        "id": "m2",
+        "name": "금옥점혈수",
+        "img": "images/m2.png",
+        "desc": "경혈을 선택하면 특수 효과를 얻습니다. 전투 중 일정 확률로 이동 불가 및 급소 파괴 효과를 얻습니다. (보스 제외)",
+        "acquire": "조각상에 둘러싸인 남자 찾기"
     },
     {
-      "id": "m3",
-      "name": "허공섭물",
-      "img": "images/m3.png"
+        "id": "m3",
+        "name": "허공섭물",
+        "img": "images/m3.png",
+        "desc": "멀리 있는 물건을 끌어당깁니다. 전투 중 적의 무장을 해제하고 적의 무기로 반격합니다. 무게에 따라 피해량이 증가합니다.",
+        "acquire": "탐험 퀘스트 완료"
     },
     {
-      "id": "m4",
-      "name": "구름 위 질주",
-      "img": "images/m4.png"
+        "id": "m4",
+        "name": "구름 위 질주",
+        "img": "images/m4.png",
+        "desc": "높이 뛰어올라 강타하거나, 특정 지점으로 점프합니다. 전투 중 적의 어깨를 밟아 기병대 및 불안정한 자세 유닛을 공략합니다.",
+        "acquire": "장군 사당 아래 동굴에서 발견"
     },
     {
-      "id": "m5",
-      "name": "사자후",
-      "img": "images/m5.png"
+        "id": "m5",
+        "name": "사자후",
+        "img": "images/m5.png",
+        "desc": "거대한 종을 내려쳐 피해를 입히고 14번 타격하는 포효를 내뿜습니다. 피해 감소 및 인내력 15% 증가 효과가 있습니다.",
+        "acquire": "청하에서 4개의 종 울리기 [위치 보기]"
     },
     {
-      "id": "m6",
-      "name": "합마공",
-      "img": "images/m6.png"
+        "id": "m6",
+        "name": "합마공",
+        "img": "images/m6.png",
+        "desc": "적을 밀어내고 돌진합니다. 2회 시전 시 독 적용, 3회 시전 시 광역 타격인 황금 두꺼비 충돌로 변경됩니다.",
+        "acquire": "장군 사당에서 양소룡과 대화 [위치 보기]"
     },
     {
-      "id": "m7",
-      "name": "귀혈수",
-      "img": "images/m7.png"
+        "id": "m7",
+        "name": "귀혈수",
+        "img": "images/m7.png",
+        "desc": "적들 앞으로 순간이동하여 최대 6명을 이동 불가 상태로 만들고 급소를 파괴합니다.",
+        "acquire": "개봉에서 무명검(도산윤)과 대화"
     },
     {
-      "id": "m8",
-      "name": "호법의 권세",
-      "img": "images/m8.png"
+        "id": "m8",
+        "name": "호법의 권세",
+        "img": "images/m8.png",
+        "desc": "지면을 강타하여 광역 피해를 줍니다. 높은 곳에서 사용 시 암야의 등불로 강화되어 적을 밀어냅니다.",
+        "acquire": "협적 제 7권-'천불 폐허' 완료"
     },
     {
-      "id": "m9",
-      "name": "유성 낙화",
-      "img": "images/m9.png"
+        "id": "m9",
+        "name": "유성 낙화",
+        "img": "images/m9.png",
+        "desc": "공중으로 뛰어올라 불타는 창을 던지고 유성처럼 낙하합니다. 슈퍼 아머 및 피해 감소 15%를 얻습니다.",
+        "acquire": "보리고해 보스에서 받아치기 숙련도 올리기"
     },
     {
-      "id": "m10",
-      "name": "응조권법",
-      "img": "images/m10.png"
+        "id": "m10",
+        "name": "응조권법",
+        "img": "images/m10.png",
+        "desc": "타겟을 휘둘러 방어를 무너뜨린 후, 3번 연속 공격하여 데미지를 입힙니다.",
+        "acquire": "별관 귓산 정상에서 새 집 관찰"
     },
     {
-      "id": "m11",
-      "name": "금강의 호법",
-      "img": "images/m11.png"
+        "id": "m11",
+        "name": "금강의 호법",
+        "img": "images/m11.png",
+        "desc": "전방으로 돌진하여 적의 방어선을 무너뜨리고 공중으로 띄웁니다.",
+        "acquire": "협적 제 8권-긴 밤의 무지개 완료"
     },
     {
-      "id": "m12",
-      "name": "속박의 자유",
-      "img": "images/m12.png"
+        "id": "m12",
+        "name": "속박의 자유",
+        "img": "images/m12.png",
+        "desc": "발차기 폭풍을 일으킵니다. 공중으로 띄운 후 무자비한 공중 공격을 가하고 내려찍습니다.",
+        "acquire": "전영의 2단계 발차기 튕겨내기"
     },
     {
-      "id": "m13",
-      "name": "포식자의 맹습",
-      "img": "images/m13.png"
+        "id": "m13",
+        "name": "포식자의 맹습",
+        "img": "images/m13.png",
+        "desc": "적을 쓰러뜨린 후 빠르게 연타를 퍼붓습니다. 기병대 등에게 효과적입니다.",
+        "acquire": "귀문시장 위쪽 상자"
     },
     {
-      "id": "m14",
-      "name": "맹수의 돌격",
-      "img": "images/m14.png"
+        "id": "m14",
+        "name": "맹수의 돌격",
+        "img": "images/m14.png",
+        "desc": "기를 뿜어내어 강력한 돌격을 가한 후 나선형으로 추격합니다. 치유 감소 효과를 부여합니다.",
+        "acquire": "https://gall.dcinside.com/mgallery/board/view/?id=wherewindsmeets&no=9621"
     },
     {
-      "id": "m15",
-      "name": "신룡의 화염",
-      "img": "images/m15.png"
+        "id": "m15",
+        "name": "신룡의 화염",
+        "img": "images/m15.png",
+        "desc": "술을 마셔 취한 상태가 되며, 기를 내뿜어 화염 피해를 입힙니다. 강인함과 피해 감소 15%를 얻습니다.",
+        "acquire": "https://youtu.be/rCGWO91-0Vw?si=bNWe8VL9SR2iZiUR"
     },
     {
-      "id": "m16",
-      "name": "태백취권",
-      "img": "images/m16.png"
+        "id": "m16",
+        "name": "태백취권",
+        "img": "images/m16.png",
+        "desc": "최대 5번의 연속 공격을 가하며 술기운를 부여합니다.",
+        "acquire": "진품 상인에게 독주 구매 후 섭취"
     },
     {
-      "id": "m17",
-      "name": "용의 진노",
-      "img": "images/m17.png"
+        "id": "m17",
+        "name": "용의 진노",
+        "img": "images/m17.png",
+        "desc": "낙엽을 모아 용의 머리 형상으로 공격하여 밀어냅니다. 슈퍼 아머 및 피해 감소 15%를 부여합니다.",
+        "acquire": "35가지 다른 비결 배우기"
     },
     {
-      "id": "m18",
-      "name": "속세의 장막",
-      "img": "images/m18.png"
+        "id": "m18",
+        "name": "속세의 장막",
+        "img": "images/m18.png",
+        "desc": "독 안개를 방출하여 시야를 가리고 5초간 전투 불능으로 만듭니다. (보스 제외)",
+        "acquire": "속세의 흐린 눈동자 스토리 완료"
     },
     {
-      "id": "m19",
-      "name": "청풍명월",
-      "img": "images/m19.png"
+        "id": "m19",
+        "name": "청풍명월",
+        "img": "images/m19.png",
+        "desc": "피격 시 빠르게 회복합니다. 명중 시 8초간 목표의 인내력 회복량 감소하고 지속 피해를 입습니다.",
+        "acquire": "천부 포인트로 잠금 해제"
     },
     {
-      "id": "m20",
-      "name": "불멸의 육신",
-      "img": "images/m20.png"
+        "id": "m20",
+        "name": "불멸의 육신",
+        "img": "images/m20.png",
+        "desc": "보호막을 얻고 기를 회복합니다. 강인함과 피해 감소 15% 효과를 얻습니다.",
+        "acquire": "https://www.youtube.com/watch?v=Gc0NrSWIgkg"
     },
     {
-      "id": "m21",
-      "name": "음양의 조화",
-      "img": "images/m21.png"
+        "id": "m21",
+        "name": "음양의 조화",
+        "img": "images/m21.png",
+        "desc": "그림자 이동 상태를 획득한다. 그림자 이동: 20초간 회피형 스킬 인내력 40% 감소, 타겟팅 불가 시간 증가.",
+        "acquire": "https://youtu.be/mVlk3ijZQz8?si=GQqKc4INLnfIYPnA"
     },
     {
-      "id": "m22",
-      "name": "거위의 절규",
-      "img": "images/m22.png"
+        "id": "m22",
+        "name": "거위의 절규",
+        "img": "images/m22.png",
+        "desc": "거위를 이용해 피해를 주고 숨 고르기를 부여합니다. 이후 거위가 도망치며 추가 피해를 줍니다.",
+        "acquire": "https://youtu.be/7dnJMl9CL20?si=KAiP3KEfLG9mpnTD"
     },
     {
-      "id": "m23",
-      "name": "임야의 휘광",
-      "img": "images/m23.png"
+        "id": "m23",
+        "name": "임야의 휘광",
+        "img": "images/m23.png",
+        "desc": "반딧불이를 소환하여 어둠 속에서 30초 동안 빛을 비춥니다.",
+        "acquire": "https://youtu.be/Yt2Pz0_vEXg?si=SrIC0xMug_vlf8CC"
     },
     {
-      "id": "m24",
-      "name": "묘령의 그림자",
-      "img": "images/m24.png"
+        "id": "m24",
+        "name": "묘령의 그림자",
+        "img": "images/m24.png",
+        "desc": "잠시 동안 적에게 덜 감지되게 됩니다. (은신 효과)",
+        "acquire": "훔쳐배우기-정당한 취득 (구월해와 대화하기)"
+    },
+    {
+        "id": "m25",
+        "name": "역풍의 그림자",
+        "img": "images/m25.png",
+        "desc": "적의 기술 방어 후 반격하여 8초간 대상의 인내력 회복량 50% 감소",
+        "acquire": "천부 포인트 14개 이상"
+    },
+    {
+        "id": "m26",
+        "name": "천상의 변주",
+        "img": "images/m26.png",
+        "desc": "피격 직전 통찰력을 소모하여 공격을 무력화 (패링)",
+        "acquire": "기본 잠금 해제"
+    },
+    {
+        "id": "m27",
+        "name": "고요한 심연",
+        "img": "images/m27.png",
+        "desc": "숨을 참는 동안 주변 대상 이동 속도 75% 감소 (인내력 소모)",
+        "acquire": "활 튜토리얼 중 해제"
+    },
+    {
+        "id": "m28",
+        "name": "천공의 일격",
+        "img": "images/m28.png",
+        "desc": "후방에서 돌격하여 약한 적을 일격에 제압 (암살)",
+        "acquire": "퀘스트 완료"
+    },
+    {
+        "id": "m29",
+        "name": "바람의 눈",
+        "img": "images/m29.png",
+        "desc": "해당 지역의 관심 품목이나 사람을 강조 표시 (탐지)",
+        "acquire": "천부 포인트 2개 이상"
     }
+
   ]
 }

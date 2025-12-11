@@ -2,6 +2,10 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "매운 맛", "answer": "고추", "user": "바람風" },
+{ "hint": "봄 분홍색 복숭아", "answer": "복숭아꽃", "user": "ㅇㅇ" },
+{ "hint": "비 오는 날", "answer": "지렁이", "user": "" },
+
     { "hint": "밭갈이 도구", "answer": "갈퀴", "user": "무삥" },
 { "hint": "말", "answer": "승마", "user": "흑공" },
 { "hint": "밭갈이도구", "answer": "갈퀴", "user": "oor" },

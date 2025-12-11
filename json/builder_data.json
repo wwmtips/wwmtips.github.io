@@ -63,7 +63,7 @@
   { "id": "h1", "name": "망각의 울림", "img": "images/h1.png", "desc": "윤희의 가르침의 일반 약공격은 적에게 징벌을 누적시키며,격노의 화염 상태의 약공격은 적에게 업보를 누적시킨다. 징벌 또는 업보 상태의 목표를 공격 시 윤희의 가르침 약공격은목표의 일부 외공 방어와 파괴 저항을 무시한다.", "acquire": "https://youtu.be/onm-DcRDWS0" },
     { "id": "h2", "name": "파도의 검기", "img": "images/h2.png", "desc": "제어류 스킬이 적에게 적중하면 현재 무술의 쿨타임이 감소한다. 이 효과는 10초에 1회 발동한다.", "acquire": "https://youtu.be/LEu0ThwSaxg" },
     { "id": "h3", "name": "파괴의 서막", "img": "images/h3.png", "desc": "탈진 상태의 적에게 치명타 피해를 입힐 경우, 자신에게 붕괴 상태가 1회 중첩된다. 붕괴 1회 중첩 시마다 3초간 자신의 외 공 관통 및 치명타 피해 보너스가 증가한다(최대 3회 중첩)", "acquire": "꿈의 불선선에서 최도 격파" },
-•     { "id": "h4", "name": "심연의 늪", "img": "images/h4.png", "desc": "속박의 칼날이 부여하는 복수령의 지속 시간이 증가하며, 추가로 은자패를 회복한다.", "acquire": "개봉-용연 퀘스트 완료 시 획득 가능" },
+    { "id": "h4", "name": "심연의 늪", "img": "images/h4.png", "desc": "속박의 칼날이 부여하는 복수령의 지속 시간이 증가하며, 추가로 은자패를 회복한다.", "acquire": "개봉-용연 퀘스트 완료 시 획득 가능" },
     { "id": "h6", "name": "맹수의 포효", "img": "images/h6.png", "desc": "차지 스킬 사용 시 모든 보스에게 주는 피해가 증가한다.", "acquire": "https://youtu.be/mEwLzR7RVnY" },
     { "id": "h7", "name": "잿빛의 잔영", "img": "images/h7.png", "desc": "인내력을 소모할 땨마다 일정량을 반환 받는다.", "acquire": "https://youtu.be/OGMGi3DC3DI" },
     { "id": "h8", "name": "천산의 의지", "img": "images/h8.png", "desc": "무명 창법의 무공 스킬 건곤의 정수 사용 시 획득하는 인내력 소모 감소 효과 증가", "acquire": "https://youtu.be/Bt9CvY9JFQ4" },

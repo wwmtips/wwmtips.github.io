@@ -1583,4 +1583,4 @@ function closeMapDetail() {
 
     // 홈으로 돌아가기
     switchTab('home'); 
-                       }
+}

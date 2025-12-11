@@ -276,42 +276,42 @@
       "id": "h31",
       "name": "천공참",
       "img": "images/h31.png",
-      "desc": "적에게 공중 부양을 부여하면 외공 공격 보너스를 얻는다.",
+      "desc": "",
       "acquire": "https://youtu.be/lg2n6OcDa24"
     },
     {
       "id": "h32",
       "name": "춘뢰일섬",
       "img": "images/h32.png",
-      "desc": "​3초 내 이동 거리가 15m를 초과할 경우 춘뢰 효과가 발동한다. 12초 동안 다음 3회의 강공격 또는 공중 강공격의 피해가 15\% 증가한다. 이 효과는 15초마다 한 번만 발동한다.",
+      "desc": "",
       "acquire": "https://youtu.be/HPe1s9nMsQo"
     },
     {
       "id": "h33",
       "name": "비상하는 호리병",
       "img": "images/h33.png",
-      "desc": "청산의 정수 초식 적막의 봄 2회 충전하고, 쿨타임이 3초 증가한다.",
+      "desc": "",
       "acquire": "https://youtu.be/tms2NXqPwUQ"
     },
     {
       "id": "h35",
       "name": "맹수의 혼",
       "img": "images/h35.png",
-      "desc": "기혈이 30% 이하일 때, 피해를 받으면 최후의 발악 효과가 발동된다. 30% 기혈 최대치의 피해를 흡수하는 보호막이 생성된다. 이 효과는 4초 동안 지속되며, 300초마다 한 번만 발동한다.",
+      "desc": "",
       "acquire": "https://youtu.be/TdBh0blvipo"
     },
     {
       "id": "h36",
       "name": "저항의 법칙",
       "img": "images/h36.png",
-      "desc": "자신이 생성한 기혈 보호막 및 해당 스킬의 추가 효과와 지속 시간이 4초 연장되고, 기혈 피해 흡수량이 10% 증가한다.",
+      "desc": "",
       "acquire": "https://youtu.be/MoE4_vowK9Y"
     },
     {
       "id": "h37",
       "name": "강철의 비기",
       "img": "images/h37.png",
-      "desc": "풍뢰의 징표 초식 천둥의 포효의 피해 감소 효과는 도발 성공 시 증가한다. 효과 지속 시간 동안, 캐릭터가 입히는 모든 피해가 감소하고 원한이 증가한다.",
+      "desc": "",
       "acquire": "https://youtu.be/YwfIrshVZk4"
     }
   ],

@@ -1,81 +1,476 @@
-<div class="quest-detail-container" style="text-align: left; position: relative;">
+<div class="quest-detail-container" style="text-align: left;">
     
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
         <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
             비결
         </h2>
-    </div>
-
-    <div id="mart-library-list" class="heart-library-grid">
-        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
-            데이터를 불러오는 중...
-        </div>
-    </div>
-
-    <div id="guide-overlay" class="bottom-sheet-overlay" onclick="closeMartDetailSheet()"></div>
-
-    <div id="mart-detail-sheet" class="bottom-sheet">
-        <div class="sheet-header">
-            <h3 id="mart-sheet-title">비결 상세</h3>
-            <button onclick="closeMartDetailSheet()" class="close-sheet-btn">✕</button>
-        </div>
-        <div class="sheet-content" id="mart-sheet-content">
-            </div>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">비결 정보 및 획득 방법 소개</p>
     </div>
 
     <style>
-        /* 심법 페이지의 스타일을 그대로 활용 (.heart-library-grid 등) */
-        /* harts.html의 스타일이 전역 CSS에 없다면 여기에 복사해야 할 수도 있습니다. 
-           하지만 보통 같은 class를 쓰면 스타일이 공유됩니다. */
-        
-        /* 비결 상세 시트 활성화 */
-        body.mart-sheet-open #mart-detail-sheet {
-            transform: translateY(0);
-        }
-        body.mart-sheet-open #guide-overlay {
-            display: block;
-            opacity: 1;
-            z-index: 1000;
-        }
-        
-        /* 혹시 스타일이 안 먹으면 아래 코드를 활성화하세요 (harts.html과 동일) */
-        .heart-library-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 15px;
-            padding: 10px 0;
-        }
-        .heart-lib-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px 5px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #fff;
-        }
-        .heart-lib-item:hover {
-            border-color: var(--wuxia-accent-gold);
-            background-color: #fffcf5;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        }
-        .heart-lib-img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            margin-bottom: 8px;
-        }
-        .heart-lib-name {
-            font-size: 0.8em;
-            color: #555;
-            text-align: center;
-            word-break: keep-all;
-            line-height: 1.2;
-        }
-    </style>
+    /* [수묵화 테마] 비결 테이블 스타일 */
+    .arts-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+        table-layout: fixed; 
+        background-color: #fff; /* 흰색 배경 */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03); /* 연한 그림자 */
+    }
+    
+    .arts-table th {
+        background-color: #fffcf5; /* 연한 미색 헤더 */
+        color: var(--wuxia-text-main);
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-bottom: 2px solid var(--wuxia-accent-gold); /* 헤더 강조 */
+        white-space: nowrap;
+        font-weight: bold;
+    }
+    
+    /* 열 너비 설정 (30%, 40%, 30%) */
+    .arts-table th:nth-child(1) { width: 30%; }
+    .arts-table th:nth-child(2) { width: 40%; }
+    .arts-table th:nth-child(3) { width: 30%; }
+
+    .arts-table td {
+        border: 1px solid #eee;
+        padding: 12px;
+        vertical-align: middle;
+        color: var(--wuxia-text-sub); /* 진한 회색 */
+        line-height: 1.5;
+    }
+    
+    .art-icon-cell {
+        text-align: center;
+        background-color: #fdfdfd; /* 이름 칸만 아주 살짝 구분 */
+        vertical-align: top;
+        padding-top: 20px;
+        border-right: 1px solid #eee;
+    }
+    
+    /* 이미지 박스 스타일 */
+    .art-img-box {
+        width: 64px;
+        height: 64px;
+        background-color: #f4f4f2; /* 아이콘 배경: 연한 미색 */
+        border: 1px solid #ddd;
+        margin: 0 auto 10px auto; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .art-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .art-name {
+        display: block;
+        color: var(--wuxia-text-main); /* 진한 색 */
+        font-weight: bold;
+        margin-bottom: 4px;
+        font-size: 1.0em;
+    }
+    
+    .art-type {
+        display: block;
+        font-size: 0.8em;
+        color: #888;
+    }
+    
+    .art-effect strong {
+        color: var(--wuxia-accent-red); /* 강조색 */
+    }
+    
+    .art-obtain {
+        color: #666;
+        font-size: 0.9em;
+    }
+    
+    /* 섹션 제목 스타일 */
+    .section-title {
+        color: var(--wuxia-text-main);
+        font-size: 1.3em;
+        border-left: 4px solid var(--wuxia-accent-red);
+        padding-left: 10px;
+        margin-bottom: 15px;
+        margin-top: 40px;
+        font-weight: bold;
+    }
+    
+    /* 링크 스타일 (배경이 흰색이므로 어두운 색으로 변경) */
+    a {
+        color: var(--wuxia-accent-gold); /* 금색/갈색 톤 */
+        text-decoration: underline;
+        font-weight: bold;
+    }
+    a:hover {
+        color: var(--wuxia-accent-red);
+    }
+</style>
+
+
+    <div class="detail-chunk">
+        <h3 class="section-title">공격 비결</h3>
+        <table class="arts-table">
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>효과</th>
+                    <th>획득 방법</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m1.png" alt="태극권" onerror="this.style.display='none'; this.parentNode.innerText='☯️'">
+                        </div>
+                        <span class="art-name">태극</span>
+                        <span class="art-type">방패 해제</span>
+                    </td>
+                    <td class="art-effect">나뭇잎을 모으고 수면에 파동을 일으킵니다. 전투 시 적을 끌어당기고 휘둘러 틈을 만듭니다. <strong>방패를 든 적</strong>에게 효과적입니다.</td>
+                    <td class="art-obtain">곰 동작 이해 튜토리얼 완료</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m2.png" alt="메리디안" onerror="this.style.display='none'; this.parentNode.innerText='👈'">
+                        </div>
+                        <span class="art-name">금옥점혈수</span>
+                        <span class="art-type">파기</span>
+                    </td>
+                    <td class="art-effect">경혈을 선택하면 특수 효과를 얻습니다. 전투 중 일정 확률로 <strong>이동 불가 및 급소 파괴</strong> 효과를 얻습니다. (보스 제외)</td>
+                    <td class="art-obtain">조각상에 둘러싸인 남자 찾기</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m3.png" alt="천상의 압수" onerror="this.style.display='none'; this.parentNode.innerText='🪝'">
+                        </div>
+                        <span class="art-name">허공섭물</span>
+                        <span class="art-type">무장 해제</span>
+                    </td>
+                    <td class="art-effect">멀리 있는 물건을 끌어당깁니다. 전투 중 적의 무장을 해제하고 <strong>적의 무기로 반격</strong>합니다. 무게에 따라 피해량이 증가합니다.</td>
+                    <td class="art-obtain">탐험 퀘스트 완료</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m4.png" alt="클라우드 스텝" onerror="this.style.display='none'; this.parentNode.innerText='☁️'">
+                        </div>
+                        <span class="art-name">구름 위 질주</span>
+                        <span class="art-type">하체</span>
+                    </td>
+                    <td class="art-effect">높이 뛰어올라 강타하거나, 특정 지점으로 점프합니다. 전투 중 <strong>적의 어깨를 밟아</strong> 기병대 및 불안정한 자세 유닛을 공략합니다.</td>
+                    <td class="art-obtain">장군 사당 아래 동굴에서 발견</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m5.png" alt="사자의 포효" onerror="this.style.display='none'; this.parentNode.innerText='🦁'">
+                        </div>
+                        <span class="art-name">사자후</span>
+                        <span class="art-type">밀쳐내기</span>
+                    </td>
+                    <td class="art-effect">거대한 종을 내려쳐 피해를 입히고 14번 타격하는 포효를 내뿜습니다. <strong>피해 감소 및 인내력 15% 증가</strong> 효과가 있습니다.</td>
+                    <td class="art-obtain">청하에서 4개의 종 울리기<br>[위치 보기]</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m6.png" alt="두꺼비" onerror="this.style.display='none'; this.parentNode.innerText='🐸'">
+                        </div>
+                        <span class="art-name">합마공</span>
+                        <span class="art-type">피해</span>
+                    </td>
+                    <td class="art-effect">적을 밀어내고 돌진합니다. 2회 시전 시 독 적용, 3회 시전 시 광역 타격인 <strong>황금 두꺼비 충돌</strong>로 변경됩니다.</td>
+                    <td class="art-obtain">장군 사당에서 양소룡과 대화<br>[위치 보기]</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m7.png" alt="고스트 바인드" onerror="this.style.display='none'; this.parentNode.innerText='👻'">
+                        </div>
+                        <span class="art-name">귀혈수</span>
+                        <span class="art-type">파기</span>
+                    </td>
+                    <td class="art-effect">적들 앞으로 순간이동하여 최대 6명을 <strong>이동 불가 상태</strong>로 만들고 급소를 파괴합니다.</td>
+                    <td class="art-obtain">개봉에서 무명검(도산윤)과 대화</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m8.png" alt="가디언 팜" onerror="this.style.display='none'; this.parentNode.innerText='✋'">
+                        </div>
+                        <span class="art-name">호법의 권세</span>
+                        <span class="art-type">피해</span>
+                    </td>
+                    <td class="art-effect">지면을 강타하여 광역 피해를 줍니다. 높은 곳에서 사용 시 <strong>암야의 등불</strong>로 강화되어 적을 밀어냅니다.</td>
+                    <td class="art-obtain">협적 제 7권-'천불 폐허' 완료</td>
+                </tr>
+                 <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m9.png" alt="불타는 유성" onerror="this.style.display='none'; this.parentNode.innerText='🔥'">
+                        </div>
+                        <span class="art-name">유성 낙화</span>
+                        <span class="art-type">지역 피해</span>
+                    </td>
+                    <td class="art-effect">공중으로 뛰어올라 불타는 창을 던지고 유성처럼 낙하합니다. <strong>슈퍼 아머 및 피해 감소 15%</strong>를 얻습니다.</td>
+                    <td class="art-obtain">보리고해 보스에서 받아치기 숙련도 올리기</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m10.png" alt="탈론 스트라이크" onerror="this.style.display='none'; this.parentNode.innerText='🦅'">
+                        </div>
+                        <span class="art-name">응조권법</span>
+                        <span class="art-type">방어의 균열</span>
+                    </td>
+                    <td class="art-effect">타겟을 휘둘러 방어를 무너뜨린 후, <strong>3번 연속 공격</strong>하여 데미지를 입힙니다.</td>
+                    <td class="art-obtain">별관 귓산 정상에서 새 집 관찰</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m11.png" alt="야크샤" onerror="this.style.display='none'; this.parentNode.innerText='👹'">
+                        </div>
+                        <span class="art-name">금강의 호법</span>
+                        <span class="art-type">방어의 균열</span>
+                    </td>
+                    <td class="art-effect">전방으로 돌진하여 적의 방어선을 무너뜨리고 <strong>공중으로 띄웁니다.</strong></td>
+                    <td class="art-obtain">협적 제 8권-긴 밤의 무지개 완료</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m12.png" alt="프리 모프" onerror="this.style.display='none'; this.parentNode.innerText='🦵'">
+                        </div>
+                        <span class="art-name">속박의 자유</span>
+                        <span class="art-type">연속기</span>
+                    </td>
+                    <td class="art-effect">발차기 폭풍을 일으킵니다. 공중으로 띄운 후 무자비한 공중 공격을 가하고 내려찍습니다.</td>
+                    <td class="art-obtain">전영의 2단계 발차기 튕겨내기</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m13.png" alt="늑대 광란" onerror="this.style.display='none'; this.parentNode.innerText='🐺'">
+                        </div>
+                        <span class="art-name">포식자의 맹습</span>
+                        <span class="art-type">연속기</span>
+                    </td>
+                    <td class="art-effect">적을 쓰러뜨린 후 빠르게 연타를 퍼붓습니다. 기병대 등에게 효과적입니다.</td>
+                    <td class="art-obtain">귀문시장 위쪽 상자</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m14.png" alt="급상승 스핀" onerror="this.style.display='none'; this.parentNode.innerText='🌪️'">
+                        </div>
+                        <span class="art-name">맹수의 돌격</span>
+                        <span class="art-type">위치 이동</span>
+                    </td>
+                    <td class="art-effect">기를 뿜어내어 강력한 돌격을 가한 후 나선형으로 추격합니다. <strong>치유 감소 효과</strong>를 부여합니다.</td>
+                    <td class="art-obtain"><a href="https://gall.dcinside.com/mgallery/board/view/?id=wherewindsmeets&no=9621">가이드 참고</a></td>
+                </tr>
+                 <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m15.png" alt="용의 숨결" onerror="this.style.display='none'; this.parentNode.innerText='🐉'">
+                        </div>
+                        <span class="art-name">신룡의 화염</span>
+                        <span class="art-type">단일 버스트</span>
+                    </td>
+                    <td class="art-effect">술을 마셔 취한 상태가 되며, 기를 내뿜어 화염 피해를 입힙니다. <strong>강인함과 피해 감소 15%</strong>를 얻습니다.</td>
+                    <td class="art-obtain"><a href="https://youtu.be/rCGWO91-0Vw?si=bNWe8VL9SR2iZiUR">가이드 참고</a></td>
+                </tr>
+                 <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m16.png" alt="술 취한 시인" onerror="this.style.display='none'; this.parentNode.innerText='🍶'">
+                        </div>
+                        <span class="art-name">태백취권</span>
+                        <span class="art-type">피해</span>
+                    </td>
+                    <td class="art-effect">최대 5번의 연속 공격을 가하며 <strong>술기운</strong>를 부여합니다.</td>
+                    <td class="art-obtain">진품 상인에게 독주 구매 후 섭취</td>
+                </tr>
+                 <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m17.png" alt="드래곤 헤드" onerror="this.style.display='none'; this.parentNode.innerText='🐲'">
+                        </div>
+                        <span class="art-name">용의 진노</span>
+                        <span class="art-type">피해</span>
+                    </td>
+                    <td class="art-effect">낙엽을 모아 용의 머리 형상으로 공격하여 밀어냅니다. <strong>슈퍼 아머 및 피해 감소 15%</strong>를 부여합니다.</td>
+                    <td class="art-obtain">35가지 다른 비결 배우기</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m18.png" alt="눈부신 안개" onerror="this.style.display='none'; this.parentNode.innerText='🌫️'">
+                        </div>
+                        <span class="art-name">속세의 장막</span>
+                        <span class="art-type">지원</span>
+                    </td>
+                    <td class="art-effect">독 안개를 방출하여 시야를 가리고 <strong>5초간 전투 불능</strong>으로 만듭니다. (보스 제외)</td>
+                    <td class="art-obtain">속세의 흐린 눈동자 스토리 완료</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m19.png" alt="고요한 산들바람" onerror="this.style.display='none'; this.parentNode.innerText='🍃'">
+                        </div>
+                        <span class="art-name">청풍명월</span>
+                        <span class="art-type">속박 해제</span>
+                    </td>
+                    <td class="art-effect">피격 시 빠르게 회복합니다. 명중 시 8초간 목표의 인내력 회복량 감소하고 지속 피해를 입습니다.</td>
+                    <td class="art-obtain">천부 포인트로 잠금 해제</td>
+                </tr>
+                 <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m20.png" alt="골든 바디" onerror="this.style.display='none'; this.parentNode.innerText='🛡️'">
+                        </div>
+                        <span class="art-name">불멸의 육신</span>
+                        <span class="art-type">보호막</span>
+                    </td>
+                    <td class="art-effect">보호막을 얻고 기를 회복합니다. <strong>강인함과 피해 감소 15%</strong> 효과를 얻습니다.</td>
+                    <td class="art-obtain"><a href="https://www.youtube.com/watch?v=Gc0NrSWIgkg">가이드 확인</a></td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m21.png" alt="유령의 계단" onerror="this.style.display='none'; this.parentNode.innerText='🪜'">
+                        </div>
+                        <span class="art-name">음양의 조화</span>
+                        <span class="art-type">회피</span>
+                    </td>
+                    <td class="art-effect">그림자 이동 상태를 획득한다. 그림자 이동: 20초간 회피형 스킬 인내력 40% 감소, 타겟팅 불가 시간 증가.</td>
+                    <td class="art-obtain"><a href="https://youtu.be/mVlk3ijZQz8?si=GQqKc4INLnfIYPnA">가이드 확인</a></td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m22.png" alt="호킹 하복" onerror="this.style.display='none'; this.parentNode.innerText='🦢'">
+                        </div>
+                        <span class="art-name">거위의 절규</span>
+                        <span class="art-type">숨 고르기</span>
+                    </td>
+                    <td class="art-effect">거위를 이용해 피해를 주고 <strong>숨 고르기</strong>를 부여합니다. 이후 거위가 도망치며 추가 피해를 줍니다.</td>
+                    <td class="art-obtain"><a href="https://youtu.be/7dnJMl9CL20?si=KAiP3KEfLG9mpnTD">가이드 확인</a></td>
+                </tr>
+                 <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m23.png" alt="반딧불이" onerror="this.style.display='none'; this.parentNode.innerText='✨'">
+                        </div>
+                        <span class="art-name">임야의 휘광</span>
+                        <span class="art-type">조명</span>
+                    </td>
+                    <td class="art-effect">반딧불이를 소환하여 어둠 속에서 30초 동안 빛을 비춥니다.</td>
+                    <td class="art-obtain"><a href="https://youtu.be/Yt2Pz0_vEXg?si=SrIC0xMug_vlf8CC">가이드 확인</a></td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m24.png" alt="고요함의 베일" onerror="this.style.display='none'; this.parentNode.innerText='🤫'">
+                        </div>
+                        <span class="art-name">묘령의 그림자</span>
+                        <span class="art-type">잠행</span>
+                    </td>
+                    <td class="art-effect">잠시 동안 적에게 덜 감지되게 됩니다. (은신 효과)</td>
+                    <td class="art-obtain">훔쳐배우기-정당한 취득 (구월해와 대화하기)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="detail-chunk">
+        <h3 class="section-title">일반 비결</h3>
+        <table class="arts-table">
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>효과</th>
+                    <th>획득 방법</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m25.png" alt="신성한 카운터" onerror="this.style.display='none'; this.parentNode.innerText='⚔️'">
+                        </div>
+                        <span class="art-name">역풍의 그림자</span>
+                    </td>
+                    <td>적의 기술 방어 후 반격하여 8초간 대상의 <strong>인내력 회복량 50% 감소</strong></td>
+                    <td class="art-obtain">천부 포인트 14개 이상</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m26.png" alt="스타 시프트" onerror="this.style.display='none'; this.parentNode.innerText='✨'">
+                        </div>
+                        <span class="art-name">천상의 변주</span>
+                    </td>
+                    <td>피격 직전 통찰력을 소모하여 공격을 무력화 (패링)</td>
+                    <td class="art-obtain">기본 잠금 해제</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m27.png" alt="스틸 워터스" onerror="this.style.display='none'; this.parentNode.innerText='💧'">
+                        </div>
+                        <span class="art-name">고요한 심연</span>
+                    </td>
+                    <td>숨을 참는 동안 주변 대상 이동 속도 75% 감소 (인내력 소모)</td>
+                    <td class="art-obtain">활 튜토리얼 중 해제</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m28.png" alt="죽음의 손길" onerror="this.style.display='none'; this.parentNode.innerText='☠️'">
+                        </div>
+                        <span class="art-name">천공의 일격</span>
+                    </td>
+                    <td>후방에서 돌격하여 약한 적을 <strong>일격에 제압</strong> (암살)</td>
+                    <td class="art-obtain">퀘스트 완료</td>
+                </tr>
+                <tr>
+                    <td class="art-icon-cell">
+                        <div class="art-img-box">
+                            <img src="images/m29.png" alt="바람 감각" onerror="this.style.display='none'; this.parentNode.innerText='🌬️'">
+                        </div>
+                        <span class="art-name">바람의 눈</span>
+                    </td>
+                    <td>해당 지역의 관심 품목이나 사람을 강조 표시 (탐지)</td>
+                    <td class="art-obtain">천부 포인트 2개 이상</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 class="section-title">비결 강화</h3>
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <p style="margin: 0; color: var(--wuxia-text-sub); font-size: 0.95em; line-height: 1.6;">
+                비결은 <strong>흑철</strong>을 사용하여 등급과 레벨을 올릴 수 있습니다.<br>
+                <br>
+                - <strong>1단계:</strong> 9등급까지 업그레이드 가능<br>
+                - <strong>승급:</strong> 이후 2단계 0등급으로 승급<br>
+                - <strong>최대 성장:</strong> 4단계 9등급까지 추가 업그레이드 가능
+            </p>
+        </div>
+    </div>
+
 </div>

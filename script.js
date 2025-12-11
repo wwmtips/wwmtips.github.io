@@ -1041,17 +1041,37 @@ function renderMartLibrary() {
 }
 
 /* [공통] 유튜브 주소 자동 변환 함수 */
+/* =========================================
+   [기능 업그레이드] 텍스트 내 링크 자동 변환 함수
+   1. 유튜브 주소 -> 동영상 플레이어 변환
+   2. 일반 주소 -> 클릭 가능한 링크(새창) 변환
+   ========================================= */
 function convertYoutubeToEmbed(text) {
     if (!text) return '획득 방법 정보가 없습니다.';
-    const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})(?:\S+)?)/g;
-    if (ytRegex.test(text)) {
-        return text.replace(ytRegex, (match, url, videoId) => {
-            return `<div style="margin-top: 10px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
-                    <iframe src="https://www.youtube.com/embed/${videoId}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>`;
-        });
-    }
-    return text;
+
+    // URL 패턴 탐지 (http 또는 https로 시작하는 모든 주소)
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return text.replace(urlRegex, (url) => {
+        // 1. 유튜브 링크인지 확인 (youtube.com 또는 youtu.be)
+        const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+        
+        if (ytMatch && ytMatch[1]) {
+            // 유튜브라면 -> 영상 임베드 (iframe)
+            return `
+            <div style="margin-top: 10px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000; margin-bottom: 10px;">
+                <iframe src="https://www.youtube.com/embed/${ytMatch[1]}" 
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>`;
+        } else {
+            // 2. 유튜브가 아닌 일반 링크라면 -> 클릭 가능한 링크 (a tag)
+            // 스타일: 굵은 글씨, 밑줄, 금색 테마 적용
+            return `<a href="${url}" target="_blank" style="color: #d48806; font-weight: bold; text-decoration: underline; word-break: break-all;">[링크 확인하기 ↗]</a>`;
+        }
+    });
 }
 
 /* [공통] 심법 상세 바텀시트 열기 */

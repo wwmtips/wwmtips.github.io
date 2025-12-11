@@ -14,7 +14,7 @@
     </div>
 
     <div id="heart-library-list" class="heart-library-grid">
-        <div style="text-align: center; padding: 40px; color: #999;">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
             데이터를 불러오는 중...
         </div>
     </div>
@@ -37,7 +37,7 @@
                     </p>
                 </div>
             </div>
-            
+
             <div class="detail-chunk" style="margin-bottom: 30px;">
                 <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
                     필수 심법: '결의의 노래'
@@ -71,7 +71,8 @@
                     </ol>
                 </div>
             </div>
-             <div class="detail-chunk" style="margin-bottom: 40px;">
+
+            <div class="detail-chunk" style="margin-bottom: 40px;">
                 <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
                     획득 방법 3: 심법 변환 
                 </h4>
@@ -79,6 +80,40 @@
                     두 심법 간에 <strong>심득 개수</strong>를 맞바꾸는 기능입니다. 시즌당 무료 4회 가능합니다.
                 </p>
             </div>
+
+            <div class="detail-chunk" style="margin-bottom: 40px;">
+                <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
+                    💡 팁: 심법 빠른 돌파 (심법 세탁)
+                </h4>
+                <p style="color: #666; line-height: 1.6; font-size: 0.95em; margin-bottom: 15px;">
+                    최종 빌드를 미리 계획해두고, <strong>심법 변경</strong>을 통해 유파를 바꿔가며 상점의 유파별 상자를 구매하면 심득을 훨씬 빠르게 모을 수 있습니다.
+                </p>
+
+                <div style="background-color: #e3f2fd; padding: 15px; border-radius: 4px; border: 1px solid #bbdefb;">
+                    <p style="margin: 0 0 10px 0; color: #1565c0; font-weight: bold; font-size: 0.9em;">
+                        📝 예시) 목표: 구현+격류 / 명금–영 유파
+                    </p>
+                    <ol style="color: #444; line-height: 1.6; padding-left: 20px; margin: 0; font-size: 0.9em;">
+                        <li style="margin-bottom: 5px;">
+                            <strong>열석–위(탄식, 풍뢰)</strong>로 시작<br>
+                            └ 심득 교체로 열석 상자 600개 전부 교환
+                        </li>
+                        <li style="margin-bottom: 5px;">
+                            <strong>견사 또는 파죽</strong>으로 변경 (1주 대기)<br>
+                            └ 해당 유파 상자 600개 교환
+                        </li>
+                        <li>
+                            최종 목표인 <strong>명금–영</strong>으로 변경<br>
+                            └ 진행하면서 명금 상자 교환
+                        </li>
+                    </ol>
+                </div>
+                
+                <p style="margin-top: 10px; color: #d32f2f; font-size: 0.85em;">
+                    ※ 주의: 최종 빌드에서 사용하는 '범용 심법'과 '전용 심법'의 개수를 정확히 구분해서 계획해야 낭비가 없습니다.
+                </p>
+            </div>
+
             <div style="height: 50px;"></div> 
         </div>
     </div>
@@ -93,7 +128,58 @@
     </div>
 
     <style>
-        /* [중요] 모든 바텀시트 기본 설정: 화면 아래로 숨김 */
+        /* 1. 심법 리스트 그리드 스타일 */
+        .heart-library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 15px;
+            padding: 10px 0;
+        }
+
+        /* 2. 개별 아이템 카드 스타일 */
+        .heart-lib-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 5px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fff;
+        }
+
+        .heart-lib-item:hover {
+            border-color: var(--wuxia-accent-gold);
+            background-color: #fffcf5;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .heart-lib-item:active {
+            transform: scale(0.95);
+        }
+
+        .heart-lib-img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .heart-lib-name {
+            font-size: 0.8em;
+            color: #555;
+            text-align: center;
+            word-break: keep-all;
+            line-height: 1.2;
+        }
+
+        /* ========================================= */
+        /* 바텀시트 제어 스타일 */
+        /* ========================================= */
+        
         .bottom-sheet {
             position: fixed;
             bottom: 0;
@@ -101,29 +187,27 @@
             width: 100%;
             background: white;
             z-index: 1001;
-            transition: transform 0.3s ease-out;
-            transform: translateY(100%); /* 기본적으로 안 보이게 내림 */
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
             
-            /* 스타일링 보완 (필요시) */
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            max-height: 80vh;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            max-height: 85vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* 1. 육성 가이드가 활성화됐을 때 -> #guide-sheet만 올림 */
+        /* ID별로 활성화 제어 */
         body.sheet-open #guide-sheet {
             transform: translateY(0);
         }
 
-        /* 2. 심법 상세가 활성화됐을 때 -> #heart-detail-sheet만 올림 */
         body.heart-sheet-open #heart-detail-sheet {
             transform: translateY(0);
         }
 
-        /* 오버레이 제어 (둘 중 하나라도 열리면 오버레이 표시) */
+        /* 오버레이 제어 */
         body.sheet-open #guide-overlay,
         body.heart-sheet-open #guide-overlay {
             display: block;
@@ -131,24 +215,25 @@
             z-index: 1000;
         }
         
-        /* 시트 내부 스크롤 처리 */
         .sheet-content {
             overflow-y: auto;
             flex: 1;
             padding: 20px;
+            -webkit-overflow-scrolling: touch; 
         }
         
-        /* 시트 헤더 고정 */
         .sheet-header {
             padding: 15px 20px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #f0f0f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: white;
+            background: #fff;
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
     </style>
-
 </div>

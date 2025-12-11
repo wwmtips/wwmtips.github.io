@@ -1304,6 +1304,50 @@ function renderHeartLibrary() {
     });
 }
 
+// [신규] 심법 상세 바텀시트 열기
+function openHeartDetailSheet(heartId) {
+    if (!builderData || !builderData.hearts) return;
+    const heart = builderData.hearts.find(h => h.id === heartId);
+    if (!heart) return;
+
+    const titleEl = document.getElementById('heart-sheet-title');
+    const contentEl = document.getElementById('heart-sheet-content');
+
+    if (titleEl) titleEl.innerText = heart.name;
+    
+    if (contentEl) {
+        contentEl.innerHTML = `
+            <div style="text-align:center; margin-bottom:20px; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
+                <img src="${heart.img}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
+            </div>
+            
+            <div class="detail-chunk" style="margin-bottom: 25px;">
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
+                    📜 설명
+                </h4>
+                <p style="color: #555; line-height: 1.6; background: #fff; padding: 10px; border: 1px dashed #ddd; border-radius: 4px;">
+                    ${heart.desc || '설명 정보가 없습니다.'}
+                </p>
+            </div>
+
+            <div class="detail-chunk">
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
+                    🗝 획득 방법
+                </h4>
+                <p style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+                    ${heart.acquire || '획득 방법 정보가 없습니다.'}
+                </p>
+            </div>
+        `;
+    }
+
+    document.body.classList.add('heart-sheet-open');
+}
+
+// [신규] 심법 상세 바텀시트 닫기
+function closeHeartDetailSheet() {
+    document.body.classList.remove('heart-sheet-open');
+}
 // 바텀시트 열기
 function openGuideSheet() {
     document.body.classList.add('sheet-open');

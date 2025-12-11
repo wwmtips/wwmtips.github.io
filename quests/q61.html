@@ -1,0 +1,183 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            말 못할 사정
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">귀으루의 은 노파의 부탁을 들어보자</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            귀으루의 <b>은 노파</b>가 제안하는 은밀한 거래입니다.<br>
+            타인으로 변장하여 물건을 받아내고, 귀신들이 다니는 시간에 접선해야 하는 난이도 높은 의뢰입니다.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 선행 조건 확인</h4>
+        <ul style="color: var(--wuxia-text-main); margin: 0; padding-left: 20px; line-height: 1.6;">
+            <li><b>필수 퀘스트 완료:</b> [변장 의뢰], [음병들의 행진]</li>
+            <li><b>필수 능력치:</b> 변장 레벨 <b>3 이상</b></li>
+        </ul>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            은 노파의 제안
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            조건을 만족했다면 변장 가게 옆에서 <b>은 노파</b>를 만날 수 있습니다.<br>
+            대화하여 고민을 물어보면, 내하교의 검술 장식을 가져다주는 대가로 돈이 될만한 것을 주겠다고 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q61_1.jpg" alt="은 노파">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q61_2.jpg" alt="은 노파 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            연년이로 변장하기
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            대화를 마친 후 길을 따라 올라가면 NPC <b>연년</b>이 있습니다.<br>
+            소지품에서 <b>'섬등지'</b>를 사용하여 그녀의 초상화를 그리세요.<br>
+            그 후 반면장(변장 가게)으로 가서 <b>연년의 모습으로 변장</b>해야 합니다.
+        </p>
+         <div class="wuxia-image-container">
+            <img src="../quests/images/q61_3.jpg" alt="은 노파">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q61_4.jpg" alt="은 노파 위치">
+        </div>
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 20px;">만기안산 속이기</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            변장을 마친 상태로 연년이 있던 쪽 언덕 위로 올라가세요.<br>
+            아래 위치에 있는 <b>만기안산</b>에게 말을 걸어 검술 장식을 받아내면 됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q61_5.jpg" alt="만기안산">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q61_6.jpg" alt="만기안산 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            사라진 노파와 류서
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            다시 은 노파가 있던 곳으로 가면 그녀는 없고 <b>류서</b>라는 NPC만 있습니다.<br>
+            그에게 은 노파의 행방을 물으면 <b>"귀문시장의 규칙을 깰 수 있느냐"</b>는 의미심장한 질문을 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q61_7.jpg" alt="류서와의 대화">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            음병의 모습으로 (시간/복장 변경)
+        </h3>
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b><br>
+                1. 시간을 <b>귀신들이 나오는 밤 시간</b>으로 변경<br>
+                2. <b>'음병 갑옷'</b>을 착용
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            조건을 모두 갖추고 아래 위치로 이동하면 은 노파를 다시 만날 수 있습니다.<br>
+            대화 후 검술 장식을 전달하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q61_8.jpg" alt="밤의 은 노파">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q61_9.jpg" alt="은 노파 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            은 노파에게 물건을 건네주면<br>
+            말 못할 사정이 해결되며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

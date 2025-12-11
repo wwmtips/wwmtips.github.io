@@ -520,5 +520,14 @@
     "bgimg": "q60_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q60.html"
+  },
+  {
+    "id": "q61",
+    "name": "말 못할 사정",
+    "location": "귀문시장",
+    "type": "만사록",
+    "bgimg": "q61_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q61.html"
   }
 ]

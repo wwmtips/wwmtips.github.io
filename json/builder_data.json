@@ -1,119 +1,440 @@
 {
   "weapons": [
-    {"id": "w1", "name": "우산-소생의 향", "img": "images/w1.png"},
-    {"id": "w2", "name": "부채-천계의 수호", "img": "images/w2.PNG"},
-    {"id": "w3", "name": "검-구현의 검무", "img": "images/w3.PNG"},
-    {"id": "w4", "name": "검-무명의 검무", "img": "images/w4.PNG"},
-    {"id": "w5", "name": "창-격류의 파동", "img": "images/w5.PNG"},
-    {"id": "w6", "name": "쌍도-윤회의 가르침", "img": "images/w6.PNG"},
-    {"id": "w7", "name": "맥도-탄식의 검기", "img": "images/w7.PNG"},
-    {"id": "w8", "name": "창-무명 창법", "img": "images/w8.PNG"},
-    {"id": "w9", "name": "사슬-속세의 지혜", "img": "images/w9.PNG"},
-    {"id": "w10", "name": "우산-봄의 선율", "img": "images/w10.PNG"},
-    {"id": "w11", "name": "부채-청산의 정수", "img": "images/w11.PNG"},
-    {"id": "w12", "name": "창-풍뢰의 징표", "img": "images/w12.PNG"}
+    {
+      "id": "w1",
+      "name": "우산-소생의 향",
+      "img": "images/w1.png"
+    },
+    {
+      "id": "w2",
+      "name": "부채-천계의 수호",
+      "img": "images/w2.PNG"
+    },
+    {
+      "id": "w3",
+      "name": "검-구현의 검무",
+      "img": "images/w3.PNG"
+    },
+    {
+      "id": "w4",
+      "name": "검-무명의 검무",
+      "img": "images/w4.PNG"
+    },
+    {
+      "id": "w5",
+      "name": "창-격류의 파동",
+      "img": "images/w5.PNG"
+    },
+    {
+      "id": "w6",
+      "name": "쌍도-윤회의 가르침",
+      "img": "images/w6.PNG"
+    },
+    {
+      "id": "w7",
+      "name": "맥도-탄식의 검기",
+      "img": "images/w7.PNG"
+    },
+    {
+      "id": "w8",
+      "name": "창-무명 창법",
+      "img": "images/w8.PNG"
+    },
+    {
+      "id": "w9",
+      "name": "사슬-속세의 지혜",
+      "img": "images/w9.PNG"
+    },
+    {
+      "id": "w10",
+      "name": "우산-봄의 선율",
+      "img": "images/w10.PNG"
+    },
+    {
+      "id": "w11",
+      "name": "부채-청산의 정수",
+      "img": "images/w11.PNG"
+    },
+    {
+      "id": "w12",
+      "name": "창-풍뢰의 징표",
+      "img": "images/w12.PNG"
+    }
   ],
-  "hearts": [    
-    { "id": "h9",
-      "name": "무명 심법", 
+  "hearts": [
+    {
+      "id": "h9",
+      "name": "무명 심법",
       "img": "images/h9.png",
       "desc": "무명 검법은 진기 보호막 지속 상태, 비전투 상태 및 특수 스킬 격절한 후퇴 검기 발사 후 5초 이내에 차지 스킬 방랑의 검법 2단 차지를 완료하면 추가로 다중 검기를 발사한다. 다중 검기 발사 시, 인내력 1pt당 1% 피해가 추가로 증가하며 **최대 20%**까지 증가한다.",
       "acquire": "출석 보상으로 획득"
-    },   
-    { "id": "h5", 
-      "name": "광풍의 검기", 
+    },
+    {
+      "id": "h5",
+      "name": "광풍의 검기",
       "img": "images/h5.png",
       "desc": "​구현의 검무의 무술 스킬, 특수 스킬, 차지 스킬을 시전 후 스킬 마무리 단계의 완벽한 타이밍에 [종횡검]을 시전하여 적을 추격할 수 있으며, 목표가 5회중첩 출혈 상태일 경우 모든 출혈을 제거하고 즉시 과다 출혈 피해를 입힌다.",
-     "acquire": "https://youtu.be/Zu4zj1k5bLA" 
+      "acquire": "https://youtu.be/Zu4zj1k5bLA"
     },
-    { 
-      "id": "h14", 
-      "name": "결의의 노래", 
+    {
+      "id": "h14",
+      "name": "결의의 노래",
       "img": "images/h14.png",
       "desc": "공격 또는 치유 시마다 80% 확률로 자신에게 결의의 효과를 1회 부여해, 중첩당 외공 관통이 2pt를 증가하고, 피해 및 치유량 1% 증가한다. 8초 동안 지속되며, 최대 5중첩까지 가능하다. 결의의 효과는 2초마다 한 번만 발동한다.",
       "acquire": "https://youtu.be/-QiZL7Pjhv0"
-
     },
-    { "id": "h26", 
-      "name": "군신의 묘약", 
+    {
+      "id": "h26",
+      "name": "군신의 묘약",
       "img": "images/h26.png",
       "desc": "천계의 수호의 무술 스킬 무위자연으로 소환한 물의 환영의 치유 효과가 증가하고 추가로 이슬을 회복한다.",
       "acquire": "https://youtu.be/15BJ3p4TTQ8"
-
     },
-    { "id": "h30", 
-      "name": "월광의 계율", 
+    {
+      "id": "h30",
+      "name": "월광의 계율",
       "img": "images/h30.png",
       "desc": "가능하며, 적중 시 목표에게 연속 명중 효과를 부여한다. 이 효과는 해당 대상이 효과 시전자로 부터 받는 일부 [탄도류 스킬] 피해를 20% 증가시키며, 12초 동안 지속된다.",
       "acquire": "https://youtu.be/C-i90nhWbeg"
-
     },
-    { "id": "h34", 
-      "name": "지축의 분노", 
+    {
+      "id": "h34",
+      "name": "지축의 분노",
       "img": "images/h34.png",
       "desc": "탄식의 검기 방어 성공 시 20% 확률로 추가로 1간의 전의를 회복한다.",
       "acquire": "https://youtu.be/lTRoJm96S5Q"
     },
-    { "id": "h12", 
-      "name": "굶주린 늑대", 
+    {
+      "id": "h12",
+      "name": "굶주린 늑대",
       "img": "images/h12.png",
-      "desc":"격류의 파동 무술 스킬 허무의 술잔의 연속 공격 시 버프를 부여하기 위한 연속 공격 수 조건이 완화된다. 자신이 부여한 출혈 효과가 걸린 BOSS를 명중할 때마다, 일정 확률로 연속 공격 수가 추가로 증가한다.",
+      "desc": "격류의 파동 무술 스킬 허무의 술잔의 연속 공격 시 버프를 부여하기 위한 연속 공격 수 조건이 완화된다. 자신이 부여한 출혈 효과가 걸린 BOSS를 명중할 때마다, 일정 확률로 연속 공격 수가 추가로 증가한다.",
       "acquire": "https://youtu.be/L3J3WaJWzEM"
     },
-    { "id": "h1", "name": "망각의 울림", "img": "images/h1.png", "desc": "윤희의 가르침의 일반 약공격은 적에게 징벌을 누적시키며,격노의 화염 상태의 약공격은 적에게 업보를 누적시킨다. 징벌 또는 업보 상태의 목표를 공격 시 윤희의 가르침 약공격은목표의 일부 외공 방어와 파괴 저항을 무시한다.", "acquire": "https://youtu.be/onm-DcRDWS0" },
-    { "id": "h2", "name": "파도의 검기", "img": "images/h2.png", "desc": "제어류 스킬이 적에게 적중하면 현재 무술의 쿨타임이 감소한다. 이 효과는 10초에 1회 발동한다.", "acquire": "https://youtu.be/LEu0ThwSaxg" },
-    { "id": "h3", "name": "파괴의 서막", "img": "images/h3.png", "desc": "탈진 상태의 적에게 치명타 피해를 입힐 경우, 자신에게 붕괴 상태가 1회 중첩된다. 붕괴 1회 중첩 시마다 3초간 자신의 외 공 관통 및 치명타 피해 보너스가 증가한다(최대 3회 중첩)", "acquire": "꿈의 불선선에서 최도 격파" },
-    { "id": "h4", "name": "심연의 늪", "img": "images/h4.png", "desc": "속박의 칼날이 부여하는 복수령의 지속 시간이 증가하며, 추가로 은자패를 회복한다.", "acquire": "개봉-용연 퀘스트 완료 시 획득 가능" },
-    { "id": "h6", "name": "맹수의 포효", "img": "images/h6.png", "desc": "차지 스킬 사용 시 모든 보스에게 주는 피해가 증가한다.", "acquire": "https://youtu.be/mEwLzR7RVnY" },
-    { "id": "h7", "name": "잿빛의 잔영", "img": "images/h7.png", "desc": "인내력을 소모할 때마다 일정량을 반환 받는다.", "acquire": "https://youtu.be/OGMGi3DC3DI" },
-    { "id": "h8", "name": "천산의 의지", "img": "images/h8.png", "desc": "무명 창법의 무공 스킬 건곤의 정수 사용 시 획득하는 인내력 소모 감소 효과 증가", "acquire": "https://youtu.be/Bt9CvY9JFQ4" },
-    { "id": "h10", "name": "통찰의 눈", "img": "images/h10.png", "desc": "각성 피해를 입히면 적의 공격을 간파하는 능력이 향상되며, 자신의 각성 피해가 증가된다. 또한 일정 확률로 받는 피해가 감소한다.", "acquire": "https://youtu.be/hkUeeVjyCPA" },
-    { "id": "h11", "name": "무공의 경지", "img": "images/h11.png", "desc": "사용하는 검류 무기에 따라 무예 효과를 얻는다.", "acquire": "https://youtu.be/JvlGo6O39oY" },
-    { "id": "h13", "name": "계절의 순환", "img": "images/h13.png", "desc": "무기 전환 시, 다음 속성(치명타 확률, 각성 확률, 외공 피해 보너스, 전속성 공격 피해 보너스) 중 1개가 지속적으로 증가한다. 해당 효과는 30초마다 1회 발동한다.", "acquire": "https://youtu.be/NY5uAvFHY54" },
-    { "id": "h16", "name": "분노의 참격", "img": "images/h16.png" },
-    { "id": "h17", "name": "제비의 보은", "img": "images/h17.png" },
-    { "id": "h18", "name": "천추의 한", "img": "images/h18.png" },
-    { "id": "h19", "name": "생명의 귀환", "img": "images/h19.png" },
-    { "id": "h20", "name": "춤추는 그림자", "img": "images/h20.png" },
-    { "id": "h21", "name": "핏빛 찬가", "img": "images/h21.png" },
-    { "id": "h22", "name": "월하의 섬광", "img": "images/h22.png" },
-    { "id": "h23", "name": "철포삼", "img": "images/h23.png" },
-    { "id": "h24", "name": "설한의 균열", "img": "images/h24.png" },
-    { "id": "h25", "name": "맹호의 질주", "img": "images/h25.png" },
-    { "id": "h27", "name": "회복의 실", "img": "images/h27.png" },
-    { "id": "h28", "name": "생명의 고서", "img": "images/h28.png" },
-    { "id": "h29", "name": "만개한 복사꽃", "img": "images/h29.png" },
-    { "id": "h31", "name": "천공참", "img": "images/h31.png" },
-    { "id": "h32", "name": "춘뢰일섬", "img": "images/h32.png" },
-    { "id": "h33", "name": "비상하는 호리병", "img": "images/h33.png" },
-    { "id": "h35", "name": "맹수의 혼", "img": "images/h35.png" },
-    { "id": "h36", "name": "저항의 법칙", "img": "images/h36.png" },
-    { "id": "h37", "name": "강철의 비기", "img": "images/h37.png" }
+    {
+      "id": "h1",
+      "name": "망각의 울림",
+      "img": "images/h1.png",
+      "desc": "윤희의 가르침의 일반 약공격은 적에게 징벌을 누적시키며,격노의 화염 상태의 약공격은 적에게 업보를 누적시킨다. 징벌 또는 업보 상태의 목표를 공격 시 윤희의 가르침 약공격은목표의 일부 외공 방어와 파괴 저항을 무시한다.",
+      "acquire": "https://youtu.be/onm-DcRDWS0"
+    },
+    {
+      "id": "h2",
+      "name": "파도의 검기",
+      "img": "images/h2.png",
+      "desc": "제어류 스킬이 적에게 적중하면 현재 무술의 쿨타임이 감소한다. 이 효과는 10초에 1회 발동한다.",
+      "acquire": "https://youtu.be/LEu0ThwSaxg"
+    },
+    {
+      "id": "h3",
+      "name": "파괴의 서막",
+      "img": "images/h3.png",
+      "desc": "탈진 상태의 적에게 치명타 피해를 입힐 경우, 자신에게 붕괴 상태가 1회 중첩된다. 붕괴 1회 중첩 시마다 3초간 자신의 외 공 관통 및 치명타 피해 보너스가 증가한다(최대 3회 중첩)",
+      "acquire": "꿈의 불선선에서 최도 격파"
+    },
+    {
+      "id": "h4",
+      "name": "심연의 늪",
+      "img": "images/h4.png",
+      "desc": "속박의 칼날이 부여하는 복수령의 지속 시간이 증가하며, 추가로 은자패를 회복한다.",
+      "acquire": "개봉-용연 퀘스트 완료 시 획득 가능"
+    },
+    {
+      "id": "h6",
+      "name": "맹수의 포효",
+      "img": "images/h6.png",
+      "desc": "차지 스킬 사용 시 모든 보스에게 주는 피해가 증가한다.",
+      "acquire": "https://youtu.be/mEwLzR7RVnY"
+    },
+    {
+      "id": "h7",
+      "name": "잿빛의 잔영",
+      "img": "images/h7.png",
+      "desc": "인내력을 소모할 때마다 일정량을 반환 받는다.",
+      "acquire": "https://youtu.be/OGMGi3DC3DI"
+    },
+    {
+      "id": "h8",
+      "name": "천산의 의지",
+      "img": "images/h8.png",
+      "desc": "무명 창법의 무공 스킬 건곤의 정수 사용 시 획득하는 인내력 소모 감소 효과 증가",
+      "acquire": "https://youtu.be/Bt9CvY9JFQ4"
+    },
+    {
+      "id": "h10",
+      "name": "통찰의 눈",
+      "img": "images/h10.png",
+      "desc": "각성 피해를 입히면 적의 공격을 간파하는 능력이 향상되며, 자신의 각성 피해가 증가된다. 또한 일정 확률로 받는 피해가 감소한다.",
+      "acquire": "https://youtu.be/hkUeeVjyCPA"
+    },
+    {
+      "id": "h11",
+      "name": "무공의 경지",
+      "img": "images/h11.png",
+      "desc": "사용하는 검류 무기에 따라 무예 효과를 얻는다.",
+      "acquire": "https://youtu.be/JvlGo6O39oY"
+    },
+    {
+      "id": "h13",
+      "name": "계절의 순환",
+      "img": "images/h13.png",
+      "desc": "무기 전환 시, 다음 속성(치명타 확률, 각성 확률, 외공 피해 보너스, 전속성 공격 피해 보너스) 중 1개가 지속적으로 증가한다. 해당 효과는 30초마다 1회 발동한다.",
+      "acquire": "https://youtu.be/NY5uAvFHY54"
+    },
+    {
+      "id": "h16",
+      "name": "분노의 참격",
+      "img": "images/h16.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h17",
+      "name": "제비의 보은",
+      "img": "images/h17.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h18",
+      "name": "천추의 한",
+      "img": "images/h18.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h19",
+      "name": "생명의 귀환",
+      "img": "images/h19.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h20",
+      "name": "춤추는 그림자",
+      "img": "images/h20.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h21",
+      "name": "핏빛 찬가",
+      "img": "images/h21.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h22",
+      "name": "월하의 섬광",
+      "img": "images/h22.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h23",
+      "name": "철포삼",
+      "img": "images/h23.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h24",
+      "name": "설한의 균열",
+      "img": "images/h24.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h25",
+      "name": "맹호의 질주",
+      "img": "images/h25.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h27",
+      "name": "회복의 실",
+      "img": "images/h27.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h28",
+      "name": "생명의 고서",
+      "img": "images/h28.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h29",
+      "name": "만개한 복사꽃",
+      "img": "images/h29.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h31",
+      "name": "천공참",
+      "img": "images/h31.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h32",
+      "name": "춘뢰일섬",
+      "img": "images/h32.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h33",
+      "name": "비상하는 호리병",
+      "img": "images/h33.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h35",
+      "name": "맹수의 혼",
+      "img": "images/h35.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h36",
+      "name": "저항의 법칙",
+      "img": "images/h36.png",
+      "desc": "",
+      "acquire": ""
+    },
+    {
+      "id": "h37",
+      "name": "강철의 비기",
+      "img": "images/h37.png",
+      "desc": "",
+      "acquire": ""
+    }
   ],
   "marts": [
-    {"id": "m1", "name": "태극", "img": "images/m1.png"},
-    {"id": "m2", "name": "금옥점혈수", "img": "images/m2.png"},
-    {"id": "m3", "name": "허공섭물", "img": "images/m3.png"},
-    {"id": "m4", "name": "구름 위 질주", "img": "images/m4.png"},
-    {"id": "m5", "name": "사자후", "img": "images/m5.png"},
-    {"id": "m6", "name": "합마공", "img": "images/m6.png"},
-    {"id": "m7", "name": "귀혈수", "img": "images/m7.png"},
-    {"id": "m8", "name": "호법의 권세", "img": "images/m8.png"},
-    {"id": "m9", "name": "유성 낙화", "img": "images/m9.png"},
-    {"id": "m10", "name": "응조권법", "img": "images/m10.png"},
-    {"id": "m11", "name": "금강의 호법", "img": "images/m11.png"},
-    {"id": "m12", "name": "속박의 자유", "img": "images/m12.png"},
-    {"id": "m13", "name": "포식자의 맹습", "img": "images/m13.png"},
-    {"id": "m14", "name": "맹수의 돌격", "img": "images/m14.png"},
-    {"id": "m15", "name": "신룡의 화염", "img": "images/m15.png"},
-    {"id": "m16", "name": "태백취권", "img": "images/m16.png"},
-    {"id": "m17", "name": "용의 진노", "img": "images/m17.png"},
-    {"id": "m18", "name": "속세의 장막", "img": "images/m18.png"},
-    {"id": "m19", "name": "청풍명월", "img": "images/m19.png"},
-    {"id": "m20", "name": "불멸의 육신", "img": "images/m20.png"},
-    {"id": "m21", "name": "음양의 조화", "img": "images/m21.png"},
-    {"id": "m22", "name": "거위의 절규", "img": "images/m22.png"},
-    {"id": "m23", "name": "임야의 휘광", "img": "images/m23.png"},
-    {"id": "m24", "name": "묘령의 그림자", "img": "images/m24.png"}
+    {
+      "id": "m1",
+      "name": "태극",
+      "img": "images/m1.png"
+    },
+    {
+      "id": "m2",
+      "name": "금옥점혈수",
+      "img": "images/m2.png"
+    },
+    {
+      "id": "m3",
+      "name": "허공섭물",
+      "img": "images/m3.png"
+    },
+    {
+      "id": "m4",
+      "name": "구름 위 질주",
+      "img": "images/m4.png"
+    },
+    {
+      "id": "m5",
+      "name": "사자후",
+      "img": "images/m5.png"
+    },
+    {
+      "id": "m6",
+      "name": "합마공",
+      "img": "images/m6.png"
+    },
+    {
+      "id": "m7",
+      "name": "귀혈수",
+      "img": "images/m7.png"
+    },
+    {
+      "id": "m8",
+      "name": "호법의 권세",
+      "img": "images/m8.png"
+    },
+    {
+      "id": "m9",
+      "name": "유성 낙화",
+      "img": "images/m9.png"
+    },
+    {
+      "id": "m10",
+      "name": "응조권법",
+      "img": "images/m10.png"
+    },
+    {
+      "id": "m11",
+      "name": "금강의 호법",
+      "img": "images/m11.png"
+    },
+    {
+      "id": "m12",
+      "name": "속박의 자유",
+      "img": "images/m12.png"
+    },
+    {
+      "id": "m13",
+      "name": "포식자의 맹습",
+      "img": "images/m13.png"
+    },
+    {
+      "id": "m14",
+      "name": "맹수의 돌격",
+      "img": "images/m14.png"
+    },
+    {
+      "id": "m15",
+      "name": "신룡의 화염",
+      "img": "images/m15.png"
+    },
+    {
+      "id": "m16",
+      "name": "태백취권",
+      "img": "images/m16.png"
+    },
+    {
+      "id": "m17",
+      "name": "용의 진노",
+      "img": "images/m17.png"
+    },
+    {
+      "id": "m18",
+      "name": "속세의 장막",
+      "img": "images/m18.png"
+    },
+    {
+      "id": "m19",
+      "name": "청풍명월",
+      "img": "images/m19.png"
+    },
+    {
+      "id": "m20",
+      "name": "불멸의 육신",
+      "img": "images/m20.png"
+    },
+    {
+      "id": "m21",
+      "name": "음양의 조화",
+      "img": "images/m21.png"
+    },
+    {
+      "id": "m22",
+      "name": "거위의 절규",
+      "img": "images/m22.png"
+    },
+    {
+      "id": "m23",
+      "name": "임야의 휘광",
+      "img": "images/m23.png"
+    },
+    {
+      "id": "m24",
+      "name": "묘령의 그림자",
+      "img": "images/m24.png"
+    }
   ]
 }

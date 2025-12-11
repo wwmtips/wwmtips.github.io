@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 수정본 - 문법 오류 수정 및 유튜브 기능 포함)
+   script.js (최종 수정본 - 문법 오류 해결 및 비결 기능 통합)
    ========================================= */
 
 // =========================================
@@ -470,6 +470,7 @@ function loadGuideContent(filename, btnElement) {
             innerContainer.innerHTML = html;
             if (filename === 'news.html') renderGuideNewsList(); 
             if (filename === 'harts.html') renderHeartLibrary();
+            if (filename === 'marts.html') renderMartLibrary(); 
         })
         .catch(err => {
             innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br>(${filename})</div>`;
@@ -558,30 +559,63 @@ function setupQuizSearch() {
 function handleGlobalSearch(e) {
     const keyword = e.target.value.trim().toLowerCase();
     const resultContainer = document.getElementById("global-search-results");
+    
+    // 검색창이 없거나 비어있으면 숨김
     if (!resultContainer) return;
-    if (!keyword) { resultContainer.style.display = 'none'; return; }
+    if (!keyword) { 
+        resultContainer.style.display = 'none'; 
+        return; 
+    }
 
     let resultsHTML = '';
     
-    if (globalData.news) {
-        globalData.news.filter(n => n.title.toLowerCase().includes(keyword) || n.content.toLowerCase().includes(keyword))
-            .slice(0, 3).forEach(item => {
-                resultsHTML += `<div class="search-result-item" onclick="switchTab('news')"><span class="badge info">정보</span> <span class="result-text">${item.title}</span></div>`;
-            });
+    // 1. 뉴스 검색
+    if (globalData.news && Array.isArray(globalData.news)) {
+        globalData.news.filter(n => {
+            const title = n.title ? n.title.toLowerCase() : "";
+            const content = n.content ? n.content.toLowerCase() : "";
+            return title.includes(keyword) || content.includes(keyword);
+        })
+        .slice(0, 3).forEach(item => {
+            resultsHTML += `
+                <div class="search-result-item" onclick="switchTab('news')">
+                    <span class="badge info">정보</span> 
+                    <span class="result-text">${item.title}</span>
+                </div>`;
+        });
     }
     
-    if (globalData.quiz) {
-        globalData.quiz.filter(q => q.hint.toLowerCase().includes(keyword) || q.answer.toLowerCase().includes(keyword))
-            .slice(0, 3).forEach(item => {
-                resultsHTML += `<div class="search-result-item" onclick="selectGlobalResult('${item.hint}')"><span class="badge quiz">족보</span><span class="result-text">${item.hint} - ${item.answer}</span></div>`;
-            });
+    // 2. 족보 검색
+    if (globalData.quiz && Array.isArray(globalData.quiz)) {
+        globalData.quiz.filter(q => {
+            const hint = q.hint ? q.hint.toLowerCase() : "";
+            const answer = q.answer ? q.answer.toLowerCase() : "";
+            return hint.includes(keyword) || answer.includes(keyword);
+        })
+        .slice(0, 3).forEach(item => {
+            const safeHint = item.hint.replace(/'/g, "\\'");
+            resultsHTML += `
+                <div class="search-result-item" onclick="selectGlobalResult('${safeHint}')">
+                    <span class="badge quiz">족보</span>
+                    <span class="result-text">${item.hint} - ${item.answer}</span>
+                </div>`;
+        });
     }
     
-    if (globalData.quests) {
-        globalData.quests.filter(q => q.name.toLowerCase().includes(keyword) || q.location.toLowerCase().includes(keyword))
-            .slice(0, 3).forEach(quest => {
-                resultsHTML += `<div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')"><span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span></div>`;
-            });
+    // 3. 퀘스트/무림록 검색
+    if (globalData.quests && Array.isArray(globalData.quests)) {
+        globalData.quests.filter(q => {
+            const name = q.name ? q.name.toLowerCase() : "";
+            const loc = q.location ? q.location.toLowerCase() : "";
+            return name.includes(keyword) || loc.includes(keyword);
+        })
+        .slice(0, 3).forEach(quest => {
+            resultsHTML += `
+                <div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')">
+                    <span class="badge item">퀘스트</span> 
+                    <span class="result-text">${quest.name}</span>
+                </div>`;
+        });
     }
 
     resultContainer.innerHTML = resultsHTML || `<div class="no-result" style="padding:15px; text-align:center; color:#888;">결과 없음</div>`;
@@ -953,8 +987,10 @@ function filterBuilds(type, btn) {
 }
 
 // =========================================
-// 11. 심법 도감 및 바텀시트 기능
+// 11. 심법 & 비결 도감 및 바텀시트 기능 (통합)
 // =========================================
+
+/* A. 심법(Heart) 리스트 렌더링 */
 function renderHeartLibrary() {
     const container = document.getElementById('heart-library-list');
     if (!container) return;
@@ -973,14 +1009,38 @@ function renderHeartLibrary() {
     builderData.hearts.forEach(heart => {
         const item = document.createElement('div');
         item.className = 'heart-lib-item';
-        // [수정] 클릭 시 상세 시트 열기
         item.onclick = () => openHeartDetailSheet(heart.id);
         item.innerHTML = `<img src="${heart.img}" class="heart-lib-img" onerror="this.src='images/logo.png'"><div class="heart-lib-name">${heart.name}</div>`;
         container.appendChild(item);
     });
 }
 
-/* [추가] 유튜브 주소 자동 변환 함수 */
+/* B. 비결(Mart) 리스트 렌더링 */
+function renderMartLibrary() {
+    const container = document.getElementById('mart-library-list');
+    if (!container) return;
+
+    if (!builderData) {
+        fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data; renderMartLibrary(); }).catch(err => { container.innerHTML = "데이터를 불러올 수 없습니다."; });
+        return;
+    }
+
+    if (!builderData.marts || builderData.marts.length === 0) {
+        container.innerHTML = "등록된 비결이 없습니다.";
+        return;
+    }
+
+    container.innerHTML = '';
+    builderData.marts.forEach(mart => {
+        const item = document.createElement('div');
+        item.className = 'heart-lib-item'; // 스타일 공유
+        item.onclick = () => openMartDetailSheet(mart.id);
+        item.innerHTML = `<img src="${mart.img}" class="heart-lib-img" onerror="this.src='images/logo.png'"><div class="heart-lib-name">${mart.name}</div>`;
+        container.appendChild(item);
+    });
+}
+
+/* [공통] 유튜브 주소 자동 변환 함수 */
 function convertYoutubeToEmbed(text) {
     if (!text) return '획득 방법 정보가 없습니다.';
     const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})(?:\S+)?)/g;
@@ -994,7 +1054,7 @@ function convertYoutubeToEmbed(text) {
     return text;
 }
 
-/* [수정] 심법 상세 바텀시트 열기 (유튜브 변환 적용) */
+/* [공통] 심법 상세 바텀시트 열기 */
 function openHeartDetailSheet(heartId) {
     if (!builderData || !builderData.hearts) return;
     const heart = builderData.hearts.find(h => h.id === heartId);
@@ -1030,6 +1090,44 @@ function openHeartDetailSheet(heartId) {
 
 function closeHeartDetailSheet() {
     document.body.classList.remove('heart-sheet-open');
+}
+
+/* [추가] 비결 상세 바텀시트 열기 */
+function openMartDetailSheet(martId) {
+    if (!builderData || !builderData.marts) return;
+    const mart = builderData.marts.find(m => m.id === martId);
+    if (!mart) return;
+
+    const titleEl = document.getElementById('mart-sheet-title');
+    const contentEl = document.getElementById('mart-sheet-content');
+
+    if (titleEl) titleEl.innerText = mart.name;
+    
+    if (contentEl) {
+        const acquireContent = convertYoutubeToEmbed(mart.acquire);
+        contentEl.innerHTML = `
+            <div style="text-align:center; margin-bottom:20px; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
+                <img src="${mart.img}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
+            </div>
+            <div class="detail-chunk" style="margin-bottom: 25px;">
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">📜 효과</h4>
+                <p style="color: #555; line-height: 1.6; background: #fff; padding: 10px; border: 1px dashed #ddd; border-radius: 4px;">
+                    ${mart.desc || '효과 정보가 없습니다.'}
+                </p>
+            </div>
+            <div class="detail-chunk">
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">🗝 획득 방법</h4>
+                <div style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+                    ${acquireContent}
+                </div>
+            </div>
+        `;
+    }
+    document.body.classList.add('mart-sheet-open');
+}
+
+function closeMartDetailSheet() {
+    document.body.classList.remove('mart-sheet-open');
 }
 
 // 12. 빌드 상세 보기 바텀시트 기능

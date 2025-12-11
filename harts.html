@@ -7,14 +7,32 @@
         </h2>
     </div>
 
-    <div style="margin-bottom: 20px; text-align: right;">
-        <button onclick="openGuideSheet()" class="guide-action-btn">
-            📖 육성 가이드 및 팁 보기
+    <div style="margin-bottom: 20px; text-align: center;">
+        <button onclick="openGuideSheet()" style="
+            width: 100%;
+            padding: 15px;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        "
+        onmouseover="this.style.borderColor='var(--wuxia-accent-gold)'; this.style.backgroundColor='#fffcf5'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.1)';"
+        onmouseout="this.style.borderColor='#ddd'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';"
+        >
+            <span style="margin-right: 8px;">📖</span> 육성 가이드 및 팁 보기
         </button>
     </div>
 
     <div id="heart-library-list" class="heart-library-grid">
-        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
+        <div style="text-align: center; padding: 40px; color: #999;">
             데이터를 불러오는 중...
         </div>
     </div>
@@ -22,6 +40,7 @@
     <div id="guide-overlay" class="bottom-sheet-overlay" onclick="closeGuideSheet(); closeHeartDetailSheet()"></div>
 
     <div id="guide-sheet" class="bottom-sheet">
+        
         <div class="sheet-header">
             <h3>심법 육성 가이드</h3>
             <button onclick="closeGuideSheet()" class="close-sheet-btn">✕</button>
@@ -71,8 +90,7 @@
                     </ol>
                 </div>
             </div>
-
-            <div class="detail-chunk" style="margin-bottom: 40px;">
+             <div class="detail-chunk" style="margin-bottom: 40px;">
                 <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
                     획득 방법 3: 심법 변환 
                 </h4>
@@ -114,8 +132,7 @@
                 </p>
             </div>
 
-            <div style="height: 50px;"></div> 
-        </div>
+            <div style="height: 50px;"></div> </div>
     </div>
 
     <div id="heart-detail-sheet" class="bottom-sheet">

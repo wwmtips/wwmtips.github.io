@@ -529,5 +529,14 @@
     "bgimg": "q61_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q61.html"
+  },
+  {
+    "id": "q62",
+    "name": "돌아갈 곳 없는 영혼",
+    "location": "귀문시장",
+    "type": "만사록",
+    "bgimg": "q62_5.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q62.html"
   }
 ]

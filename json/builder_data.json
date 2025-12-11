@@ -54,7 +54,12 @@
       "desc": "탄식의 검기 방어 성공 시 20% 확률로 추가로 1간의 전의를 회복한다.",
       "acquire": "https://youtu.be/lTRoJm96S5Q"
     },
-    { "id": "h12", "name": "굶주린 늑대", "img": "images/h12.png" },
+    { "id": "h12", 
+      "name": "굶주린 늑대", 
+      "img": "images/h12.png",
+      "desc":"격류의 파동 무술 스킬 허무의 술잔의 연속 공격 시 버프를 부여하기 위한 연속 공격 수 조건이 완화된다. 자신이 부여한 출혈 효과가 걸린 BOSS를 명중할 때마다, 일정 확률로 연속 공격 수가 추가로 증가한다.",
+      "acquire": "https://youtu.be/L3J3WaJWzEM"
+    },
     { "id": "h1", "name": "망각의 울림", "img": "images/h1.png" }, 
     { "id": "h2", "name": "파도의 검기", "img": "images/h2.png" },
     { "id": "h3", "name": "파괴의 서막", "img": "images/h3.png" },

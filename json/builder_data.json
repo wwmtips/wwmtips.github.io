@@ -185,29 +185,29 @@
       "id": "h16",
       "name": "분노의 참격",
       "img": "images/h16.png",
-      "desc": "",
-      "acquire": ""
+      "desc": "비결 사용 후 5초 동안 소모된 원기치의 30%를 환급받을 수 있으며, 1회 환급 한도는 최대 10pt이다.",
+      "acquire": "https://youtu.be/hrCW25zl6_M"
     },
     {
       "id": "h17",
       "name": "제비의 보은",
       "img": "images/h17.png",
-      "desc": "",
-      "acquire": ""
+      "desc": "탈진 처형 스킬 시전 시 입힌 피해량의 8%에 해당하는 기혈을 회복한다.",
+      "acquire": "https://youtu.be/hBV8k8CqbJs"
     },
     {
       "id": "h18",
       "name": "천추의 한",
       "img": "images/h18.png",
-      "desc": "",
-      "acquire": ""
+      "desc": "피해를 입힐 때 10% 확률로 5초 동안 지속되는 독 효과를 부여합니다. 이 독 효과는 초당 1회 피해를 입히며, 대상의 물리 방어력을 10초 동안 0.6% 감소시킵니다. 최대 5회 중첩 가능하며, 중첩 시 지속 시간이 갱신됩니다.",
+      "acquire": "https://youtu.be/iogoQua7zZc"
     },
     {
       "id": "h19",
       "name": "생명의 귀환",
       "img": "images/h19.png",
-      "desc": "",
-      "acquire": ""
+      "desc": "입히는 모든 피해 및 치유량이 5% 증가하며, 피격 후 5초간 일시적으로 효과가 사라진다. 피격 시마다 감옥 효과가 적용되어 자신이 받는 모든 피해가 5% 증가한다.",
+      "acquire": "https://youtu.be/6RC6fR53gRw"
     },
     {
       "id": "h20",

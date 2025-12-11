@@ -24,22 +24,8 @@
             </div>
     </div>
 
-    <style>
-        /* 심법 페이지의 스타일을 그대로 활용 (.heart-library-grid 등) */
-        /* harts.html의 스타일이 전역 CSS에 없다면 여기에 복사해야 할 수도 있습니다. 
-           하지만 보통 같은 class를 쓰면 스타일이 공유됩니다. */
-        
-        /* 비결 상세 시트 활성화 */
-        body.mart-sheet-open #mart-detail-sheet {
-            transform: translateY(0);
-        }
-        body.mart-sheet-open #guide-overlay {
-            display: block;
-            opacity: 1;
-            z-index: 1000;
-        }
-        
-        /* 혹시 스타일이 안 먹으면 아래 코드를 활성화하세요 (harts.html과 동일) */
+        <style>
+        /* 1. 그리드 스타일 (아이템 목록) */
         .heart-library-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -77,5 +63,85 @@
             word-break: keep-all;
             line-height: 1.2;
         }
+
+        /* 2. 바텀 시트 기본 스타일 (평소엔 숨김) */
+        #mart-detail-sheet {
+            position: fixed; /* 화면에 고정 */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            max-height: 80vh; /* 화면 높이의 80%까지만 */
+            background-color: #fff;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
+            z-index: 10001; /* 맨 위에 표시 */
+            
+            /* 핵심: 평소에는 화면 아래로 105% 내려서 숨김 */
+            transform: translateY(105%); 
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* 부드러운 움직임 */
+            
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* PC 화면에서는 너무 넓지 않게 중앙 정렬 */
+        @media (min-width: 768px) {
+            #mart-detail-sheet {
+                width: 500px;
+                left: 50%;
+                margin-left: -250px;
+            }
+        }
+
+        /* 시트 내부 디자인 */
+        #mart-detail-sheet .sheet-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #mart-detail-sheet .sheet-header h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #333;
+        }
+        #mart-detail-sheet .close-sheet-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+        }
+        #mart-detail-sheet .sheet-content {
+            padding: 20px;
+            overflow-y: auto; /* 내용 길면 스크롤 */
+            flex: 1;
+        }
+
+        /* 3. 어두운 배경 (오버레이) */
+        #guide-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            display: none; /* 기본 숨김 */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* 4. 활성화 상태 (JS가 클래스를 붙이면 실행됨) */
+        body.mart-sheet-open #mart-detail-sheet {
+            transform: translateY(0); /* 제자리로 올라옴 */
+        }
+        body.mart-sheet-open #guide-overlay {
+            display: block;
+            opacity: 1;
+        }
     </style>
+
 </div>

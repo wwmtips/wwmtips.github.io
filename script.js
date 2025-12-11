@@ -693,32 +693,75 @@ function setupQuizSearch() {
     }
 }
 
+/* script.js 내부의 handleGlobalSearch 함수 교체 */
+
 function handleGlobalSearch(e) {
     const keyword = e.target.value.trim().toLowerCase();
     const resultContainer = document.getElementById("global-search-results");
+    
+    // 검색창이 없거나 비어있으면 숨김
     if (!resultContainer) return;
-    if (!keyword) { resultContainer.style.display = 'none'; return; }
+    if (!keyword) { 
+        resultContainer.style.display = 'none'; 
+        return; 
+    }
 
     let resultsHTML = '';
     
-    if (globalData.news) {
-        globalData.news.filter(n => n.title.toLowerCase().includes(keyword) || n.content.toLowerCase().includes(keyword))
-            .slice(0, 3).forEach(item => {
-                resultsHTML += `<div class="search-result-item" onclick="switchTab('news')"><span class="badge info">정보</span> <span class="result-text">${item.title}</span></div>`;
-            });
+    // 1. 뉴스 검색 (데이터가 있고, 제목/내용이 존재할 때만)
+    if (globalData.news && Array.isArray(globalData.news)) {
+        globalData.news.filter(n => {
+            const title = n.title ? n.title.toLowerCase() : "";
+            const content = n.content ? n.content.toLowerCase() : "";
+            return title.includes(keyword) || content.includes(keyword);
+        })
+        .slice(0, 3).forEach(item => {
+            resultsHTML += `
+                <div class="search-result-item" onclick="switchTab('news')">
+                    <span class="badge info">정보</span> 
+                    <span class="result-text">${item.title}</span>
+                </div>`;
+        });
     }
     
-    globalData.quiz.filter(q => q.hint.toLowerCase().includes(keyword) || q.answer.toLowerCase().includes(keyword))
+    // 2. 족보 검색 (힌트/정답 안전하게 체크)
+    if (globalData.quiz && Array.isArray(globalData.quiz)) {
+        globalData.quiz.filter(q => {
+            const hint = q.hint ? q.hint.toLowerCase() : "";
+            const answer = q.answer ? q.answer.toLowerCase() : "";
+            return hint.includes(keyword) || answer.includes(keyword);
+        })
         .slice(0, 3).forEach(item => {
-            resultsHTML += `<div class="search-result-item" onclick="selectGlobalResult('${item.hint}')"><span class="badge quiz">족보</span><span class="result-text">${item.hint} - ${item.answer}</span></div>`;
+            // 따옴표 문제 방지를 위해 replace 사용
+            const safeHint = item.hint.replace(/'/g, "\\'");
+            resultsHTML += `
+                <div class="search-result-item" onclick="selectGlobalResult('${safeHint}')">
+                    <span class="badge quiz">족보</span>
+                    <span class="result-text">${item.hint} - ${item.answer}</span>
+                </div>`;
         });
+    }
     
-    globalData.quests.filter(q => q.name.toLowerCase().includes(keyword) || q.location.toLowerCase().includes(keyword))
+    // 3. 퀘스트/무림록 검색 (이름/위치 안전하게 체크)
+    if (globalData.quests && Array.isArray(globalData.quests)) {
+        globalData.quests.filter(q => {
+            const name = q.name ? q.name.toLowerCase() : "";
+            const loc = q.location ? q.location.toLowerCase() : "";
+            return name.includes(keyword) || loc.includes(keyword);
+        })
         .slice(0, 3).forEach(quest => {
-            resultsHTML += `<div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')"><span class="badge item">퀘스트</span> <span class="result-text">${quest.name}</span></div>`;
+            resultsHTML += `
+                <div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')">
+                    <span class="badge item">퀘스트</span> 
+                    <span class="result-text">${quest.name}</span>
+                </div>`;
         });
+    }
 
+    // 결과가 없으면 '결과 없음' 표시, 있으면 목록 표시
     resultContainer.innerHTML = resultsHTML || `<div class="no-result" style="padding:15px; text-align:center; color:#888;">결과 없음</div>`;
+    
+    // [중요] 모든 처리가 끝난 후 보여주기
     resultContainer.style.display = 'block';
 }
 

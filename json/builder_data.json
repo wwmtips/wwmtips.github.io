@@ -41,7 +41,13 @@
       "acquire": "https://youtu.be/15BJ3p4TTQ8"
 
     },
-    { "id": "h30", "name": "월광의 계율", "img": "images/h30.png" },
+    { "id": "h30", 
+      "name": "월광의 계율", 
+      "img": "images/h30.png" 
+      "desc": "가능하며, 적중 시 목표에게 연속 명중 효과를 부여한다. 이 효과는 해당 대상이 효과 시전자로 부터 받는 일부 [탄도류 스킬] 피해를 20% 증가시키며, 12초 동안 지속된다.",
+      "acquire": "https://youtu.be/C-i90nhWbeg"
+
+    },
     { "id": "h34", "name": "지축의 분노", "img": "images/h34.png" },
     { "id": "h12", "name": "굶주린 늑대", "img": "images/h12.png" },
     { "id": "h1", "name": "망각의 울림", "img": "images/h1.png" }, 

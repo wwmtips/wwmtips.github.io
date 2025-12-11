@@ -1,86 +1,440 @@
-
 {
   "weapons": [
-    { "id": "w1", "name": "우산-소생의 향", "img": "images/w1.png" },
-    { "id": "w2", "name": "부채-천계의 수호", "img": "images/w2.PNG" },
-    { "id": "w3", "name": "검-구현의 검무", "img": "images/w3.PNG" },
-    { "id": "w4", "name": "검-무명의 검무", "img": "images/w4.PNG" },
-    { "id": "w5", "name": "창-격류의 파동", "img": "images/w5.PNG" },
-    { "id": "w6", "name": "쌍도-윤회의 가르침", "img": "images/w6.PNG" },
-    { "id": "w7", "name": "맥도-탄식의 검기", "img": "images/w7.PNG" },
-    { "id": "w8", "name": "창-무명 창법", "img": "images/w8.PNG" },
-    { "id": "w9", "name": "사슬-속세의 지혜", "img": "images/w9.PNG" },
-    { "id": "w10", "name": "우산-봄의 선율", "img": "images/w10.PNG" },
-    { "id": "w11", "name": "부채-청산의 정수", "img": "images/w11.PNG" },
-    { "id": "w12", "name": "창-풍뢰의 징표", "img": "images/w12.PNG" }
+    {
+      "id": "w1",
+      "name": "우산-소생의 향",
+      "img": "images/w1.png"
+    },
+    {
+      "id": "w2",
+      "name": "부채-천계의 수호",
+      "img": "images/w2.PNG"
+    },
+    {
+      "id": "w3",
+      "name": "검-구현의 검무",
+      "img": "images/w3.PNG"
+    },
+    {
+      "id": "w4",
+      "name": "검-무명의 검무",
+      "img": "images/w4.PNG"
+    },
+    {
+      "id": "w5",
+      "name": "창-격류의 파동",
+      "img": "images/w5.PNG"
+    },
+    {
+      "id": "w6",
+      "name": "쌍도-윤회의 가르침",
+      "img": "images/w6.PNG"
+    },
+    {
+      "id": "w7",
+      "name": "맥도-탄식의 검기",
+      "img": "images/w7.PNG"
+    },
+    {
+      "id": "w8",
+      "name": "창-무명 창법",
+      "img": "images/w8.PNG"
+    },
+    {
+      "id": "w9",
+      "name": "사슬-속세의 지혜",
+      "img": "images/w9.PNG"
+    },
+    {
+      "id": "w10",
+      "name": "우산-봄의 선율",
+      "img": "images/w10.PNG"
+    },
+    {
+      "id": "w11",
+      "name": "부채-청산의 정수",
+      "img": "images/w11.PNG"
+    },
+    {
+      "id": "w12",
+      "name": "창-풍뢰의 징표",
+      "img": "images/w12.PNG"
+    }
   ],
   "hearts": [
-    { "id": "h9", "name": "무명 심법", "img": "images/h9.png", "desc": "무명 검법은 진기 보호막 지속 상태, 비전투 상태 및 특수 스킬 격절한 후퇴 검기 발사 후 5초 이내에 차지 스킬 방랑의 검법 2단 차지를 완료하면 추가로 다중 검기를 발사한다. 다중 검기 발사 시, 인내력 1pt당 1% 피해가 추가로 증가하며 **최대 20%**까지 증가한다.", "acquire": "출석 보상으로 획득" },
-    { "id": "h5", "name": "광풍의 검기", "img": "images/h5.png", "desc": "구현의 검무의 무술 스킬, 특수 스킬, 차지 스킬을 시전 후 스킬 마무리 단계의 완벽한 타이밍에 [종횡검]을 시전하여 적을 추격할 수 있으며, 목표가 5회중첩 출혈 상태일 경우 모든 출혈을 제거하고 즉시 과다 출혈 피해를 입힌다.", "acquire": "https://youtu.be/Zu4zj1k5bLA" },
-    { "id": "h14", "name": "결의의 노래", "img": "images/h14.png", "desc": "공격 또는 치유 시마다 80% 확률로 자신에게 결의의 효과를 1회 부여해, 중첩당 외공 관통이 2pt를 증가하고, 피해 및 치유량 1% 증가한다. 8초 동안 지속되며, 최대 5중첩까지 가능하다. 결의의 효과는 2초마다 한 번만 발동한다.", "acquire": "https://youtu.be/-QiZL7Pjhv0" },
-    { "id": "h26", "name": "군신의 묘약", "img": "images/h26.png", "desc": "천계의 수호의 무술 스킬 무위자연으로 소환한 물의 환영의 치유 효과가 증가하고 추가로 이슬을 회복한다.", "acquire": "https://youtu.be/15BJ3p4TTQ8" },
-    { "id": "h30", "name": "월광의 계율", "img": "images/h30.png", "desc": "가능하며, 적중 시 목표에게 연속 명중 효과를 부여한다. 이 효과는 해당 대상이 효과 시전자로 부터 받는 일부 [탄도류 스킬] 피해를 20% 증가시키며, 12초 동안 지속된다.", "acquire": "https://youtu.be/C-i90nhWbeg" },
-    { "id": "h34", "name": "지축의 분노", "img": "images/h34.png", "desc": "탄식의 검기 방어 성공 시 20% 확률로 추가로 1간의 전의를 회복한다.", "acquire": "https://youtu.be/lTRoJm96S5Q" },
-    { "id": "h12", "name": "굶주린 늑대", "img": "images/h12.png", "desc": "격류의 파동 무술 스킬 허무의 술잔의 연속 공격 시 버프를 부여하기 위한 연속 공격 수 조건이 완화된다. 자신이 부여한 출혈 효과가 걸린 BOSS를 명중할 때마다, 일정 확률로 연속 공격 수가 추가로 증가한다.", "acquire": "https://youtu.be/L3J3WaJWzEM" },
-    { "id": "h1", "name": "망각의 울림", "img": "images/h1.png", "desc": "윤희의 가르침의 일반 약공격은 적에게 징벌을 누적시키며,격노의 화염 상태의 약공격은 적에게 업보를 누적시킨다. 징벌 또는 업보 상태의 목표를 공격 시 윤희의 가르침 약공격은목표의 일부 외공 방어와 파괴 저항을 무시한다.", "acquire": "https://youtu.be/onm-DcRDWS0" },
-    { "id": "h2", "name": "파도의 검기", "img": "images/h2.png", "desc": "제어류 스킬이 적에게 적중하면 현재 무술의 쿨타임이 감소한다. 이 효과는 10초에 1회 발동한다.", "acquire": "https://youtu.be/LEu0ThwSaxg" },
-    { "id": "h3", "name": "파괴의 서막", "img": "images/h3.png", "desc": "탈진 상태의 적에게 치명타 피해를 입힐 경우, 자신에게 붕괴 상태가 1회 중첩된다. 붕괴 1회 중첩 시마다 3초간 자신의 외 공 관통 및 치명타 피해 보너스가 증가한다(최대 3회 중첩)", "acquire": "꿈의 불선선에서 최도 격파" },
-    { "id": "h4", "name": "심연의 늪", "img": "images/h4.png", "desc": "속박의 칼날이 부여하는 복수령의 지속 시간이 증가하며, 추가로 은자패를 회복한다.", "acquire": "개봉-용연 퀘스트 완료 시 획득 가능" },
-    { "id": "h6", "name": "맹수의 포효", "img": "images/h6.png", "desc": "차지 스킬 사용 시 모든 보스에게 주는 피해가 증가한다.", "acquire": "https://youtu.be/mEwLzR7RVnY" },
-    { "id": "h7", "name": "잿빛의 잔영", "img": "images/h7.png", "desc": "인내력을 소모할 때마다 일정량을 반환 받는다.", "acquire": "https://youtu.be/OGMGi3DC3DI" },
-    { "id": "h8", "name": "천산의 의지", "img": "images/h8.png", "desc": "무명 창법의 무공 스킬 건곤의 정수 사용 시 획득하는 인내력 소모 감소 효과 증가", "acquire": "https://youtu.be/Bt9CvY9JFQ4" },
-    { "id": "h10", "name": "통찰의 눈", "img": "images/h10.png", "desc": "각성 피해를 입히면 적의 공격을 간파하는 능력이 향상되며, 자신의 각성 피해가 증가된다. 또한 일정 확률로 받는 피해가 감소한다.", "acquire": "https://youtu.be/hkUeeVjyCPA" },
-    { "id": "h11", "name": "무공의 경지", "img": "images/h11.png", "desc": "사용하는 검류 무기에 따라 무예 효과를 얻는다.", "acquire": "https://youtu.be/JvlGo6O39oY" },
-    { "id": "h13", "name": "계절의 순환", "img": "images/h13.png", "desc": "무기 전환 시, 다음 속성(치명타 확률, 각성 확률, 외공 피해 보너스, 전속성 공격 피해 보너스) 중 1개가 지속적으로 증가한다. 해당 효과는 30초마다 1회 발동한다.", "acquire": "https://youtu.be/NY5uAvFHY54" },
-    { "id": "h16", "name": "분노의 참격", "img": "images/h16.png", "desc": "비결 사용 후 5초 동안 소모된 원기치의 30%를 환급받을 수 있으며, 1회 환급 한도는 최대 10pt이다.", "acquire": "https://youtu.be/hrCW25zl6_M" },
-    { "id": "h17", "name": "제비의 보은", "img": "images/h17.png", "desc": "탈진 처형 스킬 시전 시 입힌 피해량의 8%에 해당하는 기혈을 회복한다.", "acquire": "https://youtu.be/hBV8k8CqbJs" },
-    { "id": "h18", "name": "천추의 한", "img": "images/h18.png", "desc": "피해를 입힐 때 10% 확률로 5초 동안 지속되는 독 효과를 부여합니다. 이 독 효과는 초당 1회 피해를 입히며, 대상의 물리 방어력을 10초 동안 0.6% 감소시킵니다. 최대 5회 중첩 가능하며, 중첩 시 지속 시간이 갱신됩니다.", "acquire": "https://youtu.be/iogoQua7zZc" },
-    { "id": "h19", "name": "생명의 귀환", "img": "images/h19.png", "desc": "입히는 모든 피해 및 치유량이 5% 증가하며, 피격 후 5초간 일시적으로 효과가 사라진다. 피격 시마다 감옥 효과가 적용되어 자신이 받는 모든 피해가 5% 증가한다.", "acquire": "https://youtu.be/6RC6fR53gRw" },
-    { "id": "h20", "name": "춤추는 그림자", "img": "images/h20.png", "desc": "완벽한 회피 후 50% 확률로 소모한 기력을 모두 돌려받습니다.", "acquire": "https://youtu.be/TlAsTaogdec" },
-    { "id": "h21", "name": "핏빛 찬가", "img": "images/h21.png", "desc": "피해를 입힐 때마다 10% 확률로 5초간 피눈물 효과가 1회 적용되며, 초 당 1회의 피해를 입힌다. (최대 5중첩 가능) 목표의 피눈물이 5중첩 도달 시 즉시 해제되고 강력한 자상 피해를 입힌다. 해당 효과는 중첩 시 갱신된다.", "acquire": "https://youtu.be/QwzVEyfxmsk" },
-    { "id": "h22", "name": "월하의 섬광", "img": "images/h22.png", "desc": "암살 비결 [천공의 일격]의 기습 최대 거리가 1.5m 증가하고, 주는 피해가 10% 증가한다. 기습에 성공하면 즉시 입힌 피해량의 10% 만큼 기혈을 회복한다.", "acquire": "https://youtu.be/smUXyUy4JGY" },
-    { "id": "h23", "name": "철포삼", "img": "images/h23.png", "desc": "피격 시 경직될 확률니 감소한다. 단 보스나 플레이어의 공격은 적용되지 않는다.", "acquire": "https://youtu.be/NVOlRCdE6Vc" },
-    { "id": "h24", "name": "설한의 균열", "img": "images/h24.png", "desc": "전투 진입 후 일정 시간 동안 자신의 기혈이 일정 비율 이하일 경우, 초당 기혈을 회복하는 일시적 효과를 획득한다. 효과 발동에는 쿨타임이 있다.", "acquire": "https://youtu.be/qVprok-Mug8" },
-    { "id": "h25", "name": "맹호의 질주", "img": "images/h25.png", "desc": "어풍 비결 [재빠른 질주] 돌진 시 인내력 소모 감소하고, 착지 후 이동 속도 단시간 증가한다. 적 처치 시 추가 기혈 회복한다.", "acquire": "https://youtu.be/EIXvrOKEFWA" },
-    { "id": "h27", "name": "회복의 실", "img": "images/h27.png", "desc": "소생의 항의 특수 스킬 천향귀혼 시전 후 이슬치 5pt를 회복한다. 100pt 슬치 소모 시 플레이어 자신 최대 기혈의 10%를 추가로 치유한다.", "acquire": "https://youtu.be/ZljOHvd5C38" },
-    { "id": "h28", "name": "생명의 고서", "img": "images/h28.png", "desc": "천계의 수호의 부활 감지 스킬 천금조옥이 목표를 부활시킬 때 치유하는 기혈 회복량이 75% 증가한다.", "acquire": "https://youtu.be/bsiwIPyTSH0" },
-    { "id": "h29", "name": "만개한 복사꽃", "img": "images/h29.png", "desc": "치명타 치료를 발동 시마다 목표에게 6초 지속되는 안정 효과가 1회 적용되어, 치유 효과가 추가로 2% 증가한다. (최대 3중첩 가능)", "acquire": "https://youtu.be/ZwL0uUamlcA" },
-    { "id": "h31", "name": "천공참", "img": "images/h31.png", "desc": "적에게 공중 부양을 부여하면 외공 공격 보너스를 얻는다.", "acquire": "https://youtu.be/lg2n6OcDa24" },
-    { "id": "h32", "name": "춘뢰일섬", "img": "images/h32.png", "desc": "​3초 내 이동 거리가 15m를 초과할 경우 춘뢰 효과가 발동한다. 12초 동안 다음 3회의 강공격 또는 공중 강공격의 피해가 15\% 증가한다. 이 효과는 15초마다 한 번만 발동한다.", "acquire": "https://youtu.be/HPe1s9nMsQo" },
-    { "id": "h33", "name": "비상하는 호리병", "img": "images/h33.png", "desc": "청산의 정수 초식 적막의 봄 2회 충전하고, 쿨타임이 3초 증가한다.", "acquire": "https://youtu.be/tms2NXqPwUQ" },
-    { "id": "h35", "name": "맹수의 혼", "img": "images/h35.png", "desc": "기혈이 30% 이하일 때, 피해를 받으면 최후의 발악 효과가 발동된다. 30% 기혈 최대치의 피해를 흡수하는 보호막이 생성된다. 이 효과는 4초 동안 지속되며, 300초마다 한 번만 발동한다.", "acquire": "https://youtu.be/TdBh0blvipo" },
-    { "id": "h36", "name": "저항의 법칙", "img": "images/h36.png", "desc": "자신이 생성한 기혈 보호막 및 해당 스킬의 추가 효과와 지속 시간이 4초 연장되고, 기혈 피해 흡수량이 10% 증가한다.", "acquire": "https://youtu.be/MoE4_vowK9Y" },
-    { "id": "h37", "name": "강철의 비기", "img": "images/h37.png", "desc": "풍뢰의 징표 초식 천둥의 포효의 피해 감소 효과는 도발 성공 시 증가한다. 효과 지속 시간 동안, 캐릭터가 입히는 모든 피해가 감소하고 원한이 증가한다.", "acquire": "https://youtu.be/YwfIrshVZk4" }
+    {
+      "id": "h9",
+      "name": "무명 심법",
+      "img": "images/h9.png",
+      "desc": "무명 검법은 진기 보호막 지속 상태, 비전투 상태 및 특수 스킬 격절한 후퇴 검기 발사 후 5초 이내에 차지 스킬 방랑의 검법 2단 차지를 완료하면 추가로 다중 검기를 발사한다. 다중 검기 발사 시, 인내력 1pt당 1% 피해가 추가로 증가하며 **최대 20%**까지 증가한다.",
+      "acquire": "출석 보상으로 획득"
+    },
+    {
+      "id": "h5",
+      "name": "광풍의 검기",
+      "img": "images/h5.png",
+      "desc": "​구현의 검무의 무술 스킬, 특수 스킬, 차지 스킬을 시전 후 스킬 마무리 단계의 완벽한 타이밍에 [종횡검]을 시전하여 적을 추격할 수 있으며, 목표가 5회중첩 출혈 상태일 경우 모든 출혈을 제거하고 즉시 과다 출혈 피해를 입힌다.",
+      "acquire": "https://youtu.be/Zu4zj1k5bLA"
+    },
+    {
+      "id": "h14",
+      "name": "결의의 노래",
+      "img": "images/h14.png",
+      "desc": "공격 또는 치유 시마다 80% 확률로 자신에게 결의의 효과를 1회 부여해, 중첩당 외공 관통이 2pt를 증가하고, 피해 및 치유량 1% 증가한다. 8초 동안 지속되며, 최대 5중첩까지 가능하다. 결의의 효과는 2초마다 한 번만 발동한다.",
+      "acquire": "https://youtu.be/-QiZL7Pjhv0"
+    },
+    {
+      "id": "h26",
+      "name": "군신의 묘약",
+      "img": "images/h26.png",
+      "desc": "천계의 수호의 무술 스킬 무위자연으로 소환한 물의 환영의 치유 효과가 증가하고 추가로 이슬을 회복한다.",
+      "acquire": "https://youtu.be/15BJ3p4TTQ8"
+    },
+    {
+      "id": "h30",
+      "name": "월광의 계율",
+      "img": "images/h30.png",
+      "desc": "가능하며, 적중 시 목표에게 연속 명중 효과를 부여한다. 이 효과는 해당 대상이 효과 시전자로 부터 받는 일부 [탄도류 스킬] 피해를 20% 증가시키며, 12초 동안 지속된다.",
+      "acquire": "https://youtu.be/C-i90nhWbeg"
+    },
+    {
+      "id": "h34",
+      "name": "지축의 분노",
+      "img": "images/h34.png",
+      "desc": "탄식의 검기 방어 성공 시 20% 확률로 추가로 1간의 전의를 회복한다.",
+      "acquire": "https://youtu.be/lTRoJm96S5Q"
+    },
+    {
+      "id": "h12",
+      "name": "굶주린 늑대",
+      "img": "images/h12.png",
+      "desc": "격류의 파동 무술 스킬 허무의 술잔의 연속 공격 시 버프를 부여하기 위한 연속 공격 수 조건이 완화된다. 자신이 부여한 출혈 효과가 걸린 BOSS를 명중할 때마다, 일정 확률로 연속 공격 수가 추가로 증가한다.",
+      "acquire": "https://youtu.be/L3J3WaJWzEM"
+    },
+    {
+      "id": "h1",
+      "name": "망각의 울림",
+      "img": "images/h1.png",
+      "desc": "윤희의 가르침의 일반 약공격은 적에게 징벌을 누적시키며,격노의 화염 상태의 약공격은 적에게 업보를 누적시킨다. 징벌 또는 업보 상태의 목표를 공격 시 윤희의 가르침 약공격은목표의 일부 외공 방어와 파괴 저항을 무시한다.",
+      "acquire": "https://youtu.be/onm-DcRDWS0"
+    },
+    {
+      "id": "h2",
+      "name": "파도의 검기",
+      "img": "images/h2.png",
+      "desc": "제어류 스킬이 적에게 적중하면 현재 무술의 쿨타임이 감소한다. 이 효과는 10초에 1회 발동한다.",
+      "acquire": "https://youtu.be/LEu0ThwSaxg"
+    },
+    {
+      "id": "h3",
+      "name": "파괴의 서막",
+      "img": "images/h3.png",
+      "desc": "탈진 상태의 적에게 치명타 피해를 입힐 경우, 자신에게 붕괴 상태가 1회 중첩된다. 붕괴 1회 중첩 시마다 3초간 자신의 외 공 관통 및 치명타 피해 보너스가 증가한다(최대 3회 중첩)",
+      "acquire": "꿈의 불선선에서 최도 격파"
+    },
+    {
+      "id": "h4",
+      "name": "심연의 늪",
+      "img": "images/h4.png",
+      "desc": "속박의 칼날이 부여하는 복수령의 지속 시간이 증가하며, 추가로 은자패를 회복한다.",
+      "acquire": "개봉-용연 퀘스트 완료 시 획득 가능"
+    },
+    {
+      "id": "h6",
+      "name": "맹수의 포효",
+      "img": "images/h6.png",
+      "desc": "차지 스킬 사용 시 모든 보스에게 주는 피해가 증가한다.",
+      "acquire": "https://youtu.be/mEwLzR7RVnY"
+    },
+    {
+      "id": "h7",
+      "name": "잿빛의 잔영",
+      "img": "images/h7.png",
+      "desc": "인내력을 소모할 때마다 일정량을 반환 받는다.",
+      "acquire": "https://youtu.be/OGMGi3DC3DI"
+    },
+    {
+      "id": "h8",
+      "name": "천산의 의지",
+      "img": "images/h8.png",
+      "desc": "무명 창법의 무공 스킬 건곤의 정수 사용 시 획득하는 인내력 소모 감소 효과 증가",
+      "acquire": "https://youtu.be/Bt9CvY9JFQ4"
+    },
+    {
+      "id": "h10",
+      "name": "통찰의 눈",
+      "img": "images/h10.png",
+      "desc": "각성 피해를 입히면 적의 공격을 간파하는 능력이 향상되며, 자신의 각성 피해가 증가된다. 또한 일정 확률로 받는 피해가 감소한다.",
+      "acquire": "https://youtu.be/hkUeeVjyCPA"
+    },
+    {
+      "id": "h11",
+      "name": "무공의 경지",
+      "img": "images/h11.png",
+      "desc": "사용하는 검류 무기에 따라 무예 효과를 얻는다.",
+      "acquire": "https://youtu.be/JvlGo6O39oY"
+    },
+    {
+      "id": "h13",
+      "name": "계절의 순환",
+      "img": "images/h13.png",
+      "desc": "무기 전환 시, 다음 속성(치명타 확률, 각성 확률, 외공 피해 보너스, 전속성 공격 피해 보너스) 중 1개가 지속적으로 증가한다. 해당 효과는 30초마다 1회 발동한다.",
+      "acquire": "https://youtu.be/NY5uAvFHY54"
+    },
+    {
+      "id": "h16",
+      "name": "분노의 참격",
+      "img": "images/h16.png",
+      "desc": "비결 사용 후 5초 동안 소모된 원기치의 30%를 환급받을 수 있으며, 1회 환급 한도는 최대 10pt이다.",
+      "acquire": "https://youtu.be/hrCW25zl6_M"
+    },
+    {
+      "id": "h17",
+      "name": "제비의 보은",
+      "img": "images/h17.png",
+      "desc": "탈진 처형 스킬 시전 시 입힌 피해량의 8%에 해당하는 기혈을 회복한다.",
+      "acquire": "https://youtu.be/hBV8k8CqbJs"
+    },
+    {
+      "id": "h18",
+      "name": "천추의 한",
+      "img": "images/h18.png",
+      "desc": "피해를 입힐 때 10% 확률로 5초 동안 지속되는 독 효과를 부여합니다. 이 독 효과는 초당 1회 피해를 입히며, 대상의 물리 방어력을 10초 동안 0.6% 감소시킵니다. 최대 5회 중첩 가능하며, 중첩 시 지속 시간이 갱신됩니다.",
+      "acquire": "https://youtu.be/iogoQua7zZc"
+    },
+    {
+      "id": "h19",
+      "name": "생명의 귀환",
+      "img": "images/h19.png",
+      "desc": "입히는 모든 피해 및 치유량이 5% 증가하며, 피격 후 5초간 일시적으로 효과가 사라진다. 피격 시마다 감옥 효과가 적용되어 자신이 받는 모든 피해가 5% 증가한다.",
+      "acquire": "https://youtu.be/6RC6fR53gRw"
+    },
+    {
+      "id": "h20",
+      "name": "춤추는 그림자",
+      "img": "images/h20.png",
+      "desc": "완벽한 회피 후 50% 확률로 소모한 기력을 모두 돌려받습니다.",
+      "acquire": "https://youtu.be/TlAsTaogdec"
+    },
+    {
+      "id": "h21",
+      "name": "핏빛 찬가",
+      "img": "images/h21.png",
+      "desc": "피해를 입힐 때마다 10% 확률로 5초간 피눈물 효과가 1회 적용되며, 초 당 1회의 피해를 입힌다. (최대 5중첩 가능) 목표의 피눈물이 5중첩 도달 시 즉시 해제되고 강력한 자상 피해를 입힌다. 해당 효과는 중첩 시 갱신된다.",
+      "acquire": "https://youtu.be/QwzVEyfxmsk"
+    },
+    {
+      "id": "h22",
+      "name": "월하의 섬광",
+      "img": "images/h22.png",
+      "desc": "암살 비결 [천공의 일격]의 기습 최대 거리가 1.5m 증가하고, 주는 피해가 10% 증가한다. 기습에 성공하면 즉시 입힌 피해량의 10% 만큼 기혈을 회복한다.",
+      "acquire": "https://youtu.be/smUXyUy4JGY"
+    },
+    {
+      "id": "h23",
+      "name": "철포삼",
+      "img": "images/h23.png",
+      "desc": "피격 시 경직될 확률니 감소한다. 단 보스나 플레이어의 공격은 적용되지 않는다.",
+      "acquire": "https://youtu.be/NVOlRCdE6Vc"
+    },
+    {
+      "id": "h24",
+      "name": "설한의 균열",
+      "img": "images/h24.png",
+      "desc": "전투 진입 후 일정 시간 동안 자신의 기혈이 일정 비율 이하일 경우, 초당 기혈을 회복하는 일시적 효과를 획득한다. 효과 발동에는 쿨타임이 있다.",
+      "acquire": "https://youtu.be/qVprok-Mug8"
+    },
+    {
+      "id": "h25",
+      "name": "맹호의 질주",
+      "img": "images/h25.png",
+      "desc": "어풍 비결 [재빠른 질주] 돌진 시 인내력 소모 감소하고, 착지 후 이동 속도 단시간 증가한다. 적 처치 시 추가 기혈 회복한다.",
+      "acquire": "https://youtu.be/EIXvrOKEFWA"
+    },
+    {
+      "id": "h27",
+      "name": "회복의 실",
+      "img": "images/h27.png",
+      "desc": "소생의 항의 특수 스킬 천향귀혼 시전 후 이슬치 5pt를 회복한다. 100pt 슬치 소모 시 플레이어 자신 최대 기혈의 10%를 추가로 치유한다.",
+      "acquire": "https://youtu.be/ZljOHvd5C38"
+    },
+    {
+      "id": "h28",
+      "name": "생명의 고서",
+      "img": "images/h28.png",
+      "desc": "천계의 수호의 부활 감지 스킬 천금조옥이 목표를 부활시킬 때 치유하는 기혈 회복량이 75% 증가한다.",
+      "acquire": "https://youtu.be/bsiwIPyTSH0"
+    },
+    {
+      "id": "h29",
+      "name": "만개한 복사꽃",
+      "img": "images/h29.png",
+      "desc": "치명타 치료를 발동 시마다 목표에게 6초 지속되는 안정 효과가 1회 적용되어, 치유 효과가 추가로 2% 증가한다. (최대 3중첩 가능)",
+      "acquire": "https://youtu.be/ZwL0uUamlcA"
+    },
+    {
+      "id": "h31",
+      "name": "천공참",
+      "img": "images/h31.png",
+      "desc": "적에게 공중 부양을 부여하면 외공 공격 보너스를 얻는다.",
+      "acquire": "https://youtu.be/lg2n6OcDa24"
+    },
+    {
+      "id": "h32",
+      "name": "춘뢰일섬",
+      "img": "images/h32.png",
+      "desc": "​3초 내 이동 거리가 15m를 초과할 경우 춘뢰 효과가 발동한다. 12초 동안 다음 3회의 강공격 또는 공중 강공격의 피해가 15\% 증가한다. 이 효과는 15초마다 한 번만 발동한다.",
+      "acquire": "https://youtu.be/HPe1s9nMsQo"
+    },
+    {
+      "id": "h33",
+      "name": "비상하는 호리병",
+      "img": "images/h33.png",
+      "desc": "청산의 정수 초식 적막의 봄 2회 충전하고, 쿨타임이 3초 증가한다.",
+      "acquire": "https://youtu.be/tms2NXqPwUQ"
+    },
+    {
+      "id": "h35",
+      "name": "맹수의 혼",
+      "img": "images/h35.png",
+      "desc": "기혈이 30% 이하일 때, 피해를 받으면 최후의 발악 효과가 발동된다. 30% 기혈 최대치의 피해를 흡수하는 보호막이 생성된다. 이 효과는 4초 동안 지속되며, 300초마다 한 번만 발동한다.",
+      "acquire": "https://youtu.be/TdBh0blvipo"
+    },
+    {
+      "id": "h36",
+      "name": "저항의 법칙",
+      "img": "images/h36.png",
+      "desc": "자신이 생성한 기혈 보호막 및 해당 스킬의 추가 효과와 지속 시간이 4초 연장되고, 기혈 피해 흡수량이 10% 증가한다.",
+      "acquire": "https://youtu.be/MoE4_vowK9Y"
+    },
+    {
+      "id": "h37",
+      "name": "강철의 비기",
+      "img": "images/h37.png",
+      "desc": "풍뢰의 징표 초식 천둥의 포효의 피해 감소 효과는 도발 성공 시 증가한다. 효과 지속 시간 동안, 캐릭터가 입히는 모든 피해가 감소하고 원한이 증가한다.",
+      "acquire": "https://youtu.be/YwfIrshVZk4"
+    }
   ],
   "marts": [
-    { "id": "m1", "name": "태극", "img": "images/m1.png", "desc": "나뭇잎을 모으고 수면에 파동을 일으킵니다. 전투 시 적을 끌어당기고 휘둘러 틈을 만듭니다. 방패를 든 적에게 효과적입니다.", "acquire": "곰 동작 이해 튜토리얼 완료" },
-    { "id": "m2", "name": "금옥점혈수", "img": "images/m2.png", "desc": "경혈을 선택하면 특수 효과를 얻습니다. 전투 중 일정 확률로 이동 불가 및 급소 파괴 효과를 얻습니다. (보스 제외)", "acquire": "조각상에 둘러싸인 남자 찾기" },
-    { "id": "m3", "name": "허공섭물", "img": "images/m3.png", "desc": "멀리 있는 물건을 끌어당깁니다. 전투 중 적의 무장을 해제하고 적의 무기로 반격합니다. 무게에 따라 피해량이 증가합니다.", "acquire": "탐험 퀘스트 완료" },
-    { "id": "m4", "name": "구름 위 질주", "img": "images/m4.png", "desc": "높이 뛰어올라 강타하거나, 특정 지점으로 점프합니다. 전투 중 적의 어깨를 밟아 기병대 및 불안정한 자세 유닛을 공략합니다.", "acquire": "장군 사당 아래 동굴에서 발견" },
-    { "id": "m5", "name": "사자후", "img": "images/m5.png", "desc": "거대한 종을 내려쳐 피해를 입히고 14번 타격하는 포효를 내뿜습니다. 피해 감소 및 인내력 15% 증가 효과가 있습니다.", "acquire": "청하에서 4개의 종 울리기 [위치 보기]" },
-    { "id": "m6", "name": "합마공", "img": "images/m6.png", "desc": "적을 밀어내고 돌진합니다. 2회 시전 시 독 적용, 3회 시전 시 광역 타격인 황금 두꺼비 충돌로 변경됩니다.", "acquire": "장군 사당에서 양소룡과 대화 [위치 보기]" },
-    { "id": "m7", "name": "귀혈수", "img": "images/m7.png", "desc": "적들 앞으로 순간이동하여 최대 6명을 이동 불가 상태로 만들고 급소를 파괴합니다.", "acquire": "개봉에서 무명검(도산윤)과 대화" },
-    { "id": "m8", "name": "호법의 권세", "img": "images/m8.png", "desc": "지면을 강타하여 광역 피해를 줍니다. 높은 곳에서 사용 시 암야의 등불로 강화되어 적을 밀어냅니다.", "acquire": "협적 제 7권-'천불 폐허' 완료" },
-    { "id": "m9", "name": "유성 낙화", "img": "images/m9.png", "desc": "공중으로 뛰어올라 불타는 창을 던지고 유성처럼 낙하합니다. 슈퍼 아머 및 피해 감소 15%를 얻습니다.", "acquire": "보리고해 보스에서 받아치기 숙련도 올리기" },
-    { "id": "m10", "name": "응조권법", "img": "images/m10.png", "desc": "타겟을 휘둘러 방어를 무너뜨린 후, 3번 연속 공격하여 데미지를 입힙니다.", "acquire": "별관 귓산 정상에서 새 집 관찰" },
-    { "id": "m11", "name": "금강의 호법", "img": "images/m11.png", "desc": "전방으로 돌진하여 적의 방어선을 무너뜨리고 공중으로 띄웁니다.", "acquire": "협적 제 8권-긴 밤의 무지개 완료" },
-    { "id": "m12", "name": "속박의 자유", "img": "images/m12.png", "desc": "발차기 폭풍을 일으킵니다. 공중으로 띄운 후 무자비한 공중 공격을 가하고 내려찍습니다.", "acquire": "전영의 2단계 발차기 튕겨내기" },
-    { "id": "m13", "name": "포식자의 맹습", "img": "images/m13.png", "desc": "적을 쓰러뜨린 후 빠르게 연타를 퍼붓습니다. 기병대 등에게 효과적입니다.", "acquire": "귀문시장 위쪽 상자" },
-    { "id": "m14", "name": "맹수의 돌격", "img": "images/m14.png", "desc": "기를 뿜어내어 강력한 돌격을 가한 후 나선형으로 추격합니다. 치유 감소 효과를 부여합니다.", "acquire": "https://gall.dcinside.com/mgallery/board/view/?id=wherewindsmeets&no=9621" },
-    { "id": "m15", "name": "신룡의 화염", "img": "images/m15.png", "desc": "술을 마셔 취한 상태가 되며, 기를 내뿜어 화염 피해를 입힙니다. 강인함과 피해 감소 15%를 얻습니다.", "acquire": "https://youtu.be/rCGWO91-0Vw" },
-    { "id": "m16", "name": "태백취권", "img": "images/m16.png", "desc": "최대 5번의 연속 공격을 가하며 술기운를 부여합니다.", "acquire": "진품 상인에게 독주 구매 후 섭취" },
-    { "id": "m17", "name": "용의 진노", "img": "images/m17.png", "desc": "낙엽을 모아 용의 머리 형상으로 공격하여 밀어냅니다. 슈퍼 아머 및 피해 감소 15%를 부여합니다.", "acquire": "35가지 다른 비결 배우기" },
-    { "id": "m18", "name": "속세의 장막", "img": "images/m18.png", "desc": "독 안개를 방출하여 시야를 가리고 5초간 전투 불능으로 만듭니다. (보스 제외)", "acquire": "속세의 흐린 눈동자 스토리 완료" },
-    { "id": "m19", "name": "청풍명월", "img": "images/m19.png", "desc": "피격 시 빠르게 회복합니다. 명중 시 8초간 목표의 인내력 회복량 감소하고 지속 피해를 입습니다.", "acquire": "천부 포인트로 잠금 해제" },
-    { "id": "m20", "name": "불멸의 육신", "img": "images/m20.png", "desc": "보호막을 얻고 기를 회복합니다. 강인함과 피해 감소 15% 효과를 얻습니다.", "acquire": "" },
-    { "id": "m21", "name": "음양의 조화", "img": "images/m21.png", "desc": "그림자 이동 상태를 획득한다. 그림자 이동: 20초간 회피형 스킬 인내력 40% 감소, 타겟팅 불가 시간 증가.", "acquire": "https://youtu.be/mVlk3ijZQz8" },
-    { "id": "m22", "name": "거위의 절규", "img": "images/m22.png", "desc": "거위를 이용해 피해를 주고 숨 고르기를 부여합니다. 이후 거위가 도망치며 추가 피해를 줍니다.", "acquire": "https://youtu.be/7dnJMl9CL20" },
-    { "id": "m23", "name": "임야의 휘광", "img": "images/m23.png", "desc": "반딧불이를 소환하여 어둠 속에서 30초 동안 빛을 비춥니다.", "acquire": "https://youtu.be/Yt2Pz0_vEXg" },
-    { "id": "m24", "name": "묘령의 그림자", "img": "images/m24.png", "desc": "잠시 동안 적에게 덜 감지되게 됩니다. (은신 효과)", "acquire": "훔쳐배우기-정당한 취득 (구월해와 대화하기)" },
-    { "id": "m25", "name": "역풍의 그림자", "img": "images/m25.png", "desc": "적의 기술 방어 후 반격하여 8초간 대상의 인내력 회복량 50% 감소", "acquire": "천부 포인트 14개 이상" },
-    { "id": "m26", "name": "천상의 변주", "img": "images/m26.png", "desc": "피격 직전 통찰력을 소모하여 공격을 무력화 (패링)", "acquire": "기본 잠금 해제" },
-    { "id": "m27", "name": "고요한 심연", "img": "images/m27.png", "desc": "숨을 참는 동안 주변 대상 이동 속도 75% 감소 (인내력 소모)", "acquire": "활 튜토리얼 중 해제" },
-    { "id": "m28", "name": "천공의 일격", "img": "images/m28.png", "desc": "후방에서 돌격하여 약한 적을 일격에 제압 (암살)", "acquire": "퀘스트 완료" },
-    { "id": "m29", "name": "바람의 눈", "img": "images/m29.png", "desc": "해당 지역의 관심 품목이나 사람을 강조 표시 (탐지)", "acquire": "천부 포인트 2개 이상" }
+    {
+      "id": "m1",
+      "name": "태극",
+      "img": "images/m1.png"
+    },
+    {
+      "id": "m2",
+      "name": "금옥점혈수",
+      "img": "images/m2.png"
+    },
+    {
+      "id": "m3",
+      "name": "허공섭물",
+      "img": "images/m3.png"
+    },
+    {
+      "id": "m4",
+      "name": "구름 위 질주",
+      "img": "images/m4.png"
+    },
+    {
+      "id": "m5",
+      "name": "사자후",
+      "img": "images/m5.png"
+    },
+    {
+      "id": "m6",
+      "name": "합마공",
+      "img": "images/m6.png"
+    },
+    {
+      "id": "m7",
+      "name": "귀혈수",
+      "img": "images/m7.png"
+    },
+    {
+      "id": "m8",
+      "name": "호법의 권세",
+      "img": "images/m8.png"
+    },
+    {
+      "id": "m9",
+      "name": "유성 낙화",
+      "img": "images/m9.png"
+    },
+    {
+      "id": "m10",
+      "name": "응조권법",
+      "img": "images/m10.png"
+    },
+    {
+      "id": "m11",
+      "name": "금강의 호법",
+      "img": "images/m11.png"
+    },
+    {
+      "id": "m12",
+      "name": "속박의 자유",
+      "img": "images/m12.png"
+    },
+    {
+      "id": "m13",
+      "name": "포식자의 맹습",
+      "img": "images/m13.png"
+    },
+    {
+      "id": "m14",
+      "name": "맹수의 돌격",
+      "img": "images/m14.png"
+    },
+    {
+      "id": "m15",
+      "name": "신룡의 화염",
+      "img": "images/m15.png"
+    },
+    {
+      "id": "m16",
+      "name": "태백취권",
+      "img": "images/m16.png"
+    },
+    {
+      "id": "m17",
+      "name": "용의 진노",
+      "img": "images/m17.png"
+    },
+    {
+      "id": "m18",
+      "name": "속세의 장막",
+      "img": "images/m18.png"
+    },
+    {
+      "id": "m19",
+      "name": "청풍명월",
+      "img": "images/m19.png"
+    },
+    {
+      "id": "m20",
+      "name": "불멸의 육신",
+      "img": "images/m20.png"
+    },
+    {
+      "id": "m21",
+      "name": "음양의 조화",
+      "img": "images/m21.png"
+    },
+    {
+      "id": "m22",
+      "name": "거위의 절규",
+      "img": "images/m22.png"
+    },
+    {
+      "id": "m23",
+      "name": "임야의 휘광",
+      "img": "images/m23.png"
+    },
+    {
+      "id": "m24",
+      "name": "묘령의 그림자",
+      "img": "images/m24.png"
+    }
   ]
 }

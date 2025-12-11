@@ -269,50 +269,50 @@
       "id": "h29",
       "name": "만개한 복사꽃",
       "img": "images/h29.png",
-      "desc": "",
-      "acquire": ""
+      "desc": "치명타 치료를 발동 시마다 목표에게 6초 지속되는 안정 효과가 1회 적용되어, 치유 효과가 추가로 2% 증가한다. (최대 3중첩 가능)",
+      "acquire": "https://youtu.be/ZwL0uUamlcA"
     },
     {
       "id": "h31",
       "name": "천공참",
       "img": "images/h31.png",
       "desc": "",
-      "acquire": ""
+      "acquire": "https://youtu.be/lg2n6OcDa24"
     },
     {
       "id": "h32",
       "name": "춘뢰일섬",
       "img": "images/h32.png",
       "desc": "",
-      "acquire": ""
+      "acquire": "https://youtu.be/HPe1s9nMsQo"
     },
     {
       "id": "h33",
       "name": "비상하는 호리병",
       "img": "images/h33.png",
       "desc": "",
-      "acquire": ""
+      "acquire": "https://youtu.be/tms2NXqPwUQ"
     },
     {
       "id": "h35",
       "name": "맹수의 혼",
       "img": "images/h35.png",
       "desc": "",
-      "acquire": ""
+      "acquire": "https://youtu.be/TdBh0blvipo"
     },
     {
       "id": "h36",
       "name": "저항의 법칙",
       "img": "images/h36.png",
       "desc": "",
-      "acquire": ""
+      "acquire": "https://youtu.be/MoE4_vowK9Y"
     },
     {
       "id": "h37",
       "name": "강철의 비기",
       "img": "images/h37.png",
       "desc": "",
-      "acquire": ""
+      "acquire": "https://youtu.be/YwfIrshVZk4"
     }
   ],
   "marts": [

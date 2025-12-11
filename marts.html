@@ -24,7 +24,7 @@
             </div>
     </div>
 
-        <style>
+    <style>
         /* 1. 그리드 스타일 (아이템 목록) */
         .heart-library-grid {
             display: grid;
@@ -43,12 +43,15 @@
             cursor: pointer;
             transition: all 0.2s;
             background: #fff;
+            position: relative; /* 중요 */
+            z-index: 1;
         }
         .heart-lib-item:hover {
             border-color: var(--wuxia-accent-gold);
             background-color: #fffcf5;
             transform: translateY(-3px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            z-index: 10;
         }
         .heart-lib-img {
             width: 50px;
@@ -64,33 +67,50 @@
             line-height: 1.2;
         }
 
-        /* 2. 바텀 시트 기본 스타일 (평소엔 숨김) */
+        /* 2. 어두운 배경 (오버레이) - 시트보다 숫자가 작아야 함 */
+        #guide-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.6); /* 좀 더 진하게 */
+            z-index: 11000 !important; /* 아주 높은 숫자 */
+            display: none; 
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* 3. 비결 상세 시트 (하얀 창) - 오버레이보다 숫자가 커야 함 */
         #mart-detail-sheet {
-            position: fixed; /* 화면에 고정 */
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: auto;
-            max-height: 80vh; /* 화면 높이의 80%까지만 */
-            background-color: #fff;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 -5px 25px rgba(0,0,0,0.2);
-            z-index: 10001; /* 맨 위에 표시 */
+            height: auto; /* 내용만큼 늘어남 */
+            min-height: 300px; /* 내용 없어도 최소 높이 보장 */
+            max-height: 85vh;
             
-            /* 핵심: 평소에는 화면 아래로 105% 내려서 숨김 */
-            transform: translateY(105%); 
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* 부드러운 움직임 */
+            background-color: #ffffff !important; /* 흰색 강제 적용 */
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
+            
+            z-index: 11001 !important; /* 오버레이(11000)보다 무조건 높게! */
+            
+            transform: translateY(110%); /* 평소엔 화면 아래로 숨김 */
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             
             display: flex;
             flex-direction: column;
+            visibility: visible; /* 강제 보이기 */
         }
 
-        /* PC 화면에서는 너무 넓지 않게 중앙 정렬 */
+        /* PC 화면 대응 */
         @media (min-width: 768px) {
             #mart-detail-sheet {
                 width: 500px;
                 left: 50%;
-                margin-left: -250px;
+                transform: translate(-50%, 110%); /* PC에선 중앙 정렬 + 아래로 숨김 */
             }
         }
 
@@ -101,11 +121,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: #fff; /* 헤더도 흰색 */
+            border-radius: 20px 20px 0 0;
         }
         #mart-detail-sheet .sheet-header h3 {
             margin: 0;
             font-size: 1.1em;
             color: #333;
+            font-weight: bold;
         }
         #mart-detail-sheet .close-sheet-btn {
             background: none;
@@ -113,34 +136,31 @@
             font-size: 1.5em;
             cursor: pointer;
             color: #999;
+            padding: 0 10px;
         }
         #mart-detail-sheet .sheet-content {
             padding: 20px;
-            overflow-y: auto; /* 내용 길면 스크롤 */
+            overflow-y: auto;
             flex: 1;
+            background: #fff;
         }
 
-        /* 3. 어두운 배경 (오버레이) */
-        #guide-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 10000;
-            display: none; /* 기본 숨김 */
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        /* 4. 활성화 상태 (JS가 클래스를 붙이면 실행됨) */
-        body.mart-sheet-open #mart-detail-sheet {
-            transform: translateY(0); /* 제자리로 올라옴 */
-        }
+        /* 4. 활성화 상태 (JS가 body에 클래스를 붙이면 작동) */
         body.mart-sheet-open #guide-overlay {
             display: block;
             opacity: 1;
+        }
+
+        /* 모바일 활성화 */
+        body.mart-sheet-open #mart-detail-sheet {
+            transform: translateY(0);
+        }
+
+        /* PC 활성화 (중앙 정렬 유지하며 올라오기) */
+        @media (min-width: 768px) {
+            body.mart-sheet-open #mart-detail-sheet {
+                transform: translate(-50%, 0);
+            }
         }
     </style>
 

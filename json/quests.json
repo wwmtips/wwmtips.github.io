@@ -538,5 +538,14 @@
     "bgimg": "q62_5.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q62.html"
+  },
+  {
+    "id": "q63",
+    "name": "악을 막는 복숭아나무",
+    "location": "귀문시장",
+    "type": "만사록",
+    "bgimg": "q63_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q63.html"
   }
 ]

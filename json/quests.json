@@ -556,5 +556,14 @@
     "bgimg": "q64_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q64.html"
+  },
+  {
+    "id": "q65",
+    "name": "백년 해로",
+    "location": "각문리",
+    "type": "만사록",
+    "bgimg": "q65_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q65.html"
   }
 ]

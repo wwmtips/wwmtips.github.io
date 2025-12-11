@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (최종 수정본 - 무공전수 및 추천 빌드 통합)
+   script.js (최종 수정본 - 심법 클릭 이벤트 추가 완료)
    ========================================= */
 
 // =========================================
@@ -1295,6 +1295,9 @@ function renderHeartLibrary() {
     builderData.hearts.forEach(heart => {
         const item = document.createElement('div');
         item.className = 'heart-lib-item';
+        
+        // [수정] 클릭 시 상세 시트 열기 (★여기가 문제였습니다★)
+        item.onclick = () => openHeartDetailSheet(heart.id);
         
         item.innerHTML = `
             <img src="${heart.img}" class="heart-lib-img" onerror="this.src='images/logo.png'">

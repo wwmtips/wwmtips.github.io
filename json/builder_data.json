@@ -48,7 +48,12 @@
       "acquire": "https://youtu.be/C-i90nhWbeg"
 
     },
-    { "id": "h34", "name": "지축의 분노", "img": "images/h34.png" },
+    { "id": "h34", 
+      "name": "지축의 분노", 
+      "img": "images/h34.png",
+      "desc": "탄식의 검기 방어 성공 시 20% 확률로 추가로 1간의 전의를 회복한다.",
+      "acquire": "https://youtu.be/lTRoJm96S5Q"
+    },
     { "id": "h12", "name": "굶주린 늑대", "img": "images/h12.png" },
     { "id": "h1", "name": "망각의 울림", "img": "images/h1.png" }, 
     { "id": "h2", "name": "파도의 검기", "img": "images/h2.png" },

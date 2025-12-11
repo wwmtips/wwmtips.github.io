@@ -15,7 +15,12 @@
   ],
   "hearts": [    
     { "id": "h9", "name": "무명 심법", "img": "images/h9.png" },   
-    { "id": "h5", "name": "광풍의 검기", "img": "images/h5.png" },
+    { "id": "h5", 
+      "name": "광풍의 검기", 
+      "img": "images/h5.png" 
+      "desc": "​구현의 검무의 무술 스킬, 특수 스킬, 차지 스킬을 시전 후 스킬 마무리 단계의 완벽한 타이밍에 [종횡검]을 시전하여 적을 추격할 수 있으며, 목표가 5회중첩 출혈 상태일 경우 모든 출혈을 제거하고 즉시 과다 출혈 피해를 입힌다.",
+     "acquire": "https://youtu.be/Zu4zj1k5bLA" 
+    },
     { "id": "h14", "name": "결의의 노래", "img": "images/h14.png" },
     { "id": "h26", "name": "군신의 묘약", "img": "images/h26.png" },
     { "id": "h30", "name": "월광의 계율", "img": "images/h30.png" },

@@ -1307,7 +1307,37 @@ function renderHeartLibrary() {
     });
 }
 
-// [신규] 심법 상세 바텀시트 열기
+/* =========================================
+   [추가 기능] 텍스트 내 유튜브 링크를 영상으로 변환하는 함수
+   ========================================= */
+function convertYoutubeToEmbed(text) {
+    if (!text) return '획득 방법 정보가 없습니다.';
+
+    // 1. 유튜브 주소 찾기 정규식 (youtube.com/watch?v=ID 또는 youtu.be/ID)
+    const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})(?:\S+)?)/g;
+
+    // 2. 텍스트에 유튜브 주소가 있으면 iframe(영상)으로 교체
+    if (ytRegex.test(text)) {
+        return text.replace(ytRegex, (match, url, videoId) => {
+            return `
+                <div style="margin-top: 10px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
+                    <iframe src="https://www.youtube.com/embed/${videoId}" 
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            `;
+        });
+    }
+
+    // 3. 없으면 원래 텍스트 그대로 반환
+    return text;
+}
+
+/* =========================================
+   [수정됨] 심법 상세 바텀시트 열기 (유튜브 변환 적용)
+   ========================================= */
 function openHeartDetailSheet(heartId) {
     if (!builderData || !builderData.hearts) return;
     const heart = builderData.hearts.find(h => h.id === heartId);
@@ -1319,6 +1349,9 @@ function openHeartDetailSheet(heartId) {
     if (titleEl) titleEl.innerText = heart.name;
     
     if (contentEl) {
+        // acquire 텍스트를 변환 함수에 통과시킵니다.
+        const acquireContent = convertYoutubeToEmbed(heart.acquire);
+
         contentEl.innerHTML = `
             <div style="text-align:center; margin-bottom:20px; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
                 <img src="${heart.img}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
@@ -1337,9 +1370,9 @@ function openHeartDetailSheet(heartId) {
                 <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
                     🗝 획득 방법
                 </h4>
-                <p style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
-                    ${heart.acquire || '획득 방법 정보가 없습니다.'}
-                </p>
+                <div style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+                    ${acquireContent}
+                </div>
             </div>
         `;
     }

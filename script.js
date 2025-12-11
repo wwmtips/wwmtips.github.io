@@ -1072,13 +1072,13 @@ function openHeartDetailSheet(heartId) {
                 <img src="${heart.img}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
             </div>
             <div class="detail-chunk" style="margin-bottom: 25px;">
-                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">📜 설명</h4>
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">설명</h4>
                 <p style="color: #555; line-height: 1.6; background: #fff; padding: 10px; border: 1px dashed #ddd; border-radius: 4px;">
                     ${heart.desc || '설명 정보가 없습니다.'}
                 </p>
             </div>
             <div class="detail-chunk">
-                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">🗝 획득 방법</h4>
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">획득 방법</h4>
                 <div style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
                     ${acquireContent}
                 </div>
@@ -1110,13 +1110,13 @@ function openMartDetailSheet(martId) {
                 <img src="${mart.img}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
             </div>
             <div class="detail-chunk" style="margin-bottom: 25px;">
-                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">📜 효과</h4>
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">효과</h4>
                 <p style="color: #555; line-height: 1.6; background: #fff; padding: 10px; border: 1px dashed #ddd; border-radius: 4px;">
                     ${mart.desc || '효과 정보가 없습니다.'}
                 </p>
             </div>
             <div class="detail-chunk">
-                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">🗝 획득 방법</h4>
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">획득 방법</h4>
                 <div style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
                     ${acquireContent}
                 </div>
@@ -1290,13 +1290,13 @@ function openMartDetailSheet(martId) {
                 <img src="${imgPath}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
             </div>
             <div class="detail-chunk" style="margin-bottom: 25px;">
-                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">📜 설명</h4>
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">설명</h4>
                 <p style="color: #555; line-height: 1.6; background: #fff; padding: 10px; border: 1px dashed #ddd; border-radius: 4px;">
                     ${mart.desc || '설명 정보가 없습니다.'}
                 </p>
             </div>
             <div class="detail-chunk">
-                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">🗝 획득 방법</h4>
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">획득 방법</h4>
                 <div style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
                     ${acquireContent}
                 </div>

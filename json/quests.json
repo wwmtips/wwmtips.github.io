@@ -646,5 +646,14 @@
     "bgimg": "q74_1.jpg",
     "iconpath": "images/man.jpg",
     "filepath": "/quests/q74.html"
+  },
+  {
+    "id": "q75",
+    "name": "어둠의 그림자",
+    "location": "개봉",
+    "type": "인연의 궤적",
+    "bgimg": "q75_1.jpg",
+    "iconpath": "images/man.jpg",
+    "filepath": "/quests/q75.html"
   }
 ]

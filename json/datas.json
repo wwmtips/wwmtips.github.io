@@ -2,6 +2,15 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "해표", "answer": "물범", "user": "유사림" },
+{ "hint": "봄", "answer": "자두", "user": "JHJH" },
+{ "hint": "모래", "answer": "모래시계", "user": "푸짐이비버" },
+{ "hint": "볶음 요리", "answer": "양파", "user": "연귀" },
+{ "hint": "나무", "answer": "벵갈보리수", "user": "고기먹는돌쇠" },
+{ "hint": "꼬리", "answer": "너구리", "user": "영수리" },
+{ "hint": "씨앗", "answer": "살구", "user": "" },
+{ "hint": "영양", "answer": "표고버섯", "user": "" },
+
     { "hint": "인연", "answer": "자등", "user": "풀무" },
 { "hint": "우아함", "answer": "석곡", "user": "평택제일검" },
 { "hint": "은색 비늘", "answer": "꽁치", "user": "구밀" },

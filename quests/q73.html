@@ -46,92 +46,59 @@
             box-sizing: border-box;
             pointer-events: none;
         }
-        .info-box {
-            background-color: #fffcf5;
-            border: 1px solid var(--wuxia-accent-gold);
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
             padding: 15px;
             border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        .category-title {
-            color: var(--wuxia-text-main);
-            font-size: 1.2em;
-            border-left: 4px solid var(--wuxia-accent-red);
-            padding-left: 10px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            margin-top: 40px;
+            margin-bottom: 30px;
         }
     </style>
 
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">인연의 궤적</span>
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            날아가는 연
+            호화찬란의 종말
         </h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">수집 정보 모음</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">어느 정신 나간 노인의 이야기</p>
     </div>
 
-    <div class="info-box">
-        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 수집 개요</h3>
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
         <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
-            '날아가는 연' 챕터의 인연 수집 항목들에 대한 공략입니다.<br>
-            각 항목별 획득 조건과 위치를 확인하세요.
+            기연을 통해 얻은 <b>폭발 장치 도면</b>을 전달하는 의뢰입니다.<br>
+            이 물건을 필요로 하는 노인 <b>당기안</b>을 찾아가세요.
         </p>
     </div>
 
-    <h3 class="category-title">오아 대함</h3>
-    <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-bottom: 20px;">
-        <b>획득 방법:</b> 금명지 진수전 진행 시 자동으로 획득됩니다.
-    </p>
-
-    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
-
-    <h3 class="category-title">숨겨진 무기</h3>
-    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-        <b>조건:</b> 금명지 진수전 및 기연 <b>'연 그림자의 동행'</b> 클리어 완료<br>
-        <b>방법:</b> 아래 위치에서 <b>석수정</b>에게 다가가 <b>'엿듣기'</b>를 진행하세요.
-    </p>
-    <div class="wuxia-image-container">
-        <img src="../quests/images/q73_1.jpg" alt="석수정 엿듣기">
-    </div>
-    <div class="wuxia-image-container">
-        <img src="../quests/images/q73_2.jpg" alt="위치 정보">
+    <div class="warning-box">
+        <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 필수 선행 조건</h4>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            기연 <b>'연 그림자의 동행'</b>을 진행하여 <b>[폭발 장치 도면]</b>을 획득한 상태여야 합니다.
+        </p>
     </div>
 
-    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
-
-    <h3 class="category-title">풍운회</h3>
-    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-        <b>조건:</b> 기연 <b>'연 그림자의 동행'</b> 진행 중<br>
-        <b>방법:</b> 아래 위치에서 <b>'한 통의 초대장'</b>을 찾아 읽으세요.
-    </p>
-    <div class="wuxia-image-container">
-        <img src="../quests/images/q73_3.jpg" alt="초대장 위치">
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            당기안에게 전달
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            도면을 소지한 채 아래 위치로 이동하세요.<br>
+            NPC <b>당기안</b>에게 대화를 걸고 도면을 전달하면 됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q74_1.jpg" alt="당기안">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q74_2.jpg" alt="당기안 위치">
+        </div>
     </div>
 
-    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
-
-    <h3 class="category-title">무묘의 회담</h3>
-    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-        <b>방법:</b> 아래 위치로 이동하여 NPC <b>자소오</b>에게 <b>'엿듣기'</b>를 진행하세요.
-    </p>
-    <div class="wuxia-image-container">
-        <img src="../quests/images/q73_4.jpg" alt="자소오 엿듣기">
-    </div>
-    <div class="wuxia-image-container">
-        <img src="../quests/images/q73_5.jpg" alt="위치 정보">
-    </div>
-
-    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
-
-    <h3 class="category-title">벼랑 끝에서 잡아챈 말고삐</h3>
-    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-        <b>조건:</b> 기연 <b>'연 그림자의 동행'</b> 진행 중<br>
-        <b>방법:</b> 아래 위치에서 <b>'익명의 필기'</b>를 찾아 읽으세요.
-    </p>
-    <div class="wuxia-image-container">
-        <img src="../quests/images/q73_6.jpg" alt="익명의 필기 위치">
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            도면을 전달하면 노인의 이야기를 끝으로<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
     </div>
     
     <div style="text-align: center; margin-top: 40px;">

@@ -628,14 +628,23 @@
     "bgimg": "q72_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q72.html"
-  },
+  },  
   {
     "id": "q73",
+    "name": "화려함의 종말",
+    "location": "금명지",
+    "type": "만사록",
+    "bgimg": "q73_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q73.html"
+  },
+  {
+    "id": "q74",
     "name": "날아가는 연",
     "location": "개봉",
     "type": "인연의 궤적",
-    "bgimg": "q73_1.jpg",
+    "bgimg": "q74_1.jpg",
     "iconpath": "images/man.jpg",
-    "filepath": "/quests/q73.html"
+    "filepath": "/quests/q74.html"
   }
 ]

@@ -67,7 +67,7 @@
     "id": "q9",
     "name": "귀문 시장 입장 퀘스트",
     "location": "청하",
-    "type": "퀘스트",
+    "type": "기타",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q9.html"
   },
@@ -75,7 +75,7 @@
     "id": "q10",
     "name": "귀문 시장과 음병 갑옷",
     "location": "청하",
-    "type": "퀘스트",
+    "type": "기타",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q10.html"
   },
@@ -83,7 +83,7 @@
     "id": "q11",
     "name": "제 1막: 시작된 음모",
     "location": "청하",
-    "type": "세계관",
+    "type": "기타",
     "iconpath": "images/story.jpg",
     "filepath": "/quests/q11.html"
   },
@@ -132,7 +132,7 @@
     "id": "q17",
     "name": "달빛 속 칼날",
     "location": "불야채",
-    "type": "퀘스트",
+    "type": "기타",
     "iconpath": "images/event1.jpg",
     "filepath": "/quests/q17.html"
   }
@@ -158,7 +158,7 @@
     "id": "q20",
     "name": "은빛 송곳니 해금",
     "location": "한탄령",
-    "type": "퀘스트",
+    "type": "기타",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q20.html"
   },
@@ -166,7 +166,7 @@
     "id": "q21",
     "name": "구오대사: 왕청 전",
     "location": "후진",
-    "type": "세계관",
+    "type": "기타",
     "iconpath": "images/story.jpg",
     "filepath": "/quests/q21.html"
   },
@@ -182,7 +182,7 @@
     "id": "q23",
     "name": "흔들리는 붉은 꿈",
     "location": "신선 나루",
-    "type": "퀘스트",
+    "type": "기타",
     "iconpath": "images/world.jpg",
     "filepath": "/quests/q23.html"
   },

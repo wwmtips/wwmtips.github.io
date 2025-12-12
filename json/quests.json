@@ -592,5 +592,14 @@
     "bgimg": "q68_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q68.html"
+  },
+  {
+    "id": "q69",
+    "name": "독으로 해결하는 갈증",
+    "location": "순마장",
+    "type": "만사록",
+    "bgimg": "q69_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q69.html"
   }
 ]

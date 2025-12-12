@@ -601,5 +601,14 @@
     "bgimg": "q69_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q69.html"
+  },
+  {
+    "id": "q70",
+    "name": "동물과 소통하는 자",
+    "location": "순마장",
+    "type": "만사록",
+    "bgimg": "q70_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q70.html"
   }
 ]

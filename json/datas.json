@@ -2,6 +2,12 @@
   "items": [],
   "quests": [],
   "quiz": [
+{ "hint": "중독성", "answer": "담배", "user": "ㅇㅇ" },
+{ "hint": "폴짝폴짝", "answer": "개구리", "user": "가무언" },
+{ "hint": "세계문화유산", "answer": "만리장성", "user": "HighTower" },
+{ "hint": "작은 곡물", "answer": "녹두", "user": "GamTan" },
+{ "hint": "독성", "answer": "협죽도", "user": "채옥" },
+{ "hint": "침실", "answer": "침대", "user": "" },
     { "hint": "해표", "answer": "물범", "user": "유사림" },
 { "hint": "봄", "answer": "자두", "user": "JHJH" },
 { "hint": "모래", "answer": "모래시계", "user": "푸짐이비버" },

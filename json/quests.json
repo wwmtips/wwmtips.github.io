@@ -610,5 +610,14 @@
     "bgimg": "q70_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q70.html"
+  },
+  {
+    "id": "q71",
+    "name": "거래속에 감춰진 사연",
+    "location": "순마장",
+    "type": "만사록",
+    "bgimg": "q71_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q71.html"
   }
 ]

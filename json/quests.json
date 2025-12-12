@@ -619,5 +619,14 @@
     "bgimg": "q71_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q71.html"
+  },
+  {
+    "id": "q72",
+    "name": "끝내 닿지 못한 재회",
+    "location": "순마장",
+    "type": "만사록",
+    "bgimg": "q72_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q72.html"
   }
 ]

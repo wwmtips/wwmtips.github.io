@@ -583,5 +583,14 @@
     "bgimg": "q67_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q67.html"
+  },
+  {
+    "id": "q68",
+    "name": "기씨 가문의 가훈",
+    "location": "순마장",
+    "type": "만사록",
+    "bgimg": "q68_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q68.html"
   }
 ]

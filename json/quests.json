@@ -565,5 +565,14 @@
     "bgimg": "q65_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q65.html"
+  },
+  {
+    "id": "q66",
+    "name": "버드나무의 꿈",
+    "location": "개봉부",
+    "type": "만사록",
+    "bgimg": "q66_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q66.html"
   }
 ]

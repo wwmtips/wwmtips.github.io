@@ -2,6 +2,18 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "십이간지", "answer": "쥐", "user": "연신" },
+{ "hint": "식이섬유", "answer": "고구마", "user": "마도림" },
+{ "hint": "큰 울음소리", "answer": "황소개구리", "user": "이용복" },
+{ "hint": "알록달록", "answer": "튤립", "user": "마이클조던" },
+{ "hint": "촛대", "answer": "양초", "user": "시예" },
+{ "hint": "쌀밥", "answer": "벼", "user": "ㅇㅇ" },
+{ "hint": "눈물", "answer": "양파", "user": "설화띠띠" },
+{ "hint": "수염", "answer": "메기", "user": "그림비" },
+{ "hint": "바다", "answer": "바다거북", "user": "천시윤" },
+{ "hint": "사료", "answer": "옥수수", "user": "zaeun" },
+{ "hint": "무기", "answer": "창", "user": "비공개" },
+
     { "hint": "꼬리", "answer": "원숭이", "user": "마소" },
 { "hint": "시체 먹는 새", "answer": "독수리", "user": "" },
 { "hint": "과일", "answer": "귤", "user": "litss" },

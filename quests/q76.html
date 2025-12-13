@@ -1,0 +1,167 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .info-box {
+            background-color: #fffcf5;
+            border: 1px solid var(--wuxia-accent-gold);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .category-title {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-red);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">인연의 궤적</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            묘당
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">수집 정보 모음</p>
+    </div>
+
+    <div class="info-box">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 수집 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            개봉 지역을 중심으로 한 인연 수집 항목입니다.<br>
+            자동 획득 항목과 히든 퀘스트, 엿듣기 등으로 구성되어 있습니다.
+        </p>
+    </div>
+
+    <h3 class="category-title">비밀의 꽃</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>획득 방법:</b> 개봉 지역 협적 제2권 - <b>'화무 뒤편의 비밀'</b> 진행 시 자동으로 획득됩니다.
+    </p>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">설야의 결단</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-bottom: 15px;">
+        <b>획득 방법:</b> 개봉 지역 기연 <b>'설야의 결단'</b> 진행 시 자동으로 획득됩니다.
+    </p>
+
+    <div class="warning-box">
+        <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 기연 발생 조건 (중요)</h4>
+        <ul style="color: var(--wuxia-text-main); margin: 0; padding-left: 20px; line-height: 1.6;">
+            <li><b>선행 조건:</b> 협적 제4권 - <b>'밀실 속 검흔'</b> 클리어 완료</li>
+            <li><b>시간 조건:</b> 시진을 반드시 <b>자시(23:00~01:00)</b>로 변경</li>
+            <li><b>위치:</b> <b>금수문 거리 경계석</b>으로 이동 시 트리거</li>
+        </ul>
+        <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+            ※ 만약 트리거가 되지 않는다면 <b>날짜를 변경</b>하여 시도하거나, 실제 시간으로 일정 시간이 흐른 뒤 다시 시도해 보세요. 비가 오거나 눈이 오는 날 트리거 된다는 이야기도 있습니다.
+        </p>
+          <div class="wuxia-image-container">
+        <img src="../quests/images/q76_11.jpg" alt="관리 엿듣기">
+    </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">비화연</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>획득 방법:</b> 진수전 <b>'금명지'</b> 클리어 시 자동으로 획득됩니다.
+    </p>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">크게 변한 성격</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>방법:</b> 아래 장소로 이동하여 <b>관리의 대화</b>를 <b>'엿듣기'</b> 하세요.
+    </p>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q76_1.jpg" alt="관리 엿듣기">
+    </div>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q76_2.jpg" alt="위치 정보">
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">당전이 수도로 들어가다</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>방법:</b> 개봉 <b>시매사</b>(시장)에 있는 NPC <b>오가</b>와 대화하면 완료됩니다.
+    </p>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q76_3.jpg" alt="오가 위치">
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">군사 비용과 대의</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>방법:</b> 아래 장소로 이동하여 <b>조광의</b>의 대화를 <b>'엿듣기'</b> 하세요.
+    </p>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q76_4.jpg" alt="조광의 엿듣기">
+    </div>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q76_5.jpg" alt="위치 정보">
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

@@ -294,17 +294,23 @@ function loadHomeMaps() {
         mapList.appendChild(card);
     });
 }
-
-// =========================================
-// 5. 탭 전환 및 URL 관리
-// =========================================
 function switchTab(tabName) {
+    // 1. 뷰(화면) 숨기기
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail'];
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder'];
-
     views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
-    navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
 
+    // 2. 상단 탭 스타일 초기화 (일반 버튼 + 더보기 버튼)
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more'];
+    navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
+    
+    // 3. 드롭다운 내부 아이템 스타일 초기화
+    document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
+
+    // 4. 드롭다운 메뉴 닫기 (탭 이동 시)
+    const dropdown = document.getElementById("nav-more-list");
+    if(dropdown) dropdown.classList.remove('show');
+
+    // 5. 탭 활성화 로직
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
@@ -319,6 +325,7 @@ function switchTab(tabName) {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
         showQuestList();
+        // (생략: 기존 로직 유지)
         const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
         if (allBtn) filterQuestType('all', allBtn);
         updateUrlQuery('quest', null);
@@ -328,6 +335,7 @@ function switchTab(tabName) {
         updateUrlQuery('news'); 
     } 
     else if (tabName === 'guide' || tabName === 'code') {
+        // (생략: 기존 로직 유지)
         const guideView = document.getElementById('view-guide');
         if (guideView) {
             guideView.style.display = 'block';
@@ -344,7 +352,13 @@ function switchTab(tabName) {
     }
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
-        document.getElementById('nav-builder').classList.add('active');
+        
+        // [수정] 빌더는 이제 '더보기' 안에 있으므로, '더보기' 버튼과 '빌드' 아이템 둘 다 활성화 표시
+        document.getElementById('nav-more').classList.add('active');
+        const builderItem = document.getElementById('nav-builder');
+        if(builderItem) builderItem.classList.add('active');
+
+        // (생략: 기존 빌더 로직 유지)
         document.getElementById('tools-menu').style.display = 'block';
         document.getElementById('builder-interface').style.display = 'none';
 
@@ -1477,3 +1491,24 @@ function downloadBuildImage() {
         }
     });
 }
+
+// =========================================
+// [추가] 네비게이션 더보기 드롭다운 기능
+// =========================================
+
+// 1. 드롭다운 토글 함수
+function toggleNavDropdown(event) {
+    event.stopPropagation(); // 클릭 이벤트가 window까지 전파되지 않게 막음
+    const dropdown = document.getElementById("nav-more-list");
+    dropdown.classList.toggle("show");
+}
+
+// 2. 화면의 다른 곳을 클릭하면 드롭다운 닫기
+window.addEventListener('click', function(event) {
+    if (!event.target.matches('#nav-more')) {
+        const dropdown = document.getElementById("nav-more-list");
+        if (dropdown && dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+        }
+    }
+});

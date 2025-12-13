@@ -1423,13 +1423,12 @@ function copyToClipboard(text, btnElement) {
 }
 
 // =========================================
-// [추가] 뷰어(viewer.html) 이미지 저장 기능
+// [수정됨] 뷰어 이미지 저장 (출처 워터마크 자동 추가)
 // =========================================
 function downloadBuildImage() {
-    // 1. 캡쳐할 영역 가져오기 (viewer.html의 ID)
     const element = document.getElementById('capture-area');
 
-    // 혹시 index.html에서 호출했다면 기존 함수로 연결
+    // index.html의 빌더에서 호출된 경우 처리
     if (!element) {
         if (typeof saveBuildImage === 'function') {
             saveBuildImage();
@@ -1438,22 +1437,43 @@ function downloadBuildImage() {
         return alert("캡쳐할 영역을 찾을 수 없습니다.");
     }
 
-    // 2. 이미지 생성 (버튼은 data-html2canvas-ignore 속성 덕분에 자동 제외됨)
+    // 1. 출처(워터마크) 요소 생성
+    const watermark = document.createElement('div');
+    watermark.innerHTML = `
+        <div style="margin-top: 30px; padding-top: 15px; border-top: 1px dashed #ddd; text-align: center; color: #888; font-family: 'Noto Serif KR', serif; background-color: #fff;">
+            <p style="margin: 0; font-weight: bold; font-size: 0.95em; color: var(--wuxia-accent-gold);">연운 한국 위키</p>
+            <p style="margin: 5px 0 0 0; font-size: 0.8em; color: #999;">https://wwm.tips</p>
+        </div>
+    `;
+
+    // 2. 캡쳐 영역 맨 아래에 출처 붙이기
+    element.appendChild(watermark);
+
+    // 3. 이미지 생성 실행
     html2canvas(element, {
-        useCORS: true,       // 이미지 로딩 허용
-        scale: 2,            // 고화질
+        useCORS: true,
+        scale: 2, // 고해상도
         backgroundColor: "#ffffff",
         logging: false
     }).then(canvas => {
-        // 3. 다운로드 처리
+        // 4. 다운로드
         const link = document.createElement('a');
-        link.download = 'wwm-build-share.png'; // 저장될 파일명
+        link.download = 'wwm-build.png';
         link.href = canvas.toDataURL("image/png");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+
+        // 5. [중요] 캡쳐 끝났으니 출처 문구 제거 (화면에서 안 보이게)
+        if (watermark.parentNode) {
+            watermark.parentNode.removeChild(watermark);
+        }
     }).catch(err => {
         console.error("이미지 저장 실패:", err);
-        alert("이미지 저장 중 오류가 발생했습니다.\n" + err);
+        alert("이미지 저장 중 오류가 발생했습니다.");
+        // 에러가 나더라도 출처 문구는 지워줌
+        if (watermark.parentNode) {
+            watermark.parentNode.removeChild(watermark);
+        }
     });
 }

@@ -765,9 +765,12 @@ function renderPagination() {
     const container = document.getElementById('pagination-container');
     if (!container) return;
     container.innerHTML = '';
+    
+    // 전체 페이지 수 계산
     const totalPages = Math.ceil(currentQuestData.length / itemsPerPage);
     if (totalPages <= 1) return;
 
+    // 버튼 생성 도우미 함수
     const createBtn = (text, page, active = false, disabled = false) => {
         const btn = document.createElement('button');
         btn.className = `pagination-btn ${active ? 'active' : ''}`;
@@ -777,10 +780,36 @@ function renderPagination() {
         return btn;
     };
 
+    // [이전] 버튼
     container.appendChild(createBtn('<', currentPage - 1, false, currentPage === 1));
-    for (let i = 1; i <= totalPages; i++) container.appendChild(createBtn(i, i, i === currentPage));
+
+    // ▼▼▼ [핵심 수정] 5개씩 끊어서 보여주는 로직 ▼▼▼
+    const maxVisibleButtons = 5; // 한 번에 보여줄 숫자 개수
+    let startPage = currentPage - Math.floor(maxVisibleButtons / 2);
+    let endPage = currentPage + Math.floor(maxVisibleButtons / 2);
+
+    // 1. 시작 페이지 보정 (1보다 작아지지 않게)
+    if (startPage < 1) {
+        startPage = 1;
+        endPage = Math.min(totalPages, maxVisibleButtons);
+    }
+
+    // 2. 끝 페이지 보정 (전체 페이지를 넘지 않게)
+    if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, totalPages - maxVisibleButtons + 1);
+    }
+
+    // 계산된 범위만큼만 버튼 생성
+    for (let i = startPage; i <= endPage; i++) {
+        container.appendChild(createBtn(i, i, i === currentPage));
+    }
+    // ▲▲▲ 수정 끝 ▲▲▲
+
+    // [다음] 버튼
     container.appendChild(createBtn('>', currentPage + 1, false, currentPage === totalPages));
 }
+
 
 function changePage(page) {
     currentPage = page;

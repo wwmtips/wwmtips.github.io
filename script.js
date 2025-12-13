@@ -1361,3 +1361,34 @@ function handleHistoryChange() {
         switchTab('home');
     }
 }
+
+// =========================================
+// [추가 기능] 쿠폰 코드 복사하기
+// =========================================
+function copyToClipboard(text, btnElement) {
+    // 1. 텍스트 클립보드에 복사
+    navigator.clipboard.writeText(text).then(() => {
+        // 2. 성공 시 버튼 스타일 변경 (피드백)
+        const originalContent = btnElement.innerHTML;
+        
+        // 버튼 내용을 '완료' 상태로 변경
+        btnElement.innerHTML = '<span class="copy-icon">✅</span> 완료';
+        btnElement.style.backgroundColor = '#2e7d32'; // 초록색
+        btnElement.style.color = '#fff';
+        btnElement.style.borderColor = '#2e7d32';
+        btnElement.disabled = true; // 중복 클릭 방지
+
+        // 3. 2초 뒤에 원래대로 복구
+        setTimeout(() => {
+            btnElement.innerHTML = originalContent;
+            btnElement.style.backgroundColor = '';
+            btnElement.style.color = '';
+            btnElement.style.borderColor = '';
+            btnElement.disabled = false;
+        }, 2000);
+
+    }).catch(err => {
+        console.error('클립보드 복사 실패:', err);
+        alert('복사에 실패했습니다. 수동으로 복사해주세요.');
+    });
+}

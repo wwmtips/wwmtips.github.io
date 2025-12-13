@@ -2,6 +2,9 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "꼬리", "answer": "원숭이", "user": "마소" },
+{ "hint": "시체 먹는 새", "answer": "독수리", "user": "" },
+{ "hint": "과일", "answer": "귤", "user": "litss" },
     { "hint": "저항", "answer": "협죽도", "user": "ㅇㅇ" },
 
     { "hint": "당근", "answer": "토끼", "user": "무럭무럭" },

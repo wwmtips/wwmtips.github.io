@@ -43,6 +43,9 @@ const dummyMapData = [
 // =========================================
 // 2. 초기화 (DOMContentLoaded)
 // =========================================
+// =========================================
+// 2. 초기화 (DOMContentLoaded)
+// =========================================
 document.addEventListener("DOMContentLoaded", () => {
     // A. 데이터 로드
     loadData();
@@ -56,8 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // D. URL 파라미터 체크 및 탭 이동
     checkUrlParams();
-});
 
+    // ▼▼▼ [추가할 코드] 뒤로 가기 감지 이벤트 리스너 ▼▼▼
+    window.addEventListener('popstate', handleHistoryChange);
+});
 // =========================================
 // 3. 데이터 로딩 및 처리
 // =========================================
@@ -1308,4 +1313,51 @@ function openMartDetailSheet(martId) {
 
 function closeMartDetailSheet() {
     document.body.classList.remove('mart-sheet-open');
+}
+// =========================================
+// [추가 기능] 브라우저 뒤로 가기/앞으로 가기 처리
+// =========================================
+function handleHistoryChange() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    const qId = urlParams.get('q');
+    const gId = urlParams.get('g');
+    const bId = urlParams.get('b');
+
+    // 1. 퀘스트 상세 보기 주소일 경우 (예: ?q=80)
+    if (qId) {
+        switchTab('quest');
+        const fullId = 'q' + qId;
+        // 이미 로드된 데이터(globalData)에서 퀘스트 정보를 찾아서 화면에 표시
+        if (globalData.quests) {
+            const foundQuest = globalData.quests.find(q => q.id === fullId);
+            if (foundQuest) {
+                loadQuestDetail(foundQuest.filepath, fullId);
+            }
+        }
+        return;
+    }
+
+    // 2. 가이드(비급) 상세 주소일 경우 (예: ?g=code)
+    if (gId) {
+        switchTab('guide'); 
+        // switchTab('guide') 내부에서 URL을 다시 읽어 loadGuideView가 실행되므로 추가 동작 불필요
+        return;
+    }
+
+    // 3. 빌더 상세 주소일 경우 (예: ?b=...)
+    if (bId) {
+        switchTab('builder');
+        return;
+    }
+
+    // 4. 일반 탭 전환 (예: ?tab=quest 로 돌아온 경우)
+    // 여기서 switchTab('quest')가 호출되면 내부의 showQuestList()가 실행되어
+    // 상세 화면이 닫히고 목록 화면으로 돌아갑니다.
+    if (tab) {
+        switchTab(tab);
+    } else {
+        // 파라미터가 없으면 홈으로
+        switchTab('home');
+    }
 }

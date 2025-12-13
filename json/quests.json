@@ -700,5 +700,14 @@
     "bgimg": "q80_1.jpg",
     "iconpath": "images/man.jpg",
     "filepath": "/quests/q80.html"
+  },
+  {
+    "id": "q81",
+    "name": "바람에 흔들리는 매화",
+    "location": "취화음",
+    "type": "인연의 궤적",
+    "bgimg": "q81_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q81.html"
   }
 ]

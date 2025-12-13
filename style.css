@@ -1836,4 +1836,39 @@ h3 {
 #nav-more.active {
     color: var(--wuxia-text-main);
     border-bottom: 3px solid var(--wuxia-accent-red);
+}/* =========================================
+   [추가] 네비게이션 더보기 화살표 디자인 개선
+   ========================================= */
+
+/* 1. 더보기 버튼 정렬 */
+#nav-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 2. CSS로 만드는 깔끔한 화살표 (Chevron) */
+#nav-more::after {
+    content: '';
+    display: inline-block;
+    width: 6px;  /* 화살표 너비 */
+    height: 6px; /* 화살표 높이 */
+    margin-left: 8px; /* 글자와의 간격 */
+    
+    /* 얇은 선으로 V자 만들기 */
+    border-right: 2px solid #888; /* 평소 색상 (회색) */
+    border-bottom: 2px solid #888;
+    
+    /* 45도 회전시켜서 아래 방향 화살표로 만듦 */
+    transform: rotate(45deg); 
+    margin-bottom: 3px; /* 위치 미세 조정 */
+    transition: all 0.2s ease; /* 부드러운 색상 변경 애니메이션 */
+}
+
+/* 3. 활성화되었을 때 (눌렀을 때 또는 하위 메뉴 선택 시) 화살표 색상 변경 */
+#nav-more.active::after,
+.nav-dropdown-wrapper:hover #nav-more::after {
+    border-color: var(--wuxia-accent-red); /* 활성화 색상 (붉은색) */
+    /* 만약 메뉴가 열릴 때 화살표를 돌리고 싶다면 아래 주석 해제 */
+    /* transform: rotate(225deg) translate(-2px, -2px); */
 }

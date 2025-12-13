@@ -2,6 +2,8 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "저항", "answer": "협죽도", "user": "ㅇㅇ" },
+
     { "hint": "당근", "answer": "토끼", "user": "무럭무럭" },
 { "hint": "날렵함", "answer": "표범", "user": "SAOOA" },
 { "hint": "생선", "answer": "흰동가리", "user": "구구아띠" },

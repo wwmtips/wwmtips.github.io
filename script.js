@@ -1421,3 +1421,39 @@ function copyToClipboard(text, btnElement) {
         alert('복사에 실패했습니다. 수동으로 복사해주세요.');
     });
 }
+
+// =========================================
+// [추가] 뷰어(viewer.html) 이미지 저장 기능
+// =========================================
+function downloadBuildImage() {
+    // 1. 캡쳐할 영역 가져오기 (viewer.html의 ID)
+    const element = document.getElementById('capture-area');
+
+    // 혹시 index.html에서 호출했다면 기존 함수로 연결
+    if (!element) {
+        if (typeof saveBuildImage === 'function') {
+            saveBuildImage();
+            return;
+        }
+        return alert("캡쳐할 영역을 찾을 수 없습니다.");
+    }
+
+    // 2. 이미지 생성 (버튼은 data-html2canvas-ignore 속성 덕분에 자동 제외됨)
+    html2canvas(element, {
+        useCORS: true,       // 이미지 로딩 허용
+        scale: 2,            // 고화질
+        backgroundColor: "#ffffff",
+        logging: false
+    }).then(canvas => {
+        // 3. 다운로드 처리
+        const link = document.createElement('a');
+        link.download = 'wwm-build-share.png'; // 저장될 파일명
+        link.href = canvas.toDataURL("image/png");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }).catch(err => {
+        console.error("이미지 저장 실패:", err);
+        alert("이미지 저장 중 오류가 발생했습니다.\n" + err);
+    });
+}

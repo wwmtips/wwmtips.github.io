@@ -655,5 +655,14 @@
     "bgimg": "q75_1.jpg",
     "iconpath": "images/man.jpg",
     "filepath": "/quests/q75.html"
+  },
+  {
+    "id": "q76",
+    "name": "암류 3장",
+    "location": "개봉",
+    "type": "인연의 궤적",
+    "bgimg": "q76_1.jpg",
+    "iconpath": "images/man.jpg",
+    "filepath": "/quests/q76.html"
   }
 ]

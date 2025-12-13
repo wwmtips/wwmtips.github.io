@@ -1,0 +1,151 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .info-box {
+            background-color: #fffcf5;
+            border: 1px solid var(--wuxia-accent-gold);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .category-title {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-red);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+        .disabled-item {
+            color: #999;
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border: 1px dashed #ccc;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">인연의 궤적</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            암류 3장 (완료 불가)
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">수집 정보 모음 2</p>
+    </div>
+
+    <div class="info-box">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 수집 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            협적, 메인 퀘스트, 그리고 탐색 보상으로 얻을 수 있는 인연 항목들입니다.<br>
+            일부 항목은 현재 업데이트되지 않아 획득이 불가능합니다.
+        </p>
+    </div>
+
+    <h3 class="category-title">명단 위기</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>획득 방법:</b> 개봉 협적 제1권 - <b>'거리의 기인'</b> 클리어 시 자동으로 획득됩니다.
+    </p>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q77_1.jpg" alt="명단 위기 관련">
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">간절한 노래</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>방법:</b> <b>번루 1층</b>에서 아래 이미지의 NPC 대화를 <b>'엿듣기'</b> 하세요.
+    </p>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q77_2.jpg" alt="번루 1층 엿듣기">
+    </div>
+
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q77_3.jpg" alt="번루 1층 엿듣기">
+    </div>
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">귀신이 있는 밤</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>획득 방법:</b> 개봉 <b>메인 퀘스트</b>를 진행하면서 자연스럽게 획득할 수 있습니다.
+    </p>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">학살 소문</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>획득 방법:</b> 덧없는 인생 제3권 - <b>'전하지 못한 세월'</b> 클리어 시 획득할 수 있습니다.
+    </p>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">전서</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>획득 방법:</b> 개봉 <b>탐색도 5레벨</b> 달성 후 보상으로 받는 <b>'공자 서신'</b>을 획득하면 완료됩니다.
+    </p>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">알 수 없음 (6번, 7번)</h3>
+    <div class="disabled-item">
+        <p style="margin: 0; font-size: 0.9em;">
+            <b>🚫 현재 획득 불가</b><br><br>
+            개봉 협적 <b>'종장'</b> 클리어 시 획득 가능하다고 안내되어 있으나,<br>
+            현재 버전에서는 얻을 수 없습니다. (추후 업데이트 예정)
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

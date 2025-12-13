@@ -655,7 +655,7 @@
     "bgimg": "q75_1.jpg",
     "iconpath": "images/man.jpg",
     "filepath": "/quests/q75.html"
-  },,
+  },
   {
     "id": "q76",
     "name": "묘당",
@@ -667,11 +667,20 @@
   },
   {
     "id": "q77",
-    "name": "암류 3장",
+    "name": "암류 4장",
     "location": "개봉",
     "type": "인연의 궤적",
     "bgimg": "q77_1.jpg",
     "iconpath": "images/man.jpg",
     "filepath": "/quests/q77.html"
+  },
+  {
+    "id": "q78",
+    "name": "암류 5장",
+    "location": "개봉",
+    "type": "인연의 궤적",
+    "bgimg": "q78_1.jpg",
+    "iconpath": "images/man.jpg",
+    "filepath": "/quests/q78.html"
   }
 ]

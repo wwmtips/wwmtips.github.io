@@ -682,5 +682,23 @@
     "bgimg": "q78_1.jpg",
     "iconpath": "images/man.jpg",
     "filepath": "/quests/q78.html"
+  },
+  {
+    "id": "q79",
+    "name": "암류 6장",
+    "location": "개봉",
+    "type": "인연의 궤적",
+    "bgimg": "q79_1.jpg",
+    "iconpath": "images/man.jpg",
+    "filepath": "/quests/q79.html"
+  },
+  {
+    "id": "q80",
+    "name": "재물의 신",
+    "location": "개봉",
+    "type": "인연의 궤적",
+    "bgimg": "q80_1.jpg",
+    "iconpath": "images/man.jpg",
+    "filepath": "/quests/q80.html"
   }
 ]

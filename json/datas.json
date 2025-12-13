@@ -2,6 +2,17 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "당근", "answer": "토끼", "user": "무럭무럭" },
+{ "hint": "날렵함", "answer": "표범", "user": "SAOOA" },
+{ "hint": "생선", "answer": "흰동가리", "user": "구구아띠" },
+{ "hint": "독", "answer": "해파리", "user": "ㅇㅇ" },
+{ "hint": "폴짝폴짝", "answer": "개구리", "user": "뽕이" },
+{ "hint": "주름제거", "answer": "다리미", "user": "김춘룡" },
+{ "hint": "독", "answer": "해파리", "user": "SnowBall" },
+{ "hint": "물갈퀴", "answer": "오리", "user": "" },
+{ "hint": "장신구", "answer": "팔찌", "user": "양광" },
+
+    
 { "hint": "중독성", "answer": "담배", "user": "ㅇㅇ" },
 { "hint": "폴짝폴짝", "answer": "개구리", "user": "가무언" },
 { "hint": "세계문화유산", "answer": "만리장성", "user": "HighTower" },

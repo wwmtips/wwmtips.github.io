@@ -83,7 +83,7 @@
     "id": "q11",
     "name": "제 1막: 시작된 음모",
     "location": "청하",
-    "type": "기타",
+    "type": "세계관",
     "iconpath": "images/story.jpg",
     "filepath": "/quests/q11.html"
   },
@@ -132,7 +132,7 @@
     "id": "q17",
     "name": "달빛 속 칼날",
     "location": "불야채",
-    "type": "기타",
+    "type": "이벤트",
     "iconpath": "images/event1.jpg",
     "filepath": "/quests/q17.html"
   }
@@ -166,7 +166,7 @@
     "id": "q21",
     "name": "구오대사: 왕청 전",
     "location": "후진",
-    "type": "기타",
+    "type": "세계관",
     "iconpath": "images/story.jpg",
     "filepath": "/quests/q21.html"
   },

@@ -772,5 +772,14 @@
     "bgimg": "q88_1.jpg",
     "iconpath": "images/u.jpg",
     "filepath": "/quests/q88.html"
+  },
+  {
+    "id": "q89",
+    "name": "안정된 삶",
+    "location": "평야원",
+    "type": "만사록",
+    "bgimg": "q89_2.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q89.html"
   }
 ]

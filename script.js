@@ -79,7 +79,7 @@ function loadData() {
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
         fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),
         fetch('json/builds.json').then(res => res.json()).catch(err => { console.warn('builds.json 로드 실패', err); return { builds: [] }; }),
-        // fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return []; }),
+        fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return []; }),
         fetch('json/builder_data.json').then(res => res.json()).catch(err => { console.warn('builder_data.json 로드 실패', err); return null; }) 
     ])
     .then(([mainData, questData, newsData, cnewsData, buildsData, builderDataResult]) => {

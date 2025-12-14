@@ -1,0 +1,184 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            숙적과 벗
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">두 시인의 수심 들어주기</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            라이벌 관계인 두 시인, <b>개양서</b>와 <b>온근유</b>의 시 읊기 대회를 돕는 의뢰입니다.<br>
+            그들의 고민을 들어주고 대회를 위한 준비물을 모아 전달해야 합니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            두 시인의 고민 (중요: 대화 순서)
+        </h3>
+        
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>1. 개양서와의 만남:</b><br>
+            황궁 후원 남쪽 경계석 옆에서 <b>개양서</b>와 대화하여 맞수를 이길 방법을 의뢰받습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_1.jpg" alt="개양서">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_2.jpg" alt="개양서 위치">
+        </div>
+
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            <b>2. 온근유와의 만남:</b><br>
+            아래 정자 위치로 이동하여 <b>온근유</b>와 대화합니다. 그 또한 이길 방법을 찾고 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_3.jpg" alt="온근유">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_4.jpg" alt="온근유 위치">
+        </div>
+
+        <div class="warning-box">
+            <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 필수 대화 순서 (주의)</h4>
+            <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+                이벤트가 정상적으로 진행되려면 반드시 <b>아래 순서대로 두 번씩</b> 말을 걸어야 합니다.<br>
+                순서를 지키지 않으면 다음 단계로 넘어가지 않을 수 있습니다.
+            </p>
+            <div style="background-color: #fff; padding: 10px; margin-top: 10px; text-align: center; font-weight: bold; border-radius: 4px; border: 1px dashed var(--wuxia-accent-red); color: var(--wuxia-text-main);">
+                개양서 ➤ 온근유 ➤ <span style="color: var(--wuxia-accent-red);">다시 개양서</span> ➤ <span style="color: var(--wuxia-accent-red);">다시 온근유</span>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            준비물 수집
+        </h3>
+        
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 20px;">1. 문집 획득</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>사방</b>(아래 위치의 건물)으로 이동하여 <b>선반</b> 위에 있는 <b>문집</b>을 챙기세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_5.jpg" alt="문집">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_6.jpg" alt="문집 위치">
+        </div>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">2. 책 빌리기</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            건물 <b>2층</b>에 있는 NPC <b>예운</b>과 대화하여 책을 빌려야 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_7.jpg" alt="예운">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_8.jpg" alt="예운 위치">
+        </div>
+
+        <p style="font-weight: bold; color: var(--wuxia-accent-gold); margin-top: 30px;">3. 약 구하기</p>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            약장수 <b>백출</b>을 찾아가 목에 좋다는 약을 받으세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_9.jpg" alt="백출">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_10.jpg" alt="백출 위치">
+        </div>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            전달 및 완료
+        </h3>
+        <ul style="color: var(--wuxia-text-main); margin: 0; padding-left: 20px; line-height: 1.6;">
+            <li><b>개양서</b>에게 아이템 2개 전달</li>
+            <li><b>온근유</b>에게 아이템 2개 전달</li>
+            <li>마지막으로 <b>탁자 위</b>를 조사</li>
+        </ul>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            두 시인에게 모든 준비물을 전달하고 온근유 자리 입구쪽에서 가리개 치기를 하면
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+  
+    </div>
+          
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q85_11.jpg" alt="백출 위치">
+        </div>
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

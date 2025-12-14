@@ -727,5 +727,23 @@
     "bgimg": "q83_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q83.html"
+  },
+  {
+    "id": "q84",
+    "name": "옥궁의 화려함",
+    "location": "황궁 후원",
+    "type": "만사록",
+    "bgimg": "q84_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q84.html"
+  },
+  {
+    "id": "q85",
+    "name": "숙적과 벗",
+    "location": "황궁 후원",
+    "type": "만사록",
+    "bgimg": "q85_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q85.html"
   }
 ]

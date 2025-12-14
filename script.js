@@ -17,7 +17,6 @@ let slideInterval;
 // 데이터 저장소
 let globalData = { items: [], quiz: [], quests: [], news: [], cnews: [], builds: [] };
 let builderData = null; 
-chunji 추가
 let chunjiData = []; // 천지록 데이터 전역 변수
 
 // 빌더 상태 관리

@@ -64,8 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // ▼▼▼ [추가할 코드] 뒤로 가기 감지 이벤트 리스너 ▼▼▼
     window.addEventListener('popstate', handleHistoryChange);
 });
+
+
 // =========================================
-// 3. 데이터 로딩 및 처리
+// 3. 데이터 로딩 및 처리 (수정됨)
 // =========================================
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -79,17 +81,20 @@ function loadData() {
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
         fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),
         fetch('json/builds.json').then(res => res.json()).catch(err => { console.warn('builds.json 로드 실패', err); return { builds: [] }; }),
-        //fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return []; }),
+        fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return { chunji: [] }; }), // 기본값 형식 맞춤
         fetch('json/builder_data.json').then(res => res.json()).catch(err => { console.warn('builder_data.json 로드 실패', err); return null; }) 
     ])
-    .then(([mainData, questData, newsData, cnewsData, buildsData, builderDataResult]) => {
+    // ▼▼▼ [중요 수정] chunjiResult 파라미터가 빠져있던 것을 추가했습니다. ▼▼▼
+    .then(([mainData, questData, newsData, cnewsData, buildsData, chunjiResult, builderDataResult]) => {
         console.log("데이터 로드 완료");
 
         let quests = Array.isArray(questData) ? questData : (questData.quests || []);
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
-        // 천지록 데이터 처리
+        
+        // 천지록 데이터 처리 (이제 chunjiResult를 정상적으로 인식합니다)
         let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
+        
         let builds = buildsData.builds || [];
 
         if (quests.length > 0) {
@@ -106,14 +111,15 @@ function loadData() {
             quests: quests, 
             news: news,
             cnews: cnews,
-           chunji: chunji,
+            chunji: chunji, // 데이터 연결
             builds: builds 
         };
 
         builderData = builderDataResult; 
         currentQuestData = globalData.quests;
-        chunjiData = globalData.chunji; // 전역 변수에 할당
-       renderChunjiList(); // 목록 렌더링 함수 호출
+        chunjiData = globalData.chunji; // 전역 변수 할당
+        
+        renderChunjiList(); // 천지록 렌더링 실행
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
         renderQuestList();                

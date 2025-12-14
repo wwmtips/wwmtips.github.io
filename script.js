@@ -17,6 +17,8 @@ let slideInterval;
 // 데이터 저장소
 let globalData = { items: [], quiz: [], quests: [], news: [], cnews: [], builds: [] };
 let builderData = null; 
+chunji 추가
+let chunjiData = []; // 천지록 데이터 전역 변수
 
 // 빌더 상태 관리
 let currentBuild = { weapons: [null,null], hearts: [null,null,null,null], marts: new Array(8).fill(null) };
@@ -78,6 +80,7 @@ function loadData() {
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
         fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),
         fetch('json/builds.json').then(res => res.json()).catch(err => { console.warn('builds.json 로드 실패', err); return { builds: [] }; }),
+        // fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return []; }),
         fetch('json/builder_data.json').then(res => res.json()).catch(err => { console.warn('builder_data.json 로드 실패', err); return null; }) 
     ])
     .then(([mainData, questData, newsData, cnewsData, buildsData, builderDataResult]) => {
@@ -86,6 +89,8 @@ function loadData() {
         let quests = Array.isArray(questData) ? questData : (questData.quests || []);
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
+        // 천지록 데이터 처리
+        let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
         let builds = buildsData.builds || [];
 
         if (quests.length > 0) {
@@ -102,12 +107,14 @@ function loadData() {
             quests: quests, 
             news: news,
             cnews: cnews,
+           chunji: chunji,
             builds: builds 
         };
 
         builderData = builderDataResult; 
         currentQuestData = globalData.quests;
-
+        chunjiData = globalData.chunji; // 전역 변수에 할당
+       renderChunjiList(); // 목록 렌더링 함수 호출
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
         renderQuestList();                
@@ -296,11 +303,11 @@ function loadHomeMaps() {
 }
 function switchTab(tabName) {
     // 1. 뷰(화면) 숨기기
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail'];
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
     views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
     // 2. 상단 탭 스타일 초기화 (일반 버튼 + 더보기 버튼)
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more'];
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
     navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
     
     // 3. 드롭다운 내부 아이템 스타일 초기화
@@ -316,6 +323,12 @@ function switchTab(tabName) {
         document.getElementById('nav-home').classList.add('active');
         updateUrlQuery('home');
     } 
+  else if (tabName === 'chunji') {
+        document.getElementById('view-chunji').style.display = 'block';
+        document.getElementById('nav-chunji').classList.add('active');
+        showChunjiList(); // 목록 화면 보여주기
+        updateUrlQuery('chunji');
+       }
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
         document.getElementById('nav-quiz').classList.add('active');
@@ -395,6 +408,9 @@ function updateUrlQuery(tab, id) {
     else if (tab === 'guide' && id) {
         url.searchParams.set('g', id);
     }
+       else if (tab === 'chunji' && id) {
+        url.searchParams.set('cid', id); // cid 파라미터 사용 예시
+       }
     else {
         if (tab && tab !== 'home') url.searchParams.set('tab', tab);
         if (id) url.searchParams.set('id', id);
@@ -407,13 +423,15 @@ function checkUrlParams() {
     if (urlParams.get('q')) { switchTab('quest'); return; }
     if (urlParams.get('g')) { switchTab('guide'); return; }
     if (urlParams.get('b')) { switchTab('builder'); return; }
-
-    const tab = urlParams.get('tab'); 
+    if (urlParams.get('cid')) { switchTab('chunji'); loadChunjiDetailById(urlParams.get('cid')); return; } // 상세 보기 처리
+    
+   const tab = urlParams.get('tab'); 
     if (tab === 'quiz') switchTab('quiz');
     else if (tab === 'quest') switchTab('quest');
     else if (tab === 'news') switchTab('news');
     else if (tab === 'guide') switchTab('guide'); 
     else if (tab === 'builder') switchTab('builder');
+   else if (tab === 'chunji') switchTab('chunji');
     else switchTab('home');
 }
 
@@ -1512,3 +1530,112 @@ window.addEventListener('click', function(event) {
         }
     }
 });
+
+// =========================================
+// [추가] 천지록(Chunji) 기능
+// =========================================
+
+// 목록 렌더링
+function renderChunjiList() {
+    const container = document.getElementById('chunji-list-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!chunjiData || chunjiData.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">데이터가 없습니다.</div>';
+        return;
+    }
+
+    chunjiData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'chunji-item';
+        div.onclick = () => loadChunjiDetail(item, index);
+        // 썸네일 없이 텍스트만 표시
+        div.innerHTML = `<div class="chunji-title">${item.title}</div>`;
+        container.appendChild(div);
+    });
+}
+
+// 상세 보기 로드
+function loadChunjiDetail(item, index) {
+    const listView = document.getElementById('chunji-list-view');
+    const detailView = document.getElementById('chunji-detail-view');
+    const content = document.getElementById('chunji-detail-content');
+
+    if (listView) listView.style.display = 'none';
+    if (detailView) detailView.style.display = 'block';
+
+    // URL 업데이트 (선택 사항)
+    // updateUrlQuery('chunji', index); 
+
+    // 이미지 HTML 생성 헬퍼
+    const createImgHtml = (src) => src ? `<img src="${src}" class="detail-img" onerror="this.style.display='none'">` : '';
+
+    content.innerHTML = `
+        <div class="chunji-detail-header">
+            <span class="badge item">유물</span>
+            <h2 class="chunji-detail-title">${item.title}</h2>
+        </div>
+
+        <div class="detail-section">
+            <h3 class="detail-subtitle">획득 방법</h3>
+            <p class="detail-text">${item.get || '정보 없음'}</p>
+            <div class="detail-images">
+                ${createImgHtml(item.getimg1)}
+                ${createImgHtml(item.getimg2)}
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h3 class="detail-subtitle">해독 방법</h3>
+            <p class="detail-text">${item.dsec || '정보 없음'}</p> <div class="detail-images">
+                ${createImgHtml(item.dsecimg1)}
+                ${createImgHtml(item.dsecimg2)}
+            </div>
+        </div>
+    `;
+    window.scrollTo(0, 0);
+}
+
+// 목록으로 돌아가기
+function showChunjiList() {
+    const listView = document.getElementById('chunji-list-view');
+    const detailView = document.getElementById('chunji-detail-view');
+    if (listView) listView.style.display = 'block';
+    if (detailView) detailView.style.display = 'none';
+    updateUrlQuery('chunji');
+}
+
+// ID로 상세 로드 (URL 파라미터용, 인덱스 사용 예시)
+function loadChunjiDetailById(id) {
+    const index = parseInt(id);
+    if (!isNaN(index) && chunjiData[index]) {
+        loadChunjiDetail(chunjiData[index], index);
+    }
+}
+
+// 통합 검색 핸들러 수정 (handleGlobalSearch 함수 내부에 추가)
+/*
+    // 4. 천지록 검색 (기존 handleGlobalSearch 함수 안에 이 부분을 추가하세요)
+    if (globalData.chunji && Array.isArray(globalData.chunji)) {
+        globalData.chunji.filter(c => {
+            return c.title.toLowerCase().includes(keyword);
+        })
+        .slice(0, 3).forEach((item, index) => { // index는 실제 데이터에서의 인덱스를 찾아야 정확함
+            // 실제 데이터에서의 인덱스를 찾기 위해 indexOf 사용 권장
+            const realIndex = globalData.chunji.indexOf(item);
+            resultsHTML += `
+                <div class="search-result-item" onclick="selectChunjiResult(${realIndex})">
+                    <span class="badge item">천지록</span> 
+                    <span class="result-text">${item.title}</span>
+                </div>`;
+        });
+    }
+*/
+
+// 천지록 검색 결과 선택 함수
+function selectChunjiResult(index) {
+    switchTab('chunji');
+    loadChunjiDetail(globalData.chunji[index], index);
+    document.getElementById("global-search-results").style.display = 'none';
+}

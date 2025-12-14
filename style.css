@@ -1978,16 +1978,11 @@ h3 {
     border-bottom: 1px dashed #ccc;
     padding-bottom: 10px;
     font-family: 'Noto Serif KR', serif;
-}
-
-.brush-stroke {
-    display: inline-block;
-    width: 5px;
-    height: 18px;
-    background-color: var(--wuxia-accent-red);
-    margin-right: 10px;
-    border-radius: 1px;
-    transform: rotate(-10deg);
+   border-left: 4px solid var(--wuxia-accent-red); 
+    padding-left: 10px; 
+    
+    font-weight: bold;
+    font-family: 'Noto Serif KR', serif;
 }
 
 .chunji-text {
@@ -2001,7 +1996,9 @@ h3 {
     border: 1px solid #eee;
 }
 
-
+.brush-stroke {
+    display: none !important; /* JS에 남아있는 태그를 CSS로 강제 숨김 */
+}
 /* -----------------------------------------
    3. 이미지 그리드 & 카드 스타일 (퀘스트 스타일 이식)
    ----------------------------------------- */

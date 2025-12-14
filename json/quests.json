@@ -745,5 +745,14 @@
     "bgimg": "q85_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q85.html"
+  },
+  {
+    "id": "q86",
+    "name": "중요한 물건",
+    "location": "금명지",
+    "type": "만사록",
+    "bgimg": "q86_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q86.html"
   }
 ]

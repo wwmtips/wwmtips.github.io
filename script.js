@@ -74,6 +74,7 @@ function loadData() {
     const targetTab = urlParams.get('tab');
     const targetId = urlParams.get('id');
     const shortQuestId = urlParams.get('q'); 
+    const chunjiId = urlParams.get('c'); // [추가] 천지록 ID 파라미터
 
     Promise.all([
         fetch('json/datas.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
@@ -81,20 +82,16 @@ function loadData() {
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
         fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),
         fetch('json/builds.json').then(res => res.json()).catch(err => { console.warn('builds.json 로드 실패', err); return { builds: [] }; }),
-        fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return { chunji: [] }; }), // 기본값 형식 맞춤
+        fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return { chunji: [] }; }),
         fetch('json/builder_data.json').then(res => res.json()).catch(err => { console.warn('builder_data.json 로드 실패', err); return null; }) 
     ])
-    // ▼▼▼ [중요 수정] chunjiResult 파라미터가 빠져있던 것을 추가했습니다. ▼▼▼
     .then(([mainData, questData, newsData, cnewsData, buildsData, chunjiResult, builderDataResult]) => {
         console.log("데이터 로드 완료");
 
         let quests = Array.isArray(questData) ? questData : (questData.quests || []);
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
-        
-        // 천지록 데이터 처리 (이제 chunjiResult를 정상적으로 인식합니다)
         let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
-        
         let builds = buildsData.builds || [];
 
         if (quests.length > 0) {
@@ -105,21 +102,12 @@ function loadData() {
             });
         }
         
-        globalData = {
-            items: mainData.items || [],
-            quiz: mainData.quiz || [],
-            quests: quests, 
-            news: news,
-            cnews: cnews,
-            chunji: chunji, // 데이터 연결
-            builds: builds 
-        };
-
+        globalData = { items: mainData.items || [], quiz: mainData.quiz || [], quests: quests, news: news, cnews: cnews, chunji: chunji, builds: builds };
         builderData = builderDataResult; 
         currentQuestData = globalData.quests;
-        chunjiData = globalData.chunji; // 전역 변수 할당
-        
-        renderChunjiList(); // 천지록 렌더링 실행
+        chunjiData = globalData.chunji;
+
+        renderChunjiList();
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
         renderQuestList();                
@@ -128,14 +116,20 @@ function loadData() {
         renderHomeCommunityNews(globalData.cnews);
         renderFullNews(globalData.news);
 
-        if (targetTab === 'builder') {
-             renderBuildList('all');
-        }
+        if (targetTab === 'builder') renderBuildList('all');
 
+        // [수정] URL 파라미터에 따른 초기 화면 진입 로직
         if (shortQuestId) {
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
             if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); 
+        }
+        else if (chunjiId) { // [추가] 천지록 바로가기
+            const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
+            if (foundChunji) {
+                switchTab('chunji');
+                loadChunjiDetail(foundChunji);
+            }
         }
         else if (targetTab === 'quest' && targetId) {
             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
@@ -143,9 +137,7 @@ function loadData() {
             if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
         }
     })
-    .catch(error => {
-        console.error("데이터 처리 중 오류 발생:", error);
-    });
+    .catch(error => { console.error("데이터 처리 중 오류 발생:", error); });
 }
 
 // =========================================
@@ -402,10 +394,12 @@ function switchTab(tabName) {
 
 function updateUrlQuery(tab, id) {
     const url = new URL(window.location);
+    // 기존 파라미터 초기화
     url.searchParams.delete('tab');
     url.searchParams.delete('id');
     url.searchParams.delete('q');
     url.searchParams.delete('g');
+    url.searchParams.delete('c'); // [추가] c 파라미터 초기화
 
     if (tab === 'quest' && id) {
         url.searchParams.set('q', id.toLowerCase().replace('q', ''));
@@ -413,9 +407,9 @@ function updateUrlQuery(tab, id) {
     else if (tab === 'guide' && id) {
         url.searchParams.set('g', id);
     }
-       else if (tab === 'chunji' && id) {
-        url.searchParams.set('cid', id); // cid 파라미터 사용 예시
-       }
+    else if (tab === 'chunji' && id) {
+        url.searchParams.set('c', id); // [추가] 천지록 상세일 때 c=ID 설정
+    }
     else {
         if (tab && tab !== 'home') url.searchParams.set('tab', tab);
         if (id) url.searchParams.set('id', id);
@@ -423,22 +417,31 @@ function updateUrlQuery(tab, id) {
     if (url.toString() !== window.location.href) history.pushState(null, '', url);
 }
 
+
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
+    
     if (urlParams.get('q')) { switchTab('quest'); return; }
     if (urlParams.get('g')) { switchTab('guide'); return; }
     if (urlParams.get('b')) { switchTab('builder'); return; }
-    if (urlParams.get('cid')) { switchTab('chunji'); loadChunjiDetailById(urlParams.get('cid')); return; } // 상세 보기 처리
     
-   const tab = urlParams.get('tab'); 
+    // [수정] 천지록 파라미터 체크 (c)
+    if (urlParams.get('c')) { 
+        // 데이터가 아직 로드되지 않았을 수 있으므로 탭만 전환하고, 실제 로드는 loadData에서 처리
+        switchTab('chunji'); 
+        return; 
+    }
+    
+    const tab = urlParams.get('tab'); 
     if (tab === 'quiz') switchTab('quiz');
     else if (tab === 'quest') switchTab('quest');
     else if (tab === 'news') switchTab('news');
     else if (tab === 'guide') switchTab('guide'); 
     else if (tab === 'builder') switchTab('builder');
-   else if (tab === 'chunji') switchTab('chunji');
+    else if (tab === 'chunji') switchTab('chunji');
     else switchTab('home');
 }
+
 
 // =========================================
 // 6. 가이드(Guide) 기능
@@ -1403,41 +1406,34 @@ function handleHistoryChange() {
     const qId = urlParams.get('q');
     const gId = urlParams.get('g');
     const bId = urlParams.get('b');
+    const cId = urlParams.get('c'); // [추가]
 
-    // 1. 퀘스트 상세 보기 주소일 경우 (예: ?q=80)
-    if (qId) {
+    if (qId) { /* 기존 코드 유지 */
         switchTab('quest');
         const fullId = 'q' + qId;
-        // 이미 로드된 데이터(globalData)에서 퀘스트 정보를 찾아서 화면에 표시
         if (globalData.quests) {
             const foundQuest = globalData.quests.find(q => q.id === fullId);
-            if (foundQuest) {
-                loadQuestDetail(foundQuest.filepath, fullId);
-            }
+            if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId);
         }
         return;
     }
 
-    // 2. 가이드(비급) 상세 주소일 경우 (예: ?g=code)
-    if (gId) {
-        switchTab('guide'); 
-        // switchTab('guide') 내부에서 URL을 다시 읽어 loadGuideView가 실행되므로 추가 동작 불필요
+    if (gId) { switchTab('guide'); return; }
+    if (bId) { switchTab('builder'); return; }
+
+    // [추가] 천지록 뒤로가기 처리
+    if (cId) {
+        switchTab('chunji');
+        if (globalData.chunji) {
+            const foundChunji = globalData.chunji.find(c => c.id === cId);
+            if (foundChunji) loadChunjiDetail(foundChunji);
+        }
         return;
     }
 
-    // 3. 빌더 상세 주소일 경우 (예: ?b=...)
-    if (bId) {
-        switchTab('builder');
-        return;
-    }
-
-    // 4. 일반 탭 전환 (예: ?tab=quest 로 돌아온 경우)
-    // 여기서 switchTab('quest')가 호출되면 내부의 showQuestList()가 실행되어
-    // 상세 화면이 닫히고 목록 화면으로 돌아갑니다.
     if (tab) {
         switchTab(tab);
     } else {
-        // 파라미터가 없으면 홈으로
         switchTab('home');
     }
 }
@@ -1642,7 +1638,7 @@ function renderChunjiList() {
 }
 
 // 상세 보기 (수묵화 스타일 적용)
-function loadChunjiDetail(item, index) {
+function loadChunjiDetail(item) { // index 인자는 이제 필요 없음
     const listView = document.getElementById('chunji-list-view');
     const detailView = document.getElementById('chunji-detail-view');
     const content = document.getElementById('chunji-detail-content');
@@ -1650,7 +1646,9 @@ function loadChunjiDetail(item, index) {
     if (listView) listView.style.display = 'none';
     if (detailView) detailView.style.display = 'block';
 
-    // 이미지 태그 생성 헬퍼
+    // [추가] 상세 진입 시 URL 업데이트 (예: ?c=1)
+    if (item.id) updateUrlQuery('chunji', item.id);
+
     const imgTag = (src) => src ? `<div class="detail-img-wrapper"><img src="${src}" onclick="window.open(this.src)" alt="참고 이미지"></div>` : '';
 
     content.innerHTML = `
@@ -1660,7 +1658,7 @@ function loadChunjiDetail(item, index) {
         </div>
 
         <div class="chunji-section">
-            <h3 class="chunji-sub-title"><span class="brush-stroke"></span>획득 방법</h3>
+            <h3 class="chunji-sub-title">획득 방법</h3>
             <p class="chunji-text">${item.get || '정보가 없습니다.'}</p>
             <div class="chunji-img-grid">
                 ${imgTag(item.getimg1)}
@@ -1669,7 +1667,7 @@ function loadChunjiDetail(item, index) {
         </div>
 
         <div class="chunji-section">
-            <h3 class="chunji-sub-title"><span class="brush-stroke"></span>해독 방법</h3>
+            <h3 class="chunji-sub-title">해독 방법</h3>
             <p class="chunji-text">${item.dsec || '정보가 없습니다.'}</p>
             <div class="chunji-img-grid">
                 ${imgTag(item.dsecimg1)}
@@ -1679,13 +1677,10 @@ function loadChunjiDetail(item, index) {
     `;
     window.scrollTo(0, 0);
 }
-
-// 목록으로 돌아가기
 function showChunjiList() {
     document.getElementById('chunji-list-view').style.display = 'block';
     document.getElementById('chunji-detail-view').style.display = 'none';
 }
-
 // ID로 상세 로드 (URL 파라미터용)
 function loadChunjiDetailById(id) {
     const index = parseInt(id);

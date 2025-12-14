@@ -1906,12 +1906,7 @@ h3 {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.chunji-title {
-    font-weight: bold;
-    color: #333;
-    font-size: 1.05em;
-    font-family: 'Noto Serif KR', serif;
-}
+
 
 /* 천지록 상세 페이지 */
 .chunji-detail-header {
@@ -1964,4 +1959,50 @@ h3 {
     height: auto;
     border-radius: 4px;
     border: 1px solid #ddd;
+}
+/* =========================================
+   [수정] 천지록 리스트 정렬 (줄바꿈 방지)
+   ========================================= */
+.chunji-item {
+    display: flex !important;       /* [핵심] 강제로 가로 배치 */
+    justify-content: space-between; /* 양 끝으로 벌리기 */
+    align-items: center;            /* 수직 중앙 정렬 */
+    
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-left: 4px solid #aaa;
+    border-radius: 2px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.chunji-item:hover {
+    border-left-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+    transform: translateX(5px);
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 제목이 길어도 한 줄 유지 */
+.chunji-title {
+    font-size: 1.05em;
+    font-weight: bold;
+    color: #333;
+    
+    /* 말줄임 처리 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px; /* 화살표와 간격 */
+}
+
+/* 화살표 스타일 */
+.arrow-icon {
+    font-size: 1.5em; /* 크기 키움 */
+    color: #ccc;
+    font-weight: normal;
+    line-height: 1;   /* 높이 잡히는 것 방지 */
+    flex-shrink: 0;   /* 공간 부족해도 찌그러지지 않게 */
 }

@@ -763,5 +763,14 @@
     "bgimg": "q87_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q87.html"
+  },
+  {
+    "id": "q88",
+    "name": "제향의 투구",
+    "location": "장군사당",
+    "type": "유물",
+    "bgimg": "q88_1.jpg",
+    "iconpath": "images/u.jpg",
+    "filepath": "/quests/q88.html"
   }
 ]

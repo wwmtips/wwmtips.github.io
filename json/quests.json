@@ -754,5 +754,14 @@
     "bgimg": "q86_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q86.html"
+  },
+  {
+    "id": "q87",
+    "name": "호화찬란의 종말",
+    "location": "금명지",
+    "type": "만사록",
+    "bgimg": "q87_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q87.html"
   }
 ]

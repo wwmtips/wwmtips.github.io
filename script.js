@@ -1617,6 +1617,7 @@ function loadChunjiDetail(item, index) {
 // =========================================
 
 // 목록 렌더링
+// 목록 렌더링 (수정됨: 타입 정보 추가)
 function renderChunjiList() {
     const container = document.getElementById('chunji-list-container');
     if (!container) return;
@@ -1631,11 +1632,20 @@ function renderChunjiList() {
         const div = document.createElement('div');
         div.className = 'chunji-item';
         div.onclick = () => loadChunjiDetail(item, index);
-        // 타이틀만 깔끔하게 출력 (화살표 추가)
-        div.innerHTML = `<div class="chunji-title">${item.title}</div><div class="arrow-icon">›</div>`;
+        
+        // ▼▼▼ [수정] 제목과 타입(type)을 감싸는 래퍼 추가 ▼▼▼
+        div.innerHTML = `
+            <div class="chunji-text-group">
+                <div class="chunji-title">${item.title}</div>
+                <div class="chunji-type">${item.type || '분류 없음'}</div>
+            </div>
+            <div class="arrow-icon">›</div>
+        `;
+        
         container.appendChild(div);
     });
 }
+
 
 // 상세 보기 (수묵화 스타일 적용)
 function loadChunjiDetail(item) { // index 인자는 이제 필요 없음

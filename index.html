@@ -66,21 +66,20 @@
             <button class="nav-item" id="nav-quest" onclick="switchTab('quest')">
                 <span class="icon"></span>무림록
             </button>
-            <button class="nav-item" id="nav-quiz" onclick="switchTab('quiz')">
-                <span class="icon"></span>족보
-            </button>
+            
             
             <div class="nav-dropdown-wrapper">
                 <button class="nav-item" id="nav-more" onclick="toggleNavDropdown(event)">
-    <span class="icon"></span>더보기
+    <span class="icon"></span>족보
 </button>
                 <div id="nav-more-list" class="nav-dropdown-content">
+                 <button class="nav-item" id="nav-quiz" onclick="switchTab('quiz')">
+                     <span class="icon"></span>스무고개
+                 </button>
                     <button class="dropdown-item" id="nav-builder" onclick="switchTab('builder')">
                         빌드
                     </button>
-                    <button class="dropdown-item" onclick="alert('준비 중입니다.')">
-                        지도
-                    </button>
+                    
                 </div>
             </div>
             </nav>

@@ -1636,7 +1636,7 @@ function renderChunjiList() {
         div.className = 'chunji-item';
         div.onclick = () => loadChunjiDetail(item, index);
         // 타이틀만 깔끔하게 출력 (화살표 추가)
-        div.innerHTML = `<div class="chunji-title">📜 ${item.title}</div><div class="arrow-icon">›</div>`;
+        div.innerHTML = `<div class="chunji-title">${item.title}</div><div class="arrow-icon">›</div>`;
         container.appendChild(div);
     });
 }

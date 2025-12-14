@@ -709,5 +709,14 @@
     "bgimg": "q81_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q81.html"
+  },
+  {
+    "id": "q82",
+    "name": "자식 출세의 꿈",
+    "location": "황궁 후원",
+    "type": "인연의 궤적",
+    "bgimg": "q82_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q82.html"
   }
 ]

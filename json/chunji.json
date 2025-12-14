@@ -1,13 +1,13 @@
 {
   "chunji": [
     {
-      "title": "테스트",
-      "get": "청하 맵 7시 방향 [버려진 사당] 뒤편, 덩굴로 가려진 보물상자에서 획득 가능합니다.",
-      "getimg1": "images/chunji/bottle_get_1.jpg",
-      "getimg2": "images/chunji/bottle_get_2.jpg",
-      "dsec": "인벤토리에서 호리병을 우클릭하여 [살펴보기]를 누른 뒤, 호리병 입구를 마우스로 드래그하여 3번 돌리면 숨겨진 지도가 나타납니다.",
-      "dsecimg1": "images/chunji/bottle_desc_1.jpg",
-      "dsecimg2": ""
+      "title": "제향의 투구",
+      "get": "대나무 숲 은거지 집 안에 있는 상자에서 획득",
+      "getimg1": "",
+      "getimg2": "",
+      "dsec": "투구를 획득한 후 장군 사당으로 이동하세요. 제단에 있는 장군의 투구와 상호작용하면 추적이 완료됩니다.",
+      "dsecimg1": "quests/images/q88_1.jpg",
+      "dsecimg2": "quests/images/q88_2.jpg"
     }
   ]
 }

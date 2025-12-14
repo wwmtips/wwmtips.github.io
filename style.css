@@ -1778,12 +1778,17 @@ h3 {
     align-items: center;
 }
 
-/* 드롭다운 메뉴 박스 (평소엔 숨김) */
+/* 드롭다운 메뉴 박스 스타일 수정 */
 .nav-dropdown-content {
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
+    
+    /* ▼▼▼ [핵심 수정] 정렬 기준 변경 ▼▼▼ */
+    left: auto;   /* 기존 left: 0 제거 (또는 덮어쓰기) */
+    right: 0;     /* 오른쪽 끝을 부모 요소(더보기 버튼)와 맞춤 */
+    /* ▲▲▲ 수정 끝 ▲▲▲ */
+
     background-color: #fff;
     min-width: 120px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);

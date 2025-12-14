@@ -620,7 +620,21 @@ function handleGlobalSearch(e) {
                 </div>`;
         });
     }
-    
+    // 4. 천지록 검색 (기존 handleGlobalSearch 함수 안에 이 부분을 추가하세요)
+    if (globalData.chunji && Array.isArray(globalData.chunji)) {
+        globalData.chunji.filter(c => {
+            return c.title.toLowerCase().includes(keyword);
+        })
+        .slice(0, 3).forEach((item, index) => { // index는 실제 데이터에서의 인덱스를 찾아야 정확함
+            // 실제 데이터에서의 인덱스를 찾기 위해 indexOf 사용 권장
+            const realIndex = globalData.chunji.indexOf(item);
+            resultsHTML += `
+                <div class="search-result-item" onclick="selectChunjiResult(${realIndex})">
+                    <span class="badge item">천지록</span> 
+                    <span class="result-text">${item.title}</span>
+                </div>`;
+        });
+    }
     // 2. 족보 검색
     if (globalData.quiz && Array.isArray(globalData.quiz)) {
         globalData.quiz.filter(q => {

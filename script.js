@@ -1610,16 +1610,77 @@ function loadChunjiDetail(item, index) {
     window.scrollTo(0, 0);
 }
 
-// 목록으로 돌아가기
-function showChunjiList() {
-    const listView = document.getElementById('chunji-list-view');
-    const detailView = document.getElementById('chunji-detail-view');
-    if (listView) listView.style.display = 'block';
-    if (detailView) detailView.style.display = 'none';
-    updateUrlQuery('chunji');
+// =========================================
+// [수정/통합] 천지록(Chunji) 기능 로직
+// =========================================
+
+// 목록 렌더링
+function renderChunjiList() {
+    const container = document.getElementById('chunji-list-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!chunjiData || chunjiData.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">데이터가 없습니다.</div>';
+        return;
+    }
+
+    chunjiData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'chunji-item';
+        div.onclick = () => loadChunjiDetail(item, index);
+        // 타이틀만 깔끔하게 출력 (화살표 추가)
+        div.innerHTML = `<div class="chunji-title">📜 ${item.title}</div><div class="arrow-icon">›</div>`;
+        container.appendChild(div);
+    });
 }
 
-// ID로 상세 로드 (URL 파라미터용, 인덱스 사용 예시)
+// 상세 보기 (수묵화 스타일 적용)
+function loadChunjiDetail(item, index) {
+    const listView = document.getElementById('chunji-list-view');
+    const detailView = document.getElementById('chunji-detail-view');
+    const content = document.getElementById('chunji-detail-content');
+
+    if (listView) listView.style.display = 'none';
+    if (detailView) detailView.style.display = 'block';
+
+    // 이미지 태그 생성 헬퍼
+    const imgTag = (src) => src ? `<div class="detail-img-wrapper"><img src="${src}" onclick="window.open(this.src)" alt="참고 이미지"></div>` : '';
+
+    content.innerHTML = `
+        <div class="chunji-header-area">
+            <span class="chunji-badge">천지록</span>
+            <h2 class="chunji-main-title">${item.title}</h2>
+        </div>
+
+        <div class="chunji-section">
+            <h3 class="chunji-sub-title"><span class="brush-stroke"></span>획득 방법</h3>
+            <p class="chunji-text">${item.get || '정보가 없습니다.'}</p>
+            <div class="chunji-img-grid">
+                ${imgTag(item.getimg1)}
+                ${imgTag(item.getimg2)}
+            </div>
+        </div>
+
+        <div class="chunji-section">
+            <h3 class="chunji-sub-title"><span class="brush-stroke"></span>해독 방법</h3>
+            <p class="chunji-text">${item.dsec || '정보가 없습니다.'}</p>
+            <div class="chunji-img-grid">
+                ${imgTag(item.dsecimg1)}
+                ${imgTag(item.dsecimg2)}
+            </div>
+        </div>
+    `;
+    window.scrollTo(0, 0);
+}
+
+// 목록으로 돌아가기
+function showChunjiList() {
+    document.getElementById('chunji-list-view').style.display = 'block';
+    document.getElementById('chunji-detail-view').style.display = 'none';
+}
+
+// ID로 상세 로드 (URL 파라미터용)
 function loadChunjiDetailById(id) {
     const index = parseInt(id);
     if (!isNaN(index) && chunjiData[index]) {
@@ -1627,28 +1688,10 @@ function loadChunjiDetailById(id) {
     }
 }
 
-// 통합 검색 핸들러 수정 (handleGlobalSearch 함수 내부에 추가)
-/*
-    // 4. 천지록 검색 (기존 handleGlobalSearch 함수 안에 이 부분을 추가하세요)
-    if (globalData.chunji && Array.isArray(globalData.chunji)) {
-        globalData.chunji.filter(c => {
-            return c.title.toLowerCase().includes(keyword);
-        })
-        .slice(0, 3).forEach((item, index) => { // index는 실제 데이터에서의 인덱스를 찾아야 정확함
-            // 실제 데이터에서의 인덱스를 찾기 위해 indexOf 사용 권장
-            const realIndex = globalData.chunji.indexOf(item);
-            resultsHTML += `
-                <div class="search-result-item" onclick="selectChunjiResult(${realIndex})">
-                    <span class="badge item">천지록</span> 
-                    <span class="result-text">${item.title}</span>
-                </div>`;
-        });
-    }
-*/
-
 // 천지록 검색 결과 선택 함수
 function selectChunjiResult(index) {
     switchTab('chunji');
     loadChunjiDetail(globalData.chunji[index], index);
     document.getElementById("global-search-results").style.display = 'none';
 }
+

@@ -718,5 +718,14 @@
     "bgimg": "q82_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q82.html"
+  },
+  {
+    "id": "q83",
+    "name": "고요한 물결",
+    "location": "무성왕묘",
+    "type": "만사록",
+    "bgimg": "q83_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q83.html"
   }
 ]

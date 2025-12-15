@@ -1820,7 +1820,7 @@ function loadChunjiDetail(item) {
 
     if (item.id) updateUrlQuery('chunji', item.id);
 
-    const imgTag = (src) => src ? `<div class="detail-img-wrapper"><img src="${src}" onclick="window.open(this.src)" alt="참고 이미지"></div>` : '';
+    const imgTag = (src) => src ? `<div class="detail-img-wrapper"><img src="${src}" alt="참고 이미지"></div>` : '';
 
     content.innerHTML = `
         <div class="chunji-header-area">

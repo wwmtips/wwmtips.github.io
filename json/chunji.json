@@ -4,10 +4,10 @@
       "id": "3",
        "type": "사건",  
       "title": "말과 의술",
-      "get": "순마장 아래 위치의 청계관 제자 확인"
+      "get": "순마장 아래 위치의 청계관 제자 확인",
       "getimg1": "https://arcdb.kr/chunji/m2.jpg",
       "getimg2": "",
-      "dsec": "회고 후 말과 제자의 대화를 끝까지 들은 뒤 말 길들이기"
+      "dsec": "회고 후 말과 제자의 대화를 끝까지 들은 뒤 말 길들이기",
       "dsecimg1": "https://arcdb.kr/chunji/m1.jpg",
       "dsecimg2": ""
     },

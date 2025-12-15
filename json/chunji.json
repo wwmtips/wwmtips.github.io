@@ -1,6 +1,28 @@
 {
   "chunji": [
     {
+      "id": "14",
+       "type": "음식",  
+      "title": "닭볶음면",
+      "get": "각문리 NPC 우헌에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f5.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f5_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+      "id": "13",
+       "type": "음식",  
+      "title": "보리밥",
+      "get": "각문리 NPC 우헌에게 구입 (퀘스트 재료로 여유분 하나 더 구입하는거 추천)",
+      "getimg1": "https://arcdb.kr/chunji/f5.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f5_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
       "id": "12",
        "type": "음식",  
       "title": "소라살",

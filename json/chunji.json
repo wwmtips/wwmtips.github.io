@@ -1,12 +1,32 @@
 {
   "chunji": [
+    "id": "23",
+       "type": "음식",  
+      "title": "대파 생강 부꾸미",
+      "get": "승은촌 NPC 왕적사에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f10.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f10_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+      "id": "23",
+       "type": "음식",  
+      "title": "죽순 찐빵",
+      "get": "승은촌 NPC 왕적사에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f10.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f10_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
     {
       "id": "22",
        "type": "음식",  
       "title": "백합 국수",
-      "get": "연희 거리 NPC 석위에게 구입",
-      "getimg1": "https://arcdb.kr/chunji/f8.jpg",
-      "getimg2": "https://arcdb.kr/chunji/f8_1.jpg",
+      "get": "승은촌 NPC 석위에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f9.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f9_1.jpg",
       "dsec": "구입 후 소모품에서 사용 시 획득",
       "dsecimg1": "",
       "dsecimg2": ""
@@ -15,9 +35,9 @@
       "id": "21",
        "type": "음식",  
       "title": "무 국수",
-      "get": "연희 거리 NPC 석위에게 구입",
-      "getimg1": "https://arcdb.kr/chunji/f8.jpg",
-      "getimg2": "https://arcdb.kr/chunji/f8_1.jpg",
+      "get": "승은촌 NPC 석위에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f9.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f9_1.jpg",
       "dsec": "구입 후 소모품에서 사용 시 획득",
       "dsecimg1": "",
       "dsecimg2": ""

@@ -1891,49 +1891,8 @@ h3 {
     gap: 12px;
 }
 
-/* 리스트 아이템 (가로 정렬 강제) */
-.chunji-item {
-    display: flex !important;       /* 내부 요소 가로 배치 */
-    justify-content: space-between; /* 양 끝 정렬 */
-    align-items: center;            /* 수직 중앙 정렬 */
-    
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-left: 4px solid #aaa;    /* 기본 회색 포인트 */
-    border-radius: 2px;
-    padding: 15px 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
 
-.chunji-item:hover {
-    border-left-color: var(--wuxia-accent-gold);
-    background-color: #fffcf5;
-    transform: translateX(5px);
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-}
 
-/* 제목 텍스트 (말줄임 처리) */
-.chunji-title {
-    font-size: 1.05em;
-    font-weight: bold;
-    color: #333;
-    font-family: 'Noto Serif KR', serif;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-right: 15px;
-}
-
-/* 화살표 아이콘 */
-.arrow-icon {
-    font-size: 1.5em;
-    color: #ccc;
-    font-weight: normal;
-    line-height: 1;
-    flex-shrink: 0;
-}
 
 
 /* -----------------------------------------
@@ -2085,3 +2044,57 @@ h3 {
     text-overflow: ellipsis;
     /* margin-right: 15px; <- 기존에 있던 이 속성은 지워도 됩니다 (그룹으로 묶여서 불필요) */
 }
+
+/* =========================================
+   [수정] 천지록 리스트 아이템 (퀘스트 카드와 동일한 스타일 적용)
+   ========================================= */
+.chunji-item {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    
+    /* [핵심] 퀘스트 카드와 동일한 패딩 적용 (높이 통일) */
+    padding: 10px; 
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    
+    /* 퀘스트 카드와 같은 왼쪽 포인트 컬러 (선택사항, 통일감 위해 변경 가능) */
+    border-left: 4px solid #aaa; 
+}
+
+.chunji-item:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+/* 제목 텍스트 (폰트 사이즈 조정) */
+.chunji-title {
+    font-size: 0.95em; /* 퀘스트 제목 크기와 맞춤 (1.05em -> 0.95em) */
+    font-weight: bold;
+    color: #222;
+    font-family: 'Noto Serif KR', serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 15px;
+    margin-left: 5px; /* 약간의 여백 추가 */
+}
+
+/* 화살표 아이콘 (크기 및 색상 미세 조정) */
+.arrow-icon {
+    font-size: 1.2em; /* 너무 크지 않게 조정 */
+    color: #ccc;
+    font-weight: bold;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-right: 5px;
+}
+

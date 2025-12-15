@@ -396,28 +396,38 @@ function switchTab(tabName) {
 
 function updateUrlQuery(tab, id) {
     const url = new URL(window.location);
+    // 모든 파라미터 초기화
     url.searchParams.delete('tab');
     url.searchParams.delete('id');
     url.searchParams.delete('q');
     url.searchParams.delete('g');
     url.searchParams.delete('c');
-    url.searchParams.delete('cp'); // [추가] 기존 페이지 파라미터 삭제
+    url.searchParams.delete('cp'); // 천지록 페이지
+    url.searchParams.delete('qp'); // [추가] 퀘스트 페이지
 
-    if (tab === 'quest' && id) {
-        url.searchParams.set('q', id.toLowerCase().replace('q', ''));
+    if (tab === 'quest') {
+        if (id) {
+            // 상세 보기일 때
+            url.searchParams.set('q', id.toLowerCase().replace('q', ''));
+        } else {
+            // 목록 보기일 때
+            url.searchParams.set('tab', 'quest');
+            // [추가] 1페이지가 아니면 URL에 페이지 번호 저장
+            if (currentPage > 1) {
+                url.searchParams.set('qp', currentPage);
+            }
+        }
     } 
     else if (tab === 'guide' && id) {
         url.searchParams.set('g', id);
     }
     else if (tab === 'chunji') {
         if (id) {
-            // 상세 페이지일 때는 ID만 표시 (페이지 번호 필요 없음)
             url.searchParams.set('c', id);
         } else {
-            // 목록 페이지일 때는 탭과 페이지 번호 표시
             url.searchParams.set('tab', 'chunji');
             if (currentChunjiPage > 1) {
-                url.searchParams.set('cp', currentChunjiPage); // 1페이지가 아닐 때만 cp 기록
+                url.searchParams.set('cp', currentChunjiPage);
             }
         }
     }
@@ -428,27 +438,28 @@ function updateUrlQuery(tab, id) {
     if (url.toString() !== window.location.href) history.pushState(null, '', url);
 }
 
-
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     
     if (urlParams.get('q')) { switchTab('quest'); return; }
     if (urlParams.get('g')) { switchTab('guide'); return; }
     if (urlParams.get('b')) { switchTab('builder'); return; }
-    if (urlParams.get('c')) { switchTab('chunji'); return; } // 상세 로드는 loadData에서 처리됨
+    if (urlParams.get('c')) { switchTab('chunji'); return; }
     
     const tab = urlParams.get('tab'); 
     
-    if (tab === 'chunji') {
-        // [추가] URL에 페이지 번호(cp)가 있으면 읽어옴
-        const pageParam = urlParams.get('cp');
-        if (pageParam) {
-            currentChunjiPage = parseInt(pageParam);
-        }
+    if (tab === 'quest') {
+        // [추가] 퀘스트 페이지 번호 복구
+        const qPage = urlParams.get('qp');
+        if (qPage) currentPage = parseInt(qPage);
+        switchTab('quest');
+    }
+    else if (tab === 'chunji') {
+        const cPage = urlParams.get('cp');
+        if (cPage) currentChunjiPage = parseInt(cPage);
         switchTab('chunji');
     }
     else if (tab === 'quiz') switchTab('quiz');
-    else if (tab === 'quest') switchTab('quest');
     else if (tab === 'news') switchTab('news');
     else if (tab === 'guide') switchTab('guide'); 
     else if (tab === 'builder') switchTab('builder');
@@ -881,8 +892,13 @@ function renderPagination() {
 function changePage(page) {
     currentPage = page;
     renderQuestList();
+    
+    // [추가] 페이지 변경 시 URL 업데이트
+    updateUrlQuery('quest');
+    
     document.getElementById('quest-list-view').scrollIntoView({ behavior: 'smooth' });
 }
+
 
 function renderFullNews(newsList) {
     const container = document.getElementById('full-news-list');
@@ -1420,9 +1436,12 @@ function handleHistoryChange() {
     const gId = urlParams.get('g');
     const bId = urlParams.get('b');
     const cId = urlParams.get('c');
-    const cpParam = urlParams.get('cp'); // [추가] 페이지 번호 파라미터
+    
+    const cpParam = urlParams.get('cp'); // 천지록 페이지
+    const qpParam = urlParams.get('qp'); // [추가] 퀘스트 페이지
 
-    if (qId) { /* ...기존 코드... */
+    // 1. 퀘스트 상세 보기
+    if (qId) {
         switchTab('quest');
         const fullId = 'q' + qId;
         if (globalData.quests) {
@@ -1431,10 +1450,10 @@ function handleHistoryChange() {
         }
         return;
     }
+
+    // 2. 다른 탭들 상세 보기
     if (gId) { switchTab('guide'); return; }
     if (bId) { switchTab('builder'); return; }
-
-    // 천지록 상세 보기 뒤로가기 처리
     if (cId) {
         switchTab('chunji');
         if (globalData.chunji) {
@@ -1444,11 +1463,17 @@ function handleHistoryChange() {
         return;
     }
 
-    // [추가] 천지록 목록(페이징) 뒤로가기 처리
+    // [추가] 퀘스트 목록 뒤로가기 (페이지 복구)
+    if (tab === 'quest') {
+        currentPage = qpParam ? parseInt(qpParam) : 1;
+        switchTab('quest'); // 여기서 renderQuestList가 실행됨
+        return;
+    }
+
+    // 천지록 목록 뒤로가기
     if (tab === 'chunji') {
-        // URL에 cp가 있으면 그 페이지로, 없으면 1페이지로 설정
         currentChunjiPage = cpParam ? parseInt(cpParam) : 1;
-        switchTab('chunji'); // 여기서 renderChunjiList가 호출됨
+        switchTab('chunji');
         return;
     }
 

@@ -1746,7 +1746,6 @@ function renderChunjiList() {
                 <div class="chunji-title">${item.title}</div>
                 <div class="chunji-type">${item.type || '기타'}</div>
             </div>
-            <div class="arrow-icon">›</div>
         `;
         
         container.appendChild(div);

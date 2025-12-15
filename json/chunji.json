@@ -1,6 +1,28 @@
 {
   "chunji": [
     {
+    "id": "28",
+       "type": "음식",  
+      "title" :"국화 새싹전",
+      "get": "청심원 NPC 복성에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f12.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f12_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+    "id": "27",
+       "type": "음식",  
+      "title" :"금옥탕",
+      "get": "청심원 NPC 복성에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f12.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f12_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
     "id": "26",
        "type": "음식",  
       "title" :"물 말아먹는 밥",

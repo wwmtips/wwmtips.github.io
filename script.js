@@ -801,7 +801,6 @@ function createQuestCard(quest, container) {
     card.className = 'quest-card';
     card.onclick = () => { switchTab('quest'); loadQuestDetail(quest.filepath, quest.id); };
     card.innerHTML = `
-        <div class="quest-icon-wrapper"><img src="${quest.iconpath}" alt="icon" onerror="this.src='images/logo.png'"></div>
         <div class="quest-info"><div class="quest-name">${quest.name}</div><div class="quest-type">${quest.type}</div></div>
         <div class="quest-badge">${quest.location}</div>
     `;

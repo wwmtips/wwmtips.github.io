@@ -1891,7 +1891,44 @@ h3 {
     gap: 12px;
 }
 
+#chunji-list-container {
+    display: grid;
+    /* [핵심] 화면 너비에 따라 자동 조절 (최소 300px 너비 확보) */
+    /* PC에서는 3~4개씩, 모바일에서는 1개씩 자동 배치됩니다 */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 15px; /* 카드 사이 간격 */
+    width: 100%;
+    margin-top: 10px;
+}
 
+/* 리스트 아이템 (카드) 스타일 보완 */
+.chunji-item {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px 15px; /* 내부 여백 */
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    
+    /* 퀘스트와 구분되는 회색 포인트 라인 */
+    border-left: 4px solid #aaa; 
+    
+    /* 높이 균일화를 위해 최소 높이 설정 (선택사항) */
+    min-height: 50px; 
+}
+
+.chunji-item:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
 
 
 
@@ -2053,36 +2090,6 @@ h3 {
     margin: 0;
 }
 
-
-/* =========================================
-   [수정] 천지록 리스트 아이템 (퀘스트 카드와 동일한 스타일 적용)
-   ========================================= */
-.chunji-item {
-    display: flex !important;
-    justify-content: space-between;
-    align-items: center;
-    
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    
-    /* [핵심] 퀘스트 카드와 동일한 패딩 적용 (높이 통일) */
-    padding: 10px; 
-    
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-    
-    /* 퀘스트 카드와 같은 왼쪽 포인트 컬러 (선택사항, 통일감 위해 변경 가능) */
-    border-left: 4px solid #aaa; 
-}
-
-.chunji-item:hover {
-    border-color: var(--wuxia-accent-gold);
-    background-color: #fffcf5;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-}
 
 /* 화살표 아이콘 (크기 및 색상 미세 조정) */
 .arrow-icon {

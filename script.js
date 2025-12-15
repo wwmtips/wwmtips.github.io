@@ -1648,10 +1648,12 @@ function renderChunjiList() {
     });
 }
 
+// =========================================
+// [최종 완료] 천지록(Chunji) 기능 (페이징 + 필터 포함)
+// =========================================
 
-// =========================================
-// [최종 수정] 천지록(Chunji) 기능 (카테고리 필터 포함)
-// =========================================
+// 전역 변수 (상단 변수 선언부에 없으면 여기서 선언)
+let currentChunjiPage = 1; // 현재 천지록 페이지
 
 // 1. 카테고리 필터 함수
 function filterChunjiType(type, btnElement) {
@@ -1666,30 +1668,40 @@ function filterChunjiType(type, btnElement) {
     if (type === 'all') {
         currentChunjiData = chunjiData;
     } else {
-        // JSON의 "type" 값이 일치하는 것만 필터링
         currentChunjiData = chunjiData.filter(item => item.type === type);
     }
 
-    // 목록 다시 그리기
+    // [중요] 필터 변경 시 1페이지로 초기화
+    currentChunjiPage = 1;
     renderChunjiList();
 }
 
-// 2. 목록 렌더링 (필터링된 currentChunjiData 사용)
+// 2. 목록 렌더링 (페이징 적용됨)
 function renderChunjiList() {
     const container = document.getElementById('chunji-list-container');
+    const paginationContainer = document.getElementById('chunji-pagination-container');
+    
     if (!container) return;
     container.innerHTML = '';
 
-    // 데이터가 없거나 필터 결과가 없을 때
+    // 데이터가 없을 때
     if (!currentChunjiData || currentChunjiData.length === 0) {
         container.innerHTML = '<div style="padding:40px 0; text-align:center; color:#888;">해당하는 기록이 없습니다.</div>';
+        if (paginationContainer) paginationContainer.innerHTML = '';
         return;
     }
 
-    currentChunjiData.forEach((item, index) => {
+    // [페이징 계산]
+    const startIndex = (currentChunjiPage - 1) * itemsPerPage; // itemsPerPage는 전역변수(12) 사용
+    const endIndex = startIndex + itemsPerPage;
+    
+    // 현재 페이지에 해당하는 데이터만 자르기
+    const pageData = currentChunjiData.slice(startIndex, endIndex);
+
+    pageData.forEach((item) => {
+        // 주의: 필터링/페이징 된 상태이므로 index 대신 item 자체를 넘김
         const div = document.createElement('div');
         div.className = 'chunji-item';
-        // 주의: 필터링된 상태이므로 index 대신 item 자체를 넘겨야 정확함
         div.onclick = () => loadChunjiDetail(item);
         
         div.innerHTML = `
@@ -1702,9 +1714,63 @@ function renderChunjiList() {
         
         container.appendChild(div);
     });
+
+    // 페이지네이션 버튼 렌더링 호출
+    renderChunjiPagination();
 }
 
-// 3. 상세 보기
+// 3. 페이지네이션 렌더링 (퀘스트와 동일한 로직)
+function renderChunjiPagination() {
+    const container = document.getElementById('chunji-pagination-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const totalPages = Math.ceil(currentChunjiData.length / itemsPerPage);
+    if (totalPages <= 1) return; // 1페이지뿐이면 버튼 숨김
+
+    const createBtn = (text, page, active = false, disabled = false) => {
+        const btn = document.createElement('button');
+        btn.className = `pagination-btn ${active ? 'active' : ''}`;
+        btn.innerText = text;
+        btn.disabled = disabled;
+        btn.onclick = () => changeChunjiPage(page);
+        return btn;
+    };
+
+    // [이전] 버튼
+    container.appendChild(createBtn('<', currentChunjiPage - 1, false, currentChunjiPage === 1));
+
+    // [번호] 버튼 (최대 5개 표시 로직)
+    const maxVisibleButtons = 5;
+    let startPage = currentChunjiPage - Math.floor(maxVisibleButtons / 2);
+    let endPage = currentChunjiPage + Math.floor(maxVisibleButtons / 2);
+
+    if (startPage < 1) {
+        startPage = 1;
+        endPage = Math.min(totalPages, maxVisibleButtons);
+    }
+    if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, totalPages - maxVisibleButtons + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        container.appendChild(createBtn(i, i, i === currentChunjiPage));
+    }
+
+    // [다음] 버튼
+    container.appendChild(createBtn('>', currentChunjiPage + 1, false, currentChunjiPage === totalPages));
+}
+
+// 4. 페이지 변경 함수
+function changeChunjiPage(page) {
+    currentChunjiPage = page;
+    renderChunjiList();
+    // 목록 상단으로 스크롤 이동
+    document.getElementById('chunji-list-view').scrollIntoView({ behavior: 'smooth' });
+}
+
+// 5. 상세 보기
 function loadChunjiDetail(item) {
     const listView = document.getElementById('chunji-list-view');
     const detailView = document.getElementById('chunji-detail-view');
@@ -1719,7 +1785,7 @@ function loadChunjiDetail(item) {
 
     content.innerHTML = `
         <div class="chunji-header-area">
-            <span class="chunji-badge">${item.type}</span>
+            <span class="chunji-badge">천지록</span>
             <h2 class="chunji-main-title">${item.title}</h2>
         </div>
 
@@ -1744,25 +1810,25 @@ function loadChunjiDetail(item) {
     window.scrollTo(0, 0);
 }
 
-// 4. 목록으로 돌아가기
+// 6. 목록으로 돌아가기
 function showChunjiList() {
     document.getElementById('chunji-list-view').style.display = 'block';
     document.getElementById('chunji-detail-view').style.display = 'none';
     updateUrlQuery('chunji');
 }
 
-// 5. 검색 결과 선택 (전체 데이터에서 검색)
+// 7. 검색 결과 선택
 function selectChunjiResult(index) {
     switchTab('chunji');
-    // globalData.chunji (원본)에서 데이터를 가져옴
     loadChunjiDetail(globalData.chunji[index]);
     document.getElementById("global-search-results").style.display = 'none';
 }
 
-// 6. ID로 상세 로드
+// 8. ID로 상세 로드
 function loadChunjiDetailById(id) {
-    const item = chunjiData.find(c => c.id == id); // 문자/숫자 호환 비교
+    const item = chunjiData.find(c => c.id == id);
     if (item) {
         loadChunjiDetail(item);
     }
 }
+

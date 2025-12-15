@@ -1719,7 +1719,7 @@ function loadChunjiDetail(item) {
 
     content.innerHTML = `
         <div class="chunji-header-area">
-            <span class="chunji-badge">천지록</span>
+            <span class="chunji-badge">${item.type}</span>
             <h2 class="chunji-main-title">${item.title}</h2>
         </div>
 

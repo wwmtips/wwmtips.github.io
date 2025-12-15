@@ -614,20 +614,39 @@ h3 {
     padding-bottom: 0px;
 }
 
+/* =========================================
+   [수정] 퀘스트 카드 스타일 (왼쪽 라인 추가)
+   ========================================= */
 .quest-card {
-    display: flex;
+    display: flex !important;
+    justify-content: space-between;
     align-items: center;
-    background-color: #ffffff;
+
+    background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
-    padding: 10px;
+
+    /* 천지록과 동일한 패딩 적용 */
+    padding: 10px; 
+
     cursor: pointer;
     transition: all 0.2s ease;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
     box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+
+    /* ▼▼▼ [핵심] 왼쪽에 포인트 라인 추가 ▼▼▼ */
+    /* 퀘스트 테마에 맞춰 '붉은색'으로 설정했습니다. */
+    border-left: 4px solid var(--wuxia-accent-red);
+    /* 만약 천지록과 똑같은 '회색'을 원하시면 위 줄을 지우고 아래 주석을 푸세요 */
+    /* border-left: 4px solid #aaa; */
 }
+
+.quest-card:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
 
 .quest-card:hover {
     border-color: var(--wuxia-accent-gold);

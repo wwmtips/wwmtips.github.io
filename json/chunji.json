@@ -1,5 +1,16 @@
 {
   "chunji": [
+        {
+      "id": "7",
+       "type": "음식",  
+      "title": "대추 찐빵",
+      "get": "자심촌 NPC 반부영에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f2.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f2_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
     {
       "id": "6",
        "type": "음식",  

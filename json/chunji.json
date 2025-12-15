@@ -1,6 +1,39 @@
 {
   "chunji": [
     {
+      "id": "6",
+       "type": "음식",  
+      "title": "전골",
+      "get": "신선나루 NPC 원함연에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f1.jpg",
+      "getimg2": "",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+      "id": "5",
+       "type": "음식",  
+      "title": "돼지고기 조림",
+      "get": "신선나루 NPC 원함연에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f1.jpg",
+      "getimg2": "",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+      "id": "5",
+       "type": "음식",  
+      "title": "꿀배 경단",
+      "get": "신선나루 NPC 원달미에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f1.jpg",
+      "getimg2": "",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
       "id": "4",
        "type": "음식",  
       "title": "팔보 배 조림",

@@ -2,6 +2,7 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "작은 말", "answer": "당나귀", "user": "마드린느/확신" },
     { "hint": "니코틴", "answer": "담배", "user": "Eleithd" },
 { "hint": "구멍", "answer": "샐러리", "user": "안녕동맹-라이너스" },
 { "hint": "피자 토핑", "answer": "올리브", "user": "조연이" },

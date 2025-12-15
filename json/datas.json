@@ -2,6 +2,18 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "영양", "answer": "표고버섯", "user": "" },
+{ "hint": "고정", "answer": "못", "user": "라키아타" },
+{ "hint": "중독성", "answer": "담배", "user": "익명" },
+{ "hint": "물고기", "answer": "메기", "user": "천세은" },
+{ "hint": "거대한", "answer": "코끼리", "user": "팽세지" },
+{ "hint": "과일", "answer": "귤", "user": "용오" },
+{ "hint": "관목", "answer": "협죽도", "user": "팅코" },
+{ "hint": "볶음요리", "answer": "양파", "user": "가진" },
+{ "hint": "해변", "answer": "불가사리", "user": "그림비" },
+{ "hint": "기다란 꼭지", "answer": "체리", "user": "최소휘" },
+{ "hint": "바다의포시작", "answer": "상어", "user": "우생마" },
+
     { "hint": "작은 말", "answer": "당나귀", "user": "마드린느/확신" },
     { "hint": "니코틴", "answer": "담배", "user": "Eleithd" },
 { "hint": "구멍", "answer": "샐러리", "user": "안녕동맹-라이너스" },

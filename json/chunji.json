@@ -1,6 +1,50 @@
 {
   "chunji": [
     {
+      "id": "12",
+       "type": "음식",  
+      "title": "소라살",
+      "get": "풍화촌 NPC 연의경에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f4.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f4_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+      "id": "11",
+       "type": "음식",  
+      "title": "우렁이 장조림",
+      "get": "풍화촌 NPC 연의경에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f4.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f4_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+      "id": "10",
+       "type": "음식",  
+      "title": "매운 버터 과자",
+      "get": "순마장 NPC 이부인에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f3.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f3_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+      "id": "9",
+       "type": "음식",  
+      "title": "마유 과자",
+      "get": "순마장 NPC 이부인에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f3.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f3_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
       "id": "8",
        "type": "음식",  
       "title": "칠보 부꾸미",

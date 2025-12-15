@@ -1663,141 +1663,7 @@ h3 {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-/* =========================================
-   [수정] 인게임 제보 프로필 카드 (화이트 테마)
-   ========================================= */
-
-/* =========================================
-   [최종 정리] 인게임 제보 프로필 카드 (화이트 테마 & 네모 이미지)
-   ========================================= */
-
-/* 1. 카드 전체 컨테이너 */
-.ingame-report-card {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 15px; /* 사진과 텍스트 간격 */
-    
-    background-color: #fff; /* 흰색 배경 */
-    border: 1px solid #ddd; /* 연한 테두리 */
-    border-radius: 8px;
-    padding: 15px 20px; /* 내부 여백 최적화 */
-    
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.2s ease;
-}
-
-.ingame-report-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-}
-
-/* 2. 배경 장식 (은은한 효과) */
-.card-bg-deco {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
-    height: 100%;
-    background: linear-gradient(135deg, transparent 20%, #fffcf5 100%);
-    z-index: 0;
-}
-
-/* 3. 프로필 사진 영역 (네모 박스) */
-.char-portrait-box {
-    position: relative;
-    width: 65px; /* 크기 적당히 조절 */
-    height: 65px;
-    flex-shrink: 0;
-    z-index: 1;
-}
-
-.char-portrait-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    
-    /* [핵심] 네모난 모양 (약간만 둥글게) */
-    border-radius: 6px; 
-    border: 2px solid var(--wuxia-accent-gold); /* 금색 테두리 */
-    background-color: #eee;
-}
-
-/* 4. 레벨 표시 (하단 바 스타일) */
-.char-level-bar {
-    position: absolute;
-    bottom: 2px; /* 이미지 안쪽 하단에 붙임 */
-    left: 2px;
-    right: 2px; /* 좌우 여백 */
-    height: 18px;
-    
-    background: rgba(0, 0, 0, 0.7); /* 반투명 검정 */
-    border-radius: 0 0 4px 4px; /* 아래쪽만 둥글게 */
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.lvl-num {
-    color: #fff;
-    font-family: 'Noto Serif KR', serif;
-    font-weight: bold;
-    font-size: 0.75em;
-    line-height: 1;
-    text-shadow: 0 0 2px rgba(0,0,0,0.5);
-}
-
-/* 5. 텍스트 정보 영역 */
-.char-info-box {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-grow: 1;
-}
-
-.char-header {
-    margin-bottom: 4px;
-}
-
-/* 닉네임 (검은색 + 사이즈 축소) */
-.char-name {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1.1em; /* 요청하신 대로 축소 */
-    font-weight: bold;
-    color: #000; /* 완전 검은색 */
-    letter-spacing: -0.5px;
-}
-
-/* 설명글 (회색) */
-.char-id-row .label {
-    font-size: 0.85em; /* 작은 글씨 */
-    color: #666;       /* 회색 */
-    line-height: 1.4;
-    display: block;
-    word-break: keep-all; /* 단어 단위 줄바꿈 */
-}
-
-/* 6. 모바일 대응 */
-@media (max-width: 500px) {
-    .ingame-report-card {
-        padding: 12px 15px;
-        gap: 12px;
-    }
-    .char-portrait-box {
-        width: 55px;
-        height: 55px;
-    }
-    .char-name {
-        font-size: 1.05em;
-    }
-    .char-id-row .label {
-        font-size: 0.8em;
-    }
-}
+크기 적당히 조절 */
 
 
 /* =========================================
@@ -2142,6 +2008,105 @@ h3 {
     line-height: 1;
     flex-shrink: 0;
     margin-right: 5px; /* 오른쪽 여백 확보 */
+}
+
+
+/* =========================================
+   [최종] 인게임 제보 카드 (최근 소식 스타일 통일)
+   ========================================= */
+
+/* 1. 카드 컨테이너 (심플한 흰색 박스) */
+.ingame-report-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px; /* 사진과 텍스트 간격 */
+    
+    background-color: #fff;
+    border: 1px solid #ddd; /* 최근 소식과 동일한 테두리 */
+    border-radius: 4px;     /* 모서리 살짝만 둥글게 */
+    padding: 15px;
+    
+    /* 그림자 제거 또는 아주 약하게 (최근 소식과 통일감) */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02); 
+    transition: background-color 0.2s ease;
+}
+
+/* 2. 배경 장식 제거 (배경 깔끔하게) */
+.card-bg-deco {
+    display: none; 
+}
+
+/* 3. 프로필 사진 영역 (완전 네모) */
+.char-portrait-box {
+    position: relative;
+    width: 60px; 
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.char-portrait-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    
+    /* [핵심] 완전 네모 (radius 제거) */
+    border-radius: 0; 
+    border: 1px solid #ccc; /* 얇은 테두리 */
+}
+
+/* 4. 레벨 표시 (왼쪽 하단 부착) */
+.char-level-bar {
+    position: absolute;
+    bottom: 0; /* 하단 딱 붙임 */
+    left: 0;   /* 왼쪽 딱 붙임 */
+    
+    background: rgba(0, 0, 0, 0.8); /* 진한 검정 배경 */
+    padding: 1px 4px;
+    
+    /* 폰트 스타일 */
+    color: #fff;
+    font-size: 0.7em;
+    font-family: 'Noto Serif KR', serif;
+    line-height: 1.2;
+    text-align: center;
+    
+    /* 네모난 스타일 유지 */
+    border-radius: 0; 
+    min-width: 18px;
+}
+
+.lvl-num {
+    font-weight: bold;
+}
+
+/* 5. 텍스트 정보 영역 */
+.char-info-box {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.char-header {
+    margin-bottom: 4px;
+}
+
+/* 닉네임 */
+.char-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.05em; /* 적당한 크기 */
+    font-weight: bold;
+    color: #333; /* 진한 회색 */
+}
+
+/* 설명 텍스트 */
+.char-id-row .label {
+    font-size: 0.85em;
+    color: #888; /* 연한 회색 */
+    line-height: 1.4;
+    display: block;
+    word-break: keep-all;
 }
 
 

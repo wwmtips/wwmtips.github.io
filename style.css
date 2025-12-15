@@ -2026,11 +2026,16 @@ h3 {
 }
 
 /* 2. 타입(분류) 텍스트 스타일 */
+
+/* 3. 타입(분류) 스타일 */
 .chunji-type {
-    font-size: 0.85em; /* 작은 폰트 */
-    color: #888;       /* 연한 회색 */
+    font-size: 0.8em;
+    color: #888;
     font-weight: normal;
     font-family: 'Noto Serif KR', serif;
+    
+    /* [핵심] 여백 초기화 */
+    margin: 0;
 }
 
 /* 3. 제목 스타일 (기존 거에서 margin 수정) */

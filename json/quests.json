@@ -772,5 +772,24 @@
     "bgimg": "q89_2.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q89.html"
+  },
+  {
+    "id": "q90",
+    "name": "화미연과의 약속",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q90_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q90.html"
+  }
+  ,
+  {
+    "id": "q90",
+    "name": "해당꽃 속 취한꿈",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q90_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q90.html"
   }
 ]

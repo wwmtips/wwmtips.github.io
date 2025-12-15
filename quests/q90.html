@@ -1,0 +1,170 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">화간집</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            화미연과의 약속
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">호화롭고 정교한 작은 책자, 화간집을 완성하자</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            <b>화미연</b>을 찾아 화간집의 첫 페이지를 장식하는 의뢰입니다.<br>
+            그녀의 행방을 쫓아 씻고 단장한 뒤, 약속 장소에서 술을 대접해야 합니다.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 필수 선행 조건</h4>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            반드시 <b>개봉 협적 제2권 - [화무 뒤편의 비밀]</b>을 완료해야 진행할 수 있습니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            번루에서의 단서
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>번루 3층</b>으로 이동하여 취화음 제자 <b>유월아</b>와 대화하세요.<br>
+            그녀는 화미연이 <b>은화포</b>로 갔다는 정보를 줍니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q90_1.jpg" alt="유월아">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q90_2.jpg" alt="번루 3층 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            은화포 상인 탐문
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            번루 위쪽에 있는 폭포 상점, <b>은화포</b>로 이동하세요.<br>
+            상인에게 말을 걸고 <b>[화미연의 위치 묻기]</b> 선택지를 클릭하여 다음 행선지를 확인합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q90_3.jpg" alt="은화포 상인">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q90_4.jpg" alt="대화 선택지">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            춘수각에서의 준비
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            안내받은 <b>춘수각</b>으로 이동하여 주인과 대화하고 다시 <b>[화미연의 위치 묻기]</b>를 선택하세요.<br>
+            주인은 술을 건네주며 씻고 오라고 합니다.<br>
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q90_5.jpg" alt="춘수각 주인">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q90_6.jpg" alt="목욕 하기">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            번화루에서의 만남 (시간 변경)
+        </h3>
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b> 시진을 <b>해시(21:00~23:00)</b>로 변경해야 합니다.
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            목욕을 마친 후 <b>번화루</b>로 이동하여 시간을 해시로 바꾸세요.<br>
+            돌 위에 누워 있는 <b>화미연</b>과 대화하고 준비한 <b>술을 선물</b>하면 됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q90_7.jpg" alt="화미연">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q90_8.jpg" alt="번화루 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            화미연에게 술을 건네면 첫 번째 화간집과 만사록 해당꽃 속 취한 꿈이
+            <span style="color: var(--wuxia-accent-red);">모두 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

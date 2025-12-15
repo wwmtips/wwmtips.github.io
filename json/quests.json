@@ -787,7 +787,7 @@
     "id": "q90",
     "name": "해당꽃 속 취한꿈",
     "location": "취화음",
-    "type": "화간집",
+    "type": "만사록",
     "bgimg": "q90_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q90.html"

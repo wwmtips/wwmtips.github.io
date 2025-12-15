@@ -1,6 +1,28 @@
 {
   "chunji": [
     {
+      "id": "20",
+       "type": "음식",  
+      "title": "칠보 채식죽",
+      "get": "연희 거리 NPC 여형에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f8.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f8_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+      "id": "19",
+       "type": "음식",  
+      "title": "찔레꽃 죽",
+      "get": "연희 거리 NPC 여형에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f8.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f8_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
       "id": "18",
        "type": "음식",  
       "title": "족발 편육",

@@ -1,6 +1,28 @@
 {
   "chunji": [
     {
+    "id": "26",
+       "type": "음식",  
+      "title" :"물 말아먹는 밥",
+      "get": "홍구운화 NPC 탕건에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f11.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f11_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+    "id": "25",
+       "type": "음식",  
+      "title": "시원한 냉차",
+      "get": "홍구운화 NPC 탕건에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f11.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f11_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
     "id": "24",
        "type": "음식",  
       "title": "대파 생강 부꾸미",

@@ -204,11 +204,24 @@
         </div>
         
 <div id="view-chunji" style="display: none;">
-    <section id="chunji-list-view">
-        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 20px; margin-top: 20px;">
+    <section id="chunji-list-view" style="margin-top: 0; padding: 0;">
+        
+        <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px; margin-top: 20px;">
+            <div class="guide-item-btn active" onclick="filterChunjiType('all', this)">
+                <span class="guide-title">전체</span>
+            </div>
+            <div class="guide-item-btn" onclick="filterChunjiType('유물', this)">
+                <span class="guide-title">유물</span>
+            </div>
+            <div class="guide-item-btn" onclick="filterChunjiType('사건', this)">
+                <span class="guide-title">사건</span>
+            </div>
+            </div>
+
+        <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 20px;">
             <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
             <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">천지록</h2>
-            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 2px;">유물 정보와 획득/해독 방법을 확인하세요.</p>
+            <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 2px;">유물의 획득처와 해독법을 기록한 고서입니다.</p>
         </div>
         
         <div id="chunji-list-container" class="chunji-list"></div>
@@ -219,6 +232,7 @@
         <div id="chunji-detail-content" class="detail-content-box"></div>
     </section>
 </div>
+
 
         <div id="view-news" style="display: none;">
             <section style="margin-top: 30px;">

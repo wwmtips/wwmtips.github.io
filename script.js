@@ -18,6 +18,7 @@ let slideInterval;
 let globalData = { items: [], quiz: [], quests: [], news: [], cnews: [], builds: [] };
 let builderData = null; 
 let chunjiData = []; // 천지록 데이터 전역 변수
+let currentChunjiData = [];
 
 // 빌더 상태 관리
 let currentBuild = { weapons: [null,null], hearts: [null,null,null,null], marts: new Array(8).fill(null) };
@@ -106,7 +107,8 @@ function loadData() {
         builderData = builderDataResult; 
         currentQuestData = globalData.quests;
         chunjiData = globalData.chunji;
-
+        currentChunjiData = globalData.chunji; // [추가] 초기화 (전체 목록)
+       
         renderChunjiList();
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
@@ -1647,8 +1649,63 @@ function renderChunjiList() {
 }
 
 
-// 상세 보기 (수묵화 스타일 적용)
-function loadChunjiDetail(item) { // index 인자는 이제 필요 없음
+// =========================================
+// [최종 수정] 천지록(Chunji) 기능 (카테고리 필터 포함)
+// =========================================
+
+// 1. 카테고리 필터 함수
+function filterChunjiType(type, btnElement) {
+    // 버튼 스타일 활성화
+    const buttons = document.querySelectorAll('#chunji-list-view .guide-item-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+
+    // 데이터 필터링
+    if (!chunjiData) return;
+
+    if (type === 'all') {
+        currentChunjiData = chunjiData;
+    } else {
+        // JSON의 "type" 값이 일치하는 것만 필터링
+        currentChunjiData = chunjiData.filter(item => item.type === type);
+    }
+
+    // 목록 다시 그리기
+    renderChunjiList();
+}
+
+// 2. 목록 렌더링 (필터링된 currentChunjiData 사용)
+function renderChunjiList() {
+    const container = document.getElementById('chunji-list-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // 데이터가 없거나 필터 결과가 없을 때
+    if (!currentChunjiData || currentChunjiData.length === 0) {
+        container.innerHTML = '<div style="padding:40px 0; text-align:center; color:#888;">해당하는 기록이 없습니다.</div>';
+        return;
+    }
+
+    currentChunjiData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'chunji-item';
+        // 주의: 필터링된 상태이므로 index 대신 item 자체를 넘겨야 정확함
+        div.onclick = () => loadChunjiDetail(item);
+        
+        div.innerHTML = `
+            <div class="chunji-text-group">
+                <div class="chunji-title">${item.title}</div>
+                <div class="chunji-type">${item.type || '기타'}</div>
+            </div>
+            <div class="arrow-icon">›</div>
+        `;
+        
+        container.appendChild(div);
+    });
+}
+
+// 3. 상세 보기
+function loadChunjiDetail(item) {
     const listView = document.getElementById('chunji-list-view');
     const detailView = document.getElementById('chunji-detail-view');
     const content = document.getElementById('chunji-detail-content');
@@ -1656,7 +1713,6 @@ function loadChunjiDetail(item) { // index 인자는 이제 필요 없음
     if (listView) listView.style.display = 'none';
     if (detailView) detailView.style.display = 'block';
 
-    // [추가] 상세 진입 시 URL 업데이트 (예: ?c=1)
     if (item.id) updateUrlQuery('chunji', item.id);
 
     const imgTag = (src) => src ? `<div class="detail-img-wrapper"><img src="${src}" onclick="window.open(this.src)" alt="참고 이미지"></div>` : '';
@@ -1687,22 +1743,26 @@ function loadChunjiDetail(item) { // index 인자는 이제 필요 없음
     `;
     window.scrollTo(0, 0);
 }
+
+// 4. 목록으로 돌아가기
 function showChunjiList() {
     document.getElementById('chunji-list-view').style.display = 'block';
     document.getElementById('chunji-detail-view').style.display = 'none';
-}
-// ID로 상세 로드 (URL 파라미터용)
-function loadChunjiDetailById(id) {
-    const index = parseInt(id);
-    if (!isNaN(index) && chunjiData[index]) {
-        loadChunjiDetail(chunjiData[index], index);
-    }
+    updateUrlQuery('chunji');
 }
 
-// 천지록 검색 결과 선택 함수
+// 5. 검색 결과 선택 (전체 데이터에서 검색)
 function selectChunjiResult(index) {
     switchTab('chunji');
-    loadChunjiDetail(globalData.chunji[index], index);
+    // globalData.chunji (원본)에서 데이터를 가져옴
+    loadChunjiDetail(globalData.chunji[index]);
     document.getElementById("global-search-results").style.display = 'none';
 }
 
+// 6. ID로 상세 로드
+function loadChunjiDetailById(id) {
+    const item = chunjiData.find(c => c.id == id); // 문자/숫자 호환 비교
+    if (item) {
+        loadChunjiDetail(item);
+    }
+}

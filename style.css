@@ -2016,16 +2016,31 @@ h3 {
 /* =========================================
    [추가/수정] 천지록 리스트 타입 스타일
    ========================================= */
-
 /* 1. 텍스트 그룹 (제목 + 타입) */
 .chunji-text-group {
     display: flex;
     flex-direction: column; /* 위아래 배치 */
-    gap: 3px; /* 제목과 타입 사이 간격 */
-    overflow: hidden; /* 긴 텍스트 처리용 */
+    justify-content: center;
+    align-items: flex-start; /* [핵심] 무조건 왼쪽 끝선에 맞춤 */
+    gap: 3px; 
+    overflow: hidden;
+    margin-left: 5px; /* 그룹 전체를 살짝 띄움 (제목/타입 같이 이동) */
 }
 
-/* 2. 타입(분류) 텍스트 스타일 */
+/* 2. 제목 스타일 */
+.chunji-title {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #222;
+    font-family: 'Noto Serif KR', serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    /* [핵심 수정] 기존에 있던 margin-left 제거 -> 완전 왼쪽 정렬 */
+    margin: 0; 
+    padding: 0;
+}
 
 /* 3. 타입(분류) 스타일 */
 .chunji-type {
@@ -2038,17 +2053,6 @@ h3 {
     margin: 0;
 }
 
-/* 3. 제목 스타일 (기존 거에서 margin 수정) */
-.chunji-title {
-    font-size: 1.05em;
-    font-weight: bold;
-    color: #333;
-    font-family: 'Noto Serif KR', serif;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* margin-right: 15px; <- 기존에 있던 이 속성은 지워도 됩니다 (그룹으로 묶여서 불필요) */
-}
 
 /* =========================================
    [수정] 천지록 리스트 아이템 (퀘스트 카드와 동일한 스타일 적용)
@@ -2078,19 +2082,6 @@ h3 {
     background-color: #fffcf5;
     transform: translateY(-2px);
     box-shadow: 0 5px 12px rgba(0,0,0,0.1);
-}
-
-/* 제목 텍스트 (폰트 사이즈 조정) */
-.chunji-title {
-    font-size: 0.95em; /* 퀘스트 제목 크기와 맞춤 (1.05em -> 0.95em) */
-    font-weight: bold;
-    color: #222;
-    font-family: 'Noto Serif KR', serif;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-right: 15px;
-    margin-left: 5px; /* 약간의 여백 추가 */
 }
 
 /* 화살표 아이콘 (크기 및 색상 미세 조정) */

@@ -1,6 +1,28 @@
 {
   "chunji": [
     {
+      "id": "16",
+       "type": "음식",  
+      "title": "수정 양갱",
+      "get": "연희 거리 NPC 유지량에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f6.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f6_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+      {
+      "id": "15",
+       "type": "음식",  
+      "title": "두구 음료",
+      "get": "연희 거리 NPC 유지량에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f6.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f6_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
       "id": "14",
        "type": "음식",  
       "title": "닭볶음면",

@@ -396,12 +396,12 @@ function switchTab(tabName) {
 
 function updateUrlQuery(tab, id) {
     const url = new URL(window.location);
-    // 기존 파라미터 초기화
     url.searchParams.delete('tab');
     url.searchParams.delete('id');
     url.searchParams.delete('q');
     url.searchParams.delete('g');
-    url.searchParams.delete('c'); // [추가] c 파라미터 초기화
+    url.searchParams.delete('c');
+    url.searchParams.delete('cp'); // [추가] 기존 페이지 파라미터 삭제
 
     if (tab === 'quest' && id) {
         url.searchParams.set('q', id.toLowerCase().replace('q', ''));
@@ -409,8 +409,17 @@ function updateUrlQuery(tab, id) {
     else if (tab === 'guide' && id) {
         url.searchParams.set('g', id);
     }
-    else if (tab === 'chunji' && id) {
-        url.searchParams.set('c', id); // [추가] 천지록 상세일 때 c=ID 설정
+    else if (tab === 'chunji') {
+        if (id) {
+            // 상세 페이지일 때는 ID만 표시 (페이지 번호 필요 없음)
+            url.searchParams.set('c', id);
+        } else {
+            // 목록 페이지일 때는 탭과 페이지 번호 표시
+            url.searchParams.set('tab', 'chunji');
+            if (currentChunjiPage > 1) {
+                url.searchParams.set('cp', currentChunjiPage); // 1페이지가 아닐 때만 cp 기록
+            }
+        }
     }
     else {
         if (tab && tab !== 'home') url.searchParams.set('tab', tab);
@@ -426,21 +435,23 @@ function checkUrlParams() {
     if (urlParams.get('q')) { switchTab('quest'); return; }
     if (urlParams.get('g')) { switchTab('guide'); return; }
     if (urlParams.get('b')) { switchTab('builder'); return; }
-    
-    // [수정] 천지록 파라미터 체크 (c)
-    if (urlParams.get('c')) { 
-        // 데이터가 아직 로드되지 않았을 수 있으므로 탭만 전환하고, 실제 로드는 loadData에서 처리
-        switchTab('chunji'); 
-        return; 
-    }
+    if (urlParams.get('c')) { switchTab('chunji'); return; } // 상세 로드는 loadData에서 처리됨
     
     const tab = urlParams.get('tab'); 
-    if (tab === 'quiz') switchTab('quiz');
+    
+    if (tab === 'chunji') {
+        // [추가] URL에 페이지 번호(cp)가 있으면 읽어옴
+        const pageParam = urlParams.get('cp');
+        if (pageParam) {
+            currentChunjiPage = parseInt(pageParam);
+        }
+        switchTab('chunji');
+    }
+    else if (tab === 'quiz') switchTab('quiz');
     else if (tab === 'quest') switchTab('quest');
     else if (tab === 'news') switchTab('news');
     else if (tab === 'guide') switchTab('guide'); 
     else if (tab === 'builder') switchTab('builder');
-    else if (tab === 'chunji') switchTab('chunji');
     else switchTab('home');
 }
 
@@ -1408,9 +1419,10 @@ function handleHistoryChange() {
     const qId = urlParams.get('q');
     const gId = urlParams.get('g');
     const bId = urlParams.get('b');
-    const cId = urlParams.get('c'); // [추가]
+    const cId = urlParams.get('c');
+    const cpParam = urlParams.get('cp'); // [추가] 페이지 번호 파라미터
 
-    if (qId) { /* 기존 코드 유지 */
+    if (qId) { /* ...기존 코드... */
         switchTab('quest');
         const fullId = 'q' + qId;
         if (globalData.quests) {
@@ -1419,11 +1431,10 @@ function handleHistoryChange() {
         }
         return;
     }
-
     if (gId) { switchTab('guide'); return; }
     if (bId) { switchTab('builder'); return; }
 
-    // [추가] 천지록 뒤로가기 처리
+    // 천지록 상세 보기 뒤로가기 처리
     if (cId) {
         switchTab('chunji');
         if (globalData.chunji) {
@@ -1433,12 +1444,21 @@ function handleHistoryChange() {
         return;
     }
 
+    // [추가] 천지록 목록(페이징) 뒤로가기 처리
+    if (tab === 'chunji') {
+        // URL에 cp가 있으면 그 페이지로, 없으면 1페이지로 설정
+        currentChunjiPage = cpParam ? parseInt(cpParam) : 1;
+        switchTab('chunji'); // 여기서 renderChunjiList가 호출됨
+        return;
+    }
+
     if (tab) {
         switchTab(tab);
     } else {
         switchTab('home');
     }
 }
+
 
 // =========================================
 // [추가 기능] 쿠폰 코드 복사하기
@@ -1766,7 +1786,10 @@ function renderChunjiPagination() {
 function changeChunjiPage(page) {
     currentChunjiPage = page;
     renderChunjiList();
-    // 목록 상단으로 스크롤 이동
+    
+    // [추가] 페이지 변경 시 URL 업데이트 (브라우저 기록에 남김)
+    updateUrlQuery('chunji');
+    
     document.getElementById('chunji-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 

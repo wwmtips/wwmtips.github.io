@@ -2115,3 +2115,96 @@ h3 {
     /* 긴 텍스트 줄바꿈 자연스럽게 */
     word-break: keep-all; 
 }
+
+/* =========================================
+   [추가] 바텀 시트 및 탭 스타일
+   ========================================= */
+
+/* 1. 모달 배경 (어둡게) */
+.bottom-sheet-modal {
+    display: none; /* 평소엔 숨김 */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    align-items: flex-end; /* 바닥 정렬 */
+    justify-content: center;
+}
+
+.bottom-sheet-modal.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 2. 시트 본체 */
+.sheet-container {
+    background: #fff;
+    width: 100%;
+    max-width: 600px; /* PC에서 너무 커지지 않게 */
+    border-radius: 20px 20px 0 0;
+    padding: 10px 20px 40px 20px;
+    max-height: 80vh; /* 화면 80% 높이까지만 */
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bottom-sheet-modal.show .sheet-container {
+    transform: translateY(0);
+}
+
+/* 3. 핸들바 */
+.sheet-handle-bar {
+    width: 40px;
+    height: 5px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    margin: 10px auto 20px auto;
+}
+
+/* 4. [핵심] 탭 네비게이션 스타일 */
+.sheet-tabs {
+    display: flex;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 0;
+}
+
+.sheet-tab-btn {
+    flex: 1; /* 반반 차지 */
+    padding: 12px 0;
+    background: none;
+    border: none;
+    font-size: 1em;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    position: relative;
+    font-family: 'Noto Serif KR', serif;
+}
+
+/* 활성화된 탭 스타일 */
+.sheet-tab-btn.active {
+    color: #333;
+}
+
+/* 활성화된 탭 밑줄 (애니메이션 효과) */
+.sheet-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; /* 줄 위치 */
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--wuxia-accent-red); /* 테마색 */
+}
+
+/* 5. 탭 내용 숨김/보임 처리 */
+.tab-content-item {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

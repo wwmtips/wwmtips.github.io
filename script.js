@@ -1870,3 +1870,45 @@ function loadChunjiDetailById(id) {
     }
 }
 
+// =========================================
+// [추가] 바텀 시트 및 탭 전환 기능
+// =========================================
+
+// 1. 시트 열기
+function openReportSheet() {
+    const modal = document.getElementById('report-sheet-modal');
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // 뒷배경 스크롤 막기
+    }
+}
+
+// 2. 시트 닫기
+function closeReportSheet(e) {
+    // 배경(어두운 부분)을 클릭했거나 명시적 호출인 경우만 닫기
+    if (!e || e.target.id === 'report-sheet-modal') {
+        const modal = document.getElementById('report-sheet-modal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = ''; // 스크롤 풀기
+        }
+    }
+}
+
+// 3. 탭 전환 기능
+function switchReportTab(tabName, btnElement) {
+    // A. 모든 탭 내용 숨기기
+    document.getElementById('tab-content-report').style.display = 'none';
+    document.getElementById('tab-content-gift').style.display = 'none';
+
+    // B. 선택한 탭 내용 보이기
+    document.getElementById(`tab-content-${tabName}`).style.display = 'block';
+
+    // C. 버튼 스타일 변경
+    const buttons = document.querySelectorAll('.sheet-tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    if (btnElement) {
+        btnElement.classList.add('active');
+    }
+}

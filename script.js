@@ -540,6 +540,7 @@ function loadGuideContent(filename, btnElement) {
             if (filename === 'news.html') renderGuideNewsList(); 
             if (filename === 'harts.html') renderHeartLibrary();
             if (filename === 'marts.html') renderMartLibrary(); 
+            if (filename === 'npc.html') initHomeworkChecklist(); 
         })
         .catch(err => {
             innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br>(${filename})</div>`;

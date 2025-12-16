@@ -818,5 +818,14 @@
     "bgimg": "q93_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q93.html"
+  },
+  {
+    "id": "q94",
+    "name": "엄선된 스승",
+    "location": "서쪽 외곽",
+    "type": "만사록",
+    "bgimg": "q94_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q94.html"
   }
 ]

@@ -11,7 +11,7 @@ function initHomeworkChecklist() {
     const taskData = [
                 // [월간]
                 { id: 'm_1', freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
-                { id: 'm_2', freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 교환' },
+                { id: 'm_2', freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 구매' },
                 
                 // [주간]
                 { id: 'w_1', freq: 'weekly', type: '구매', loc: '강호백진', title: '음의 선율 구매' },

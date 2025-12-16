@@ -458,8 +458,8 @@
 
     <div id="report-sheet-modal" class="bottom-sheet-modal" onclick="closeReportSheet(event)">
     <div class="sheet-container">
-        <div class="sheet-handle-bar"></div>
-
+        <button type="button" class="sheet-close-btn" onclick="closeReportSheet()">
+            &times; </button>
         <div class="sheet-tabs">
             <button class="sheet-tab-btn active" onclick="switchReportTab('report', this)">인게임 제보</button>
             <button class="sheet-tab-btn" onclick="switchReportTab('gift', this)">응원하기</button>

@@ -863,5 +863,14 @@
     "bgimg": "q97_1.jpg",
     "iconpath": "images/hwa.jpg",
     "filepath": "/quests/q97.html"
+  },
+  {
+    "id": "q98",
+    "name": "감당운사",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q98_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q98.html"
   }
 ]

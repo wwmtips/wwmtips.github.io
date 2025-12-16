@@ -872,5 +872,14 @@
     "bgimg": "q98_1.jpg",
     "iconpath": "images/hwa.jpg",
     "filepath": "/quests/q98.html"
+  },
+  {
+    "id": "q99",
+    "name": "옥명공후",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q99_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q99.html"
   }
 ]

@@ -845,5 +845,14 @@
     "bgimg": "q95_1.jpg",
     "iconpath": "images/hwa.jpg",
     "filepath": "/quests/q95.html"
+  },
+  {
+    "id": "q96",
+    "name": "천향목단",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q96_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q96.html"
   }
 ]

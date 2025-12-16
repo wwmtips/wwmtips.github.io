@@ -132,7 +132,7 @@
             </div>
         </div>
     </div>
-     <div class="ingame-report-card">
+     <div class="ingame-report-card" onclick="openProgressSheet()" style="cursor: pointer;">
         <div class="card-bg-deco"></div>
 
         <div class="char-portrait-box">
@@ -518,6 +518,50 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+    </div>
+</div>
+<div id="progress-sheet-modal" class="bottom-sheet-modal" onclick="closeProgressSheet(event)">
+    <div class="sheet-container">
+        
+        <button type="button" class="sheet-close-btn" onclick="closeProgressSheet()">
+            &times; 
+        </button>
+
+        <div class="sheet-tabs">
+            <button class="sheet-tab-btn active" onclick="switchProgressTab('status', this)">진행 현황</button>
+            <button class="sheet-tab-btn" onclick="switchProgressTab('cheer', this)">응원하기</button>
+        </div>
+
+        <div class="sheet-body-content">
+            
+            <div id="tab-p-status" class="tab-content-item" style="display: block;">
+                <div style="padding: 20px 0;">
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">
+                        현재 수집된 무림록 및 업데이트 현황입니다.
+                    </p>
+                    
+                    <div id="home-community-news" class="quest-grid" style="display: block;"></div>
+                </div>
+            </div>
+
+<div id="tab-p-cheer" class="tab-content-item" style="display: none;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center;">
+        
+        <div style="font-size: 3em; margin-bottom: 20px;">🙏</div>
+        
+        <p style="font-size: 1.1em; font-weight: bold; color: #333; margin: 0 0 10px 0; font-family: 'Noto Serif KR', serif;">
+            인게임 제보 및 응원을 받지 않습니다.
+        </p>
+        
+        <p style="font-size: 1em; color: #666; margin: 0; font-family: 'Noto Serif KR', serif;">
+            마음만 받겠습니다. 대협.
+        </p>
+        
+    </div>
+</div>
+
 
         </div>
     </div>

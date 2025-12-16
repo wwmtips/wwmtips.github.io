@@ -1,1 +1,333 @@
 
+<div class="quest-detail-container">
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #c92a2a;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333333;
+            --wuxia-text-sub: #666666;
+            --wuxia-border: #e0e0e0;
+        }
+
+        /* 숙제표 전용 추가 스타일 */
+        .hw-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--wuxia-border);
+        }
+
+        .hw-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--wuxia-text-main);
+            border-left: 4px solid var(--wuxia-accent-red);
+            padding-left: 12px;
+        }
+
+        .hw-progress-text {
+            font-size: 0.9em;
+            color: var(--wuxia-accent-gold);
+            font-weight: bold;
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        /* 퀘스트 카드 스타일 (그리드) */
+        .quest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .quest-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quest-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            border-color: var(--wuxia-accent-gold);
+        }
+
+        /* 텍스트 영역 */
+        .quest-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* 배지 스타일 (위치/타입) */
+        .quest-badges {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 6px;
+        }
+
+        .badge {
+            font-size: 0.75em;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .badge-loc {
+            background-color: #f5f5f5;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .badge-type {
+            background-color: #fff0f0;
+            color: var(--wuxia-accent-red);
+            border: 1px solid #ffcccc;
+        }
+
+        .quest-name {
+            font-size: 1em;
+            font-weight: bold;
+            color: var(--wuxia-text-main);
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        /* 완료 버튼 스타일 */
+        .check-btn {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 1em;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        /* 완료된 상태 스타일 */
+        .quest-card.completed {
+            background-color: #fcfcfc;
+            border-color: #eee;
+            opacity: 0.6;
+        }
+
+        .quest-card.completed .quest-name {
+            text-decoration: line-through;
+            color: #bbb;
+        }
+        
+        .quest-card.completed .badge {
+            background-color: #eee;
+            color: #ccc;
+            border-color: #eee;
+        }
+
+        .quest-card.completed .check-btn {
+            background-color: var(--wuxia-accent-gold);
+            border-color: var(--wuxia-accent-gold);
+            color: #fff;
+        }
+
+        /* 초기화 시간 안내 */
+        .reset-info {
+            text-align: right;
+            font-size: 0.8em;
+            color: #999;
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+        <p style="margin: 0; color: var(--wuxia-accent-red); font-weight: bold;">📍 수행 안내</p>
+        <p style="margin: 5px 0 0 0; font-size: 0.9em; color: var(--wuxia-text-sub); line-height: 1.5;">
+            강호의 고수는 하루도 수련을 게을리하지 않습니다.<br>
+            완료한 항목을 클릭하여 체크하세요. 
+            <span style="font-weight:bold; color:var(--wuxia-text-main)">(오전 6시 자동 초기화)</span>
+        </p>
+    </div>
+
+    <div class="reset-info">
+        다음 일일 초기화: <span id="next-reset-time" style="color:var(--wuxia-accent-red); font-weight:bold;">계산 중...</span>
+    </div>
+
+    <div class="hw-section-header">
+        <span class="hw-title">일일 </span>
+        <span class="hw-progress-text" id="prog-daily">0/0</span>
+    </div>
+    <div id="list-daily" class="quest-grid"></div>
+
+    <div class="hw-section-header">
+        <span class="hw-title">주간 </span>
+        <span class="hw-progress-text" id="prog-weekly">0/0</span>
+    </div>
+    <div id="list-weekly" class="quest-grid"></div>
+
+    <div class="hw-section-header">
+        <span class="hw-title">월간 </span>
+        <span class="hw-progress-text" id="prog-monthly">0/0</span>
+    </div>
+    <div id="list-monthly" class="quest-grid"></div>
+
+    <div style="margin-top: 50px; text-align: center; color: #ccc; font-size: 0.75em;">
+        저장 데이터는 Local Storage에 저장됩니다.
+    </div>
+
+    <script>
+        (function() {
+            // 1. 데이터 정의 (count 제거, 교환->구매 변경)
+            const taskData = [
+                // [월간]
+                { id: 'm_1', freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
+                { id: 'm_2', freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 교환' },
+                
+                // [주간]
+                { id: 'w_1', freq: 'weekly', type: '구매', loc: '강호백진', title: '음의 선율 구매' },
+                { id: 'w_2', freq: 'weekly', type: '구매', loc: '시즌상점', title: '심법 심득 상자 구매' },
+                { id: 'w_3', freq: 'weekly', type: '구매', loc: '시즌상점', title: '비결 돌파 지원상자' },
+                { id: 'w_4', freq: 'weekly', type: '구매', loc: '시즌상점', title: '작은 단백전 상자' },
+                { id: 'w_5', freq: 'weekly', type: '구매', loc: '시즌상점', title: '음의 선율 구매' },
+                { id: 'w_6', freq: 'weekly', type: '구매', loc: '강호령 상점', title: '비결 돌파 지원상자' },
+                { id: 'w_7', freq: 'weekly', type: '전투', loc: '협경', title: '협경 클리어' },
+                { id: 'w_8', freq: 'weekly', type: '전투', loc: '검무장', title: '검무장 클리어' },
+              
+                { id: 'w_10', freq: 'weekly', type: '구매', loc: '시즌상점', title: '기술 필기 구매' },
+                { id: 'w_11', freq: 'weekly', type: '구매', loc: '기술양성', title: '문예/의술/선택 상자 구매' },
+                { id: 'w_12', freq: 'weekly', type: '구매', loc: '십득교환', title: '심법 선택 상자 구매' },
+
+                // [일일]
+                { id: 'd_2', freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령' },
+                { id: 'd_3', freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령' },
+            ];
+
+            // 2. 상태 관리 (LocalStorage 키 변경 v3 - 데이터 구조 변경 반영)
+            const STORAGE_KEY = 'wwm_checklist_v3';
+            let status = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                checked: {},
+                lastDailyReset: 0
+            };
+
+            // 3. 시간 및 초기화 로직
+            function checkReset() {
+                const now = new Date();
+                
+                // 현재 시간 기준 "오늘의 리셋 타임(오전 5시)" 구하기
+                let currentResetTime = new Date(now);
+                if (now.getHours() < 5) {
+                    currentResetTime.setDate(currentResetTime.getDate() - 1);
+                }
+                currentResetTime.setHours(5, 0, 0, 0);
+
+                if (status.lastDailyReset < currentResetTime.getTime()) {
+                    // 일일(daily) 항목만 체크 해제
+                    const dailyIds = taskData.filter(t => t.freq === 'daily').map(t => t.id);
+                    dailyIds.forEach(id => delete status.checked[id]);
+                    
+                    status.lastDailyReset = now.getTime();
+                    saveStatus();
+                }
+            }
+
+            function saveStatus() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(status));
+                updateProgress();
+            }
+
+            function updateProgress() {
+                ['daily', 'weekly', 'monthly'].forEach(freq => {
+                    const tasks = taskData.filter(t => t.freq === freq);
+                    const total = tasks.length;
+                    const done = tasks.filter(t => status.checked[t.id]).length;
+                    
+                    const el = document.getElementById(`prog-${freq}`);
+                    if (el) el.textContent = `${done}/${total}`;
+                });
+            }
+
+            // 4. 렌더링 함수
+            function renderList(freq, containerId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = '';
+
+                const tasks = taskData.filter(t => t.freq === freq);
+
+                tasks.forEach(task => {
+                    const isChecked = status.checked[task.id];
+                    const card = document.createElement('div');
+                    card.className = `quest-card ${isChecked ? 'completed' : ''}`;
+                    card.onclick = () => toggleTask(task.id, card);
+
+                    // count 제거됨, 교환->구매 로직 적용된 상태로 렌더링
+                    card.innerHTML = `
+                        <div class="quest-info">
+                            <div class="quest-badges">
+                                <span class="badge badge-loc">${task.loc}</span>
+                                <span class="badge badge-type">${task.type}</span>
+                            </div>
+                            <div class="quest-name">${task.title}</div>
+                        </div>
+                        <div class="check-btn">${isChecked ? '✔' : ''}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            function toggleTask(id, cardEl) {
+                const isDone = !status.checked[id];
+                if (isDone) {
+                    status.checked[id] = true;
+                    cardEl.classList.add('completed');
+                    cardEl.querySelector('.check-btn').textContent = '✔';
+                } else {
+                    delete status.checked[id];
+                    cardEl.classList.remove('completed');
+                    cardEl.querySelector('.check-btn').textContent = '';
+                }
+                saveStatus();
+            }
+
+            function updateTimer() {
+                const now = new Date();
+                let target = new Date(now);
+                target.setHours(5, 0, 0, 0);
+                if (now >= target) {
+                    target.setDate(target.getDate() + 1);
+                }
+                const diff = target - now;
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('next-reset-time').textContent = `${h}시간 ${m}분 후`;
+            }
+
+            // 초기화 및 실행
+            checkReset();
+            renderList('daily', 'list-daily');
+            renderList('weekly', 'list-weekly');
+            renderList('monthly', 'list-monthly');
+            updateProgress();
+            updateTimer();
+            
+            setInterval(updateTimer, 60000);
+
+        })();
+    </script>
+</div>

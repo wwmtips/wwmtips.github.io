@@ -210,7 +210,7 @@ function renderHomeCommunityNews(cnewsList) {
         return;
     }
 
-    cnewsList.slice(0, 5).forEach((item, index) => {
+    cnewsList.slice(0, 10).forEach((item, index) => {
         const progress = item.progress || 0; 
         const isComplete = progress >= 100;
         const itemDiv = document.createElement('div');

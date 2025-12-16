@@ -2208,3 +2208,26 @@ h3 {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+/* =========================================
+   [추가] 바텀 시트 닫기 버튼 스타일
+   ========================================= */
+.sheet-close-btn {
+    position: absolute; /* 시트 기준으로 위치 고정 */
+    top: 10px;
+    right: 15px;
+    
+    background: none;
+    border: none;
+    color: #999; /* 은은한 회색 */
+    font-size: 28px; /* 크기 키움 */
+    line-height: 1;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 10; /* 다른 요소보다 위에 */
+    
+    transition: color 0.2s;
+}
+
+.sheet-close-btn:hover {
+    color: #333; /* 마우스 올리면 진하게 */
+}

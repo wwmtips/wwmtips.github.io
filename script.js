@@ -1912,3 +1912,51 @@ function switchReportTab(tabName, btnElement) {
         btnElement.classList.add('active');
     }
 }
+
+// =========================================
+// [추가] 문진관 제자 (진행 현황) 시트 기능
+// =========================================
+
+// 1. 시트 열기
+function openProgressSheet() {
+    const modal = document.getElementById('progress-sheet-modal');
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// 2. 시트 닫기
+function closeProgressSheet(e) {
+    if (!e || e.target.id === 'progress-sheet-modal') {
+        const modal = document.getElementById('progress-sheet-modal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+    }
+}
+
+// 3. 탭 전환 (진행 현황 <-> 응원하기)
+function switchProgressTab(tabName, btnElement) {
+    // 내용 숨기기
+    document.getElementById('tab-p-status').style.display = 'none';
+    document.getElementById('tab-p-cheer').style.display = 'none';
+
+    // 선택한 탭 보이기
+    if (tabName === 'status') {
+        document.getElementById('tab-p-status').style.display = 'block';
+    } else if (tabName === 'cheer') {
+        document.getElementById('tab-p-cheer').style.display = 'block';
+    }
+
+    // 버튼 스타일 초기화 및 활성화
+    // (주의: 해당 모달 안의 버튼만 찾도록 범위 한정)
+    const modal = document.getElementById('progress-sheet-modal');
+    const buttons = modal.querySelectorAll('.sheet-tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    if (btnElement) {
+        btnElement.classList.add('active');
+    }
+}

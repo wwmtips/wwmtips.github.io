@@ -2,6 +2,11 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "손씻기", "answer": "너구리", "user": "가진" },
+{ "hint": "아삭아삭", "answer": "사과", "user": "전략" },
+{ "hint": "파란색", "answer": "백로", "user": "바람風" },
+
+    
     { "hint": "영양", "answer": "표고버섯", "user": "" },
 { "hint": "고정", "answer": "못", "user": "라키아타" },
 { "hint": "중독성", "answer": "담배", "user": "익명" },

@@ -1,7 +1,6 @@
 
 <div class="quest-detail-container">
 
-
     <style>
         /* [수묵화 테마] 공통 변수 */
         :root {
@@ -12,7 +11,7 @@
             --wuxia-border: #e0e0e0;
         }
 
-        /* 섹션 헤더 (일일, 주간 등) */
+        /* 섹션 헤더 */
         .hw-section-header {
             display: flex;
             align-items: center;
@@ -28,7 +27,7 @@
             font-weight: bold;
             color: var(--wuxia-text-main);
             border-left: 4px solid var(--wuxia-accent-red);
-            padding-left: 12px; /* 텍스트와 빨간 줄 간격 */
+            padding-left: 12px;
         }
 
         .hw-progress-text {
@@ -38,27 +37,26 @@
             font-family: 'Noto Serif KR', serif;
         }
 
-        /* [수정] 그리드 레이아웃 (모바일 2열 최적화) */
+        /* [핵심 수정] 무조건 한 줄(1열)로 보이게 변경 */
         .quest-grid {
             display: grid;
-            /* 155px보다 작아지면 1열, 크면 2열로 자동 조정 */
-            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); 
-            gap: 10px; 
+            grid-template-columns: 1fr; /* 무조건 1개씩 꽉 차게 */
+            gap: 12px; /* 카드 사이 간격 */
         }
 
-        /* [수정] 카드 디자인 */
+        /* 카드 디자인 */
         .quest-card {
             background-color: #fff;
             border: 1px solid #e0e0e0;
             border-radius: 6px;
-            padding: 10px 12px; 
+            padding: 12px 15px; /* 넓어진 만큼 여백 확보 */
             display: flex;
-            align-items: center; /* 세로 중앙 정렬 */
-            justify-content: space-between; /* 텍스트(좌) - 체크(우) 끝으로 밀기 */
+            align-items: center;
+            justify-content: space-between;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02);
             transition: all 0.2s ease;
             cursor: pointer;
-            min-height: 50px;
+            min-height: 54px; /* 높이 약간 확보 */
         }
 
         .quest-card:hover {
@@ -67,35 +65,32 @@
             border-color: var(--wuxia-accent-gold);
         }
 
-        /* [핵심 수정] 텍스트 영역 왼쪽 정렬 강제 */
+        /* 텍스트 영역 */
         .quest-info {
-            flex: 1; /* 남은 공간 차지 */
+            flex: 1; /* 남은 공간 모두 차지 */
             display: flex;
-            flex-direction: column; /* 위아래 배치 */
-            justify-content: center; /* 세로 중앙 */
-            
-            /* ▼▼▼ 여기가 왼쪽 정렬 핵심입니다 ▼▼▼ */
-            align-items: flex-start; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start; /* 왼쪽 정렬 */
             text-align: left;
-            /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
-            
-            overflow: hidden;
+            padding-right: 10px; /* 체크 버튼과의 간격 */
+            overflow: hidden; 
         }
         
         /* 배지 영역 */
         .quest-badges {
             display: flex;
-            gap: 4px;
-            margin-bottom: 5px; /* 제목과 간격 */
+            gap: 5px;
+            margin-bottom: 5px;
         }
 
         .badge {
-            font-size: 0.7em; 
+            font-size: 0.75em; 
             padding: 2px 6px;
             border-radius: 3px;
             font-weight: bold;
             white-space: nowrap; 
-            line-height: 1; /* 배지 높이 최소화 */
+            line-height: 1; 
         }
 
         .badge-loc {
@@ -111,28 +106,26 @@
         }
 
         .quest-name {
-            font-size: 0.9em;
+            font-size: 1em; /* 글자 크기 복구 */
             font-weight: bold;
             color: var(--wuxia-text-main);
             margin: 0;
-            line-height: 1.3;
-            word-break: keep-all; 
-            text-align: left; /* 혹시 모를 상속 방지 */
+            line-height: 1.4;
+            word-break: keep-all; /* 단어 단위 줄바꿈 */
         }
 
         /* 체크 버튼 */
         .check-btn {
             background-color: #fff;
-            border: 1px solid #ddd; 
+            border: 2px solid #ddd; /* 테두리 조금 더 잘 보이게 */
             color: #fff;
-            width: 24px;  
-            height: 24px; 
+            width: 28px;  
+            height: 28px; 
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 8px; /* 텍스트와 간격 좁힘 */
-            font-size: 0.9em;
+            font-size: 1em;
             flex-shrink: 0; 
             transition: all 0.2s;
         }

@@ -1,7 +1,9 @@
 
 <div class="quest-detail-container">
+
+
     <style>
-        /* [수묵화 테마] 스타일 정의 */
+        /* [수묵화 테마] 공통 변수 */
         :root {
             --wuxia-accent-red: #c92a2a;
             --wuxia-accent-gold: #b08d55;
@@ -10,23 +12,23 @@
             --wuxia-border: #e0e0e0;
         }
 
-        /* 숙제표 전용 추가 스타일 */
+        /* 섹션 헤더 (일일, 주간 등) */
         .hw-section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 35px;
-            margin-bottom: 15px;
+            margin-top: 30px;
+            margin-bottom: 12px;
             padding-bottom: 8px;
             border-bottom: 2px solid var(--wuxia-border);
         }
 
         .hw-title {
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: bold;
             color: var(--wuxia-text-main);
             border-left: 4px solid var(--wuxia-accent-red);
-            padding-left: 12px;
+            padding-left: 12px; /* 텍스트와 빨간 줄 간격 */
         }
 
         .hw-progress-text {
@@ -36,54 +38,64 @@
             font-family: 'Noto Serif KR', serif;
         }
 
-        /* 퀘스트 카드 스타일 (그리드) */
+        /* [수정] 그리드 레이아웃 (모바일 2열 최적화) */
         .quest-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
+            /* 155px보다 작아지면 1열, 크면 2열로 자동 조정 */
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); 
+            gap: 10px; 
         }
 
+        /* [수정] 카드 디자인 */
         .quest-card {
             background-color: #fff;
             border: 1px solid #e0e0e0;
             border-radius: 6px;
-            padding: 12px 15px;
+            padding: 10px 12px; 
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            align-items: center; /* 세로 중앙 정렬 */
+            justify-content: space-between; /* 텍스트(좌) - 체크(우) 끝으로 밀기 */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
             transition: all 0.2s ease;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            min-height: 50px;
         }
 
         .quest-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
             border-color: var(--wuxia-accent-gold);
         }
 
-        /* 텍스트 영역 */
+        /* [핵심 수정] 텍스트 영역 왼쪽 정렬 강제 */
         .quest-info {
-            flex: 1;
+            flex: 1; /* 남은 공간 차지 */
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: column; /* 위아래 배치 */
+            justify-content: center; /* 세로 중앙 */
+            
+            /* ▼▼▼ 여기가 왼쪽 정렬 핵심입니다 ▼▼▼ */
+            align-items: flex-start; 
+            text-align: left;
+            /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+            
+            overflow: hidden;
         }
         
-        /* 배지 스타일 (위치/타입) */
+        /* 배지 영역 */
         .quest-badges {
             display: flex;
-            gap: 5px;
-            margin-bottom: 6px;
+            gap: 4px;
+            margin-bottom: 5px; /* 제목과 간격 */
         }
 
         .badge {
-            font-size: 0.75em;
+            font-size: 0.7em; 
             padding: 2px 6px;
             border-radius: 3px;
             font-weight: bold;
+            white-space: nowrap; 
+            line-height: 1; /* 배지 높이 최소화 */
         }
 
         .badge-loc {
@@ -99,31 +111,33 @@
         }
 
         .quest-name {
-            font-size: 1em;
+            font-size: 0.9em;
             font-weight: bold;
             color: var(--wuxia-text-main);
             margin: 0;
             line-height: 1.3;
+            word-break: keep-all; 
+            text-align: left; /* 혹시 모를 상속 방지 */
         }
 
-        /* 완료 버튼 스타일 */
+        /* 체크 버튼 */
         .check-btn {
             background-color: #fff;
-            border: 2px solid #ddd;
+            border: 1px solid #ddd; 
             color: #fff;
-            width: 28px;
-            height: 28px;
+            width: 24px;  
+            height: 24px; 
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 15px;
-            font-size: 1em;
-            flex-shrink: 0;
+            margin-left: 8px; /* 텍스트와 간격 좁힘 */
+            font-size: 0.9em;
+            flex-shrink: 0; 
             transition: all 0.2s;
         }
 
-        /* 완료된 상태 스타일 */
+        /* 완료 상태 */
         .quest-card.completed {
             background-color: #fcfcfc;
             border-color: #eee;
@@ -147,7 +161,6 @@
             color: #fff;
         }
 
-        /* 초기화 시간 안내 */
         .reset-info {
             text-align: right;
             font-size: 0.8em;
@@ -156,6 +169,8 @@
         }
     </style>
 
+
+    
     <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; margin-bottom: 20px;">
         <p style="margin: 0; color: var(--wuxia-accent-red); font-weight: bold;">📍 수행 안내</p>
         <p style="margin: 5px 0 0 0; font-size: 0.9em; color: var(--wuxia-text-sub); line-height: 1.5;">

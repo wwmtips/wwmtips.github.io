@@ -2278,3 +2278,29 @@ h3 {
     padding: 0 !important;
     line-height: 1.2;
 }
+
+/* =========================================
+   [추가] PC 화면(768px 이상)에서 인게임 제보 2열 배치
+   ========================================= */
+@media (min-width: 768px) {
+    
+    /* 프로필 섹션을 그리드 레이아웃으로 변경 */
+    .profile-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 1:1 비율로 2칸 나눔 */
+        gap: 15px; /* 카드 사이 간격 */
+        align-items: stretch; /* 카드 높이 동일하게 맞춤 */
+    }
+
+    /* 섹션 제목("인게임 제보")은 한 줄 전체를 차지하게 함 */
+    .profile-section .section-header-clickable {
+        grid-column: 1 / -1; /* 첫 번째 라인부터 끝 라인까지 확장 */
+        margin-bottom: 5px; /* 제목과 카드 사이 간격 */
+    }
+
+    /* PC에서는 카드 자체의 하단 여백 제거 (그리드 gap으로 대체) */
+    .profile-section .ingame-report-card {
+        margin-bottom: 0;
+        height: auto; /* 높이 자동 조절 */
+    }
+}

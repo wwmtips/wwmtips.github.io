@@ -299,55 +299,53 @@ function loadHomeMaps() {
         `;
         mapList.appendChild(card);
     });
-}
-function switchTab(tabName) {
+}// [수정] updateHistory 매개변수 추가 (기본값 true)
+function switchTab(tabName, updateHistory = true) {
     // 1. 뷰(화면) 숨기기
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
     views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
-    // 2. 상단 탭 스타일 초기화 (일반 버튼 + 더보기 버튼)
+    // 2. 상단 탭 스타일 초기화
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
     navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
     
-    // 3. 드롭다운 내부 아이템 스타일 초기화
+    // 3. 드롭다운 초기화
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
-
-    // 4. 드롭다운 메뉴 닫기 (탭 이동 시)
     const dropdown = document.getElementById("nav-more-list");
     if(dropdown) dropdown.classList.remove('show');
 
-    // 5. 탭 활성화 로직
+    // 4. 탭 활성화 로직
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
-        updateUrlQuery('home');
+        if (updateHistory) updateUrlQuery('home');
     } 
-  else if (tabName === 'chunji') {
+    else if (tabName === 'chunji') {
         document.getElementById('view-chunji').style.display = 'block';
         document.getElementById('nav-chunji').classList.add('active');
-        showChunjiList(); // 목록 화면 보여주기
-        updateUrlQuery('chunji');
-       }
+        showChunjiList();
+        if (updateHistory) updateUrlQuery('chunji');
+    }
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
         document.getElementById('nav-quiz').classList.add('active');
-        updateUrlQuery('quiz');
+        if (updateHistory) updateUrlQuery('quiz');
     } 
     else if (tabName === 'quest') {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
         showQuestList();
         
-        const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
-        if (allBtn) filterQuestType('all', allBtn);
-        updateUrlQuery('quest', null);
+        // ▼▼▼ [핵심] 뒤로가기(false)가 아닐 때만 URL 업데이트 실행 ▼▼▼
+        if (updateHistory) {
+            updateUrlQuery('quest');
+        }
     } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
-        updateUrlQuery('news'); 
+        if (updateHistory) updateUrlQuery('news');
     } 
     else if (tabName === 'guide' || tabName === 'code') {
-        // (생략: 기존 로직 유지)
         const guideView = document.getElementById('view-guide');
         if (guideView) {
             guideView.style.display = 'block';
@@ -359,29 +357,25 @@ function switchTab(tabName) {
             }
         }
         document.getElementById('nav-code').classList.add('active');
-        const params = new URLSearchParams(window.location.search);
-        if(!params.get('id') && !params.get('g')) updateUrlQuery('guide');
+        if (updateHistory) {
+            const params = new URLSearchParams(window.location.search);
+            if(!params.get('id') && !params.get('g')) updateUrlQuery('guide');
+        }
     }
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
-        
-        // [수정] 빌더는 이제 '더보기' 안에 있으므로, '더보기' 버튼과 '빌드' 아이템 둘 다 활성화 표시
         document.getElementById('nav-more').classList.add('active');
         const builderItem = document.getElementById('nav-builder');
         if(builderItem) builderItem.classList.add('active');
 
-        // (생략: 기존 빌더 로직 유지)
         document.getElementById('tools-menu').style.display = 'block';
         document.getElementById('builder-interface').style.display = 'none';
 
         if (!builderData) {
             fetch('json/builder_data.json')
                 .then(res => res.json())
-                .then(data => { 
-                    builderData = data; 
-                    renderBuildList('all'); 
-                })
-                .catch(err => console.error("빌더 데이터 로드 실패:", err));
+                .then(data => { builderData = data; renderBuildList('all'); })
+                .catch(err => console.error(err));
         } else {
             renderBuildList('all'); 
         }
@@ -390,7 +384,7 @@ function switchTab(tabName) {
             openBuilderInterface();
             loadViewer();
         }
-        updateUrlQuery('builder');
+        if (updateHistory) updateUrlQuery('builder');
     }
 }
 
@@ -1427,15 +1421,13 @@ function closeMartDetailSheet() {
     document.body.classList.remove('mart-sheet-open');
 }
 // =========================================
-// [추가 기능] 브라우저 뒤로 가기/앞으로 가기 처리
-// =========================================
-// script.js - handleHistoryChange 함수 (퀘스트 부분 수정)
-// =========================================
 // [수정] 브라우저 뒤로 가기/앞으로 가기 처리
 // =========================================
 function handleHistoryChange() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab');
+    
+    // 파라미터 가져오기
     const qId = urlParams.get('q');
     const gId = urlParams.get('g');
     const bId = urlParams.get('b');
@@ -1444,40 +1436,57 @@ function handleHistoryChange() {
     const cpParam = urlParams.get('cp'); // 천지록 페이지
     const qpParam = urlParams.get('qp'); // 퀘스트 페이지
 
-    // 1. 상세 보기 처리들 (기존 유지)
-    if (qId) { switchTab('quest'); const fullId = 'q' + qId; if (globalData.quests) { const foundQuest = globalData.quests.find(q => q.id === fullId); if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); } return; }
-    if (gId) { switchTab('guide'); return; }
-    if (bId) { switchTab('builder'); return; }
-    if (cId) { switchTab('chunji'); if (globalData.chunji) { const foundChunji = globalData.chunji.find(c => c.id === cId); if (foundChunji) loadChunjiDetail(foundChunji); } return; }
+    // 1. 상세 보기 처리 (상세 ID가 있으면 해당 화면 로드)
+    if (qId) { 
+        switchTab('quest', false); 
+        const fullId = 'q' + qId; 
+        if (globalData.quests) { 
+            const foundQuest = globalData.quests.find(q => q.id === fullId); 
+            if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); 
+        } 
+        return; 
+    }
+    if (gId) { switchTab('guide', false); return; }
+    if (bId) { switchTab('builder', false); return; }
+    if (cId) { 
+        switchTab('chunji', false); 
+        if (globalData.chunji) { 
+            const foundChunji = globalData.chunji.find(c => c.id === cId); 
+            if (foundChunji) loadChunjiDetail(foundChunji); 
+        } 
+        return; 
+    }
 
     // 2. [수정] 퀘스트 목록 뒤로가기
     if (tab === 'quest') {
-        // [핵심 수정] 페이지 번호를 '먼저' 복구해야 switchTab이 URL을 덮어쓰지 않습니다.
+        // [핵심 1] URL에 있는 페이지 번호(qp)를 currentPage 변수에 먼저 복구합니다.
+        // (없으면 1페이지)
         currentPage = qpParam ? parseInt(qpParam) : 1;
         
-        switchTab('quest'); // 화면 전환 (이때 올바른 currentPage로 URL 체크함)
-        renderQuestList();  // 리스트 그리기
+        // [핵심 2] switchTab을 부를 때 false를 넘겨서 URL을 다시 저장하지 않게 합니다.
+        // (이미 브라우저 URL은 ?tab=quest&qp=2 상태이기 때문)
+        switchTab('quest', false); 
+        
+        // [핵심 3] 복구된 페이지 번호로 리스트를 다시 그립니다.
+        renderQuestList();
         return;
     }
 
     // 3. [수정] 천지록 목록 뒤로가기
     if (tab === 'chunji') {
-        // [핵심 수정] 여기도 마찬가지로 페이지 먼저 설정
         currentChunjiPage = cpParam ? parseInt(cpParam) : 1;
-        
-        switchTab('chunji');
+        switchTab('chunji', false);
         renderChunjiList();
         return;
     }
 
     // 4. 나머지 탭
     if (tab) {
-        switchTab(tab);
+        switchTab(tab, false); 
     } else {
-        switchTab('home');
+        switchTab('home', false);
     }
 }
-
 
 // =========================================
 // [추가 기능] 쿠폰 코드 복사하기

@@ -1871,41 +1871,54 @@ function loadChunjiDetailById(id) {
 }
 
 // =========================================
-// [추가] 바텀 시트 및 탭 전환 기능
+// [통합] 바텀 시트 공통 기능 및 탭 설정
 // =========================================
 
-// 1. 시트 열기
+/**
+ * 1. 윤쫑 (인게임 제보) 시트 관련
+ */
 function openReportSheet() {
     const modal = document.getElementById('report-sheet-modal');
     if (modal) {
         modal.classList.add('show');
-        document.body.style.overflow = 'hidden'; // 뒷배경 스크롤 막기
+        document.body.style.overflow = 'hidden';
+        
+        // [옵션] 열 때마다 무조건 '제보' 탭으로 초기화하고 싶다면 주석 해제
+        // const defaultBtn = modal.querySelector('.sheet-tab-btn:nth-child(1)');
+        // switchReportTab('report', defaultBtn);
     }
 }
 
-// 2. 시트 닫기
 function closeReportSheet(e) {
-    // 배경(어두운 부분)을 클릭했거나 명시적 호출인 경우만 닫기
+    // X버튼 클릭(e 없음) 또는 배경 클릭(e.target 확인) 시 닫기
     if (!e || e.target.id === 'report-sheet-modal') {
         const modal = document.getElementById('report-sheet-modal');
         if (modal) {
             modal.classList.remove('show');
-            document.body.style.overflow = ''; // 스크롤 풀기
+            document.body.style.overflow = '';
+
+            // ▼▼▼ [핵심] 닫힐 때 탭 초기화 (애니메이션 후 실행) ▼▼▼
+            setTimeout(() => {
+                const defaultBtn = modal.querySelector('.sheet-tab-btn:nth-child(1)'); // 첫 번째 버튼
+                switchReportTab('report', defaultBtn);
+            }, 300);
         }
     }
 }
 
-// 3. 탭 전환 기능
 function switchReportTab(tabName, btnElement) {
-    // A. 모든 탭 내용 숨기기
-    document.getElementById('tab-content-report').style.display = 'none';
-    document.getElementById('tab-content-gift').style.display = 'none';
+    const modal = document.getElementById('report-sheet-modal');
+    if (!modal) return;
 
-    // B. 선택한 탭 내용 보이기
-    document.getElementById(`tab-content-${tabName}`).style.display = 'block';
+    // A. 컨텐츠 전환
+    const reportTab = document.getElementById('tab-content-report');
+    const giftTab = document.getElementById('tab-content-gift');
+    
+    if(reportTab) reportTab.style.display = (tabName === 'report') ? 'block' : 'none';
+    if(giftTab) giftTab.style.display = (tabName === 'gift') ? 'block' : 'none';
 
-    // C. 버튼 스타일 변경
-    const buttons = document.querySelectorAll('.sheet-tab-btn');
+    // B. 버튼 스타일 변경 ([중요] 이 모달 안의 버튼만 찾도록 범위 한정)
+    const buttons = modal.querySelectorAll('.sheet-tab-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
     if (btnElement) {
@@ -1913,11 +1926,10 @@ function switchReportTab(tabName, btnElement) {
     }
 }
 
-// =========================================
-// [추가] 문진관 제자 (진행 현황) 시트 기능
-// =========================================
 
-// 1. 시트 열기
+/**
+ * 2. 문진관 제자 (진행 현황) 시트 관련
+ */
 function openProgressSheet() {
     const modal = document.getElementById('progress-sheet-modal');
     if (modal) {
@@ -1926,33 +1938,34 @@ function openProgressSheet() {
     }
 }
 
-// 2. 시트 닫기
 function closeProgressSheet(e) {
     if (!e || e.target.id === 'progress-sheet-modal') {
         const modal = document.getElementById('progress-sheet-modal');
         if (modal) {
             modal.classList.remove('show');
             document.body.style.overflow = '';
+
+            // ▼▼▼ [핵심] 닫힐 때 탭 초기화 ▼▼▼
+            setTimeout(() => {
+                const defaultBtn = modal.querySelector('.sheet-tab-btn:nth-child(1)'); // 첫 번째 버튼
+                switchProgressTab('status', defaultBtn);
+            }, 300);
         }
     }
 }
 
-// 3. 탭 전환 (진행 현황 <-> 응원하기)
 function switchProgressTab(tabName, btnElement) {
-    // 내용 숨기기
-    document.getElementById('tab-p-status').style.display = 'none';
-    document.getElementById('tab-p-cheer').style.display = 'none';
-
-    // 선택한 탭 보이기
-    if (tabName === 'status') {
-        document.getElementById('tab-p-status').style.display = 'block';
-    } else if (tabName === 'cheer') {
-        document.getElementById('tab-p-cheer').style.display = 'block';
-    }
-
-    // 버튼 스타일 초기화 및 활성화
-    // (주의: 해당 모달 안의 버튼만 찾도록 범위 한정)
     const modal = document.getElementById('progress-sheet-modal');
+    if (!modal) return;
+
+    // A. 컨텐츠 전환
+    const statusTab = document.getElementById('tab-p-status');
+    const cheerTab = document.getElementById('tab-p-cheer');
+
+    if(statusTab) statusTab.style.display = (tabName === 'status') ? 'block' : 'none';
+    if(cheerTab) cheerTab.style.display = (tabName === 'cheer') ? 'block' : 'none';
+
+    // B. 버튼 스타일 변경 ([중요] 이 모달 안의 버튼만 찾도록 범위 한정)
     const buttons = modal.querySelectorAll('.sheet-tab-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     

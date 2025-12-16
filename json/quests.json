@@ -827,5 +827,23 @@
     "bgimg": "q94_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q94.html"
+  },
+  {
+    "id": "q95",
+    "name": "봄의 알림",
+    "location": "취화음",
+    "type": "만사록",
+    "bgimg": "q95_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q95.html"
+  },
+  {
+    "id": "q95",
+    "name": "백용과의 약속",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q95_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q95.html"
   }
 ]

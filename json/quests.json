@@ -917,5 +917,14 @@
     "bgimg": "q104_1.jpg",
     "iconpath": "images/hwa.jpg",
     "filepath": "/quests/q104.html"
+  },
+  {
+    "id": "q105",
+    "name": "목란망춘",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q105_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q105.html"
   }
 ]

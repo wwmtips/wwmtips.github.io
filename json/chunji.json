@@ -1,5 +1,49 @@
 {
   "chunji": [
+     {
+    "id": "34",
+       "type": "음식",  
+      "title" :"냉이 만두",
+      "get": "만승촌 NPC 마철산에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f14.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f14_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+    "id": "33",
+       "type": "음식",  
+      "title" :"백미 만두",
+      "get": "만승촌 NPC 마철산에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f14.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f14_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+    "id": "32",
+       "type": "음식",  
+      "title" :"전통 매운탕",
+      "get": "만승촌 NPC 해종우에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f15.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f15_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+    "id": "31",
+       "type": "음식",  
+      "title" :"얼큰 두부탕",
+      "get": "만승촌 NPC 해종우에게 구입",
+      "getimg1": "https://arcdb.kr/chunji/f15.jpg",
+      "getimg2": "https://arcdb.kr/chunji/f15_1.jpg",
+      "dsec": "구입 후 소모품에서 사용 시 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
     {
     "id": "30",
        "type": "음식",  

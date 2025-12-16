@@ -892,12 +892,12 @@
     "filepath": "/quests/q100.html"
   },
   {
-    "id": "q101",
-    "name": "공곡유란",
+    "id": "q102",
+    "name": "연령등고",
     "location": "취화음",
     "type": "화간집",
-    "bgimg": "q101_1.jpg",
+    "bgimg": "q102_1.jpg",
     "iconpath": "images/hwa.jpg",
-    "filepath": "/quests/q101.html"
+    "filepath": "/quests/q102.html"
   }
 ]

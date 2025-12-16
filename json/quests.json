@@ -854,5 +854,14 @@
     "bgimg": "q96_1.jpg",
     "iconpath": "images/hwa.jpg",
     "filepath": "/quests/q96.html"
+  },
+  {
+    "id": "q97",
+    "name": "저문 찔레꽃",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q97_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q97.html"
   }
 ]

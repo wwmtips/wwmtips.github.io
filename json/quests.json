@@ -908,5 +908,14 @@
     "bgimg": "q103_1.jpg",
     "iconpath": "images/hwa.jpg",
     "filepath": "/quests/q103.html"
+  },
+  {
+    "id": "q104",
+    "name": "능파선영",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q104_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q104.html"
   }
 ]

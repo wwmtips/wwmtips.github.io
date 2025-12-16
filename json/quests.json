@@ -881,5 +881,14 @@
     "bgimg": "q99_1.jpg",
     "iconpath": "images/hwa.jpg",
     "filepath": "/quests/q99.html"
+  },
+  {
+    "id": "q100",
+    "name": "유예서묵",
+    "location": "취화음",
+    "type": "화간집",
+    "bgimg": "q100_1.jpg",
+    "iconpath": "images/hwa.jpg",
+    "filepath": "/quests/q100.html"
   }
 ]

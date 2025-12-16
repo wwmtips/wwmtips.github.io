@@ -24,7 +24,7 @@ function initHomeworkChecklist() {
                 { id: 'w_8', freq: 'weekly', type: '전투', loc: '검무장', title: '검무장 클리어' },
               
                 { id: 'w_10', freq: 'weekly', type: '구매', loc: '시즌상점', title: '기술 필기 구매' },
-                { id: 'w_11', freq: 'weekly', type: '구매', loc: '기술양성', title: '문예/의술/선택 상자 구매' },
+                { id: 'w_11', freq: 'weekly', type: '구매', loc: '기술양성', title: '기술 선택 상자 구매' },
                 { id: 'w_12', freq: 'weekly', type: '구매', loc: '십득교환', title: '심법 선택 상자 구매' },
 
                 // [일일]

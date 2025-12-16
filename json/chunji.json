@@ -3,7 +3,7 @@
     {
     "id": "30",
        "type": "음식",  
-      "title" :"황천의 술",
+      "title" :"망천 나루",
       "get": "귀문시장 NPC 학환에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f13.jpg",
       "getimg2": "https://arcdb.kr/chunji/f13_1.jpg",

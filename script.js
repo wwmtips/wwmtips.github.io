@@ -1430,7 +1430,9 @@ function closeMartDetailSheet() {
 // [추가 기능] 브라우저 뒤로 가기/앞으로 가기 처리
 // =========================================
 // script.js - handleHistoryChange 함수 (퀘스트 부분 수정)
-
+// =========================================
+// [수정] 브라우저 뒤로 가기/앞으로 가기 처리
+// =========================================
 function handleHistoryChange() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab');
@@ -1443,28 +1445,28 @@ function handleHistoryChange() {
     const qpParam = urlParams.get('qp'); // 퀘스트 페이지
 
     // 1. 상세 보기 처리들 (기존 유지)
-    if (qId) { /* ... */ switchTab('quest'); const fullId = 'q' + qId; if (globalData.quests) { const foundQuest = globalData.quests.find(q => q.id === fullId); if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); } return; }
+    if (qId) { switchTab('quest'); const fullId = 'q' + qId; if (globalData.quests) { const foundQuest = globalData.quests.find(q => q.id === fullId); if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); } return; }
     if (gId) { switchTab('guide'); return; }
     if (bId) { switchTab('builder'); return; }
     if (cId) { switchTab('chunji'); if (globalData.chunji) { const foundChunji = globalData.chunji.find(c => c.id === cId); if (foundChunji) loadChunjiDetail(foundChunji); } return; }
 
-    // 2. [수정] 퀘스트 목록 뒤로가기 (순서 변경 및 렌더링 추가)
+    // 2. [수정] 퀘스트 목록 뒤로가기
     if (tab === 'quest') {
-        switchTab('quest'); // 먼저 화면을 전환하고
-        
-        // URL에 저장된 페이지 번호가 있으면 복구, 없으면 1페이지
+        // [핵심 수정] 페이지 번호를 '먼저' 복구해야 switchTab이 URL을 덮어쓰지 않습니다.
         currentPage = qpParam ? parseInt(qpParam) : 1;
         
-        // [중요] 복구된 페이지 번호로 리스트 다시 그리기
-        renderQuestList(); 
+        switchTab('quest'); // 화면 전환 (이때 올바른 currentPage로 URL 체크함)
+        renderQuestList();  // 리스트 그리기
         return;
     }
 
-    // 3. 천지록 목록 뒤로가기
+    // 3. [수정] 천지록 목록 뒤로가기
     if (tab === 'chunji') {
-        switchTab('chunji');
+        // [핵심 수정] 여기도 마찬가지로 페이지 먼저 설정
         currentChunjiPage = cpParam ? parseInt(cpParam) : 1;
-        renderChunjiList(); // [중요] 여기도 다시 그리기 추가하면 더 확실함
+        
+        switchTab('chunji');
+        renderChunjiList();
         return;
     }
 

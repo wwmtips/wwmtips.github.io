@@ -337,10 +337,10 @@ function switchTab(tabName) {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
         showQuestList();
-        /*
+        
         const allBtn = document.querySelector('#view-quest .guide-item-btn[onclick*="all"]');
         if (allBtn) filterQuestType('all', allBtn);
-        updateUrlQuery('quest', null);*/
+        updateUrlQuery('quest', null);
     } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';

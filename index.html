@@ -455,5 +455,78 @@
     </footer>
     <script src="script.js"></script>
  <script src="calc.js"></script>
+
+    <div id="report-sheet-modal" class="bottom-sheet-modal" onclick="closeReportSheet(event)">
+    <div class="sheet-container">
+        <div class="sheet-handle-bar"></div>
+
+        <div class="sheet-tabs">
+            <button class="sheet-tab-btn active" onclick="switchReportTab('report', this)">인게임 제보</button>
+            <button class="sheet-tab-btn" onclick="switchReportTab('gift', this)">마음 전하기</button>
+        </div>
+
+        <div class="sheet-body-content">
+            
+            <div id="tab-content-report" class="tab-content-item" style="display: block;">
+                <div style="padding: 20px 0;">
+                    <h3 style="font-size: 1.1em; color: #333; margin-bottom: 15px; border-left: 3px solid var(--wuxia-accent-red); padding-left: 10px;">
+                        제보 방법 안내
+                    </h3>
+                    <p style="color: #555; line-height: 1.6; margin-bottom: 20px; font-size: 0.95em;">
+                        만사록, 위키 정보 누락, 혹은 오류 발견 시 인게임 내 <strong>귓속말</strong>로 제보해 주시면 감사하겠습니다.
+                    </p>
+                    
+                    <div style="background-color: #fff5f5; border: 1px dashed #ef9a9a; border-radius: 4px; padding: 15px;">
+                        <p style="color: #c62828; font-weight: bold; font-size: 0.9em; margin: 0 0 5px 0;">⚠ 주의사항</p>
+                        <p style="color: #d32f2f; font-size: 0.85em; margin: 0; line-height: 1.4;">
+                            위키 정보 제보 외의 사적인 메시지나 장난성 귓속말을 보내시는 경우, 답변 없이 <strong>차단</strong>될 수 있습니다.
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button onclick="copyToClipboard('윤쫑', this)" style="background: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                            '윤쫑' 닉네임 복사
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-content-gift" class="tab-content-item" style="display: none;">
+                <div style="padding: 20px 0;">
+                    <h3 style="font-size: 1.1em; color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">
+                        개발자 응원하기
+                    </h3>
+                    <p style="color: #666; font-size: 0.9em; margin-bottom: 20px; line-height: 1.5;">
+                        커피는 제가 사 먹겠습니다! 대신 인게임 <strong>프로필 좋아요</strong>를 눌러주시면 큰 힘이 됩니다.
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        
+                        <div style="border: 1px solid #eee; border-radius: 4px; overflow: hidden;">
+                            <div style="background: #f9f9f9; padding: 8px 12px; font-size: 0.85em; font-weight: bold; color: #555;">
+                                STEP 1. 친구/검색 > ID 입력
+                            </div>
+                            <div style="height: 120px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                                <img src="images/guide_step1.jpg" alt="ID검색" style="width:100%; height:100%; object-fit:cover;">
+                            </div>
+                        </div>
+
+                        <div style="border: 1px solid #eee; border-radius: 4px; overflow: hidden;">
+                            <div style="background: #f9f9f9; padding: 8px 12px; font-size: 0.85em; font-weight: bold; color: #555;">
+                                STEP 2. 우측 상단 좋아요(♥) 클릭
+                            </div>
+                            <div style="height: 120px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                                <img src="images/guide_step2.jpg" alt="좋아요클릭" style="width:100%; height:100%; object-fit:cover;">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

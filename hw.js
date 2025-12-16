@@ -1,13 +1,10 @@
-// script.js 에 추가하세요
+/* homework.js */
 
-/* =========================================
-   숙제(Checklist) 기능 초기화 함수
-   ========================================= */
 function initHomeworkChecklist() {
-    // DOM이 생성되었는지 확인 (방어 코드)
+    // 1. 방어 코드
     if (!document.getElementById('list-daily')) return;
 
-    // 1. 데이터 정의
+    // 2. 데이터 정의
     const taskData = [
                 // [월간]
                 { id: 'm_1', freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
@@ -31,22 +28,80 @@ function initHomeworkChecklist() {
                 { id: 'd_2', freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령' },
                 { id: 'd_3', freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령' },
             ];
-
+    
+    // 3. 상태 관리
     const STORAGE_KEY = 'wwm_checklist_v3';
-    let status = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { checked: {}, lastDailyReset: 0 };
+    let status = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { 
+        checked: {}, 
+        lastDailyReset: 0,
+        lastWeeklyReset: 0,
+        lastMonthlyReset: 0
+    };
 
+    // 4. 초기화 로직 (오전 6시 기준)
     function checkReset() {
         const now = new Date();
-        let currentResetTime = new Date(now);
-        if (now.getHours() < 5) currentResetTime.setDate(currentResetTime.getDate() - 1);
-        currentResetTime.setHours(5, 0, 0, 0);
 
-        if (status.lastDailyReset < currentResetTime.getTime()) {
-            const dailyIds = taskData.filter(t => t.freq === 'daily').map(t => t.id);
-            dailyIds.forEach(id => delete status.checked[id]);
+        // A. 일일 리셋 (매일 오전 6시)
+        let dailyTarget = new Date(now);
+        // 현재 시간이 오전 6시 전이라면, 타겟은 어제 6시
+        if (now.getHours() < 6) dailyTarget.setDate(dailyTarget.getDate() - 1);
+        dailyTarget.setHours(6, 0, 0, 0);
+
+        if (status.lastDailyReset < dailyTarget.getTime()) {
+            resetTasks('daily');
             status.lastDailyReset = now.getTime();
-            saveStatus();
         }
+
+        // B. 주간 리셋 (매주 월요일 오전 6시)
+        let weeklyTarget = new Date(now);
+        const day = weeklyTarget.getDay(); // 0(일) ~ 6(토)
+        // 이번 주 월요일 계산
+        const diff = weeklyTarget.getDate() - day + (day === 0 ? -6 : 1); 
+        weeklyTarget.setDate(diff);
+        weeklyTarget.setHours(6, 0, 0, 0);
+        
+        // 오늘이 월요일인데 6시 전이라면, 저번주 월요일이 타겟
+        if (day === 1 && now.getHours() < 6) {
+            weeklyTarget.setDate(weeklyTarget.getDate() - 7);
+        }
+        // 계산된 월요일이 미래라면 저번주로 보정
+        if (weeklyTarget > now) {
+            weeklyTarget.setDate(weeklyTarget.getDate() - 7);
+        }
+
+        if (status.lastWeeklyReset < weeklyTarget.getTime()) {
+            resetTasks('weekly');
+            status.lastWeeklyReset = now.getTime();
+        }
+
+        // C. 월간 리셋 (매월 1일 오전 6시)
+        let monthlyTarget = new Date(now);
+        monthlyTarget.setDate(1);
+        monthlyTarget.setHours(6, 0, 0, 0);
+        
+        // 오늘이 1일인데 6시 전이라면, 저번달 1일이 타겟
+        if (now.getDate() === 1 && now.getHours() < 6) {
+            monthlyTarget.setMonth(monthlyTarget.getMonth() - 1);
+        }
+        // 계산된 1일이 미래라면 저번달로 보정
+        if (monthlyTarget > now) {
+            monthlyTarget.setMonth(monthlyTarget.getMonth() - 1);
+        }
+
+        if (status.lastMonthlyReset < monthlyTarget.getTime()) {
+            resetTasks('monthly');
+            status.lastMonthlyReset = now.getTime();
+        }
+
+        saveStatus();
+    }
+
+    // 특정 타입의 체크만 해제하는 헬퍼 함수
+    function resetTasks(freqType) {
+        const idsToReset = taskData.filter(t => t.freq === freqType).map(t => t.id);
+        idsToReset.forEach(id => delete status.checked[id]);
+        console.log(`${freqType} 퀘스트가 초기화되었습니다. (오전 6시 기준)`);
     }
 
     function saveStatus() {
@@ -75,7 +130,6 @@ function initHomeworkChecklist() {
             const card = document.createElement('div');
             card.className = `quest-card ${isChecked ? 'completed' : ''}`;
             
-            // 클릭 이벤트 직접 연결
             card.addEventListener('click', function() {
                 toggleTask(task.id, card);
             });
@@ -113,8 +167,10 @@ function initHomeworkChecklist() {
         if(!el) return;
         const now = new Date();
         let target = new Date(now);
-        target.setHours(5, 0, 0, 0);
+        // 다음 오전 6시 계산
+        target.setHours(6, 0, 0, 0);
         if (now >= target) target.setDate(target.getDate() + 1);
+        
         const diff = target - now;
         const h = Math.floor(diff / (1000 * 60 * 60));
         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));

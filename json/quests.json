@@ -797,8 +797,17 @@
     "name": "터무니 없는 날조",
     "location": "만승촌",
     "type": "만사록",
-    "bgimg": "q90_1.jpg",
+    "bgimg": "q91_1.jpg",
     "iconpath": "images/masa.jpg",
-    "filepath": "/quests/q90.html"
+    "filepath": "/quests/q91.html"
+  },
+  {
+    "id": "q92",
+    "name": "등가 거래",
+    "location": "만승촌",
+    "type": "만사록",
+    "bgimg": "q92_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q92.html"
   }
 ]

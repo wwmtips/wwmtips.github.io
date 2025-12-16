@@ -791,5 +791,14 @@
     "bgimg": "q90_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q90.html"
+  } ,
+  {
+    "id": "q91",
+    "name": "터무니 없는 날조",
+    "location": "만승촌",
+    "type": "만사록",
+    "bgimg": "q90_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q90.html"
   }
 ]

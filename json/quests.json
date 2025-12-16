@@ -702,15 +702,6 @@
     "filepath": "/quests/q80.html"
   },
   {
-    "id": "q81",
-    "name": "바람에 흔들리는 매화",
-    "location": "취화음",
-    "type": "만사록",
-    "bgimg": "q81_1.jpg",
-    "iconpath": "images/masa.jpg",
-    "filepath": "/quests/q81.html"
-  },
-  {
     "id": "q82",
     "name": "자식 출세의 꿈",
     "location": "황궁 후원",
@@ -772,6 +763,15 @@
     "bgimg": "q89_2.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q89.html"
+  },
+  {
+    "id": "q81",
+    "name": "바람에 흔들리는 매화",
+    "location": "취화음",
+    "type": "만사록",
+    "bgimg": "q81_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q81.html"
   },
   {
     "id": "q90",

@@ -809,5 +809,14 @@
     "bgimg": "q92_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q92.html"
+  },
+  {
+    "id": "q93",
+    "name": "손주의 농담",
+    "location": "서쪽 외곽",
+    "type": "만사록",
+    "bgimg": "q93_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q93.html"
   }
 ]

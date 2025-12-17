@@ -46,7 +46,7 @@ const dummyMapData = [
         key: "kaifeng",
         desc: "지도 데이터 변경으로 아직 접속 할 수 없습니다.",
         link: "#",
-        image: "images/map1.jpeg"
+        image: "images/gs.jpg"
    }
 ];
 

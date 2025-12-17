@@ -2158,7 +2158,7 @@ function updateChunjiSubtypeOptions() {
     const sortedSubtypes = Array.from(subtypes).sort();
 
     // D. 드롭다운 초기화 및 다시 채우기
-    subtypeSelect.innerHTML = '<option value="all">전체 세부</option>'; // 기본값
+    subtypeSelect.innerHTML = '<option value="all">모든 항목</option>'; // 기본값
     
     sortedSubtypes.forEach(sub => {
         const option = document.createElement('option');

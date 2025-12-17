@@ -1,44 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>인터렉티브 맵 (JSON 연동)</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>인터렉티브 맵 프로젝트</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <style>
-        html, body, #map { height: 100%; margin: 0; background: #222; }
-        /* 마커 아이콘 크기 스타일 (필요시 수정) */
-        .custom-icon { width: 32px; height: 32px; object-fit: contain; }
+        /* 화면 전체를 지도로 꽉 채우기 */
+        html, body, #map { height: 100%; width: 100%; margin: 0; padding: 0; background: #1a1a1a; }
+        
+        /* 팝업 스타일 커스텀 */
+        .leaflet-popup-content-wrapper { border-radius: 8px; }
+        .popup-title { font-size: 1.1em; font-weight: bold; margin-bottom: 5px; }
+        .popup-type { font-size: 0.9em; color: #666; margin-bottom: 10px; }
+        .popup-desc { font-size: 0.95em; color: #333; }
+        
+        /* 좌표 복사 버튼 스타일 */
+        .copy-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .copy-btn:active { background-color: #45a049; }
     </style>
 </head>
 <body>
+
     <div id="map"></div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
-        // --- 1. 기본 설정 ---
+        // ==========================================
+        // 1. 기본 설정 (이 부분만 수정하면 됩니다)
+        // ==========================================
         const config = {
-            imageUrl: 'qinghe.jpg', // 지도 이미지 파일명
-            imageWidth: 2479,            // 실제 이미지 가로 크기
-            imageHeight: 1600,           // 실제 이미지 세로 크기
-            iconSize: [16, 16],          // 마커 아이콘 크기 [가로, 세로]
-            jsonPath: 'json/data.json'   // 데이터 파일 경로
+            imageUrl: '1000027025.jpg',  // 지도 이미지 파일명
+            imageWidth: 4000,             // 이미지 실제 가로 크기 (픽셀)
+            imageHeight: 3000,            // 이미지 실제 세로 크기 (픽셀)
+            iconSize: [32, 32],           // 아이콘 크기 [가로, 세로]
+            jsonPath: 'json/data.json'    // 데이터 파일 경로
         };
 
-        // --- 2. 지도 생성 (오버레이 방식) ---
+        // ==========================================
+        // 2. 지도 초기화 (이미지 오버레이 방식)
+        // ==========================================
         const map = L.map('map', {
-            crs: L.CRS.Simple,
-            minZoom: -2,
-            maxZoom: 2,
-            zoomSnap: 0.5
+            crs: L.CRS.Simple,            // 평면 좌표계 사용
+            minZoom: -2,                  // 축소 허용 범위
+            maxZoom: 2,                   // 확대 허용 범위
+            zoomSnap: 0.5,                // 줌 단계를 부드럽게
+            zoomDelta: 0.5
         });
 
+        // 이미지 경계 설정
         const bounds = [[0, 0], [config.imageHeight, config.imageWidth]];
+        
+        // 이미지 불러오기
         L.imageOverlay(config.imageUrl, bounds).addTo(map);
+        
+        // 처음에 전체 지도가 보이도록 맞춤
         map.fitBounds(bounds);
 
 
-        // --- 3. 데이터 불러오기 및 마커 생성 ---
+        // ==========================================
+        // 3. JSON 데이터 불러오기 및 마커 생성
+        // ==========================================
         fetch(config.jsonPath)
             .then(response => {
                 if (!response.ok) throw new Error("JSON 파일을 찾을 수 없습니다.");
@@ -48,76 +83,107 @@
                 createMarkers(data);
             })
             .catch(error => {
-                console.error('에러 발생:', error);
-                alert('데이터를 불러오는 데 실패했습니다. (서버 실행 여부를 확인하세요)');
+                console.error('에러:', error);
+                alert('데이터 로딩 실패! (VS Code의 Live Server로 실행했는지 확인하세요)');
             });
 
 
-        // --- 4. 마커 생성 및 필터 그룹화 로직 ---
+        // ==========================================
+        // 4. 마커 생성 및 필터 그룹화 함수
+        // ==========================================
         function createMarkers(data) {
-            // 그룹별로 마커를 담을 통(Object)을 만듭니다.
             const layerGroups = {};
 
             data.forEach(item => {
-                // 1) 해당 타입의 그룹이 없으면 새로 만듭니다.
+                // 해당 타입의 그룹이 없으면 생성
                 if (!layerGroups[item.type]) {
                     layerGroups[item.type] = L.layerGroup();
                 }
 
-                // 2) 아이콘 설정 (type 이름에 따라 이미지 파일 자동 매칭)
-                // 예: type이 'stone'이면 -> 'images/stone.png'
+                // 아이콘 설정 (파일명 = type.png)
                 const myIcon = L.icon({
-                    iconUrl: `images/${item.type}.png`, 
+                    iconUrl: `images/${item.type}.png`,
                     iconSize: config.iconSize,
-                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], // 아이콘의 하단 중앙이 좌표에 찍히도록
-                    popupAnchor: [0, -config.iconSize[1]] // 팝업 위치 조절
+                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], // 아이콘 하단 중앙이 좌표
+                    popupAnchor: [0, -config.iconSize[1]]
                 });
 
-                // 3) 마커 생성
+                // 마커 생성
                 const marker = L.marker([item.y, item.x], { icon: myIcon });
-                
-                // 4) 팝업 내용 구성 (HTML 태그 사용 가능)
+
+                // 팝업 내용 (HTML)
                 const popupContent = `
                     <div style="text-align:center">
-                        <h3 style="margin:5px 0">${item.name}</h3>
-                        <p style="margin:0; color:gray">${item.type}</p>
-                        <br>
-                        ${item.desc ? `<span>${item.desc}</span>` : ''}
+                        <div class="popup-title">${item.name}</div>
+                        <div class="popup-type">${item.type}</div>
+                        <div class="popup-desc">${item.desc || ''}</div>
                     </div>
                 `;
                 marker.bindPopup(popupContent);
 
-                // 5) 그룹에 마커 추가
+                // 그룹에 추가
                 layerGroups[item.type].addLayer(marker);
             });
 
-            // --- 5. 필터 컨트롤 생성 (우측 상단 레이어 버튼) ---
+            // 필터 컨트롤 (우측 상단 메뉴) 생성
             const overlays = {};
-            
-            // 한글 이름 매핑 (필요하면 여기서 이름을 예쁘게 바꾸세요)
-            const typeNames = {
+            const typeNames = { // 화면에 표시될 한글 이름 매핑
                 "stone": "경계석",
                 "chest": "보물상자",
                 "boss": "보스 몬스터"
             };
 
-            // 그룹들을 지도에 추가하고, 필터 메뉴에도 등록
             for (const [type, layer] of Object.entries(layerGroups)) {
-                layer.addTo(map); // 처음에 모두 보이게 하기
-                
-                // 메뉴에 표시될 이름 (매핑된 이름이 있으면 쓰고, 없으면 영어 type 그대로)
-                const labelName = typeNames[type] || type; 
-                overlays[labelName] = layer;
+                layer.addTo(map); // 기본적으로 모두 켜기
+                const label = typeNames[type] || type; // 한글 이름 없으면 영어 그대로
+                overlays[label] = layer;
             }
 
-            // 우측 상단에 필터 버튼 추가
             L.control.layers(null, overlays, { collapsed: false }).addTo(map);
         }
 
-        // --- 6. (개발용) 클릭 시 좌표 따기 ---
+
+        // ==========================================
+        // 5. (개발용) 클릭/터치 시 좌표 복사 기능
+        // ==========================================
         map.on('click', function(e) {
-            console.log(`"y": ${Math.round(e.latlng.lat)}, "x": ${Math.round(e.latlng.lng)}`);
+            const y = Math.round(e.latlng.lat);
+            const x = Math.round(e.latlng.lng);
+            
+            // JSON에 바로 붙여넣을 수 있는 포맷
+            const copyText = `"y": ${y}, "x": ${x}`;
+
+            const content = `
+                <div style="text-align:center; min-width: 160px;">
+                    <div style="font-weight:bold; margin-bottom:5px;">좌표 확인</div>
+                    <div style="background:#f1f1f1; padding:5px; font-family:monospace; margin-bottom:5px;">
+                        y: ${y}, x: ${x}
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('${copyText}')">
+                        좌표 복사하기
+                    </button>
+                </div>
+            `;
+
+            L.popup()
+                .setLatLng(e.latlng)
+                .setContent(content)
+                .openOn(map);
         });
+
+        // 클립보드 복사 함수 (전역 함수로 선언해야 onclick에서 실행됨)
+        window.copyToClipboard = function(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('복사완료: ' + text);
+                }).catch(err => {
+                    prompt("복사가 차단되었습니다. 아래 텍스트를 직접 복사하세요:", text);
+                });
+            } else {
+                // 구형 브라우저 등 호환성
+                prompt("이 텍스트를 복사하세요:", text);
+            }
+        };
 
     </script>
 </body>

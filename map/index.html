@@ -139,9 +139,9 @@ map.setView([centerY, centerX], initialZoom);
             // 필터 컨트롤 (우측 상단 메뉴) 생성
             const overlays = {};
             const typeNames = { // 화면에 표시될 한글 이름 매핑
-                "stone": "경계석",
-                "chest": "보물상자",
-                "boss": "보스 몬스터"
+                "경계석": "경계석",
+                "보물상자": "보물상자",
+                "보스": "보스 몬스터"
             };
 
             for (const [type, layer] of Object.entries(layerGroups)) {
@@ -172,9 +172,9 @@ map.setView([centerY, centerX], initialZoom);
                     
                     <label>타입:</label>
                     <select id="input_type" style="width:100%; margin-bottom:5px; padding:5px; box-sizing:border-box;">
-                        <option value="stone">경계석 (stone)</option>
-                        <option value="chest">보물상자 (chest)</option>
-                        <option value="boss">보스 (boss)</option>
+                        <option value="stone">경계석</option>
+                        <option value="chest">보물상자</option>
+                        <option value="boss">보스</option>
                         </select>
 
                     <label>설명:</label>

@@ -239,7 +239,7 @@
             const image = document.getElementById('input_image').value;
             const uniqueId = Date.now(); 
 
-            const jsonString = `,
+            const jsonString = `
   {
     "id": ${uniqueId},
     "name": "${name}",
@@ -249,7 +249,7 @@
     "desc": "${desc}",
     "link": "${link}",
     "image": "${image}"
-  }`;
+  },`;
             copyToClipboard(jsonString);
         };
 

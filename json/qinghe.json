@@ -1,6 +1,16 @@
 [
   
   {
+    "id": 1765979401154,
+    "name": "달빛에 서린 회한",
+    "type": "만사록",
+    "y": 3570,
+    "x": 2022,
+    "desc": "마을에 영약을 찾는 사람이 있는듯 하다.",
+    "link": "https://wwm.tips/?q=52",
+    "image": "https://wwm.tips/quests/images/q52_1.jpg"
+  },
+  {
     "id": 1765979065801,
     "name": "장생 녹선인",
     "type": "만사록",

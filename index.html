@@ -241,27 +241,20 @@
 <div id="view-chunji" style="display: none;">
     <section id="chunji-list-view" style="margin-top: 0; padding: 0;">
         
-        <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px; margin-top: 20px;">
-            <div class="guide-item-btn active" onclick="filterChunjiType('all', this)">
-                <span class="guide-title">전체</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterChunjiType('병기', this)">
-                <span class="guide-title">병기</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterChunjiType('협도', this)">
-                <span class="guide-title">협도</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterChunjiType('음식', this)">
-                <span class="guide-title">음식</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterChunjiType('풍물', this)">
-                <span class="guide-title">풍물</span>
-            </div>
-            <div class="guide-item-btn" onclick="filterChunjiType('시화', this)">
-                <span class="guide-title">시화</span>
-            </div>
-     </div>
+        <div class="filter-bar-wrapper" style="margin-bottom: 20px; margin-top: 20px;">
+            <select id="chunji-type-select" class="custom-select" onchange="onChunjiTypeChange()">
+                <option value="all">전체</option>
+                <option value="병기">병기</option>
+                <option value="협도">협도</option>
+                <option value="음식">음식</option>
+                <option value="풍물">풍물</option>
+                <option value="시화">시화</option>
+            </select>
 
+            <select id="chunji-subtype-select" class="custom-select" onchange="applyChunjiFilter()">
+                <option value="all">모든 항목</option>
+            </select>
+        </div>
         <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 20px;">
             <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
             <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">천지록</h2>
@@ -277,6 +270,7 @@
         <div id="chunji-detail-content" class="detail-content-box"></div>
     </section>
 </div>
+
 
 
         <div id="view-news" style="display: none;">

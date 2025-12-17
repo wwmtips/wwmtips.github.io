@@ -108,7 +108,8 @@ function loadData() {
         currentQuestData = globalData.quests;
         chunjiData = globalData.chunji;
         currentChunjiData = globalData.chunji; // [추가] 초기화 (전체 목록)
-       
+        
+        initLocationFilter(); 
         renderChunjiList();
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
@@ -1984,4 +1985,54 @@ function switchProgressTab(tabName, btnElement) {
     if (btnElement) {
         btnElement.classList.add('active');
     }
+}
+
+// 1. 지역(Location) 옵션 자동 생성 함수
+function initLocationFilter() {
+    const locationSelect = document.getElementById('quest-location-select');
+    if (!locationSelect || !globalData.quests) return;
+
+    // 모든 퀘스트에서 location 정보만 추출하여 중복 제거 (Set 사용)
+    const locations = new Set();
+    globalData.quests.forEach(q => {
+        if (q.location && q.location.trim() !== "") {
+            locations.add(q.location);
+        }
+    });
+
+    // 가나다 순 정렬
+    const sortedLocations = Array.from(locations).sort();
+
+    // 옵션 태그 생성 및 추가
+    sortedLocations.forEach(loc => {
+        const option = document.createElement('option');
+        option.value = loc;
+        option.innerText = loc;
+        locationSelect.appendChild(option);
+    });
+}
+
+// 2. 통합 필터 적용 함수 (Type + Location AND 조건)
+function applyQuestFilter() {
+    const typeSelect = document.getElementById('quest-type-select');
+    const locationSelect = document.getElementById('quest-location-select');
+    
+    const selectedType = typeSelect ? typeSelect.value : 'all';
+    const selectedLocation = locationSelect ? locationSelect.value : 'all';
+
+    // 데이터 필터링
+    currentQuestData = globalData.quests.filter(item => {
+        // 1. 분류 체크 (all이면 통과, 아니면 일치해야 통과)
+        const typeMatch = (selectedType === 'all') || (item.type === selectedType);
+        
+        // 2. 지역 체크 (all이면 통과, 아니면 일치해야 통과)
+        const locationMatch = (selectedLocation === 'all') || (item.location === selectedLocation);
+
+        // 두 조건 모두 만족해야 함
+        return typeMatch && locationMatch;
+    });
+
+    // 페이지를 1페이지로 초기화하고 렌더링
+    currentPage = 1;
+    renderQuestList();
 }

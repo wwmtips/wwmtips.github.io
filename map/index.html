@@ -267,7 +267,7 @@
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
             if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
             html += `<div class="btn-container">`;
-            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">지침서</a>`;
+            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;

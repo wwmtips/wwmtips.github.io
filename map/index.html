@@ -99,59 +99,67 @@ map.setView([centerY, centerX], initialZoom);
             });
 
 
-        // ==========================================
-        // 4. 마커 생성 및 필터 그룹화 함수
+                // ==========================================
+        // 4. 마커 생성 및 필터 그룹화 함수 (이미지/설명 조건부 표시)
         // ==========================================
         function createMarkers(data) {
             const layerGroups = {};
 
             data.forEach(item => {
-                // 해당 타입의 그룹이 없으면 생성
                 if (!layerGroups[item.type]) {
                     layerGroups[item.type] = L.layerGroup();
                 }
 
-                // 아이콘 설정 (파일명 = type.png)
                 const myIcon = L.icon({
                     iconUrl: `images/${item.type}.png`,
                     iconSize: config.iconSize,
-                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], // 아이콘 하단 중앙이 좌표
+                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]],
                     popupAnchor: [0, -config.iconSize[1]]
                 });
 
-                // 마커 생성
                 const marker = L.marker([item.y, item.x], { icon: myIcon });
 
-                // 팝업 내용 (HTML)
-                const popupContent = `
-                    <div style="text-align:center">
-                        <div class="popup-title">${item.name}</div>
-                        <div class="popup-type">${item.type}</div>
-                        <div class="popup-desc">${item.desc || ''}</div>
-                    </div>
-                `;
-                marker.bindPopup(popupContent);
+                // --- 팝업 내용 동적 생성 (여기서 비어있는지 검사합니다) ---
+                let popupHtml = `<div style="text-align:center; min-width:150px">`;
+                
+                // 1. 이름과 타입은 무조건 표시
+                popupHtml += `<h3 style="margin:5px 0">${item.name}</h3>`;
+                popupHtml += `<p style="margin:0; color:gray; font-size:0.8em; margin-bottom:5px;">${item.type}</p>`;
 
-                // 그룹에 추가
+                // 2. 설명이 있을 때만 표시
+                if (item.desc && item.desc.trim() !== "") {
+                    popupHtml += `<p style="margin:5px 0; font-size:0.95em; color:#333;">${item.desc}</p>`;
+                }
+
+                // 3. 이미지가 있을 때만 표시
+                if (item.image && item.image.trim() !== "") {
+                    // 이미지가 팝업 밖으로 튀어나가지 않게 스타일 지정
+                    popupHtml += `<img src="${item.image}" style="width:100%; height:auto; border-radius:4px; margin-top:8px; display:block;">`;
+                }
+
+                popupHtml += `</div>`;
+                // -----------------------------------------------------
+
+                marker.bindPopup(popupHtml);
                 layerGroups[item.type].addLayer(marker);
             });
 
-            // 필터 컨트롤 (우측 상단 메뉴) 생성
             const overlays = {};
-            const typeNames = { // 화면에 표시될 한글 이름 매핑
+            const typeNames = { 
                 "경계석": "경계석",
-                "보물상자": "보물상자",
+                "상자": "상자",
                 "보스": "보스 몬스터"
             };
 
             for (const [type, layer] of Object.entries(layerGroups)) {
-                layer.addTo(map); // 기본적으로 모두 켜기
-                const label = typeNames[type] || type; // 한글 이름 없으면 영어 그대로
+                layer.addTo(map);
+                const label = typeNames[type] || type;
                 overlays[label] = layer;
             }
 
             L.control.layers(null, overlays, { collapsed: false }).addTo(map);
         }
+
 
         // ==========================================
         // 5. (개발용) 초고속 데이터 생성 도구
@@ -199,6 +207,89 @@ map.setView([centerY, centerX], initialZoom);
             }, 100);
         });
 
+                // ==========================================
+        // 5. (개발용) 초고속 데이터 생성 도구 (+이미지 추가)
+        // ==========================================
+        map.on('click', function(e) {
+            const y = Math.round(e.latlng.lat);
+            const x = Math.round(e.latlng.lng);
+
+            const content = `
+                <div style="min-width:220px; text-align:left;">
+                    <h4 style="margin:0 0 10px 0; text-align:center;">새 마커 추가</h4>
+                    
+                    <label>이름:</label>
+                    <input type="text" id="input_name" style="width:100%; margin-bottom:5px;" placeholder="이름 입력">
+                    
+                    <label>타입:</label>
+                    <select id="input_type" style="width:100%; margin-bottom:5px; padding:5px;">
+                        <option value="stone">경계석 (stone)</option>
+                        <option value="chest">보물상자 (chest)</option>
+                        <option value="boss">보스 (boss)</option>
+                    </select>
+
+                    <label>설명 (선택):</label>
+                    <textarea id="input_desc" style="width:100%; height:30px; margin-bottom:5px;" placeholder="비워두면 표시 안 됨"></textarea>
+
+                    <label>이미지 경로 (선택):</label>
+                    <input type="text" id="input_image" style="width:100%; margin-bottom:10px;" placeholder="예: images/screen1.jpg">
+
+                    <button onclick="copyMarkerJson(${y}, ${x})" 
+                        style="width:100%; background:#2196F3; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer; font-weight:bold;">
+                        JSON 복사하기
+                    </button>
+                </div>
+            `;
+
+            L.popup()
+                .setLatLng(e.latlng)
+                .setContent(content)
+                .openOn(map);
+                
+            setTimeout(() => {
+                const nameInput = document.getElementById('input_name');
+                if(nameInput) nameInput.focus();
+            }, 100);
+        });
+
+        window.copyMarkerJson = function(y, x) {
+            const name = document.getElementById('input_name').value || "이름 없음";
+            const type = document.getElementById('input_type').value;
+            const desc = document.getElementById('input_desc').value; // 입력 안 하면 빈 문자열
+            const image = document.getElementById('input_image').value; // 입력 안 하면 빈 문자열
+            
+            const uniqueId = Date.now(); 
+
+            // 설명이나 이미지는 값이 없으면 "" (빈 문자열)로 저장됩니다.
+            const jsonString = `,
+  {
+    "id": ${uniqueId},
+    "name": "${name}",
+    "type": "${type}",
+    "y": ${y},
+    "x": ${x},
+    "desc": "${desc}",
+    "image": "${image}"
+  }`;
+
+            copyToClipboard(jsonString);
+        };
+
+        // 복사 함수 (유지)
+        window.copyToClipboard = function(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; textArea.style.left = "0"; textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus(); textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) alert("복사 완료! data.json에 붙여넣으세요.");
+                else prompt("복사 실패. 직접 복사하세요:", text);
+            } catch (err) { prompt("복사 실패. 직접 복사하세요:", text); }
+            document.body.removeChild(textArea);
+        };
+
         // [복사하기] 버튼 누르면 실행되는 함수
         window.copyMarkerJson = function(y, x) {
             // 입력된 값 가져오기
@@ -210,45 +301,6 @@ map.setView([centerY, centerX], initialZoom);
             const uniqueId = Date.now(); 
 
             // JSON 데이터 생성
-            // 앞에 콤마(,)를 붙여서 바로 이어 붙일 수 있게 함
-            const jsonString = `,
-  {
-    "id": ${uniqueId},
-    "name": "${name}",
-    "type": "${type}",
-    "y": ${y},
-    "x": ${x},
-    "desc": "${desc}"
-  }`;
-
-            // 클립보드에 복사
-            copyToClipboard(jsonString);
-        };
-
-        // 강력한 복사 기능 (모바일/PC 호환)
-        window.copyToClipboard = function(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed"; 
-            textArea.style.left = "0"; 
-            textArea.style.top = "0";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    alert("복사 완료! data.json 맨 뒤에 붙여넣으세요.");
-                } else {
-                    prompt("복사 실패. 아래 텍스트를 직접 복사하세요:", text);
-                }
-            } catch (err) {
-                prompt("복사 실패. 아래 텍스트를 직접 복사하세요:", text);
-            }
-            document.body.removeChild(textArea);
-        };
-
 
         // 옛날 방식 (화면에 안 보이는 글상자를 만들어서 복사)
         function fallbackCopy(text) {

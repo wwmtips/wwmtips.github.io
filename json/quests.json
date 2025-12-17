@@ -978,7 +978,7 @@
     "name": "각문 사건 조사",
     "location": "각문리",
     "type": "만사록",
-    "bgimg": "q110_1.jpg",
+    "bgimg": "q61_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q111.html"
   }

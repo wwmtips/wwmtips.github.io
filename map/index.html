@@ -10,8 +10,51 @@
     
     <style>
         #map { background: #1a1a1a; }
-        /* 개발자 모드일 때만 커서가 십자가 모양으로 변경됨 */
         .dev-mode-cursor { cursor: crosshair !important; }
+
+        /* ★ [추가] 사진 마커 디자인 (CSS로 핀 모양 만들기) */
+        .photo-pin {
+            position: relative;
+            background: #fff;
+            border-radius: 50%;
+            border: 3px solid #d48806; /* 테두리 색상 (금색) */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4); /* 그림자 */
+            box-sizing: border-box;
+            transition: transform 0.2s; /* 호버 효과용 */
+        }
+        .photo-pin:hover {
+            transform: scale(1.1); /* 마우스 올리면 살짝 커짐 */
+            z-index: 1000 !important;
+        }
+        .photo-pin img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%; /* 이미지를 동그랗게 */
+            object-fit: cover; /* 비율 유지하며 꽉 채우기 */
+            display: block;
+        }
+        /* 핀 꼬리 (삼각형) */
+        .photo-pin::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; /* 꼬리 위치 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #d48806; /* 꼬리 색상 */
+        }
+        /* 완료된 사진 마커는 흑백 처리 */
+        .marker-completed .photo-pin {
+            filter: grayscale(100%);
+            border-color: #555;
+            opacity: 0.7;
+        }
+        .marker-completed .photo-pin::after {
+            border-top-color: #555;
+        }
     </style>
 </head>
 <body>
@@ -53,16 +96,11 @@
             "kaifeng": { name: "개봉", img: "../kaifeng.jpg", json: "../json/kaifeng.json", w: 8000, h: 6000 }
         };
 
-        const typeMapping = { "경계석": "ic_pin", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
+        const typeMapping = { "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
 
-        // ★ [핵심] 개발자 모드 판별 로직
         const urlParams = new URLSearchParams(window.location.search);
         let rawId = urlParams.get('id') || "qinghe";
-        
-        // id가 '_dev'로 끝나면 개발자 모드라고 판단
         const isDevMode = rawId.endsWith('_dev');
-        
-        // 실제 맵 ID 추출 (예: 'qinghe_dev' -> 'qinghe')
         let currentMapId = isDevMode ? rawId.replace('_dev', '') : rawId;
 
         if (!mapsDB[currentMapId]) currentMapId = "qinghe";
@@ -72,10 +110,13 @@
         const sidebarBtn = document.getElementById('sidebar-toggle-btn');
         if (sidebarBtn) sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
 
-        // 기기별 설정
         const isMobile = window.innerWidth <= 768;
-        const markerSize = isMobile ? [30, 30] : [40, 40]; 
-        const config = { iconSize: markerSize };
+        // 일반 아이콘 크기
+        const iconSize = isMobile ? [30, 30] : [50, 50]; 
+        // 사진 핀 크기 (일반 아이콘보다 조금 더 크게)
+        const pinSize = isMobile ? [40, 40] : [60, 60];
+
+        const config = { iconSize: iconSize };
         const layerGroups = {}; 
         const allMarkers = []; 
 
@@ -86,15 +127,12 @@
             crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, zoomControl: false, attributionControl: false
         });
 
-        // 개발자 모드면 커서 변경 (시각적 효과)
-        if (isDevMode) {
-            document.getElementById('map').classList.add('dev-mode-cursor');
-        }
+        if (isDevMode) document.getElementById('map').classList.add('dev-mode-cursor');
 
         const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
         L.imageOverlay(currentConfig.img, bounds).addTo(map);
 
-        const zoomSettings = { pc: -1.2, mobile: -2.5 };
+        const zoomSettings = { pc: -2.5, mobile: -4.5 };
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 
@@ -111,7 +149,6 @@
         });
         map.addControl(new FullscreenControl());
 
-        // 맵 선택기 (개발자 모드 유지를 위해 로직 수정)
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -119,15 +156,13 @@
             if (key === currentMapId) option.selected = true;
             mapSelect.appendChild(option);
         }
-        
         mapSelect.onchange = function() {
-            // 맵 바꿀 때 개발자 모드면 _dev 붙여서 이동, 아니면 그냥 이동
             const nextId = this.value + (isDevMode ? '_dev' : '');
             window.location.search = `?id=${nextId}`;
         };
 
         // ==========================================
-        // 3. 데이터 로딩
+        // 3. 데이터 로딩 & 마커 생성 (핵심 수정됨)
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -143,18 +178,35 @@
 
             data.forEach(item => {
                 if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
-                const imgName = typeMapping[item.type] || item.type;
                 const isCompleted = completedList.includes(item.id);
+                
+                let markerIcon;
 
-                const myIcon = L.icon({
-                    iconUrl: `../images/${imgName}.png`,
-                    iconSize: config.iconSize,
-                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], 
-                    popupAnchor: [0, -config.iconSize[1]],
-                    className: isCompleted ? 'marker-completed' : ''
-                });
+                // ★ [로직] JSON에 'image'가 있으면 사진 핀 사용, 없으면 일반 아이콘 사용
+                if (item.image && item.image.trim() !== "") {
+                    // 1. 사진 핀 마커 (L.divIcon 사용)
+                    markerIcon = L.divIcon({
+                        className: isCompleted ? 'marker-completed' : '', // 완료 시 CSS 클래스 추가
+                        html: `<div class="photo-pin">
+                                  <img src="${item.image}" onerror="this.src='../images/logo.png'">
+                               </div>`,
+                        iconSize: pinSize, // 핀 크기
+                        iconAnchor: [pinSize[0]/2, pinSize[1] + 8], // 꼬리 부분에 중심점 맞춤
+                        popupAnchor: [0, -(pinSize[1] + 8)]
+                    });
+                } else {
+                    // 2. 일반 아이콘 마커 (기존 방식)
+                    const imgName = typeMapping[item.type] || item.type;
+                    markerIcon = L.icon({
+                        iconUrl: `../images/${imgName}.png`,
+                        iconSize: config.iconSize,
+                        iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], 
+                        popupAnchor: [0, -config.iconSize[1]],
+                        className: isCompleted ? 'marker-completed' : ''
+                    });
+                }
 
-                const marker = L.marker([item.y, item.x], { icon: myIcon });
+                const marker = L.marker([item.y, item.x], { icon: markerIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 layerGroups[item.type].addLayer(marker);
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
@@ -225,19 +277,30 @@
         }
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); const marker = target ? target.marker : null; if (!marker) return;
-            if (index > -1) { list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); } else { list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); }
-            localStorage.setItem(storageKey, JSON.stringify(list)); marker.closePopup(); marker.openPopup();
+            const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
+            // 마커 아이콘(DivIcon)은 내부 HTML 구조가 다르므로 클래스 처리 방식이 다를 수 있음
+            // 하지만 Leaflet은 _icon 요소에 클래스를 붙이므로 동일하게 작동함.
+            // 다만 DivIcon의 경우 내부 HTML에도 스타일을 줄 수 있음.
+            
+            if (!target) return;
+            const marker = target.marker;
+
+            if (index > -1) { 
+                list.splice(index, 1); 
+                L.DomUtil.removeClass(marker._icon, 'marker-completed'); 
+            } else { 
+                list.push(id); 
+                L.DomUtil.addClass(marker._icon, 'marker-completed'); 
+            }
+            localStorage.setItem(storageKey, JSON.stringify(list)); 
+            marker.closePopup(); 
+            marker.openPopup();
         };
 
         // ==========================================
-        // ★ 5. 개발자 툴 (조건부 실행)
+        // 5. 개발자 툴
         // ==========================================
-        
-        // isDevMode가 true일 때만 클릭 이벤트 등록
         if (isDevMode) {
-            console.log("🛠️ 개발자 모드 활성화됨 (클릭 시 좌표 표시)");
-            
             map.on('click', function(e) {
                 const y = Math.round(e.latlng.lat);
                 const x = Math.round(e.latlng.lng);

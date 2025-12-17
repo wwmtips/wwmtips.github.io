@@ -168,7 +168,7 @@
         const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
         L.imageOverlay(currentConfig.img, bounds).addTo(map);
 
-        const zoomSettings = { pc: -2.5, mobile: -4.5 };
+        const zoomSettings = { pc: -1.5, mobile: -2.5 };
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 

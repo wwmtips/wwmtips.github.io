@@ -42,9 +42,9 @@ const dummyMapData = [
      }
      */
    {
-        title: "공사 중",
+        title: "지도 찾는 중...",
         key: "kaifeng",
-        desc: "지도 데이터 변경으로 아직 접속 할 수 없습니다.",
+        desc: "큰 거위가 지도를 물고 갔습니다.",
         link: "#",
         image: "images/gs.jpg"
    }

@@ -2,7 +2,8 @@
   "chunji": [
      {
     "id": "34",
-       "type": "음식",  
+       "type": "음식", 
+       "subtype":"요리",
       "title" :"냉이 만두",
       "get": "만승촌 NPC 마철산에게 구입",
       "getimg1": "https://arcdb.kr/chunji/14.jpg",
@@ -14,6 +15,7 @@
     {
     "id": "33",
        "type": "음식",  
+      "subtype":"요리",
       "title" :"백미 만두",
       "get": "만승촌 NPC 마철산에게 구입",
       "getimg1": "https://arcdb.kr/chunji/14.jpg",
@@ -24,7 +26,8 @@
     },
     {
     "id": "32",
-       "type": "음식",  
+       "type": "음식", 
+      "subtype":"요리",
       "title" :"전통 매운탕",
       "get": "만승촌 NPC 해종우에게 구입",
       "getimg1": "https://arcdb.kr/chunji/15.jpg",
@@ -36,6 +39,7 @@
     {
     "id": "31",
        "type": "음식",  
+      "subtype":"요리",
       "title" :"얼큰 두부탕",
       "get": "만승촌 NPC 해종우에게 구입",
       "getimg1": "https://arcdb.kr/chunji/15.jpg",
@@ -46,7 +50,8 @@
     },
     {
     "id": "30",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title" :"망천 나루",
       "get": "귀문시장 NPC 학환에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f13.jpg",
@@ -57,7 +62,8 @@
     },
     {
     "id": "29",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title" :"황천의 술",
       "get": "귀문시장 NPC 학환에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f13.jpg",
@@ -68,7 +74,8 @@
     },
     {
     "id": "28",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title" :"국화 새싹전",
       "get": "청심원 NPC 복성에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f12.jpg",
@@ -79,7 +86,8 @@
     },
     {
     "id": "27",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title" :"금옥탕",
       "get": "청심원 NPC 복성에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f12.jpg",
@@ -90,7 +98,8 @@
     },
     {
     "id": "26",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title" :"물 말아먹는 밥",
       "get": "홍구운화 NPC 탕건에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f11.jpg",
@@ -101,7 +110,8 @@
     },
     {
     "id": "25",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "시원한 냉차",
       "get": "홍구운화 NPC 탕건에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f11.jpg",
@@ -112,7 +122,8 @@
     },
     {
     "id": "24",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "대파 생강 부꾸미",
       "get": "승은촌 NPC 왕적사에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f10.jpg",
@@ -123,7 +134,8 @@
     },
     {
       "id": "23",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "죽순 찐빵",
       "get": "승은촌 NPC 왕적사에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f10.jpg",
@@ -134,7 +146,8 @@
     },
     {
       "id": "22",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "백합 국수",
       "get": "승은촌 NPC 석위에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f9.jpg",
@@ -145,7 +158,8 @@
     },
     {
       "id": "21",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "무 국수",
       "get": "승은촌 NPC 석위에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f9.jpg",
@@ -156,7 +170,8 @@
     },
     {
       "id": "20",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "칠보 채식죽",
       "get": "연희 거리 NPC 소자양에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f8.jpg",
@@ -167,7 +182,8 @@
     },
     {
       "id": "19",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "찔레꽃 죽",
       "get": "연희 거리 NPC 소자양에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f8.jpg",
@@ -178,7 +194,8 @@
     },
     {
       "id": "18",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "족발 편육",
       "get": "연희 거리 NPC 여형에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f7.jpg",
@@ -189,7 +206,8 @@
     },
     {
       "id": "17",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "양고기 편육",
       "get": "연희 거리 NPC 여형에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f7.jpg",
@@ -200,7 +218,8 @@
     },
     {
       "id": "16",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "수정 양갱",
       "get": "연희 거리 NPC 유지량에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f6.jpg",
@@ -211,7 +230,8 @@
     },
       {
       "id": "15",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "두구 음료",
       "get": "연희 거리 NPC 유지량에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f6.jpg",
@@ -222,7 +242,8 @@
     },
     {
       "id": "14",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "닭볶음면",
       "get": "각문리 NPC 우헌에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f5.jpg",
@@ -233,7 +254,8 @@
     },
     {
       "id": "13",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "보리밥",
       "get": "각문리 NPC 우헌에게 구입 (퀘스트 재료로 여유분 하나 더 구입하는거 추천)",
       "getimg1": "https://arcdb.kr/chunji/f5.jpg",
@@ -244,7 +266,8 @@
     },
     {
       "id": "12",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "소라살",
       "get": "풍화촌 NPC 연의경에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f4.jpg",
@@ -255,7 +278,8 @@
     },
     {
       "id": "11",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "우렁이 장조림",
       "get": "풍화촌 NPC 연의경에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f4.jpg",
@@ -266,7 +290,8 @@
     },
     {
       "id": "10",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "매운 버터 과자",
       "get": "순마장 NPC 이부인에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f3.jpg",
@@ -277,7 +302,8 @@
     },
     {
       "id": "9",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "마유 과자",
       "get": "순마장 NPC 이부인에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f3.jpg",
@@ -288,7 +314,8 @@
     },
     {
       "id": "8",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "칠보 부꾸미",
       "get": "자심촌 NPC 반부영에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f2.jpg",
@@ -299,7 +326,8 @@
     },
         {
       "id": "7",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "대추 꽃빵",
       "get": "자심촌 NPC 반부영에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f2.jpg",
@@ -310,7 +338,8 @@
     },
     {
       "id": "6",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "전골",
       "get": "신선나루 NPC 원함연에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f1.jpg",
@@ -321,7 +350,8 @@
     },
     {
       "id": "5",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "돼지고기 조림",
       "get": "신선나루 NPC 원함연에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f1.jpg",
@@ -332,7 +362,8 @@
     },
     {
       "id": "5",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "꿀배 경단",
       "get": "신선나루 NPC 원달미에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f1.jpg",
@@ -343,7 +374,8 @@
     },
     {
       "id": "4",
-       "type": "음식",  
+       "type": "음식",   
+      "subtype":"요리",
       "title": "팔보 배 조림",
       "get": "신선나루 NPC 원달미에게 구입",
       "getimg1": "https://arcdb.kr/chunji/f1.jpg",
@@ -354,7 +386,8 @@
     },
     {
       "id": "3",
-       "type": "협도",  
+       "type": "협도",   
+      "subtype":"사건",
       "title": "말과 의술",
       "get": "순마장 아래 위치의 청계관 제자 확인",
       "getimg1": "https://arcdb.kr/chunji/m2.jpg",
@@ -365,7 +398,8 @@
     },
     {
       "id": "2",
-       "type": "병기",  
+       "type": "병기",   
+      "subtype":"유물",
       "title": "열언·단심 걸음쇠",
       "get": "장군 사당(지상) 내부, 조각상 동쪽 문 뒤의 상자를 열면 획득 (협적 2권 - 폐사당의 비밀 완료 필수)",
       "getimg1": "",
@@ -376,7 +410,8 @@
     },
     {
       "id": "1",
-       "type": "병기",  
+       "type": "병기",   
+      "subtype":"유물",
       "title": "제향의 투구",
       "get": "대나무 숲 은거지 집 안에 있는 상자에서 획득",
       "getimg1": "",

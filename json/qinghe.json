@@ -1,5 +1,27 @@
 [
   {
+    "id": 1765980734099,
+    "name": "최고의 진미",
+    "type": "만사록",
+    "y": 1660,
+    "x": 3014,
+    "desc": "아내 입맛 바꾸기",
+    "link": "https://wwm.tips/?q=42",
+    "image": "https://wwm.tips/quests/images/q42_1.jpg"
+  }
+  ,
+  {
+    "id": 1765980566571,
+    "name": "영령 위로의 말",
+    "type": "만사록",
+    "y": 1888,
+    "x": 4319,
+    "desc": "주씨 할아버지에게 술을 전달하자",
+    "link": "https://wwm.tips/?q=28",
+    "image": "https://wwm.tips/quests/images/q28_1.jpg"
+  }
+  ,
+  {
     "id": 1765980507099,
     "name": "근심 퇴치법",
     "type": "만사록",

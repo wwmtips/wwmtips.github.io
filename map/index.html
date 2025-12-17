@@ -11,17 +11,25 @@
 <body>
 
     <button class="sidebar-toggle-btn" onclick="toggleSidebar()">
-        <span>☰</span> 필터 & 검색
+        <span>☰</span> 더보기
     </button>
 
     <div id="map-sidebar" class="map-sidebar">
         <div class="sidebar-close-btn" onclick="toggleSidebar()">✕</div>
 
         <div class="sidebar-header">
+            
+            <div class="map-select-area">
+                <label class="sidebar-label">지역 선택</label>
+                <select id="sidebar-map-select" class="sidebar-select">
+                    </select>
+            </div>
+
             <div class="search-wrapper">
                 <input type="text" id="marker-search" class="sidebar-search-input" placeholder="이름 검색 (예: 상자)">
                 <span class="search-icon">🔍</span>
             </div>
+
             <div class="filter-controls" id="filter-controls-area">
                 <button class="filter-control-btn" onclick="setAllFilters(true)">모두 표시</button>
                 <button class="filter-control-btn" onclick="setAllFilters(false)">모두 숨기기</button>
@@ -57,7 +65,7 @@
 
         const config = { iconSize: [30, 30] };
         const layerGroups = {}; 
-        const allMarkers = []; // 검색을 위해 모든 마커 데이터를 여기에 저장
+        const allMarkers = []; 
 
         // ==========================================
         // 2. 지도 생성
@@ -72,45 +80,44 @@
         map.setView([currentConfig.h / 2, currentConfig.w / 2], -2.5);
 
         // ==========================================
-        // 3. 컨트롤 (줌, 전체화면, 맵변경)
+        // 3. 컨트롤 배치 (우측 하단 몰아넣기)
         // ==========================================
+        
+        // [A] 줌 컨트롤 -> 우측 하단
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        // 전체화면
+        // [B] 전체화면 버튼 -> 우측 하단 (줌 버튼 아래)
         const FullscreenControl = L.Control.extend({
-            options: { position: 'bottomleft' },
+            options: { position: 'bottomright' },
             onAdd: function () {
                 const c = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
                 const b = L.DomUtil.create('a', 'leaflet-control-fullscreen', c);
-                b.href = '#'; b.innerHTML = '⛶';
+                b.href = '#'; b.innerHTML = '⛶'; b.title = "전체화면";
                 b.onclick = (e) => { e.preventDefault(); toggleFullscreen(); };
                 return c;
             }
         });
         map.addControl(new FullscreenControl());
 
-        // 맵 변경
-        const MapSwitcherControl = L.Control.extend({
-            options: { position: 'topright' },
-            onAdd: function () {
-                const c = L.DomUtil.create('div', 'leaflet-bar leaflet-control map-switcher-control');
-                const i = L.DomUtil.create('span', 'map-switcher-icon', c); i.innerHTML = '🗺️';
-                const s = L.DomUtil.create('select', 'map-switcher-select', c);
-                for (const [k, v] of Object.entries(mapsDB)) {
-                    const o = document.createElement('option');
-                    o.value = k; o.innerText = v.name;
-                    if (k === currentMapId) o.selected = true;
-                    s.appendChild(o);
-                }
-                s.onchange = function() { window.location.search = `?id=${this.value}`; };
-                L.DomEvent.disableClickPropagation(c);
-                return c;
-            }
-        });
-        map.addControl(new MapSwitcherControl());
+        // ==========================================
+        // 4. [NEW] 사이드바 맵 선택기 초기화
+        // ==========================================
+        const mapSelect = document.getElementById('sidebar-map-select');
+        for (const [key, val] of Object.entries(mapsDB)) {
+            const option = document.createElement('option');
+            option.value = key;
+            option.innerText = val.name;
+            if (key === currentMapId) option.selected = true;
+            mapSelect.appendChild(option);
+        }
+        
+        // 맵 변경 시 이동
+        mapSelect.onchange = function() {
+            window.location.search = `?id=${this.value}`;
+        };
 
         // ==========================================
-        // 4. 데이터 로딩
+        // 5. 데이터 로딩
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -120,7 +127,7 @@
             })
             .catch(err => {
                 console.error(err);
-                // 파일 없을 때 에러 무시 (개봉 등)
+                // 파일 없을 때 에러 무시
             });
 
         function createMarkers(data) {
@@ -145,26 +152,21 @@
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
 
                 layerGroups[item.type].addLayer(marker);
-                
-                // ★ 검색을 위해 데이터 저장
                 allMarkers.push({
                     id: item.id,
                     name: item.name,
                     desc: item.desc || "",
                     type: item.type,
-                    marker: marker // 마커 객체 자체를 저장 (나중에 점프하기 위해)
+                    marker: marker 
                 });
             });
 
-            // 초기엔 모두 표시
             for (const key in layerGroups) layerGroups[key].addTo(map);
         }
 
         // ==========================================
-        // 5. 사이드바 로직 (검색 & 이동 핵심)
+        // 6. 사이드바 로직
         // ==========================================
-        
-        // 검색 이벤트 리스너
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
         const searchResultList = document.getElementById('search-result-list');
@@ -174,20 +176,17 @@
             const keyword = e.target.value.trim().toLowerCase();
 
             if (keyword === "") {
-                // 검색어 없으면 -> 필터 목록 보여주기
                 filterList.classList.remove('hidden');
                 filterControls.style.display = 'flex';
                 searchResultList.classList.remove('active');
                 return;
             }
 
-            // 검색어 있으면 -> 필터 숨기고 결과 목록 보여주기
             filterList.classList.add('hidden');
-            filterControls.style.display = 'none'; // 전체선택 버튼도 숨김
+            filterControls.style.display = 'none';
             searchResultList.classList.add('active');
-            searchResultList.innerHTML = ''; // 기존 결과 초기화
+            searchResultList.innerHTML = '';
 
-            // 검색 로직
             const results = allMarkers.filter(item => 
                 item.name.toLowerCase().includes(keyword) || 
                 item.desc.toLowerCase().includes(keyword)
@@ -198,11 +197,9 @@
                 return;
             }
 
-            // 결과 리스트 생성
             results.forEach(item => {
                 const row = document.createElement('div');
                 row.className = 'search-result-row';
-                
                 const imgName = typeMapping[item.type] || item.type;
                 
                 row.innerHTML = `
@@ -213,37 +210,18 @@
                     <img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">
                 `;
 
-                // ★ 클릭 시 이동 (Jump) 기능
                 row.onclick = () => {
-                    // 1. 해당 타입의 레이어가 꺼져있다면 켜주기
                     if (!map.hasLayer(layerGroups[item.type])) {
                         map.addLayer(layerGroups[item.type]);
-                        // (선택사항) 체크박스도 동기화하려면 추가 로직 필요
                     }
-
-                    // 2. 지도로 날아가기 (FlyTo)
-                    // 줌 레벨을 1 (약간 확대) 정도로 설정
-                    map.flyTo(item.marker.getLatLng(), 0, {
-                        animate: true,
-                        duration: 1.5 // 1.5초 동안 부드럽게 이동
-                    });
-
-                    // 3. 팝업 열기 (이동 후 열리도록 약간 지연)
-                    setTimeout(() => {
-                        item.marker.openPopup();
-                    }, 1000);
-
-                    // 4. 모바일이면 사이드바 닫기 (편의성)
-                    if (window.innerWidth <= 480) {
-                        toggleSidebar();
-                    }
+                    map.flyTo(item.marker.getLatLng(), 0, { animate: true, duration: 1.5 });
+                    setTimeout(() => { item.marker.openPopup(); }, 1000);
+                    if (window.innerWidth <= 480) toggleSidebar();
                 };
-
                 searchResultList.appendChild(row);
             });
         });
 
-        // 사이드바 생성 (필터 목록)
         function generateSidebar(data) {
             filterList.innerHTML = '';
             const counts = {};
@@ -266,9 +244,6 @@
             }
         }
 
-        // ==========================================
-        // 6. 기타 기능 함수들
-        // ==========================================
         function toggleLayer(type, isChecked) {
             isChecked ? map.addLayer(layerGroups[type]) : map.removeLayer(layerGroups[type]);
         }
@@ -323,7 +298,6 @@
             marker.closePopup(); marker.openPopup();
         };
 
-        // (개발용) 좌표 복사
         map.on('click', function(e) {
             // console.log(`"y": ${Math.round(e.latlng.lat)}, "x": ${Math.round(e.latlng.lng)}`);
         });

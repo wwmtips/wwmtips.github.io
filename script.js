@@ -109,7 +109,7 @@ function loadData() {
         chunjiData = globalData.chunji;
         currentChunjiData = globalData.chunji; // [추가] 초기화 (전체 목록)
         
-        initLocationFilter(); 
+        updateLocationOptions(); 
         renderChunjiList();
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
@@ -1987,32 +1987,60 @@ function switchProgressTab(tabName, btnElement) {
     }
 }
 
-// 1. 지역(Location) 옵션 자동 생성 함수
-function initLocationFilter() {
-    const locationSelect = document.getElementById('quest-location-select');
-    if (!locationSelect || !globalData.quests) return;
+// =========================================
+// [수정/추가] 동적 필터링 로직 (분류 선택 시 지역 목록 갱신)
+// =========================================
 
-    // 모든 퀘스트에서 location 정보만 추출하여 중복 제거 (Set 사용)
+// 1. 분류(Type) 변경 시 호출되는 함수
+function onQuestTypeChange() {
+    // 1단계: 선택된 분류에 맞는 지역 목록만 다시 생성
+    updateLocationOptions(); 
+    
+    // 2단계: 필터 적용하여 그리드 다시 그리기
+    applyQuestFilter();
+}
+
+// 2. 현재 선택된 분류에 따라 지역(Location) 옵션을 새로고침하는 함수
+function updateLocationOptions() {
+    const typeSelect = document.getElementById('quest-type-select');
+    const locationSelect = document.getElementById('quest-location-select');
+    
+    if (!typeSelect || !locationSelect || !globalData.quests) return;
+
+    const selectedType = typeSelect.value; // 현재 선택된 분류 (예: '만사록')
+
+    // A. 현재 분류에 해당하는 퀘스트만 추리기
+    let filteredData = globalData.quests;
+    if (selectedType !== 'all') {
+        filteredData = globalData.quests.filter(q => q.type === selectedType);
+    }
+
+    // B. 추려진 퀘스트에서 지역(Location)만 뽑아서 중복 제거
     const locations = new Set();
-    globalData.quests.forEach(q => {
+    filteredData.forEach(q => {
         if (q.location && q.location.trim() !== "") {
             locations.add(q.location);
         }
     });
 
-    // 가나다 순 정렬
+    // C. 가나다 순 정렬
     const sortedLocations = Array.from(locations).sort();
 
-    // 옵션 태그 생성 및 추가
+    // D. 드롭다운 초기화 및 다시 채우기
+    locationSelect.innerHTML = '<option value="all">모든 지역</option>'; // 기본값 복구
+    
     sortedLocations.forEach(loc => {
         const option = document.createElement('option');
         option.value = loc;
         option.innerText = loc;
         locationSelect.appendChild(option);
     });
+
+    // E. 분류가 바뀌었으므로 지역 선택은 '모든 지역'으로 리셋
+    locationSelect.value = 'all'; 
 }
 
-// 2. 통합 필터 적용 함수 (Type + Location AND 조건)
+// 3. 실제 필터링 적용 및 렌더링 함수 (기존 로직 유지/보완)
 function applyQuestFilter() {
     const typeSelect = document.getElementById('quest-type-select');
     const locationSelect = document.getElementById('quest-location-select');
@@ -2020,19 +2048,14 @@ function applyQuestFilter() {
     const selectedType = typeSelect ? typeSelect.value : 'all';
     const selectedLocation = locationSelect ? locationSelect.value : 'all';
 
-    // 데이터 필터링
+    // 데이터 필터링 (AND 조건)
     currentQuestData = globalData.quests.filter(item => {
-        // 1. 분류 체크 (all이면 통과, 아니면 일치해야 통과)
         const typeMatch = (selectedType === 'all') || (item.type === selectedType);
-        
-        // 2. 지역 체크 (all이면 통과, 아니면 일치해야 통과)
         const locationMatch = (selectedLocation === 'all') || (item.location === selectedLocation);
-
-        // 두 조건 모두 만족해야 함
         return typeMatch && locationMatch;
     });
 
-    // 페이지를 1페이지로 초기화하고 렌더링
+    // 1페이지로 초기화 후 렌더링
     currentPage = 1;
     renderQuestList();
 }

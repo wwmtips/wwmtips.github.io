@@ -128,11 +128,11 @@
 
         // ★ [색상 설정] style.css의 테마 색상 적용
         const colorMapping = {
-            "상자": "#2e7d32",   // 황금색 (보물)
+            "상자": "#2e7d32",   // 황금색 (보물) -> 녹색
             "보스": "#b71c1c",   // 붉은색 (위험)
-            "고양이": "#000000",
-            "만사록": "#a08040", // 초록색 (정보)
-            "경계석": "#ffffff", // 파란색 (이동)
+            "고양이": "#000000", // 고양이 (검정)
+            "만사록": "#a08040", // 초록색 (정보) -> 금색
+            "경계석": "#ffffff", // 파란색 (이동) -> 흰색
             "기타": "#555555"    // 회색 (기타)
         };
 
@@ -151,7 +151,7 @@
         const isMobile = window.innerWidth <= 768;
         
         // 핀 크기 (이미지 크기를 키웠으므로 전체 크기는 적당히 유지)
-        const pinSize = isMobile ? [20, 20] : [28, 28];
+        const pinSize = isMobile ? [20, 20] : [32, 32];
 
         const layerGroups = {}; 
         const allMarkers = []; 
@@ -214,6 +214,7 @@
                 if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
                 const isCompleted = completedList.includes(item.id);
                 
+                // 고양이면 ic_cat.png 사용
                 const imgName = typeMapping[item.type] || "stone"; 
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || colorMapping["기타"];
@@ -293,7 +294,14 @@
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
-            if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
+            
+            // ★ [수정] 고양이 설명 자동 추가 로직
+            let description = item.desc;
+            if (!description && item.type === "고양이") {
+                description = "귀여운 고양이다";
+            }
+            if (description) html += `<div class="popup-desc">${description}</div>`;
+
             html += `<div class="btn-container">`;
             if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;
             const btnText = isCompleted ? "취소" : "완료";

@@ -143,25 +143,36 @@
             L.control.layers(null, overlays, { collapsed: false }).addTo(map);
         }
 
-
         // ==========================================
-        // 5. (개발용) 클릭/터치 시 좌표 복사 기능
+        // 5. (개발용) 초고속 데이터 생성 도구
         // ==========================================
+        
+        // 팝업이 열릴 때마다 실행될 함수
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
-            
-            // JSON에 바로 붙여넣을 수 있는 포맷
-            const copyText = `"y": ${y}, "x": ${x}`;
 
+            // 입력 폼 HTML (디자인)
             const content = `
-                <div style="text-align:center; min-width: 160px;">
-                    <div style="font-weight:bold; margin-bottom:5px;">좌표 확인</div>
-                    <div style="background:#f1f1f1; padding:5px; font-family:monospace; margin-bottom:5px;">
-                        y: ${y}, x: ${x}
-                    </div>
-                    <button class="copy-btn" onclick="copyToClipboard('${copyText}')">
-                        좌표 복사하기
+                <div style="min-width:200px; text-align:left;">
+                    <h4 style="margin:0 0 10px 0; text-align:center;">새 마커 추가</h4>
+                    
+                    <label>이름:</label>
+                    <input type="text" id="input_name" style="width:100%; margin-bottom:5px; box-sizing:border-box;" placeholder="예: 숨겨진 상자">
+                    
+                    <label>타입:</label>
+                    <select id="input_type" style="width:100%; margin-bottom:5px; padding:5px; box-sizing:border-box;">
+                        <option value="stone">경계석 (stone)</option>
+                        <option value="chest">보물상자 (chest)</option>
+                        <option value="boss">보스 (boss)</option>
+                        </select>
+
+                    <label>설명:</label>
+                    <textarea id="input_desc" style="width:100%; height:40px; margin-bottom:10px; box-sizing:border-box;" placeholder="예: 나무 뒤"></textarea>
+
+                    <button onclick="copyMarkerJson(${y}, ${x})" 
+                        style="width:100%; background:#2196F3; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer; font-weight:bold;">
+                        JSON 복사하기
                     </button>
                 </div>
             `;
@@ -170,27 +181,64 @@
                 .setLatLng(e.latlng)
                 .setContent(content)
                 .openOn(map);
+                
+            // 팝업이 열리면 이름 입력창에 자동으로 포커스 (PC 편의성)
+            setTimeout(() => {
+                const nameInput = document.getElementById('input_name');
+                if(nameInput) nameInput.focus();
+            }, 100);
         });
 
-                // ==========================================
-        // [수정됨] 강력한 복사 기능 (모바일 호환성 강화)
-        // ==========================================
-        window.copyToClipboard = function(text) {
-            // 1. 최신 방식 시도 (HTTPS 환경)
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text)
-                    .then(() => {
-                        alert("복사되었습니다: " + text);
-                    })
-                    .catch(err => {
-                        // 실패하면 옛날 방식 시도
-                        fallbackCopy(text);
-                    });
-            } else {
-                // 최신 방식 지원 안 하면 바로 옛날 방식 시도
-                fallbackCopy(text);
-            }
+        // [복사하기] 버튼 누르면 실행되는 함수
+        window.copyMarkerJson = function(y, x) {
+            // 입력된 값 가져오기
+            const name = document.getElementById('input_name').value || "이름 없음";
+            const type = document.getElementById('input_type').value;
+            const desc = document.getElementById('input_desc').value;
+            
+            // 고유 ID 생성 (현재 시간 사용 - 겹칠 일 없음)
+            const uniqueId = Date.now(); 
+
+            // JSON 데이터 생성
+            // 앞에 콤마(,)를 붙여서 바로 이어 붙일 수 있게 함
+            const jsonString = `,
+  {
+    "id": ${uniqueId},
+    "name": "${name}",
+    "type": "${type}",
+    "y": ${y},
+    "x": ${x},
+    "desc": "${desc}"
+  }`;
+
+            // 클립보드에 복사
+            copyToClipboard(jsonString);
         };
+
+        // 강력한 복사 기능 (모바일/PC 호환)
+        window.copyToClipboard = function(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; 
+            textArea.style.left = "0"; 
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    alert("복사 완료! data.json 맨 뒤에 붙여넣으세요.");
+                } else {
+                    prompt("복사 실패. 아래 텍스트를 직접 복사하세요:", text);
+                }
+            } catch (err) {
+                prompt("복사 실패. 아래 텍스트를 직접 복사하세요:", text);
+            }
+            document.body.removeChild(textArea);
+        };
+
 
         // 옛날 방식 (화면에 안 보이는 글상자를 만들어서 복사)
         function fallbackCopy(text) {

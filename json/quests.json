@@ -944,5 +944,14 @@
     "bgimg": "q106_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q106.html"
+  },
+  {
+    "id": "q108",
+    "name": "즐겁게 한자리에 모이다",
+    "location": "각문리",
+    "type": "만사록",
+    "bgimg": "q108_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q108.html"
   }
 ]

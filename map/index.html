@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    
     <meta charset="UTF-8">
-    <title>연운 한국 위키 : 지도 </title>
+    <title>연운 대지도</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-5SMVDZTDST');
-</script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-5SMVDZTDST');
+    </script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="../map_style.css">
     
@@ -44,7 +42,7 @@
 
         /* 2. 내부 컬러 원 (크기를 키워서 테두리를 얇게 만듦) */
         .pin-inner-circle {
-            width: 88%;  /* ★ 여기를 키워서 흰색 테두리를 얇게 만듦 (기존 76% -> 88%) */
+            width: 88%;  /* ★ 여기를 키워서 흰색 테두리를 얇게 만듦 */
             height: 88%;
             border-radius: 50%;
             
@@ -65,7 +63,7 @@
             /* 핀이 -45도 돌았으므로, 이미지는 +45도 돌려서 똑바로 보이게 함 */
             transform: rotate(45deg); 
             
-            /* 아이콘을 하얀색으로 변경 
+            /* 아이콘을 하얀색으로 변경하지 않고 원본 유지 
             filter: brightness(0) invert(1);*/
             opacity: 1;
         }
@@ -152,14 +150,14 @@
         if (!mapsDB[currentMapId]) currentMapId = "qinghe";
         const currentConfig = mapsDB[currentMapId];
         
-        document.title = `${currentConfig.name} - 연운 한국 위키 지도`;
+        document.title = `${currentConfig.name} - 연운 지도`;
         const sidebarBtn = document.getElementById('sidebar-toggle-btn');
         if (sidebarBtn) sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
 
         const isMobile = window.innerWidth <= 768;
         
         // 핀 크기 (이미지 크기를 키웠으므로 전체 크기는 적당히 유지)
-        const pinSize = isMobile ? [20, 20] : [32, 32];
+        const pinSize = isMobile ? [20, 20] : [28, 28];
 
         const layerGroups = {}; 
         const allMarkers = []; 
@@ -212,40 +210,54 @@
                 createMarkers(data);
                 generateSidebar(data);
             })
-            .catch(err => { console.error(err); });
+            .catch(err => { console.error("데이터 로딩 오류:", err); });
 
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
             data.forEach(item => {
-                if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
-                const isCompleted = completedList.includes(item.id);
-                
-                // 고양이면 ic_cat.png 사용
-                const imgName = typeMapping[item.type] || "stone"; 
-                const iconPath = `../images/${imgName}.png`;
-                const pinColor = colorMapping[item.type] || colorMapping["기타"];
+                try {
+                    // ★ [안전장치 1] 좌표 데이터가 없으면 건너뜀 (지도 멈춤 방지)
+                    if (item.x == null || item.y == null) return;
 
-                // ★ [핀 마커 생성] 
-                // .pin-marker (흰색 몸통) -> .pin-inner-circle (컬러 원) -> img (흰색 아이콘)
-                const pinIcon = L.divIcon({
-                    className: isCompleted ? 'marker-completed' : '',
-                    html: `<div class="pin-marker">
-                               <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
-                                   <img src="${iconPath}" onerror="this.src='../images/stone.png'">
-                               </div>
-                           </div>`,
-                    iconSize: pinSize, 
-                    // 앵커: 핀의 뾰족한 끝(바닥)이 정확히 좌표에 찍히도록 조정
-                    iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], 
-                    popupAnchor: [0, -(pinSize[1] * 0.8)]
-                });
+                    // 종류별 그룹 생성
+                    if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
+                    const isCompleted = completedList.includes(item.id);
+                    
+                    const imgName = typeMapping[item.type] || "stone"; 
+                    const iconPath = `../images/${imgName}.png`;
+                    const pinColor = colorMapping[item.type] || colorMapping["기타"];
 
-                const marker = L.marker([item.y, item.x], { icon: pinIcon });
-                marker.bindPopup(() => generatePopupContent(item, storageKey));
-                layerGroups[item.type].addLayer(marker);
-                allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
+                    // ★ [핀 마커 생성] 
+                    const pinIcon = L.divIcon({
+                        className: isCompleted ? 'marker-completed' : '',
+                        html: `<div class="pin-marker">
+                                   <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
+                                       <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                                   </div>
+                               </div>`,
+                        iconSize: pinSize, 
+                        iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], 
+                        popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    });
+
+                    const marker = L.marker([item.y, item.x], { icon: pinIcon });
+                    marker.bindPopup(() => generatePopupContent(item, storageKey));
+                    layerGroups[item.type].addLayer(marker);
+                    
+                    // ★ [안전장치 2] 설명이 undefined일 경우 빈 문자열로 처리하여 검색 에러 방지
+                    allMarkers.push({ 
+                        id: item.id, 
+                        name: item.name || "이름 없음", 
+                        desc: item.desc || "", 
+                        type: item.type, 
+                        marker: marker 
+                    });
+
+                } catch (err) {
+                    console.warn("마커 생성 중 오류 발생 (건너뜀):", item, err);
+                }
             });
 
             for (const key in layerGroups) layerGroups[key].addTo(map);
@@ -265,7 +277,12 @@
                 filterList.classList.remove('hidden'); filterControls.style.display = 'flex'; searchResultList.classList.remove('active'); return;
             }
             filterList.classList.add('hidden'); filterControls.style.display = 'none'; searchResultList.classList.add('active'); searchResultList.innerHTML = '';
-            const results = allMarkers.filter(item => item.name.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword));
+            
+            const results = allMarkers.filter(item => 
+                item.name.toLowerCase().includes(keyword) || 
+                item.desc.toLowerCase().includes(keyword)
+            );
+            
             if (results.length === 0) { searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>'; return; }
             results.forEach(item => {
                 const row = document.createElement('div'); row.className = 'search-result-row';
@@ -303,12 +320,17 @@
             const isCompleted = completedList.includes(item.id);
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
             
-            // ★ [수정] 고양이 설명 자동 추가 로직
-            let description = item.desc;
-            if (!description && item.type === "고양이") {
+            // ★ [수정] 고양이 설명 자동 추가 로직 (공백 체크 포함)
+            // 설명이 없거나 공백뿐이라면 "귀여운 고양이다" 출력
+            let description = item.desc ? String(item.desc).trim() : "";
+            
+            if (item.type === "고양이" && description === "") {
                 description = "귀여운 고양이다";
             }
-            if (description) html += `<div class="popup-desc">${description}</div>`;
+            
+            if (description !== "") {
+                html += `<div class="popup-desc">${description}</div>`;
+            }
 
             html += `<div class="btn-container">`;
             if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;

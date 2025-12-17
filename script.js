@@ -2059,3 +2059,58 @@ function applyQuestFilter() {
     currentPage = 1;
     renderQuestList();
 }
+
+// =========================================
+// [추가] 가이드(비급) 드롭다운 기능
+// =========================================
+
+// 1. 드롭다운 선택 시 콘텐츠 로드
+function onGuideSelectChange(selectElement) {
+    const filename = selectElement.value;
+    // 기존 loadGuideContent 함수 재사용 (두 번째 인자는 버튼이 없으므로 null)
+    loadGuideContent(filename, null);
+}
+
+// 2. loadGuideView 수정 (기존 함수 업데이트)
+// 가이드 탭을 처음 눌렀을 때나 URL로 접근했을 때 드롭다운 상태를 동기화합니다.
+function loadGuideView() {
+    const container = document.getElementById('guide-content-loader');
+    if (!container) return;
+
+    // URL 파라미터 확인 (예: ?g=code)
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetId = urlParams.get('id') || urlParams.get('g');
+    
+    // 기본값은 뉴스
+    let fileToLoad = 'news.html';
+    if (targetId && GUIDE_MAP[targetId]) fileToLoad = GUIDE_MAP[targetId];
+
+    if (isGuideLoaded) {
+        // 이미 로드된 상태라면 드롭다운 값만 맞추고 콘텐츠 로드
+        syncGuideDropdown(fileToLoad);
+        loadGuideContent(fileToLoad, null);
+        return; 
+    }
+    
+    // HTML 파일 불러오기
+    fetch('guide.html') 
+        .then(res => res.text())
+        .then(html => {
+            container.innerHTML = html;
+            container.style.marginTop = '0';
+            isGuideLoaded = true;
+
+            // [추가] 로드 직후 드롭다운 상태 동기화
+            syncGuideDropdown(fileToLoad);
+            
+            loadGuideContent(fileToLoad, null); 
+        });
+}
+
+// [헬퍼 함수] 드롭다운의 선택값을 현재 보고 있는 파일로 변경
+function syncGuideDropdown(filename) {
+    const select = document.getElementById('guide-select');
+    if (select) {
+        select.value = filename;
+    }
+}

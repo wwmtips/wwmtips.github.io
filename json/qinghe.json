@@ -1,6 +1,26 @@
 [
   
   {
+    "id": 1765984647855,
+    "name": "고양이 - 도현",
+    "type": "경계석",
+    "y": 2712,
+    "x": 4299,
+    "desc": "",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/4.jpg"
+  },
+  {
+    "id": 1765984583079,
+    "name": "고양이 - 대두",
+    "type": "고양이",
+    "y": 2564,
+    "x": 4396,
+    "desc": "",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/3.jpg"
+  },
+  {
     "id": 1765983810582,
     "name": "고양이 - 알록이",
     "type": "고양이",

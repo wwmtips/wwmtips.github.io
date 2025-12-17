@@ -1,6 +1,16 @@
 [
   
   {
+    "id": 1765978002672,
+    "name": "꽃 속의 소원",
+    "type": "만사록",
+    "y": 3819,
+    "x": 3993,
+    "desc": "부처님의 가호를 위해 기도하는 사람들",
+    "link": "https://wwm.tips/?q=40",
+    "image": "https://wwm.tips/quests/images/q40_1.jpg"
+  },
+  {
     "id": 1765977725072,
     "name": "차 한잔의 여유",
     "type": "만사록",

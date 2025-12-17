@@ -1,44 +1,19 @@
 <div class="guide-page-container">
+<div class="guide-page-container">
 
-    <div class="guide-grid-menu">
-        
-        <div class="guide-item-btn" onclick="loadGuideContent('news.html', this)">
-            <span class="guide-title">최신 뉴스</span>
-        </div>
-
-        <div class="guide-item-btn" onclick="loadGuideContent('npc.html', this)">
-            <span class="guide-title">할 일</span>
-        </div>
-        
-        <div class="guide-item-btn" onclick="loadGuideContent('tier_weapon.html', this)">
-            <span class="guide-title">무공</span>
-        </div>
-
-       <!-- <div class="guide-item-btn" onclick="loadGuideContent('build.html', this)">
-            <span class="guide-title">추천 빌드</span>
-        </div>-->
-
-        <div class="guide-item-btn" onclick="loadGuideContent('harts.html', this)">
-            <span class="guide-title">심법</span>
-        </div>
-        
-        <div class="guide-item-btn" onclick="loadGuideContent('marts.html', this)">
-            <span class="guide-title">비결</span>
-        </div>
-
-        <div class="guide-item-btn" onclick="loadGuideContent('boss.html', this)">
-            <span class="guide-title">보스 공략</span>
-        </div>
-        
-       <div class="guide-item-btn" onclick="loadGuideContent('sim.html', this)">
-            <span class="guide-title">심력계산</span>
-        </div>
-        
-        <div class="guide-item-btn special" onclick="loadGuideContent('code.html', this)">
-            <span class="guide-title">교환 코드</span>
-        </div>
-
+    <div class="filter-bar-wrapper" style="margin-bottom: 20px;">
+        <select id="guide-select" class="custom-select" style="width: 100%;" onchange="onGuideSelectChange(this)">
+            <option value="news.html">최신 뉴스</option>
+            <option value="npc.html">할 일 (숙제)</option>
+            <option value="tier_weapon.html">무공 티어</option>
+            <option value="harts.html">심법 도감</option>
+            <option value="marts.html">비결 도감</option>
+            <option value="boss.html">보스 공략</option>
+            <option value="sim.html">심력 계산기</option>
+            <option value="code.html">교환 코드</option> </select>
     </div>
 
-    <div id="guide-dynamic-content" style="display: none; margin-top: 10px; padding-top: 20px;"></div>
+    <div id="guide-dynamic-content" style="display: none; margin-top: 10px; padding-top: 10px;"></div>
+</div>
+
 </div>

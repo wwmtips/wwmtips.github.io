@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../map_style.css">
     
     <style>
-        /* 배경색 설정 */
         #map { background: #1a1a1a; }
     </style>
 </head>
@@ -21,24 +20,20 @@
 
     <div id="map-sidebar" class="map-sidebar">
         <div class="sidebar-close-btn" onclick="toggleSidebar()">✕</div>
-
         <div class="sidebar-header">
             <div class="map-select-area">
                 <label class="sidebar-label">지역 변경</label>
                 <select id="sidebar-map-select" class="sidebar-select"></select>
             </div>
-
             <div class="search-wrapper">
-                <input type="text" id="marker-search" class="sidebar-search-input" placeholder="이름 검색 (예: 상자)">
+                <input type="text" id="marker-search" class="sidebar-search-input" placeholder="이름 검색">
                 <span class="search-icon">🔍</span>
             </div>
-
             <div class="filter-controls" id="filter-controls-area">
                 <button class="filter-control-btn" onclick="setAllFilters(true)">모두 표시</button>
                 <button class="filter-control-btn" onclick="setAllFilters(false)">모두 숨기기</button>
             </div>
         </div>
-
         <div id="filter-list" class="filter-list-container"></div>
         <div id="search-result-list" class="search-results-container"></div>
     </div>
@@ -49,26 +44,15 @@
 
     <script>
         // ==========================================
-        // 1. 맵 데이터베이스 (통이미지 방식)
+        // 1. 설정
         // ==========================================
         const mapsDB = {
-            "qinghe": {
-                name: "청하",
-                img: "../qinghe.jpg", // ★ 원본 이미지 경로
-                json: "../json/qinghe.json",
-                w: 7306, h: 4732
-            },
-            "kaifeng": {
-                name: "개봉",
-                img: "../kaifeng.jpg", 
-                json: "../json/kaifeng.json",
-                w: 8000, h: 6000
-            }
+            "qinghe": { name: "청하", img: "../qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
+            "kaifeng": { name: "개봉", img: "../kaifeng.jpg", json: "../json/kaifeng.json", w: 8000, h: 6000 }
         };
 
         const typeMapping = { "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
 
-        // URL 파라미터 처리
         const urlParams = new URLSearchParams(window.location.search);
         let currentMapId = urlParams.get('id') || "qinghe";
         if (!mapsDB[currentMapId]) currentMapId = "qinghe";
@@ -78,37 +62,30 @@
         const sidebarBtn = document.getElementById('sidebar-toggle-btn');
         if (sidebarBtn) sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
 
-        const config = { iconSize: [30, 30] };
+        // ★ [설정 1] 기기별 마커 크기 (모바일 30px / PC 50px)
+        const isMobile = window.innerWidth <= 768;
+        const markerSize = isMobile ? [30, 30] : [50, 50]; 
+
+        const config = { iconSize: markerSize };
         const layerGroups = {}; 
         const allMarkers = []; 
 
         // ==========================================
-        // 2. 지도 생성 (L.imageOverlay 사용)
+        // 2. 지도 생성 (통이미지 방식)
         // ==========================================
         const map = L.map('map', {
-            crs: L.CRS.Simple, // 평면 좌표계
-            minZoom: -5,       // 이미지가 크니까 마이너스 줌 허용
-            maxZoom: 2,        
-            zoomControl: false,
-            attributionControl: false
+            // ★ [설정 2] minZoom을 -5로 설정하여 모바일에서 충분히 축소되도록 함
+            crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, zoomControl: false, attributionControl: false
         });
 
-        // ★ 통이미지 오버레이 (가장 확실한 방법)
         const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
         L.imageOverlay(currentConfig.img, bounds).addTo(map);
 
-        // ★ 기기별 초기 줌 설정
-        const zoomSettings = {
-            pc: -1.2,      // PC는 적당히 축소
-            mobile: -2.5   // 모바일은 더 많이 축소
-        };
-        const isMobile = window.innerWidth <= 768;
+        // ★ [설정 3] 기기별 초기 줌 레벨 (모바일 -4.5 / PC -2.5)
+        const zoomSettings = { pc: -1.2, mobile: -2.5 };
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
-
-        // 화면 중앙으로 이동
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 
-        // 컨트롤 배치 (줌, 전체화면)
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         const FullscreenControl = L.Control.extend({
@@ -122,7 +99,6 @@
         });
         map.addControl(new FullscreenControl());
 
-        // 맵 선택기 옵션
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -132,9 +108,8 @@
         }
         mapSelect.onchange = function() { window.location.search = `?id=${this.value}`; };
 
-
         // ==========================================
-        // 3. 데이터 로딩 & 마커 생성
+        // 3. 데이터 로딩
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -142,10 +117,7 @@
                 createMarkers(data);
                 generateSidebar(data);
             })
-            .catch(err => { 
-                console.error(err);
-                // alert('로컬 보안 정책으로 JSON을 못 불러올 수 있습니다. VS Code Live Server를 사용하세요.');
-            });
+            .catch(err => { console.error(err); });
 
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
@@ -164,27 +136,17 @@
                     className: isCompleted ? 'marker-completed' : ''
                 });
 
-                // ★ 통이미지 방식은 좌표 변환 불필요 (있는 그대로 사용)
                 const marker = L.marker([item.y, item.x], { icon: myIcon });
-                
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 layerGroups[item.type].addLayer(marker);
-                
-                // 검색 데이터 추가
-                allMarkers.push({ 
-                    id: item.id, 
-                    name: item.name, 
-                    desc: item.desc || "", 
-                    type: item.type, 
-                    marker: marker 
-                });
+                allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
             for (const key in layerGroups) layerGroups[key].addTo(map);
         }
 
         // ==========================================
-        // 4. 사이드바 기능 (검색, 필터)
+        // 4. 사이드바 로직
         // ==========================================
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
@@ -197,18 +159,14 @@
                 filterList.classList.remove('hidden'); filterControls.style.display = 'flex'; searchResultList.classList.remove('active'); return;
             }
             filterList.classList.add('hidden'); filterControls.style.display = 'none'; searchResultList.classList.add('active'); searchResultList.innerHTML = '';
-
             const results = allMarkers.filter(item => item.name.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword));
             if (results.length === 0) { searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>'; return; }
-
             results.forEach(item => {
                 const row = document.createElement('div'); row.className = 'search-result-row';
                 const imgName = typeMapping[item.type] || item.type;
                 row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
-                
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
-                    // 이동 시 줌 레벨 (이미지 방식이라 0이 최대 확대에 가까움)
                     const jumpZoom = Math.min(map.getZoom() + 3, 1); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     setTimeout(() => { item.marker.openPopup(); }, 1000);
@@ -233,27 +191,20 @@
         function toggleSidebar() { document.getElementById('map-sidebar').classList.toggle('open'); }
         function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else if (document.exitFullscreen) document.exitFullscreen(); }
         
-        // ==========================================
-        // 5. 팝업 & 완료 & 개발툴
-        // ==========================================
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
             if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
-            
             html += `<div class="btn-container">`;
-            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">지침서</a>`;
-            
+            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;
-            
             if (item.image) html += `<img src="${item.image}" class="popup-img">`;
             html += `</div>`;
             return html;
         }
-
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
             const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); const marker = target ? target.marker : null; if (!marker) return;
@@ -261,11 +212,12 @@
             localStorage.setItem(storageKey, JSON.stringify(list)); marker.closePopup(); marker.openPopup();
         };
 
-        // 개발자 툴: 클릭 시 JSON 생성
+        // ==========================================
+        // 5. 개발자 툴 (JSON 복사)
+        // ==========================================
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
-            
             const content = `
                 <div class="input-group">
                     <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
@@ -296,7 +248,8 @@
             const image = document.getElementById('input_image').value || "";
             const uniqueId = Date.now(); 
 
-            const jsonString = `,
+            // 붙여넣기 편하게 앞에 쉼표(,)를 포함했습니다.
+            const jsonString = `
   {
     "id": ${uniqueId},
     "name": "${name}",
@@ -306,7 +259,7 @@
     "desc": "${desc}",
     "link": "${link}",
     "image": "${image}"
-  }`;
+  },`;
             copyToClipboard(jsonString);
         };
 

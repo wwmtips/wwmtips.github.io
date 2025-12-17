@@ -9,10 +9,8 @@
     <link rel="stylesheet" href="../map_style.css">
     
     <style>
-        /* 빈 타일 공간을 자연스럽게 하기 위한 어두운 배경 */
+        /* 배경색 설정 */
         #map { background: #1a1a1a; }
-        /* 도트가 튀지 않고 선명하게 보이도록 렌더링 설정 */
-        .leaflet-image-layer, .leaflet-layer { image-rendering: pixelated; }
     </style>
 </head>
 <body>
@@ -51,31 +49,26 @@
 
     <script>
         // ==========================================
-        // 1. 맵 데이터베이스 설정
+        // 1. 맵 데이터베이스 (통이미지 방식)
         // ==========================================
         const mapsDB = {
             "qinghe": {
                 name: "청하",
-                // ★ 파이썬으로 만든 폴더 이름이 tiles_qinghe 여야 합니다.
-                tileUrl: "../tiles_qinghe/{z}/{x}/{y}.png", 
+                img: "../qinghe.jpg", // ★ 원본 이미지 경로
                 json: "../json/qinghe.json",
-                w: 7306, h: 4732,
-                minZoom: 0, 
-                // ★ 파이썬 실행 후 나온 '최대 줌 레벨' 숫자를 여기에 적으세요 (보통 5 또는 6)
-                maxZoom: 5 
+                w: 7306, h: 4732
             },
             "kaifeng": {
                 name: "개봉",
                 img: "../kaifeng.jpg", 
                 json: "../json/kaifeng.json",
-                w: 8000, h: 6000,
-                minZoom: -2, maxZoom: 2
+                w: 8000, h: 6000
             }
         };
 
         const typeMapping = { "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
 
-        // URL 파라미터 처리 (?id=qinghe)
+        // URL 파라미터 처리
         const urlParams = new URLSearchParams(window.location.search);
         let currentMapId = urlParams.get('id') || "qinghe";
         if (!mapsDB[currentMapId]) currentMapId = "qinghe";
@@ -90,43 +83,32 @@
         const allMarkers = []; 
 
         // ==========================================
-        // 2. 지도 생성 (타일링 및 404 방지)
+        // 2. 지도 생성 (L.imageOverlay 사용)
         // ==========================================
-        
-        // 투명한 1x1 픽셀 이미지 (타일 없을 때 엑박 대신 표시)
-        const emptyTile = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-
         const map = L.map('map', {
             crs: L.CRS.Simple, // 평면 좌표계
-            minZoom: currentConfig.minZoom,
-            maxZoom: currentConfig.maxZoom + 2, // 여유 있게 줌 허용
+            minZoom: -5,       // 이미지가 크니까 마이너스 줌 허용
+            maxZoom: 2,        
             zoomControl: false,
             attributionControl: false
         });
 
-        if (currentConfig.tileUrl) {
-            // [A] 타일 방식 (청하)
-            L.tileLayer(currentConfig.tileUrl, {
-                minZoom: currentConfig.minZoom,
-                maxZoom: currentConfig.maxZoom,
-                tileSize: 256,
-                noWrap: true,
-                tms: false, // 파이썬/MapTiler 표준은 false (좌상단 0,0)
-                errorTileUrl: emptyTile, // 404 에러 방지
-                bounds: [[-currentConfig.h, 0], [0, currentConfig.w]] // 지도 범위
-            }).addTo(map);
-            
-            // 중앙 이동 (초기화)
-            map.setView([-currentConfig.h / 2, currentConfig.w / 2], 2);
+        // ★ 통이미지 오버레이 (가장 확실한 방법)
+        const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
+        L.imageOverlay(currentConfig.img, bounds).addTo(map);
 
-        } else if (currentConfig.img) {
-            // [B] 통이미지 방식 (개봉 예비용)
-            const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
-            L.imageOverlay(currentConfig.img, bounds).addTo(map);
-            map.setView([currentConfig.h / 2, currentConfig.w / 2], -2);
-        }
+        // ★ 기기별 초기 줌 설정
+        const zoomSettings = {
+            pc: -2.5,      // PC는 적당히 축소
+            mobile: -4.5   // 모바일은 더 많이 축소
+        };
+        const isMobile = window.innerWidth <= 768;
+        const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
 
-        // 줌 컨트롤 & 전체화면 컨트롤
+        // 화면 중앙으로 이동
+        map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
+
+        // 컨트롤 배치 (줌, 전체화면)
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         const FullscreenControl = L.Control.extend({
@@ -140,7 +122,7 @@
         });
         map.addControl(new FullscreenControl());
 
-        // 맵 선택기 옵션 생성
+        // 맵 선택기 옵션
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -150,8 +132,9 @@
         }
         mapSelect.onchange = function() { window.location.search = `?id=${this.value}`; };
 
+
         // ==========================================
-        // 3. 데이터 로딩 & 마커 찍기
+        // 3. 데이터 로딩 & 마커 생성
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -159,7 +142,10 @@
                 createMarkers(data);
                 generateSidebar(data);
             })
-            .catch(err => { console.error(err); });
+            .catch(err => { 
+                console.error(err);
+                // alert('로컬 보안 정책으로 JSON을 못 불러올 수 있습니다. VS Code Live Server를 사용하세요.');
+            });
 
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
@@ -178,17 +164,13 @@
                     className: isCompleted ? 'marker-completed' : ''
                 });
 
-                // ★ 좌표계 보정 (가장 중요)
-                // 타일맵은 Y축이 위(0) -> 아래(음수)로 갑니다.
-                // 따라서 JSON에 저장된 양수 Y좌표를 음수로 바꿔줘야 제자리에 찍힙니다.
-                let markerY = -Math.abs(item.y); 
-                if (!currentConfig.tileUrl) markerY = Math.abs(item.y); // 통이미지는 양수
-
-                const marker = L.marker([markerY, item.x], { icon: myIcon });
+                // ★ 통이미지 방식은 좌표 변환 불필요 (있는 그대로 사용)
+                const marker = L.marker([item.y, item.x], { icon: myIcon });
+                
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 layerGroups[item.type].addLayer(marker);
                 
-                // 검색을 위한 데이터 저장
+                // 검색 데이터 추가
                 allMarkers.push({ 
                     id: item.id, 
                     name: item.name, 
@@ -226,7 +208,8 @@
                 
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
-                    const jumpZoom = Math.min(map.getZoom() + 2, currentConfig.maxZoom); 
+                    // 이동 시 줌 레벨 (이미지 방식이라 0이 최대 확대에 가까움)
+                    const jumpZoom = Math.min(map.getZoom() + 3, 1); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     setTimeout(() => { item.marker.openPopup(); }, 1000);
                     if (window.innerWidth <= 480) toggleSidebar();
@@ -251,7 +234,7 @@
         function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else if (document.exitFullscreen) document.exitFullscreen(); }
         
         // ==========================================
-        // 5. 팝업 내용 생성
+        // 5. 팝업 & 완료 & 개발툴
         // ==========================================
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
@@ -278,9 +261,7 @@
             localStorage.setItem(storageKey, JSON.stringify(list)); marker.closePopup(); marker.openPopup();
         };
 
-        // ==========================================
-        // 6. [개발자용] 새 위치 기록 (입력폼 복구 완료)
-        // ==========================================
+        // 개발자 툴: 클릭 시 JSON 생성
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
@@ -288,8 +269,8 @@
             const content = `
                 <div class="input-group">
                     <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
-                    <label>이름 (Name)</label> <input type="text" id="input_name">
-                    <label>종류 (Type)</label> 
+                    <label>이름</label> <input type="text" id="input_name">
+                    <label>종류</label> 
                     <select id="input_type">
                         <option value="경계석">경계석</option>
                         <option value="상자">상자</option>
@@ -297,10 +278,10 @@
                         <option value="보스">보스</option>
                         <option value="기타">기타</option>
                     </select>
-                    <label>설명 (Desc)</label> <textarea id="input_desc" style="height:40px;"></textarea>
-                    <label>링크 (Link)</label> <input type="text" id="input_link" placeholder="https://...">
-                    <label>사진 (Image URL)</label> <input type="text" id="input_image" placeholder="https://...">
-                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사 (Copy)</button>
+                    <label>설명</label> <textarea id="input_desc" style="height:40px;"></textarea>
+                    <label>링크</label> <input type="text" id="input_link">
+                    <label>사진</label> <input type="text" id="input_image">
+                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button>
                 </div>
             `;
             L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
@@ -308,9 +289,6 @@
         });
 
         window.copyMarkerJson = function(y, x) {
-            // 타일맵에서는 클릭한 y가 음수이므로, 저장할 때는 양수(절댓값)로 저장
-            const jsonY = Math.abs(y); 
-            
             const name = document.getElementById('input_name').value || "이름 없음";
             const type = document.getElementById('input_type').value;
             const desc = document.getElementById('input_desc').value || "";
@@ -318,13 +296,12 @@
             const image = document.getElementById('input_image').value || "";
             const uniqueId = Date.now(); 
 
-            // JSON 포맷 생성
             const jsonString = `,
   {
     "id": ${uniqueId},
     "name": "${name}",
     "type": "${type}",
-    "y": ${jsonY},
+    "y": ${y},
     "x": ${x},
     "desc": "${desc}",
     "link": "${link}",
@@ -348,7 +325,6 @@
             catch (err) { prompt("오류:", text); }
             document.body.removeChild(ta);
         }
-
     </script>
 </body>
 </html>

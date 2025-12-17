@@ -42,12 +42,11 @@ const dummyMapData = [
      }
      */
    {
-        title: "지도 찾는 중...",
-        key: "kaifeng",
-        desc: "큰 거위가 지도를 물고 갔습니다.",
-        link: "#",
-        image: "images/gs.jpg"
-   }
+        title: "청하",
+        key: "qinghe", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "어린 주인공이 많은 가족들과 함께 생활하던 지역으로 이야기의 시작지입니다.",
+        image: "images/map2.jpeg" // (썸네일 이미지가 있다면 유지)
+    }
 ];
 
 // =========================================
@@ -1322,16 +1321,24 @@ function closeBuildDetailSheet() { document.body.classList.remove('build-sheet-o
 
 // 13. 지도 상세 뷰 기능
 function openMapDetail(mapName, mapKey) {
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder'];
+    // 다른 뷰 숨기기
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
     views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
     const mapDiv = document.getElementById('view-map-detail');
     if(mapDiv) {
         mapDiv.style.display = 'block';
         document.getElementById('map-detail-title').innerText = mapName;
-        const targetUrl = `https://yhellos3327-eng.github.io/wwmkoreamap/?map=${mapKey}&embed=true`;
+        
+        // ★ [핵심 변경] 우리가 만든 map 폴더의 index.html을 불러옵니다.
+        // 주소 형식: map/?id=키값 (예: map/?id=qinghe)
+        const targetUrl = `map/?id=${mapKey}`; 
+        
         const iframe = document.getElementById('map-iframe');
-        if(iframe && iframe.src !== targetUrl) iframe.src = targetUrl;
+        // 불필요한 리로딩 방지 (이미 같은 주소면 새로고침 안 함)
+        if(iframe && !iframe.src.includes(targetUrl)) {
+            iframe.src = targetUrl;
+        }
     }
     window.scrollTo(0, 0);
 }

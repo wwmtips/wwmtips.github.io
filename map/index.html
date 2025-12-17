@@ -10,6 +10,8 @@
     
     <style>
         #map { background: #1a1a1a; }
+        /* 개발자 모드일 때만 커서가 십자가 모양으로 변경됨 */
+        .dev-mode-cursor { cursor: crosshair !important; }
     </style>
 </head>
 <body>
@@ -53,8 +55,16 @@
 
         const typeMapping = { "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
 
+        // ★ [핵심] 개발자 모드 판별 로직
         const urlParams = new URLSearchParams(window.location.search);
-        let currentMapId = urlParams.get('id') || "qinghe";
+        let rawId = urlParams.get('id') || "qinghe";
+        
+        // id가 '_dev'로 끝나면 개발자 모드라고 판단
+        const isDevMode = rawId.endsWith('_dev');
+        
+        // 실제 맵 ID 추출 (예: 'qinghe_dev' -> 'qinghe')
+        let currentMapId = isDevMode ? rawId.replace('_dev', '') : rawId;
+
         if (!mapsDB[currentMapId]) currentMapId = "qinghe";
         const currentConfig = mapsDB[currentMapId];
         
@@ -62,26 +72,28 @@
         const sidebarBtn = document.getElementById('sidebar-toggle-btn');
         if (sidebarBtn) sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
 
-        // ★ [설정 1] 기기별 마커 크기 (모바일 30px / PC 50px)
+        // 기기별 설정
         const isMobile = window.innerWidth <= 768;
         const markerSize = isMobile ? [30, 30] : [40, 40]; 
-
         const config = { iconSize: markerSize };
         const layerGroups = {}; 
         const allMarkers = []; 
 
         // ==========================================
-        // 2. 지도 생성 (통이미지 방식)
+        // 2. 지도 생성
         // ==========================================
         const map = L.map('map', {
-            // ★ [설정 2] minZoom을 -5로 설정하여 모바일에서 충분히 축소되도록 함
             crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, zoomControl: false, attributionControl: false
         });
+
+        // 개발자 모드면 커서 변경 (시각적 효과)
+        if (isDevMode) {
+            document.getElementById('map').classList.add('dev-mode-cursor');
+        }
 
         const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
         L.imageOverlay(currentConfig.img, bounds).addTo(map);
 
-        // ★ [설정 3] 기기별 초기 줌 레벨 (모바일 -4.5 / PC -2.5)
         const zoomSettings = { pc: -1.2, mobile: -2.5 };
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
@@ -99,6 +111,7 @@
         });
         map.addControl(new FullscreenControl());
 
+        // 맵 선택기 (개발자 모드 유지를 위해 로직 수정)
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -106,7 +119,12 @@
             if (key === currentMapId) option.selected = true;
             mapSelect.appendChild(option);
         }
-        mapSelect.onchange = function() { window.location.search = `?id=${this.value}`; };
+        
+        mapSelect.onchange = function() {
+            // 맵 바꿀 때 개발자 모드면 _dev 붙여서 이동, 아니면 그냥 이동
+            const nextId = this.value + (isDevMode ? '_dev' : '');
+            window.location.search = `?id=${nextId}`;
+        };
 
         // ==========================================
         // 3. 데이터 로딩
@@ -197,7 +215,7 @@
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
             if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
             html += `<div class="btn-container">`;
-            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;
+            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">지침서</a>`;
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;
@@ -213,32 +231,38 @@
         };
 
         // ==========================================
-        // 5. 개발자 툴 (JSON 복사)
+        // ★ 5. 개발자 툴 (조건부 실행)
         // ==========================================
-        map.on('click', function(e) {
-            const y = Math.round(e.latlng.lat);
-            const x = Math.round(e.latlng.lng);
-            const content = `
-                <div class="input-group">
-                    <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
-                    <label>이름</label> <input type="text" id="input_name">
-                    <label>종류</label> 
-                    <select id="input_type">
-                        <option value="경계석">경계석</option>
-                        <option value="상자">상자</option>
-                        <option value="만사록">만사록</option>
-                        <option value="보스">보스</option>
-                        <option value="기타">기타</option>
-                    </select>
-                    <label>설명</label> <textarea id="input_desc" style="height:40px;"></textarea>
-                    <label>링크</label> <input type="text" id="input_link">
-                    <label>사진</label> <input type="text" id="input_image">
-                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button>
-                </div>
-            `;
-            L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
-            setTimeout(() => document.getElementById('input_name')?.focus(), 100);
-        });
+        
+        // isDevMode가 true일 때만 클릭 이벤트 등록
+        if (isDevMode) {
+            console.log("🛠️ 개발자 모드 활성화됨 (클릭 시 좌표 표시)");
+            
+            map.on('click', function(e) {
+                const y = Math.round(e.latlng.lat);
+                const x = Math.round(e.latlng.lng);
+                const content = `
+                    <div class="input-group">
+                        <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
+                        <label>이름</label> <input type="text" id="input_name">
+                        <label>종류</label> 
+                        <select id="input_type">
+                            <option value="경계석">경계석</option>
+                            <option value="상자">상자</option>
+                            <option value="만사록">만사록</option>
+                            <option value="보스">보스</option>
+                            <option value="기타">기타</option>
+                        </select>
+                        <label>설명</label> <textarea id="input_desc" style="height:40px;"></textarea>
+                        <label>링크</label> <input type="text" id="input_link">
+                        <label>사진</label> <input type="text" id="input_image">
+                        <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button>
+                    </div>
+                `;
+                L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
+                setTimeout(() => document.getElementById('input_name')?.focus(), 100);
+            });
+        }
 
         window.copyMarkerJson = function(y, x) {
             const name = document.getElementById('input_name').value || "이름 없음";
@@ -248,7 +272,6 @@
             const image = document.getElementById('input_image').value || "";
             const uniqueId = Date.now(); 
 
-            // 붙여넣기 편하게 앞에 쉼표(,)를 포함했습니다.
             const jsonString = `
   {
     "id": ${uniqueId},

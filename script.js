@@ -26,7 +26,7 @@ let currentSlot = { type: '', index: 0 };
 
 // [지도 더미 데이터]
 const dummyMapData = [
-    {
+    /*{
         title: "청하",
         key:"qinghe",
         desc: "어린 주인공이 많은 가족들과 함께 생활하던 지역으로 이야기의 시작지입니다.",
@@ -40,6 +40,14 @@ const dummyMapData = [
         link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
         image: "images/map1.jpeg"
      }
+     */
+   {
+        title: "공사 중",
+        key: "kaifeng",
+        desc: "지도 데이터 변경으로 아직 접속 할 수 없습니다.",
+        link: "#",
+        image: "images/map1.jpeg"
+   }
 ];
 
 // =========================================

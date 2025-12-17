@@ -242,3 +242,180 @@ html, body, #map {
     font-family: 'Noto Serif KR', serif; 
 }
 .copy-btn:hover { background-color: #8a6d3b; }
+/* =========================================
+   [NEW] 사이드바 (필터 & 검색) 스타일
+   ========================================= */
+
+/* 1. 사이드바 열기 버튼 (좌측 상단) */
+.sidebar-toggle-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000; /* 지도 위에 표시 */
+    background-color: var(--wuxia-bg-panel);
+    border: 1px solid var(--wuxia-accent-gold);
+    color: var(--wuxia-text-main);
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Noto Serif KR', serif;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+.sidebar-toggle-btn:hover {
+    background-color: #fffcf5;
+    color: var(--wuxia-accent-red);
+}
+
+/* 2. 사이드바 컨테이너 (평소에는 화면 밖으로 숨김) */
+.map-sidebar {
+    position: fixed;
+    top: 0;
+    left: -320px; /* 너비만큼 숨김 */
+    width: 320px;
+    height: 100%;
+    background-color: var(--wuxia-bg-panel);
+    z-index: 2000; /* 지도 컨트롤보다 위에 */
+    box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+    transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--wuxia-accent-gold);
+}
+
+/* 사이드바 열렸을 때 */
+.map-sidebar.open {
+    left: 0;
+}
+
+/* 3. 사이드바 헤더 (검색창 영역) */
+.sidebar-header {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid var(--wuxia-border);
+}
+
+.search-wrapper {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.sidebar-search-input {
+    width: 100%;
+    padding: 10px 35px 10px 10px;
+    border: 1px solid var(--wuxia-border);
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: 'Noto Serif KR', serif;
+}
+.sidebar-search-input:focus {
+    border-color: var(--wuxia-accent-gold);
+    outline: none;
+    background-color: #fff;
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+/* 4. 컨트롤 버튼 (모두 표시/숨기기) */
+.filter-controls {
+    display: flex;
+    gap: 5px;
+}
+.filter-control-btn {
+    flex: 1;
+    padding: 6px 0;
+    font-size: 0.85em;
+    background: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    font-family: 'Noto Serif KR', serif;
+    color: #555;
+    border-radius: 2px;
+}
+.filter-control-btn:hover {
+    border-color: var(--wuxia-accent-gold);
+    color: var(--wuxia-accent-gold);
+}
+
+/* 5. 닫기 버튼 (사이드바 내부) */
+.sidebar-close-btn {
+    position: absolute;
+    top: 10px;
+    right: -40px; /* 사이드바 바깥으로 뺌 */
+    width: 40px;
+    height: 40px;
+    background: var(--wuxia-bg-panel);
+    border: 1px solid var(--wuxia-accent-gold);
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: var(--wuxia-accent-gold);
+    display: none; /* JS로 제어하거나 CSS로 제어 */
+}
+.map-sidebar.open .sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 6. 필터 리스트 영역 */
+.filter-list-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+/* 개별 필터 항목 */
+.filter-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.filter-item:hover {
+    background-color: #fffcf5;
+}
+
+.filter-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95em;
+    color: var(--wuxia-text-main);
+    font-weight: bold;
+}
+
+/* 체크박스 커스텀 (선택 사항) */
+.filter-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--wuxia-accent-red);
+}
+
+.filter-count {
+    font-size: 0.85em;
+    color: #888;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* 모바일 대응 */
+@media (max-width: 480px) {
+    .map-sidebar { width: 85%; left: -85%; }
+}

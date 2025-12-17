@@ -202,19 +202,55 @@
                 .openOn(map);
         });
 
-        // 클립보드 복사 함수 (전역 함수로 선언해야 onclick에서 실행됨)
+                // ==========================================
+        // [수정됨] 강력한 복사 기능 (모바일 호환성 강화)
+        // ==========================================
         window.copyToClipboard = function(text) {
+            // 1. 최신 방식 시도 (HTTPS 환경)
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    alert('복사완료: ' + text);
-                }).catch(err => {
-                    prompt("복사가 차단되었습니다. 아래 텍스트를 직접 복사하세요:", text);
-                });
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        alert("복사되었습니다: " + text);
+                    })
+                    .catch(err => {
+                        // 실패하면 옛날 방식 시도
+                        fallbackCopy(text);
+                    });
             } else {
-                // 구형 브라우저 등 호환성
-                prompt("이 텍스트를 복사하세요:", text);
+                // 최신 방식 지원 안 하면 바로 옛날 방식 시도
+                fallbackCopy(text);
             }
         };
+
+        // 옛날 방식 (화면에 안 보이는 글상자를 만들어서 복사)
+        function fallbackCopy(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            // 화면 밖으로 튀지 않게 설정
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    alert("복사되었습니다: " + text);
+                } else {
+                    // 진짜 모든 게 다 실패했을 때 최후의 수단
+                    prompt("복사가 차단되었습니다. 아래 텍스트를 직접 복사하세요:", text);
+                }
+            } catch (err) {
+                prompt("복사가 차단되었습니다. 아래 텍스트를 직접 복사하세요:", text);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
 
     </script>
 </body>

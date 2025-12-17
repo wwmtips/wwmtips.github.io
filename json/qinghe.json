@@ -1,5 +1,26 @@
 [
-  
+  {
+    "id": 1765980457573,
+    "name": "무료 정보",
+    "type": "만사록",
+    "y": 1856,
+    "x": 2950,
+    "desc": "은월산 동굴에서 다친 아대를 치료하고 정보를 획득하자",
+    "link": "https://wwm.tips/?q=39",
+    "image": "https://wwm.tips/quests/images/q39_1.jpg"
+  }
+  ,
+  {
+    "id": 1765980396803,
+    "name": "세 번째 불광",
+    "type": "만사록",
+    "y": 3500,
+    "x": 1877,
+    "desc": "죄업의 탑에서 장부 찾기",
+    "link": "https://wwm.tips/?q=57",
+    "image": "https://wwm.tips/quests/images/q57_1.jpg"
+  }
+  ,
   {
     "id": 1765980014914,
     "name": "부서진 불상은 말이 없네",

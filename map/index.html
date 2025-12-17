@@ -12,61 +12,55 @@
         #map { background: #1a1a1a; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
-        /* ★ [핵심] 핀 마커 디자인 (CSS로 예쁜 풍선 모양 만들기) */
+        /* =========================================
+           ★ 구글 지도 스타일 마커 (물방울 모양) CSS
+           ========================================= */
         .pin-marker {
             position: relative;
             width: 100%;
             height: 100%;
-            background: #fff; /* 배경 흰색 */
-            border: 3px solid #d48806; /* 금색 테두리 */
-            border-radius: 50%; /* 동그랗게 */
-            box-shadow: 0 3px 6px rgba(0,0,0,0.4); /* 그림자 */
+            /* 물방울 모양 만들기: 모서리 3개는 둥글게, 하나는 뾰족하게 */
+            border-radius: 50% 50% 50% 0;
+            /* 45도 회전시켜서 뾰족한 부분이 아래로 가게 함 */
+            transform: rotate(-45deg);
+            
+            background: var(--pin-color, #555); /* JS에서 색상 주입 */
+            border: 3px solid #fff; /* 흰색 테두리 */
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.4); /* 그림자 */
+            
             display: flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
-            transition: transform 0.2s;
+            transition: transform 0.2s, z-index 0.2s;
         }
-        /* 핀 꼬리 (역삼각형) */
-        .pin-marker::after {
-            content: '';
-            position: absolute;
-            bottom: -8px; /* 꼬리 위치 */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 10px solid #d48806; /* 꼬리 색상 */
-        }
-        
-        /* 핀 안에 들어가는 아이콘 이미지 */
+
+        /* 핀 내부 아이콘 (이미지) */
         .pin-marker img {
-            width: 70%;  /* 아이콘 크기 조절 (핀 크기의 70%) */
-            height: 70%;
-            object-fit: contain; /* 비율 유지 */
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+            
+            /* ★ 중요: 핀이 -45도 돌아갔으므로, 이미지는 +45도 돌려야 똑바로 보임 */
+            transform: rotate(45deg); 
+
+            /* 이미지를 하얀색 실루엣으로 변경 (깔끔한 느낌) */
+            /* 원본 색을 쓰고 싶으면 아래 filter 줄을 지우세요 */
+            filter: brightness(0) invert(1); 
         }
 
         /* 마우스 올렸을 때 효과 */
         .pin-marker:hover {
-            transform: scale(1.15); 
+            transform: rotate(-45deg) scale(1.1); /* 회전 유지하며 커지기 */
             z-index: 9999;
-            border-color: #ff9d00;
-        }
-        .pin-marker:hover::after {
-            border-top-color: #ff9d00;
+            cursor: pointer;
         }
 
         /* 완료된 마커 (회색 처리) */
         .marker-completed .pin-marker {
-            filter: grayscale(100%);
-            border-color: #555;
-            background: #eee;
-            opacity: 0.6;
-        }
-        .marker-completed .pin-marker::after {
-            border-top-color: #555;
+            background: #777 !important; /* 회색 배경 강제 적용 */
+            border-color: #bbb;
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -109,14 +103,21 @@
             "kaifeng": { name: "개봉", img: "../kaifeng.jpg", json: "../json/kaifeng.json", w: 8000, h: 6000 }
         };
 
-        // ★ 아이콘 파일명 매핑 (여기를 잘 맞춰주세요)
-        // 예: JSON의 type이 "만사록"이면 -> images/ic_mansa.png 를 사용함
         const typeMapping = { 
             "경계석": "stone", 
             "상자": "chest", 
             "만사록": "ic_mansa", 
             "보스": "boss",
-            "기타": "stone" // 기본값
+            "기타": "stone"
+        };
+
+        // ★ [핵심] 종류별 마커 색상 정의 (Google Maps 스타일 컬러)
+        const colorMapping = {
+            "상자": "#ff9800",   // 주황색 (Chest)
+            "보스": "#f44336",   // 빨간색 (Danger)
+            "만사록": "#4caf50", // 초록색 (Book/Knowledge)
+            "경계석": "#2196f3", // 파란색 (Stone/Point)
+            "기타": "#607d8b"    // 회색 (Default)
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -133,8 +134,7 @@
 
         const isMobile = window.innerWidth <= 768;
         
-        // ★ 핀 크기 설정 (원하는 크기로 조절 가능)
-        // [가로, 세로] - 세로는 꼬리 포함 높이 고려
+        // ★ 핀 크기 설정 (물방울 모양은 정사각형 비율이어야 예쁩니다)
         const pinSize = isMobile ? [36, 36] : [48, 48];
 
         const layerGroups = {}; 
@@ -157,8 +157,7 @@
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-        const FullscreenControl = L.Control.extend({
+        map.addControl(new (L.Control.extend({
             options: { position: 'bottomright' },
             onAdd: function () {
                 const c = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
@@ -166,8 +165,7 @@
                 b.href = '#'; b.innerHTML = '⛶'; b.onclick = (e) => { e.preventDefault(); toggleFullscreen(); };
                 return c;
             }
-        });
-        map.addControl(new FullscreenControl());
+        }))());
 
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
@@ -200,22 +198,25 @@
                 if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
                 const isCompleted = completedList.includes(item.id);
                 
-                // ★ [아이콘 결정] typeMapping에서 파일명 가져오기
-                // 예: item.type이 '만사록' -> imgName은 'ic_mansa'
+                // 이미지 경로 및 색상 결정
                 const imgName = typeMapping[item.type] || "stone"; 
                 const iconPath = `../images/${imgName}.png`;
+                const pinColor = colorMapping[item.type] || colorMapping["기타"];
 
-                // ★ [핀 마커 생성] L.divIcon 사용 (HTML로 커스텀)
+                // ★ [핀 마커 생성]
                 const pinIcon = L.divIcon({
-                    className: isCompleted ? 'marker-completed' : '', // 완료 여부 클래스
-                    html: `<div class="pin-marker">
+                    className: isCompleted ? 'marker-completed' : '',
+                    // style 변수로 색상을 주입하여 CSS에서 var(--pin-color)로 사용
+                    html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
                               <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                            </div>`,
                     iconSize: pinSize, 
-                    // 핀의 뾰족한 끝(꼬리)이 정확한 좌표에 오도록 anchor 조정
-                    // X는 중앙(width/2), Y는 전체 높이 + 꼬리 길이(약 8px)
-                    iconAnchor: [pinSize[0]/2, pinSize[1] + 8], 
-                    popupAnchor: [0, -(pinSize[1] + 10)]
+                    // 물방울 모양(회전됨)의 뾰족한 끝이 좌표에 닿도록 앵커 조정
+                    // 45도 회전했기 때문에 단순 높이 계산이 아니라 대각선 고려가 필요하지만,
+                    // 보통 [width/2, height] 정도 주면 얼추 맞습니다. (CSS transform-origin에 따라 다름)
+                    // 현재 CSS 기준으로는 중앙에서 회전하므로, 약간 아래쪽으로 앵커를 잡습니다.
+                    iconAnchor: [pinSize[0]/2, pinSize[1] * 0.85], 
+                    popupAnchor: [0, -(pinSize[1] * 0.8)]
                 });
 
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
@@ -228,7 +229,7 @@
         }
 
         // ==========================================
-        // 4. 사이드바 로직
+        // 4. 사이드바 로직 (기존과 동일)
         // ==========================================
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
@@ -284,7 +285,6 @@
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;
-            // 팝업에는 여전히 스크린샷(item.image)이 있다면 보여줍니다
             if (item.image) html += `<img src="${item.image}" class="popup-img">`;
             html += `</div>`;
             return html;

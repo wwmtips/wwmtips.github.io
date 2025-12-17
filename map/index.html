@@ -2,48 +2,68 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>인터렉티브 맵 (한글 버전)</title>
+    <title>Where Winds Meet - Interactive Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <style>
+        /* 기본 스타일 */
         html, body, #map { height: 100%; width: 100%; margin: 0; padding: 0; background: #1a1a1a; }
+        
+        /* 팝업 내부 스타일 */
+        .leaflet-popup-content-wrapper { border-radius: 8px; }
+        .popup-container { text-align: center; min-width: 150px; }
+        .popup-title { font-size: 1.1em; font-weight: bold; margin: 5px 0; }
+        .popup-type { font-size: 0.8em; color: gray; margin-bottom: 5px; }
+        .popup-desc { font-size: 0.95em; color: #333; margin: 5px 0; }
         .popup-img { width: 100%; height: auto; border-radius: 4px; margin-top: 8px; display: block; }
+
+        /* 입력 폼 스타일 */
+        .input-group { text-align: left; min-width: 220px; }
+        .input-group label { display: block; margin-top: 5px; font-weight: bold; font-size: 0.9em; }
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%; box-sizing: border-box; margin-bottom: 5px; padding: 5px;
+        }
+        .copy-btn {
+            width: 100%; background: #2196F3; color: white; border: none; 
+            padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div id="map"></div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
         // ==========================================
-        // 1. 설정 및 한글-이미지 연결
+        // 1. 기본 설정 (이미지 크기 및 파일명)
         // ==========================================
         const config = {
-            imageUrl: 'qinghe.jpg',       // 지도 이미지
-            imageWidth: 7306,
-            imageHeight: 4732,
-            iconSize: [24, 24],
-            jsonPath: 'json/data.json'
+            imageUrl: 'qinghe.jpg',       // 지도 이미지 파일명
+            imageWidth: 7306,             // 이미지 가로 픽셀
+            imageHeight: 4732,            // 이미지 세로 픽셀
+            iconSize: [24, 24],           // 아이콘 크기
+            jsonPath: 'json/data.json'    // 데이터 파일 경로
         };
 
-        // ★ 여기서 '한글 타입'과 '영어 이미지 파일명'을 연결합니다.
-        // (데이터는 한글로 쓰되, 파일명은 안전하게 영어를 쓰는 게 좋습니다)
+        // ★ 한글 타입과 영어 이미지 파일명 연결 (매핑)
         const typeMapping = {
-            "경계석": "stone",   // 타입이 '경계석'이면 images/stone.png 사용
-            "상자": "chest",     // 타입이 '상자'면 images/chest.png 사용
-            "보스": "boss"       // 타입이 '보스'면 images/boss.png 사용
+            "경계석": "stone",   // 데이터가 '경계석'이면 -> images/stone.png
+            "상자": "chest",     // 데이터가 '상자'면 -> images/chest.png
+            "보스": "boss"       // 데이터가 '보스'면 -> images/boss.png
         };
 
 
         // ==========================================
-        // 2. 지도 생성
+        // 2. 지도 초기화
         // ==========================================
         const map = L.map('map', {
-            crs: L.CRS.Simple,
-            minZoom: -5,
-            maxZoom: 2,
+            crs: L.CRS.Simple,            // 평면 좌표계 (게임맵용)
+            minZoom: -5,                  // 최대 축소 레벨
+            maxZoom: 2,                   // 최대 확대 레벨
             zoomSnap: 0.5,
             zoomDelta: 0.5
         });
@@ -51,120 +71,141 @@
         const bounds = [[0, 0], [config.imageHeight, config.imageWidth]];
         L.imageOverlay(config.imageUrl, bounds).addTo(map);
 
+        // --- [수정됨] 초기 화면 설정 (축소된 상태로 시작) ---
         var centerY = config.imageHeight / 2;
         var centerX = config.imageWidth / 2;
-        map.setView([centerY, centerX], -1.2);
+        
+        // ★ 여기 숫자를 조절하세요 (-2: 많이 축소, 0: 원본 크기)
+        var initialZoom = -2; 
+
+        map.setView([centerY, centerX], initialZoom);
 
 
         // ==========================================
-        // 3. 데이터 로딩
+        // 3. JSON 데이터 로딩
         // ==========================================
         fetch(config.jsonPath)
-            .then(res => res.json())
-            .then(data => createMarkers(data))
-            .catch(err => {
-                console.error(err);
-                alert('데이터 로딩 실패! Live Server 사용 중인지 확인하세요.');
+            .then(response => {
+                if (!response.ok) throw new Error("JSON 파일을 찾을 수 없습니다.");
+                return response.json();
+            })
+            .then(data => {
+                createMarkers(data);
+            })
+            .catch(error => {
+                console.error('에러:', error);
+                alert('데이터 로딩 실패! (VS Code Live Server로 실행해주세요)');
             });
 
 
         // ==========================================
-        // 4. 마커 생성 (한글 타입 지원)
+        // 4. 마커 생성 및 필터 설정
         // ==========================================
         function createMarkers(data) {
             const layerGroups = {};
 
             data.forEach(item => {
-                // 1. 그룹 생성 (한글 이름 그대로 사용)
+                // 1. 그룹 생성 (한글 이름 그대로 그룹명 사용)
                 if (!layerGroups[item.type]) {
                     layerGroups[item.type] = L.layerGroup();
                 }
 
-                // 2. 이미지 파일명 찾기 (매핑된 게 있으면 그거 쓰고, 없으면 그냥 타입 이름 그대로)
-                // 예: "경계석" -> "stone" -> "images/stone.png"
+                // 2. 아이콘 이미지 결정 (매핑 확인 -> 없으면 타입 이름 그대로)
                 const imgName = typeMapping[item.type] || item.type;
-                
+
                 const myIcon = L.icon({
                     iconUrl: `images/${imgName}.png`,
                     iconSize: config.iconSize,
-                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]],
+                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], 
                     popupAnchor: [0, -config.iconSize[1]]
                 });
 
                 // 3. 마커 생성
                 const marker = L.marker([item.y, item.x], { icon: myIcon });
 
-                // 4. 팝업 내용
-                let popupHtml = `<div style="text-align:center; min-width:150px">
-                    <h3 style="margin:5px 0">${item.name}</h3>
-                    <p style="margin:0; color:gray; font-size:0.8em; margin-bottom:5px;">${item.type}</p>`;
+                // 4. 팝업 내용 구성
+                let popupHtml = `<div class="popup-container">
+                    <div class="popup-title">${item.name}</div>
+                    <div class="popup-type">${item.type}</div>`;
 
-                if (item.desc) popupHtml += `<p style="margin:5px 0; font-size:0.95em; color:#333;">${item.desc}</p>`;
-                if (item.image) popupHtml += `<img src="${item.image}" class="popup-img">`;
-                
+                if (item.desc && item.desc.trim() !== "") {
+                    popupHtml += `<div class="popup-desc">${item.desc}</div>`;
+                }
+                if (item.image && item.image.trim() !== "") {
+                    popupHtml += `<img src="${item.image}" class="popup-img">`;
+                }
                 popupHtml += `</div>`;
 
                 marker.bindPopup(popupHtml);
+                
+                // 5. 그룹에 추가
                 layerGroups[item.type].addLayer(marker);
             });
 
-            // 필터 컨트롤 (이제 한글 그대로 표시됨)
+            // --- [수정됨] 모든 필터를 기본적으로 '켜짐' 상태로 만들기 ---
+            for (const key in layerGroups) {
+                layerGroups[key].addTo(map); 
+            }
+
+            // 우측 상단 필터 컨트롤 추가
             L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
         }
 
 
         // ==========================================
-        // 5. 입력 도구 (한글 선택지)
+        // 5. (개발용) 데이터 입력 및 생성 도구
         // ==========================================
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
 
-            // ★ 입력창의 선택지도 한글로 변경했습니다.
+            // 입력 폼 HTML
             const content = `
-                <div style="min-width:220px; text-align:left;">
+                <div class="input-group">
                     <h4 style="margin:0 0 10px 0; text-align:center;">새 마커 추가</h4>
                     
                     <label>이름:</label>
-                    <input type="text" id="input_name" style="width:100%; margin-bottom:5px;">
+                    <input type="text" id="input_name" placeholder="이름 입력">
                     
                     <label>타입:</label>
-                    <select id="input_type" style="width:100%; margin-bottom:5px; padding:5px;">
+                    <select id="input_type">
                         <option value="경계석">경계석</option>
                         <option value="상자">상자</option>
                         <option value="보스">보스</option>
                     </select>
 
-                    <label>설명:</label>
-                    <textarea id="input_desc" style="width:100%; height:30px; margin-bottom:5px;"></textarea>
+                    <label>설명 (선택):</label>
+                    <textarea id="input_desc" style="height:40px;" placeholder="설명 입력"></textarea>
 
-                    <label>이미지 경로:</label>
-                    <input type="text" id="input_image" style="width:100%; margin-bottom:10px;">
+                    <label>이미지 경로 (선택):</label>
+                    <input type="text" id="input_image" placeholder="예: images/sc1.jpg">
 
-                    <button onclick="copyMarkerJson(${y}, ${x})" 
-                        style="width:100%; background:#2196F3; color:white; border:none; padding:10px; border-radius:4px; font-weight:bold;">
+                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">
                         JSON 복사하기
                     </button>
                 </div>
             `;
 
             L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
+            
+            // 팝업 열리면 이름 입력창에 포커스
             setTimeout(() => document.getElementById('input_name')?.focus(), 100);
         });
 
+        // JSON 생성 및 복사 함수
         window.copyMarkerJson = function(y, x) {
             const name = document.getElementById('input_name').value || "이름 없음";
-            const type = document.getElementById('input_type').value; // 이제 "경계석" 같은 한글이 들어감
+            const type = document.getElementById('input_type').value;
             const desc = document.getElementById('input_desc').value;
             const image = document.getElementById('input_image').value;
             const uniqueId = Date.now(); 
 
-            // JSON 생성
+            // JSON 포맷 생성 (한글 타입 포함)
             const jsonString = `,
   {
     "id": ${uniqueId},
     "name": "${name}",
-    "type": "${type}", 
+    "type": "${type}",
     "y": ${y},
     "x": ${x},
     "desc": "${desc}",
@@ -173,27 +214,39 @@
             copyToClipboard(jsonString);
         };
 
-        // 복사 함수
+        // ==========================================
+        // 6. 강력한 복사 기능 (모바일/PC 호환)
+        // ==========================================
         window.copyToClipboard = function(text) {
+            // 1. 최신 브라우저 방식 시도
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text)
-                    .then(() => alert("복사 완료!"))
+                    .then(() => alert("복사 완료! data.json 뒤에 붙여넣으세요."))
                     .catch(() => fallbackCopy(text));
-            } else { fallbackCopy(text); }
+            } else {
+                // 2. 구형 방식 시도
+                fallbackCopy(text);
+            }
         };
 
         function fallbackCopy(text) {
-            const ta = document.createElement("textarea");
-            ta.value = text;
-            ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
-            document.body.appendChild(ta);
-            ta.focus(); ta.select();
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; textArea.style.left = "0"; textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
             try {
-                if(document.execCommand('copy')) alert("복사 완료!");
-                else prompt("복사 실패. 직접 복사하세요:", text);
-            } catch (err) { prompt("오류. 직접 복사하세요:", text); }
-            document.body.removeChild(ta);
+                const successful = document.execCommand('copy');
+                if (successful) alert("복사 완료! data.json 뒤에 붙여넣으세요.");
+                else prompt("복사 실패. 아래 텍스트를 직접 복사하세요:", text);
+            } catch (err) {
+                prompt("복사 실패. 아래 텍스트를 직접 복사하세요:", text);
+            }
+            document.body.removeChild(textArea);
         }
+
     </script>
 </body>
 </html>

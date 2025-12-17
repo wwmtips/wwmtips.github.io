@@ -44,21 +44,19 @@
 
     <script>
         // ==========================================
-        // 1. 맵 데이터베이스 설정
+        // 1. 맵 데이터베이스
         // ==========================================
         const mapsDB = {
             "qinghe": {
                 name: "청하",
-                // ★ 타일 경로 설정 ({z}, {x}, {y}는 그대로 두세요)
                 tileUrl: "../tiles_qinghe/{z}/{x}/{y}.png", 
                 json: "../json/qinghe.json",
                 w: 7306, h: 4732,
-                minZoom: 0, 
-                maxZoom: 5 // ★ 파이썬 실행 결과에 나온 숫자(예: 5)를 넣으세요
+                minZoom: 0, maxZoom: 5 
             },
             "kaifeng": {
                 name: "개봉",
-                img: "../kaifeng.jpg", // 개봉은 아직 이미지라면 이렇게 유지 가능
+                img: "../kaifeng.jpg", 
                 json: "../json/kaifeng.json",
                 w: 8000, h: 6000,
                 minZoom: -2, maxZoom: 2
@@ -68,7 +66,7 @@
         const typeMapping = { "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
 
         // ==========================================
-        // 2. 초기화 및 URL 파라미터 처리
+        // 2. 초기화
         // ==========================================
         const urlParams = new URLSearchParams(window.location.search);
         let currentMapId = urlParams.get('id') || "qinghe";
@@ -84,24 +82,21 @@
         const allMarkers = []; 
 
         // ==========================================
-        // 3. 지도 생성 (타일링 지원)
+        // 3. 지도 생성 (좌표계 보정 포함)
         // ==========================================
-        
-        // ★ [핵심] 기존 마커 좌표(Y축)와 타일 좌표를 맞추기 위한 설정
-        // (이미지 좌하단이 0,0 이고 우상단이 w,h 인 경우를 위한 변환)
         const mapCRS = L.Util.extend({}, L.CRS.Simple, {
             transformation: new L.Transformation(1, 0, -1, currentConfig.h)
         });
 
         const map = L.map('map', {
-            crs: mapCRS, // 커스텀 좌표계 적용
+            crs: mapCRS, 
             minZoom: currentConfig.minZoom,
-            maxZoom: currentConfig.maxZoom + 2, // 여유 있게
+            maxZoom: currentConfig.maxZoom + 2, 
             zoomControl: false,
             attributionControl: false 
         });
 
-        // A. 타일 방식일 때 (청하)
+        // 타일 또는 이미지 로딩
         if (currentConfig.tileUrl) {
             L.tileLayer(currentConfig.tileUrl, {
                 minZoom: currentConfig.minZoom,
@@ -110,30 +105,19 @@
                 noWrap: true,
                 bounds: [[0, 0], [currentConfig.h, currentConfig.w]]
             }).addTo(map);
-        } 
-        // B. 통이미지 방식일 때 (개봉 등 예비용)
-        else if (currentConfig.img) {
+        } else if (currentConfig.img) {
             const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
             L.imageOverlay(currentConfig.img, bounds).addTo(map);
         }
 
-        // ==========================================
-        // 4. 초기 줌 & 컨트롤 배치
-        // ==========================================
-        
-        // 기기별 줌 레벨 설정
-        // 타일링 방식은 줌 레벨 0~5 사이가 기본이므로 숫자가 다릅니다.
-        // 타일 0레벨 = 전체 맵이 256px 크기
-        const zoomSettings = {
-            pc: 2,         // PC: 적당히 확대
-            mobile: 0      // 모바일: 전체 보기 (작게)
-        };
+        // 줌 설정
+        const zoomSettings = { pc: 2, mobile: 0 };
         const isMobile = window.innerWidth <= 768;
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
 
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 
-        // 컨트롤 우측 하단 배치
+        // 컨트롤 배치
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         const FullscreenControl = L.Control.extend({
@@ -147,9 +131,7 @@
         });
         map.addControl(new FullscreenControl());
 
-        // ==========================================
-        // 5. 사이드바 맵 선택기
-        // ==========================================
+        // 맵 선택기 초기화
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -160,7 +142,7 @@
         mapSelect.onchange = function() { window.location.search = `?id=${this.value}`; };
 
         // ==========================================
-        // 6. 데이터 로딩 & 마커 생성
+        // 4. 데이터 로딩 & 마커 생성
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -176,7 +158,6 @@
 
             data.forEach(item => {
                 if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
-
                 const imgName = typeMapping[item.type] || item.type;
                 const isCompleted = completedList.includes(item.id);
 
@@ -190,7 +171,6 @@
 
                 const marker = L.marker([item.y, item.x], { icon: myIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
-
                 layerGroups[item.type].addLayer(marker);
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
@@ -199,7 +179,7 @@
         }
 
         // ==========================================
-        // 7. 사이드바 로직 (검색/필터)
+        // 5. 사이드바 로직 (검색/필터)
         // ==========================================
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
@@ -231,14 +211,9 @@
                 row.className = 'search-result-row';
                 const imgName = typeMapping[item.type] || item.type;
                 row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
-                
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
-                    
-                    // 이동 시 줌 레벨 설정 (타일 방식에 맞게 조정)
-                    // 너무 줌을 당기면 타일이 없어서 흐려질 수 있으니 maxZoom 확인
                     const jumpZoom = Math.min(map.getZoom() + 2, currentConfig.maxZoom); 
-                    
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     setTimeout(() => { item.marker.openPopup(); }, 1000);
                     if (window.innerWidth <= 480) toggleSidebar();
@@ -275,7 +250,7 @@
         }
 
         // ==========================================
-        // 8. 팝업 및 완료 기능
+        // 6. 팝업 & 완료 기능
         // ==========================================
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
@@ -308,6 +283,73 @@
             localStorage.setItem(storageKey, JSON.stringify(list));
             marker.closePopup(); marker.openPopup();
         };
+
+        // ==========================================
+        // ★ [추가됨] 7. 개발자용 데이터 생성 툴
+        // ==========================================
+        map.on('click', function(e) {
+            const y = Math.round(e.latlng.lat);
+            const x = Math.round(e.latlng.lng);
+
+            const content = `
+                <div class="input-group">
+                    <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
+                    <label>이름 (Name)</label> <input type="text" id="input_name">
+                    <label>종류 (Type)</label> 
+                    <select id="input_type">
+                        <option value="경계석">경계석</option>
+                        <option value="상자">상자</option>
+                        <option value="만사록">만사록</option>
+                        <option value="보스">보스</option>
+                    </select>
+                    <label>설명 (Desc)</label> <textarea id="input_desc" style="height:40px;"></textarea>
+                    <label>링크 (Link)</label> <input type="text" id="input_link">
+                    <label>사진 (Image)</label> <input type="text" id="input_image">
+                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사 (Copy)</button>
+                </div>
+            `;
+            L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
+            setTimeout(() => document.getElementById('input_name')?.focus(), 100);
+        });
+
+        window.copyMarkerJson = function(y, x) {
+            const name = document.getElementById('input_name').value || "이름 없음";
+            const type = document.getElementById('input_type').value;
+            const desc = document.getElementById('input_desc').value;
+            const link = document.getElementById('input_link').value;
+            const image = document.getElementById('input_image').value;
+            const uniqueId = Date.now(); 
+
+            const jsonString = `
+  {
+    "id": ${uniqueId},
+    "name": "${name}",
+    "type": "${type}",
+    "y": ${y},
+    "x": ${x},
+    "desc": "${desc}",
+    "link": "${link}",
+    "image": "${image}"
+  },`;
+            copyToClipboard(jsonString);
+        };
+
+        window.copyToClipboard = function(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => alert("복사 완료!")).catch(() => fallbackCopy(text));
+            } else { fallbackCopy(text); }
+        };
+
+        function fallbackCopy(text) {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            try { document.execCommand('copy') ? alert("복사 완료!") : prompt("복사 실패:", text); } 
+            catch (err) { prompt("오류:", text); }
+            document.body.removeChild(ta);
+        }
+
     </script>
 </body>
 </html>

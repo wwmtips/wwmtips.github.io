@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Where Winds Meet - Interactive Map</title>
+    <title>Map테스트</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -13,7 +13,7 @@
         
         /* 팝업 스타일 */
         .leaflet-popup-content-wrapper { border-radius: 8px; padding: 0; overflow: hidden; }
-        .leaflet-popup-content { margin: 15px; width: 200px !important; }
+        .leaflet-popup-content { margin: 15px; width: 220px !important; }
         
         .popup-container { text-align: center; }
         .popup-title { font-size: 1.1em; font-weight: bold; margin: 5px 0; color: #333; }
@@ -21,22 +21,48 @@
         .popup-desc { font-size: 0.95em; color: #444; margin: 8px 0; line-height: 1.4; text-align: left; background: #f9f9f9; padding: 5px; border-radius: 4px; }
         .popup-img { width: 100%; height: auto; border-radius: 4px; margin-top: 8px; display: block; border: 1px solid #ddd; }
 
-        /* 링크 버튼 스타일 */
-        .popup-link-btn {
-            display: block;
+        /* ★ 버튼 컨테이너 (Flexbox로 좌우 배치) */
+        .btn-container {
+            display: flex;
+            gap: 5px; /* 버튼 사이 간격 */
             margin-top: 10px;
+        }
+
+        /* 공통 버튼 스타일 */
+        .action-btn {
+            flex: 1; /* 공간을 균등하게 차지 */
             padding: 8px 0;
-            background-color: #5c6bc0; /* 버튼 색상 */
-            color: white !important;
-            text-decoration: none;
             border-radius: 4px;
             font-size: 0.9em;
             font-weight: bold;
-            transition: background 0.2s;
+            cursor: pointer;
+            border: none;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
-        .popup-link-btn:hover { background-color: #3f51b5; }
 
-        /* 입력 폼 스타일 */
+        /* 위키 버튼 색상 */
+        .btn-wiki { background-color: #5c6bc0; }
+        .btn-wiki:hover { background-color: #3f51b5; }
+
+        /* 완료 버튼 색상 (기본) */
+        .btn-complete { background-color: #4CAF50; }
+        .btn-complete:hover { background-color: #43a047; }
+
+        /* 완료 취소 버튼 색상 (이미 완료된 경우) */
+        .btn-undo { background-color: #757575; }
+
+        /* ★ 완료된 마커 스타일 (흑백 + 투명도) */
+        .marker-completed {
+            filter: grayscale(100%);
+            opacity: 0.5;
+            transition: all 0.3s ease; /* 부드럽게 변함 */
+        }
+
+
+        /* 개발자용 입력 폼 스타일 */
         .input-group { text-align: left; min-width: 240px; }
         .input-group label { display: block; margin-top: 8px; font-weight: bold; font-size: 0.9em; color: #333; }
         .input-group input, .input-group select, .input-group textarea {
@@ -59,7 +85,7 @@
         // 1. 기본 설정
         // ==========================================
         const config = {
-            imageUrl: 'qinghe.jpg',       // 지도 이미지 파일명
+            imageUrl: 'qinghe.jpg',       
             imageWidth: 7306,
             imageHeight: 4732,
             iconSize: [24, 24],
@@ -71,6 +97,9 @@
             "상자": "chest",
             "보스": "boss"
         };
+        
+        // 전역 변수로 마커들을 관리 (ID로 찾아서 스타일 바꾸기 위함)
+        const allMarkers = {};
 
 
         // ==========================================
@@ -87,10 +116,9 @@
         const bounds = [[0, 0], [config.imageHeight, config.imageWidth]];
         L.imageOverlay(config.imageUrl, bounds).addTo(map);
 
-        // 초기 화면 설정 (축소)
         var centerY = config.imageHeight / 2;
         var centerX = config.imageWidth / 2;
-        var initialZoom = -2; 
+        var initialZoom = -1.2; 
         map.setView([centerY, centerX], initialZoom);
 
 
@@ -102,71 +130,136 @@
             .then(data => createMarkers(data))
             .catch(err => {
                 console.error(err);
-                alert('데이터 로딩 실패! (Live Server 확인)');
+                alert('데이터 로딩 실패! Live Server를 확인하세요.');
             });
 
 
         // ==========================================
-        // 4. 마커 생성 로직 (링크 버튼 추가됨)
+        // 4. 마커 생성 로직 (완료 기능 추가됨)
         // ==========================================
         function createMarkers(data) {
             const layerGroups = {};
 
+            // 1. 로컬스토리지에서 완료된 목록 가져오기 (없으면 빈 배열)
+            const completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+
             data.forEach(item => {
-                // 그룹 생성
                 if (!layerGroups[item.type]) {
                     layerGroups[item.type] = L.layerGroup();
                 }
 
-                // 아이콘 설정
                 const imgName = typeMapping[item.type] || item.type;
+                
+                // 완료 여부 확인
+                const isCompleted = completedList.includes(item.id);
+
+                // 아이콘 설정 (완료되었으면 클래스 추가)
                 const myIcon = L.icon({
                     iconUrl: `images/${imgName}.png`,
                     iconSize: config.iconSize,
                     iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], 
-                    popupAnchor: [0, -config.iconSize[1]]
+                    popupAnchor: [0, -config.iconSize[1]],
+                    // ★ 핵심: 완료된 경우 'marker-completed' 클래스를 붙여서 흑백 처리
+                    className: isCompleted ? 'marker-completed' : ''
                 });
 
-                // 마커 생성
                 const marker = L.marker([item.y, item.x], { icon: myIcon });
 
-                // --- 팝업 내용 구성 ---
-                let popupHtml = `<div class="popup-container">
-                    <div class="popup-title">${item.name}</div>
-                    <div class="popup-type">${item.type}</div>`;
+                // 전역 변수에 저장 (나중에 ID로 찾기 위해)
+                allMarkers[item.id] = marker;
 
-                if (item.desc && item.desc.trim() !== "") {
-                    popupHtml += `<div class="popup-desc">${item.desc}</div>`;
-                }
+                // --- 팝업 HTML 생성 ---
+                marker.bindPopup(() => generatePopupContent(item));
 
-                // ★ 링크 버튼 생성 로직 (데이터가 있을 때만 표시)
-                if (item.link && item.link.trim() !== "") {
-                    popupHtml += `<a href="${item.link}" target="_blank" class="popup-link-btn">
-                        위키 / 공략 보기 🔗
-                    </a>`;
-                }
-
-                if (item.image && item.image.trim() !== "") {
-                    popupHtml += `<img src="${item.image}" class="popup-img">`;
-                }
-                popupHtml += `</div>`;
-                // ---------------------
-
-                marker.bindPopup(popupHtml);
                 layerGroups[item.type].addLayer(marker);
             });
 
-            // 모든 필터 켜기
             for (const key in layerGroups) {
                 layerGroups[key].addTo(map); 
             }
-
             L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
+        }
+
+        // 팝업 내용 생성 함수 (상태에 따라 버튼 모양이 바뀜)
+        function generatePopupContent(item) {
+            const completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+            const isCompleted = completedList.includes(item.id);
+
+            let html = `<div class="popup-container">
+                <div class="popup-title">${item.name}</div>
+                <div class="popup-type">${item.type}</div>`;
+
+            if (item.desc && item.desc.trim() !== "") {
+                html += `<div class="popup-desc">${item.desc}</div>`;
+            }
+
+            // --- 버튼 영역 시작 ---
+            html += `<div class="btn-container">`;
+
+            // 1) 위키 링크 버튼 (링크가 있을 때만 생성)
+            if (item.link && item.link.trim() !== "") {
+                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">
+                    위키
+                </a>`;
+            }
+
+            // 2) 완료/취소 버튼
+            // 토글 함수 호출 (ID 전달)
+            const btnText = isCompleted ? "취소" : "완료";
+            const btnClass = isCompleted ? "btn-undo" : "btn-complete";
+            
+            html += `<button onclick="toggleComplete(${item.id})" class="action-btn ${btnClass}">
+                ${btnText}
+            </button>`;
+
+            html += `</div>`; // btn-container 끝
+            // --- 버튼 영역 끝 ---
+
+            if (item.image && item.image.trim() !== "") {
+                html += `<img src="${item.image}" class="popup-img">`;
+            }
+            html += `</div>`;
+
+            return html;
         }
 
 
         // ==========================================
-        // 5. 입력 도구 (링크 입력란 추가됨)
+        // 5. ★ 완료 상태 토글 함수 (전역)
+        // ==========================================
+        window.toggleComplete = function(id) {
+            // 1. 현재 저장된 목록 불러오기
+            let completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+            const index = completedList.indexOf(id);
+
+            const marker = allMarkers[id];
+            if (!marker) return;
+
+            // 2. 상태 변경 로직
+            if (index > -1) {
+                // 이미 완료됨 -> 취소 (목록에서 제거)
+                completedList.splice(index, 1);
+                // 흑백 스타일 제거
+                L.DomUtil.removeClass(marker._icon, 'marker-completed');
+            } else {
+                // 완료 안 됨 -> 추가
+                completedList.push(id);
+                // 흑백 스타일 추가
+                L.DomUtil.addClass(marker._icon, 'marker-completed');
+            }
+
+            // 3. 로컬스토리지에 저장
+            localStorage.setItem('completedMarkers', JSON.stringify(completedList));
+
+            // 4. 팝업 내용 새로고침 (버튼 텍스트 변경을 위해)
+            // 현재 열려있는 팝업을 닫았다가 다시 열거나, 내용을 갱신
+            marker.closePopup();
+            marker.openPopup();
+        };
+
+
+        // ==========================================
+        // 6. 입력 도구 (기존과 동일)
         // ==========================================
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
@@ -175,46 +268,31 @@
             const content = `
                 <div class="input-group">
                     <h4 style="margin:0 0 10px 0; text-align:center;">새 마커 추가</h4>
-                    
-                    <label>이름:</label>
-                    <input type="text" id="input_name" placeholder="이름 입력">
-                    
-                    <label>타입:</label>
+                    <label>이름:</label> <input type="text" id="input_name">
+                    <label>타입:</label> 
                     <select id="input_type">
                         <option value="경계석">경계석</option>
                         <option value="상자">상자</option>
                         <option value="보스">보스</option>
                     </select>
-
-                    <label>설명 (선택):</label>
-                    <textarea id="input_desc" style="height:40px;" placeholder="설명 입력"></textarea>
-
-                    <label>위키 링크 (선택):</label>
-                    <input type="text" id="input_link" placeholder="https://...">
-
-                    <label>이미지 경로 (선택):</label>
-                    <input type="text" id="input_image" placeholder="예: images/1.jpg">
-
-                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">
-                        JSON 복사하기
-                    </button>
+                    <label>설명:</label> <textarea id="input_desc" style="height:40px;"></textarea>
+                    <label>위키 링크:</label> <input type="text" id="input_link">
+                    <label>이미지:</label> <input type="text" id="input_image">
+                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사하기</button>
                 </div>
             `;
-
             L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
             setTimeout(() => document.getElementById('input_name')?.focus(), 100);
         });
 
-        // JSON 생성 및 복사
         window.copyMarkerJson = function(y, x) {
             const name = document.getElementById('input_name').value || "이름 없음";
             const type = document.getElementById('input_type').value;
             const desc = document.getElementById('input_desc').value;
-            const link = document.getElementById('input_link').value;   // 링크 값 가져오기
+            const link = document.getElementById('input_link').value;
             const image = document.getElementById('input_image').value;
             const uniqueId = Date.now(); 
 
-            // JSON 포맷 (link 필드 추가됨)
             const jsonString = `,
   {
     "id": ${uniqueId},
@@ -229,12 +307,9 @@
             copyToClipboard(jsonString);
         };
 
-        // 복사 기능
         window.copyToClipboard = function(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text)
-                    .then(() => alert("복사 완료! data.json 뒤에 붙여넣으세요."))
-                    .catch(() => fallbackCopy(text));
+                navigator.clipboard.writeText(text).then(() => alert("복사 완료!")).catch(() => fallbackCopy(text));
             } else { fallbackCopy(text); }
         };
 
@@ -242,12 +317,9 @@
             const ta = document.createElement("textarea");
             ta.value = text;
             ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
-            document.body.appendChild(ta);
-            ta.focus(); ta.select();
-            try {
-                if(document.execCommand('copy')) alert("복사 완료!");
-                else prompt("복사 실패. 직접 복사하세요:", text);
-            } catch (err) { prompt("오류:", text); }
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            try { document.execCommand('copy') ? alert("복사 완료!") : prompt("복사 실패:", text); } 
+            catch (err) { prompt("오류:", text); }
             document.body.removeChild(ta);
         }
     </script>

@@ -18,11 +18,9 @@
         <div class="sidebar-close-btn" onclick="toggleSidebar()">✕</div>
 
         <div class="sidebar-header">
-            
             <div class="map-select-area">
                 <label class="sidebar-label">지역 변경</label>
-                <select id="sidebar-map-select" class="sidebar-select">
-                    </select>
+                <select id="sidebar-map-select" class="sidebar-select"></select>
             </div>
 
             <div class="search-wrapper">
@@ -46,60 +44,96 @@
 
     <script>
         // ==========================================
-        // 1. 설정 및 초기화
+        // 1. 맵 데이터베이스 설정
         // ==========================================
         const mapsDB = {
-            "qinghe": { name: "청하", img: "../qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
-            "kaifeng": { name: "개봉", img: "../kaifeng.jpg", json: "../json/kaifeng.json", w: 8000, h: 6000 }
+            "qinghe": {
+                name: "청하",
+                // ★ 타일 경로 설정 ({z}, {x}, {y}는 그대로 두세요)
+                tileUrl: "../tiles_qinghe/{z}/{x}/{y}.png", 
+                json: "../json/qinghe.json",
+                w: 7306, h: 4732,
+                minZoom: 0, 
+                maxZoom: 5 // ★ 파이썬 실행 결과에 나온 숫자(예: 5)를 넣으세요
+            },
+            "kaifeng": {
+                name: "개봉",
+                img: "../kaifeng.jpg", // 개봉은 아직 이미지라면 이렇게 유지 가능
+                json: "../json/kaifeng.json",
+                w: 8000, h: 6000,
+                minZoom: -2, maxZoom: 2
+            }
         };
 
         const typeMapping = { "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
 
+        // ==========================================
+        // 2. 초기화 및 URL 파라미터 처리
+        // ==========================================
         const urlParams = new URLSearchParams(window.location.search);
         let currentMapId = urlParams.get('id') || "qinghe";
         if (!mapsDB[currentMapId]) currentMapId = "qinghe";
-        
         const currentConfig = mapsDB[currentMapId];
+        
         document.title = `${currentConfig.name} - 연운 지도`;
-
-        // ★ [핵심] 사이드바 버튼 텍스트를 현재 맵 이름으로 변경
         const sidebarBtn = document.getElementById('sidebar-toggle-btn');
-        if (sidebarBtn) {
-            sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
-        }
+        if (sidebarBtn) sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
 
-        const config = { iconSize: [32, 32] };
+        const config = { iconSize: [30, 30] };
         const layerGroups = {}; 
         const allMarkers = []; 
 
         // ==========================================
-        // 2. 지도 생성
+        // 3. 지도 생성 (타일링 지원)
         // ==========================================
-        const map = L.map('map', {
-            crs: L.CRS.Simple, minZoom: -2, maxZoom: 2, zoomSnap: 0.5, zoomDelta: 0.5,
-            zoomControl: false, attributionControl: false 
+        
+        // ★ [핵심] 기존 마커 좌표(Y축)와 타일 좌표를 맞추기 위한 설정
+        // (이미지 좌하단이 0,0 이고 우상단이 w,h 인 경우를 위한 변환)
+        const mapCRS = L.Util.extend({}, L.CRS.Simple, {
+            transformation: new L.Transformation(1, 0, -1, currentConfig.h)
         });
 
-        const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
-        L.imageOverlay(currentConfig.img, bounds).addTo(map);
+        const map = L.map('map', {
+            crs: mapCRS, // 커스텀 좌표계 적용
+            minZoom: currentConfig.minZoom,
+            maxZoom: currentConfig.maxZoom + 2, // 여유 있게
+            zoomControl: false,
+            attributionControl: false 
+        });
 
-        // 1. PC와 모바일의 줌 레벨을 다르게 설정
-        const zoomSettings = {
-            pc: -1.5,      // PC: 적당히 축소
-            mobile: -2.5   // 모바일: 화면이 좁으므로 더 많이 축소
-        };
+        // A. 타일 방식일 때 (청하)
+        if (currentConfig.tileUrl) {
+            L.tileLayer(currentConfig.tileUrl, {
+                minZoom: currentConfig.minZoom,
+                maxZoom: currentConfig.maxZoom,
+                tileSize: 256,
+                noWrap: true,
+                bounds: [[0, 0], [currentConfig.h, currentConfig.w]]
+            }).addTo(map);
+        } 
+        // B. 통이미지 방식일 때 (개봉 등 예비용)
+        else if (currentConfig.img) {
+            const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
+            L.imageOverlay(currentConfig.img, bounds).addTo(map);
+        }
 
-        // 2. 현재 화면 너비가 768px 이하면 모바일로 판단
-        const isMobile = window.innerWidth <= 768;
-
-        // 3. 알맞은 줌 레벨 적용
-        const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
+        // ==========================================
+        // 4. 초기 줌 & 컨트롤 배치
+        // ==========================================
         
+        // 기기별 줌 레벨 설정
+        // 타일링 방식은 줌 레벨 0~5 사이가 기본이므로 숫자가 다릅니다.
+        // 타일 0레벨 = 전체 맵이 256px 크기
+        const zoomSettings = {
+            pc: 2,         // PC: 적당히 확대
+            mobile: 0      // 모바일: 전체 보기 (작게)
+        };
+        const isMobile = window.innerWidth <= 768;
+        const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
+
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 
-        // ==========================================
-        // 3. 컨트롤 배치 (우측 하단)
-        // ==========================================
+        // 컨트롤 우측 하단 배치
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         const FullscreenControl = L.Control.extend({
@@ -107,31 +141,26 @@
             onAdd: function () {
                 const c = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
                 const b = L.DomUtil.create('a', 'leaflet-control-fullscreen', c);
-                b.href = '#'; b.innerHTML = '⛶'; b.title = "전체화면";
-                b.onclick = (e) => { e.preventDefault(); toggleFullscreen(); };
+                b.href = '#'; b.innerHTML = '⛶'; b.onclick = (e) => { e.preventDefault(); toggleFullscreen(); };
                 return c;
             }
         });
         map.addControl(new FullscreenControl());
 
         // ==========================================
-        // 4. 사이드바 맵 선택기 (드롭다운)
+        // 5. 사이드바 맵 선택기
         // ==========================================
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
-            option.value = key;
-            option.innerText = val.name;
+            option.value = key; option.innerText = val.name;
             if (key === currentMapId) option.selected = true;
             mapSelect.appendChild(option);
         }
-        
-        mapSelect.onchange = function() {
-            window.location.search = `?id=${this.value}`;
-        };
+        mapSelect.onchange = function() { window.location.search = `?id=${this.value}`; };
 
         // ==========================================
-        // 5. 데이터 로딩
+        // 6. 데이터 로딩 & 마커 생성
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -139,9 +168,7 @@
                 createMarkers(data);
                 generateSidebar(data);
             })
-            .catch(err => {
-                console.error(err);
-            });
+            .catch(err => { console.error(err); });
 
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
@@ -165,16 +192,14 @@
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
 
                 layerGroups[item.type].addLayer(marker);
-                allMarkers.push({
-                    id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker 
-                });
+                allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
             for (const key in layerGroups) layerGroups[key].addTo(map);
         }
 
         // ==========================================
-        // 6. 사이드바 로직 (검색 & 이동)
+        // 7. 사이드바 로직 (검색/필터)
         // ==========================================
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
@@ -183,24 +208,19 @@
 
         searchInput.addEventListener('input', function(e) {
             const keyword = e.target.value.trim().toLowerCase();
-
             if (keyword === "") {
                 filterList.classList.remove('hidden');
                 filterControls.style.display = 'flex';
                 searchResultList.classList.remove('active');
                 return;
             }
-
             filterList.classList.add('hidden');
             filterControls.style.display = 'none';
             searchResultList.classList.add('active');
             searchResultList.innerHTML = '';
 
-            const results = allMarkers.filter(item => 
-                item.name.toLowerCase().includes(keyword) || 
-                item.desc.toLowerCase().includes(keyword)
-            );
-
+            const results = allMarkers.filter(item => item.name.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword));
+            
             if (results.length === 0) {
                 searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>';
                 return;
@@ -210,20 +230,16 @@
                 const row = document.createElement('div');
                 row.className = 'search-result-row';
                 const imgName = typeMapping[item.type] || item.type;
+                row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
                 
-                row.innerHTML = `
-                    <div class="result-info">
-                        <div class="result-name">${item.name}</div>
-                        <div class="result-desc">${item.desc}</div>
-                    </div>
-                    <img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">
-                `;
-
                 row.onclick = () => {
-                    if (!map.hasLayer(layerGroups[item.type])) {
-                        map.addLayer(layerGroups[item.type]);
-                    }
-                    map.flyTo(item.marker.getLatLng(), 0, { animate: true, duration: 1.5 });
+                    if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
+                    
+                    // 이동 시 줌 레벨 설정 (타일 방식에 맞게 조정)
+                    // 너무 줌을 당기면 타일이 없어서 흐려질 수 있으니 maxZoom 확인
+                    const jumpZoom = Math.min(map.getZoom() + 2, currentConfig.maxZoom); 
+                    
+                    map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     setTimeout(() => { item.marker.openPopup(); }, 1000);
                     if (window.innerWidth <= 480) toggleSidebar();
                 };
@@ -235,28 +251,16 @@
             filterList.innerHTML = '';
             const counts = {};
             data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
-
             for (const [type, count] of Object.entries(counts)) {
                 const div = document.createElement('div');
                 div.className = 'filter-item';
                 const imgName = typeMapping[type] || type;
-                
-                div.innerHTML = `
-                    <label class="filter-label" style="cursor:pointer; width:100%;">
-                        <input type="checkbox" class="filter-checkbox" checked onchange="toggleLayer('${type}', this.checked)">
-                        <img src="../images/${imgName}.png" width="24" height="24" onerror="this.style.display='none'" style="vertical-align:middle; margin-right:5px;">
-                        ${type}
-                    </label>
-                    <span class="filter-count">${count}</span>
-                `;
+                div.innerHTML = `<label class="filter-label" style="cursor:pointer; width:100%;"><input type="checkbox" class="filter-checkbox" checked onchange="toggleLayer('${type}', this.checked)"><img src="../images/${imgName}.png" width="24" height="24" onerror="this.style.display='none'" style="vertical-align:middle; margin-right:5px;"> ${type}</label><span class="filter-count">${count}</span>`;
                 filterList.appendChild(div);
             }
         }
 
-        function toggleLayer(type, isChecked) {
-            isChecked ? map.addLayer(layerGroups[type]) : map.removeLayer(layerGroups[type]);
-        }
-
+        function toggleLayer(type, isChecked) { isChecked ? map.addLayer(layerGroups[type]) : map.removeLayer(layerGroups[type]); }
         function setAllFilters(status) {
             document.querySelectorAll('.filter-checkbox').forEach(cb => {
                 cb.checked = status;
@@ -264,23 +268,22 @@
                 toggleLayer(type, status);
             });
         }
-
-        function toggleSidebar() {
-            document.getElementById('map-sidebar').classList.toggle('open');
-        }
-
+        function toggleSidebar() { document.getElementById('map-sidebar').classList.toggle('open'); }
         function toggleFullscreen() {
             if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
             else if (document.exitFullscreen) document.exitFullscreen();
         }
 
+        // ==========================================
+        // 8. 팝업 및 완료 기능
+        // ==========================================
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
             if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
             html += `<div class="btn-container">`;
-            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;
+            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">지침서</a>`;
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;
@@ -295,7 +298,6 @@
             const target = allMarkers.find(m => m.id === id);
             const marker = target ? target.marker : null;
             if (!marker) return;
-
             if (index > -1) {
                 list.splice(index, 1);
                 L.DomUtil.removeClass(marker._icon, 'marker-completed');
@@ -306,11 +308,6 @@
             localStorage.setItem(storageKey, JSON.stringify(list));
             marker.closePopup(); marker.openPopup();
         };
-
-        map.on('click', function(e) {
-            // console.log(`"y": ${Math.round(e.latlng.lat)}, "x": ${Math.round(e.latlng.lng)}`);
-        });
-
     </script>
 </body>
 </html>

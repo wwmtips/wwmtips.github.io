@@ -953,5 +953,14 @@
     "bgimg": "q108_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q108.html"
+  },
+  {
+    "id": "q109",
+    "name": "영광의 귀향",
+    "location": "각문리",
+    "type": "만사록",
+    "bgimg": "q109_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q109.html"
   }
 ]

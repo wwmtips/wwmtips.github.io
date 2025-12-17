@@ -110,7 +110,9 @@ function loadData() {
         currentChunjiData = globalData.chunji; // [추가] 초기화 (전체 목록)
         
         updateLocationOptions(); 
-        renderChunjiList();
+        updateChunjiSubtypeOptions(); 
+
+       renderChunjiList();
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
         renderQuestList();                
@@ -2113,4 +2115,84 @@ function syncGuideDropdown(filename) {
     if (select) {
         select.value = filename;
     }
+}
+
+// =========================================
+// [수정] 천지록 동적 필터링 (Type + Subtype 연동)
+// =========================================
+
+// 1. 메인 분류(Type) 변경 시 호출
+function onChunjiTypeChange() {
+    // 1단계: 선택된 분류에 맞는 세부 분류(Subtype) 목록 갱신
+    updateChunjiSubtypeOptions(); 
+    
+    // 2단계: 필터 적용하여 리스트 다시 그리기
+    applyChunjiFilter();
+}
+
+// 2. 세부 분류(Subtype) 옵션 업데이트 함수
+function updateChunjiSubtypeOptions() {
+    const typeSelect = document.getElementById('chunji-type-select');
+    const subtypeSelect = document.getElementById('chunji-subtype-select');
+    
+    if (!typeSelect || !subtypeSelect || !globalData.chunji) return;
+
+    const selectedType = typeSelect.value; // 현재 선택된 메인 분류
+
+    // A. 현재 메인 분류에 해당하는 아이템만 추리기
+    let filteredData = globalData.chunji;
+    if (selectedType !== 'all') {
+        filteredData = globalData.chunji.filter(item => item.type === selectedType);
+    }
+
+    // B. 세부 분류(subtype) 추출 및 중복 제거
+    const subtypes = new Set();
+    filteredData.forEach(item => {
+        // subtype이 있고, 비어있지 않은 경우만 추가
+        if (item.subtype && item.subtype.trim() !== "") {
+            subtypes.add(item.subtype);
+        }
+    });
+
+    // C. 가나다 순 정렬
+    const sortedSubtypes = Array.from(subtypes).sort();
+
+    // D. 드롭다운 초기화 및 다시 채우기
+    subtypeSelect.innerHTML = '<option value="all">전체 세부</option>'; // 기본값
+    
+    sortedSubtypes.forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub;
+        option.innerText = sub;
+        subtypeSelect.appendChild(option);
+    });
+
+    // E. 메인 분류가 바뀌었으므로 세부 분류는 '전체'로 리셋
+    subtypeSelect.value = 'all'; 
+}
+
+// 3. 필터 적용 및 렌더링 함수
+function applyChunjiFilter() {
+    const typeSelect = document.getElementById('chunji-type-select');
+    const subtypeSelect = document.getElementById('chunji-subtype-select');
+    
+    const selectedType = typeSelect ? typeSelect.value : 'all';
+    const selectedSubtype = subtypeSelect ? subtypeSelect.value : 'all';
+
+    // 데이터 필터링 (AND 조건)
+    currentChunjiData = globalData.chunji.filter(item => {
+        // 1. 메인 분류 체크
+        const typeMatch = (selectedType === 'all') || (item.type === selectedType);
+        
+        // 2. 세부 분류 체크
+        // (데이터에 subtype이 아예 없는 경우도 고려하여 안전하게 처리)
+        const itemSubtype = item.subtype || "";
+        const subtypeMatch = (selectedSubtype === 'all') || (itemSubtype === selectedSubtype);
+
+        return typeMatch && subtypeMatch;
+    });
+
+    // 1페이지로 초기화 후 렌더링
+    currentChunjiPage = 1;
+    renderChunjiList();
 }

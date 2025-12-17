@@ -13,10 +13,10 @@
         .dev-mode-cursor { cursor: crosshair !important; }
 
         /* =========================================
-           ★ 구글 지도 스타일 핀 (이중 구조)
+           ★ 핀 디자인 (얇은 테두리 버전)
            ========================================= */
         
-        /* 1. 핀 바디 (흰색 물방울) */
+        /* 1. 핀 몸통 (흰색 베이스) */
         .pin-marker {
             position: relative;
             width: 100%;
@@ -24,8 +24,8 @@
             border-radius: 50% 50% 50% 0; /* 물방울 모양 */
             transform: rotate(-45deg);    /* 45도 회전 */
             
-            background: #ffffff;          /* 핀 몸통은 흰색 */
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* 그림자 */
+            background: #ffffff;          /* ★ 몸통은 무조건 흰색 */
+            box-shadow: 1px 1px 4px rgba(0,0,0,0.5); /* 그림자 */
             
             display: flex;
             align-items: center;
@@ -34,31 +34,32 @@
             transition: transform 0.2s, z-index 0.2s;
         }
 
-        /* 2. 내부 컬러 원 (타입별 색상) */
+        /* 2. 내부 컬러 원 (크기를 키워서 테두리를 얇게 만듦) */
         .pin-inner-circle {
-            width: 76%;  /* 핀 크기 대비 원 크기 */
-            height: 76%;
+            width: 88%;  /* ★ 여기를 키워서 흰색 테두리를 얇게 만듦 (기존 76% -> 88%) */
+            height: 88%;
             border-radius: 50%;
-            background: var(--pin-color, #555); /* JS에서 주입된 색상 */
             
-            /* 핀이 -45도 돌았으므로, 원을 45도 돌려 정방향으로 맞춤 */
-            transform: rotate(45deg); 
+            /* JS에서 주입한 색상 적용 */
+            background: var(--pin-color, #555); 
             
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 0 3px rgba(0,0,0,0.2); /* 내부 깊이감 */
         }
 
-        /* 3. 아이콘 (흰색 실루엣) */
+        /* 3. 아이콘 (흰색, 회전 보정) */
         .pin-inner-circle img {
-            width: 75%;  /* 원 내부에서 아이콘 크기 (꽉 차게) */
-            height: 75%;
+            width: 70%;  
+            height: 70%;
             object-fit: contain;
             
-            /* 아이콘을 하얀색으로 변경하여 가독성 확보 */
+            /* 핀이 -45도 돌았으므로, 이미지는 +45도 돌려서 똑바로 보이게 함 */
+            transform: rotate(45deg); 
+            
+            /* 아이콘을 하얀색으로 변경 */
             filter: brightness(0) invert(1);
-            opacity: 0.95;
+            opacity: 1;
         }
 
         /* 호버 효과 */
@@ -70,10 +71,10 @@
 
         /* 완료된 마커 (회색 처리) */
         .marker-completed .pin-inner-circle {
-            background: #777 !important; /* 회색으로 덮어쓰기 */
+            background: #999 !important; /* 회색으로 덮어쓰기 */
         }
         .marker-completed .pin-marker {
-            opacity: 0.7;
+            opacity: 0.6;
         }
     </style>
 </head>
@@ -124,13 +125,13 @@
             "기타": "stone"
         };
 
-        // ★ [스타일 적용] style.css의 테마 색상 적용
+        // ★ [색상 설정] style.css의 테마 색상 적용
         const colorMapping = {
-            "상자": "#a08040",   // Gold (wuxia-accent-gold)
-            "보스": "#b71c1c",   // Red (wuxia-accent-red)
-            "만사록": "#2e7d32", // Green (rarity-uncommon) - 비급 느낌
-            "경계석": "#1565c0", // Blue (rarity-rare) - 차분함
-            "기타": "#555555"    // Grey (rarity-common)
+            "상자": "#a08040",   // 황금색 (보물)
+            "보스": "#b71c1c",   // 붉은색 (위험)
+            "만사록": "#2e7d32", // 초록색 (정보)
+            "경계석": "#1565c0", // 파란색 (이동)
+            "기타": "#555555"    // 회색 (기타)
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -147,8 +148,8 @@
 
         const isMobile = window.innerWidth <= 768;
         
-        // 핀 크기 설정 (흰색 테두리 포함 전체 크기)
-        const pinSize = isMobile ? [32, 32] : [44, 44];
+        // 핀 크기 (이미지 크기를 키웠으므로 전체 크기는 적당히 유지)
+        const pinSize = isMobile ? [32, 32] : [42, 42];
 
         const layerGroups = {}; 
         const allMarkers = []; 
@@ -215,7 +216,8 @@
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || colorMapping["기타"];
 
-                // ★ [핀 마커 구조 변경] 흰색 핀 -> 컬러 원 -> 아이콘
+                // ★ [핀 마커 생성] 
+                // .pin-marker (흰색 몸통) -> .pin-inner-circle (컬러 원) -> img (흰색 아이콘)
                 const pinIcon = L.divIcon({
                     className: isCompleted ? 'marker-completed' : '',
                     html: `<div class="pin-marker">
@@ -224,7 +226,7 @@
                                </div>
                            </div>`,
                     iconSize: pinSize, 
-                    // 앵커: 핀의 뾰족한 끝(바닥)이 좌표에 오도록 설정
+                    // 앵커: 핀의 뾰족한 끝(바닥)이 정확히 좌표에 찍히도록 조정
                     iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], 
                     popupAnchor: [0, -(pinSize[1] * 0.8)]
                 });
@@ -355,7 +357,7 @@
             const image = document.getElementById('input_image').value || "";
             const uniqueId = Date.now(); 
 
-            const jsonString = `,
+            const jsonString = `
   {
     "id": ${uniqueId},
     "name": "${name}",
@@ -365,7 +367,7 @@
     "desc": "${desc}",
     "link": "${link}",
     "image": "${image}"
-  }`;
+  },`;
             copyToClipboard(jsonString);
         };
 

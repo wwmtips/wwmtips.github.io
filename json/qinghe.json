@@ -1,5 +1,16 @@
 [
   {
+    "id": 1765980507099,
+    "name": "근심 퇴치법",
+    "type": "만사록",
+    "y": 1848,
+    "x": 3652,
+    "desc": "웃음병에 걸린 의사에게 해독약 찾아주기",
+    "link": "https://wwm.tips/?q=41",
+    "image": "https://wwm.tips/quests/images/q41_1.jpg"
+  }
+  ,
+  {
     "id": 1765980457573,
     "name": "무료 정보",
     "type": "만사록",

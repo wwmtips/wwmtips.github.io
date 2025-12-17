@@ -221,3 +221,21 @@ html, body, #map {
     font-family: 'Noto Serif KR', serif;
 }
 .copy-btn:hover { background-color: #8a6d3b; }
+/* =========================================
+   전체화면 버튼 스타일 (추가됨)
+   ========================================= */
+.leaflet-control-fullscreen {
+    font-size: 20px;       /* 아이콘 크기 */
+    line-height: 30px !important; /* 수직 정렬 */
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    width: 30px;
+    height: 30px;
+    text-decoration: none;
+    color: var(--wuxia-accent-gold) !important; /* 금색 */
+}
+
+.leaflet-control-fullscreen:hover {
+    color: var(--wuxia-accent-red) !important; /* 마우스 올리면 붉은색 */
+}

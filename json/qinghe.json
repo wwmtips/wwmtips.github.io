@@ -1,4 +1,65 @@
 [
+  
+  {
+    "id": 1765988172028,
+    "name": "막내 (메인 전)",
+    "type": "고양이",
+    "y": 2693,
+    "x": 1948,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/15.jpg"
+  },
+  {
+    "id": 1765988101163,
+    "name": "기름이 (메인 전)",
+    "type": "고양이",
+    "y": 2839,
+    "x": 2006,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/16.jpg"
+  },
+  {
+    "id": 1765988067532,
+    "name": "기름이 (메인 후)",
+    "type": "고양이",
+    "y": 2787,
+    "x": 2138,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/16.jpg"
+  },
+  {
+    "id": 1765987863187,
+    "name": "막내 (메인 후)",
+    "type": "고양이",
+    "y": 2623,
+    "x": 2145,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/15.jpg"
+  },
+  {
+    "id": 1765987751219,
+    "name": "복숭아",
+    "type": "고양이",
+    "y": 2438,
+    "x": 1949,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/14.jpg"
+  },
+  {
+    "id": 1765987719995,
+    "name": "활명의 관",
+    "type": "경계석",
+    "y": 2464,
+    "x": 1950,
+    "desc": "",
+    "link": "",
+    "image": ""
+  },
   {
     "id": 1765986968970,
     "name": "재복",

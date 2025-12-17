@@ -1,6 +1,26 @@
 [
   
   {
+    "id": 1765991805943,
+    "name": "두털이",
+    "type": "고양이",
+    "y": 2207,
+    "x": 3163,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/35.jpg"
+  },
+  {
+    "id": 1765991682335,
+    "name": "장원",
+    "type": "고양이",
+    "y": 2168,
+    "x": 3174,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/34.jpg"
+  },
+  {
     "id": 1765991464495,
     "name": "대방",
     "type": "고양이",
@@ -264,10 +284,10 @@
   {
     "id": 1765988579980,
     "name": "아지",
-    "type": "경계석",
+    "type": "고양이",
     "y": 3686,
     "x": 2114,
-    "desc": "",
+    "desc": "귀여운 고양이다",
     "link": "",
     "image": "https://wwm.tips/images/cat/19.jpg"
   },

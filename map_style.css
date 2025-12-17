@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
 
 /* =========================================
-   무협 테마 변수 (메인 style.css와 통일)
+   [기본 테마] 무협 스타일 변수
    ========================================= */
 :root {
     --wuxia-bg-deep: #f4f4f2;
@@ -17,7 +17,6 @@
     --btn-gray: #757575;
 }
 
-/* 기본 설정 */
 html, body, #map { 
     height: 100%; width: 100%; margin: 0; padding: 0; 
     background: var(--wuxia-bg-deep);
@@ -25,10 +24,10 @@ html, body, #map {
 }
 
 /* =========================================
-   Leaflet UI 커스텀
+   [UI] Leaflet 컨트롤 커스텀
    ========================================= */
 
-/* 줌 컨트롤 (+/- 버튼) */
+/* 1. 줌 컨트롤 (+/- 버튼) - 우측 하단용 */
 .leaflet-bar {
     border: 1px solid var(--wuxia-accent-gold) !important;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
@@ -46,8 +45,12 @@ html, body, #map {
     background-color: #fffcf5 !important;
     color: var(--wuxia-accent-red) !important;
 }
+/* 마지막 버튼은 밑줄 제거 */
+.leaflet-bar a:last-child {
+    border-bottom: none !important;
+}
 
-/* 레이어 컨트롤 (필터 메뉴) */
+/* 2. 레이어 컨트롤 (필터 메뉴) */
 .leaflet-control-layers {
     background: var(--wuxia-bg-panel) !important;
     border: 1px solid var(--wuxia-accent-gold) !important;
@@ -57,12 +60,59 @@ html, body, #map {
     color: var(--wuxia-text-main);
     padding: 10px !important;
 }
-.leaflet-control-layers-toggle {
-    filter: sepia(1) hue-rotate(-50deg) saturate(2); 
+
+/* 3. [신규] 맵 변경 드롭다운 (우측 상단) */
+.map-switcher-control {
+    background: var(--wuxia-bg-panel);
+    border: 1px solid var(--wuxia-accent-gold);
+    border-radius: 4px;
+    padding: 6px 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-family: 'Noto Serif KR', serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+/* 드롭다운 아이콘 */
+.map-switcher-icon {
+    font-size: 1.1em;
+    color: var(--wuxia-accent-gold);
+}
+/* 실제 선택 박스 */
+.map-switcher-select {
+    border: none;
+    background: transparent;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--wuxia-text-main);
+    outline: none;
+    cursor: pointer;
+    padding-right: 5px;
+}
+.map-switcher-select:hover {
+    color: var(--wuxia-accent-red);
+}
+
+/* 4. 전체화면 버튼 (좌측 하단) */
+.leaflet-control-fullscreen {
+    font-size: 20px;
+    line-height: 30px !important;
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    width: 30px;
+    height: 30px;
+    text-decoration: none;
+    color: var(--wuxia-accent-gold) !important;
+}
+.leaflet-control-fullscreen:hover {
+    color: var(--wuxia-accent-red) !important;
 }
 
 /* =========================================
-   팝업창 디자인
+   [Popup] 팝업창 스타일
    ========================================= */
 .leaflet-popup-content-wrapper { 
     background: var(--wuxia-bg-panel);
@@ -82,8 +132,6 @@ html, body, #map {
     width: 240px !important; 
     text-align: center;
 }
-
-/* 닫기 버튼 */
 .leaflet-container a.leaflet-popup-close-button {
     color: var(--wuxia-text-sub) !important;
     font-size: 20px !important;
@@ -104,14 +152,12 @@ html, body, #map {
     display: inline-block;
     padding-bottom: 3px;
 }
-
 .popup-type { 
     font-size: 0.85em; 
     color: var(--wuxia-accent-gold);
     margin-bottom: 10px; 
     font-weight: bold; 
 }
-
 .popup-desc { 
     font-size: 0.95em; 
     color: var(--wuxia-text-sub); 
@@ -123,7 +169,6 @@ html, body, #map {
     border: 1px dashed var(--wuxia-border);
     border-radius: 4px;
 }
-
 .popup-img { 
     width: 100%; 
     height: auto; 
@@ -131,84 +176,60 @@ html, body, #map {
     margin-top: 10px; 
     display: block; 
     border-radius: 4px;
-    filter: sepia(0.1); /* 옛날 느낌 필터 */
+    filter: sepia(0.1); 
 }
 
 /* =========================================
-   버튼 스타일
+   [Button] 팝업 내부 버튼
    ========================================= */
-.btn-container {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.action-btn {
-    flex: 1;
-    padding: 8px 0;
-    border-radius: 4px;
-    font-size: 0.9em;
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid transparent;
-    color: white;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-    font-family: 'Noto Serif KR', serif;
+.btn-container { display: flex; gap: 8px; margin-top: 12px; }
+.action-btn { 
+    flex: 1; 
+    padding: 8px 0; 
+    border-radius: 4px; 
+    font-size: 0.9em; 
+    font-weight: bold; 
+    cursor: pointer; 
+    border: 1px solid transparent; 
+    color: white; 
+    text-decoration: none; 
+    display: inline-block; 
+    text-align: center; 
+    font-family: 'Noto Serif KR', serif; 
     transition: all 0.2s;
 }
-
-/* 위키(지침서) 버튼 */
-.btn-wiki { 
-    background-color: #fff;
-    color: var(--wuxia-accent-gold);
-    border: 1px solid var(--wuxia-accent-gold);
-}
-.btn-wiki:hover { 
-    background-color: #fffcf5;
-    color: #8a6d3b;
-}
-
-/* 완료 버튼 */
-.btn-complete { 
-    background-color: var(--rarity-uncommon); 
-    border: 1px solid var(--rarity-uncommon);
-}
+.btn-wiki { background-color: #fff; color: var(--wuxia-accent-gold); border: 1px solid var(--wuxia-accent-gold); }
+.btn-wiki:hover { background-color: #fffcf5; color: #8a6d3b; }
+.btn-complete { background-color: var(--rarity-uncommon); border: 1px solid var(--rarity-uncommon); }
 .btn-complete:hover { background-color: #1b5e20; }
+.btn-undo { background-color: var(--btn-gray); border: 1px solid var(--btn-gray); }
 
-/* 취소 버튼 */
-.btn-undo { 
-    background-color: var(--btn-gray); 
-    border: 1px solid var(--btn-gray);
-}
-
-/* 완료된 마커 효과 */
-.marker-completed {
-    filter: grayscale(100%);
-    opacity: 0.6;
-    transition: all 0.5s ease;
+/* 완료 효과 */
+.marker-completed { 
+    filter: grayscale(100%); 
+    opacity: 0.6; 
+    transition: all 0.5s ease; 
 }
 
 /* =========================================
-   개발자 입력 도구 폼
+   [Dev] 개발자 입력 폼
    ========================================= */
 .input-group label { 
     display: block; margin-top: 10px; 
     font-weight: bold; font-size: 0.9em; 
-    color: var(--wuxia-accent-gold);
-    border-left: 3px solid var(--wuxia-accent-red);
-    padding-left: 5px;
+    color: var(--wuxia-accent-gold); 
+    border-left: 3px solid var(--wuxia-accent-red); 
+    padding-left: 5px; 
 }
-.input-group input, .input-group select, .input-group textarea {
+.input-group input, .input-group select, .input-group textarea { 
     width: 100%; box-sizing: border-box; 
     margin-top: 5px; padding: 8px; 
     border: 1px solid var(--wuxia-border); 
-    background-color: #fcfcfc;
-    border-radius: 4px;
-    font-family: 'Noto Serif KR', serif;
+    background-color: #fcfcfc; 
+    border-radius: 4px; 
+    font-family: 'Noto Serif KR', serif; 
 }
-.copy-btn {
+.copy-btn { 
     width: 100%; 
     background: var(--wuxia-accent-gold); 
     color: white; 
@@ -217,164 +238,7 @@ html, body, #map {
     border-radius: 4px; 
     font-weight: bold; 
     cursor: pointer; 
-    margin-top: 15px;
-    font-family: 'Noto Serif KR', serif;
+    margin-top: 15px; 
+    font-family: 'Noto Serif KR', serif; 
 }
 .copy-btn:hover { background-color: #8a6d3b; }
-/* =========================================
-   전체화면 버튼 스타일 (추가됨)
-   ========================================= */
-.leaflet-control-fullscreen {
-    font-size: 20px;       /* 아이콘 크기 */
-    line-height: 30px !important; /* 수직 정렬 */
-    text-align: center;
-    cursor: pointer;
-    display: block;
-    width: 30px;
-    height: 30px;
-    text-decoration: none;
-    color: var(--wuxia-accent-gold) !important; /* 금색 */
-}
-
-.leaflet-control-fullscreen:hover {
-    color: var(--wuxia-accent-red) !important; /* 마우스 올리면 붉은색 */
-}
-@charset "utf-8";
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
-
-/* =========================================
-   기본 설정 & 변수 (기존과 동일)
-   ========================================= */
-:root {
-    --wuxia-bg-deep: #f4f4f2;
-    --wuxia-bg-panel: #ffffff;
-    --wuxia-border: #dcdcdc;
-    --wuxia-accent-gold: #a08040;
-    --wuxia-accent-red: #b71c1c;
-    --wuxia-text-main: #1a1a1a;
-    --wuxia-text-sub: #555555;
-    
-    --rarity-uncommon: #2e7d32;
-    --btn-gray: #757575;
-}
-
-html, body, #map { 
-    height: 100%; width: 100%; margin: 0; padding: 0; 
-    background: var(--wuxia-bg-deep);
-    font-family: 'Noto Serif KR', serif;
-}
-
-/* =========================================
-   [수정됨] Leaflet 컨트롤 스타일
-   ========================================= */
-
-/* 1. 줌 컨트롤 (+/-) 스타일 */
-.leaflet-bar {
-    border: 1px solid var(--wuxia-accent-gold) !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
-    border-radius: 4px !important;
-    overflow: hidden;
-}
-.leaflet-bar a {
-    background-color: var(--wuxia-bg-panel) !important;
-    color: var(--wuxia-accent-gold) !important;
-    border-bottom: 1px solid var(--wuxia-accent-gold) !important;
-    font-family: 'Noto Serif KR', serif;
-    font-weight: bold;
-}
-.leaflet-bar a:hover {
-    background-color: #fffcf5 !important;
-    color: var(--wuxia-accent-red) !important;
-}
-.leaflet-bar a:last-child {
-    border-bottom: none !important;
-}
-
-/* 2. 레이어 컨트롤 (필터) */
-.leaflet-control-layers {
-    background: var(--wuxia-bg-panel) !important;
-    border: 1px solid var(--wuxia-accent-gold) !important;
-    border-radius: 4px !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-    font-family: 'Noto Serif KR', serif;
-    color: var(--wuxia-text-main);
-    padding: 10px !important;
-}
-
-/* 3. [추가됨] 맵 변경 드롭다운 스타일 */
-.map-switcher-control {
-    background: var(--wuxia-bg-panel);
-    border: 1px solid var(--wuxia-accent-gold);
-    border-radius: 4px;
-    padding: 5px 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    font-family: 'Noto Serif KR', serif;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-.map-switcher-select {
-    border: none;
-    background: transparent;
-    font-family: 'Noto Serif KR', serif;
-    font-size: 1em;
-    font-weight: bold;
-    color: var(--wuxia-text-main);
-    outline: none;
-    cursor: pointer;
-    padding-right: 5px;
-}
-.map-switcher-icon {
-    font-size: 1.2em;
-    color: var(--wuxia-accent-gold);
-}
-
-/* 4. 전체화면 버튼 스타일 */
-.leaflet-control-fullscreen {
-    font-size: 20px;
-    line-height: 30px !important;
-    text-align: center;
-    cursor: pointer;
-    display: block;
-    width: 30px;
-    height: 30px;
-    text-decoration: none;
-    color: var(--wuxia-accent-gold) !important;
-}
-.leaflet-control-fullscreen:hover {
-    color: var(--wuxia-accent-red) !important;
-}
-
-/* =========================================
-   팝업 및 기타 스타일 (기존 유지)
-   ========================================= */
-.leaflet-popup-content-wrapper { 
-    background: var(--wuxia-bg-panel);
-    border: 1px solid var(--wuxia-accent-gold);
-    border-radius: 4px;
-    padding: 0; 
-    overflow: hidden; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-.leaflet-popup-tip {
-    background: var(--wuxia-bg-panel);
-    border: 1px solid var(--wuxia-accent-gold);
-    border-top: none; border-left: none;
-}
-.leaflet-popup-content { margin: 15px; width: 240px !important; text-align: center; }
-.leaflet-container a.leaflet-popup-close-button {
-    color: var(--wuxia-text-sub) !important; font-size: 20px !important; top: 8px !important; right: 8px !important;
-}
-.popup-title { font-size: 1.2em; font-weight: bold; margin: 5px 0; color: var(--wuxia-text-main); border-bottom: 2px solid var(--wuxia-accent-red); display: inline-block; padding-bottom: 3px; }
-.popup-type { font-size: 0.85em; color: var(--wuxia-accent-gold); margin-bottom: 10px; font-weight: bold; }
-.popup-desc { font-size: 0.95em; color: var(--wuxia-text-sub); margin: 10px 0; line-height: 1.6; text-align: left; background: #f9f9f9; padding: 10px; border: 1px dashed var(--wuxia-border); border-radius: 4px; }
-.popup-img { width: 100%; height: auto; border: 1px solid var(--wuxia-border); margin-top: 10px; display: block; border-radius: 4px; filter: sepia(0.1); }
-
-.btn-container { display: flex; gap: 8px; margin-top: 12px; }
-.action-btn { flex: 1; padding: 8px 0; border-radius: 4px; font-size: 0.9em; font-weight: bold; cursor: pointer; border: 1px solid transparent; color: white; text-decoration: none; display: inline-block; text-align: center; font-family: 'Noto Serif KR', serif; transition: all 0.2s; }
-.btn-wiki { background-color: #fff; color: var(--wuxia-accent-gold); border: 1px solid var(--wuxia-accent-gold); }
-.btn-wiki:hover { background-color: #fffcf5; color: #8a6d3b; }
-.btn-complete { background-color: var(--rarity-uncommon); border: 1px solid var(--rarity-uncommon); }
-.btn-complete:hover { background-color: #1b5e20; }
-.btn-undo { background-color

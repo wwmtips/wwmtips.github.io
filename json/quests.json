@@ -926,5 +926,14 @@
     "bgimg": "q105_1.jpg",
     "iconpath": "images/hwa.jpg",
     "filepath": "/quests/q105.html"
-  }
+  },
+  {
+    "id": "q106",
+    "name": "난초 향기의 여운",
+    "location": "취화음",
+    "type": "만사록",
+    "bgimg": "q99_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q99.html"
+  },
 ]

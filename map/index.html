@@ -7,6 +7,14 @@
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="../map_style.css">
+    <style>
+        /* 배경색을 밝은 회색으로 줘서 지도가 투명한지 확인 */
+        #map { background: #f0f0f0; }
+        /* 타일 이미지가 픽셀화되어 보이게 설정 (선명하게) */
+        .leaflet-image-layer, .leaflet-layer {
+            image-rendering: pixelated;
+        }
+    </style>
 </head>
 <body>
 
@@ -22,12 +30,10 @@
                 <label class="sidebar-label">지역 변경</label>
                 <select id="sidebar-map-select" class="sidebar-select"></select>
             </div>
-
             <div class="search-wrapper">
-                <input type="text" id="marker-search" class="sidebar-search-input" placeholder="이름 검색 (예: 상자)">
+                <input type="text" id="marker-search" class="sidebar-search-input" placeholder="이름 검색">
                 <span class="search-icon">🔍</span>
             </div>
-
             <div class="filter-controls" id="filter-controls-area">
                 <button class="filter-control-btn" onclick="setAllFilters(true)">모두 표시</button>
                 <button class="filter-control-btn" onclick="setAllFilters(false)">모두 숨기기</button>
@@ -44,15 +50,18 @@
 
     <script>
         // ==========================================
-        // 1. 맵 데이터베이스
+        // 1. 맵 설정 (타일링에 맞게 수정됨)
         // ==========================================
         const mapsDB = {
             "qinghe": {
                 name: "청하",
+                // ★ 경로 확인: 상위 폴더(..)의 tiles_qinghe 폴더
                 tileUrl: "../tiles_qinghe/{z}/{x}/{y}.png", 
                 json: "../json/qinghe.json",
                 w: 7306, h: 4732,
-                minZoom: 0, maxZoom: 5 
+                // ★ [중요] 타일링은 0이 최소(전체보기), 5가 최대(확대)입니다.
+                minZoom: 0, 
+                maxZoom: 5 
             },
             "kaifeng": {
                 name: "개봉",
@@ -82,40 +91,59 @@
         const allMarkers = []; 
 
         // ==========================================
-        // 3. 지도 생성 (좌표계 보정 포함)
+        // 3. 지도 생성 (타일링 최적화)
         // ==========================================
-        const mapCRS = L.Util.extend({}, L.CRS.Simple, {
-            transformation: new L.Transformation(1, 0, -1, currentConfig.h)
-        });
-
+        
+        // ★ CRS.Simple은 기본적으로 (0,0)이 좌상단입니다.
         const map = L.map('map', {
-            crs: mapCRS, 
+            crs: L.CRS.Simple, 
             minZoom: currentConfig.minZoom,
-            maxZoom: currentConfig.maxZoom + 2, 
+            maxZoom: currentConfig.maxZoom, // 최대 줌 제한
             zoomControl: false,
             attributionControl: false 
         });
 
-        // 타일 또는 이미지 로딩
         if (currentConfig.tileUrl) {
+            // [A] 타일 방식 (청하)
             L.tileLayer(currentConfig.tileUrl, {
                 minZoom: currentConfig.minZoom,
                 maxZoom: currentConfig.maxZoom,
                 tileSize: 256,
                 noWrap: true,
-                bounds: [[0, 0], [currentConfig.h, currentConfig.w]]
+                // bounds: 타일이 지도 영역 밖으로 나가지 않게 제한
+                bounds: [[0, 0], [-currentConfig.h, currentConfig.w]]
             }).addTo(map);
+
         } else if (currentConfig.img) {
+            // [B] 통이미지 방식 (개봉 예비용)
+            // 통이미지는 좌하단이 (0,0)인 좌표계를 쓰므로 bounds가 다릅니다.
             const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
             L.imageOverlay(currentConfig.img, bounds).addTo(map);
         }
 
-        // 줌 설정
-        const zoomSettings = { pc: 2, mobile: 0 };
+        // ==========================================
+        // 4. 초기 줌 설정 (여기가 문제였음!)
+        // ==========================================
+        const zoomSettings = {
+            // ★ 타일 모드에서는 0~5 사이의 양수여야 합니다.
+            // 2레벨: 적당한 확대, 0레벨: 전체 보기
+            pc: 2,        
+            mobile: 1      
+        };
         const isMobile = window.innerWidth <= 768;
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
 
-        map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
+        // 중앙 좌표 (타일 좌표계에서는 Y가 음수일 수 있음. 일단 중앙으로 설정)
+        // L.CRS.Simple 기본 설정상 Y축 방향이 헷갈릴 수 있으므로 
+        // 일단 (0, 0) 근처나 중앙으로 이동해봅니다.
+        if (currentConfig.tileUrl) {
+            // 타일링 맵은 보통 좌상단(0,0)에서 시작해 아래로 내려갑니다.
+            // 일단 강제로 -height/2 (중앙)을 줘봅니다.
+            map.setView([-currentConfig.h / 2, currentConfig.w / 2], targetZoom);
+        } else {
+            // 통이미지 맵
+            map.setView([currentConfig.h / 2, currentConfig.w / 2], -2);
+        }
 
         // 컨트롤 배치
         L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -131,7 +159,7 @@
         });
         map.addControl(new FullscreenControl());
 
-        // 맵 선택기 초기화
+        // 맵 선택기
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -142,7 +170,7 @@
         mapSelect.onchange = function() { window.location.search = `?id=${this.value}`; };
 
         // ==========================================
-        // 4. 데이터 로딩 & 마커 생성
+        // 5. 데이터 로딩
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -160,7 +188,6 @@
                 if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
                 const imgName = typeMapping[item.type] || item.type;
                 const isCompleted = completedList.includes(item.id);
-
                 const myIcon = L.icon({
                     iconUrl: `../images/${imgName}.png`,
                     iconSize: config.iconSize,
@@ -169,7 +196,14 @@
                     className: isCompleted ? 'marker-completed' : ''
                 });
 
-                const marker = L.marker([item.y, item.x], { icon: myIcon });
+                // ★ [좌표 보정]
+                // 타일링 방식과 JSON 좌표계가 반대(위아래)일 경우
+                // item.y 대신 (-item.y) 또는 (Height - item.y)를 써야 할 수 있습니다.
+                // 일단 그대로(item.y) 찍어보고, 마커가 안 보이면 
+                // 아래 줄을 `const markerY = -item.y;` 로 바꿔보세요.
+                const markerY = -item.y; // ★ 타일링은 보통 Y가 음수로 내려갑니다.
+                
+                const marker = L.marker([markerY, item.x], { icon: myIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 layerGroups[item.type].addLayer(marker);
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
@@ -179,7 +213,7 @@
         }
 
         // ==========================================
-        // 5. 사이드바 로직 (검색/필터)
+        // 6. 사이드바 및 기타 로직 (기존과 동일)
         // ==========================================
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
@@ -198,14 +232,11 @@
             filterControls.style.display = 'none';
             searchResultList.classList.add('active');
             searchResultList.innerHTML = '';
-
             const results = allMarkers.filter(item => item.name.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword));
-            
             if (results.length === 0) {
                 searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>';
                 return;
             }
-
             results.forEach(item => {
                 const row = document.createElement('div');
                 row.className = 'search-result-row';
@@ -234,7 +265,6 @@
                 filterList.appendChild(div);
             }
         }
-
         function toggleLayer(type, isChecked) { isChecked ? map.addLayer(layerGroups[type]) : map.removeLayer(layerGroups[type]); }
         function setAllFilters(status) {
             document.querySelectorAll('.filter-checkbox').forEach(cb => {
@@ -248,10 +278,6 @@
             if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
             else if (document.exitFullscreen) document.exitFullscreen();
         }
-
-        // ==========================================
-        // 6. 팝업 & 완료 기능
-        // ==========================================
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
@@ -266,7 +292,6 @@
             html += `</div>`;
             return html;
         }
-
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
             const index = list.indexOf(id);
@@ -283,73 +308,22 @@
             localStorage.setItem(storageKey, JSON.stringify(list));
             marker.closePopup(); marker.openPopup();
         };
-
-        // ==========================================
-        // ★ [추가됨] 7. 개발자용 데이터 생성 툴
-        // ==========================================
+        
+        // 개발용 클릭 좌표
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
-
-            const content = `
-                <div class="input-group">
-                    <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
-                    <label>이름 (Name)</label> <input type="text" id="input_name">
-                    <label>종류 (Type)</label> 
-                    <select id="input_type">
-                        <option value="경계석">경계석</option>
-                        <option value="상자">상자</option>
-                        <option value="만사록">만사록</option>
-                        <option value="보스">보스</option>
-                    </select>
-                    <label>설명 (Desc)</label> <textarea id="input_desc" style="height:40px;"></textarea>
-                    <label>링크 (Link)</label> <input type="text" id="input_link">
-                    <label>사진 (Image)</label> <input type="text" id="input_image">
-                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사 (Copy)</button>
-                </div>
-            `;
+            const content = `<div class="input-group"><h4 style="margin:0 0 10px 0;text-align:center;">새 위치</h4><label>이름</label><input type="text" id="input_name"><label>종류</label><select id="input_type"><option value="경계석">경계석</option><option value="상자">상자</option></select><button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button></div>`;
             L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
-            setTimeout(() => document.getElementById('input_name')?.focus(), 100);
         });
-
         window.copyMarkerJson = function(y, x) {
-            const name = document.getElementById('input_name').value || "이름 없음";
+            // y 좌표 부호 원래대로 (음수였다면 양수로)
+            const jsonY = Math.abs(y); 
+            const name = document.getElementById('input_name').value;
             const type = document.getElementById('input_type').value;
-            const desc = document.getElementById('input_desc').value;
-            const link = document.getElementById('input_link').value;
-            const image = document.getElementById('input_image').value;
-            const uniqueId = Date.now(); 
-
-            const jsonString = `
-  {
-    "id": ${uniqueId},
-    "name": "${name}",
-    "type": "${type}",
-    "y": ${y},
-    "x": ${x},
-    "desc": "${desc}",
-    "link": "${link}",
-    "image": "${image}"
-  },`;
-            copyToClipboard(jsonString);
+            const str = `, { "id": ${Date.now()}, "name": "${name}", "type": "${type}", "y": ${jsonY}, "x": ${x} }`;
+            navigator.clipboard.writeText(str).then(()=>alert("복사됨"));
         };
-
-        window.copyToClipboard = function(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => alert("복사 완료!")).catch(() => fallbackCopy(text));
-            } else { fallbackCopy(text); }
-        };
-
-        function fallbackCopy(text) {
-            const ta = document.createElement("textarea");
-            ta.value = text;
-            ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
-            document.body.appendChild(ta); ta.focus(); ta.select();
-            try { document.execCommand('copy') ? alert("복사 완료!") : prompt("복사 실패:", text); } 
-            catch (err) { prompt("오류:", text); }
-            document.body.removeChild(ta);
-        }
-
     </script>
 </body>
 </html>

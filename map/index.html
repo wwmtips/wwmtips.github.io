@@ -8,12 +8,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="../map_style.css">
     <style>
-        /* 배경색을 밝은 회색으로 줘서 지도가 투명한지 확인 */
-        #map { background: #f0f0f0; }
-        /* 타일 이미지가 픽셀화되어 보이게 설정 (선명하게) */
-        .leaflet-image-layer, .leaflet-layer {
-            image-rendering: pixelated;
-        }
+        /* 배경을 어둡게 처리하여 빈 타일 공간이 자연스럽게 보이도록 함 */
+        #map { background: #1a1a1a; }
+        /* 픽셀 아트처럼 선명하게 보이도록 설정 */
+        .leaflet-image-layer, .leaflet-layer { image-rendering: pixelated; }
     </style>
 </head>
 <body>
@@ -24,7 +22,6 @@
 
     <div id="map-sidebar" class="map-sidebar">
         <div class="sidebar-close-btn" onclick="toggleSidebar()">✕</div>
-
         <div class="sidebar-header">
             <div class="map-select-area">
                 <label class="sidebar-label">지역 변경</label>
@@ -39,7 +36,6 @@
                 <button class="filter-control-btn" onclick="setAllFilters(false)">모두 숨기기</button>
             </div>
         </div>
-
         <div id="filter-list" class="filter-list-container"></div>
         <div id="search-result-list" class="search-results-container"></div>
     </div>
@@ -50,18 +46,15 @@
 
     <script>
         // ==========================================
-        // 1. 맵 설정 (타일링에 맞게 수정됨)
+        // 1. 설정
         // ==========================================
         const mapsDB = {
             "qinghe": {
                 name: "청하",
-                // ★ 경로 확인: 상위 폴더(..)의 tiles_qinghe 폴더
                 tileUrl: "../tiles_qinghe/{z}/{x}/{y}.png", 
                 json: "../json/qinghe.json",
                 w: 7306, h: 4732,
-                // ★ [중요] 타일링은 0이 최소(전체보기), 5가 최대(확대)입니다.
-                minZoom: 0, 
-                maxZoom: 5 
+                minZoom: 0, maxZoom: 5 
             },
             "kaifeng": {
                 name: "개봉",
@@ -74,9 +67,6 @@
 
         const typeMapping = { "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
 
-        // ==========================================
-        // 2. 초기화
-        // ==========================================
         const urlParams = new URLSearchParams(window.location.search);
         let currentMapId = urlParams.get('id') || "qinghe";
         if (!mapsDB[currentMapId]) currentMapId = "qinghe";
@@ -90,11 +80,11 @@
         const layerGroups = {}; 
         const allMarkers = []; 
 
-       // ==========================================
-        // 3. 지도 생성 (타일링 최적화 & 404 방지)
+        // ==========================================
+        // 2. 지도 생성 (404 해결 로직 적용)
         // ==========================================
         
-        // 투명한 1x1 픽셀 이미지 (에러 날 때 대신 보여줄 이미지)
+        // 투명한 빈 이미지 (404 에러 대체용)
         const emptyTile = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
         const mapCRS = L.Util.extend({}, L.CRS.Simple, {
@@ -104,30 +94,29 @@
         const map = L.map('map', {
             crs: mapCRS, 
             minZoom: currentConfig.minZoom,
-            maxZoom: currentConfig.maxZoom, 
+            maxZoom: currentConfig.maxZoom + 2, 
             zoomControl: false,
             attributionControl: false,
-            // 지도가 튕겨 나가는 느낌을 줄이고 딱딱하게 고정
-            maxBoundsViscosity: 1.0 
+            maxBoundsViscosity: 0.8 
         });
 
         if (currentConfig.tileUrl) {
-            // [A] 타일 방식 (청하)
-            const tileLayer = L.tileLayer(currentConfig.tileUrl, {
+            // [A] 타일 방식
+            L.tileLayer(currentConfig.tileUrl, {
                 minZoom: currentConfig.minZoom,
                 maxZoom: currentConfig.maxZoom,
                 tileSize: 256,
                 noWrap: true,
-                // ★ [핵심] 404 에러가 나면 엑박 대신 투명 이미지를 보여줌
+                // ★ 여기가 핵심: 파일이 없으면 투명 이미지를 대신 보여줌 (404 콘솔 도배 방지)
                 errorTileUrl: emptyTile, 
-                // ★ [핵심] 지도 범위를 벗어난 타일은 아예 요청하지 않음
-                bounds: [[0, 0], [-currentConfig.h, currentConfig.w]] 
+                bounds: [[0, 0], [-currentConfig.h, currentConfig.w]]
             }).addTo(map);
 
-            // 지도 범위를 벗어나지 못하게 강제 설정
+            // 지도 밖으로 나가지 못하게 제한
+            const buffer = 500;
             map.setMaxBounds([
-                [1000, -1000], // 위쪽 여유
-                [-currentConfig.h - 1000, currentConfig.w + 1000] // 아래쪽 여유
+                [buffer, -buffer], 
+                [-currentConfig.h - buffer, currentConfig.w + buffer]
             ]);
 
         } else if (currentConfig.img) {
@@ -136,27 +125,14 @@
             L.imageOverlay(currentConfig.img, bounds).addTo(map);
         }
 
-        // ==========================================
-        // 4. 초기 줌 설정 (여기가 문제였음!)
-        // ==========================================
-        const zoomSettings = {
-            // ★ 타일 모드에서는 0~5 사이의 양수여야 합니다.
-            // 2레벨: 적당한 확대, 0레벨: 전체 보기
-            pc: 2,        
-            mobile: 1      
-        };
+        // 초기 줌 설정 (기기별 대응)
+        const zoomSettings = { pc: 2, mobile: 0 };
         const isMobile = window.innerWidth <= 768;
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
 
-        // 중앙 좌표 (타일 좌표계에서는 Y가 음수일 수 있음. 일단 중앙으로 설정)
-        // L.CRS.Simple 기본 설정상 Y축 방향이 헷갈릴 수 있으므로 
-        // 일단 (0, 0) 근처나 중앙으로 이동해봅니다.
         if (currentConfig.tileUrl) {
-            // 타일링 맵은 보통 좌상단(0,0)에서 시작해 아래로 내려갑니다.
-            // 일단 강제로 -height/2 (중앙)을 줘봅니다.
             map.setView([-currentConfig.h / 2, currentConfig.w / 2], targetZoom);
         } else {
-            // 통이미지 맵
             map.setView([currentConfig.h / 2, currentConfig.w / 2], -2);
         }
 
@@ -174,7 +150,6 @@
         });
         map.addControl(new FullscreenControl());
 
-        // 맵 선택기
         const mapSelect = document.getElementById('sidebar-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -185,7 +160,7 @@
         mapSelect.onchange = function() { window.location.search = `?id=${this.value}`; };
 
         // ==========================================
-        // 5. 데이터 로딩
+        // 3. 데이터 로딩 & 마커 생성
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -211,13 +186,10 @@
                     className: isCompleted ? 'marker-completed' : ''
                 });
 
-                // ★ [좌표 보정]
-                // 타일링 방식과 JSON 좌표계가 반대(위아래)일 경우
-                // item.y 대신 (-item.y) 또는 (Height - item.y)를 써야 할 수 있습니다.
-                // 일단 그대로(item.y) 찍어보고, 마커가 안 보이면 
-                // 아래 줄을 `const markerY = -item.y;` 로 바꿔보세요.
-                const markerY = -item.y; // ★ 타일링은 보통 Y가 음수로 내려갑니다.
-                
+                // ★ [좌표 보정] 타일링 맵은 Y축 좌표를 반대로(-y) 줘야 제자리에 찍힙니다.
+                let markerY = item.y;
+                if (currentConfig.tileUrl) markerY = -item.y;
+
                 const marker = L.marker([markerY, item.x], { icon: myIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 layerGroups[item.type].addLayer(marker);
@@ -228,7 +200,7 @@
         }
 
         // ==========================================
-        // 6. 사이드바 및 기타 로직 (기존과 동일)
+        // 4. 사이드바 로직
         // ==========================================
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
@@ -259,6 +231,8 @@
                 row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
+                    
+                    // 줌 레벨 조정 (타일링에 맞게)
                     const jumpZoom = Math.min(map.getZoom() + 2, currentConfig.maxZoom); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     setTimeout(() => { item.marker.openPopup(); }, 1000);
@@ -293,6 +267,10 @@
             if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
             else if (document.exitFullscreen) document.exitFullscreen();
         }
+
+        // ==========================================
+        // 5. 팝업 & 완료 기능
+        // ==========================================
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
@@ -324,7 +302,9 @@
             marker.closePopup(); marker.openPopup();
         };
         
-        // 개발용 클릭 좌표
+        // ==========================================
+        // 6. 개발자 툴 (좌표 복사)
+        // ==========================================
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
@@ -332,7 +312,7 @@
             L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
         });
         window.copyMarkerJson = function(y, x) {
-            // y 좌표 부호 원래대로 (음수였다면 양수로)
+            // Y축을 양수로 변환하여 저장
             const jsonY = Math.abs(y); 
             const name = document.getElementById('input_name').value;
             const type = document.getElementById('input_type').value;

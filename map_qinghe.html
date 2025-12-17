@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Where Winds Meet Map - Qinghe</title>
+    <title>청하</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -19,17 +19,25 @@
         // 1. 설정 (Config)
         // ==========================================
         const config = {
-            imageUrl: 'qinghe.jpg',   
-            imageWidth: 7306,             
-            imageHeight: 4732,            
-            iconSize: [24, 24],           
-            jsonPath: 'json/map.json'    
+            imageUrl: '1000027025.jpg',   // ★ 현재 맵 이미지
+            imageWidth: 7306,
+            imageHeight: 4732,
+            iconSize: [24, 24],
+            jsonPath: 'json/data.json'
         };
+
+        // ★ 맵 리스트 설정 (나중에 여기에 추가하면 됩니다)
+        const mapList = [
+            { name: "청하", url: "map_qinghe.html" }, // 현재 파일
+            { name: "개봉", url: "map_kaifeng.html" } // 나중에 만들 파일
+        ];
+
+        // 현재 페이지의 파일명 알아내기 (드롭다운 선택 상태용)
+        const currentPage = window.location.pathname.split("/").pop();
 
         const typeMapping = {
             "경계석": "stone",
             "상자": "chest",
-            "만사록":"ic_mansa",
             "보스": "boss"
         };
         
@@ -44,6 +52,7 @@
             maxZoom: 2,
             zoomSnap: 0.5,
             zoomDelta: 0.5,
+            zoomControl: false,       // ★ 기본 줌 컨트롤 끄기 (위치 이동을 위해)
             attributionControl: false 
         });
 
@@ -59,56 +68,92 @@
 
 
         // ==========================================
-        // ★ [추가됨] 전체화면 버튼 컨트롤 생성
+        // 3. 컨트롤 배치 (줌, 전체화면, 맵 변경)
         // ==========================================
-        const FullscreenControl = L.Control.extend({
-            options: {
-                position: 'bottomleft' // 왼쪽 하단 배치
-            },
 
+        // [3-1] 줌 컨트롤 -> 오른쪽 하단 (bottomright)
+        L.control.zoom({
+            position: 'bottomright'
+        }).addTo(map);
+
+
+        // [3-2] 전체화면 버튼 -> 왼쪽 하단 (bottomleft) 유지
+        const FullscreenControl = L.Control.extend({
+            options: { position: 'bottomleft' },
             onAdd: function (map) {
-                // 버튼 컨테이너 생성 (Leaflet 기본 스타일 클래스 사용)
                 const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-                
-                // 실제 버튼 링크 생성
                 const button = L.DomUtil.create('a', 'leaflet-control-fullscreen', container);
                 button.href = '#';
                 button.title = '전체화면 보기';
-                button.innerHTML = '⛶'; // 아이콘 (유니코드)
-                button.role = 'button';
-
-                // 클릭 이벤트 연결
+                button.innerHTML = '⛶'; 
                 button.onclick = function(e) {
                     e.preventDefault();
                     toggleFullscreen();
                 }
+                return container;
+            }
+        });
+        map.addControl(new FullscreenControl());
+
+
+        // [3-3] 맵 변경(Switcher) -> 오른쪽 상단 (topright)
+        const MapSwitcherControl = L.Control.extend({
+            options: { position: 'topright' }, // ★ 우측 상단 배치
+
+            onAdd: function (map) {
+                const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control map-switcher-control');
+                
+                // 아이콘 (선택사항)
+                const icon = L.DomUtil.create('span', 'map-switcher-icon', container);
+                icon.innerHTML = '🗺️ ';
+
+                // 드롭다운 메뉴 (Select)
+                const select = L.DomUtil.create('select', 'map-switcher-select', container);
+                
+                // 맵 리스트를 기반으로 옵션 생성
+                mapList.forEach(m => {
+                    const option = document.createElement('option');
+                    option.value = m.url;
+                    option.innerText = m.name;
+                    
+                    // 현재 페이지와 URL이 같으면 선택된 상태로 표시
+                    if (currentPage === m.url) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+
+                // 선택 변경 시 페이지 이동 이벤트
+                select.onchange = function() {
+                    if (this.value) {
+                        window.location.href = this.value;
+                    }
+                };
+
+                // 드롭다운 클릭 시 지도가 같이 클릭되는 것 방지
+                L.DomEvent.disableClickPropagation(container);
 
                 return container;
             }
         });
+        map.addControl(new MapSwitcherControl());
 
-        // 지도에 버튼 추가
-        map.addControl(new FullscreenControl());
 
-        // 전체화면 토글 함수
+        // ==========================================
+        // 4. 기능 로직 (전체화면, 데이터 로딩 등)
+        // ==========================================
+
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
-                // 전체화면 진입
                 document.documentElement.requestFullscreen().catch(err => {
-                    alert(`전체화면 모드를 사용할 수 없습니다: ${err.message}`);
+                    alert(`전체화면 오류: ${err.message}`);
                 });
             } else {
-                // 전체화면 해제
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
+                if (document.exitFullscreen) document.exitFullscreen();
             }
         }
 
-
-        // ==========================================
-        // 3. 데이터 로딩
-        // ==========================================
+        // 데이터 로딩
         fetch(config.jsonPath)
             .then(res => res.json())
             .then(data => createMarkers(data))
@@ -117,19 +162,12 @@
                 alert('데이터 로딩 실패! (VS Code Live Server 확인)');
             });
 
-
-        // ==========================================
-        // 4. 마커 생성 및 관리
-        // ==========================================
         function createMarkers(data) {
             const layerGroups = {};
             const completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
 
             data.forEach(item => {
-                if (!layerGroups[item.type]) {
-                    layerGroups[item.type] = L.layerGroup();
-                }
-
+                if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
                 const imgName = typeMapping[item.type] || item.type;
                 const isCompleted = completedList.includes(item.id);
 
@@ -143,18 +181,14 @@
 
                 const marker = L.marker([item.y, item.x], { icon: myIcon });
                 allMarkers[item.id] = marker;
-
                 marker.bindPopup(() => generatePopupContent(item));
                 layerGroups[item.type].addLayer(marker);
             });
 
-            for (const key in layerGroups) {
-                layerGroups[key].addTo(map); 
-            }
+            for (const key in layerGroups) layerGroups[key].addTo(map);
             L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
         }
 
-        // 팝업 콘텐츠 생성
         function generatePopupContent(item) {
             const completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
             const isCompleted = completedList.includes(item.id);
@@ -169,12 +203,11 @@
 
             html += `<div class="btn-container">`;
             if (item.link && item.link.trim() !== "") {
-                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략</a>`;
+                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">지침서</a>`;
             }
 
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
-            
             html += `<button onclick="toggleComplete(${item.id})" class="action-btn ${btnClass}">${btnText}</button>`;
             html += `</div>`; 
 
@@ -185,15 +218,10 @@
             return html;
         }
 
-
-        // ==========================================
-        // 5. 기능 함수 (완료 체크, 개발자 도구)
-        // ==========================================
         window.toggleComplete = function(id) {
             let completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
             const index = completedList.indexOf(id);
             const marker = allMarkers[id];
-            
             if (!marker) return;
 
             if (index > -1) {
@@ -207,7 +235,7 @@
             marker.closePopup(); marker.openPopup();
         };
 
-        // 개발용 입력 도구
+        // (개발용) 지도 클릭 시 좌표 및 JSON 복사
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
@@ -219,8 +247,6 @@
                     <label>종류 (Type)</label> 
                     <select id="input_type">
                         <option value="경계석">경계석</option>
-                        <option value="만사록">만사록</option>
-                        <option value="묘물">묘물</option>
                         <option value="상자">상자</option>
                         <option value="보스">보스</option>
                     </select>
@@ -242,7 +268,7 @@
             const image = document.getElementById('input_image').value;
             const uniqueId = Date.now(); 
 
-            const jsonString = `
+            const jsonString = `,
   {
     "id": ${uniqueId},
     "name": "${name}",
@@ -252,7 +278,7 @@
     "desc": "${desc}",
     "link": "${link}",
     "image": "${image}"
-  },`;
+  }`;
             copyToClipboard(jsonString);
         };
 

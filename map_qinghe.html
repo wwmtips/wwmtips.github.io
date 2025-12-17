@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Where Winds Meet Map - Qinghe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="map_style.css">
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // ==========================================
+        // 1. 설정 (Config)
+        // ==========================================
+        const config = {
+            imageUrl: '1000027025.jpg',   // ★ 이미지 파일명 확인
+            imageWidth: 7306,
+            imageHeight: 4732,
+            iconSize: [24, 24],
+            jsonPath: 'json/data.json'
+        };
+
+        const typeMapping = {
+            "경계석": "stone",
+            "상자": "chest",
+            "보스": "boss"
+        };
+        
+        const allMarkers = {};
+
+        // ==========================================
+        // 2. 지도 초기화
+        // ==========================================
+        const map = L.map('map', {
+            crs: L.CRS.Simple,
+            minZoom: -5,
+            maxZoom: 2,
+            zoomSnap: 0.5,
+            zoomDelta: 0.5,
+            attributionControl: false 
+        });
+
+        const bounds = [[0, 0], [config.imageHeight, config.imageWidth]];
+        L.imageOverlay(config.imageUrl, bounds).addTo(map);
+
+        // ★ [수정됨] 요청하신 초기 줌 레벨 설정 코드로 복구했습니다.
+        var centerY = config.imageHeight / 2;
+        var centerX = config.imageWidth / 2;
+        
+        // 이 숫자를 조절해서 초기 확대/축소 정도를 결정하세요 (-2.5)
+        var initialZoom = -2.5; 
+        
+        map.setView([centerY, centerX], initialZoom);
+
+
+        // ==========================================
+        // 3. 데이터 로딩
+        // ==========================================
+        fetch(config.jsonPath)
+            .then(res => res.json())
+            .then(data => createMarkers(data))
+            .catch(err => {
+                console.error(err);
+                alert('데이터 로딩 실패! (VS Code Live Server 확인)');
+            });
+
+
+        // ==========================================
+        // 4. 마커 생성 및 관리
+        // ==========================================
+        function createMarkers(data) {
+            const layerGroups = {};
+            const completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+
+            data.forEach(item => {
+                if (!layerGroups[item.type]) {
+                    layerGroups[item.type] = L.layerGroup();
+                }
+
+                const imgName = typeMapping[item.type] || item.type;
+                const isCompleted = completedList.includes(item.id);
+
+                const myIcon = L.icon({
+                    iconUrl: `images/${imgName}.png`,
+                    iconSize: config.iconSize,
+                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], 
+                    popupAnchor: [0, -config.iconSize[1]],
+                    className: isCompleted ? 'marker-completed' : ''
+                });
+
+                const marker = L.marker([item.y, item.x], { icon: myIcon });
+                allMarkers[item.id] = marker;
+
+                marker.bindPopup(() => generatePopupContent(item));
+                layerGroups[item.type].addLayer(marker);
+            });
+
+            for (const key in layerGroups) {
+                layerGroups[key].addTo(map); 
+            }
+            L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
+        }
+
+        // 팝업 콘텐츠 생성
+        function generatePopupContent(item) {
+            const completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+            const isCompleted = completedList.includes(item.id);
+
+            let html = `<div class="popup-container">
+                <div class="popup-title">${item.name}</div>
+                <div class="popup-type">◈ ${item.type} ◈</div>`;
+
+            if (item.desc && item.desc.trim() !== "") {
+                html += `<div class="popup-desc">${item.desc}</div>`;
+            }
+
+            html += `<div class="btn-container">`;
+            if (item.link && item.link.trim() !== "") {
+                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">지침서</a>`;
+            }
+
+            const btnText = isCompleted ? "취소" : "완료";
+            const btnClass = isCompleted ? "btn-undo" : "btn-complete";
+            
+            html += `<button onclick="toggleComplete(${item.id})" class="action-btn ${btnClass}">${btnText}</button>`;
+            html += `</div>`; 
+
+            if (item.image && item.image.trim() !== "") {
+                html += `<img src="${item.image}" class="popup-img">`;
+            }
+            html += `</div>`;
+            return html;
+        }
+
+
+        // ==========================================
+        // 5. 기능 함수 (완료 체크, 개발자 도구)
+        // ==========================================
+        window.toggleComplete = function(id) {
+            let completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+            const index = completedList.indexOf(id);
+            const marker = allMarkers[id];
+            
+            if (!marker) return;
+
+            if (index > -1) {
+                completedList.splice(index, 1);
+                L.DomUtil.removeClass(marker._icon, 'marker-completed');
+            } else {
+                completedList.push(id);
+                L.DomUtil.addClass(marker._icon, 'marker-completed');
+            }
+            localStorage.setItem('completedMarkers', JSON.stringify(completedList));
+            marker.closePopup(); marker.openPopup();
+        };
+
+        // 개발용 입력 도구
+        map.on('click', function(e) {
+            const y = Math.round(e.latlng.lat);
+            const x = Math.round(e.latlng.lng);
+
+            const content = `
+                <div class="input-group">
+                    <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
+                    <label>이름 (Name)</label> <input type="text" id="input_name">
+                    <label>종류 (Type)</label> 
+                    <select id="input_type">
+                        <option value="경계석">경계석</option>
+                        <option value="상자">상자</option>
+                        <option value="보스">보스</option>
+                    </select>
+                    <label>설명 (Desc)</label> <textarea id="input_desc" style="height:40px;"></textarea>
+                    <label>링크 (Link)</label> <input type="text" id="input_link">
+                    <label>사진 (Image)</label> <input type="text" id="input_image">
+                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사 (Copy)</button>
+                </div>
+            `;
+            L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
+            setTimeout(() => document.getElementById('input_name')?.focus(), 100);
+        });
+
+        window.copyMarkerJson = function(y, x) {
+            const name = document.getElementById('input_name').value || "이름 없음";
+            const type = document.getElementById('input_type').value;
+            const desc = document.getElementById('input_desc').value;
+            const link = document.getElementById('input_link').value;
+            const image = document.getElementById('input_image').value;
+            const uniqueId = Date.now(); 
+
+            const jsonString = `,
+  {
+    "id": ${uniqueId},
+    "name": "${name}",
+    "type": "${type}",
+    "y": ${y},
+    "x": ${x},
+    "desc": "${desc}",
+    "link": "${link}",
+    "image": "${image}"
+  }`;
+            copyToClipboard(jsonString);
+        };
+
+        window.copyToClipboard = function(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => alert("복사 완료!")).catch(() => fallbackCopy(text));
+            } else { fallbackCopy(text); }
+        };
+
+        function fallbackCopy(text) {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            try { document.execCommand('copy') ? alert("복사 완료!") : prompt("복사 실패:", text); } 
+            catch (err) { prompt("오류:", text); }
+            document.body.removeChild(ta);
+        }
+    </script>
+</body>
+</html>

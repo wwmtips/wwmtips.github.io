@@ -2,77 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Map테스트</title>
+    <title>연운 대지도</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <style>
-        /* 기본 스타일 */
-        html, body, #map { height: 100%; width: 100%; margin: 0; padding: 0; background: #1a1a1a; }
-        
-        /* 팝업 스타일 */
-        .leaflet-popup-content-wrapper { border-radius: 8px; padding: 0; overflow: hidden; }
-        .leaflet-popup-content { margin: 15px; width: 220px !important; }
-        
-        .popup-container { text-align: center; }
-        .popup-title { font-size: 1.1em; font-weight: bold; margin: 5px 0; color: #333; }
-        .popup-type { font-size: 0.8em; color: #666; margin-bottom: 8px; font-weight: bold; }
-        .popup-desc { font-size: 0.95em; color: #444; margin: 8px 0; line-height: 1.4; text-align: left; background: #f9f9f9; padding: 5px; border-radius: 4px; }
-        .popup-img { width: 100%; height: auto; border-radius: 4px; margin-top: 8px; display: block; border: 1px solid #ddd; }
-
-        /* ★ 버튼 컨테이너 (Flexbox로 좌우 배치) */
-        .btn-container {
-            display: flex;
-            gap: 5px; /* 버튼 사이 간격 */
-            margin-top: 10px;
-        }
-
-        /* 공통 버튼 스타일 */
-        .action-btn {
-            flex: 1; /* 공간을 균등하게 차지 */
-            padding: 8px 0;
-            border-radius: 4px;
-            font-size: 0.9em;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            color: white;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        /* 위키 버튼 색상 */
-        .btn-wiki { background-color: #5c6bc0; }
-        .btn-wiki:hover { background-color: #3f51b5; }
-
-        /* 완료 버튼 색상 (기본) */
-        .btn-complete { background-color: #4CAF50; }
-        .btn-complete:hover { background-color: #43a047; }
-
-        /* 완료 취소 버튼 색상 (이미 완료된 경우) */
-        .btn-undo { background-color: #757575; }
-
-        /* ★ 완료된 마커 스타일 (흑백 + 투명도) */
-        .marker-completed {
-            filter: grayscale(100%);
-            opacity: 0.5;
-            transition: all 0.3s ease; /* 부드럽게 변함 */
-        }
-
-
-        /* 개발자용 입력 폼 스타일 */
-        .input-group { text-align: left; min-width: 240px; }
-        .input-group label { display: block; margin-top: 8px; font-weight: bold; font-size: 0.9em; color: #333; }
-        .input-group input, .input-group select, .input-group textarea {
-            width: 100%; box-sizing: border-box; margin-bottom: 2px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;
-        }
-        .copy-btn {
-            width: 100%; background: #2196F3; color: white; border: none; 
-            padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 15px;
-        }
-    </style>
+    <link rel="stylesheet" href="../map_style.css">
 </head>
 <body>
 
@@ -82,203 +16,240 @@
 
     <script>
         // ==========================================
-        // 1. 기본 설정
+        // 1. 맵 데이터베이스 (설정)
         // ==========================================
+        // ★ 여기에 맵이 추가될 때마다 한 줄씩 적으면 됩니다.
+        const mapsDB = {
+            "qinghe": {
+                name: "청하",
+                img: "../qinghe.jpg",       // 이미지 경로
+                json: "../json/qinghe.json", // 데이터 경로 (파일명 변경 권장)
+                w: 7306, h: 4732            // 이미지 크기
+            },
+            "kaifeng": {
+                name: "개봉",
+                img: "../kaifeng.jpg",      // (예시)
+                json: "../json/kaifeng.json",
+                w: 8000, h: 6000            // (예시 크기)
+            }
+        };
+
+        // ==========================================
+        // 2. 현재 어떤 맵을 보여줄지 결정
+        // ==========================================
+        // URL에서 ?id=qinghe 같은 파라미터를 가져옵니다.
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentMapId = urlParams.get('id');
+
+        // 만약 id가 없거나 이상하면 기본값 'qinghe'로 설정
+        if (!currentMapId || !mapsDB[currentMapId]) {
+            currentMapId = "qinghe";
+        }
+
+        const currentConfig = mapsDB[currentMapId];
+        document.title = `${currentConfig.name} - 연운 지도`; // 브라우저 탭 제목 변경
+
+        // 아이콘 설정
         const config = {
-            imageUrl: 'qinghe.jpg',       
-            imageWidth: 7306,
-            imageHeight: 4732,
-            iconSize: [24, 24],
-            jsonPath: 'json/data.json'
+            iconSize: [30, 30]
         };
 
         const typeMapping = {
-            "경계석": "stone",
-            "상자": "chest",
-            "보스": "boss"
+            "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss"
         };
         
-        // 전역 변수로 마커들을 관리 (ID로 찾아서 스타일 바꾸기 위함)
         const allMarkers = {};
 
-
         // ==========================================
-        // 2. 지도 초기화
+        // 3. 지도 초기화
         // ==========================================
         const map = L.map('map', {
             crs: L.CRS.Simple,
             minZoom: -5,
             maxZoom: 2,
             zoomSnap: 0.5,
-            zoomDelta: 0.5
+            zoomDelta: 0.5,
+            zoomControl: false,
+            attributionControl: false 
         });
 
-        const bounds = [[0, 0], [config.imageHeight, config.imageWidth]];
-        L.imageOverlay(config.imageUrl, bounds).addTo(map);
+        // 설정된 맵 이미지 불러오기
+        const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
+        L.imageOverlay(currentConfig.img, bounds).addTo(map);
 
-        var centerY = config.imageHeight / 2;
-        var centerX = config.imageWidth / 2;
-        var initialZoom = -2.5; 
-        map.setView([centerY, centerX], initialZoom);
+        // 초기 화면 중앙 정렬
+        map.setView([currentConfig.h / 2, currentConfig.w / 2], -2.5);
 
 
         // ==========================================
-        // 3. 데이터 로딩
+        // 4. 컨트롤 배치
         // ==========================================
-        fetch(config.jsonPath)
+        
+        // [줌] 우측 하단
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // [전체화면] 좌측 하단
+        const FullscreenControl = L.Control.extend({
+            options: { position: 'bottomleft' },
+            onAdd: function () {
+                const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+                const btn = L.DomUtil.create('a', 'leaflet-control-fullscreen', container);
+                btn.href = '#'; btn.innerHTML = '⛶'; btn.title = "전체화면";
+                btn.onclick = (e) => { e.preventDefault(); toggleFullscreen(); };
+                return container;
+            }
+        });
+        map.addControl(new FullscreenControl());
+
+        // [맵 변경 메뉴] 우측 상단 ★ 핵심 부분
+        const MapSwitcherControl = L.Control.extend({
+            options: { position: 'topright' },
+            onAdd: function () {
+                const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control map-switcher-control');
+                
+                const icon = L.DomUtil.create('span', 'map-switcher-icon', container);
+                icon.innerHTML = '🗺️';
+
+                const select = L.DomUtil.create('select', 'map-switcher-select', container);
+                
+                // mapsDB에 있는 모든 맵을 옵션으로 만듦
+                for (const [key, val] of Object.entries(mapsDB)) {
+                    const option = document.createElement('option');
+                    option.value = key; // qinghe, kaifeng ...
+                    option.innerText = val.name; // 청하, 개봉 ...
+                    
+                    // 현재 보고 있는 맵이면 선택 처리
+                    if (key === currentMapId) option.selected = true;
+                    select.appendChild(option);
+                }
+
+                // 변경 시 페이지 새로고침 (파라미터 변경)
+                select.onchange = function() {
+                    // ?id=kaifeng 형태로 주소 이동
+                    window.location.search = `?id=${this.value}`;
+                };
+
+                L.DomEvent.disableClickPropagation(container);
+                return container;
+            }
+        });
+        map.addControl(new MapSwitcherControl());
+
+
+        // ==========================================
+        // 5. 기능 로직 (전체화면, 데이터 로딩)
+        // ==========================================
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => alert(`오류: ${err.message}`));
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        // 현재 선택된 맵의 JSON 데이터 불러오기
+        fetch(currentConfig.json)
             .then(res => res.json())
             .then(data => createMarkers(data))
             .catch(err => {
                 console.error(err);
-                alert('데이터 로딩 실패! Live Server를 확인하세요.');
+                // 데이터 파일이 없을 때 조용히 넘어가거나 알림
+                if(currentMapId !== 'kaifeng') { // 개봉은 아직 없을 수 있으니 예외 처리 예시
+                    alert(`데이터 로딩 실패: ${currentConfig.json}`);
+                }
             });
 
-
-        // ==========================================
-        // 4. 마커 생성 로직 (완료 기능 추가됨)
-        // ==========================================
         function createMarkers(data) {
             const layerGroups = {};
-
-            // 1. 로컬스토리지에서 완료된 목록 가져오기 (없으면 빈 배열)
-            const completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+            // 로컬스토리지 키도 맵 ID별로 분리해서 관리 (청하 완료랑 개봉 완료가 섞이지 않게)
+            const storageKey = `completed_${currentMapId}`; 
+            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
             data.forEach(item => {
-                if (!layerGroups[item.type]) {
-                    layerGroups[item.type] = L.layerGroup();
-                }
-
+                if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
                 const imgName = typeMapping[item.type] || item.type;
-                
-                // 완료 여부 확인
                 const isCompleted = completedList.includes(item.id);
 
-                // 아이콘 설정 (완료되었으면 클래스 추가)
                 const myIcon = L.icon({
-                    iconUrl: `images/${imgName}.png`,
+                    iconUrl: `../images/${imgName}.png`,
                     iconSize: config.iconSize,
                     iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], 
                     popupAnchor: [0, -config.iconSize[1]],
-                    // ★ 핵심: 완료된 경우 'marker-completed' 클래스를 붙여서 흑백 처리
                     className: isCompleted ? 'marker-completed' : ''
                 });
 
                 const marker = L.marker([item.y, item.x], { icon: myIcon });
-
-                // 전역 변수에 저장 (나중에 ID로 찾기 위해)
                 allMarkers[item.id] = marker;
-
-                // --- 팝업 HTML 생성 ---
-                marker.bindPopup(() => generatePopupContent(item));
-
+                marker.bindPopup(() => generatePopupContent(item, storageKey));
                 layerGroups[item.type].addLayer(marker);
             });
 
-            for (const key in layerGroups) {
-                layerGroups[key].addTo(map); 
-            }
+            for (const key in layerGroups) layerGroups[key].addTo(map);
             L.control.layers(null, layerGroups, { collapsed: false }).addTo(map);
         }
 
-        // 팝업 내용 생성 함수 (상태에 따라 버튼 모양이 바뀜)
-        function generatePopupContent(item) {
-            const completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+        function generatePopupContent(item, storageKey) {
+            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
 
             let html = `<div class="popup-container">
                 <div class="popup-title">${item.name}</div>
-                <div class="popup-type">${item.type}</div>`;
+                <div class="popup-type">◈ ${item.type} ◈</div>`;
 
-            if (item.desc && item.desc.trim() !== "") {
-                html += `<div class="popup-desc">${item.desc}</div>`;
-            }
+            if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
 
-            // --- 버튼 영역 시작 ---
             html += `<div class="btn-container">`;
+            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">지침서</a>`;
 
-            // 1) 위키 링크 버튼 (링크가 있을 때만 생성)
-            if (item.link && item.link.trim() !== "") {
-                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">
-                    위키
-                </a>`;
-            }
-
-            // 2) 완료/취소 버튼
-            // 토글 함수 호출 (ID 전달)
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             
-            html += `<button onclick="toggleComplete(${item.id})" class="action-btn ${btnClass}">
-                ${btnText}
-            </button>`;
+            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button>`;
+            html += `</div>`; 
 
-            html += `</div>`; // btn-container 끝
-            // --- 버튼 영역 끝 ---
-
-            if (item.image && item.image.trim() !== "") {
-                html += `<img src="${item.image}" class="popup-img">`;
-            }
+            if (item.image) html += `<img src="${item.image}" class="popup-img">`;
             html += `</div>`;
-
             return html;
         }
 
-
-        // ==========================================
-        // 5. ★ 완료 상태 토글 함수 (전역)
-        // ==========================================
-        window.toggleComplete = function(id) {
-            // 1. 현재 저장된 목록 불러오기
-            let completedList = JSON.parse(localStorage.getItem('completedMarkers')) || [];
+        window.toggleComplete = function(id, storageKey) {
+            let completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const index = completedList.indexOf(id);
-
             const marker = allMarkers[id];
+            
             if (!marker) return;
 
-            // 2. 상태 변경 로직
             if (index > -1) {
-                // 이미 완료됨 -> 취소 (목록에서 제거)
                 completedList.splice(index, 1);
-                // 흑백 스타일 제거
                 L.DomUtil.removeClass(marker._icon, 'marker-completed');
             } else {
-                // 완료 안 됨 -> 추가
                 completedList.push(id);
-                // 흑백 스타일 추가
                 L.DomUtil.addClass(marker._icon, 'marker-completed');
             }
-
-            // 3. 로컬스토리지에 저장
-            localStorage.setItem('completedMarkers', JSON.stringify(completedList));
-
-            // 4. 팝업 내용 새로고침 (버튼 텍스트 변경을 위해)
-            // 현재 열려있는 팝업을 닫았다가 다시 열거나, 내용을 갱신
-            marker.closePopup();
-            marker.openPopup();
+            localStorage.setItem(storageKey, JSON.stringify(completedList));
+            marker.closePopup(); marker.openPopup();
         };
 
-
-        // ==========================================
-        // 6. 입력 도구 (기존과 동일)
-        // ==========================================
+        // (개발용) 클릭 시 좌표 따기
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
 
             const content = `
                 <div class="input-group">
-                    <h4 style="margin:0 0 10px 0; text-align:center;">새 마커 추가</h4>
-                    <label>이름:</label> <input type="text" id="input_name">
-                    <label>타입:</label> 
+                    <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
+                    <label>이름</label> <input type="text" id="input_name">
+                    <label>종류</label> 
                     <select id="input_type">
                         <option value="경계석">경계석</option>
                         <option value="상자">상자</option>
+                        <option value="만사록">만사록</option>
                         <option value="보스">보스</option>
                     </select>
-                    <label>설명:</label> <textarea id="input_desc" style="height:40px;"></textarea>
-                    <label>위키 링크:</label> <input type="text" id="input_link">
-                    <label>이미지:</label> <input type="text" id="input_image">
-                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사하기</button>
+                    <label>설명</label> <textarea id="input_desc" style="height:40px;"></textarea>
+                    <label>링크</label> <input type="text" id="input_link">
+                    <label>사진</label> <input type="text" id="input_image">
+                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button>
                 </div>
             `;
             L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
@@ -293,7 +264,7 @@
             const image = document.getElementById('input_image').value;
             const uniqueId = Date.now(); 
 
-            const jsonString = `
+            const jsonString = `,
   {
     "id": ${uniqueId},
     "name": "${name}",
@@ -303,7 +274,7 @@
     "desc": "${desc}",
     "link": "${link}",
     "image": "${image}"
-  },`;
+  }`;
             copyToClipboard(jsonString);
         };
 

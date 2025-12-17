@@ -12,29 +12,23 @@
         #map { background: #1a1a1a; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
-        /* ★ [추가] 사진 마커 디자인 (CSS로 핀 모양 만들기) */
-        .photo-pin {
+        /* ★ [핵심] 핀 마커 디자인 (CSS로 예쁜 풍선 모양 만들기) */
+        .pin-marker {
             position: relative;
-            background: #fff;
-            border-radius: 50%;
-            border: 3px solid #d48806; /* 테두리 색상 (금색) */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4); /* 그림자 */
-            box-sizing: border-box;
-            transition: transform 0.2s; /* 호버 효과용 */
-        }
-        .photo-pin:hover {
-            transform: scale(1.1); /* 마우스 올리면 살짝 커짐 */
-            z-index: 1000 !important;
-        }
-        .photo-pin img {
             width: 100%;
             height: 100%;
-            border-radius: 50%; /* 이미지를 동그랗게 */
-            object-fit: cover; /* 비율 유지하며 꽉 채우기 */
-            display: block;
+            background: #fff; /* 배경 흰색 */
+            border: 3px solid #d48806; /* 금색 테두리 */
+            border-radius: 50%; /* 동그랗게 */
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4); /* 그림자 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            transition: transform 0.2s;
         }
-        /* 핀 꼬리 (삼각형) */
-        .photo-pin::after {
+        /* 핀 꼬리 (역삼각형) */
+        .pin-marker::after {
             content: '';
             position: absolute;
             bottom: -8px; /* 꼬리 위치 */
@@ -46,13 +40,32 @@
             border-right: 8px solid transparent;
             border-top: 10px solid #d48806; /* 꼬리 색상 */
         }
-        /* 완료된 사진 마커는 흑백 처리 */
-        .marker-completed .photo-pin {
+        
+        /* 핀 안에 들어가는 아이콘 이미지 */
+        .pin-marker img {
+            width: 70%;  /* 아이콘 크기 조절 (핀 크기의 70%) */
+            height: 70%;
+            object-fit: contain; /* 비율 유지 */
+        }
+
+        /* 마우스 올렸을 때 효과 */
+        .pin-marker:hover {
+            transform: scale(1.15); 
+            z-index: 9999;
+            border-color: #ff9d00;
+        }
+        .pin-marker:hover::after {
+            border-top-color: #ff9d00;
+        }
+
+        /* 완료된 마커 (회색 처리) */
+        .marker-completed .pin-marker {
             filter: grayscale(100%);
             border-color: #555;
-            opacity: 0.7;
+            background: #eee;
+            opacity: 0.6;
         }
-        .marker-completed .photo-pin::after {
+        .marker-completed .pin-marker::after {
             border-top-color: #555;
         }
     </style>
@@ -96,7 +109,15 @@
             "kaifeng": { name: "개봉", img: "../kaifeng.jpg", json: "../json/kaifeng.json", w: 8000, h: 6000 }
         };
 
-        const typeMapping = { "경계석": "stone", "상자": "chest", "만사록": "ic_mansa", "보스": "boss" };
+        // ★ 아이콘 파일명 매핑 (여기를 잘 맞춰주세요)
+        // 예: JSON의 type이 "만사록"이면 -> images/ic_mansa.png 를 사용함
+        const typeMapping = { 
+            "경계석": "stone", 
+            "상자": "chest", 
+            "만사록": "ic_mansa", 
+            "보스": "boss",
+            "기타": "stone" // 기본값
+        };
 
         const urlParams = new URLSearchParams(window.location.search);
         let rawId = urlParams.get('id') || "qinghe";
@@ -111,12 +132,11 @@
         if (sidebarBtn) sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
 
         const isMobile = window.innerWidth <= 768;
-        // 일반 아이콘 크기
-        const iconSize = isMobile ? [30, 30] : [50, 50]; 
-        // 사진 핀 크기 (일반 아이콘보다 조금 더 크게)
-        const pinSize = isMobile ? [40, 40] : [60, 60];
+        
+        // ★ 핀 크기 설정 (원하는 크기로 조절 가능)
+        // [가로, 세로] - 세로는 꼬리 포함 높이 고려
+        const pinSize = isMobile ? [36, 36] : [48, 48];
 
-        const config = { iconSize: iconSize };
         const layerGroups = {}; 
         const allMarkers = []; 
 
@@ -162,7 +182,7 @@
         };
 
         // ==========================================
-        // 3. 데이터 로딩 & 마커 생성 (핵심 수정됨)
+        // 3. 데이터 로딩 & 핀 마커 생성
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -180,33 +200,25 @@
                 if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
                 const isCompleted = completedList.includes(item.id);
                 
-                let markerIcon;
+                // ★ [아이콘 결정] typeMapping에서 파일명 가져오기
+                // 예: item.type이 '만사록' -> imgName은 'ic_mansa'
+                const imgName = typeMapping[item.type] || "stone"; 
+                const iconPath = `../images/${imgName}.png`;
 
-                // ★ [로직] JSON에 'image'가 있으면 사진 핀 사용, 없으면 일반 아이콘 사용
-                if (item.image && item.image.trim() !== "") {
-                    // 1. 사진 핀 마커 (L.divIcon 사용)
-                    markerIcon = L.divIcon({
-                        className: isCompleted ? 'marker-completed' : '', // 완료 시 CSS 클래스 추가
-                        html: `<div class="photo-pin">
-                                  <img src="${item.image}" onerror="this.src='../images/logo.png'">
-                               </div>`,
-                        iconSize: pinSize, // 핀 크기
-                        iconAnchor: [pinSize[0]/2, pinSize[1] + 8], // 꼬리 부분에 중심점 맞춤
-                        popupAnchor: [0, -(pinSize[1] + 8)]
-                    });
-                } else {
-                    // 2. 일반 아이콘 마커 (기존 방식)
-                    const imgName = typeMapping[item.type] || item.type;
-                    markerIcon = L.icon({
-                        iconUrl: `../images/${imgName}.png`,
-                        iconSize: config.iconSize,
-                        iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], 
-                        popupAnchor: [0, -config.iconSize[1]],
-                        className: isCompleted ? 'marker-completed' : ''
-                    });
-                }
+                // ★ [핀 마커 생성] L.divIcon 사용 (HTML로 커스텀)
+                const pinIcon = L.divIcon({
+                    className: isCompleted ? 'marker-completed' : '', // 완료 여부 클래스
+                    html: `<div class="pin-marker">
+                              <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                           </div>`,
+                    iconSize: pinSize, 
+                    // 핀의 뾰족한 끝(꼬리)이 정확한 좌표에 오도록 anchor 조정
+                    // X는 중앙(width/2), Y는 전체 높이 + 꼬리 길이(약 8px)
+                    iconAnchor: [pinSize[0]/2, pinSize[1] + 8], 
+                    popupAnchor: [0, -(pinSize[1] + 10)]
+                });
 
-                const marker = L.marker([item.y, item.x], { icon: markerIcon });
+                const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 layerGroups[item.type].addLayer(marker);
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
@@ -233,7 +245,7 @@
             if (results.length === 0) { searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>'; return; }
             results.forEach(item => {
                 const row = document.createElement('div'); row.className = 'search-result-row';
-                const imgName = typeMapping[item.type] || item.type;
+                const imgName = typeMapping[item.type] || "stone";
                 row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
@@ -251,7 +263,8 @@
             const counts = {};
             data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
             for (const [type, count] of Object.entries(counts)) {
-                const div = document.createElement('div'); div.className = 'filter-item'; const imgName = typeMapping[type] || type;
+                const div = document.createElement('div'); div.className = 'filter-item'; 
+                const imgName = typeMapping[type] || "stone";
                 div.innerHTML = `<label class="filter-label" style="cursor:pointer; width:100%;"><input type="checkbox" class="filter-checkbox" checked onchange="toggleLayer('${type}', this.checked)"><img src="../images/${imgName}.png" width="24" height="24" onerror="this.style.display='none'" style="vertical-align:middle; margin-right:5px;"> ${type}</label><span class="filter-count">${count}</span>`;
                 filterList.appendChild(div);
             }
@@ -271,6 +284,7 @@
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;
+            // 팝업에는 여전히 스크린샷(item.image)이 있다면 보여줍니다
             if (item.image) html += `<img src="${item.image}" class="popup-img">`;
             html += `</div>`;
             return html;
@@ -278,10 +292,6 @@
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
             const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
-            // 마커 아이콘(DivIcon)은 내부 HTML 구조가 다르므로 클래스 처리 방식이 다를 수 있음
-            // 하지만 Leaflet은 _icon 요소에 클래스를 붙이므로 동일하게 작동함.
-            // 다만 DivIcon의 경우 내부 HTML에도 스타일을 줄 수 있음.
-            
             if (!target) return;
             const marker = target.marker;
 
@@ -335,7 +345,7 @@
             const image = document.getElementById('input_image').value || "";
             const uniqueId = Date.now(); 
 
-            const jsonString = `
+            const jsonString = `,
   {
     "id": ${uniqueId},
     "name": "${name}",
@@ -345,7 +355,7 @@
     "desc": "${desc}",
     "link": "${link}",
     "image": "${image}"
-  },`;
+  }`;
             copyToClipboard(jsonString);
         };
 

@@ -935,5 +935,14 @@
     "bgimg": "q99_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q99.html"
+  },
+  {
+    "id": "q107",
+    "name": "앞길이 창창하다",
+    "location": "각문리",
+    "type": "만사록",
+    "bgimg": "q106_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q106.html"
   }
 ]

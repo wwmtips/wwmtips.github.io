@@ -206,9 +206,10 @@
                     <div class="guide-item-btn" onclick="filterQuestType('이벤트', this)"><span class="guide-title">이벤트</span></div>
                     <div class="guide-item-btn" onclick="filterQuestType('기타', this)"><span class="guide-title">기타</span></div>
                 </div>-->
-    <div class="filter-bar-wrapper" style="margin-bottom: 20px; margin-top: 20px;">
+    
+<div class="filter-bar-wrapper" style="margin-bottom: 20px; margin-top: 20px;">
     <select id="quest-type-select" class="custom-select" onchange="onQuestTypeChange()">
-        <option value="all">전체</option>
+        <option value="all">전체 분류</option>
         <option value="인연의 궤적">인연의 궤적</option>
         <option value="만사록">만사록</option>
         <option value="화간집">화간집</option>
@@ -220,13 +221,6 @@
         <option value="all">모든 지역</option>
     </select>
 </div>
-
-
-    <select id="quest-location-select" class="custom-select" onchange="applyQuestFilter()">
-        <option value="all">모든 지역</option>
-        </select>
-</div>
-
 
                 <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 10px;">
                     <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>

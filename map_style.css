@@ -484,3 +484,43 @@ html, body, #map {
 .filter-list-container.hidden {
     display: none;
 }
+/* =========================================
+   [추가] 사이드바 내부 맵 선택기 스타일
+   ========================================= */
+.map-select-area {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--wuxia-border);
+}
+
+.sidebar-label {
+    display: block;
+    font-size: 0.85em;
+    color: var(--wuxia-accent-gold);
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.sidebar-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--wuxia-border);
+    border-radius: 4px;
+    background-color: #fff;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1em;
+    color: var(--wuxia-text-main);
+    cursor: pointer;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.sidebar-select:focus {
+    border-color: var(--wuxia-accent-gold);
+}
+
+/* 우측 하단 컨트롤 간격 조정 */
+.leaflet-right .leaflet-control {
+    margin-bottom: 10px;
+}
+

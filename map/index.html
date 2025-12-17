@@ -4,14 +4,11 @@
     <meta charset="UTF-8">
     <title>연운 대지도</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="../map_style.css">
     <style>
-        /* 배경을 어둡게 처리하여 빈 타일 공간이 자연스럽게 보이도록 함 */
-        #map { background: #1a1a1a; }
-        /* 픽셀 아트처럼 선명하게 보이도록 설정 */
-        .leaflet-image-layer, .leaflet-layer { image-rendering: pixelated; }
+        #map { background: #222; }
+        .leaflet-layer { image-rendering: pixelated; }
     </style>
 </head>
 <body>
@@ -46,7 +43,7 @@
 
     <script>
         // ==========================================
-        // 1. 설정
+        // 1. 설정 (MapTiler 기준)
         // ==========================================
         const mapsDB = {
             "qinghe": {
@@ -81,62 +78,37 @@
         const allMarkers = []; 
 
         // ==========================================
-        // 2. 지도 생성 (404 해결 로직 적용)
+        // 2. 지도 생성
         // ==========================================
-        
-        // 투명한 빈 이미지 (404 에러 대체용)
         const emptyTile = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
-        const mapCRS = L.Util.extend({}, L.CRS.Simple, {
-            transformation: new L.Transformation(1, 0, -1, currentConfig.h)
-        });
-
         const map = L.map('map', {
-            crs: mapCRS, 
+            crs: L.CRS.Simple, 
             minZoom: currentConfig.minZoom,
             maxZoom: currentConfig.maxZoom + 2, 
             zoomControl: false,
-            attributionControl: false,
-            maxBoundsViscosity: 0.8 
+            attributionControl: false
         });
 
         if (currentConfig.tileUrl) {
-            // [A] 타일 방식
             L.tileLayer(currentConfig.tileUrl, {
                 minZoom: currentConfig.minZoom,
                 maxZoom: currentConfig.maxZoom,
                 tileSize: 256,
+                tms: false, 
                 noWrap: true,
-                // ★ 여기가 핵심: 파일이 없으면 투명 이미지를 대신 보여줌 (404 콘솔 도배 방지)
-                errorTileUrl: emptyTile, 
-                bounds: [[0, 0], [-currentConfig.h, currentConfig.w]]
+                errorTileUrl: emptyTile,
+                bounds: [[-currentConfig.h, 0], [0, currentConfig.w]]
             }).addTo(map);
-
-            // 지도 밖으로 나가지 못하게 제한
-            const buffer = 500;
-            map.setMaxBounds([
-                [buffer, -buffer], 
-                [-currentConfig.h - buffer, currentConfig.w + buffer]
-            ]);
+            
+            map.setView([-currentConfig.h / 2, currentConfig.w / 2], 2);
 
         } else if (currentConfig.img) {
-            // [B] 통이미지 방식
             const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
             L.imageOverlay(currentConfig.img, bounds).addTo(map);
-        }
-
-        // 초기 줌 설정 (기기별 대응)
-        const zoomSettings = { pc: 2, mobile: 0 };
-        const isMobile = window.innerWidth <= 768;
-        const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
-
-        if (currentConfig.tileUrl) {
-            map.setView([-currentConfig.h / 2, currentConfig.w / 2], targetZoom);
-        } else {
             map.setView([currentConfig.h / 2, currentConfig.w / 2], -2);
         }
 
-        // 컨트롤 배치
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         const FullscreenControl = L.Control.extend({
@@ -160,7 +132,7 @@
         mapSelect.onchange = function() { window.location.search = `?id=${this.value}`; };
 
         // ==========================================
-        // 3. 데이터 로딩 & 마커 생성
+        // 3. 데이터 로딩
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
@@ -186,53 +158,35 @@
                     className: isCompleted ? 'marker-completed' : ''
                 });
 
-                // ★ [좌표 보정] 타일링 맵은 Y축 좌표를 반대로(-y) 줘야 제자리에 찍힙니다.
-                let markerY = item.y;
-                if (currentConfig.tileUrl) markerY = -item.y;
+                let markerY = -item.y; 
+                if (!currentConfig.tileUrl) markerY = item.y; 
 
                 const marker = L.marker([markerY, item.x], { icon: myIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 layerGroups[item.type].addLayer(marker);
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
-
             for (const key in layerGroups) layerGroups[key].addTo(map);
         }
 
-        // ==========================================
-        // 4. 사이드바 로직
-        // ==========================================
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
         const searchResultList = document.getElementById('search-result-list');
         const filterControls = document.getElementById('filter-controls-area');
-
         searchInput.addEventListener('input', function(e) {
             const keyword = e.target.value.trim().toLowerCase();
             if (keyword === "") {
-                filterList.classList.remove('hidden');
-                filterControls.style.display = 'flex';
-                searchResultList.classList.remove('active');
-                return;
+                filterList.classList.remove('hidden'); filterControls.style.display = 'flex'; searchResultList.classList.remove('active'); return;
             }
-            filterList.classList.add('hidden');
-            filterControls.style.display = 'none';
-            searchResultList.classList.add('active');
-            searchResultList.innerHTML = '';
+            filterList.classList.add('hidden'); filterControls.style.display = 'none'; searchResultList.classList.add('active'); searchResultList.innerHTML = '';
             const results = allMarkers.filter(item => item.name.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword));
-            if (results.length === 0) {
-                searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>';
-                return;
-            }
+            if (results.length === 0) { searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>'; return; }
             results.forEach(item => {
-                const row = document.createElement('div');
-                row.className = 'search-result-row';
+                const row = document.createElement('div'); row.className = 'search-result-row';
                 const imgName = typeMapping[item.type] || item.type;
                 row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
-                    
-                    // 줌 레벨 조정 (타일링에 맞게)
                     const jumpZoom = Math.min(map.getZoom() + 2, currentConfig.maxZoom); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     setTimeout(() => { item.marker.openPopup(); }, 1000);
@@ -247,30 +201,16 @@
             const counts = {};
             data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
             for (const [type, count] of Object.entries(counts)) {
-                const div = document.createElement('div');
-                div.className = 'filter-item';
-                const imgName = typeMapping[type] || type;
+                const div = document.createElement('div'); div.className = 'filter-item'; const imgName = typeMapping[type] || type;
                 div.innerHTML = `<label class="filter-label" style="cursor:pointer; width:100%;"><input type="checkbox" class="filter-checkbox" checked onchange="toggleLayer('${type}', this.checked)"><img src="../images/${imgName}.png" width="24" height="24" onerror="this.style.display='none'" style="vertical-align:middle; margin-right:5px;"> ${type}</label><span class="filter-count">${count}</span>`;
                 filterList.appendChild(div);
             }
         }
         function toggleLayer(type, isChecked) { isChecked ? map.addLayer(layerGroups[type]) : map.removeLayer(layerGroups[type]); }
-        function setAllFilters(status) {
-            document.querySelectorAll('.filter-checkbox').forEach(cb => {
-                cb.checked = status;
-                const type = cb.parentElement.innerText.trim();
-                toggleLayer(type, status);
-            });
-        }
+        function setAllFilters(status) { document.querySelectorAll('.filter-checkbox').forEach(cb => { cb.checked = status; const type = cb.parentElement.innerText.trim(); toggleLayer(type, status); }); }
         function toggleSidebar() { document.getElementById('map-sidebar').classList.toggle('open'); }
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
-            else if (document.exitFullscreen) document.exitFullscreen();
-        }
-
-        // ==========================================
-        // 5. 팝업 & 완료 기능
-        // ==========================================
+        function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else if (document.exitFullscreen) document.exitFullscreen(); }
+        
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
@@ -287,38 +227,79 @@
         }
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const index = list.indexOf(id);
-            const target = allMarkers.find(m => m.id === id);
-            const marker = target ? target.marker : null;
-            if (!marker) return;
-            if (index > -1) {
-                list.splice(index, 1);
-                L.DomUtil.removeClass(marker._icon, 'marker-completed');
-            } else {
-                list.push(id);
-                L.DomUtil.addClass(marker._icon, 'marker-completed');
-            }
-            localStorage.setItem(storageKey, JSON.stringify(list));
-            marker.closePopup(); marker.openPopup();
+            const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); const marker = target ? target.marker : null; if (!marker) return;
+            if (index > -1) { list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); } else { list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); }
+            localStorage.setItem(storageKey, JSON.stringify(list)); marker.closePopup(); marker.openPopup();
         };
         
         // ==========================================
-        // 6. 개발자 툴 (좌표 복사)
+        // 4. 개발자 툴 (입력폼 완전 복구)
         // ==========================================
         map.on('click', function(e) {
             const y = Math.round(e.latlng.lat);
             const x = Math.round(e.latlng.lng);
-            const content = `<div class="input-group"><h4 style="margin:0 0 10px 0;text-align:center;">새 위치</h4><label>이름</label><input type="text" id="input_name"><label>종류</label><select id="input_type"><option value="경계석">경계석</option><option value="상자">상자</option></select><button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button></div>`;
+            // ★ 아래 HTML이 복구된 입력 폼입니다.
+            const content = `
+                <div class="input-group">
+                    <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
+                    <label>이름 (Name)</label> <input type="text" id="input_name">
+                    <label>종류 (Type)</label> 
+                    <select id="input_type">
+                        <option value="경계석">경계석</option>
+                        <option value="상자">상자</option>
+                        <option value="만사록">만사록</option>
+                        <option value="보스">보스</option>
+                    </select>
+                    <label>설명 (Desc)</label> <textarea id="input_desc" style="height:40px;"></textarea>
+                    <label>링크 (Link/Wiki)</label> <input type="text" id="input_link">
+                    <label>사진 (Image URL)</label> <input type="text" id="input_image">
+                    <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사 (Copy)</button>
+                </div>
+            `;
             L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
+            setTimeout(() => document.getElementById('input_name')?.focus(), 100);
         });
+
         window.copyMarkerJson = function(y, x) {
-            // Y축을 양수로 변환하여 저장
-            const jsonY = Math.abs(y); 
-            const name = document.getElementById('input_name').value;
+            const jsonY = Math.abs(y); // JSON에는 양수로 저장
+            const name = document.getElementById('input_name').value || "이름 없음";
             const type = document.getElementById('input_type').value;
-            const str = `, { "id": ${Date.now()}, "name": "${name}", "type": "${type}", "y": ${jsonY}, "x": ${x} }`;
-            navigator.clipboard.writeText(str).then(()=>alert("복사됨"));
+            // ★ 누락되었던 필드값 가져오기 복구
+            const desc = document.getElementById('input_desc').value || "";
+            const link = document.getElementById('input_link').value || "";
+            const image = document.getElementById('input_image').value || "";
+            const uniqueId = Date.now(); 
+
+            // ★ 모든 필드를 포함한 JSON 생성
+            const jsonString = `
+  {
+    "id": ${uniqueId},
+    "name": "${name}",
+    "type": "${type}",
+    "y": ${jsonY},
+    "x": ${x},
+    "desc": "${desc}",
+    "link": "${link}",
+    "image": "${image}"
+  },`;
+            copyToClipboard(jsonString);
         };
+
+        window.copyToClipboard = function(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => alert("복사 완료!")).catch(() => fallbackCopy(text));
+            } else { fallbackCopy(text); }
+        };
+
+        function fallbackCopy(text) {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            try { document.execCommand('copy') ? alert("복사 완료!") : prompt("복사 실패:", text); } 
+            catch (err) { prompt("오류:", text); }
+            document.body.removeChild(ta);
+        }
     </script>
 </body>
 </html>

@@ -1,6 +1,36 @@
 [
   
   {
+    "id": 1765988385443,
+    "name": "설녀",
+    "type": "고양이",
+    "y": 2982,
+    "x": 2160,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/18.jpg"
+  },
+  {
+    "id": 1765988305571,
+    "name": "묘덕 (메인 전)",
+    "type": "고양이",
+    "y": 2681,
+    "x": 2055,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/17.jpg"
+  },
+  {
+    "id": 1765988264371,
+    "name": "묘덕 (메인 후)",
+    "type": "경계석",
+    "y": 2884,
+    "x": 1900,
+    "desc": "",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/17.jpg"
+  },
+  {
     "id": 1765988172028,
     "name": "막내 (메인 전)",
     "type": "고양이",

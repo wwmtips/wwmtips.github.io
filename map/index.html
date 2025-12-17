@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>내 게임 지도 (한 장 버전)</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        /* 화면 전체를 지도로 채우기 */
+        html, body { height: 100%; margin: 0; background: #222; }
+        #map { height: 100%; width: 100%; }
+    </style>
+</head>
+<body>
+    
+    <div id="map"></div>
+
+    <script>
+        // 1. 이미지 파일 설정 (여기에 파일명을 적으세요)
+        var imageUrl = '1000027025.jpg';
+        
+        // 2. 이미지의 실제 크기 (대략적인 비율만 맞아도 됩니다)
+        // PC에서 이미지 우클릭 -> 속성 -> 자세히 에서 픽셀 확인 가능
+        var imgWidth = 4000;  // 예: 가로 4000px
+        var imgHeight = 3000; // 예: 세로 3000px
+
+        // 지도 틀 생성
+        var map = L.map('map', {
+            crs: L.CRS.Simple, // 지구 좌표계가 아닌 단순 이미지 좌표계 사용
+            minZoom: -2,       // 축소 허용 범위 (이미지 전체를 보려면 마이너스 값 필요)
+            maxZoom: 2,        // 확대 허용 범위
+            zoomSnap: 0.1,     // 줌 단계를 부드럽게 (0.5 단위 등)
+            zoomDelta: 0.5     // 휠 굴릴 때 확대되는 정도
+        });
+
+        // 이미지의 모서리 좌표 정의 ( [0,0] 부터 [세로, 가로] 까지 )
+        var bounds = [[0, 0], [imgHeight, imgWidth]];
+
+        // ★ 핵심: 이미지를 오버레이로 덮어씌움 (자르지 않음!)
+        L.imageOverlay(imageUrl, bounds).addTo(map);
+
+        // 지도가 이미지 밖으로 못 나가게 막기
+        map.setMaxBounds(bounds);
+
+        // 3. 처음 시작할 때 화면 설정
+        // 전체를 보고 싶으면: map.fitBounds(bounds);
+        // 확대한 상태로 시작하려면: 
+        // setView( [세로중앙, 가로중앙], 줌레벨 )
+        map.setView([imgHeight/2, imgWidth/2], 0); 
+
+    </script>
+</body>
+</html>

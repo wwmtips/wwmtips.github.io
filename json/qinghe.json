@@ -1,6 +1,26 @@
 [
   
   {
+    "id": 1765990621446,
+    "name": "묘오십오",
+    "type": "고양이",
+    "y": 3814,
+    "x": 2748,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/21.jpg"
+  },
+  {
+    "id": 1765990441534,
+    "name": "마소로",
+    "type": "고양이",
+    "y": 3285,
+    "x": 4826,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/27.jpg"
+  },
+  {
     "id": 1765990346766,
     "name": "비프바",
     "type": "고양이",

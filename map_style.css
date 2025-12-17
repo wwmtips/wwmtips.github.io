@@ -419,3 +419,68 @@ html, body, #map {
 @media (max-width: 480px) {
     .map-sidebar { width: 85%; left: -85%; }
 }
+/* =========================================
+   [추가] 사이드바 검색 결과 리스트 스타일
+   ========================================= */
+
+/* 검색 결과 컨테이너 (평소엔 숨김) */
+.search-results-container {
+    display: none; /* 기본 숨김 */
+    flex: 1;
+    overflow-y: auto;
+    background-color: #fff;
+    padding: 0;
+}
+
+/* 검색 결과가 있을 때 활성화 클래스 */
+.search-results-container.active {
+    display: block;
+}
+
+/* 개별 결과 아이템 */
+.search-result-row {
+    padding: 12px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+}
+
+.search-result-row:hover {
+    background-color: #e3f2fd; /* 마우스 올리면 연한 파란색 */
+}
+
+.result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.result-name {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: var(--wuxia-text-main);
+}
+
+.result-desc {
+    font-size: 0.8em;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.result-type-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    opacity: 0.7;
+}
+
+/* 검색 중일 때 기존 필터 목록 숨기기용 */
+.filter-list-container.hidden {
+    display: none;
+}

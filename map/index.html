@@ -68,7 +68,7 @@
             sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
         }
 
-        const config = { iconSize: [30, 30] };
+        const config = { iconSize: [32, 32] };
         const layerGroups = {}; 
         const allMarkers = []; 
 
@@ -76,13 +76,26 @@
         // 2. 지도 생성
         // ==========================================
         const map = L.map('map', {
-            crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, zoomSnap: 0.5, zoomDelta: 0.5,
+            crs: L.CRS.Simple, minZoom: -2, maxZoom: 2, zoomSnap: 0.5, zoomDelta: 0.5,
             zoomControl: false, attributionControl: false 
         });
 
         const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
         L.imageOverlay(currentConfig.img, bounds).addTo(map);
-        map.setView([currentConfig.h / 2, currentConfig.w / 2], -2.5);
+
+        // 1. PC와 모바일의 줌 레벨을 다르게 설정
+        const zoomSettings = {
+            pc: -0.5,      // PC: 적당히 축소
+            mobile: -2.5   // 모바일: 화면이 좁으므로 더 많이 축소
+        };
+
+        // 2. 현재 화면 너비가 768px 이하면 모바일로 판단
+        const isMobile = window.innerWidth <= 768;
+
+        // 3. 알맞은 줌 레벨 적용
+        const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
+        
+        map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 
         // ==========================================
         // 3. 컨트롤 배치 (우측 하단)

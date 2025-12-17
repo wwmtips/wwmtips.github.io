@@ -19,7 +19,7 @@
 
 html, body, #map { 
     height: 100%; width: 100%; margin: 0; padding: 0; 
-    background: var(--wuxia-bg-deep);
+    background: #171e21;
     font-family: 'Noto Serif KR', serif;
 }
 

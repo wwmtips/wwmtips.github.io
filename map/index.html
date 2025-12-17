@@ -66,39 +66,9 @@
         
         // 이미지 불러오기
         L.imageOverlay(config.imageUrl, bounds).addTo(map);
-        
-        // 처음에 전체 지도가 보이도록 맞춤
-        // 2. 원하는 위치와 줌 레벨을 직접 지정합니다.
-// map.setView([세로중앙, 가로중앙], 줌레벨);
-        // ==========================================
-        // [수정된 부분] 세로 사이즈 맞춤 로직
-        // ==========================================
-        
-        // 1. 현재 화면의 높이와 이미지의 높이 비율을 계산
-        var mapHeight = map.getSize().y;       // 현재 지도(화면)의 세로 픽셀 수
-        var imgHeight = config.imageHeight;    // 이미지 원본의 세로 픽셀 수
-        
-        // 비율 계산 (예: 화면이 1000px, 이미지가 2000px이면 비율은 0.5)
-        var ratio = mapHeight / imgHeight;
 
-        // 2. 그 비율에 맞는 줌 레벨을 Leaflet이 계산하도록 함
-        // (두 번째 인자 0은 기준 줌 레벨입니다)
-        var targetZoom = map.getScaleZoom(ratio, 0);
-
-        // 3. 이미지의 정중앙을 그 줌 레벨로 바라보게 설정
-        var centerY = config.imageHeight / 2;
-        var centerX = config.imageWidth / 2;
-        
-        map.setView([centerY, centerX], targetZoom);
-
-        // (선택사항) 창 크기가 바뀔 때마다 계속 세로를 맞추고 싶으면 아래 주석 해제
-        /*
-        map.on('resize', function() {
-            var newRatio = map.getSize().y / config.imageHeight;
-            var newZoom = map.getScaleZoom(newRatio, 0);
-            map.setZoom(newZoom);
-        });
-        */
+        //dd
+        map.fitBounds(bounds);
 
 
 

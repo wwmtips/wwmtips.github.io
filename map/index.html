@@ -290,17 +290,40 @@
         function toggleSidebar() { document.getElementById('map-sidebar').classList.toggle('open'); }
         function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else if (document.exitFullscreen) document.exitFullscreen(); }
         
-        function generatePopupContent(item, storageKey) {
+      function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
+            
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
+            
             if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
+            
             html += `<div class="btn-container">`;
             if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;
+            
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;
-            if (item.image) html += `<img src="${item.image}" class="popup-img">`;
+            
+            // ★ [여기부터 수정됨] 이미지 vs 유튜브 링크 구분 로직
+            if (item.image) {
+                const ytId = getYouTubeId(item.image); // 유튜브 ID 확인
+                if (ytId) {
+                    // 유튜브 링크면 iframe으로 표시 (반응형 비율 유지)
+                    html += `
+                        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top:10px; border-radius:4px;">
+                            <iframe src="https://www.youtube.com/embed/${ytId}" 
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                            </iframe>
+                        </div>`;
+                } else {
+                    // 아니면 그냥 이미지 표시
+                    html += `<img src="${item.image}" class="popup-img">`;
+                }
+            }
+            // ★ [여기까지 수정됨]
+
             html += `</div>`;
             return html;
         }
@@ -364,7 +387,14 @@
                 descInput.value = '';
             }
         };
-
+// 유튜브 URL에서 ID 추출하는 함수
+function getYouTubeId(url) {
+    if (!url) return null;
+    // 일반 주소(youtube.com)와 단축 주소(youtu.be) 모두 처리
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
         window.copyMarkerJson = function(y, x) {
             const name = document.getElementById('input_name').value || "이름 없음";
             const type = document.getElementById('input_type').value;

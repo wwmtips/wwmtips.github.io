@@ -90,33 +90,48 @@
         const layerGroups = {}; 
         const allMarkers = []; 
 
-        // ==========================================
-        // 3. 지도 생성 (타일링 최적화)
+       // ==========================================
+        // 3. 지도 생성 (타일링 최적화 & 404 방지)
         // ==========================================
         
-        // ★ CRS.Simple은 기본적으로 (0,0)이 좌상단입니다.
+        // 투명한 1x1 픽셀 이미지 (에러 날 때 대신 보여줄 이미지)
+        const emptyTile = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
+        const mapCRS = L.Util.extend({}, L.CRS.Simple, {
+            transformation: new L.Transformation(1, 0, -1, currentConfig.h)
+        });
+
         const map = L.map('map', {
-            crs: L.CRS.Simple, 
+            crs: mapCRS, 
             minZoom: currentConfig.minZoom,
-            maxZoom: currentConfig.maxZoom, // 최대 줌 제한
+            maxZoom: currentConfig.maxZoom, 
             zoomControl: false,
-            attributionControl: false 
+            attributionControl: false,
+            // 지도가 튕겨 나가는 느낌을 줄이고 딱딱하게 고정
+            maxBoundsViscosity: 1.0 
         });
 
         if (currentConfig.tileUrl) {
             // [A] 타일 방식 (청하)
-            L.tileLayer(currentConfig.tileUrl, {
+            const tileLayer = L.tileLayer(currentConfig.tileUrl, {
                 minZoom: currentConfig.minZoom,
                 maxZoom: currentConfig.maxZoom,
                 tileSize: 256,
                 noWrap: true,
-                // bounds: 타일이 지도 영역 밖으로 나가지 않게 제한
-                bounds: [[0, 0], [-currentConfig.h, currentConfig.w]]
+                // ★ [핵심] 404 에러가 나면 엑박 대신 투명 이미지를 보여줌
+                errorTileUrl: emptyTile, 
+                // ★ [핵심] 지도 범위를 벗어난 타일은 아예 요청하지 않음
+                bounds: [[0, 0], [-currentConfig.h, currentConfig.w]] 
             }).addTo(map);
 
+            // 지도 범위를 벗어나지 못하게 강제 설정
+            map.setMaxBounds([
+                [1000, -1000], // 위쪽 여유
+                [-currentConfig.h - 1000, currentConfig.w + 1000] // 아래쪽 여유
+            ]);
+
         } else if (currentConfig.img) {
-            // [B] 통이미지 방식 (개봉 예비용)
-            // 통이미지는 좌하단이 (0,0)인 좌표계를 쓰므로 bounds가 다릅니다.
+            // [B] 통이미지 방식
             const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
             L.imageOverlay(currentConfig.img, bounds).addTo(map);
         }

@@ -19,17 +19,17 @@
         // 1. 설정 (Config)
         // ==========================================
         const config = {
-            imageUrl: '1000027025.jpg',   // ★ 현재 맵 이미지
+            imageUrl: 'qinghe.jpg',   // ★ 현재 맵 이미지
             imageWidth: 7306,
             imageHeight: 4732,
-            iconSize: [24, 24],
-            jsonPath: 'json/data.json'
+            iconSize: [30, 30],
+            jsonPath: 'json/map.json'
         };
 
         // ★ 맵 리스트 설정 (나중에 여기에 추가하면 됩니다)
         const mapList = [
             { name: "청하", url: "map_qinghe.html" }, // 현재 파일
-            { name: "개봉", url: "map_kaifeng.html" } // 나중에 만들 파일
+            { name: "개봉", url: "map_qinghe.html" } // 나중에 만들 파일
         ];
 
         // 현재 페이지의 파일명 알아내기 (드롭다운 선택 상태용)
@@ -106,7 +106,7 @@
                 
                 // 아이콘 (선택사항)
                 const icon = L.DomUtil.create('span', 'map-switcher-icon', container);
-                icon.innerHTML = '🗺️ ';
+                icon.innerHTML = '';
 
                 // 드롭다운 메뉴 (Select)
                 const select = L.DomUtil.create('select', 'map-switcher-select', container);

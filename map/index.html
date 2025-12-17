@@ -1,53 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>map test</title>
+    <title>인터렉티브 맵 (JSON 연동)</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        /* 화면 전체를 지도로 채우기 */
-        html, body { height: 100%; margin: 0; background: #222; }
-        #map { height: 100%; width: 100%; }
+        html, body, #map { height: 100%; margin: 0; background: #222; }
+        /* 마커 아이콘 크기 스타일 (필요시 수정) */
+        .custom-icon { width: 32px; height: 32px; object-fit: contain; }
     </style>
 </head>
 <body>
-    
     <div id="map"></div>
 
     <script>
-        // 1. 이미지 파일 설정 (여기에 파일명을 적으세요)
-        var imageUrl = 'qinghe.jpg';
-        
-        // 2. 이미지의 실제 크기 (대략적인 비율만 맞아도 됩니다)
-        // PC에서 이미지 우클릭 -> 속성 -> 자세히 에서 픽셀 확인 가능
-        var imgWidth = 4000;  // 예: 가로 4000px
-        var imgHeight = 3000; // 예: 세로 3000px
+        // --- 1. 기본 설정 ---
+        const config = {
+            imageUrl: 'qinghe.jpg', // 지도 이미지 파일명
+            imageWidth: 2479,            // 실제 이미지 가로 크기
+            imageHeight: 1600,           // 실제 이미지 세로 크기
+            iconSize: [16, 16],          // 마커 아이콘 크기 [가로, 세로]
+            jsonPath: 'json/data.json'   // 데이터 파일 경로
+        };
 
-        // 지도 틀 생성
-        var map = L.map('map', {
-            crs: L.CRS.Simple, // 지구 좌표계가 아닌 단순 이미지 좌표계 사용
-            minZoom: -2,       // 축소 허용 범위 (이미지 전체를 보려면 마이너스 값 필요)
-            maxZoom: 2,        // 확대 허용 범위
-            zoomSnap: 0.1,     // 줌 단계를 부드럽게 (0.5 단위 등)
-            zoomDelta: 0.5     // 휠 굴릴 때 확대되는 정도
+        // --- 2. 지도 생성 (오버레이 방식) ---
+        const map = L.map('map', {
+            crs: L.CRS.Simple,
+            minZoom: -2,
+            maxZoom: 2,
+            zoomSnap: 0.5
         });
 
-        // 이미지의 모서리 좌표 정의 ( [0,0] 부터 [세로, 가로] 까지 )
-        var bounds = [[0, 0], [imgHeight, imgWidth]];
+        const bounds = [[0, 0], [config.imageHeight, config.imageWidth]];
+        L.imageOverlay(config.imageUrl, bounds).addTo(map);
+        map.fitBounds(bounds);
 
-        // ★ 핵심: 이미지를 오버레이로 덮어씌움 (자르지 않음!)
-        L.imageOverlay(imageUrl, bounds).addTo(map);
 
-        // 지도가 이미지 밖으로 못 나가게 막기
-        map.setMaxBounds(bounds);
+        // --- 3. 데이터 불러오기 및 마커 생성 ---
+        fetch(config.jsonPath)
+            .then(response => {
+                if (!response.ok) throw new Error("JSON 파일을 찾을 수 없습니다.");
+                return response.json();
+            })
+            .then(data => {
+                createMarkers(data);
+            })
+            .catch(error => {
+                console.error('에러 발생:', error);
+                alert('데이터를 불러오는 데 실패했습니다. (서버 실행 여부를 확인하세요)');
+            });
 
-        // 3. 처음 시작할 때 화면 설정
-        // 전체를 보고 싶으면: map.fitBounds(bounds);
-        // 확대한 상태로 시작하려면: 
-        // setView( [세로중앙, 가로중앙], 줌레벨 )
-        map.setView([imgHeight/2, imgWidth/2], 0); 
+
+        // --- 4. 마커 생성 및 필터 그룹화 로직 ---
+        function createMarkers(data) {
+            // 그룹별로 마커를 담을 통(Object)을 만듭니다.
+            const layerGroups = {};
+
+            data.forEach(item => {
+                // 1) 해당 타입의 그룹이 없으면 새로 만듭니다.
+                if (!layerGroups[item.type]) {
+                    layerGroups[item.type] = L.layerGroup();
+                }
+
+                // 2) 아이콘 설정 (type 이름에 따라 이미지 파일 자동 매칭)
+                // 예: type이 'stone'이면 -> 'images/stone.png'
+                const myIcon = L.icon({
+                    iconUrl: `images/${item.type}.png`, 
+                    iconSize: config.iconSize,
+                    iconAnchor: [config.iconSize[0]/2, config.iconSize[1]], // 아이콘의 하단 중앙이 좌표에 찍히도록
+                    popupAnchor: [0, -config.iconSize[1]] // 팝업 위치 조절
+                });
+
+                // 3) 마커 생성
+                const marker = L.marker([item.y, item.x], { icon: myIcon });
+                
+                // 4) 팝업 내용 구성 (HTML 태그 사용 가능)
+                const popupContent = `
+                    <div style="text-align:center">
+                        <h3 style="margin:5px 0">${item.name}</h3>
+                        <p style="margin:0; color:gray">${item.type}</p>
+                        <br>
+                        ${item.desc ? `<span>${item.desc}</span>` : ''}
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+
+                // 5) 그룹에 마커 추가
+                layerGroups[item.type].addLayer(marker);
+            });
+
+            // --- 5. 필터 컨트롤 생성 (우측 상단 레이어 버튼) ---
+            const overlays = {};
+            
+            // 한글 이름 매핑 (필요하면 여기서 이름을 예쁘게 바꾸세요)
+            const typeNames = {
+                "stone": "경계석",
+                "chest": "보물상자",
+                "boss": "보스 몬스터"
+            };
+
+            // 그룹들을 지도에 추가하고, 필터 메뉴에도 등록
+            for (const [type, layer] of Object.entries(layerGroups)) {
+                layer.addTo(map); // 처음에 모두 보이게 하기
+                
+                // 메뉴에 표시될 이름 (매핑된 이름이 있으면 쓰고, 없으면 영어 type 그대로)
+                const labelName = typeNames[type] || type; 
+                overlays[labelName] = layer;
+            }
+
+            // 우측 상단에 필터 버튼 추가
+            L.control.layers(null, overlays, { collapsed: false }).addTo(map);
+        }
+
+        // --- 6. (개발용) 클릭 시 좌표 따기 ---
+        map.on('click', function(e) {
+            console.log(`"y": ${Math.round(e.latlng.lat)}, "x": ${Math.round(e.latlng.lng)}`);
+        });
 
     </script>
 </body>

@@ -1,6 +1,26 @@
 [
   
   {
+    "id": 1765991464495,
+    "name": "대방",
+    "type": "고양이",
+    "y": 3988,
+    "x": 5650,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/33.jpg"
+  },
+  {
+    "id": 1765991397831,
+    "name": "소아",
+    "type": "고양이",
+    "y": 3754,
+    "x": 5362,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/32.jpg"
+  },
+  {
     "id": 1765991259039,
     "name": "묘사시주",
     "type": "고양이",

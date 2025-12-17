@@ -68,7 +68,17 @@
         L.imageOverlay(config.imageUrl, bounds).addTo(map);
 
         //dd
-        map.fitBounds(bounds);
+        //map.fitBounds(bounds);
+// 1. 전체 보기 기능은 끕니다 (앞에 //를 붙여서 주석 처리)
+// map.fitBounds(bounds);
+
+// 2. 원하는 위치와 줌 레벨을 직접 지정합니다.
+// map.setView([세로중앙, 가로중앙], 줌레벨);
+var centerY = config.imageHeight / 2; // 이미지의 세로 중앙
+var centerX = config.imageWidth / 2;  // 이미지의 가로 중앙
+var initialZoom = 1.5;                  // 0 또는 1 정도로 설정해보세요 (숫자가 클수록 확대됨)
+
+map.setView([centerY, centerX], initialZoom);
 
 
 

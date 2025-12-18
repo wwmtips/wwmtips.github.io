@@ -383,6 +383,18 @@
             marker.closePopup(); 
             marker.openPopup();
         };
+                // ★ [누락된 함수 복구] 현재 위치 공유 링크 생성 및 복사
+        window.shareMarker = function(id) {
+            // 현재 페이지의 기본 URL 가져오기
+            const url = new URL(window.location.href);
+            
+            // marker 파라미터 설정 (기존 id 파라미터 등은 유지됨)
+            url.searchParams.set('marker', id);
+            
+            // 클립보드에 복사 함수 호출
+            copyToClipboard(url.toString());
+        };
+
 // ==========================================
         // 5. 개발자 툴
         // ==========================================

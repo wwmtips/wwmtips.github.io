@@ -319,7 +319,7 @@
         function toggleSidebar() { document.getElementById('map-sidebar').classList.toggle('open'); }
         function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else if (document.exitFullscreen) document.exitFullscreen(); }
         
-      function generatePopupContent(item, storageKey) {
+              function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
             
@@ -327,19 +327,28 @@
             
             if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
             
-            html += `<div class="btn-container">`;
-            if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;
-            html += `<button onclick="shareMarker(${item.id})" class="action-btn" style="background:#4a90e2; color:white;">🔗 공유</button>`;
+            // ★ [수정 1] 공략 보기가 있으면 가장 윗줄에 꽉 차게 배치
+            if (item.link) {
+                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki" style="display:block; width:100%; box-sizing:border-box; text-align:center; margin-bottom:8px;">📖 공략 보기</a>`;
+            }
             
-          const btnText = isCompleted ? "취소" : "완료";
+            // ★ [수정 2] 공유와 완료 버튼은 그 아래 한 줄에 나란히 (flex 사용)
+            html += `<div class="btn-container" style="display:flex; gap:5px; margin-bottom:0;">`;
+            
+            // 공유 버튼 (flex:1 로 반반 차지)
+            html += `<button onclick="shareMarker(${item.id})" class="action-btn" style="flex:1; background:#4a90e2; color:white;">🔗 공유</button>`;
+
+            // 완료 버튼 (flex:1 로 반반 차지)
+            const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
-            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;
+            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}" style="flex:1;">${btnText}</button>`;
             
-            // ★ [여기부터 수정됨] 이미지 vs 유튜브 링크 구분 로직
+            html += `</div>`; // 버튼 컨테이너 닫기
+
+            // 이미지/유튜브 처리
             if (item.image) {
-                const ytId = getYouTubeId(item.image); // 유튜브 ID 확인
+                const ytId = getYouTubeId(item.image);
                 if (ytId) {
-                    // 유튜브 링크면 iframe으로 표시 (반응형 비율 유지)
                     html += `
                         <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top:10px; border-radius:4px;">
                             <iframe src="https://www.youtube.com/embed/${ytId}" 
@@ -348,29 +357,14 @@
                             </iframe>
                         </div>`;
                 } else {
-                    // 아니면 그냥 이미지 표시
-                    html += `<img src="${item.image}" class="popup-img">`;
+                    html += `<img src="${item.image}" class="popup-img" style="margin-top:10px;">`;
                 }
             }
-            // ★ [여기까지 수정됨]
 
             html += `</div>`;
             return html;
-      }
-                // ★ [추가된 함수] 현재 위치 공유 링크 복사
-        window.shareMarker = function(id) {
-            // 현재 페이지의 기본 URL 가져오기
-            const url = new URL(window.location.href);
-            
-            // marker 파라미터 설정 (기존 파라미터 유지한 채 추가/수정)
-            url.searchParams.set('marker', id);
-            
-            // 클립보드에 복사
-            copyToClipboard(url.toString());
-            
-            // (선택사항) 알림 메시지를 좀 더 예쁘게 띄우고 싶으면 여기서 처리
-            // 현재는 copyToClipboard 내부의 alert("복사 완료!")가 뜹니다.
-        };
+        }
+
 
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];

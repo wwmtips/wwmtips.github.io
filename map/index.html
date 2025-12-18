@@ -126,7 +126,7 @@
             "묘물": "ic_uni", 
             "상자": "chest", 
             "보스": "ic_boss",
-            "기타": "stone"
+            "기연": "ic_ki"
         };
 
         // ★ [색상 설정] style.css의 테마 색상 적용
@@ -137,7 +137,7 @@
             "묘물": "#35945f", 
             "만사록": "#a08040", // 초록색 (정보)
             "경계석": "#dfe0ce", // 파란색 (이동)
-            "기타": "#555555"    // 회색 (기타)
+            "기연": "#555555"    // 회색 (기타)
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -404,6 +404,7 @@
                         <label>이름</label> <input type="text" id="input_name">
                         <label>종류</label> 
                         <select id="input_type" onchange="autoFillDesc(this)">
+                        <option value="기연">기연</option>
                              <option value="경계석">경계석</option>
                              <option value="묘물">묘물</option>
                            
@@ -411,7 +412,7 @@
                             <option value="상자">상자</option>
                             <option value="만사록">만사록</option>
                             <option value="보스">보스</option>
-                            <option value="기타">기타</option>
+                            
                         </select>
                         <label>설명</label> <textarea id="input_desc" style="height:40px;"></textarea>
                         <label>링크</label> <input type="text" id="input_link">

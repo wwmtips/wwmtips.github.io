@@ -1,5 +1,25 @@
 [
   {
+    "id": 1766081536514,
+    "name": "외로운 배 홀로 선 그림자",
+    "type": "만사록",
+    "y": 3949,
+    "x": 1856,
+    "desc": "진계동의 억울함 풀어주기",
+    "link": "https://wwm.tips/?q=115",
+    "image": "https://wwm.tips/quests/images/q115_1.jpg"
+  },
+  {
+    "id": 1766081486210,
+    "name": "숲을 향한 그리움",
+    "type": "만사록",
+    "y": 3797,
+    "x": 1831,
+    "desc": "아씨를 고칠 약초를 찾아주자",
+    "link": "https://wwm.tips/?q=114",
+    "image": "https://wwm.tips/quests/images/q114_1.jpg"
+  },
+  {
     "id": 1766079478393,
     "name": "조수충어",
     "type": "만사록",

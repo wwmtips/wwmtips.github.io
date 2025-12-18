@@ -1,4 +1,13 @@
 [
+    {
+    "id": "q117",
+    "name": "깊은 이화담",
+    "location": "수창방",
+    "type": "만사록",
+    "bgimg": "q117_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q117.html"
+  },
   {
     "id": "q116",
     "name": "벼랑 끝",

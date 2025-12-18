@@ -1,0 +1,146 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            둘만의 시간
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">아버지를 찾는 딸의 고민 해결하기</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            놀기 바쁜 아버지 <b>장낙안</b>을 집으로 데려가려는 딸 <b>장서아</b>의 이야기입니다.<br>
+            아버지의 부탁을 들어주고 부녀의 화해를 도와주세요.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            남매와의 대화
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 위치로 이동하면 <b>장서아</b>와 <b>장서예</b> 남매가 있습니다.<br>
+            먼저 <b>장서아</b>에게 말을 걸면, 아버지를 찾아 집으로 데려가야 한다고 말합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q112_1.jpg" alt="장서아와 장서예">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q112_2.jpg" alt="시작 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            아버지의 제안
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            대화를 마친 후 바로 <b>뒤쪽 건물</b>을 바라보세요.<br>
+            딸의 눈치를 보며 숨어 있는 아버지 <b>장낙안</b>을 발견할 수 있습니다.<br>
+            그와 대화하면 입막음용으로 <b>돈주머니</b>를 건네줍니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q112_3.jpg" alt="숨어있는 아버지">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 5px; font-weight: bold;">
+            시간 변경 및 완료
+        </h3>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            받은 돈주머니를 아들인 <b>장서예</b>에게 전달하세요.<br>
+            그 후, <b>시간을 하루 뒤(다음 날)</b>로 변경합니다.
+        </p>
+        
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b> 돈주머니 전달 후 반드시 시간을 <b>하루 뒤</b>로 돌려야 이벤트가 발생합니다.
+            </p>
+        </div>
+
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            바로 앞 <b>취화음 공연장</b>으로 이동하면 아버지와 딸이 함께 놀고 있는 것을 볼 수 있습니다.<br>
+            <b>장서아</b>에게 말을 걸면 퀘스트가 완료됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q112_4.jpg" alt="화해한 부녀">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            결국 함께 즐거운 시간을 보내기로 한 부녀를 보며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

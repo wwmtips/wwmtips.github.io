@@ -103,7 +103,7 @@ function loadData() {
             quests.sort((a, b) => {
                 const numA = parseInt((a.id || "").replace('q', '')) || 0;
                 const numB = parseInt((b.id || "").replace('q', '')) || 0;
-                return numA - numB; 
+                return numB - numA; 
             });
         }
         

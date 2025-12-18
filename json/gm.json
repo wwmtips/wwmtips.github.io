@@ -1,6 +1,26 @@
 [
   
   {
+    "id": 1766037481798,
+    "name": "악을 막는 복숭아나무",
+    "type": "만사록",
+    "y": 2041,
+    "x": 1544,
+    "desc": "마치 외로운 넋들이 방황하는 소리",
+    "link": "https://wwm.tips/?q=63",
+    "image": "https://wwm.tips/quests/images/q63_1.jpg"
+  },
+  {
+    "id": 1766037411533,
+    "name": "돌아갈 곳 없는 영혼",
+    "type": "만사록",
+    "y": 1667,
+    "x": 2204,
+    "desc": "묘시 이후 이수원 입구에서 나는 소리의 정체를 밝히자",
+    "link": "https://wwm.tips/?q=62",
+    "image": "https://wwm.tips/quests/images/q62_2.jpg"
+  },
+  {
     "id": 1766037201530,
     "name": "말 못할 사정",
     "type": "만사록",

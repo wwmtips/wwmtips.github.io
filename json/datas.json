@@ -2,6 +2,11 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "날렵함", "answer": "표범", "user": "월흔향" },
+{ "hint": "강한 향기", "answer": "히아신스", "user": "" },
+{ "hint": "여름", "answer": "백일초", "user": "Raku라쿠" },
+{ "hint": "목 돌리기", "answer": "올빼미", "user": "풍사향" },
+
     { "hint": "Medicinal", "answer": "polygonum multiflorum", "user": "" },
     { "hint": "날개", "answer": "나비", "user": "임호택" },
 { "hint": "반찬", "answer": "마늘종", "user": "ㅇㅇ" },

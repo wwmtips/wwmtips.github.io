@@ -36,7 +36,7 @@ const dummyMapData = [
         title: "개봉",
         key: "kaifeng", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "강호로 한 발 다가간 주인공은 개봉에서 수많은 강호인들과 인연을 쌓습니다.",
-      image: "images/map2.jpeg" // (썸네일 이미지가 있다면 유지)
+      image: "images/map1.jpeg" // (썸네일 이미지가 있다면 유지)
    }
 ];
 

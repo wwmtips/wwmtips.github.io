@@ -1,6 +1,16 @@
 [
   
   {
+    "id": 1766037050945,
+    "name": "옛 친구 찾기 어렵다",
+    "type": "만사록",
+    "y": 2338,
+    "x": 1644,
+    "desc": "유혼 동굴 구름 다리위에 있는 노인과 대화하자",
+    "link": "https://wwm.tips/?q=60",
+    "image": "https://wwm.tips/quests/images/q60_1.jpg"
+  },
+  {
     "id": 1766036704845,
     "name": "쥐",
     "type": "묘물",

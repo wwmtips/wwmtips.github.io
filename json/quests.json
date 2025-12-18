@@ -1,5 +1,13 @@
 [
-
+  {
+    "id": "q113",
+    "name": "조수충어",
+    "location": "수창방",
+    "type": "만사록",
+    "bgimg": "q113_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q113.html"
+  },
     {
     "id": "q112",
     "name": "둘만의 시간",

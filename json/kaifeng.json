@@ -1,5 +1,15 @@
 [
   {
+    "id": 1766075945375,
+    "name": "둘만의 시간",
+    "type": "만사록",
+    "y": 4151,
+    "x": 2989,
+    "desc": "아버지를 찾는 딸의 고민 해결하기",
+    "link": "https://wwm.tips/?q=112",
+    "image": "https://wwm.tips/quests/images/q112_1.jpg"
+  },
+  {
     "id": 1766074788742,
     "name": "난초 향기의 여운",
     "type": "묘물",

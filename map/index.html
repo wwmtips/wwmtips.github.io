@@ -243,7 +243,33 @@
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
+          // 기존 루프가 끝난 뒤, layerGroups 추가하는 코드 아래에 작성:
             for (const key in layerGroups) layerGroups[key].addTo(map);
+
+            // ★ [추가된 부분] URL 파라미터에 marker ID가 있으면 그곳으로 이동
+            const targetId = urlParams.get('marker');
+            if (targetId) {
+                // ID는 숫자일 수도 문자일 수도 있으므로 == 비교 (느슨한 비교)
+                const target = allMarkers.find(m => m.id == targetId);
+                if (target) {
+                    // 해당 레이어가 꺼져있을 수도 있으므로 강제로 켬
+                    if (!map.hasLayer(layerGroups[target.type])) {
+                        map.addLayer(layerGroups[target.type]);
+                        // 체크박스도 동기화
+                        const checkbox = Array.from(document.querySelectorAll('.filter-checkbox'))
+                                              .find(cb => cb.parentElement.innerText.includes(target.type));
+                        if (checkbox) checkbox.checked = true;
+                    }
+
+                    // 1. 위치로 이동 (Zoom 레벨은 0 정도로 가깝게)
+                    map.setView(target.marker.getLatLng(), 0);
+                    
+                    // 2. 팝업 열기 (지도 이동 애니메이션 후 실행)
+                    setTimeout(() => {
+                        target.marker.openPopup();
+                    }, 500);
+                }
+            }
         }
 
         // ==========================================
@@ -303,8 +329,9 @@
             
             html += `<div class="btn-container">`;
             if (item.link) html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">공략 보기</a>`;
+            html += `<button onclick="shareMarker(${item.id})" class="action-btn" style="background:#4a90e2; color:white;">🔗 공유</button>`;
             
-            const btnText = isCompleted ? "취소" : "완료";
+          const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div>`;
             
@@ -329,7 +356,22 @@
 
             html += `</div>`;
             return html;
-        }
+      }
+                // ★ [추가된 함수] 현재 위치 공유 링크 복사
+        window.shareMarker = function(id) {
+            // 현재 페이지의 기본 URL 가져오기
+            const url = new URL(window.location.href);
+            
+            // marker 파라미터 설정 (기존 파라미터 유지한 채 추가/수정)
+            url.searchParams.set('marker', id);
+            
+            // 클립보드에 복사
+            copyToClipboard(url.toString());
+            
+            // (선택사항) 알림 메시지를 좀 더 예쁘게 띄우고 싶으면 여기서 처리
+            // 현재는 copyToClipboard 내부의 alert("복사 완료!")가 뜹니다.
+        };
+
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
             const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 

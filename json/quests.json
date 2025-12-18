@@ -1,4 +1,14 @@
-[{
+[
+  {
+    "id": "q116",
+    "name": "벼랑 끝",
+    "location": "무성왕묘",
+    "type": "만사록",
+    "bgimg": "q116_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q116.html"
+  },
+  {
     "id": "q115",
     "name": "외로운 배 홀로 선 그림자",
     "location": "수창방",

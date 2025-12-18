@@ -1,0 +1,151 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .tip-box {
+            background-color: #f0f8ff;
+            padding: 10px 15px;
+            border-left: 3px solid #4682b4;
+            margin: 10px 0;
+            border-radius: 0 4px 4px 0;
+            color: #333;
+            font-size: 0.9em;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            깊은 이화담
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">백화당의 유명한 상인, 진보래에 대한 소문</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            백화당의 상인 <b>진보래</b>의 요청으로 이화주를 구해다 주는 의뢰입니다.<br>
+            이전 퀘스트인 '벼랑 끝'의 후속 이야기이기도 합니다.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 필수 선행 조건 및 문제 해결</h4>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            1. 반드시 <b>만사록 [벼랑 끝]</b>을 먼저 완료해야 합니다.<br>
+            2. 선행 퀘스트를 완료했는데도 <b>진보래가 보이지 않는다면?</b><br>
+            <span style="display:block; margin-top:5px; padding-left:10px; border-left:2px solid #ccc; color:#555;">
+                → 다시 [벼랑 끝] 퀘스트의 <b>왕생이 있던 곳</b>으로 가세요.<br>
+                → 그곳에 있는 <b>원소만</b>과 대화하면 진보래가 나타납니다.
+            </span>
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 진보래와 호복</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>백화당 경계석</b> 근처, <b>불상이 있는 건물</b>로 이동하세요.<br>
+            그곳에 있는 <b>진보래</b>와 대화한 후, 가게 바로 앞에 서 있는 <b>호복</b>과도 대화를 나눕니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q117_1.jpg" alt="진보래">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q117_2.jpg" alt="진보래 위치">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q117_3.jpg" alt="호복과 대화">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 이화주 획득 및 전달</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>각문리 경계석</b>으로 이동하여 아래 지도에 표시된 위치를 찾아가세요.<br>
+            그곳에서 <b>[이화주]</b>를 구한 뒤, 다시 <b>진보래</b>에게 돌아가 전달하면 됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q117_4.jpg" alt="이화주 획득">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q117_5.jpg" alt="이화주 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            진보래에게 술을 전해주면<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

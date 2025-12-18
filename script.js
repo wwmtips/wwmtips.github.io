@@ -26,27 +26,18 @@ let currentSlot = { type: '', index: 0 };
 
 // [지도 더미 데이터]
 const dummyMapData = [
-    /*{
-        title: "청하",
-        key:"qinghe",
-        desc: "어린 주인공이 많은 가족들과 함께 생활하던 지역으로 이야기의 시작지입니다.",
-        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
-        image: "images/map2.jpeg" 
-    },
-    {
-        title: "개봉",
-        key: "kaifeng",
-        desc: "강호로 한 발 다가간 주인공은 개봉에서 수많은 강호인들과 인연을 쌓습니다.",
-        link: "https://yhellos3327-eng.github.io/wwmkoreamap/",
-        image: "images/map1.jpeg"
-     }
-     */
    {
         title: "청하",
         key: "qinghe", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "어린 주인공이 많은 가족들과 함께 생활하던 지역으로 이야기의 시작지입니다.",
         image: "images/map2.jpeg" // (썸네일 이미지가 있다면 유지)
-    }
+    },
+   {
+        title: "개봉",
+        key: "kaifeng", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "강호로 한 발 다가간 주인공은 개봉에서 수많은 강호인들과 인연을 쌓습니다.",
+      image: "images/map2.jpeg" // (썸네일 이미지가 있다면 유지)
+   }
 ];
 
 // =========================================

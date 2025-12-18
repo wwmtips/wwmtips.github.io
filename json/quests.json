@@ -1,5 +1,14 @@
 [
   {
+    "id": "q114",
+    "name": "숲을 향한 그리움",
+    "location": "수창방",
+    "type": "만사록",
+    "bgimg": "q114_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q114.html"
+  },
+  {
     "id": "q113",
     "name": "조수충어",
     "location": "수창방",

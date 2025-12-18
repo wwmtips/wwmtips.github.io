@@ -1,0 +1,178 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            숲을 향한 그리움
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">아씨를 고칠 약초를 찾아주자</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            아픈 아씨를 위해 약초를 구하려는 <b>오흥평</b>을 돕는 의뢰입니다.<br>
+            시간을 변경하고 장소를 이동하며 잃어버린 약초 주머니를 찾아야 합니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 오흥평과의 만남</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 위치로 이동하여 <b>오흥평</b>과 대화하세요.<br>
+            그는 약초를 구하던 중 문제가 생긴 모양입니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_1.jpg" alt="오흥평">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_2.jpg" alt="시작 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 약초 주머니 찾기 (시간 변경)</div>
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b> 시진을 <b>해시(21:00~23:00)</b>로 변경해야 합니다.
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            해시가 되면 <b>백화당 경계석</b> 근처로 이동하세요.<br>
+            바닥에 누워 있는 <b>왕기</b>와 대화하면 약초 주머니가 물에 떠내려갔다는 정보를 얻습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_3.jpg" alt="왕기">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_4.jpg" alt="왕기 위치">
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            대화를 마친 후 바로 <b>옆 다리 밑</b>을 조사하면 <b>[약초 주머니]</b>를 찾을 수 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_5.jpg" alt="약초 주머니 발견">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_6.jpg" alt="주머니 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">3. 주머니 전달 (위치 변경)</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            찾은 약초 주머니를 <b>오흥평</b>에게 돌려줘야 합니다.<br>
+            <span style="color: var(--wuxia-accent-red);">※ 주의:</span> 그는 원래 있던 자리가 아닌, <b>아래 지도에 표시된 장소</b>에 있습니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_7.jpg" alt="오흥평에게 전달">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_8.jpg" alt="변경된 오흥평 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">4. 퀘스트 완료 (이틀 뒤)</div>
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b> 시진을 <b>이틀 뒤 오시(11:00~13:00)</b>로 변경하세요.
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            시간을 변경한 후, <b>맨 처음 오흥평을 만났던 장소</b>로 돌아가세요.<br>
+            그 자리에 서 있는 <b>방내</b>와 대화하면 퀘스트가 완료됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_9.jpg" alt="방내">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q114_10.jpg" alt="완료 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            방내와의 대화를 끝으로<br>
+            <span style="color: var(--wuxia-accent-red);">모든 의뢰가 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

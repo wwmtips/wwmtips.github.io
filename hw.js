@@ -20,10 +20,11 @@ function initHomeworkChecklist() {
                 { id: 'w_4', freq: 'weekly', type: '구매', loc: '시즌상점', title: '작은 단백전 상자 구매' },
                 { id: 'w_6', freq: 'weekly', type: '구매', loc: '강호령 상점', title: '비결 지원 상자 구매' },
               { id: 'w_7', freq: 'weekly', type: '활동', loc: '동맹', title: '화물 운송' },
+              { id: 'w_8', freq: 'weekly', type: '활동', loc: '무역', title: '시매사 교환' },
               
                 { id: 'w_10', freq: 'weekly', type: '구매', loc: '시즌상점', title: '기술 필기 구매' },
                 { id: 'w_11', freq: 'weekly', type: '구매', loc: '기술양성', title: '기술 선택 상자 구매' },
-                { id: 'w_12', freq: 'weekly', type: '구매', loc: '십득교환', title: '심법 선택 상자 구매' },
+                { id: 'w_12', freq: 'weekly', type: '구매', loc: '심득교환', title: '심법 선택 상자 구매' },
 
                 // [일일]
                 { id: 'd_2', freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령' },

@@ -1,9 +1,10 @@
 [
     {
-    "id": "q1",
+    "id": "q112",
     "name": "둘만의 시간",
     "location": "취화음",
     "type": "만사록",
+    "bgimg": "q112_1.jpg",
     "iconpath": "images/masa.jpg",
     "filepath": "/quests/q112.html"
   },

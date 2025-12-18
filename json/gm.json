@@ -1,6 +1,16 @@
 [
   
   {
+    "id": 1766037201530,
+    "name": "말 못할 사정",
+    "type": "만사록",
+    "y": 1805,
+    "x": 2226,
+    "desc": "귀으루의 은 노파의 부탁을 들어보자",
+    "link": "https://wwm.tips/?q=61",
+    "image": "https://wwm.tips/quests/images/q61_1.jpg"
+  },
+  {
     "id": 1766037050945,
     "name": "옛 친구 찾기 어렵다",
     "type": "만사록",

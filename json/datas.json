@@ -2,6 +2,14 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "Medicinal", "answer": "polygonum multiflorum", "user": "" },
+    { "hint": "날개", "answer": "나비", "user": "임호택" },
+{ "hint": "반찬", "answer": "마늘종", "user": "ㅇㅇ" },
+{ "hint": "과일", "answer": "탕후루", "user": "당마란" },
+{ "hint": "겨울잠", "answer": "곰", "user": "하복" },
+{ "hint": "해변", "answer": "불가사리", "user": "이론적주사위" },
+{ "hint": "매실", "answer": "매실", "user": "매실" },
+
     { "hint": "큰귀", "answer": "비글", "user": "버물리" },
 { "hint": "관상용 식물", "answer": "담쟁이덩굴", "user": "빛객" },
 { "hint": "장수", "answer": "느릅나무", "user": "" },

@@ -794,13 +794,6 @@ h3 {
 }
 
 /* 지도 섹션 카드 */
-.map-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 20px;       
-    margin-top: 15px;
-    margin-bottom: 10px;
-}
 
 .map-card {
     display: flex;
@@ -820,36 +813,8 @@ h3 {
     border-color: var(--wuxia-accent-gold);
 }
 
-.map-hero-bg {
-    width: 100%;
-    height: 180px; 
-    background-size: cover;    
-    background-position: center center;
-    background-repeat: no-repeat;
-    border-bottom: 1px solid #333;
-    transition: transform 0.5s ease;
-}
-
 .map-card:hover .map-hero-bg {
     transform: scale(1.05);
-}
-
-.map-content {
-    padding: 20px;
-    background-color: #1a1a1a; 
-    position: relative;
-    z-index: 1;
-}
-
-.map-title {
-    color: #fff;
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-family: 'Noto Serif KR', serif;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .map-title::after {
@@ -861,13 +826,65 @@ h3 {
 }
 .map-card:hover .map-title::after { opacity: 1; }
 
+/* =========================================
+   [수정] 지도 섹션 카드 스타일 (소형화)
+   ========================================= */
+
+/* 1. 그리드 배치 수정 */
+.map-grid {
+    display: grid;
+    /* [핵심] 300px -> 220px로 축소 (화면이 좁아도 여러 개 들어감) */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    gap: 15px;       
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* ... .map-card 스타일은 그대로 유지 ... */
+
+/* 2. 이미지 높이 대폭 축소 */
+.map-hero-bg {
+    width: 100%;
+    /* [핵심] 기존 180px -> 110px로 변경 (세로 길이 줄이기) */
+    height: 110px; 
+    background-size: cover;    
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #333;
+    transition: transform 0.5s ease;
+}
+
+/* 3. 내부 텍스트 여백 축소 */
+.map-content {
+    /* [핵심] 기존 20px -> 12px 15px로 변경 (위아래 여백 줄임) */
+    padding: 12px 15px;
+    background-color: #1a1a1a; 
+    position: relative;
+    z-index: 1;
+}
+
+/* 4. 제목 크기 미세 조정 */
+.map-title {
+    color: #fff;
+    /* [핵심] 1.2em -> 1.05em (살짝 줄임) */
+    font-size: 1.05em;
+    font-weight: bold;
+    margin-bottom: 5px; /* 간격 줄임 */
+    font-family: 'Noto Serif KR', serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 5. 설명글 줄 수 제한 (3줄 -> 2줄) */
 .map-desc {
     color: #aaa;      
-    font-size: 0.9em;
-    line-height: 1.5;
+    font-size: 0.85em; /* 0.9em -> 0.85em */
+    line-height: 1.4;
     margin: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    /* [핵심] 설명이 길면 2줄까지만 보여주고 ... 처리 */
+    -webkit-line-clamp: 2; 
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -1,6 +1,26 @@
 [
   
   {
+    "id": 1766036272285,
+    "name": "귀염둥이",
+    "type": "고양이",
+    "y": 1955,
+    "x": 2402,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/50.jpg"
+  },
+  {
+    "id": 1766036177604,
+    "name": "샘물이",
+    "type": "고양이",
+    "y": 2014,
+    "x": 2428,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/50.jpg"
+  },
+  {
     "id": 1766035979227,
     "name": "성곽 유적",
     "type": "경계석",

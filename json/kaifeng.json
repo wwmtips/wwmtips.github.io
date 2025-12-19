@@ -1,6 +1,16 @@
 [
   
   {
+    "id": 1766162085177,
+    "name": "구름 걷힌 달빛",
+    "type": "만사록",
+    "y": 3082,
+    "x": 2988,
+    "desc": "고양이 완두떡이 얌전해진 이유",
+    "link": "https://wwm.tips/?q=123",
+    "image": "https://wwm.tips/quests/images/q123_2.jpg"
+  },
+  {
     "id": 1766160059058,
     "name": "영롱한 우산",
     "type": "만사록",

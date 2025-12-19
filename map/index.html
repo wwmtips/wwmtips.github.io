@@ -113,8 +113,12 @@
 </head>
 <body>
 
-    <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" onclick="toggleSidebar()">
+  <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" onclick="toggleSidebar()">
         <span>☰</span> Loading...
+    </button>
+    
+    <button id="cluster-toggle-btn" class="cluster-toggle-btn" onclick="toggleClusterMode()">
+        Checking...
     </button>
 
     <div id="map-sidebar" class="map-sidebar">
@@ -143,36 +147,24 @@
 
     <script>
         // ==========================================
-        // 1. 설정
+        // 1. 설정 및 전역 변수
         // ==========================================
         const mapsDB = {
             "qinghe": { name: "청하", img: "../qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
             "kaifeng": { name: "개봉", img: "../kaifeng.jpg", json: "../json/kaifeng.json", w: 5159, h: 7000 },
             "gm": { name: "귀문시장", img: "../gm.jpg", json: "../json/gm.json", w: 5482, h: 3534 }
-      
         };
 
         const typeMapping = { 
-            "경계석": "ic_pin", 
-            "묘묘냥": "ic_mew", 
-            "고양이": "ic_cat",
-            "만사록": "ic_mansa", 
-            "묘물": "ic_uni", 
-            "상자": "chest", 
-            "보스": "ic_boss",
-            "기연": "ic_ki"
+            "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
+            "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "chest", 
+            "보스": "ic_boss", "기연": "ic_ki"
         };
 
-        // ★ [색상 설정] style.css의 테마 색상 적용
         const colorMapping = {
-            "상자": "#2e7d32",   // 황금색 (보물)
-            "보스": "#b71c1c",   // 붉은색 (위험)
-            "고양이": "#000000",
-            "묘물": "#35945f", 
-            "만사록": "#a08040", // 초록색 (정보)
-            "경계석": "#4b3947", // 파란색 (이동)
-            "기연": "#f086ab",    // 회색 (기타)
-            "묘묘냥": "#635e85"    // 회색 (기타)
+            "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
+            "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
+            "기연": "#f086ab", "묘묘냥": "#635e85"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -188,12 +180,14 @@
         if (sidebarBtn) sidebarBtn.innerHTML = `<span>☰</span> ${currentConfig.name}`;
 
         const isMobile = window.innerWidth <= 768;
-        
-        // 핀 크기 (이미지 크기를 키웠으므로 전체 크기는 적당히 유지)
         const pinSize = isMobile ? [24, 24] : [30, 30];
 
-        const layerGroups = {}; 
-        const allMarkers = []; 
+        // ★ [전역 변수]
+        let layerGroups = {}; 
+        let allMarkers = []; 
+        let cachedData = null; // 데이터 캐싱용
+        // 로컬스토리지에서 클러스터 설정 로드 (기본값 true)
+        let isClusterOn = localStorage.getItem('clusterMode') !== 'false';
 
         // ==========================================
         // 2. 지도 생성
@@ -235,72 +229,99 @@
         };
 
         // ==========================================
-        // 3. 데이터 로딩 & 핀 마커 생성
+        // 3. 데이터 로딩 & 기능 실행
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
             .then(data => {
-                createMarkers(data);
-                generateSidebar(data);
+                cachedData = data;     // 데이터 저장
+                updateClusterButton(); // 버튼 UI 초기화
+                createMarkers(data);   // 마커 생성
+                generateSidebar(data); // 사이드바 생성
             })
             .catch(err => { console.error(err); });
 
-       function createMarkers(data) {
+        // ★ [클러스터 토글 로직]
+        function updateClusterButton() {
+            const btn = document.getElementById('cluster-toggle-btn');
+            if (isClusterOn) {
+                btn.innerText = "● 클러스터 ON";
+                btn.classList.remove('off');
+            } else {
+                btn.innerText = "○ 클러스터 OFF";
+                btn.classList.add('off');
+            }
+        }
+
+        window.toggleClusterMode = function() {
+            isClusterOn = !isClusterOn;
+            localStorage.setItem('clusterMode', isClusterOn);
+            updateClusterButton();
+            
+            // 기존 레이어 제거 및 초기화
+            for (const key in layerGroups) {
+                map.removeLayer(layerGroups[key]);
+            }
+            layerGroups = {};
+            allMarkers = [];
+
+            // 다시 그리기
+            if (cachedData) createMarkers(cachedData);
+        };
+
+        // ★ [마커 생성 함수 (토글 로직 포함)]
+        function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
-            // ★ [설정] 검은색 글씨를 사용할 밝은 배경의 타입들을 여기에 적어주세요.
-            const lightTypes = [""]; 
+            // 검은 글씨를 사용할 밝은 배경 타입들
+            const lightTypes = ["경계석", "기연"]; 
 
             data.forEach(item => {
-                
+                // 그룹이 없으면 새로 생성
                 if (!layerGroups[item.type]) {
                     
-                    const typeImgName = typeMapping[item.type] || "stone";
-                    const typeIconPath = `../images/${typeImgName}.png`;
-                    const typeColor = colorMapping[item.type] || "#555";
+                    // 1. 클러스터 모드일 때
+                    if (isClusterOn) {
+                        const typeImgName = typeMapping[item.type] || "stone";
+                        const typeIconPath = `../images/${typeImgName}.png`;
+                        const typeColor = colorMapping[item.type] || "#555";
+                        
+                        const isLight = lightTypes.includes(item.type);
+                        const badgeTextColor = isLight ? "#000000" : "#ffffff";
+                        const textShadowStyle = isLight ? "none" : "0 0 2px rgba(0,0,0,0.5)";
 
-                    // ★ 배경이 밝은 타입이면 글자색을 검정(#000), 아니면 흰색(#fff)으로 설정
-                    const isLight = lightTypes.includes(item.type);
-                    const badgeTextColor = isLight ? "#000000" : "#ffffff";
-                    const textShadowStyle = isLight ? "none" : "0 0 2px rgba(0,0,0,0.5)";
-
-                    layerGroups[item.type] = L.markerClusterGroup({
-                        disableClusteringAtZoom: 0,
-                        spiderfyOnMaxZoom: true,
-                        showCoverageOnHover: false, 
-                        chunkedLoading: true,
-
-                        iconCreateFunction: function(cluster) {
-                            const count = cluster.getChildCount();
-                            const countText = count > 99 ? '99+' : count;
-
-                            const html = `
-                                <div class="badge-cluster-container">
-                                    <div class="pin-marker">
-                                        <div class="pin-inner-circle" style="--pin-color: ${typeColor};">
-                                            <img src="${typeIconPath}" onerror="this.src='../images/stone.png'">
+                        layerGroups[item.type] = L.markerClusterGroup({
+                            disableClusteringAtZoom: 0,
+                            spiderfyOnMaxZoom: true,
+                            showCoverageOnHover: false, 
+                            chunkedLoading: true,
+                            iconCreateFunction: function(cluster) {
+                                const count = cluster.getChildCount();
+                                const countText = count > 99 ? '99+' : count;
+                                const html = `
+                                    <div class="badge-cluster-container">
+                                        <div class="pin-marker">
+                                            <div class="pin-inner-circle" style="--pin-color: ${typeColor};">
+                                                <img src="${typeIconPath}" onerror="this.src='../images/stone.png'">
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="cluster-badge-count" style="background-color: ${typeColor}; color: ${badgeTextColor}; text-shadow: ${textShadowStyle};">
-                                        ${countText}
-                                    </div>
-                                </div>
-                            `;
-
-                            return L.divIcon({
-                                html: html,
-                                className: '',     
-                                iconSize: pinSize, 
-                                iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9] 
-                            });
-                        }
-                    });
+                                        <div class="cluster-badge-count" style="background-color: ${typeColor}; color: ${badgeTextColor}; text-shadow: ${textShadowStyle};">
+                                            ${countText}
+                                        </div>
+                                    </div>`;
+                                return L.divIcon({ html: html, className: '', iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9] });
+                            }
+                        });
+                    } 
+                    // 2. 클러스터 OFF 모드일 때 (일반 레이어)
+                    else {
+                        layerGroups[item.type] = L.layerGroup();
+                    }
                 }
 
+                // 개별 마커 생성
                 const isCompleted = completedList.includes(item.id);
-                
                 const imgName = typeMapping[item.type] || "stone"; 
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || colorMapping["기타"];
@@ -324,22 +345,36 @@
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
-            for (const key in layerGroups) layerGroups[key].addTo(map);
+            // 지도에 레이어 추가 (필터 상태 반영)
+            const checkboxes = document.querySelectorAll('.filter-checkbox');
+            if (checkboxes.length > 0) {
+                // 이미 사이드바가 있으면 체크된 것만 추가
+                checkboxes.forEach(cb => {
+                    const type = cb.parentElement.innerText.trim();
+                    if (cb.checked && layerGroups[type]) map.addLayer(layerGroups[type]);
+                });
+            } else {
+                // 처음 로딩이면 전부 추가
+                for (const key in layerGroups) layerGroups[key].addTo(map);
+            }
 
-            // URL 파라미터 이동 로직
+            // URL 파라미터로 특정 마커 이동
             const targetId = urlParams.get('marker');
             if (targetId) {
                 const target = allMarkers.find(m => m.id == targetId);
                 if (target) {
                     if (!map.hasLayer(layerGroups[target.type])) {
                         map.addLayer(layerGroups[target.type]);
-                        const checkbox = Array.from(document.querySelectorAll('.filter-checkbox'))
-                                              .find(cb => cb.parentElement.innerText.includes(target.type));
-                        if (checkbox) checkbox.checked = true;
                     }
-                    layerGroups[target.type].zoomToShowLayer(target.marker, function() {
-                        target.marker.openPopup();
-                    });
+                    
+                    if (isClusterOn && layerGroups[target.type].zoomToShowLayer) {
+                        layerGroups[target.type].zoomToShowLayer(target.marker, function() {
+                            target.marker.openPopup();
+                        });
+                    } else {
+                        map.setView(target.marker.getLatLng(), 0);
+                        setTimeout(() => target.marker.openPopup(), 500);
+                    }
                 }
             }
         }
@@ -391,56 +426,46 @@
         function toggleSidebar() { document.getElementById('map-sidebar').classList.toggle('open'); }
         function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else if (document.exitFullscreen) document.exitFullscreen(); }
         
-              function generatePopupContent(item, storageKey) {
+        // ==========================================
+        // 5. 팝업 및 공유 로직
+        // ==========================================
+        function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
             
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
-            
             if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
             
-            // ★ [수정 1] 공략 보기가 있으면 가장 윗줄에 꽉 차게 배치
             if (item.link) {
                 html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki" style="display:block; width:100%; box-sizing:border-box; text-align:center; margin-bottom:8px;">📖 공략 보기</a>`;
             }
             
-            // ★ [수정 2] 공유와 완료 버튼은 그 아래 한 줄에 나란히 (flex 사용)
             html += `<div class="btn-container" style="display:flex; gap:5px; margin-bottom:0;">`;
-            
-            // 공유 버튼 (flex:1 로 반반 차지)
             html += `<button onclick="shareMarker(${item.id})" class="action-btn" style="flex:1; background:#4a90e2; color:white;">🔗 공유</button>`;
 
-            // 완료 버튼 (flex:1 로 반반 차지)
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}" style="flex:1;">${btnText}</button>`;
-            
-            html += `</div>`; // 버튼 컨테이너 닫기
+            html += `</div>`; 
 
-            // 이미지/유튜브 처리
             if (item.image) {
                 const ytId = getYouTubeId(item.image);
                 if (ytId) {
-                    html += `
-                        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top:10px; border-radius:4px;">
-                            <iframe src="https://www.youtube.com/embed/${ytId}" 
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
-                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                            </iframe>
-                        </div>`;
+                    html += `<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top:10px; border-radius:4px;">
+                                <iframe src="https://www.youtube.com/embed/${ytId}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
+                             </div>`;
                 } else {
                     html += `<img src="${item.image}" class="popup-img" style="margin-top:10px;">`;
                 }
             }
-
             html += `</div>`;
             return html;
         }
 
-
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
+            const index = list.indexOf(id); 
+            const target = allMarkers.find(m => m.id === id); 
             if (!target) return;
             const marker = target.marker;
 
@@ -455,76 +480,61 @@
             marker.closePopup(); 
             marker.openPopup();
         };
-                // ★ [누락된 함수 복구] 현재 위치 공유 링크 생성 및 복사
+
         window.shareMarker = function(id) {
-            // 현재 페이지의 기본 URL 가져오기
             const url = new URL(window.location.href);
-            
-            // marker 파라미터 설정 (기존 id 파라미터 등은 유지됨)
             url.searchParams.set('marker', id);
-            
-            // 클립보드에 복사 함수 호출
             copyToClipboard(url.toString());
         };
 
-// ==========================================
-        // 5. 개발자 툴
+        // ==========================================
+        // 6. 개발자 툴
         // ==========================================
         if (isDevMode) {
             map.on('click', function(e) {
                 const y = Math.round(e.latlng.lat);
                 const x = Math.round(e.latlng.lng);
-                
-                // onchange="autoFillDesc(this)" 추가됨
                 const content = `
                     <div class="input-group">
                         <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
                         <label>이름</label> <input type="text" id="input_name">
                         <label>종류</label> 
                         <select id="input_type" onchange="autoFillDesc(this)">
-                            <option value="묘묘냥">묘묘냥</option>
-                            <option value="기연">기연</option>
-                             <option value="묘물">묘물</option>
-                             <option value="경계석">경계석</option>                           
-                            <option value="고양이">고양이</option>
-                            <option value="상자">상자</option>
-                            <option value="만사록">만사록</option>
-                            <option value="보스">보스</option>
-                            
+                            <option value="묘묘냥">묘묘냥</option> <option value="기연">기연</option>
+                            <option value="묘물">묘물</option> <option value="경계석">경계석</option>                           
+                            <option value="고양이">고양이</option> <option value="상자">상자</option>
+                            <option value="만사록">만사록</option> <option value="보스">보스</option>
                         </select>
                         <label>설명</label> <textarea id="input_desc" style="height:40px;"></textarea>
                         <label>링크</label> <input type="text" id="input_link">
                         <label>사진</label> <input type="text" id="input_image">
                         <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button>
-                    </div>
-                `;
+                    </div>`;
                 L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
                 setTimeout(() => document.getElementById('input_name')?.focus(), 100);
             });
         }
 
-        // [추가된 함수] 고양이 선택 시 설명 자동 입력
         window.autoFillDesc = function(selectElement) {
             const descInput = document.getElementById('input_desc');
             const titleInput = document.getElementById('input_name');
             if (selectElement.value === '고양이') {
                 descInput.value = '귀여운 고양이다';
-            }else if (selectElement.value === '묘묘냥') {
+            } else if (selectElement.value === '묘묘냥') {
                 descInput.value = '박식 스탯을 위해 필수 진행';
                 titleInput.value ='묘묘냥';
             } else if (descInput.value === '귀여운 고양이다') {
-                // (옵션) 만약 다른 걸로 바꿨는데 내용이 '귀여운 고양이다' 그대로면 지워줌
                 descInput.value = '';
             }
         };
-// 유튜브 URL에서 ID 추출하는 함수
-function getYouTubeId(url) {
-    if (!url) return null;
-    // 일반 주소(youtube.com)와 단축 주소(youtu.be) 모두 처리
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-}
+
+        function getYouTubeId(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
         window.copyMarkerJson = function(y, x) {
             const name = document.getElementById('input_name').value || "이름 없음";
             const type = document.getElementById('input_type').value;
@@ -532,7 +542,6 @@ function getYouTubeId(url) {
             const link = document.getElementById('input_link').value || "";
             const image = document.getElementById('input_image').value || "";
             const uniqueId = Date.now(); 
-
             const jsonString = `
   {
     "id": ${uniqueId},

@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q124",
+   "name": "아름다운 이",
+   "location": "연희 거리",
+   "type": "만사록",
+   "bgimg": "q124_6.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q124.html"
+ },
+  {
    "id": "q123",
    "name": "구름 걷힌 달빛",
    "location": "연희 거리",

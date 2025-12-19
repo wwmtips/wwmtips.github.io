@@ -1,4 +1,12 @@
-[
+[ {
+    "id": "q118",
+    "name": "신룡의 화염",
+    "location": "연희 거리",
+    "type": "만사록",
+    "bgimg": "q118_2.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q118.html"
+  },
     {
     "id": "q117",
     "name": "깊은 이화담",

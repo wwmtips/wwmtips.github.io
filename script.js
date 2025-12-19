@@ -334,8 +334,15 @@ function switchTab(tabName, updateHistory = true) {
         if (updateHistory) updateUrlQuery('chunji');
     }
     else if (tabName === 'quiz') {
-        document.getElementById('view-quiz').style.display = 'block';
-        document.getElementById('nav-quiz').classList.add('active');
+       document.getElementById('view-quiz').style.display = 'block';
+        
+        // [수정] 부모 메뉴인 '족보(nav-more)'에도 언더라인(active) 적용
+        document.getElementById('nav-more').classList.add('active'); 
+        
+        // 드롭다운 내부의 '스무고개' 버튼도 활성화 표시 (선택사항)
+        const quizBtn = document.getElementById('nav-quiz');
+        if (quizBtn) quizBtn.classList.add('active');
+        
         if (updateHistory) updateUrlQuery('quiz');
     } 
     else if (tabName === 'quest') {

@@ -627,39 +627,52 @@ html, body, #map {
         }
 
         /* =========================================
-           ★ 버튼 자동 정렬 (Flexbox)
+           ★ 상단 버튼 그룹 (높이/폰트 완벽 일치 수정)
            ========================================= */
         
-        /* 1. 두 버튼을 감싸는 투명 상자 */
+        /* 1. 두 버튼을 감싸는 컨테이너 */
         .top-controls-wrapper {
-            position: absolute; /* 지도 위에 고정 */
-            top: 10px;          /* 상단 여백 */
-            left: 10px;         /* 좌측 여백 */
-            z-index: 1000;      /* 지도보다 위에 */
-            
-            display: flex;      /* 내용물을 가로로 배치 */
-            gap: 10px;          /* ★ 핵심: 버튼 사이 간격 10px 자동 유지 */
-            align-items: flex-start; /* 높이 기준 상단 정렬 */
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;       /* 버튼 사이 간격 */
+            align-items: center; /* 수직 중앙 정렬 */
         }
 
-        /* 2. 기존 사이드바 버튼 위치 초기화 */
-        /* map_style.css의 absolute 속성을 무시하기 위해 !important 사용 */
+        /* 2. 기존 사이드바 버튼 ('청하' 버튼) 강제 스타일 재정의 */
+        /* map_style.css의 설정보다 우선순위를 높이기 위해 !important 사용 */
         .sidebar-toggle-btn {
-            position: static !important; 
+            position: static !important; /* wrapper 안으로 배치 */
             margin: 0 !important;
+            
+            /* ★ 크기/폰트 강제 통일 */
+            height: 40px !important;
+            padding: 0 15px !important; /* 좌우 여백 */
+            font-size: 14px !important;
+            line-height: 1 !important;  /* 줄 간격으로 인한 높이 변화 방지 */
+            
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
         }
 
-        /* 3. 모아보기 버튼 스타일 (위치값 제거됨) */
+        /* 3. 모아보기 버튼 스타일 */
         .cluster-toggle-btn {
-            position: static !important; /* 위치 고정 해제 (상자를 따라감) */
+            /* 위치는 wrapper가 잡아주므로 static */
+            position: static;
             
-            /* 디자인 (다크+골드 테마 유지) */
-            padding: 8px 12px;
-            font-family: 'Noto Serif KR', serif;
-            font-size: 1em;
+            /* ★ 왼쪽 버튼과 동일한 규격 적용 */
+            height: 40px;
+            padding: 0 15px;
+            font-size: 14px;
+            font-family: 'Noto Serif KR', serif; /* 폰트 통일 */
             font-weight: bold;
-            line-height: 1.5;
+            line-height: 1;
             
+            /* 디자인 (다크 테마 + 골드) */
             background-color: #1a1a1a;
             color: #ffffff;
             border: 1px solid #a08040;
@@ -668,15 +681,13 @@ html, body, #map {
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             
-            /* 내부 텍스트 정렬 */
+            /* 내부 정렬 */
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 6px; /* 아이콘과 글자 사이 간격 */
+            box-sizing: border-box;
             transition: all 0.2s;
-            
-            /* 높이 강제 일치 (필요시 사용, 보통은 자동으로 맞음) */
-            /* height: 42px; */ 
         }
 
         .cluster-toggle-btn:hover {
@@ -684,6 +695,7 @@ html, body, #map {
             transform: translateY(-1px);
         }
 
+        /* 꺼짐 상태 */
         .cluster-toggle-btn.off {
             background-color: #333;
             border-color: #666;

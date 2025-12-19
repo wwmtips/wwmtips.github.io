@@ -584,47 +584,44 @@ html, body, #map {
         }
 
         /* =========================================
-           ★ 모아보기(클러스터) 버튼 스타일 (수정됨)
+           ★ 모아보기 버튼 (좌측 버튼과 완벽 정렬)
            ========================================= */
         .cluster-toggle-btn {
-            position: fixed;
-            top: 20px;      /* 왼쪽 버튼과 동일한 높이 */
-            left: 120px;    /* 왼쪽 버튼 옆에 위치 (간격 조정됨) */
-            z-index: 1000;  /* 지도 컨트롤보다 위에 */
+            position: absolute; /* fixed 대신 absolute 사용하여 지도 흐름에 맞춤 */
+            top: 10px;          /* ★ 중요: 왼쪽 버튼과 동일한 높이 */
+            left: 100px;        /* 왼쪽 버튼 옆에 배치 (겹치면 이 숫자를 늘리세요) */
+            z-index: 1000;
             
-            /* '청하' 버튼과 동일한 크기감 설정 */
-            padding: 10px 20px; 
+            /* ★ 중요: map_style.css의 .sidebar-toggle-btn과 동일한 규격 */
+            padding: 8px 12px;
+            font-family: 'Noto Serif KR', serif; /* 폰트 통일 */
+            font-size: 1em;     /* 폰트 크기 통일 */
+            font-weight: bold;
+            line-height: 1.5;   /* 줄 높이 통일 */
+            
+            /* 디자인: 요청하신 다크 테마 + 골드 테두리 */
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #a08040;
             border-radius: 4px;
             
-            /* ★ 색상 유지 (다크 테마 + 골드) */
-            background: #1a1a1a;
-            color: white;
-            border: 1px solid #a08040; 
-            
-            font-size: 16px; /* 폰트 크기 맞춤 */
-            font-weight: bold;
             cursor: pointer;
-            
-            /* 그림자도 왼쪽 버튼과 비슷하게 */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            transition: all 0.2s;
-            
-            /* 텍스트 수직 중앙 정렬 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 44px; /* 왼쪽 버튼과 높이 강제 일치 (필요시 조절) */
-            box-sizing: border-box; 
+            gap: 5px; /* 아이콘과 텍스트 사이 간격 */
+            transition: all 0.2s;
         }
 
         .cluster-toggle-btn:hover {
-            background: #333;
-            transform: translateY(-1px); /* 살짝 떠오르는 효과 */
+            background-color: #333;
+            transform: translateY(-1px);
         }
 
-        /* 꺼졌을 때 스타일 (약간 흐리게) */
+        /* 꺼졌을 때 스타일 (회색조) */
         .cluster-toggle-btn.off {
-            background: #333;
+            background-color: #333;
             border-color: #666;
             color: #aaa;
         }

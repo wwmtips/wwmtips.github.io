@@ -1,4 +1,12 @@
-[ 
+[ {
+    "id": "q120",
+    "name": "한 번의 인연",
+    "location": "연희 거리",
+    "type": "만사록",
+    "bgimg": "q120_2.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q120.html"
+  },
   {
     "id": "q119",
     "name": "만년등의 빛",

@@ -525,7 +525,7 @@ html, body, #map {
 }
 
 /* =========================================
-           ★ 뱃지 스타일 클러스터링 (최종 수정)
+           ★ 뱃지 스타일 클러스터링 (테마 적용 버전)
            ========================================= */
         
         /* 1. 클러스터 전체 컨테이너 */
@@ -535,33 +535,44 @@ html, body, #map {
             height: 100%;
         }
 
-        /* 2. 뱃지 디자인 (첨부 이미지 스타일) */
+        /* 2. 뱃지 디자인 (다크 테마 + 골드 포인트) */
         .cluster-badge-count {
             position: absolute;
-            bottom: -2px;   /* 우측 하단 배치 */
-            right: -2px;
+            bottom: -5px;   /* 핀 우측 하단에 걸치게 */
+            right: -5px;
             
-            background-color: #ffffff; /* 흰색 배경 */
-            color: #000000;            /* 검은색 글씨 */
-            border: 2px solid #000000; /* 검은색 테두리 (진하게) */
-            border-radius: 12px;       /* 둥근 알약 모양 */
+            background-color: #1a1a1a; /* 지도 배경과 같은 진한 색 */
+            color: #ffffff;            /* 숫자는 잘 보이게 흰색 */
             
-            min-width: 20px;
-            height: 20px;
-            padding: 0 4px;
+            border: 2px solid #a08040; /* ★ 포인트: 금색 테두리 */
+            border-radius: 50%;        /* 완전한 원형 (알약 모양보다 깔끔) */
             
-            font-size: 12px;
+            min-width: 22px;           /* 크기 확보 */
+            height: 22px;
+            
+            font-size: 11px;
             font-weight: bold;
-            line-height: 18px;         /* 수직 중앙 정렬 */
-            text-align: center;
+            font-family: sans-serif;
             
-            box-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* 살짝 그림자 */
-            z-index: 1000;             /* 핀보다 무조건 위에 */
+            /* 수직/수평 중앙 정렬 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            box-shadow: 0 2px 5px rgba(0,0,0,0.6); /* 깊이감 있는 그림자 */
+            z-index: 1000;
+            transition: all 0.2s ease;
         }
 
-        /* 3. 클러스터 호버 효과 (살짝 커짐) */
-        .badge-cluster-container:hover {
+        /* 3. 호버 시 효과 */
+        .badge-cluster-container:hover .pin-marker {
+            transform: rotate(-45deg) scale(1.1); /* 핀이 커짐 */
+            z-index: 1001;
+        }
+        
+        .badge-cluster-container:hover .cluster-badge-count {
+            background-color: #a08040; /* 배경이 금색으로 반전 */
+            border-color: #ffffff;     /* 테두리가 흰색으로 */
+            color: #ffffff;
             transform: scale(1.1);
-            transition: transform 0.2s;
-            cursor: pointer;
         }

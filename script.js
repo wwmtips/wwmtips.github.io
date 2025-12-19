@@ -1594,20 +1594,30 @@ function downloadBuildImage() {
 // [추가] 네비게이션 더보기 드롭다운 기능
 // =========================================
 
-// 1. 드롭다운 토글 함수
-function toggleNavDropdown(event) {
-    event.stopPropagation(); // 클릭 이벤트가 window까지 전파되지 않게 막음
-    const dropdown = document.getElementById("nav-more-list");
-    dropdown.classList.toggle("show");
+// [수정] 드롭다운 토글 함수 (어떤 메뉴를 열지 ID를 받아서 처리)
+function toggleNavDropdown(event, menuId) {
+    event.stopPropagation(); // 이벤트 전파 중단
+
+    // 1. 열려있는 다른 모든 드롭다운 닫기
+    const allDropdowns = document.querySelectorAll('.nav-dropdown-content');
+    allDropdowns.forEach(d => {
+        if (d.id !== menuId) {
+            d.classList.remove('show');
+        }
+    });
+
+    // 2. 클릭한 메뉴만 열기/닫기 토글
+    const dropdown = document.getElementById(menuId);
+    if (dropdown) {
+        dropdown.classList.toggle("show");
+    }
 }
 
-// 2. 화면의 다른 곳을 클릭하면 드롭다운 닫기
+// [수정] 화면의 빈 곳을 클릭하면 모든 드롭다운 닫기
 window.addEventListener('click', function(event) {
-    if (!event.target.matches('#nav-more')) {
-        const dropdown = document.getElementById("nav-more-list");
-        if (dropdown && dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-        }
+    if (!event.target.closest('.nav-dropdown-wrapper')) {
+        const dropdowns = document.querySelectorAll(".nav-dropdown-content");
+        dropdowns.forEach(d => d.classList.remove('show'));
     }
 });
 
@@ -2207,4 +2217,23 @@ function applyChunjiFilter() {
     // 1페이지로 초기화 후 렌더링
     currentChunjiPage = 1;
     renderChunjiList();
+}
+// [추가] 드롭다운 메뉴 클릭 시 해당 비급 파일 바로 열기
+function openGuideDirect(filename) {
+    // 1. 해당 파일에 매칭되는 ID 찾기 (예: 'boss.html' -> 'boss')
+    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
+    
+    // 2. 가이드 데이터가 아직 안 불려와졌을 때 (새로고침 직후 등)
+    if (!isGuideLoaded) {
+        // URL에 ID를 미리 박아두고 switchTab을 부르면, loadGuideView가 알아서 처리함
+        if (foundId) updateUrlQuery('guide', foundId);
+        switchTab('guide', false); 
+    } 
+    // 3. 이미 로드되어 있을 때
+    else {
+        // 탭 전환 후 강제로 콘텐츠 교체
+        switchTab('guide', false);
+        if (foundId) updateUrlQuery('guide', foundId);
+        loadGuideContent(filename, null);
+    }
 }

@@ -250,13 +250,24 @@
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
             data.forEach(item => {
-                // ★ [수정됨] 일반 레이어 그룹 대신 클러스터 그룹 사용
+                // ★ [수정됨] 클러스터 그룹 설정에 'iconCreateFunction' 추가
                 if (!layerGroups[item.type]) {
                     layerGroups[item.type] = L.markerClusterGroup({
-                        disableClusteringAtZoom: 0, // 0레벨(가장 확대)부터는 클러스터 해제하고 핀 다 보여줌
-                        spiderfyOnMaxZoom: false,   // 최대 확대 시 핀 흩뿌리기 효과 끄기 (취향껏 true/false)
-                        showCoverageOnHover: false, // 클러스터 호버 시 범위 표시 끄기
-                        chunkedLoading: true        // ★ 중요: 핀이 많을 때 브라우저 멈춤 방지 (나눠서 로딩)
+                        disableClusteringAtZoom: 0, 
+                        spiderfyOnMaxZoom: false,   
+                        showCoverageOnHover: false, 
+                        chunkedLoading: true,
+                        
+                        // ★ [여기부터] 커스텀 디자인 적용 코드
+                        iconCreateFunction: function(cluster) {
+                            const count = cluster.getChildCount(); // 묶인 개수
+                            return L.divIcon({
+                                html: `<div>${count}</div>`, // 숫자 표시
+                                className: 'custom-cluster-icon', // 위에서 만든 CSS 클래스 적용
+                                iconSize: L.point(40, 40) // 아이콘 크기
+                            });
+                        }
+                        // ★ [여기까지]
                     });
                 }
 
@@ -281,17 +292,13 @@
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 
-                // 그룹에 마커 추가
                 layerGroups[item.type].addLayer(marker);
-                
-                // 검색 등을 위해 배열에도 저장
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
-            // 생성된 그룹들을 지도에 표시
             for (const key in layerGroups) layerGroups[key].addTo(map);
 
-            // ★ https://math-development-geometry.tistory.com/50
+            // URL 파라미터 이동 로직
             const targetId = urlParams.get('marker');
             if (targetId) {
                 const target = allMarkers.find(m => m.id == targetId);
@@ -302,9 +309,7 @@
                                               .find(cb => cb.parentElement.innerText.includes(target.type));
                         if (checkbox) checkbox.checked = true;
                     }
-
-                    // 해당 클러스터 그룹에서 마커가 보이도록 줌 처리
-                    // (클러스터 안에 숨어있을 수 있으므로 zoomToShowLayer 사용)
+                    // 클러스터 줌 처리
                     layerGroups[target.type].zoomToShowLayer(target.marker, function() {
                         target.marker.openPopup();
                     });

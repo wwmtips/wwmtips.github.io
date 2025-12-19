@@ -251,44 +251,46 @@
 
             data.forEach(item => {
                 
-                // ★ [그룹 생성] 타입별로 클러스터 그룹을 생성 (자동으로 같은 타입끼리만 묶임)
                 if (!layerGroups[item.type]) {
                     
-                    // 해당 타입의 아이콘/색상 정보를 미리 가져옴 (클러스터 아이콘용)
+                    // 아이콘 및 '색상' 정보 가져오기
                     const typeImgName = typeMapping[item.type] || "stone";
                     const typeIconPath = `../images/${typeImgName}.png`;
+                    
+                    // ★ 여기서 가져온 색상(typeColor)을 핀과 뱃지 양쪽에 다 씁니다.
                     const typeColor = colorMapping[item.type] || "#555";
 
                     layerGroups[item.type] = L.markerClusterGroup({
-                        disableClusteringAtZoom: 0, // 줌을 당기면 흩어짐
-                        spiderfyOnMaxZoom: true,    // 최대 줌에서 클릭 시 벌어짐
-                        showCoverageOnHover: false, // 묶음 영역 표시 끔
-                        chunkedLoading: true,       // ★ 렉 방지 필수 옵션
+                        disableClusteringAtZoom: 0,
+                        spiderfyOnMaxZoom: true,
+                        showCoverageOnHover: false, 
+                        chunkedLoading: true,
 
-                        // ★ [커스텀 뱃지 아이콘 생성]
+                        // ★ [뱃지 생성]
                         iconCreateFunction: function(cluster) {
-                            const count = cluster.getChildCount(); // 묶인 개수
-                            
-                            // 숫자가 100이 넘어가면 '99+'로 표시 (디자인 깨짐 방지)
+                            const count = cluster.getChildCount();
                             const countText = count > 99 ? '99+' : count;
 
                             const html = `
                                 <div class="badge-cluster-container">
+                                    
                                     <div class="pin-marker">
                                         <div class="pin-inner-circle" style="--pin-color: ${typeColor};">
                                             <img src="${typeIconPath}" onerror="this.src='../images/stone.png'">
                                         </div>
                                     </div>
                                     
-                                    <div class="cluster-badge-count">${countText}</div>
+                                    <div class="cluster-badge-count" style="background-color: ${typeColor};">
+                                        ${countText}
+                                    </div>
                                 </div>
                             `;
 
                             return L.divIcon({
                                 html: html,
-                                className: '',     // 기본 클래스 제거
-                                iconSize: pinSize, // 핀 크기와 동일
-                                iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9]
+                                className: '',     
+                                iconSize: pinSize, 
+                                iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9] 
                             });
                         }
                     });
@@ -300,7 +302,6 @@
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || colorMapping["기타"];
 
-                // 일반 마커 (묶이지 않았을 때)
                 const pinIcon = L.divIcon({
                     className: isCompleted ? 'marker-completed' : '',
                     html: `<div class="pin-marker">
@@ -316,15 +317,13 @@
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 
-                // 그룹에 추가
                 layerGroups[item.type].addLayer(marker);
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
-            // 지도에 표시
             for (const key in layerGroups) layerGroups[key].addTo(map);
 
-            // https://math-development-geometry.tistory.com/50
+            // URL 파라미터 이동 로직
             const targetId = urlParams.get('marker');
             if (targetId) {
                 const target = allMarkers.find(m => m.id == targetId);
@@ -335,7 +334,6 @@
                                               .find(cb => cb.parentElement.innerText.includes(target.type));
                         if (checkbox) checkbox.checked = true;
                     }
-                    // 클러스터 내부 줌 처리
                     layerGroups[target.type].zoomToShowLayer(target.marker, function() {
                         target.marker.openPopup();
                     });

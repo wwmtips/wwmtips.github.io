@@ -1,5 +1,25 @@
 [
   {
+    "id": 1766140174871,
+    "name": "도박왕의 비밀보물",
+    "type": "만사록",
+    "y": 2930,
+    "x": 2329,
+    "desc": "숨겨진 도박왕의 보물을 찾아서",
+    "link": "https://wwm.tips/?q=25",
+    "image": "https://wwm.tips/quests/images/q25_2.jpg"
+  },
+  {
+    "id": 1766140146927,
+    "name": "생잎죽",
+    "type": "만사록",
+    "y": 2963,
+    "x": 2149,
+    "desc": "견평안을 위한 약 구하기",
+    "link": "https://wwm.tips/?q=26",
+    "image": "https://wwm.tips/quests/images/q26_1.jpg"
+  },
+  {
     "id": 1766119642605,
     "name": "하루살이 꽃",
     "type": "기연",

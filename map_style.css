@@ -584,34 +584,47 @@ html, body, #map {
         }
 
         /* =========================================
-           ★ 클러스터 토글 버튼 스타일
+           ★ 모아보기(클러스터) 버튼 스타일 (수정됨)
            ========================================= */
         .cluster-toggle-btn {
             position: fixed;
-            top: 20px;
-            left: 140px; /* 사이드바 버튼 너비만큼 띄움 (조절 가능) */
-            z-index: 2000;
+            top: 20px;      /* 왼쪽 버튼과 동일한 높이 */
+            left: 120px;    /* 왼쪽 버튼 옆에 위치 (간격 조정됨) */
+            z-index: 1000;  /* 지도 컨트롤보다 위에 */
             
-            padding: 10px 15px;
-            background: #1a1a1a;
-            color: white;
-            border: 2px solid #a08040; /* 금색 테두리 */
+            /* '청하' 버튼과 동일한 크기감 설정 */
+            padding: 10px 20px; 
             border-radius: 4px;
             
-            font-size: 14px;
+            /* ★ 색상 유지 (다크 테마 + 골드) */
+            background: #1a1a1a;
+            color: white;
+            border: 1px solid #a08040; 
+            
+            font-size: 16px; /* 폰트 크기 맞춤 */
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            
+            /* 그림자도 왼쪽 버튼과 비슷하게 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             transition: all 0.2s;
+            
+            /* 텍스트 수직 중앙 정렬 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 44px; /* 왼쪽 버튼과 높이 강제 일치 (필요시 조절) */
+            box-sizing: border-box; 
         }
 
         .cluster-toggle-btn:hover {
             background: #333;
+            transform: translateY(-1px); /* 살짝 떠오르는 효과 */
         }
 
-        /* 꺼졌을 때 스타일 (회색) */
+        /* 꺼졌을 때 스타일 (약간 흐리게) */
         .cluster-toggle-btn.off {
-            background: #555;
-            border-color: #888;
-            color: #ccc;
+            background: #333;
+            border-color: #666;
+            color: #aaa;
         }

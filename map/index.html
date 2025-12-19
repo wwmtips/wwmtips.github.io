@@ -242,14 +242,21 @@
             .catch(err => { console.error(err); });
 
         // ★ [클러스터 토글 로직]
+       // ★ [버튼 텍스트 변경: 모아보기]
         function updateClusterButton() {
             const btn = document.getElementById('cluster-toggle-btn');
             if (isClusterOn) {
-                btn.innerText = "● 클러스터 ON";
+                // 켜져 있을 때 (금색 테두리)
+                btn.innerText = "● 모아보기 ON";
                 btn.classList.remove('off');
+                btn.style.border = "1px solid #a08040";
+                btn.style.color = "white";
             } else {
-                btn.innerText = "○ 클러스터 OFF";
+                // 꺼져 있을 때 (회색 처리)
+                btn.innerText = "○ 모아보기 OFF";
                 btn.classList.add('off');
+                btn.style.border = "1px solid #666";
+                btn.style.color = "#aaa";
             }
         }
 

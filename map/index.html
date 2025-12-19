@@ -467,8 +467,12 @@
         // [추가된 함수] 고양이 선택 시 설명 자동 입력
         window.autoFillDesc = function(selectElement) {
             const descInput = document.getElementById('input_desc');
+            const titleInput = document.getElementById('input_name');
             if (selectElement.value === '고양이') {
                 descInput.value = '귀여운 고양이다';
+            }else if (selectElement.value === '묘묘냥') {
+                descInput.value = '박식 스탯을 위해 필수 진행';
+                titleInput.value ='묘묘냥';
             } else if (descInput.value === '귀여운 고양이다') {
                 // (옵션) 만약 다른 걸로 바꿨는데 내용이 '귀여운 고양이다' 그대로면 지워줌
                 descInput.value = '';

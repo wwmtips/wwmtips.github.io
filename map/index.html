@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <meta charset="UTF-8">
     <title>연운 한국어 맵 for Wiki</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
@@ -136,8 +138,8 @@
     </div>
 
     <div id="map"></div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
         // ==========================================
@@ -243,20 +245,63 @@
             })
             .catch(err => { console.error(err); });
 
-        function createMarkers(data) {
+       function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
             data.forEach(item => {
-                if (!layerGroups[item.type]) layerGroups[item.type] = L.layerGroup();
+                
+                if (!layerGroups[item.type]) {
+                    
+                    // 아이콘 및 '색상' 정보 가져오기
+                    const typeImgName = typeMapping[item.type] || "stone";
+                    const typeIconPath = `../images/${typeImgName}.png`;
+                    
+                    // ★ 여기서 가져온 색상(typeColor)을 핀과 뱃지 양쪽에 다 씁니다.
+                    const typeColor = colorMapping[item.type] || "#555";
+
+                    layerGroups[item.type] = L.markerClusterGroup({
+                        disableClusteringAtZoom: 0,
+                        spiderfyOnMaxZoom: true,
+                        showCoverageOnHover: false, 
+                        chunkedLoading: true,
+
+                        // ★ [뱃지 생성]
+                        iconCreateFunction: function(cluster) {
+                            const count = cluster.getChildCount();
+                            const countText = count > 99 ? '99+' : count;
+
+                            const html = `
+                                <div class="badge-cluster-container">
+                                    
+                                    <div class="pin-marker">
+                                        <div class="pin-inner-circle" style="--pin-color: ${typeColor};">
+                                            <img src="${typeIconPath}" onerror="this.src='../images/stone.png'">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="cluster-badge-count" style="background-color: ${typeColor};">
+                                        ${countText}
+                                    </div>
+                                </div>
+                            `;
+
+                            return L.divIcon({
+                                html: html,
+                                className: '',     
+                                iconSize: pinSize, 
+                                iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9] 
+                            });
+                        }
+                    });
+                }
+
                 const isCompleted = completedList.includes(item.id);
                 
                 const imgName = typeMapping[item.type] || "stone"; 
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || colorMapping["기타"];
 
-                // ★ [핀 마커 생성] 
-                // .pin-marker (흰색 몸통) -> .pin-inner-circle (컬러 원) -> img (흰색 아이콘)
                 const pinIcon = L.divIcon({
                     className: isCompleted ? 'marker-completed' : '',
                     html: `<div class="pin-marker">
@@ -265,42 +310,33 @@
                                </div>
                            </div>`,
                     iconSize: pinSize, 
-                    // 앵커: 핀의 뾰족한 끝(바닥)이 정확히 좌표에 찍히도록 조정
                     iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], 
                     popupAnchor: [0, -(pinSize[1] * 0.8)]
                 });
 
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
+                
                 layerGroups[item.type].addLayer(marker);
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
-          // 기존 루프가 끝난 뒤, layerGroups 추가하는 코드 아래에 작성:
             for (const key in layerGroups) layerGroups[key].addTo(map);
 
-            // ★ [추가된 부분] URL 파라미터에 marker ID가 있으면 그곳으로 이동
+            // URL 파라미터 이동 로직
             const targetId = urlParams.get('marker');
             if (targetId) {
-                // ID는 숫자일 수도 문자일 수도 있으므로 == 비교 (느슨한 비교)
                 const target = allMarkers.find(m => m.id == targetId);
                 if (target) {
-                    // 해당 레이어가 꺼져있을 수도 있으므로 강제로 켬
                     if (!map.hasLayer(layerGroups[target.type])) {
                         map.addLayer(layerGroups[target.type]);
-                        // 체크박스도 동기화
                         const checkbox = Array.from(document.querySelectorAll('.filter-checkbox'))
                                               .find(cb => cb.parentElement.innerText.includes(target.type));
                         if (checkbox) checkbox.checked = true;
                     }
-
-                    // 1. 위치로 이동 (Zoom 레벨은 0 정도로 가깝게)
-                    map.setView(target.marker.getLatLng(), 0);
-                    
-                    // 2. 팝업 열기 (지도 이동 애니메이션 후 실행)
-                    setTimeout(() => {
+                    layerGroups[target.type].zoomToShowLayer(target.marker, function() {
                         target.marker.openPopup();
-                    }, 500);
+                    });
                 }
             }
         }
@@ -524,5 +560,6 @@ function getYouTubeId(url) {
             document.body.removeChild(ta);
         }
     </script>
+    
 </body>
 </html>

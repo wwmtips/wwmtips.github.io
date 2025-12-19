@@ -249,16 +249,21 @@
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
+            // ★ [설정] 검은색 글씨를 사용할 밝은 배경의 타입들을 여기에 적어주세요.
+            const lightTypes = ["경계석"]; 
+
             data.forEach(item => {
                 
                 if (!layerGroups[item.type]) {
                     
-                    // 아이콘 및 '색상' 정보 가져오기
                     const typeImgName = typeMapping[item.type] || "stone";
                     const typeIconPath = `../images/${typeImgName}.png`;
-                    
-                    // ★ 여기서 가져온 색상(typeColor)을 핀과 뱃지 양쪽에 다 씁니다.
                     const typeColor = colorMapping[item.type] || "#555";
+
+                    // ★ 배경이 밝은 타입이면 글자색을 검정(#000), 아니면 흰색(#fff)으로 설정
+                    const isLight = lightTypes.includes(item.type);
+                    const badgeTextColor = isLight ? "#000000" : "#ffffff";
+                    const textShadowStyle = isLight ? "none" : "0 0 2px rgba(0,0,0,0.5)";
 
                     layerGroups[item.type] = L.markerClusterGroup({
                         disableClusteringAtZoom: 0,
@@ -266,21 +271,19 @@
                         showCoverageOnHover: false, 
                         chunkedLoading: true,
 
-                        // ★ [뱃지 생성]
                         iconCreateFunction: function(cluster) {
                             const count = cluster.getChildCount();
                             const countText = count > 99 ? '99+' : count;
 
                             const html = `
                                 <div class="badge-cluster-container">
-                                    
                                     <div class="pin-marker">
                                         <div class="pin-inner-circle" style="--pin-color: ${typeColor};">
                                             <img src="${typeIconPath}" onerror="this.src='../images/stone.png'">
                                         </div>
                                     </div>
                                     
-                                    <div class="cluster-badge-count" style="background-color: ${typeColor};">
+                                    <div class="cluster-badge-count" style="background-color: ${typeColor}; color: ${badgeTextColor}; text-shadow: ${textShadowStyle};">
                                         ${countText}
                                     </div>
                                 </div>

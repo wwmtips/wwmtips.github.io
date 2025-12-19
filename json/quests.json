@@ -1,4 +1,14 @@
-[ {
+[ 
+  {
+    "id": "q119",
+    "name": "만년등의 빛",
+    "location": "연희 거리",
+    "type": "만사록",
+    "bgimg": "q119_2.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q119.html"
+  },
+{
     "id": "q118",
     "name": "신룡의 화염",
     "location": "연희 거리",

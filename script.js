@@ -316,10 +316,13 @@ function switchTab(tabName, updateHistory = true) {
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
     navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
     
-    // 3. 드롭다운 초기화
+  // 3. 드롭다운 초기화 (모든 메뉴 닫기)
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
-    const dropdown = document.getElementById("nav-more-list");
-    if(dropdown) dropdown.classList.remove('show');
+    
+    // [핵심] ID 상관없이 'nav-dropdown-content' 클래스를 가진 모든 메뉴를 닫습니다.
+    document.querySelectorAll('.nav-dropdown-content').forEach(el => {
+        el.classList.remove('show');
+    });
 
     // 4. 탭 활성화 로직
     if (tabName === 'home') {

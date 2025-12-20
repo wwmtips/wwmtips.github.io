@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q127",
+   "name": "빛나는 법등",
+   "location": "연희 거리",
+   "type": "만사록",
+   "bgimg": "q127_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q127.html"
+ },
+  {
    "id": "q126",
    "name": "어둠 속 향기",
    "location": "연희 거리",

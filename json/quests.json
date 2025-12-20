@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q137",
+   "name": "설한의 복수",
+   "location": "백마 나루",
+   "type": "만사록",
+   "bgimg": "q137_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q137.html"
+ },
+  {
    "id": "q136",
    "name": "밝은 등불",
    "location": "목판소",

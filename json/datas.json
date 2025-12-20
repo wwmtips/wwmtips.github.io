@@ -2,6 +2,15 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "바다의 포식자", "answer": "상어", "user": "깜선생" },
+{ "hint": "꼬리", "answer": "전갈", "user": "izell" },
+{ "hint": "향신료", "answer": "로즈마리", "user": "핑주왘" },
+{ "hint": "보라색", "answer": "가지", "user": "셔니" },
+{ "hint": "기침", "answer": "비파", "user": "경교" },
+{ "hint": "꼬리", "answer": "올챙이", "user": "제갈청하" },
+{ "hint": "나트륨", "answer": "소금", "user": "Raku라쿠" },
+{ "hint": "흰 줄무늬", "answer": "스컹크", "user": "설리화" },
+
     { "hint": "날렵함", "answer": "표범", "user": "월흔향" },
 { "hint": "강한 향기", "answer": "히아신스", "user": "" },
 { "hint": "여름", "answer": "백일초", "user": "Raku라쿠" },

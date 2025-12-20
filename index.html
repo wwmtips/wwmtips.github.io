@@ -42,7 +42,34 @@
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="fav/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
-    
+   <script>
+        // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
+        const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbyWLxpB4ULKKHku_V78oV8hUUrpC-7SaSO5EZRF-nI4taUspbddYsclztl6YAGvg-dm/exec"; 
+
+        document.addEventListener("DOMContentLoaded", function() {
+            checkEventStatus();
+        });
+
+        function checkEventStatus() {
+            const banner = document.getElementById('luckyBanner');
+            
+            if (!banner) return;
+
+            // 서버에 상태 확인 요청
+            fetch(`${EVENT_API_URL}?action=status`)
+                .then(response => response.text())
+                .then(status => {
+                    if (status === "GAMEOVER") {
+                        // ★ [수정됨] 당첨자가 있으면 배너를 아예 삭제(숨김)
+                        banner.style.display = 'none'; 
+                    }
+                })
+                .catch(err => console.log("이벤트 상태 확인 실패:", err));
+        }
+    </script>
+</body>
+</html>
+        
 </head>
 <body>
 
@@ -115,7 +142,7 @@
                 <div id="slider-indicators" class="slider-indicators"></div>
             </div>
 
-            
+
  <div id="luckyBanner" class="lucky-event-banner" onclick="location.href='event/index.html'">
                 <div class="lucky-content-wrapper">
                     <div class="lucky-seal-icon">

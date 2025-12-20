@@ -2255,25 +2255,4 @@ function openGuideDirect(filename) {
 }
 
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
-        const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbwkMb9GqB-rtz7Tx1jVqmT0xHCKTSas1jWiF--kZjHn7vziE5IYNaYVlz_I-SGbNFFq/exec"; 
 
-        document.addEventListener("DOMContentLoaded", function() {
-            checkEventStatus();
-        });
-
-        function checkEventStatus() {
-            const banner = document.getElementById('luckyBanner');
-            const title = document.getElementById('luckyTitle');
-            const desc = document.getElementById('luckyDesc');
-
-            if (!banner) return; // 배너가 없으면 중단
-
-            // 서버에 상태 물어보기 (action=status)
-            fetch(`${EVENT_API_URL}?action=status`)
-                .then(response => response.text())
-                .then(status => {
-                    if (status === "GAMEOVER") {
-                       banner.style.display = 'none';
-                })
-                .catch(err => console.log("이벤트 상태 확인 실패:", err));
-        }

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>행운의 봉투 이벤트</title>
+    <style>
+        /* 기본 설정 */
+        body {
+            display: flex; flex-direction: column; align-items: center;
+            background-color: #f0f0f0; margin: 0; padding-top: 50px;
+            font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* 입력창 스타일 */
+        .input-area { margin-bottom: 30px; text-align: center; z-index: 10; }
+        .input-nickname { padding: 10px; border: 2px solid #ddd; border-radius: 5px; width: 180px; }
+        .start-btn { padding: 10px 20px; background-color: #c41e28; color: white; border: none; border-radius: 5px; cursor: pointer; }
+
+        /* 봉투 스타일 */
+        .envelope-wrapper {
+            position: relative; width: 320px; height: 220px;
+            pointer-events: none; opacity: 0.6; transition: opacity 0.3s;
+            margin-bottom: 50px; 
+            margin-top: 150px; /* 카드 올라갈 공간 확보 */
+        }
+        .envelope-wrapper.active { pointer-events: auto; opacity: 1; cursor: pointer; }
+        
+        .shake { animation: shake 2.5s infinite; }
+        @keyframes shake { 0%, 100% { transform: rotate(0deg); } 5% { transform: rotate(1deg); } 10% { transform: rotate(-1deg); } 25% { transform: rotate(0deg); } }
+        
+        .envelope { position: relative; width: 100%; height: 100%; background-color: #ba1c26; border-radius: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        
+        /* 카드 스타일 (높이 수정됨) */
+        .card { 
+            position: absolute; 
+            left: 15px; right: 15px; bottom: 10px; top: 20px;
+            background: white; 
+            border: 2px solid #e0aa3e; 
+            border-radius: 5px; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; 
+            z-index: 1; 
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            padding: 20px; box-sizing: border-box;
+        }
+        .card h2 { margin: 0 0 10px 0; font-size: 22px; }
+        .card p { margin: 0; color: #555; font-size: 14px; word-break: keep-all; }
+
+        /* ★ 당첨 코드 박스 스타일 */
+        .win-code-box {
+            display: none; /* 평소엔 숨김 */
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: #fff8e1;
+            border: 2px dashed #e0aa3e;
+            border-radius: 8px;
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 18px;
+            user-select: all; /* 드래그 복사 쉽게 */
+        }
+
+        /* 날개들 */
+        .flap-left { position: absolute; top: 0; left: 0; bottom: 0; width: 0; height: 0; border-style: solid; border-width: 110px 0 110px 160px; border-color: transparent transparent transparent #c41e28; z-index: 2; }
+        .flap-right { position: absolute; top: 0; right: 0; bottom: 0; width: 0; height: 0; border-style: solid; border-width: 110px 160px 110px 0; border-color: transparent #c41e28 transparent transparent; z-index: 2; }
+        .flap-bottom { position: absolute; bottom: 0; left: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 160px 130px 160px; border-color: transparent transparent #d62832 transparent; z-index: 3; }
+        .flap-top { position: absolute; top: 0; left: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 130px 160px 0 160px; border-color: #e3303a transparent transparent transparent; z-index: 4; transform-origin: top; transition: transform 0.6s; }
+        .flap-top::after { content: ''; position: absolute; top: -130px; left: -150px; width: 300px; height: 120px; border: 1px solid #f9d675; border-top: none; transform: scaleY(0.8); opacity: 0.5; pointer-events: none; }
+        
+        .seal { position: absolute; top: 100px; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: radial-gradient(circle, #f9d675 0%, #e0aa3e 100%); border: 2px solid #fff; border-radius: 50%; z-index: 5; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #c41e28; font-size: 20px; transition: opacity 0.3s; }
+        .loader { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 4px solid #f3f3f3; border-top: 4px solid #c41e28; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; z-index: 100; }
+        @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* 오픈 애니메이션 (카드 높이 -100px로 수정됨) */
+        .open .flap-top { transform: rotateX(180deg); z-index: 1; }
+        .open .seal { opacity: 0; pointer-events: none; }
+        .open .card { transform: translateY(-100px); z-index: 3; transition-delay: 0.4s; }
+
+        /* 명단 리스트 스타일 */
+        .list-container {
+            width: 90%; max-width: 400px; background: white; padding: 20px; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 50px; z-index: 50; 
+        }
+        .list-title { text-align: center; color: #333; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        .list-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .list-table th { color: #888; text-align: left; padding: 5px; font-weight: normal; }
+        .list-table td { padding: 8px 5px; border-bottom: 1px solid #f5f5f5; color: #333; }
+        .res-win { color: #d32f2f; font-weight: bold; }
+        .res-lose { color: #aaa; }
+    </style>
+</head>
+<body>
+
+    <div class="envelope-wrapper shake" id="envelopeWrapper" onclick="requestResult()">
+        <div class="envelope">
+            <div class="card">
+                <h2 id="resultTitle">?</h2>
+                <p id="resultText">확인 중...</p>
+                <div id="codeBox" class="win-code-box"></div>
+            </div>
+            <div class="flap-left"></div> <div class="flap-right"></div> <div class="flap-bottom"></div> <div class="flap-top"></div> <div class="seal">福</div>
+            <div class="loader" id="loader"></div>
+        </div>
+    </div>
+
+    <div class="input-area" id="inputArea">
+        <h3>닉네임을 입력하세요</h3>
+        <input type="text" id="nickname" class="input-nickname" placeholder="여기에 입력..." maxlength="8">
+        <button class="start-btn" onclick="readyToOpen()">확인</button>
+    </div>
+
+    <div class="list-container">
+        <h4 class="list-title">📋 최근 참여자 현황</h4>
+        <table class="list-table">
+            <thead>
+                <tr>
+                    <th width="25%">시간</th>
+                    <th width="40%">닉네임</th>
+                    <th width="35%" style="text-align:right">결과</th>
+                </tr>
+            </thead>
+            <tbody id="listBody">
+                <tr><td colspan="3" style="text-align:center; padding:20px;">로딩 중...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // ★★★ 구글 앱스 스크립트 배포 URL을 여기에 넣으세요 ★★★
+        const GAS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwri9pIRIer_sxDsjJIjr1zE5rlnWhhEy0EgM6knOBO4X7TazREbihq_WLJ-Iq_k_-G/exec"; 
+
+        let isReady = false;
+        let isOpened = false;
+        let currentUser = "";
+
+        // 페이지 열리자마자 명단 로드
+        window.onload = function() { loadList(); };
+
+        function readyToOpen() {
+            const input = document.getElementById('nickname');
+            if (!input.value.trim()) { alert("닉네임을 입력해주세요!"); return; }
+            currentUser = input.value.trim();
+            document.getElementById('inputArea').style.display = 'none';
+            document.getElementById('envelopeWrapper').classList.add('active');
+            isReady = true;
+        }
+
+        function requestResult() {
+            if (!isReady || isOpened) return;
+            
+            const wrapper = document.getElementById('envelopeWrapper');
+            const loader = document.getElementById('loader');
+            const title = document.getElementById('resultTitle');
+            const text = document.getElementById('resultText');
+            const codeBox = document.getElementById('codeBox');
+
+            wrapper.classList.remove('shake');
+            loader.style.display = 'block';
+
+            // 1. IP 확인
+            fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(ipData => {
+                const userIp = ipData.ip;
+                // 2. 서버 요청
+                return fetch(`${GAS_SCRIPT_URL}?action=play&id=${encodeURIComponent(currentUser)}&ip=${userIp}`);
+            })
+            .then(response => response.text())
+            .then(data => {
+                loader.style.display = 'none';
+
+                // 종료 조건 체크
+                if (data === "GAMEOVER") {
+                    alert("📢 이미 당첨자가 나왔습니다!\n이벤트가 종료되었습니다.");
+                    text.innerText = "이벤트 종료";
+                    wrapper.classList.remove('active');
+                    wrapper.style.opacity = "0.5";
+                    loadList(); 
+                    return; 
+                }
+
+                isOpened = true;
+                
+                // 데이터 파싱 ("WIN:코드" 또는 "HISTORY:WIN:코드")
+                let finalResult = data;
+                let finalCode = "";
+                let isHistory = false;
+
+                if (data.startsWith("HISTORY:")) {
+                    isHistory = true;
+                    // 예: HISTORY:WIN:LUCKY2025
+                    const parts = data.split(":");
+                    finalResult = parts[1]; // WIN 또는 LOSE
+                    if(parts.length > 2) finalCode = parts[2]; // 코드
+                } else if (data.startsWith("WIN:")) {
+                    // 예: WIN:LUCKY2025
+                    const parts = data.split(":");
+                    finalResult = "WIN";
+                    finalCode = parts[1];
+                }
+
+                // 결과 화면 표시
+                if (finalResult === "WIN") {
+                    if(isHistory) {
+                        title.innerText = "참여 완료"; title.style.color = "#d32f2f";
+                        text.innerHTML = "이미 당첨되셨습니다!<br>코드를 확인해주세요.";
+                    } else {
+                        title.innerText = "🎉 대협! 🎉"; title.style.color = "#d32f2f";
+                        text.innerHTML = "즐거운 주말 보내시오. 손이가도 손이 가는 새우깡이오!";
+                    }
+                    
+                    // 코드 표시
+                    if(finalCode) {
+                        codeBox.innerText = finalCode; // 코드만 깔끔하게 표시
+                        codeBox.style.display = "block";
+                    }
+
+                } else {
+                    if(isHistory) {
+                        title.innerText = "참여 완료"; title.style.color = "#555";
+                        text.innerHTML = "이미 참여하셨습니다.<br>(결과: 꽝)";
+                    } else {
+                        title.innerText = "또 속냐, 막내야?"; title.style.color = "#555";
+                        text.innerHTML = "구류문은 언제나 열려있단다<br>막내야!";
+                    }
+                }
+
+                wrapper.classList.add('open');
+                loadList(); // 명단 갱신
+            })
+            .catch(err => {
+                loader.style.display = 'none';
+                alert("오류 발생. 다시 시도해주세요.");
+                wrapper.classList.add('shake');
+            });
+        }
+
+        // 명단 리스트 함수
+        function loadList() {
+            fetch(`${GAS_SCRIPT_URL}?action=list`)
+            .then(res => res.json())
+            .then(list => {
+                const tbody = document.getElementById('listBody');
+                tbody.innerHTML = ""; 
+
+                if(list.length === 0) {
+                    tbody.innerHTML = "<tr><td colspan='3' style='text-align:center; padding:20px;'>아직 참여자가 없습니다.</td></tr>";
+                    return;
+                }
+
+                list.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const resClass = item.result === "WIN" ? "res-win" : "res-lose";
+                    const resText = item.result === "WIN" ? "🎉 행원봉투" : "사리봉";
+                    
+                    tr.innerHTML = `
+                        <td>${item.time}</td>
+                        <td>${item.name}</td>
+                        <td style="text-align:right" class="${resClass}">${resText}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

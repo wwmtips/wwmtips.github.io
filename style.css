@@ -2705,3 +2705,40 @@ h3 {
     .lucky-title { font-size: 1.0em; }
     .lucky-action-btn { display: none; } /* 화면 좁으면 버튼 숨김 */
 }
+
+/* =========================================
+   [추가] 행운 봉투 종료 상태 (Dim 처리)
+   ========================================= */
+.lucky-event-banner.ended {
+    /* 흑백 처리 */
+    filter: grayscale(100%);
+    /* 투명도 (Dim) */
+    opacity: 0.6;
+    /* 클릭 커서 변경 */
+    cursor: default;
+    /* 배경색 변경 (회색조) */
+    background: #555;
+    border-color: #888;
+    box-shadow: none;
+}
+
+/* 종료 시 마우스 올려도 반응 없게 */
+.lucky-event-banner.ended:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* 종료 시 씰 애니메이션 멈춤 */
+.lucky-event-banner.ended .lucky-seal-icon {
+    animation: none;
+    background: #ccc;
+    border-color: #999;
+}
+
+.lucky-event-banner.ended .lucky-seal-icon span {
+    color: #fff;
+}
+
+.lucky-event-banner.ended .lucky-action-btn {
+    display: none; /* 버튼 숨김 */
+}

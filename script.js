@@ -2253,3 +2253,37 @@ function openGuideDirect(filename) {
         loadGuideContent(filename, null);
     }
 }
+
+// ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
+        const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbwkMb9GqB-rtz7Tx1jVqmT0xHCKTSas1jWiF--kZjHn7vziE5IYNaYVlz_I-SGbNFFq/exec"; 
+
+        document.addEventListener("DOMContentLoaded", function() {
+            checkEventStatus();
+        });
+
+        function checkEventStatus() {
+            const banner = document.getElementById('luckyBanner');
+            const title = document.getElementById('luckyTitle');
+            const desc = document.getElementById('luckyDesc');
+
+            if (!banner) return; // 배너가 없으면 중단
+
+            // 서버에 상태 물어보기 (action=status)
+            fetch(`${EVENT_API_URL}?action=status`)
+                .then(response => response.text())
+                .then(status => {
+                    if (status === "GAMEOVER") {
+                        // 당첨자가 이미 나온 경우 -> 종료 처리
+                        banner.classList.add('ended'); // 흑백 클래스 추가
+                        banner.onclick = function(e) {
+                            e.preventDefault(); // 클릭 막기
+                            alert("이번 이벤트는 종료되었습니다. 다음 기회를 노려주세요!");
+                        };
+                        
+                        // 텍스트 변경
+                        title.innerText = "행운 봉투 이벤트 종료";
+                        desc.innerText = "다음 행운 봉투를 기다려주세요.";
+                    }
+                })
+                .catch(err => console.log("이벤트 상태 확인 실패:", err));
+        }

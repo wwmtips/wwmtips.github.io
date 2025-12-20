@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q140",
+   "name": "산수유 향기",
+   "location": "천상래",
+   "type": "만사록",
+   "bgimg": "q140_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q140.html"
+ },
+  {
    "id": "q139",
    "name": "슬픔의 깊이",
    "location": "천상래",

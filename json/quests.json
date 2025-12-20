@@ -1,5 +1,23 @@
 [ 
   {
+   "id": "q139",
+   "name": "슬픔의 깊이",
+   "location": "천상래",
+   "type": "만사록",
+   "bgimg": "q139_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q139.html"
+ },
+  {
+   "id": "q138",
+   "name": "방랑자의 가서",
+   "location": "천상래",
+   "type": "만사록",
+   "bgimg": "q138_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q138.html"
+ },
+  {
    "id": "q137",
    "name": "설한의 복수",
    "location": "백마 나루",

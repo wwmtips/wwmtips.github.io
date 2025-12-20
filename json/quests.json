@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q126",
+   "name": "어둠 속 향기",
+   "location": "연희 거리",
+   "type": "만사록",
+   "bgimg": "q126_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q126.html"
+ },
+  {
    "id": "q125",
    "name": "삼 척 명주",
    "location": "연희 거리",

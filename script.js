@@ -2273,17 +2273,7 @@ function openGuideDirect(filename) {
                 .then(response => response.text())
                 .then(status => {
                     if (status === "GAMEOVER") {
-                        // 당첨자가 이미 나온 경우 -> 종료 처리
-                        banner.classList.add('ended'); // 흑백 클래스 추가
-                        banner.onclick = function(e) {
-                            e.preventDefault(); // 클릭 막기
-                            alert("이번 이벤트는 종료되었습니다. 다음 기회를 노려주세요!");
-                        };
-                        
-                        // 텍스트 변경
-                        title.innerText = "행운 봉투 이벤트 종료";
-                        desc.innerText = "다음 행운 봉투를 기다려주세요.";
-                    }
+                       banner.style.display = 'none';
                 })
                 .catch(err => console.log("이벤트 상태 확인 실패:", err));
         }

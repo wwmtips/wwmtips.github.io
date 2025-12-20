@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q133",
+   "name": "서리꾼",
+   "location": "평야원",
+   "type": "만사록",
+   "bgimg": "q133_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q133.html"
+ },
+  {
    "id": "q132",
    "name": "말하는 농작물",
    "location": "평야원",

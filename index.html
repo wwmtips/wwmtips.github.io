@@ -44,32 +44,44 @@
 <meta name="theme-color" content="#ffffff">
    <script>
         // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
-        const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbyWLxpB4ULKKHku_V78oV8hUUrpC-7SaSO5EZRF-nI4taUspbddYsclztl6YAGvg-dm/exec"; 
+        const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbxNJNUMnWPYI4QeXyUAiix9kJDz8Lc4KqEpWIZNCsPKqbjpd-eMyZAW1RUl60hywJmQ/exec"; 
 
         document.addEventListener("DOMContentLoaded", function() {
             checkEventStatus();
         });
 
-        function checkEventStatus() {
+       function checkEventStatus() {
             const banner = document.getElementById('luckyBanner');
-            
-            if (!banner) return;
+            const title = document.getElementById('luckyTitle');
+            const desc = document.getElementById('luckyDesc');
 
-            // 서버에 상태 확인 요청
+            if (!banner) return; 
+
             fetch(`${EVENT_API_URL}?action=status`)
                 .then(response => response.text())
-                .then(status => {
-                    if (status === "GAMEOVER") {
-                       // 당첨자가 이미 나온 경우 -> 종료 처리
-                        banner.classList.add('ended'); // 흑백 클래스 추가
+                .then(data => {
+                    // "GAMEOVER:홍길동" 처럼 데이터가 옴
+                    if (data.startsWith("GAMEOVER")) {
+                        
+                        // 1. 닉네임 추출 (콜론 : 기준으로 자르기)
+                        const parts = data.split(":");
+                        let winnerName = "익명"; // 기본값
+                        if (parts.length > 1) {
+                            winnerName = parts[1];
+                        }
+
+                        // 2. 종료 스타일 적용 (흑백 처리)
+                        banner.classList.add('ended'); 
+                        
                         banner.onclick = function(e) {
-                            e.preventDefault(); // 클릭 막기
-                            alert("이번 이벤트는 종료되었습니다. 다음 기회를 노려주세요!");
+                            e.preventDefault(); 
+                            alert(`이미 [${winnerName}]님이 당첨되셨습니다. 다음 기회에!`);
                         };
                         
-                        // 텍스트 변경
-                        title.innerText = "행운 봉투 이벤트 종료";
-                        desc.innerText = "다음 행운 봉투를 기다려주세요.";
+                        // 3. ★ 문구 변경 (당첨자 이름 표시)
+                        title.innerText = `행운봉투 이벤트 종료`; 
+                        title.style.color = "#ffcdd2"; // (선택) 흑백 배경에서 잘 보이게 연한 색으로
+                        desc.innerText = "${winnerName}대협이 행운봉투를 여셨소!"; 
                     }
                 })
                 .catch(err => console.log("이벤트 상태 확인 실패:", err));
@@ -158,7 +170,7 @@
                     </div>
                     
                     <div class="lucky-text-group">
-                        <div id="luckyTitle" class="lucky-title">오늘의 행운 봉투 도착!</div>
+                        <div id="luckyTitle" class="lucky-title">행운 봉투 도착!</div>
                         <div id="luckyDesc" class="lucky-desc">꽝 없는 100% 당첨, 지금 바로 확인하세요.</div>
                     </div>
                 </div>

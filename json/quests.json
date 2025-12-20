@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q136",
+   "name": "밝은 등불",
+   "location": "목판소",
+   "type": "만사록",
+   "bgimg": "q136_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q136.html"
+ },
+  {
    "id": "q135",
    "name": "노묵의 논쟁",
    "location": "목판소",

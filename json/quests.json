@@ -1,5 +1,14 @@
 [ 
-  {
+{
+   "id": "q129",
+   "name": "삶의 길잡이",
+   "location": "연희 거리",
+   "type": "만사록",
+   "bgimg": "q129_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q129.html"
+ },
+{
    "id": "q128",
    "name": "평등한 생명",
    "location": "연희 거리",
@@ -360,7 +369,7 @@
   {
     "id": "q24",
     "name": "고양이 우두머리의 고충",
-    "location": "자심선원",
+    "location": "자심산원",
     "type": "만사록",
     "bgimg": "q24_1.jpg",
   

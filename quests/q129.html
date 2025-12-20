@@ -1,0 +1,179 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .tip-box {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-left: 4px solid #4682b4;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+            color: #333;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            삶의 길잡이
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">점쟁이 서자인과 시녀 추일의 이야기</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            자신의 길을 고민하는 시녀 <b>추일</b>에게 풍수 나침반을 전달하고 그녀의 선택을 돕는 의뢰입니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 점쟁이와 시녀</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>대상국사</b> 앞 점집으로 이동하여 점쟁이 <b>서자인(서선생)</b>과 대화하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q129_1.jpg" alt="서자인">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q129_2.jpg" alt="서자인 위치">
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            이후 아래 장소에 있는 용가 시녀 <b>추일</b>을 찾아가 대화를 나눕니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q129_3.jpg" alt="추일">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q129_4.jpg" alt="추일 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 나침반 전달 (시간 변경)</div>
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b> 시진을 <b>다음 날 오전</b>으로 변경하세요.
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            다음 날 아침이 되면 아래 장소로 이동해 <b>추일</b>을 다시 만납니다.<br>
+            그녀에게 <b>[풍수 나침반]</b>을 전달해야 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q129_5.jpg" alt="추일과의 재회">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q129_6.jpg" alt="재회 위치">
+        </div>
+
+        <div class="tip-box">
+            <h4 style="margin: 0 0 10px 0; color: #2c5282;">💡 풍수 나침반이 없다면?</h4>
+            <p style="margin: 0; line-height: 1.6;">
+                인벤토리에 나침반이 없다면 아래 지도에 표시된 곳으로 이동하세요.<br>
+                해당 위치에서 <b>[허공섭물]</b>을 사용하면 나침반을 획득할 수 있습니다.
+            </p>
+            <div class="wuxia-image-container" style="margin-top: 10px;">
+                <img src="../quests/images/q129_7.jpg" alt="나침반 획득 (허공섭물)">
+            </div>
+            <div class="wuxia-image-container">
+                <img src="../quests/images/q129_8.jpg" alt="나침반 위치">
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">3. 새로운 점쟁이 (시간 변경)</div>
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b> 시진을 <b>하루 뒤</b>로 변경하세요.
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            시간을 보낸 후, 맨 처음 <b>서자인이 있던 점집</b>으로 돌아가세요.<br>
+            그 자리에 앉아 있는 <b>추일</b>과 대화하면 퀘스트가 완료됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q129_9.jpg" alt="점집의 추일">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            새로운 삶을 찾은 추일을 보며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

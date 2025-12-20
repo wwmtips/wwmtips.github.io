@@ -1,0 +1,150 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .puzzle-box {
+            background-color: #fff8e1;
+            border: 1px solid #ffecb3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .puzzle-title {
+            color: #d84315;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            대를 이어내려온 보물
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">석공 맹대랑의 가보 찾기</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            석공 <b>맹대랑</b>의 부탁을 받아 동굴 속에 있는 가보를 꺼내오는 의뢰입니다.<br>
+            동굴 문을 열기 위해서는 특별한 장치 조작이 필요합니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 맹대랑과 대화</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>조각소 경계석 아래쪽</b>으로 이동하세요.<br>
+            그곳에 있는 석공 <b>맹대랑</b>과 대화하여 의뢰를 수락합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q134_1.jpg" alt="맹대랑">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q134_2.jpg" alt="맹대랑 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 동굴 진입 및 기믹 해결</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            맹대랑 바로 <b>앞에 있는 동굴</b>로 이동하세요.<br>
+            동굴 입구는 잠겨 있으며, 아래 순서대로 기믹을 해결해야 열립니다.
+        </p>
+        
+        <div class="puzzle-box">
+            <span class="puzzle-title">🔒 동굴 문 여는 법</span>
+            <ol style="margin: 0; padding-left: 20px; line-height: 1.8; color: #333;">
+                <li>문을 기준으로 <b>오른쪽</b>에 있는 <b>스피커(나팔) 모양 장치</b>를 돌려 <b>문고리</b>를 향하게 합니다.</li>
+                <li><b>위쪽</b>에 달려 있는 <b>종</b>을 울립니다.</li>
+                <li>마지막으로 <b>[금옥점혈수]</b> 스킬을 사용하여 문을 개방합니다.</li>
+            </ol>
+        </div>
+
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            문이 열리면 안으로 들어가 <b>[가보]</b>를 획득하세요.<br>
+            그 후 다시 <b>맹대랑</b>에게 돌아가 전달하면 퀘스트가 완료됩니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q134_5.jpg" alt="동굴 위치">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q134_3.jpg" alt="가보 획득">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q134_4.jpg" alt="동굴 위치">
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            가보를 무사히 전달하면<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

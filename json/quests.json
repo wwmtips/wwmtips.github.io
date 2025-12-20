@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q134",
+   "name": "대를 이어내려온 보물",
+   "location": "조각소",
+   "type": "만사록",
+   "bgimg": "q134_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q134.html"
+ },
+  {
    "id": "q133",
    "name": "서리꾼",
    "location": "평야원",

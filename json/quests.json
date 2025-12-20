@@ -1,4 +1,13 @@
 [ 
+  {
+   "id": "q130",
+   "name": "도굴탐험가",
+   "location": "백공방",
+   "type": "만사록",
+   "bgimg": "q130_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q130.html"
+ },
 {
    "id": "q129",
    "name": "삶의 길잡이",

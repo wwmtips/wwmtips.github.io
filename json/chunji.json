@@ -1,5 +1,29 @@
 {
   "chunji": [
+     {
+    "id": "37",
+       "type": "서화",  
+      "subtype":"그림",
+      "title" :"산비탈 담론도",
+      "get": "춘추별관 끝에 큰 수금루 건물안 상자",
+      "getimg1": "images/chunji/p1.jpg",
+      "getimg2": "images/chunji/p2.jpg",
+      "dsec": "자동 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+    {
+    "id": "36",
+       "type": "서화",  
+      "subtype":"그림",
+      "title" :"백화 미인도",
+      "get": "개봉 번루 1층 모한영과 대화",
+      "getimg1": "images/chunji/p2.jpg",
+      "getimg2": "",
+      "dsec": "자동 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
     {
     "id": "35",
        "type": "서화",  

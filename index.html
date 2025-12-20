@@ -81,7 +81,7 @@
                         // 3. ★ 문구 변경 (당첨자 이름 표시)
                         title.innerText = `행운봉투 이벤트 종료`; 
                         title.style.color = "#ffcdd2"; // (선택) 흑백 배경에서 잘 보이게 연한 색으로
-                        desc.innerText = $winnerName+'대협이 행운봉투를 여셨소!'; 
+                        desc.innerText = `${winnerName} 대협이 행운봉투를 여셨소!`;
                     }
                 })
                 .catch(err => console.log("이벤트 상태 확인 실패:", err));

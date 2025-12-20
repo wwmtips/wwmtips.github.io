@@ -1,0 +1,180 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            노묵의 논쟁
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">목판소의 풍계승과 세 가지 보물</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            <b>풍계승</b>과의 대화를 시작으로, 사당의 비밀을 풀고 세 가지 보물을 찾아 바치는 긴 여정입니다.<br>
+            특정 NPC의 정체를 미리 엿볼 수도 있는 중요한 퀘스트입니다.
+        </p>
+    </div>
+
+    <div class="warning-box">
+        <h4 style="color: var(--wuxia-accent-red); margin: 0 0 10px 0;">⚠️ 필수 선행 조건</h4>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            이 퀘스트를 수행하기 위해서는 반드시 만사록 <b>[대를 이어내려온 보물]</b>을 먼저 완료해야 합니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 풍계승과 대화 및 돈주머니 전달</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>목판소 경계석 바로 아래</b>에 있는 <b>풍계승</b>과 대화하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_1.jpg" alt="풍계승">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_2.jpg" alt="풍계승 위치">
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            이후 아래 장소로 이동하여 바닥에 떨어진 <b>[돈주머니]</b>를 줍습니다.<br>
+            바로 옆에 있는 <b>뱃사람</b>에게 전달해 주세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_3.jpg" alt="돈주머니">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_4.jpg" alt="뱃사람에게 전달">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_5.jpg" alt="위치 정보">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 사당 진입 및 보물 찾기</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            정면에 보이는 <b>사당</b> 안으로 들어가 <b>???</b>와 대화합니다.<br>
+            그는 <b>세 가지 보물</b>을 요구합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_6.jpg" alt="사당 내부">
+        </div>
+
+        <ul style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 15px;">
+            <li><b>첫 번째 보물:</b> 선행 퀘스트 <b>[대를 이어내려온 보물]</b>을 완료했다면 이미 확보된 상태입니다.</li>
+            <li>
+                <b>두 번째 보물:</b> 아래 장소로 이동하여 <b>종 기믹</b>을 한 번 더 수행하면 얻을 수 있습니다.
+                <div class="wuxia-image-container">
+                    <img src="../quests/images/q135_7.jpg" alt="종 기믹 장소">
+                </div>
+                <div class="wuxia-image-container">
+                    <img src="../quests/images/q135_8.jpg" alt="위치">
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">3. 수중 던전 클리어 및 완료</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>세 번째 보물</b>을 찾기 위해 다시 <b>사당</b>으로 돌아오세요.<br>
+            사당 <b>중앙에 있는 연못</b>으로 잠수하면 히든 던전으로 진입합니다.<br>
+            이곳에서 <b>총 3개의 잠금 장치(종 기믹 등)</b>를 해제하고 던전을 클리어해야 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_9.jpg" alt="수중 던전 입구">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_10.jpg" alt="던전 기믹 1">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q135_11.jpg" alt="던전 기믹 2">
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            던전을 모두 클리어한 후, 다시 <b>풍계승</b>과 대화하면 퀘스트가 최종 완료됩니다.
+        </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            모든 보물을 찾고 비밀을 밝혀내면<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>
+.

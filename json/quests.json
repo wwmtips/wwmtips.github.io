@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q135",
+   "name": "노묵의 논쟁",
+   "location": "목판소",
+   "type": "만사록",
+   "bgimg": "q135_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q135.html"
+ },
+  {
    "id": "q134",
    "name": "대를 이어내려온 보물",
    "location": "조각소",

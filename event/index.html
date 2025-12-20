@@ -105,11 +105,12 @@
     </div>
 
     <div class="input-area" id="inputArea">
-        <h3>닉네임을 입력하세요</h3>
-        <input type="text" id="nickname" class="input-nickname" placeholder="여기에 입력..." maxlength="8">
+        <input type="text" id="nickname" class="input-nickname" placeholder="닉네임 입력" maxlength="8">
         <button class="start-btn" onclick="readyToOpen()">확인</button>
-    </div>
+<div style="font-size: 12px;"><br>이 이벤트는 소소한 재미를 위해 만든 것 입니다.<br>상품은 크지 않으니 혹시 오류가 있더라도 노여워마세요.</div>
+        
 
+    </div>
     <div class="list-container">
         <h4 class="list-title">📋 최근 참여자 현황</h4>
         <table class="list-table">
@@ -128,7 +129,7 @@
 
     <script>
         // ★★★ 구글 앱스 스크립트 배포 URL을 여기에 넣으세요 ★★★
-        const GAS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwri9pIRIer_sxDsjJIjr1zE5rlnWhhEy0EgM6knOBO4X7TazREbihq_WLJ-Iq_k_-G/exec"; 
+        const GAS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvjyD1QxzKfVdvuPhOI4M6r9jkAcgx5dMtL5cLlaQLrYqsA3kYApbw3JYz_cCRaqo2/exec"; 
 
         let isReady = false;
         let isOpened = false;
@@ -207,7 +208,7 @@
                         text.innerHTML = "이미 당첨되셨습니다!<br>코드를 확인해주세요.";
                     } else {
                         title.innerText = "🎉 대협! 🎉"; title.style.color = "#d32f2f";
-                        text.innerHTML = "즐거운 주말 보내시오. 손이가도 손이 가는 새우깡이오!<br>∙ 코드등록 유효기간 : 2025.12.25<br>∙ 코드등록 방법 : 카카오톡 > 선물하기 > 선물함 > 선물코드 등록";
+                        text.innerHTML = "즐거운 주말 보내시오. <br>∙ 코드등록 유효기간 : 2025.12.25<br>∙ 코드등록 방법 : 카카오톡 > 선물하기 > 선물함 > 선물코드 등록";
                     }
                     
                     // 코드 표시
@@ -222,7 +223,7 @@
                         text.innerHTML = "구류문으로 오라니까?<br>(결과: 꽝)";
                     } else {
                         title.innerText = "당첨이오?"; title.style.color = "#555";
-                        text.innerHTML = "아니 사리봉이오~~<br>으하하!";
+                        text.innerHTML = "아니 사리봉이오~~<br>내일 다시 도전하시오!";
                     }
                 }
 

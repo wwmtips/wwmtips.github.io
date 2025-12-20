@@ -82,6 +82,10 @@
                         title.innerText = `행운봉투 이벤트 종료`; 
                         title.style.color = "#ffcdd2"; // (선택) 흑백 배경에서 잘 보이게 연한 색으로
                         desc.innerText = `${winnerName} 대협이 행운봉투를 여셨소!`;
+                    }else{
+                        
+                        title.innerText = `행운봉투 이벤트 도착`; 
+                        desc.innerText = `오늘은 상품은 새우깡입니다.`;
                     }
                 })
                 .catch(err => console.log("이벤트 상태 확인 실패:", err));
@@ -170,8 +174,8 @@
                     </div>
                     
                     <div class="lucky-text-group">
-                        <div id="luckyTitle" class="lucky-title">행운 봉투 도착!</div>
-                        <div id="luckyDesc" class="lucky-desc">꽝 없는 100% 당첨, 지금 바로 확인하세요.</div>
+                        <div id="luckyTitle" class="lucky-title">행운 봉투 확인 중...</div>
+                        <div id="luckyDesc" class="lucky-desc">웃음이 늘 있으면 행운도 늘 함께!</div>
                     </div>
                 </div>
                 <div class="lucky-action-btn">열어보기 ➔</div>

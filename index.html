@@ -57,38 +57,57 @@
 
             if (!banner) return; 
 
+            // ★ 1. [확인 중] 클릭 방지 및 스타일 설정
+            banner.style.pointerEvents = 'none'; // 클릭 아예 안 되게 막음
+            banner.style.cursor = 'wait';        // 마우스 올리면 모래시계/로딩 표시
+            banner.style.opacity = '0.7';        // 살짝 흐리게 (로딩 중 느낌)
+
             fetch(`${EVENT_API_URL}?action=status`)
                 .then(response => response.text())
                 .then(data => {
-                    // "GAMEOVER:홍길동" 처럼 데이터가 옴
-                    if (data.startsWith("GAMEOVER")) {
-                        
-                        // 1. 닉네임 추출 (콜론 : 기준으로 자르기)
-                        const parts = data.split(":");
-                        let winnerName = "익명"; // 기본값
-                        if (parts.length > 1) {
-                            winnerName = parts[1];
-                        }
+                    // ★ 2. [확인 완료] 클릭 허용 및 원래대로 복구
+                    banner.style.pointerEvents = 'auto'; 
+                    banner.style.cursor = 'pointer';
+                    banner.style.opacity = '1';
 
-                        // 2. 종료 스타일 적용 (흑백 처리)
+                    if (data.startsWith("GAMEOVER")) {
+                        // [종료된 경우]
+                        const parts = data.split(":");
+                        let winnerName = "익명";
+                        if (parts.length > 1) winnerName = parts[1];
+
                         banner.classList.add('ended'); 
                         
+                        // 클릭 시 알림창 띄우기
                         banner.onclick = function(e) {
                             e.preventDefault(); 
                             alert(`이미 [${winnerName}]님이 당첨되셨습니다. 다음 기회에!`);
                         };
                         
-                        // 3. ★ 문구 변경 (당첨자 이름 표시)
                         title.innerText = `행운봉투 이벤트 종료`; 
-                        title.style.color = "#ffcdd2"; // (선택) 흑백 배경에서 잘 보이게 연한 색으로
+                        title.style.color = "#ffcdd2";
                         desc.innerText = `${winnerName} 대협이 행운봉투를 여셨소!`;
-                    }else{
-                        
+
+                    } else {
+                        // [진행 중인 경우]
+                        // ★ 여기서 이동 기능 부여 (확인이 끝난 후 연결됨)
+                        banner.onclick = function() {
+                            location.href = 'event/index.html';
+                        };
+
                         title.innerText = `행운봉투 이벤트 도착`; 
-                        desc.innerText = `오늘은 상품은 새우깡입니다.`;
+                        desc.innerText = `오늘의 상품은 새우깡입니다.`;
                     }
                 })
-                .catch(err => console.log("이벤트 상태 확인 실패:", err));
+                .catch(err => {
+                    console.log("이벤트 상태 확인 실패:", err);
+                    // 에러가 나도 배너가 먹통이 되지 않게 복구해줍니다.
+                    banner.style.pointerEvents = 'auto';
+                    banner.style.cursor = 'pointer';
+                    banner.style.opacity = '1';
+                    // 기본 이동 기능 연결
+                    banner.onclick = function() { location.href = 'event/index.html'; };
+                });
         }
     </script>
 </body>
@@ -175,8 +194,7 @@
                 <div id="home-recent-news" class="quest-grid"></div>
             </section>
 
-            
- <div id="luckyBanner" class="lucky-event-banner" onclick="location.href='event/index.html'">
+            <div id="luckyBanner" class="lucky-event-banner">
                 <div class="lucky-content-wrapper">
                     <div class="lucky-seal-icon">
                         <span>福</span>

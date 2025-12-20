@@ -1,203 +1,188 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <meta charset="UTF-8">
     <title>연운 한국어 맵 for Wiki</title>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-5SMVDZTDST');
     </script>
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="연운 한국 위키에서 제공하는 한국어 맵입니다. 위키와 연동된 새로운 맵을 사용해보세요.">
-    <meta name="description" content="연운 한국 위키에서 제공하는 한국어 맵입니다. 위키와 연동된 새로운 맵을 사용해보세요.">
-
-    <meta property="og:title" content="연운 한국어 맵 for Wiki">    
-    <meta property="og:image" content="fav/apple-icon-120x120.png">    
-    <meta property="og:url" content="https://wwm.tips/">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    
     <link rel="stylesheet" href="../map_style.css">
-    <link rel="apple-touch-icon" sizes="57x57" href="../fav/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="../fav/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="../fav/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="../fav/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="../fav/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="../fav/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="../fav/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="../fav/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="../fav/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="../fav/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="../fav/favicon-16x16.png">
-<link rel="manifest" href="../fav/manifest.json">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="../fav/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="연운 한국 위키에서 제공하는 한국어 맵입니다.">
+    <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
     <style>
         #map { background: #1a1a1a; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
         /* =========================================
-           ★ 핀 디자인 (얇은 테두리 버전)
+           1. 핀 디자인 (기본 마커)
            ========================================= */
-        
-        /* 1. 핀 몸통 (흰색 베이스) */
         .pin-marker {
             position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 50% 50% 50% 0; /* 물방울 모양 */
-            transform: rotate(-45deg);    /* 45도 회전 */
-            
-            background: #ffffff;          /* ★ 몸통은 무조건 흰색 */
-            box-shadow: 1px 1px 4px rgba(0,0,0,0.5); /* 그림자 */
-            
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%; height: 100%;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            background: #ffffff;
+            box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
             box-sizing: border-box;
             transition: transform 0.2s, z-index 0.2s;
         }
-
-        /* 2. 내부 컬러 원 (크기를 키워서 테두리를 얇게 만듦) */
         .pin-inner-circle {
-            width: 88%;  /* ★ 여기를 키워서 흰색 테두리를 얇게 만듦 (기존 76% -> 88%) */
-            height: 88%;
+            width: 88%; height: 88%;
             border-radius: 50%;
-            
-            /* JS에서 주입한 색상 적용 */
-            background: var(--pin-color, #555); 
-            
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: var(--pin-color, #555);
+            display: flex; align-items: center; justify-content: center;
         }
-
-        /* 3. 아이콘 (흰색, 회전 보정) */
         .pin-inner-circle img {
-            width: 70%;  
-            height: 70%;
+            width: 70%; height: 70%;
             object-fit: contain;
-            
-            /* 핀이 -45도 돌았으므로, 이미지는 +45도 돌려서 똑바로 보이게 함 */
-            transform: rotate(45deg); 
-            
-            /* 아이콘을 하얀색으로 변경 
-            filter: brightness(0) invert(1);*/
+            transform: rotate(45deg);
             opacity: 1;
         }
-
-        /* 호버 효과 */
         .pin-marker:hover {
-            transform: rotate(-45deg) scale(1.15); /* 커짐 */
-            z-index: 9999;
-            cursor: pointer;
+            transform: rotate(-45deg) scale(1.15);
+            z-index: 9999; cursor: pointer;
         }
+        .marker-completed .pin-inner-circle { background: #999 !important; }
 
-        /* 완료된 마커 (회색 처리) */
-        .marker-completed .pin-inner-circle {
-            background: #999 !important; /* 회색으로 덮어쓰기 */
-        }
-        .marker-completed .pin-marker {
-            opacity: 1;
-        }
         /* =========================================
-           ★ 상단 버튼 그룹 (높이/폰트 완벽 일치 수정)
+           2. 상단 버튼 그룹 (높이/위치 완벽 정렬)
            ========================================= */
-        
-        /* 1. 두 버튼을 감싸는 컨테이너 */
         .top-controls-wrapper {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 10px; left: 10px;
             z-index: 1000;
-            display: flex;
-            gap: 10px;       /* 버튼 사이 간격 */
-            align-items: center; /* 수직 중앙 정렬 */
+            display: flex; gap: 10px;
+            align-items: center;
         }
 
-        /* 2. 기존 사이드바 버튼 ('청하' 버튼) 강제 스타일 재정의 */
-        /* map_style.css의 설정보다 우선순위를 높이기 위해 !important 사용 */
+        /* 기존 사이드바 버튼 강제 재정의 */
         .sidebar-toggle-btn {
-            position: static !important; /* wrapper 안으로 배치 */
+            position: static !important;
             margin: 0 !important;
-            
-            /* ★ 크기/폰트 강제 통일 */
             height: 40px !important;
-            padding: 0 15px !important; /* 좌우 여백 */
+            padding: 0 15px !important;
             font-size: 14px !important;
-            line-height: 1 !important;  /* 줄 간격으로 인한 높이 변화 방지 */
-            
+            line-height: 1 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             box-sizing: border-box !important;
         }
 
-        /* 3. 모아보기 버튼 스타일 */
+        /* 모아보기 버튼 스타일 */
         .cluster-toggle-btn {
-            /* 위치는 wrapper가 잡아주므로 static */
             position: static;
-            
-            /* ★ 왼쪽 버튼과 동일한 규격 적용 */
             height: 40px;
             padding: 0 15px;
             font-size: 14px;
-            font-family: 'Noto Serif KR', serif; /* 폰트 통일 */
+            font-family: 'Noto Serif KR', serif;
             font-weight: bold;
             line-height: 1;
-            
-            /* 디자인 (다크 테마 + 골드) */
             background-color: #1a1a1a;
             color: #ffffff;
             border: 1px solid #a08040;
             border-radius: 4px;
-            
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            
-            /* 내부 정렬 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px; /* 아이콘과 글자 사이 간격 */
+            display: flex; align-items: center; justify-content: center;
+            gap: 6px;
             box-sizing: border-box;
             transition: all 0.2s;
         }
+        .cluster-toggle-btn:hover { background-color: #333; transform: translateY(-1px); }
+        .cluster-toggle-btn.off { background-color: #333; border-color: #666; color: #aaa; }
 
-        .cluster-toggle-btn:hover {
-            background-color: #333;
-            transform: translateY(-1px);
+        /* =========================================
+           3. 사이드바 스타일 리뉴얼 (다크 테마 + 2열 그리드)
+           ========================================= */
+        .map-sidebar {
+            background-color: #1a1a1a !important;
+            border-right: 1px solid #333 !important;
+            color: #eee !important;
         }
+        .sidebar-header {
+            background-color: #1a1a1a !important;
+            border-bottom: 1px solid #333 !important;
+        }
+        .sidebar-label { color: #a08040 !important; }
+        .sidebar-search-input, .sidebar-select, .filter-control-btn {
+            background-color: #2a2a2a !important;
+            border: 1px solid #444 !important;
+            color: #fff !important;
+        }
+        .filter-control-btn:hover { border-color: #a08040 !important; color: #a08040 !important; }
 
-        /* 꺼짐 상태 */
-        .cluster-toggle-btn.off {
-            background-color: #333;
-            border-color: #666;
-            color: #aaa;
+        /* 필터 리스트 컨테이너 */
+        .filter-list-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px;
+            align-content: start;
         }
+        /* 개별 필터 아이템 */
+        .filter-item {
+            display: flex; align-items: center; justify-content: space-between;
+            background-color: transparent;
+            padding: 5px 0;
+            border-bottom: none !important;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .filter-icon-img { width: 20px; height: 20px; object-fit: contain; }
+        .filter-text-name { font-size: 0.9em; color: #ccc; font-weight: normal; }
+        .filter-count { background: none !important; color: #666 !important; font-size: 0.9em; padding: 0; }
+
+        /* 활성화/비활성화 상태 */
+        .filter-item.active .filter-text-name { color: #fff; font-weight: bold; }
+        .filter-item.active .filter-icon-img { opacity: 1; }
+        .filter-item.inactive { opacity: 0.4; }
+        .filter-item.inactive .filter-text-name { text-decoration: line-through; color: #888; }
+        .filter-item.inactive .filter-icon-img { filter: grayscale(100%); }
+
+        /* =========================================
+           4. 심플 클러스터 (색상 원 + 숫자)
+           ========================================= */
+        .simple-cluster-marker {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; /* 글자 크기 조정 */
+            font-weight: bold;
+            font-family: 'Noto Serif KR', serif;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
+        }
+        .simple-cluster-marker:hover { transform: scale(1.15); cursor: pointer; z-index: 5000; }
     </style>
 </head>
 <body>
 
-  <div class="top-controls-wrapper">
-        
+    <div class="top-controls-wrapper">
         <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" onclick="toggleSidebar()">
-            <span>☰</span> 지역 확인...
+            <span>☰</span> Loading...
         </button>
-        
         <button id="cluster-toggle-btn" class="cluster-toggle-btn" onclick="toggleClusterMode()">
-            핀 구성 중...
+            Checking...
         </button>
-
     </div>
 
     <div id="map-sidebar" class="map-sidebar">
@@ -221,8 +206,9 @@
     </div>
 
     <div id="map"></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
         // ==========================================
@@ -261,12 +247,11 @@
         const isMobile = window.innerWidth <= 768;
         const pinSize = isMobile ? [24, 24] : [30, 30];
 
-        // ★ [전역 변수]
+        // 전역 변수
         let layerGroups = {}; 
         let allMarkers = []; 
-        let cachedData = null; // 데이터 캐싱용
-        // 로컬스토리지에서 클러스터 설정 로드 (기본값 true)
-        let isClusterOn = localStorage.getItem('clusterMode') !== 'false';
+        let cachedData = null; 
+        let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; // 기본값 ON
 
         // ==========================================
         // 2. 지도 생성
@@ -308,70 +293,61 @@
         };
 
         // ==========================================
-        // 3. 데이터 로딩 & 기능 실행
+        // 3. 데이터 로딩 및 실행
         // ==========================================
         fetch(currentConfig.json)
             .then(res => res.json())
             .then(data => {
-                cachedData = data;     // 데이터 저장
-                updateClusterButton(); // 버튼 UI 초기화
-                createMarkers(data);   // 마커 생성
-                generateSidebar(data); // 사이드바 생성
+                cachedData = data;
+                updateClusterButton(); 
+                createMarkers(data);
+                generateSidebar(data);
             })
             .catch(err => { console.error(err); });
 
-        // ★ [클러스터 토글 로직]
-  // ★ [버튼 UI 업데이트 함수]
+        // 버튼 UI 업데이트
         function updateClusterButton() {
             const btn = document.getElementById('cluster-toggle-btn');
             if (isClusterOn) {
-                // ON 상태: 금색 테두리 + 흰색 글씨
-                btn.innerHTML = `<span style="color:#a08040">●</span> 모아보기 ON`;
+                btn.innerHTML = `<span style="color:#a08040; font-size:1.2em; line-height:0;">●</span> 모아보기 ON`;
                 btn.classList.remove('off');
                 btn.style.border = "1px solid #a08040";
                 btn.style.color = "white";
             } else {
-                // OFF 상태: 회색 테두리 + 회색 글씨
-                btn.innerHTML = `<span style="color:#888">○</span> 모아보기 OFF`;
+                btn.innerHTML = `<span style="color:#888; font-size:1.2em; line-height:0;">○</span> 모아보기 OFF`;
                 btn.classList.add('off');
                 btn.style.border = "1px solid #666";
                 btn.style.color = "#aaa";
             }
         }
 
+        // 토글 기능
         window.toggleClusterMode = function() {
             isClusterOn = !isClusterOn;
             localStorage.setItem('clusterMode', isClusterOn);
             updateClusterButton();
             
-            // 기존 레이어 제거 및 초기화
-            for (const key in layerGroups) {
-                map.removeLayer(layerGroups[key]);
-            }
+            for (const key in layerGroups) map.removeLayer(layerGroups[key]);
             layerGroups = {};
             allMarkers = [];
 
-            // 다시 그리기
-            if (cachedData) createMarkers(cachedData);
+            if (cachedData) {
+                createMarkers(cachedData);
+                generateSidebar(cachedData); // 사이드바 상태(active/inactive) 동기화 위해 다시 호출
+            }
         };
 
-        // ★ [마커 생성 함수 (토글 로직 포함)]
+        // 마커 생성 함수
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-
-            // 검은 글씨를 사용할 밝은 배경 타입들
-            const lightTypes = [""]; 
+            const lightTypes = [""]; // 밝은 배경 타입
 
             data.forEach(item => {
-                
                 if (!layerGroups[item.type]) {
-                    
                     if (isClusterOn) {
                         // === 클러스터 모드 ===
                         const typeColor = colorMapping[item.type] || "#555";
-                        
-                        // 글자색 결정 (밝은 배경엔 검은 글씨)
                         const isLight = lightTypes.includes(item.type);
                         const badgeTextColor = isLight ? "#000000" : "#ffffff";
                         const textShadowStyle = isLight ? "none" : "0 0 2px rgba(0,0,0,0.5)";
@@ -381,32 +357,28 @@
                             spiderfyOnMaxZoom: true,
                             showCoverageOnHover: false, 
                             chunkedLoading: true,
-                            
-                            // ★ [수정됨] 심플한 원형 + 숫자 디자인
+                            // 심플한 원형 디자인
                             iconCreateFunction: function(cluster) {
                                 const count = cluster.getChildCount();
                                 const countText = count > 99 ? '99+' : count;
-                                
                                 const html = `
                                     <div class="simple-cluster-marker" style="background-color: ${typeColor}; color: ${badgeTextColor}; text-shadow: ${textShadowStyle};">
                                         ${countText}
                                     </div>`;
-                                
                                 return L.divIcon({
-                                    html: html,
-                                    className: '', // 기본 스타일 제거
-                                    iconSize: [30, 30], // 원 크기 (적당히 큼직하게)
-                                    iconAnchor: [18, 18] // 중심점
+                                    html: html, className: '',
+                                    iconSize: [28, 28], // 크기 줄임
+                                    iconAnchor: [14, 14] // 중심점
                                 });
                             }
                         });
                     } else {
-                        // === 모아보기 OFF (일반 레이어) ===
+                        // === 일반 모드 ===
                         layerGroups[item.type] = L.layerGroup();
                     }
                 }
 
-                // === 개별 마커 생성 (여기는 핀 모양 유지) ===
+                // 개별 마커 생성
                 const isCompleted = completedList.includes(item.id);
                 const imgName = typeMapping[item.type] || "stone"; 
                 const iconPath = `../images/${imgName}.png`;
@@ -431,30 +403,15 @@
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
-            // 레이어 지도에 추가
-            const checkboxes = document.querySelectorAll('.filter-item'); // 클래스명 주의 (filter-item으로 변경됨)
-            
-            // 사이드바가 이미 생성되어 있다면 active 상태인 것만 추가
-            if (checkboxes.length > 0) {
-                checkboxes.forEach(div => {
-                    const type = div.querySelector('.filter-text-name').innerText;
-                    if (div.classList.contains('active') && layerGroups[type]) {
-                        map.addLayer(layerGroups[type]);
-                    }
-                });
-            } else {
-                // 처음 로딩이면 전부 추가
-                for (const key in layerGroups) layerGroups[key].addTo(map);
-            }
+            // 초기 로딩 시 모든 레이어 추가
+            for (const key in layerGroups) layerGroups[key].addTo(map);
 
             // URL 파라미터 이동
             const targetId = urlParams.get('marker');
             if (targetId) {
                 const target = allMarkers.find(m => m.id == targetId);
                 if (target) {
-                    if (!map.hasLayer(layerGroups[target.type])) {
-                        map.addLayer(layerGroups[target.type]);
-                    }
+                    if (!map.hasLayer(layerGroups[target.type])) map.addLayer(layerGroups[target.type]);
                     
                     if (isClusterOn && layerGroups[target.type].zoomToShowLayer) {
                         layerGroups[target.type].zoomToShowLayer(target.marker, function() {
@@ -468,10 +425,8 @@
             }
         }
 
-
-        
         // ==========================================
-        // 4. 사이드바 로직
+        // 4. 사이드바 로직 (리뉴얼됨)
         // ==========================================
         const searchInput = document.getElementById('marker-search');
         const filterList = document.getElementById('filter-list');
@@ -501,24 +456,66 @@
             });
         });
 
+        // 사이드바 생성 (클릭 토글 방식)
         function generateSidebar(data) {
             filterList.innerHTML = '';
             const counts = {};
             data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
+
             for (const [type, count] of Object.entries(counts)) {
-                const div = document.createElement('div'); div.className = 'filter-item'; 
+                const div = document.createElement('div');
+                const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
+                div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
+                
                 const imgName = typeMapping[type] || "stone";
-                div.innerHTML = `<label class="filter-label" style="cursor:pointer; width:100%;"><input type="checkbox" class="filter-checkbox" checked onchange="toggleLayer('${type}', this.checked)"><img src="../images/${imgName}.png" width="24" height="24" onerror="this.style.display='none'" style="vertical-align:middle; margin-right:5px;"> ${type}</label><span class="filter-count">${count}</span>`;
+                div.innerHTML = `
+                    <div class="filter-left-group">
+                        <img src="../images/${imgName}.png" class="filter-icon-img" onerror="this.style.display='none'">
+                        <span class="filter-text-name">${type}</span>
+                    </div>
+                    <span class="filter-count">${count}</span>`;
+
+                div.onclick = function() {
+                    const isNowActive = div.classList.contains('active');
+                    if (isNowActive) {
+                        div.classList.remove('active'); div.classList.add('inactive');
+                        toggleLayer(type, false);
+                    } else {
+                        div.classList.remove('inactive'); div.classList.add('active');
+                        toggleLayer(type, true);
+                    }
+                };
                 filterList.appendChild(div);
             }
         }
-        function toggleLayer(type, isChecked) { isChecked ? map.addLayer(layerGroups[type]) : map.removeLayer(layerGroups[type]); }
-        function setAllFilters(status) { document.querySelectorAll('.filter-checkbox').forEach(cb => { cb.checked = status; const type = cb.parentElement.innerText.trim(); toggleLayer(type, status); }); }
+
+        function toggleLayer(type, isChecked) {
+            if (isChecked) {
+                if (layerGroups[type]) map.addLayer(layerGroups[type]);
+            } else {
+                if (layerGroups[type]) map.removeLayer(layerGroups[type]);
+            }
+        }
+
+        function setAllFilters(status) {
+            const items = document.querySelectorAll('.filter-item');
+            items.forEach(div => {
+                const typeName = div.querySelector('.filter-text-name').innerText;
+                if (status) {
+                    div.classList.remove('inactive'); div.classList.add('active');
+                    toggleLayer(typeName, true);
+                } else {
+                    div.classList.remove('active'); div.classList.add('inactive');
+                    toggleLayer(typeName, false);
+                }
+            });
+        }
+
         function toggleSidebar() { document.getElementById('map-sidebar').classList.toggle('open'); }
         function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else if (document.exitFullscreen) document.exitFullscreen(); }
-        
+
         // ==========================================
-        // 5. 팝업 및 공유 로직
+        // 5. 팝업 및 기능
         // ==========================================
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
@@ -533,11 +530,11 @@
             
             html += `<div class="btn-container" style="display:flex; gap:5px; margin-bottom:0;">`;
             html += `<button onclick="shareMarker(${item.id})" class="action-btn" style="flex:1; background:#4a90e2; color:white;">🔗 공유</button>`;
-
+            
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}" style="flex:1;">${btnText}</button>`;
-            html += `</div>`; 
+            html += `</div>`;
 
             if (item.image) {
                 const ytId = getYouTubeId(item.image);
@@ -555,21 +552,17 @@
 
         window.toggleComplete = function(id, storageKey) {
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const index = list.indexOf(id); 
-            const target = allMarkers.find(m => m.id === id); 
+            const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
             if (!target) return;
             const marker = target.marker;
 
             if (index > -1) { 
-                list.splice(index, 1); 
-                L.DomUtil.removeClass(marker._icon, 'marker-completed'); 
+                list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); 
             } else { 
-                list.push(id); 
-                L.DomUtil.addClass(marker._icon, 'marker-completed'); 
+                list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); 
             }
             localStorage.setItem(storageKey, JSON.stringify(list)); 
-            marker.closePopup(); 
-            marker.openPopup();
+            marker.closePopup(); marker.openPopup();
         };
 
         window.shareMarker = function(id) {
@@ -663,6 +656,5 @@
             document.body.removeChild(ta);
         }
     </script>
-    
 </body>
 </html>

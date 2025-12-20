@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q128",
+   "name": "평등한 생명",
+   "location": "연희 거리",
+   "type": "만사록",
+   "bgimg": "q128_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q128.html"
+ },
+  {
    "id": "q127",
    "name": "빛나는 법등",
    "location": "연희 거리",

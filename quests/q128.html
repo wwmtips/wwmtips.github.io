@@ -1,0 +1,162 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+        .tip-box {
+            background-color: #f0f8ff;
+            padding: 10px 15px;
+            border-left: 3px solid #4682b4;
+            margin: 10px 0;
+            border-radius: 0 4px 4px 0;
+            color: #333;
+            font-size: 0.9em;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            평등한 생명
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">대상국사 앞의 수상한 그림자 조사하기</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            야심한 밤, 대상국사 주변을 배회하는 밀렵꾼들을 저지하고 스님의 물건을 되찾아주는 의뢰입니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 정진 스님과의 만남 (시간 변경)</div>
+        <div class="warning-box">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 필수 조건:</b> 시진을 <b>해시(21:00~23:00)</b>로 변경해야 합니다.
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            해시가 되면 아래 장소로 이동하여 <b>정진 스님</b>과 대화하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q128_1.jpg" alt="정진 스님">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q128_2.jpg" alt="정진 스님 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 하삼 발견</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            정진 스님 <b>바로 뒤쪽 나무</b> 뒤를 살펴보세요.<br>
+            숨어 있는 <b>하삼</b>을 발견하고 대화를 나눕니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q128_3.jpg" alt="숨어있는 하삼">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q128_4.jpg" alt="하삼 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">3. 하대 변장 및 그물 회수</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>대상국사 경계석 왼쪽</b> 길을 따라 이동하다 보면 돌아다니는 <b>하대</b>를 발견할 수 있습니다.<br>
+            <b>[섬등지]</b>를 사용하여 그의 얼굴을 그린 후 <b>변장</b>하세요.
+        </p>
+        <div class="tip-box">
+            <b>💡 팁:</b> 하대가 계속 움직여서 상호작용하기 어렵다면, <b>몸통 박치기</b>를 한 번 해서 잠깐 멈춰 세운 뒤 대화를 시도하세요.
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q128_5.jpg" alt="하대와 조우">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q128_6.jpg" alt="하대 위치">
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            변장을 마친 상태로 다시 <b>하삼</b>에게 돌아가세요.<br>
+            숨겨둔 <b>[그물]</b>이 있는 곳으로 안내받게 되며, 그물을 획득한 후 <b>정진 스님</b>에게 돌려주면 완료됩니다.
+        </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            생명을 위협하는 그물을 회수하여 전달하면<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

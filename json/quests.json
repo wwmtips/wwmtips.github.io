@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q132",
+   "name": "말하는 농작물",
+   "location": "평야원",
+   "type": "만사록",
+   "bgimg": "q132_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q132.html"
+ },
+  {
    "id": "q131",
    "name": "황금이 자라는 밭",
    "location": "평야원",

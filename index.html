@@ -57,57 +57,76 @@
 
             if (!banner) return; 
 
-            // ★ 1. [확인 중] 클릭 방지 및 스타일 설정
-            banner.style.pointerEvents = 'none'; // 클릭 아예 안 되게 막음
-            banner.style.cursor = 'wait';        // 마우스 올리면 모래시계/로딩 표시
-            banner.style.opacity = '0.7';        // 살짝 흐리게 (로딩 중 느낌)
+            // 로딩 중 클릭 방지
+            banner.style.pointerEvents = 'none';
+            banner.style.cursor = 'wait';
+            banner.style.opacity = '0.7';
 
-            fetch(`${EVENT_API_URL}?action=status`)
-                .then(response => response.text())
-                .then(data => {
-                    // ★ 2. [확인 완료] 클릭 허용 및 원래대로 복구
-                    banner.style.pointerEvents = 'auto'; 
-                    banner.style.cursor = 'pointer';
-                    banner.style.opacity = '1';
+            // 1. 내 IP 가져오기
+            fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(ipData => {
+                const userIp = ipData.ip;
+                // 2. 서버에 상태 + 내 IP 전송
+                return fetch(`${EVENT_API_URL}?action=status&ip=${userIp}`);
+            })
+            .then(response => response.text())
+            .then(data => {
+                // 로딩 해제
+                banner.style.pointerEvents = 'auto'; 
+                banner.style.cursor = 'pointer';
+                banner.style.opacity = '1';
 
-                    if (data.startsWith("GAMEOVER")) {
-                        // [종료된 경우]
-                        const parts = data.split(":");
-                        let winnerName = "익명";
-                        if (parts.length > 1) winnerName = parts[1];
+                // ★ [케이스 1] 내가 당첨자인 경우
+                if (data.startsWith("MYWIN")) {
+                    const myCode = data.split(":")[1]; // 코드 추출
+                    
+                    // 배너 스타일 (금색으로 강조하거나, 기본 빨강 유지)
+                    banner.classList.remove('ended'); 
+                    
+                    // 클릭 시 코드 알림
+                    banner.onclick = function(e) {
+                        e.preventDefault(); // 페이지 이동 막기
+                        alert(`축하합니다! 대협의 당첨 코드: [ ${myCode} ]\n잊지 말고 캡처해두시오!`);
+                    };
 
-                        banner.classList.add('ended'); 
-                        
-                        // 클릭 시 알림창 띄우기
-                        banner.onclick = function(e) {
-                            e.preventDefault(); 
-                            alert(`이미 [${winnerName}]님이 당첨되셨습니다. 다음 기회에!`);
-                        };
-                        
-                        title.innerText = `행운봉투 이벤트 종료`; 
-                        title.style.color = "#ffcdd2";
-                        desc.innerText = `${winnerName} 대협이 행운봉투를 여셨소!`;
+                    title.innerText = "🎉 축하하오! 당첨이오! 🎉";
+                    // desc.style.fontWeight = "bold"; 
+                    desc.innerText = "여기를 눌러 당첨 코드를 확인하시오!";
+                
+                // ★ [케이스 2] 다른 사람이 당첨되어 종료된 경우
+                } else if (data.startsWith("GAMEOVER")) {
+                    const parts = data.split(":");
+                    let winnerName = "익명";
+                    if (parts.length > 1) winnerName = parts[1];
 
-                    } else {
-                        // [진행 중인 경우]
-                        // ★ 여기서 이동 기능 부여 (확인이 끝난 후 연결됨)
-                        banner.onclick = function() {
-                            location.href = 'event/index.html';
-                        };
+                    // 흑백 처리
+                    banner.classList.add('ended'); 
+                    
+                    banner.onclick = function(e) {
+                        e.preventDefault(); 
+                        alert(`이미 [${winnerName}]님이 당첨되셨습니다. 다음 기회에!`);
+                    };
+                    
+                    title.innerText = "행운봉투 이벤트 종료"; 
+                    title.style.color = "#ffcdd2"; 
+                    desc.innerText = `${winnerName} 대협이 행운봉투를 여셨소!`;
 
-                        title.innerText = `행운봉투 이벤트 도착!`; 
-                        desc.innerText = `오늘의 상품은 [GS25 츄파춥스]입니다.`;
-                    }
-                })
-                .catch(err => {
-                    console.log("이벤트 상태 확인 실패:", err);
-                    // 에러가 나도 배너가 먹통이 되지 않게 복구해줍니다.
-                    banner.style.pointerEvents = 'auto';
-                    banner.style.cursor = 'pointer';
-                    banner.style.opacity = '1';
-                    // 기본 이동 기능 연결
-                    banner.onclick = function() { location.href = 'event/index.html'; };
-                });
+                // ★ [케이스 3] 이벤트 진행 중
+                } else {
+                    banner.onclick = function() { location.href = 'event/'; };
+                    title.innerText = "행운봉투 이벤트 도착"; 
+                    desc.innerText = "오늘의 상품은 새우깡입니다.";
+                }
+            })
+            .catch(err => {
+                console.log("오류:", err);
+                // 에러 발생 시 기본 복구
+                banner.style.pointerEvents = 'auto';
+                banner.style.cursor = 'pointer';
+                banner.style.opacity = '1';
+                banner.onclick = function() { location.href = 'event/'; };
+            });
         }
     </script>
 </body>

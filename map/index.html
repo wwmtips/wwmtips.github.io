@@ -259,13 +259,13 @@
         const typeMapping = { 
             "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
             "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
-            "보스": "ic_boss", "기연": "ic_ki"
+            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
         const colorMapping = {
             "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
             "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
-            "기연": "#f086ab", "묘묘냥": "#635e85"
+            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4e7f80"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -620,6 +620,7 @@
                         <label>이름</label> <input type="text" id="input_name">
                         <label>종류</label> 
                         <select id="input_type" onchange="autoFillDesc(this)">
+                            <option value="묘묘냥">묘묘냥</option> <option value="천지록">천지록</option>
                             <option value="묘묘냥">묘묘냥</option> <option value="기연">기연</option>
                             <option value="묘물">묘물</option> <option value="경계석">경계석</option>                           
                             <option value="고양이">고양이</option> <option value="상자">상자</option>

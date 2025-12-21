@@ -214,40 +214,70 @@
             isReady = true;
         }
 
-        function requestResult() {
+    function requestResult() {
+            // 1. 닉네임 가져오기 (이 부분이 중요합니다!)
+            const nicknameInput = document.querySelector('.input-nickname');
+            const currentUser = nicknameInput.value.trim();
+
+            if (!currentUser) {
+                alert("닉네임을 입력해주세요!");
+                nicknameInput.focus();
+                return;
+            }
+
+            // 기존 상태 체크 변수들 (isReady, isOpened가 상단에 선언되어 있어야 함)
             if (!isReady || isOpened) return;
             
             const wrapper = document.getElementById('envelopeWrapper');
-            const loader = document.getElementById('loader');
+            const loader = document.getElementById('loader'); // 로딩 아이콘이 있다면
             const title = document.getElementById('resultTitle');
             const text = document.getElementById('resultText');
             const codeBox = document.getElementById('codeBox');
 
-            wrapper.classList.remove('shake');
-            loader.style.display = 'block';
+            // 애니메이션 초기화
+            if(wrapper) wrapper.classList.remove('shake');
+            if(loader) loader.style.display = 'block';
 
-            // 1. IP 확인
+            // 2. IP 확인 및 서버 요청
             fetch('https://api.ipify.org?format=json')
             .then(res => res.json())
             .then(ipData => {
                 const userIp = ipData.ip;
-                // 2. 서버 요청
+                // 서버로 닉네임과 IP 전송
                 return fetch(`${GAS_SCRIPT_URL}?action=play&id=${encodeURIComponent(currentUser)}&ip=${userIp}`);
             })
             .then(response => response.text())
             .then(data => {
-                loader.style.display = 'none';
+                if(loader) loader.style.display = 'none';
+
+                // ★★★ [보안 1] 밴 당한 유저 처리 ★★★
+                if (data === "BANNED") {
+                    alert("🚫 접근이 제한된 사용자입니다.\n(사유: 운영 정책 위반 또는 IP 차단)");
+                    location.href = "../index.html"; // 강제 추방
+                    return;
+                }
+
+                // ★★★ [보안 2] 금칙어 닉네임 처리 ★★★
+                if (data === "BAD_NAME") {
+                    alert("⚠️ 사용할 수 없는 닉네임입니다.\n바른 말을 사용해주세요.");
+                    nicknameInput.value = ""; // 입력창 비우기
+                    nicknameInput.focus();
+                    return;
+                }
 
                 // 종료 조건 체크
                 if (data === "GAMEOVER") {
                     alert("📢 이미 당첨자가 나왔습니다!\n이벤트가 종료되었습니다.");
-                    text.innerText = "이벤트 종료";
-                    wrapper.classList.remove('active');
-                    wrapper.style.opacity = "0.5";
+                    if(text) text.innerText = "이벤트 종료";
+                    if(wrapper) {
+                        wrapper.classList.remove('active');
+                        wrapper.style.opacity = "0.5";
+                    }
                     loadList(); 
                     return; 
                 }
 
+                // 정상 진행 (봉투 열기)
                 isOpened = true;
                 
                 // 데이터 파싱 ("WIN:코드" 또는 "HISTORY:WIN:코드")
@@ -257,12 +287,10 @@
 
                 if (data.startsWith("HISTORY:")) {
                     isHistory = true;
-                    // 예: HISTORY:WIN:LUCKY2025
                     const parts = data.split(":");
                     finalResult = parts[1]; // WIN 또는 LOSE
-                    if(parts.length > 2) finalCode = parts[2]; // 코드
+                    if(parts.length > 2) finalCode = parts[2]; 
                 } else if (data.startsWith("WIN:")) {
-                    // 예: WIN:LUCKY2025
                     const parts = data.split(":");
                     finalResult = "WIN";
                     finalCode = parts[1];
@@ -271,36 +299,38 @@
                 // 결과 화면 표시
                 if (finalResult === "WIN") {
                     if(isHistory) {
-                        title.innerText = "참여 완료"; title.style.color = "#d32f2f";
-                        text.innerHTML = "이미 당첨되셨습니다!<br>코드를 확인해주세요.";
+                        if(title) { title.innerText = "참여 완료"; title.style.color = "#d32f2f"; }
+                        if(text) text.innerHTML = "이미 당첨되셨습니다!<br>코드를 확인해주세요.";
                     } else {
-                        title.innerText = "🎉 대협! 🎉"; title.style.color = "#d32f2f";
-                        text.innerHTML = "즐거운 주말 보내시오. <br>∙ 코드등록 유효기간 : 2025.12.25<br>∙ 코드등록 방법 : 카카오톡 > 선물하기 > 선물함 > 선물코드 등록";
+                        if(title) { title.innerText = "🎉 대협! 🎉"; title.style.color = "#d32f2f"; }
+                        if(text) text.innerHTML = "즐거운 주말 보내시오. <br>∙ 코드등록 유효기간 : 2025.12.25<br>∙ 코드등록 방법 : 카카오톡 > 선물하기 > 선물함 > 선물코드 등록";
                     }
                     
                     // 코드 표시
-                    if(finalCode) {
-                        codeBox.innerText = finalCode; // 코드만 깔끔하게 표시
+                    if(finalCode && codeBox) {
+                        codeBox.innerText = finalCode; 
                         codeBox.style.display = "block";
                     }
 
                 } else {
+                    // 꽝일 때
                     if(isHistory) {
-                        title.innerText = "아니 왜 또?"; title.style.color = "#555";
-                        text.innerHTML = "구류문으로 오라니까?<br>(결과: 꽝)";
+                        if(title) { title.innerText = "아니 왜 또?"; title.style.color = "#555"; }
+                        if(text) text.innerHTML = "구류문으로 오라니까?<br>(결과: 꽝)";
                     } else {
-                        title.innerText = "당첨이오?"; title.style.color = "#555";
-                        text.innerHTML = "아니 사리봉이오~~<br>내일 다시 도전하시오!";
+                        if(title) { title.innerText = "당첨이오?"; title.style.color = "#555"; }
+                        if(text) text.innerHTML = "아니 사리봉이오~~<br>내일 다시 도전하시오!";
                     }
                 }
 
-                wrapper.classList.add('open');
+                if(wrapper) wrapper.classList.add('open');
                 loadList(); // 명단 갱신
             })
             .catch(err => {
-                loader.style.display = 'none';
+                if(loader) loader.style.display = 'none';
+                console.error(err);
                 alert("오류 발생. 다시 시도해주세요.");
-                wrapper.classList.add('shake');
+                if(wrapper) wrapper.classList.add('shake');
             });
         }
 

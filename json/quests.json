@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q152",
+   "name": "곡물 가격 소동",
+   "location": "남쪽 외곽",
+   "type": "만사록",
+   "bgimg": "q152_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q152.html"
+ },
+  {
    "id": "q151",
    "name": "두려움이 아닌 존중",
    "location": "비화 나루",

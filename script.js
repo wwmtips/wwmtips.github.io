@@ -1022,9 +1022,11 @@ function closeBuilderModal(e) {
         document.getElementById('builder-modal').style.display = 'none';
     }
 }
-
+// 1. 링크 생성 함수 (닉네임 ID 변경 적용)
 function generateBuildUrl() {
-    const creatorName = document.getElementById('creator-name').value.trim();
+    // [수정] 닉네임 가져오는 ID 변경 (creator-name -> build-creator)
+    const creatorName = document.getElementById('build-creator').value.trim();
+    
     const buildData = { w: currentBuild.weapons, h: currentBuild.hearts, m: currentBuild.marts, c: creatorName };
     const encodedString = btoa(unescape(encodeURIComponent(JSON.stringify(buildData))));
     const origin = window.location.origin;
@@ -2267,65 +2269,64 @@ function openGuideDirect(filename) {
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
 
 
-// ★★★ 빌드 공유하기 기능 (닉네임 추가 버전) ★★★
+// 2. 서버 전송 함수 (닉네임/제목 분리 적용)
 function shareBuildToCloud() {
-    // 1. 입력값 가져오기
-    const nick = document.getElementById('creator-nick').value.trim(); // [추가] 닉네임
-    const title = document.getElementById('creator-name').value.trim(); // 제목
+    // [수정] ID 변경에 따른 값 가져오기
+    const title = document.getElementById('build-title').value.trim();     // 빌드 이름
+    const creator = document.getElementById('build-creator').value.trim(); // 닉네임
     const desc = document.getElementById('build-desc').value.trim();
-    
-    // 라디오 버튼값 가져오기
+    const recWeapons = document.getElementById('rec-weapons').value.trim();
+    const recArmor = document.getElementById('rec-armor').value.trim();
+
     const typeRadio = document.querySelector('input[name="buildType"]:checked');
     const type = typeRadio ? typeRadio.value : "PvE";
 
-    // 유효성 검사 (닉네임, 제목 필수)
-    if (!nick) {
-        alert("작성자 닉네임을 입력해주세요!");
-        document.getElementById('creator-nick').focus();
+    // 필수값 체크
+    if (!title) {
+        alert("빌드 이름을 입력해주세요!");
+        document.getElementById('build-title').focus();
         return;
     }
-    if (!title) {
-        alert("빌드 제목을 입력해주세요!");
-        document.getElementById('creator-name').focus();
+    if (!creator) {
+        alert("닉네임을 입력해주세요!");
+        document.getElementById('build-creator').focus();
         return;
     }
 
     if (!confirm(`'${title}' 빌드를 공유하시겠습니까?`)) return;
 
-    // 2. 링크 생성 (기존 함수 활용)
     generateBuildUrl(); 
     const link = document.getElementById('result-url').value;
 
     if (!link) {
-        alert("빌드 데이터를 생성하지 못했습니다. 아이템을 선택했는지 확인해주세요.");
+        alert("빌드 데이터를 생성하지 못했습니다.");
         return;
     }
 
-    // 3. 무기 ID 추출
     let weapons = [];
     if (currentBuild && currentBuild.weapons) {
         weapons = currentBuild.weapons.filter(id => id !== null && id !== "");
     }
 
-    // 4. 서버 전송 준비
     const btn = event.target;
     const originalText = btn.innerText;
     btn.disabled = true;
     btn.innerText = "전송 중...";
 
-    // 전송 파라미터 구성 (닉네임 포함)
     const params = new URLSearchParams({
         action: 'submit_build',
         title: title,
-        creator: nick, // [수정] 입력받은 닉네임 사용
+        creator: creator, // [수정] 입력받은 닉네임 전송
         type: type,
         desc: desc,
         weapons: JSON.stringify(weapons),
-        link: link
+        link: link,
+        rec_weapons: recWeapons,
+        rec_armor: recArmor
     });
 
     if (typeof BUILD_API_URL === 'undefined') {
-        alert("서버 주소 설정 오류: BUILD_API_URL을 찾을 수 없습니다.");
+        alert("서버 주소 설정 오류");
         btn.disabled = false;
         btn.innerText = originalText;
         return;
@@ -2334,12 +2335,19 @@ function shareBuildToCloud() {
     fetch(`${BUILD_API_URL}?${params.toString()}`)
     .then(res => res.text())
     .then(data => {
-        if (data.trim() === "SUCCESS") {
-            alert("빌드가 성공적으로 공유되었습니다!\n관리자 확인 후 목록에 표시됩니다.");
-            // 입력창 초기화
+        data = data.trim();
+        if (data === "SUCCESS") {
+            alert("빌드가 성공적으로 공유되었습니다!");
+            // 초기화
+            document.getElementById('build-title').value = "";
+            document.getElementById('build-creator').value = "";
             document.getElementById('build-desc').value = "";
-            document.getElementById('creator-name').value = "";
-            document.getElementById('creator-nick').value = ""; // 닉네임도 초기화
+            document.getElementById('rec-weapons').value = ""; 
+            document.getElementById('rec-armor').value = "";   
+        } else if (data === "FAIL:BAD_WORD") {
+            alert("🚫 부적절한 단어가 포함되어 있습니다.");
+        } else if (data === "FAIL:TOO_LONG") {
+            alert("🚫 내용이 너무 깁니다.");
         } else {
             alert("전송 실패: " + data);
         }

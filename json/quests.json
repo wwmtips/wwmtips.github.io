@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q157",
+   "name": "엇갈린 인연",
+   "location": "홍구 운하",
+   "type": "만사록",
+   "bgimg": "q157_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q157.html"
+ },
+  {
    "id": "q156",
    "name": "연의 그림자",
    "location": "비파 계곡",

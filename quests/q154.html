@@ -1,0 +1,131 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .tip-box {
+            background-color: #f0f8ff;
+            padding: 10px 15px;
+            border-left: 3px solid #4682b4;
+            margin: 10px 0;
+            border-radius: 0 4px 4px 0;
+            color: #333;
+            font-size: 0.9em;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            여섯 환자의 탄식
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">영행촌 소합 낭자의 부탁</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            영행촌의 <b>소합</b> 낭자를 만나 육병관 유적 지하에서 얻은 물건을 전달하는 의뢰입니다.
+        </p>
+        <div class="tip-box" style="margin-top: 15px;">
+            <b>💡 추천 동선:</b> 육병관 유적의 <b>[기러기의 소원]</b> 만사록을 <b>먼저 완료</b>한 후 진행하는 것을 강력히 추천합니다. (필요 아이템을 미리 획득 가능)
+        </div>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 소합 낭자와 대화</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 지도에 표시된 장소로 이동하여 <b>소합</b>과 대화하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q154_1.jpg" alt="소합 낭자">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q154_2.jpg" alt="소합 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 아이템 전달 및 완료</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>[기러기의 소원]</b> 퀘스트를 이미 진행했다면, 필요한 아이템이 인벤토리에 있습니다.<br>
+            소합에게 다시 말을 걸어 아이템을 <b>전달</b>하면 완료됩니다.
+        </p>
+        
+        <div class="warning-box" style="margin-top: 20px;">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⚠️ 문제 해결:</b> 만약 대화 시 <b>[선물하기]</b> 옵션이 나타나지 않는다면,<br>
+                <b>시간(시진)을 변경</b>한 후 다시 말을 걸어보세요.
+            </p>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

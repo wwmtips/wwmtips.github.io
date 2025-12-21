@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q149",
+   "name": "애절한 그리움",
+   "location": "북쪽 외곽",
+   "type": "만사록",
+   "bgimg": "q149_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q149.html"
+ },
+  {
    "id": "q148",
    "name": "영원한 약속",
    "location": "성은",

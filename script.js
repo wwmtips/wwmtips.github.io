@@ -143,7 +143,10 @@ function loadData() {
         renderFullNews(globalData.news);
 
         if (targetTab === 'builder') renderBuildList('all');
-
+if (typeof checkEventStatus === 'function') {
+            console.log("데이터 로드 완료 후 이벤트 상태 체크 시작");
+            checkEventStatus();
+        }
         if (shortQuestId) {
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);

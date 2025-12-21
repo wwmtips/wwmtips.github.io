@@ -79,37 +79,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // =========================================
 // 3. 데이터 로딩 및 처리 (수정됨)
-// =========================================
-// =========================================
-// 3. 데이터 로딩 및 처리 (수정됨: 빌드 서버 연동)
-// =========================================
+// =========================================// script.js 파일의 loadData 함수 교체
+
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
-    const targetTab = urlParams.get('tab');
+    const targetTab = urlParams.get('tab') || 'home'; // 기본값은 홈
     const targetId = urlParams.get('id');
     const shortQuestId = urlParams.get('q'); 
     const chunjiId = urlParams.get('c');
 
-    // ★★★ [핵심 변경] index.html에 선언된 BUILD_API_URL 사용 ★★★
+    // 빌드 데이터 URL 확인
     const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined') 
         ? `${BUILD_API_URL}?action=list` 
-        : 'json/builds.json'; // 비상시 로컬 파일 사용
+        : 'json/builds.json';
 
     Promise.all([
-        fetch('json/datas.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
-        fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }), 
-        fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
-        fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),
-        
-        // ★★★ [핵심 변경] 위에서 설정한 URL로 빌드 데이터 로드 ★★★
-        fetch(buildFetchUrl).then(res => res.json()).catch(err => { console.warn('빌드 데이터 로드 실패', err); return { builds: [] }; }),
-        
-        fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return { chunji: [] }; }),
-        fetch('json/builder_data.json').then(res => res.json()).catch(err => { console.warn('builder_data.json 로드 실패', err); return null; }) 
+        fetch('json/datas.json').then(res => res.json()).catch(err => ({})),
+        fetch('json/quests.json').then(res => res.json()).catch(err => []), 
+        fetch('json/news.json').then(res => res.json()).catch(err => []),
+        fetch('json/cnews.json').then(res => res.json()).catch(err => []),
+        fetch(buildFetchUrl).then(res => res.json()).catch(err => ({ builds: [] })),
+        fetch('json/chunji.json').then(res => res.json()).catch(err => ({ chunji: [] })),
+        fetch('json/builder_data.json').then(res => res.json()).catch(err => null) 
     ])
     .then(([mainData, questData, newsData, cnewsData, buildsData, chunjiResult, builderDataResult]) => {
         console.log("데이터 로드 완료");
 
+        // 1. 데이터 전역 변수에 저장
         let quests = Array.isArray(questData) ? questData : (questData.quests || []);
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
@@ -128,41 +124,42 @@ function loadData() {
         builderData = builderDataResult; 
         currentQuestData = globalData.quests;
         chunjiData = globalData.chunji;
-        currentChunjiData = globalData.chunji; 
+        currentChunjiData = globalData.chunji;
         
+        // 2. 필터 옵션 초기화
         updateLocationOptions(); 
         updateChunjiSubtypeOptions(); 
 
-        renderChunjiList();
-        renderQuizTable(globalData.quiz);
-        updateQuizCounter();
-        renderQuestList();                
+        // 3. [최적화] 홈 화면 요소는 항상 그림 (가벼움)
         renderHomeSlider(globalData.quests); 
         renderHomeRecentNews(globalData.news);     
         renderHomeCommunityNews(globalData.cnews);
-        renderFullNews(globalData.news);
 
-        if (targetTab === 'builder') renderBuildList('all');
-if (typeof checkEventStatus === 'function') {
-            console.log("데이터 로드 완료 후 이벤트 상태 체크 시작");
-            checkEventStatus();
-        }
+        // 4. [최적화 핵심] 현재 보고 있는 탭의 내용만 그리기! (나머지는 클릭할 때 그림)
         if (shortQuestId) {
+            // 퀘스트 상세 링크인 경우
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
             if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); 
-        }
+        } 
         else if (chunjiId) {
+            // 천지록 상세 링크인 경우
             const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
             if (foundChunji) {
                 switchTab('chunji');
                 loadChunjiDetail(foundChunji);
             }
         }
-        else if (targetTab === 'quest' && targetId) {
-            const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
-            const foundQuest = globalData.quests.find(q => q.id === formattedId);
-            if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
+        else if (targetTab === 'quest') renderQuestList();
+        else if (targetTab === 'chunji') renderChunjiList();
+        else if (targetTab === 'quiz') { renderQuizTable(globalData.quiz); updateQuizCounter(); }
+        else if (targetTab === 'builder') renderBuildList('all');
+        else if (targetTab === 'news') renderFullNews(globalData.news);
+        // 'home' 탭인 경우 아무것도 안 그려도 됨 (위에서 Slider 등을 이미 그렸으므로)
+
+        // 5. [최적화] 모든 처리가 끝난 후 이벤트 체크 실행
+        if (typeof checkEventStatus === 'function') {
+            checkEventStatus();
         }
     })
     .catch(error => { console.error("데이터 처리 중 오류 발생:", error); });
@@ -326,62 +323,97 @@ function loadHomeMaps() {
         mapList.appendChild(card);
     });
 }// [수정] updateHistory 매개변수 추가 (기본값 true)
+// script.js 파일의 switchTab 함수 교체
+
 function switchTab(tabName, updateHistory = true) {
-    // 1. 뷰(화면) 숨기기
+    // 1. 화면 전환 (기존 로직)
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
     views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
-    // 2. 상단 탭 스타일 초기화
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
     navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
     
-  // 3. 드롭다운 초기화 (모든 메뉴 닫기)
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
-    
-    // [핵심] ID 상관없이 'nav-dropdown-content' 클래스를 가진 모든 메뉴를 닫습니다.
-    document.querySelectorAll('.nav-dropdown-content').forEach(el => {
-        el.classList.remove('show');
-    });
+    document.querySelectorAll('.nav-dropdown-content').forEach(el => { el.classList.remove('show'); });
 
-    // 4. 탭 활성화 로직
+    // 2. [최적화 핵심] 탭을 눌렀을 때, 내용이 비어있으면 그때 그리기 (Lazy Rendering)
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
-        if (updateHistory) updateUrlQuery('home');
     } 
     else if (tabName === 'chunji') {
         document.getElementById('view-chunji').style.display = 'block';
         document.getElementById('nav-chunji').classList.add('active');
+        // 데이터가 있는데 화면이 비어있으면 렌더링
+        const container = document.getElementById('chunji-list-container');
+        if (container && container.children.length === 0 && chunjiData.length > 0) {
+            renderChunjiList();
+        }
         showChunjiList();
-        if (updateHistory) updateUrlQuery('chunji');
     }
     else if (tabName === 'quiz') {
-       document.getElementById('view-quiz').style.display = 'block';
-        
-        // [수정] 부모 메뉴인 '족보(nav-more)'에도 언더라인(active) 적용
+        document.getElementById('view-quiz').style.display = 'block';
         document.getElementById('nav-more').classList.add('active'); 
-        
-        // 드롭다운 내부의 '스무고개' 버튼도 활성화 표시 (선택사항)
         const quizBtn = document.getElementById('nav-quiz');
         if (quizBtn) quizBtn.classList.add('active');
         
-        if (updateHistory) updateUrlQuery('quiz');
+        // 렌더링 체크
+        const tbody = document.getElementById('quiz-table-body');
+        if (tbody && tbody.children.length === 0 && globalData.quiz.length > 0) {
+            renderQuizTable(globalData.quiz);
+            updateQuizCounter();
+        }
     } 
     else if (tabName === 'quest') {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
-        showQuestList();
         
-        // ▼▼▼ [핵심] 뒤로가기(false)가 아닐 때만 URL 업데이트 실행 ▼▼▼
-        if (updateHistory) {
-            updateUrlQuery('quest');
+        // 렌더링 체크
+        const container = document.getElementById('quest-grid-container');
+        if (container && container.children.length === 0 && globalData.quests.length > 0) {
+            renderQuestList();
         }
+        showQuestList();
     } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
-        if (updateHistory) updateUrlQuery('news');
+        
+        // 렌더링 체크
+        const container = document.getElementById('full-news-list');
+        if (container && container.children.length === 0 && globalData.news.length > 0) {
+            renderFullNews(globalData.news);
+        }
     } 
+    else if (tabName === 'builder') {
+        document.getElementById('view-builder').style.display = 'block';
+        document.getElementById('nav-more').classList.add('active');
+        const builderItem = document.getElementById('nav-builder');
+        if(builderItem) builderItem.classList.add('active');
+
+        document.getElementById('tools-menu').style.display = 'block';
+        document.getElementById('builder-interface').style.display = 'none';
+
+        // 데이터 체크 및 렌더링
+        if (!builderData) {
+            fetch('json/builder_data.json')
+                .then(res => res.json())
+                .then(data => { builderData = data; renderBuildList('all'); })
+                .catch(err => console.error(err));
+        } else {
+            const container = document.getElementById('build-list-container');
+            // 로딩 문구만 있거나 비어있으면 렌더링
+            if (container && (container.children.length === 0 || container.innerText.includes('불러오는 중'))) {
+                renderBuildList('all');
+            }
+        }
+        
+        if (new URLSearchParams(window.location.search).get('b')) {
+            openBuilderInterface();
+            loadViewer();
+        }
+    }
     else if (tabName === 'guide' || tabName === 'code') {
+        // 가이드는 기존 로직 유지 (이미 동적 로딩임)
         const guideView = document.getElementById('view-guide');
         if (guideView) {
             guideView.style.display = 'block';
@@ -393,34 +425,14 @@ function switchTab(tabName, updateHistory = true) {
             }
         }
         document.getElementById('nav-code').classList.add('active');
-        if (updateHistory) {
-            const params = new URLSearchParams(window.location.search);
-            if(!params.get('id') && !params.get('g')) updateUrlQuery('guide');
-        }
     }
-    else if (tabName === 'builder') {
-        document.getElementById('view-builder').style.display = 'block';
-        document.getElementById('nav-more').classList.add('active');
-        const builderItem = document.getElementById('nav-builder');
-        if(builderItem) builderItem.classList.add('active');
 
-        document.getElementById('tools-menu').style.display = 'block';
-        document.getElementById('builder-interface').style.display = 'none';
-
-        if (!builderData) {
-            fetch('json/builder_data.json')
-                .then(res => res.json())
-                .then(data => { builderData = data; renderBuildList('all'); })
-                .catch(err => console.error(err));
-        } else {
-            renderBuildList('all'); 
+    // 3. URL 업데이트
+    if (updateHistory) {
+        // 가이드는 내부에서 처리하므로 제외
+        if (tabName !== 'guide' && tabName !== 'code') {
+            updateUrlQuery(tabName);
         }
-        
-        if (new URLSearchParams(window.location.search).get('b')) {
-            openBuilderInterface();
-            loadViewer();
-        }
-        if (updateHistory) updateUrlQuery('builder');
     }
 }
 

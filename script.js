@@ -2276,123 +2276,102 @@ function openGuideDirect(filename) {
 }
 
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
-
-
-// [script.js] shareBuildToCloud 함수 (모든 항목 필수 체크 적용)
+// [script.js] shareBuildToCloud 함수 (IP 전송 및 차단 로직 추가)
 function shareBuildToCloud() {
     // 1. 입력값 가져오기
-    const title = document.getElementById('build-title').value.trim();     // 빌드 이름
-    const creator = document.getElementById('build-creator').value.trim(); // 닉네임
-    const recWeapons = document.getElementById('rec-weapons').value.trim(); // 추천 무기
-    const recArmor = document.getElementById('rec-armor').value.trim();     // 추천 방어구
-    const desc = document.getElementById('build-desc').value.trim();       // 설명
-
+    const title = document.getElementById('build-title').value.trim();
+    const creator = document.getElementById('build-creator').value.trim();
+    const recWeapons = document.getElementById('rec-weapons').value.trim();
+    const recArmor = document.getElementById('rec-armor').value.trim();
+    const desc = document.getElementById('build-desc').value.trim();
     const typeRadio = document.querySelector('input[name="buildType"]:checked');
     const type = typeRadio ? typeRadio.value : "PvE";
 
-    // 2. ★★★ [필수 입력 체크] 하나라도 비어있으면 차단 ★★★
-    if (!title) {
-        alert("⚠️ 빌드 이름을 입력해주세요!");
-        document.getElementById('build-title').focus();
-        return;
-    }
-    if (!creator) {
-        alert("⚠️ 닉네임을 입력해주세요!");
-        document.getElementById('build-creator').focus();
-        return;
-    }
-    if (!recWeapons) {
-        alert("⚠️ 추천 무기 세트를 입력해주세요! (예: 흑룡)");
-        document.getElementById('rec-weapons').focus();
-        return;
-    }
-    if (!recArmor) {
-        alert("⚠️ 추천 방어구 세트를 입력해주세요! (예: 광전사)");
-        document.getElementById('rec-armor').focus();
-        return;
-    }
-
-    // (참고: 설명은 선택사항으로 두었습니다. 만약 설명도 필수로 하려면 아래 주석을 해제하세요.)
-    /*
-    if (!desc) {
-        alert("⚠️ 설명을 입력해주세요!");
-        document.getElementById('build-desc').focus();
-        return;
-    }
-    */
+    // 2. 필수 입력 체크
+    if (!title) { alert("⚠️ 빌드 이름을 입력해주세요!"); document.getElementById('build-title').focus(); return; }
+    if (!creator) { alert("⚠️ 닉네임을 입력해주세요!"); document.getElementById('build-creator').focus(); return; }
+    if (!recWeapons) { alert("⚠️ 추천 무기 세트를 입력해주세요!"); document.getElementById('rec-weapons').focus(); return; }
+    if (!recArmor) { alert("⚠️ 추천 방어구 세트를 입력해주세요!"); document.getElementById('rec-armor').focus(); return; }
 
     if (!confirm(`'${title}' 빌드를 공유하시겠습니까?`)) return;
 
-    // 3. 링크 생성
-    generateBuildUrl(); 
-    const link = document.getElementById('result-url').value;
-
-    if (!link) {
-        alert("빌드 데이터를 생성하지 못했습니다. 아이템을 선택했는지 확인해주세요.");
-        return;
+    // 3. 버튼 잠금 (IP 조회 동안 대기)
+    const btn = event.target; // 클릭된 버튼(this)을 잡아야 함 (HTML에서 onclick으로 호출 시 event 객체 사용)
+    // 안전하게 버튼 요소 찾기 (혹시 event가 없을 경우 대비)
+    const submitBtn = btn || document.querySelector('.browse-button[onclick*="shareBuildToCloud"]');
+    const originalText = submitBtn ? submitBtn.innerText : "전송";
+    
+    if(submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = "IP 확인 중...";
     }
 
-    // 4. 무기 데이터 추출
+    // 4. 링크 생성 및 데이터 준비
+    generateBuildUrl(); 
+    const link = document.getElementById('result-url').value;
+    if (!link) {
+        alert("데이터 생성 실패");
+        if(submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalText; }
+        return;
+    }
+    
     let weapons = [];
     if (currentBuild && currentBuild.weapons) {
         weapons = currentBuild.weapons.filter(id => id !== null && id !== "");
     }
 
-    // 5. 전송 버튼 잠금 (중복 클릭 방지)
-    const btn = event.target;
-    const originalText = btn.innerText;
-    btn.disabled = true;
-    btn.innerText = "전송 중...";
+    // ★★★ [핵심] IP 조회 후 전송 ★★★
+    fetch('https://api.ipify.org?format=json')
+    .then(res => res.json())
+    .then(ipData => {
+        const userIp = ipData.ip;
+        
+        if(submitBtn) submitBtn.innerText = "전송 중...";
 
-    // 6. 서버로 전송할 데이터 구성
-    const params = new URLSearchParams({
-        action: 'submit_build',
-        title: title,
-        creator: creator,
-        type: type,
-        desc: desc,
-        weapons: JSON.stringify(weapons),
-        link: link,
-        rec_weapons: recWeapons,
-        rec_armor: recArmor
-    });
+        const params = new URLSearchParams({
+            action: 'submit_build',
+            title: title, creator: creator, type: type, desc: desc,
+            weapons: JSON.stringify(weapons), link: link,
+            rec_weapons: recWeapons, rec_armor: recArmor,
+            ip: userIp // ★ IP를 함께 보냄
+        });
 
-    // 서버 주소 체크
-    if (typeof BUILD_API_URL === 'undefined') {
-        alert("서버 주소 설정 오류: BUILD_API_URL을 찾을 수 없습니다.");
-        btn.disabled = false;
-        btn.innerText = originalText;
-        return;
-    }
+        if (typeof BUILD_API_URL === 'undefined') { throw new Error("서버 주소 오류"); }
 
-    // 7. 전송 시작
-    fetch(`${BUILD_API_URL}?${params.toString()}`)
+        return fetch(`${BUILD_API_URL}?${params.toString()}`);
+    })
     .then(res => res.text())
     .then(data => {
         data = data.trim();
         if (data === "SUCCESS") {
             alert("✅ 빌드가 성공적으로 공유되었습니다!");
-            // 입력창 초기화
+            // 초기화
             document.getElementById('build-title').value = "";
             document.getElementById('build-creator').value = "";
             document.getElementById('build-desc').value = "";
             document.getElementById('rec-weapons').value = ""; 
             document.getElementById('rec-armor').value = "";   
-        } else if (data === "FAIL:BAD_WORD") {
-            alert("🚫 부적절한 단어(욕설, 비하, 홍보 등)가 포함되어 있습니다.\n바른 말을 사용해주세요.");
-        } else if (data === "FAIL:TOO_LONG") {
-            alert("🚫 입력한 내용이 너무 깁니다. 조금만 줄여주세요.");
+        } 
+        else if (data === "FAIL:BAD_WORD_BANNED") {
+            alert("🚫 [경고] 금칙어(욕설/비하/정치 등) 사용이 감지되었습니다.\n\n해당 IP는 블랙리스트에 등록되어\n앞으로 빌드 공유 기능을 사용할 수 없습니다.");
+        } 
+        else if (data === "FAIL:BLOCKED_USER") {
+            alert("⛔ [차단됨] 귀하의 IP는 운영 정책 위반으로 인해\n빌드 공유 기능이 영구 차단되었습니다.");
+        }
+        else if (data === "FAIL:TOO_LONG") {
+            alert("🚫 내용이 너무 깁니다.");
         } else {
             alert("전송 실패: " + data);
         }
     })
     .catch(err => {
         console.error(err);
-        alert("서버 통신 오류가 발생했습니다.");
+        alert("서버 통신 중 오류가 발생했습니다. (AdBlock 등이 IP 확인을 막았을 수 있습니다)");
     })
     .finally(() => {
-        // 전송 끝난 후 버튼 복구
-        btn.disabled = false;
-        btn.innerText = originalText;
+        if(submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+        }
     });
 }

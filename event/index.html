@@ -304,7 +304,7 @@
             });
         }
 
-        // 명단 리스트 함수
+      // 명단 리스트 함수 (최종 수정: 5명 제한 + 텍스트 구분)
         function loadList() {
             fetch(`${GAS_SCRIPT_URL}?action=list`)
             .then(res => res.json())
@@ -312,16 +312,22 @@
                 const tbody = document.getElementById('listBody');
                 tbody.innerHTML = ""; 
 
-                if(list.length === 0) {
+                // 1. 최근 5명만 자르기
+                const recentList = list.slice(0, 5);
+
+                if(recentList.length === 0) {
                     tbody.innerHTML = "<tr><td colspan='3' style='text-align:center; padding:20px;'>아직 참여자가 없습니다.</td></tr>";
                     return;
                 }
 
-                list.forEach(item => {
+                recentList.forEach(item => {
                     const tr = document.createElement('tr');
+                    // 당첨 여부에 따라 색상 클래스 다르게 적용 (CSS에 .res-win, .res-lose 있어야 함)
                     const resClass = item.result === "WIN" ? "res-win" : "res-lose";
-                    const resText = item.result === "WIN" ? "🎉 행운봉투" : "사리봉";
                     
+                    // ★★★ [복구됨] 요청하신 텍스트 구분 로직 ★★★
+                    const resText = item.result === "WIN" ? "🎉 행운봉투" : "사리봉";
+
                     tr.innerHTML = `
                         <td>${item.time}</td>
                         <td>${item.name}</td>

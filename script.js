@@ -888,7 +888,21 @@ function loadQuestDetail(filepath, id) {
 function showQuestList() {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
-    if(listView && detailView) { listView.style.display = 'block'; detailView.style.display = 'none'; }
+    
+    // ★ [핵심 추가] 목록 상자가 비어있다면, 지금 그리기! 
+    // (상세 주소로 바로 들어왔을 때를 대비함)
+    const container = document.getElementById('quest-grid-container');
+    if (container && container.children.length === 0) {
+        renderQuestList();
+    }
+
+    if(listView && detailView) { 
+        listView.style.display = 'block'; 
+        detailView.style.display = 'none'; 
+    }
+    
+    // URL 정리 (상세 ID '?q=...'를 지우고 목록 상태로 변경)
+    updateUrlQuery('quest');
 }
 
 function filterQuestType(type, btnElement) {
@@ -1966,8 +1980,21 @@ function loadChunjiDetail(item) {
 
 // 6. 목록으로 돌아가기
 function showChunjiList() {
-    document.getElementById('chunji-list-view').style.display = 'block';
-    document.getElementById('chunji-detail-view').style.display = 'none';
+    const listView = document.getElementById('chunji-list-view');
+    const detailView = document.getElementById('chunji-detail-view');
+    
+    // ★ [핵심 추가] 천지록 목록도 비어있으면 그리기
+    const container = document.getElementById('chunji-list-container');
+    if (container && container.children.length === 0) {
+        renderChunjiList();
+    }
+
+    if(listView && detailView) { 
+        listView.style.display = 'block'; 
+        detailView.style.display = 'none'; 
+    }
+    
+    // URL 정리
     updateUrlQuery('chunji');
 }
 

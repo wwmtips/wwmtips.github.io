@@ -1,0 +1,178 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .puzzle-box {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .puzzle-title {
+            color: #2e7d32;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            흑살기의 음양술
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">건륭관 뒤쪽 괴상한 도사 운재 구하기</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            도사 <b>운재</b>의 부탁을 받아 두 개의 동굴 퍼즐을 풀고, 흑살기의 음모를 저지하여 그를 구출하는 의뢰입니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 운재와의 만남</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>건륭관 뒤쪽</b>으로 이동하여 괴상한 도사 <b>운재</b>와 대화하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q143_1.jpg" alt="운재">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q143_2.jpg" alt="운재 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 첫 번째 동굴 (퍼즐 및 전투)</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 지도에 표시된 <b>첫 번째 동굴</b>로 이동하세요.<br>
+            입구의 석판을 조작하여 문을 열어야 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q143_3.jpg" alt="첫 번째 동굴 입구">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q143_4.jpg" alt="동굴 위치">
+        </div>
+
+        <div class="puzzle-box">
+            <span class="puzzle-title">🔓 동굴 해제 방법</span>
+            <p style="margin: 0; font-size: 0.9em;">아래 이미지와 같이 석판의 위쪽과 아래쪽 무늬를 맞추세요.</p>
+            <div class="wuxia-image-container" style="margin-top: 10px;">
+                <img src="../quests/images/q143_5.jpg" alt="해제 방법">
+            </div>
+        </div>
+
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
+            문이 열리면 안으로 들어가 적들의 대화를 엿들은 후 모두 처치하세요.<br>
+            그 후 앞에 있는 <b>석상</b>에 <b>[불화살]</b>을 쏘면 <b>[옥패]</b>를 획득할 수 있습니다.
+        </p>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">3. 두 번째 동굴 (퍼즐)</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            이제 <b>두 번째 동굴</b>을 찾아가야 합니다. 위치는 아래 지도를 참고하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q143_7.jpg" alt="두 번째 동굴 입구">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q143_8.jpg" alt="두 번째 동굴 위치">
+        </div>
+
+        <div class="puzzle-box">
+            <span class="puzzle-title">🔓 동굴 해제 방법</span>
+            <p style="margin: 0; font-size: 0.9em;">첫 번째와 동일한 방식의 석판 퍼즐입니다. 석판을 해제하고 안으로 들어가 동일하게 대화를 엿듣고, 적을 처치 후 이번에는 <b>서신과 옥패</b>를 챙겨야 합니다.</p>
+            <div class="wuxia-image-container" style="margin-top: 10px;">
+                <img src="../quests/images/q143_9.jpg" alt="해제 방법">
+            </div>
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">4. 운재 구출 및 완료</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            두 동굴의 퍼즐을 모두 해결한 뒤, 다시 <b>운재</b>가 있던 곳으로 돌아가세요.<br>
+            기존에 닫혀 있던 <b>음양 무늬의 바닥(지하 통로)</b>이 열려 있습니다.<br>
+            안으로 들어가 운재를 풀어주고 <b>서신</b>을 전달하면 퀘스트가 완료됩니다.
+        </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
+            운재를 구하고 음양의 조화를 되찾으며<br>
+            <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q150",
+   "name": "이심전심",
+   "location": "북쪽 외곽",
+   "type": "만사록",
+   "bgimg": "q150_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q150.html"
+ },
+  {
    "id": "q149",
    "name": "애절한 그리움",
    "location": "북쪽 외곽",
@@ -569,7 +578,7 @@
   {
     "id": "q26",
     "name": "풋잎죽",
-    
+
     "location": "남문대로",
     "type": "만사록",
     "bgimg": "q26_1.jpg",

@@ -55,100 +55,113 @@
             font-weight: bold;
             margin-top: 30px;
         }
-        .warning-box {
-            border: 2px solid var(--wuxia-accent-red);
-            background-color: #fff5f5;
+        .item-box {
+            background-color: #fffcf5;
+            border: 1px dashed var(--wuxia-accent-gold);
             padding: 15px;
             border-radius: 4px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
-        .tip-box {
-            background-color: #f0f8ff;
-            padding: 10px 15px;
-            border-left: 3px solid #4682b4;
-            margin: 10px 0;
-            border-radius: 0 4px 4px 0;
-            color: #333;
-            font-size: 0.9em;
+        .item-title {
+            color: var(--wuxia-accent-red);
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
         }
     </style>
 
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
         <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            목적 달성
+            연의 그림자
         </h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">회남 절벽에서 무언가 찾는 봉삼도</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">금군 도두 이수절과 흩어진 부품들</p>
     </div>
 
     <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
         <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
         <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
-            회남 절벽 거점 근처의 <b>봉삼도</b>를 도와 잃어버린 향낭을 찾고, 그의 뒤를 쫓아 진실을 확인하는 의뢰입니다.
+            비파 계곡에 있는 금군 도두 <b>이수절</b>을 도와 주변에 흩어진 세 가지 부품을 회수하는 의뢰입니다.
         </p>
     </div>
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <div class="step-header">1. 봉삼도와의 만남</div>
+        <div class="step-header">1. 이수절과 대화</div>
         <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-            <b>회남 절벽 거점 오른쪽</b>으로 이동하세요.<br>
-            거점 안쪽을 살피고 있는 <b>봉삼도</b>와 대화하여 의뢰를 수락합니다.
+            아래 지도에 표시된 위치로 이동하여 <b>이수절</b>과 대화하세요.<br>
+            그는 잃어버린 <b>세 개의 부품</b>을 찾아달라고 부탁합니다.
         </p>
         <div class="wuxia-image-container">
-            <img src="../quests/images/q155_1.jpg" alt="봉삼도">
+            <img src="../quests/images/q156_1.jpg" alt="이수절">
         </div>
         <div class="wuxia-image-container">
-            <img src="../quests/images/q155_2.jpg" alt="봉삼도 위치">
+            <img src="../quests/images/q156_2.jpg" alt="이수절 위치">
         </div>
     </div>
 
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <div class="step-header">2. 향낭 찾기 (열쇠 필요)</div>
-        <div class="warning-box">
-            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
-                <b>🔑 필수 아이템:</b> 문을 열기 위해서는 <b>[비밀 열쇠]</b>가 필요합니다.<br>
-                이 열쇠는 해당 <b>거점을 클리어</b>하면 보상으로 획득할 수 있습니다.
+        <div class="step-header">2. 부품 찾기 (3곳)</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-bottom: 20px;">
+            이수절이 있는 곳을 기준으로 주변을 수색해야 합니다.
+        </p>
+
+        <div class="item-box">
+            <span class="item-title">🌿 첫 번째 부품: 덩굴 제거</span>
+            <p style="margin: 0; line-height: 1.6;">
+                이수절이 <b>바라보는 방향</b>으로 가세요.<br>
+                길을 막고 있는 <b>덩굴</b>을 제거하면 부품을 획득할 수 있습니다.
             </p>
+            <div class="wuxia-image-container" style="margin-top: 10px;">
+                <img src="../quests/images/q156_3.jpg" alt="덩굴 위치">
+            </div>
+            <div class="wuxia-image-container">
+                <img src="../quests/images/q156_4.jpg" alt="덩굴 제거">
+            </div>
         </div>
-        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-            거점 안으로 들어가 아래 위치의 건물 앞으로 가세요.<br>
-            바닥의 <b>발자국</b>을 조사한 뒤, <b>뒤에 있는 문</b>을 열면 향낭을 찾을 수 있습니다.
-        </p>
-        <div class="wuxia-image-container">
-            <img src="../quests/images/q155_3.jpg" alt="발자국과 문">
+
+        <div class="item-box">
+            <span class="item-title">🌊 두 번째 부품: 호수 잠수</span>
+            <p style="margin: 0; line-height: 1.6;">
+                이수절 <b>앞쪽</b>에 있는 <b>호수</b>로 들어가세요.<br>
+                물속으로 <b>[잠수]</b>하면 바닥에서 부품을 찾을 수 있습니다.
+            </p>
+            <div class="wuxia-image-container" style="margin-top: 10px;">
+                <img src="../quests/images/q156_5.jpg" alt="호수 잠수">
+            </div>
+            <div class="wuxia-image-container">
+                <img src="../quests/images/q156_6.jpg" alt="호수 위치">
+            </div>
         </div>
-        <div class="wuxia-image-container">
-            <img src="../quests/images/q155_4.jpg" alt="건물 위치">
-        </div>
-        <div class="wuxia-image-container">
-            <img src="../quests/images/q155_5.jpg" alt="향낭 획득">
+
+        <div class="item-box">
+            <span class="item-title">⛏️ 세 번째 부품: 의관묘 채굴</span>
+            <p style="margin: 0; line-height: 1.6;">
+                이수절 <b>뒤쪽</b>에 있는 <b>의관묘(무덤)</b>로 가세요.<br>
+                그곳을 <b>[채굴]</b>하면 마지막 부품을 얻을 수 있습니다.
+            </p>
+            <div class="wuxia-image-container" style="margin-top: 10px;">
+                <img src="../quests/images/q156_7.jpg" alt="의관묘 채굴">
+            </div>
+            <div class="wuxia-image-container">
+                <img src="../quests/images/q156_8.jpg" alt="의관묘 위치">
+            </div>
         </div>
     </div>
 
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
     <div class="detail-chunk" style="margin-bottom: 40px;">
-        <div class="step-header">3. 미행 및 엿듣기</div>
+        <div class="step-header">3. 완료</div>
         <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-            찾은 향낭을 <b>봉삼도</b>에게 돌려주면 그가 어디론가 이동합니다.<br>
-            <b>들키지 않게</b> 조심스럽게 뒤를 쫓아가세요.
+            세 개의 부품을 모두 모은 뒤, 다시 <b>이수절</b>에게 돌아가 전달하면 퀘스트가 완료됩니다.
         </p>
-        <div class="tip-box">
-            <b>🕵️ 미행 팁:</b> 너무 가까이 붙지 말고 일정 거리를 유지하세요.
-        </div>
-        <p style="color: var(--wuxia-text-main); line-height: 1.8; margin-top: 20px;">
-            도착한 곳에서 <b>[엿듣기]</b>를 성공하면 퀘스트가 완료됩니다.
-        </p>
-        <div class="wuxia-image-container">
-            <img src="../quests/images/q155_6.jpg" alt="엿듣기 위치">
-        </div>
     </div>
 
     <div style="text-align: center; margin-top: 30px; padding: 30px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
         <p style="color: var(--wuxia-text-main); font-size: 1.1em; font-weight: bold; margin: 0; line-height: 1.8; font-family: 'Noto Serif KR', serif;">
-            그의 목적을 확인하면<br>
+            부품을 모두 모아 전달하면<br>
             <span style="color: var(--wuxia-accent-red);">퀘스트는 완료됩니다.</span>
         </p>
     </div>

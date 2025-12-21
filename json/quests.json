@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q168",
+   "name": "일일천리",
+   "location": "청심원",
+   "type": "만사록",
+   "bgimg": "q168_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q168.html"
+ },
+  {
    "id": "q167",
    "name": "강호 고수",
    "location": "청심원",

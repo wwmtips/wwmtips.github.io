@@ -1089,7 +1089,7 @@ function renderBuildList(filterType) {
     container.innerHTML = '';
 
     if (!globalData.builds || globalData.builds.length === 0) {
-        container.innerHTML = '<div style="padding:30px; text-align:center; color:#666;">등록된 비급이 없습니다.</div>';
+        container.innerHTML = '<div style="padding:30px; text-align:center; color:#666;">불러오는 중...</div>';
         return;
     }
 

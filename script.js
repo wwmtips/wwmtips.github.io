@@ -2256,3 +2256,85 @@ function openGuideDirect(filename) {
 
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
 
+
+// ★★★ 빌드 공유하기 기능 (최종 수정: 주소 분리 및 전역 변수 사용) ★★★
+function shareBuildToCloud() {
+    // 1. 입력값 가져오기
+    const title = document.getElementById('creator-name').value.trim();
+    const desc = document.getElementById('build-desc').value.trim();
+    
+    // 라디오 버튼값 가져오기
+    const typeRadio = document.querySelector('input[name="buildType"]:checked');
+    const type = typeRadio ? typeRadio.value : "PvE";
+
+    if (!title) {
+        alert("빌드 이름을 입력해주세요!");
+        document.getElementById('creator-name').focus();
+        return;
+    }
+
+    if (!confirm(`'${title}' 빌드를 공유하시겠습니까?`)) return;
+
+    // 2. 링크 생성 (기존 함수 활용)
+    generateBuildUrl(); 
+    const link = document.getElementById('result-url').value;
+
+    if (!link) {
+        alert("빌드 데이터를 생성하지 못했습니다. 아이템을 선택했는지 확인해주세요.");
+        return;
+    }
+
+    // 3. 무기 ID 추출 (HTML 파싱 대신 전역 변수 currentBuild 사용 - 안전함)
+    let weapons = [];
+    if (currentBuild && currentBuild.weapons) {
+        // [null, "w1"] 처럼 비어있는 슬롯을 제외하고 실제 아이템 ID만 추출
+        weapons = currentBuild.weapons.filter(id => id !== null && id !== "");
+    }
+
+    // 4. 서버 전송 준비
+    const btn = event.target;
+    const originalText = btn.innerText;
+    btn.disabled = true;
+    btn.innerText = "전송 중...";
+
+    // 전송 파라미터 구성
+    const params = new URLSearchParams({
+        action: 'submit_build',
+        title: title,
+        creator: '익명', 
+        type: type,
+        desc: desc,
+        weapons: JSON.stringify(weapons),
+        link: link
+    });
+
+    // ★★★ [핵심 변경] BUILD_API_URL 사용 (이벤트 URL과 분리) ★★★
+    // index.html에 선언된 주소 사용, 없으면 알림
+    if (typeof BUILD_API_URL === 'undefined') {
+        alert("서버 주소 설정 오류: BUILD_API_URL을 찾을 수 없습니다.");
+        btn.disabled = false;
+        btn.innerText = originalText;
+        return;
+    }
+
+    fetch(`${BUILD_API_URL}?${params.toString()}`)
+    .then(res => res.text())
+    .then(data => {
+        if (data.trim() === "SUCCESS") {
+            alert("빌드가 성공적으로 공유되었습니다!\n관리자 확인 후 목록에 표시됩니다.");
+            // 입력창 초기화
+            document.getElementById('build-desc').value = "";
+            document.getElementById('creator-name').value = "";
+        } else {
+            alert("전송 실패: " + data);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("서버 통신 오류가 발생했습니다.");
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.innerText = originalText;
+    });
+}

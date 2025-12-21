@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q145",
+   "name": "이름 없는 무덤",
+   "location": "백어강",
+   "type": "만사록",
+   "bgimg": "q145_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q145.html"
+ },
+  {
    "id": "q144",
    "name": "황화귀관",
    "location": "백어강",

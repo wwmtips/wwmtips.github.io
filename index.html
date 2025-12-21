@@ -47,7 +47,7 @@
         const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbxNJNUMnWPYI4QeXyUAiix9kJDz8Lc4KqEpWIZNCsPKqbjpd-eMyZAW1RUl60hywJmQ/exec"; 
 
         // 2. [추가] 빌드 공유용 주소 (새로 만든 스크립트 배포 주소)
-        const BUILD_API_URL = "https://script.google.com/macros/s/AKfycby9ErHwCFdMxjvKjld56jAQE3I3CkJkRrEahhOIyL6QoTcDWjmpxk0XHfpjanzOFTlIXA/exec"; 
+        const BUILD_API_URL = "https://script.google.com/macros/s/AKfycbybEDXxSWtBjK3byOYOV-PLt1NdPS5W9yVsqwEJTd436RQNC1j3jf_GgMhVzigGTURAvA/exec"; 
 
         document.addEventListener("DOMContentLoaded", function() {
             checkEventStatus(); // 이벤트 로직은 EVENT_API_URL을 사용 (수정 불필요)
@@ -427,12 +427,7 @@
                             onmouseout="this.style.borderColor='#ddd'; this.style.color='#333'">
                         <span>✍️</span> 빌드 만들기
                     </button>
-                    <button onclick="window.open('https://wwm.tips/suggest', '_blank')" 
-                            style="padding: 12px 0; background-color: #fff; border: 1px solid #ddd; border-radius: 4px; color: #666; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: all 0.2s;"
-                            onmouseover="this.style.borderColor='#999'; this.style.color='#333'"
-                            onmouseout="this.style.borderColor='#ddd'; this.style.color='#666'">
-                        <span>📤</span> 빌드 제안
-                    </button>
+                
                 </div>
                 <div id="build-list-container" class="build-list-wrapper">
                     <div style="text-align:center; padding: 30px; color: #999;">

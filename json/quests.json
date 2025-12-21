@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q144",
+   "name": "황화귀관",
+   "location": "백어강",
+   "type": "만사록",
+   "bgimg": "q144_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q144.html"
+ },
+  {
    "id": "q143",
    "name": "흑살기의 음양술",
    "location": "부의산",

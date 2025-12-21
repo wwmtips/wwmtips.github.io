@@ -2275,8 +2275,7 @@ function openGuideDirect(filename) {
     }
 }
 
-// ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
-// [script.js] shareBuildToCloud 함수 (IP 전송 및 차단 로직 추가)
+// ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★// [script.js] shareBuildToCloud 함수 (최종 완성본)
 function shareBuildToCloud() {
     // 1. 입력값 가져오기
     const title = document.getElementById('build-title').value.trim();
@@ -2284,68 +2283,97 @@ function shareBuildToCloud() {
     const recWeapons = document.getElementById('rec-weapons').value.trim();
     const recArmor = document.getElementById('rec-armor').value.trim();
     const desc = document.getElementById('build-desc').value.trim();
+    
     const typeRadio = document.querySelector('input[name="buildType"]:checked');
     const type = typeRadio ? typeRadio.value : "PvE";
 
-    // 2. 필수 입력 체크
-    if (!title) { alert("⚠️ 빌드 이름을 입력해주세요!"); document.getElementById('build-title').focus(); return; }
-    if (!creator) { alert("⚠️ 닉네임을 입력해주세요!"); document.getElementById('build-creator').focus(); return; }
-    if (!recWeapons) { alert("⚠️ 추천 무기 세트를 입력해주세요!"); document.getElementById('rec-weapons').focus(); return; }
-    if (!recArmor) { alert("⚠️ 추천 방어구 세트를 입력해주세요!"); document.getElementById('rec-armor').focus(); return; }
+    // 2. ★★★ [필수 입력 체크] 하나라도 비어있으면 차단 ★★★
+    if (!title) {
+        alert("⚠️ 빌드 이름을 입력해주세요!");
+        document.getElementById('build-title').focus();
+        return;
+    }
+    if (!creator) {
+        alert("⚠️ 닉네임을 입력해주세요!");
+        document.getElementById('build-creator').focus();
+        return;
+    }
+    if (!recWeapons) {
+        alert("⚠️ 추천 무기 세트를 입력해주세요! (예: 흑룡)");
+        document.getElementById('rec-weapons').focus();
+        return;
+    }
+    if (!recArmor) {
+        alert("⚠️ 추천 방어구 세트를 입력해주세요! (예: 광전사)");
+        document.getElementById('rec-armor').focus();
+        return;
+    }
 
+    // 최종 확인
     if (!confirm(`'${title}' 빌드를 공유하시겠습니까?`)) return;
 
-    // 3. 버튼 잠금 (IP 조회 동안 대기)
-    const btn = event.target; // 클릭된 버튼(this)을 잡아야 함 (HTML에서 onclick으로 호출 시 event 객체 사용)
-    // 안전하게 버튼 요소 찾기 (혹시 event가 없을 경우 대비)
-    const submitBtn = btn || document.querySelector('.browse-button[onclick*="shareBuildToCloud"]');
-    const originalText = submitBtn ? submitBtn.innerText : "전송";
+    // 3. 버튼 잠금 (전송 시작)
+    // 클릭된 버튼 요소를 안전하게 찾기 (아이콘 클릭 시 부모 버튼 찾기)
+    const btnTarget = event.target; 
+    const submitBtn = btnTarget.closest('button') || btnTarget; 
+    const originalText = submitBtn.innerText;
     
-    if(submitBtn) {
+    if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerText = "IP 확인 중...";
     }
 
-    // 4. 링크 생성 및 데이터 준비
+    // 4. 링크 생성
     generateBuildUrl(); 
     const link = document.getElementById('result-url').value;
+
     if (!link) {
-        alert("데이터 생성 실패");
-        if(submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalText; }
+        alert("빌드 데이터를 생성하지 못했습니다. 아이템을 선택했는지 확인해주세요.");
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalText; }
         return;
     }
-    
+
+    // 5. 무기 데이터 추출
     let weapons = [];
     if (currentBuild && currentBuild.weapons) {
         weapons = currentBuild.weapons.filter(id => id !== null && id !== "");
     }
 
-    // ★★★ [핵심] IP 조회 후 전송 ★★★
+    // 6. ★★★ [핵심] IP 조회 후 서버로 데이터 전송 ★★★
     fetch('https://api.ipify.org?format=json')
     .then(res => res.json())
     .then(ipData => {
         const userIp = ipData.ip;
         
-        if(submitBtn) submitBtn.innerText = "전송 중...";
+        if (submitBtn) submitBtn.innerText = "전송 중...";
 
+        // 서버로 보낼 데이터 묶음
         const params = new URLSearchParams({
             action: 'submit_build',
-            title: title, creator: creator, type: type, desc: desc,
-            weapons: JSON.stringify(weapons), link: link,
-            rec_weapons: recWeapons, rec_armor: recArmor,
-            ip: userIp // ★ IP를 함께 보냄
+            title: title,
+            creator: creator,
+            type: type,
+            desc: desc,
+            weapons: JSON.stringify(weapons),
+            link: link,
+            rec_weapons: recWeapons,
+            rec_armor: recArmor,
+            ip: userIp // 차단 확인용 IP
         });
 
-        if (typeof BUILD_API_URL === 'undefined') { throw new Error("서버 주소 오류"); }
+        if (typeof BUILD_API_URL === 'undefined') { throw new Error("서버 주소(BUILD_API_URL)가 설정되지 않았습니다."); }
 
+        // 구글 Apps Script로 전송
         return fetch(`${BUILD_API_URL}?${params.toString()}`);
     })
     .then(res => res.text())
     .then(data => {
         data = data.trim();
+        
+        // 결과에 따른 처리
         if (data === "SUCCESS") {
             alert("✅ 빌드가 성공적으로 공유되었습니다!");
-            // 초기화
+            // 입력창 초기화
             document.getElementById('build-title').value = "";
             document.getElementById('build-creator').value = "";
             document.getElementById('build-desc').value = "";
@@ -2359,17 +2387,22 @@ function shareBuildToCloud() {
             alert("⛔ [차단됨] 귀하의 IP는 운영 정책 위반으로 인해\n빌드 공유 기능이 영구 차단되었습니다.");
         }
         else if (data === "FAIL:TOO_LONG") {
-            alert("🚫 내용이 너무 깁니다.");
-        } else {
+            alert("🚫 입력한 내용이 너무 깁니다. 조금만 줄여주세요.");
+        } 
+        else if (data === "FAIL:MISSING_DATA") {
+            alert("⚠️ 필수 데이터가 누락되었습니다.");
+        }
+        else {
             alert("전송 실패: " + data);
         }
     })
     .catch(err => {
         console.error(err);
-        alert("서버 통신 중 오류가 발생했습니다. (AdBlock 등이 IP 확인을 막았을 수 있습니다)");
+        alert("서버 통신 중 오류가 발생했습니다.\n(AdBlock 등이 켜져있다면 꺼주세요)");
     })
     .finally(() => {
-        if(submitBtn) {
+        // 전송이 끝나면 버튼 원래대로 복구
+        if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.innerText = originalText;
         }

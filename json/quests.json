@@ -1,5 +1,13 @@
 [ 
-
+{
+   "id": "q155",
+   "name": "목적 달성",
+   "location": "회남 절벽",
+   "type": "만사록",
+   "bgimg": "q155_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q155.html"
+ },
 
   {
    "id": "q154",

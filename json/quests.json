@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q143",
+   "name": "흑살기의 음양술",
+   "location": "부의산",
+   "type": "만사록",
+   "bgimg": "q143_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q143.html"
+ },
+  {
    "id": "q142",
    "name": "첫 번째 향로",
    "location": "부의산",

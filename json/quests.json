@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q161",
+   "name": "어디엔들 근심이 없으랴",
+   "location": "승은촌",
+   "type": "만사록",
+   "bgimg": "q161_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q161.html"
+ },
+  {
    "id": "q160",
    "name": "호떡 반쪽",
    "location": "승은촌",
@@ -7,6 +16,15 @@
    "bgimg": "q160_2.jpg",
    "iconpath": "images/masa.jpg",
    "filepath": "/quests/q160.html"
+ },
+ {
+   "id": "q159",
+   "name": "봉인된 목소리",
+   "location": "승은촌",
+   "type": "만사록",
+   "bgimg": "q159_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q159.html"
  },
   {
    "id": "q158",

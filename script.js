@@ -80,19 +80,30 @@ document.addEventListener("DOMContentLoaded", () => {
 // =========================================
 // 3. 데이터 로딩 및 처리 (수정됨)
 // =========================================
+// =========================================
+// 3. 데이터 로딩 및 처리 (수정됨: 빌드 서버 연동)
+// =========================================
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab');
     const targetId = urlParams.get('id');
     const shortQuestId = urlParams.get('q'); 
-    const chunjiId = urlParams.get('c'); // [추가] 천지록 ID 파라미터
+    const chunjiId = urlParams.get('c');
+
+    // ★★★ [핵심 변경] index.html에 선언된 BUILD_API_URL 사용 ★★★
+    const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined') 
+        ? `${BUILD_API_URL}?action=list` 
+        : 'json/builds.json'; // 비상시 로컬 파일 사용
 
     Promise.all([
         fetch('json/datas.json').then(res => res.json()).catch(err => { console.warn('data.json 로드 실패', err); return {}; }),
         fetch('json/quests.json').then(res => res.json()).catch(err => { console.warn('quests.json 로드 실패', err); return []; }), 
         fetch('json/news.json').then(res => res.json()).catch(err => { console.warn('news.json 로드 실패', err); return []; }),
         fetch('json/cnews.json').then(res => res.json()).catch(err => { console.warn('cnews.json 로드 실패', err); return []; }),
-        fetch('json/builds.json').then(res => res.json()).catch(err => { console.warn('builds.json 로드 실패', err); return { builds: [] }; }),
+        
+        // ★★★ [핵심 변경] 위에서 설정한 URL로 빌드 데이터 로드 ★★★
+        fetch(buildFetchUrl).then(res => res.json()).catch(err => { console.warn('빌드 데이터 로드 실패', err); return { builds: [] }; }),
+        
         fetch('json/chunji.json').then(res => res.json()).catch(err => { console.warn('chunji.json 로드 실패', err); return { chunji: [] }; }),
         fetch('json/builder_data.json').then(res => res.json()).catch(err => { console.warn('builder_data.json 로드 실패', err); return null; }) 
     ])
@@ -117,12 +128,12 @@ function loadData() {
         builderData = builderDataResult; 
         currentQuestData = globalData.quests;
         chunjiData = globalData.chunji;
-        currentChunjiData = globalData.chunji; // [추가] 초기화 (전체 목록)
+        currentChunjiData = globalData.chunji; 
         
         updateLocationOptions(); 
         updateChunjiSubtypeOptions(); 
 
-       renderChunjiList();
+        renderChunjiList();
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
         renderQuestList();                
@@ -133,13 +144,12 @@ function loadData() {
 
         if (targetTab === 'builder') renderBuildList('all');
 
-        // [수정] URL 파라미터에 따른 초기 화면 진입 로직
         if (shortQuestId) {
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
             if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); 
         }
-        else if (chunjiId) { // [추가] 천지록 바로가기
+        else if (chunjiId) {
             const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
             if (foundChunji) {
                 switchTab('chunji');

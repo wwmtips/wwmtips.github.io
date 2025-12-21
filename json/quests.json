@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q162",
+   "name": "꽃가루를 전하는 벌",
+   "location": "동쪽 외곽",
+   "type": "만사록",
+   "bgimg": "q162_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q162.html"
+ },
+  {
    "id": "q161",
    "name": "어디엔들 근심이 없으랴",
    "location": "승은촌",

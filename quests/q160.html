@@ -1,0 +1,145 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.03); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.2em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .warning-box {
+            border: 2px solid var(--wuxia-accent-red);
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">만사록</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            호떡 반쪽
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">풍수사 앞 두 아이의 이야기</p>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 퀘스트 개요</h3>
+        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
+            밤과 아침에 각각 나타나는 <b>유소안</b>과 <b>사소명</b>을 만나고, 오구아에게서 호떡을 훔쳐 전달하는 의뢰입니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">1. 유소안과 사소명 만나기</div>
+        
+        <div class="warning-box" style="margin-bottom: 15px;">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⏰ 시간 변경 1:</b> 시진을 <b>밤</b>으로 변경하세요.
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            아래 지도에 표시된 장소(풍수사 밖)로 이동하여 <b>유소안</b>과 대화합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q160_1.jpg" alt="유소안">
+        </div>
+
+        <div class="warning-box" style="margin-top: 20px; margin-bottom: 15px;">
+            <p style="color: var(--wuxia-text-main); margin: 0; font-size: 0.95em;">
+                <b>⏰ 시간 변경 2:</b> 그 자리에서 시진을 <b>아침</b>으로 변경하세요.
+            </p>
+        </div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            시간을 변경하면 <b>사소명</b>이 나타납니다. 그와 대화하세요.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q160_2.jpg" alt="사소명">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q160_3.jpg" alt="아이들 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">2. 호떡 훔치기</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            <b>승은촌 입구</b> 쪽으로 이동하여 <b>오구아</b>를 찾으세요.<br>
+            그가 가지고 있는 <b>[호떡 반쪽]</b>을 <b>[허공섭물]</b>로 훔쳐야 합니다.
+        </p>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q160_4.jpg" alt="오구아와 호떡">
+        </div>
+        <div class="wuxia-image-container">
+            <img src="../quests/images/q160_5.jpg" alt="오구아 위치">
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <div class="detail-chunk" style="margin-bottom: 40px;">
+        <div class="step-header">3. 전달 및 완료</div>
+        <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+            훔친 호떡을 가지고 다시 아이들이 있던 곳으로 돌아가세요.<br>
+            <b>유소안</b> 혹은 <b>사소명</b> 중 아무에게나 전달하고 다시 한번 더 대화를 걸면 퀘스트가 완료됩니다.
+        </p>
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="showQuestList()" 
+                style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q160",
+   "name": "호떡 반쪽",
+   "location": "승은촌",
+   "type": "만사록",
+   "bgimg": "q160_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q160.html"
+ },
+  {
    "id": "q158",
    "name": "배신자의 정체",
    "location": "승은촌",

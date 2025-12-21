@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q151",
+   "name": "두려움이 아닌 존중",
+   "location": "비화 나루",
+   "type": "만사록",
+   "bgimg": "q151_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q151.html"
+ },
+  {
    "id": "q150",
    "name": "이심전심",
    "location": "북쪽 외곽",

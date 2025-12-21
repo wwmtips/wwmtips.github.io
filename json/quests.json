@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q164",
+   "name": "안개 숲의 기이한 꽃",
+   "location": "동쪽 외곽",
+   "type": "만사록",
+   "bgimg": "q164_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q164.html"
+ },
+  {
    "id": "q163",
    "name": "끈질긴 집념",
    "location": "동쪽 외곽",

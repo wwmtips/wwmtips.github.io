@@ -1082,14 +1082,14 @@ function loadViewer() {
     renderSlot('marts', m, 'v');
 }
 
-// [script.js] renderBuildList 함수 (작성자 표시 기능 추가됨)
+// [script.js] renderBuildList 함수 (작성자 위치 왼쪽으로 이동)
 function renderBuildList(filterType) {
     const container = document.getElementById('build-list-container');
     if (!container) return;
     container.innerHTML = '';
 
     if (!globalData.builds || globalData.builds.length === 0) {
-        container.innerHTML = '<div style="padding:30px; text-align:center; color:#666;">불러오는 중...</div>';
+        container.innerHTML = '<div style="padding:30px; text-align:center; color:#666;">등록된 비급이 없습니다.</div>';
         return;
     }
 
@@ -1114,6 +1114,7 @@ function renderBuildList(filterType) {
         row.onclick = () => { openBuildDetailSheet(build); };
         const typeClass = build.type.toUpperCase() === 'PVP' ? 'type-pvp' : 'type-pve';
         
+        // ▼▼▼ HTML 구조 변경 ▼▼▼
         row.innerHTML = `
             <div class="build-icons-area">
                 <div class="build-icon-box"><img src="${getImg(w1Id)}" alt="무기1"></div>
@@ -1124,11 +1125,12 @@ function renderBuildList(filterType) {
                     <span class="build-title">${build.title}</span>
                     <span class="build-type-badge ${typeClass}">${build.type}</span>
                 </div>
-                <div class="build-desc">${build.description || "설명이 없는 비급입니다."}</div>
-                
-                <div style="font-size: 0.8em; color: #999; margin-top: 6px; text-align: right;">
+
+                <div style="font-size: 0.8em; color: #999; margin-top: 2px; margin-bottom: 8px; text-align: left;">
                     작성자: <span style="color: #666; font-weight: bold;">${build.creator || '익명'}</span>
                 </div>
+
+                <div class="build-desc">${build.description || "설명이 없는 비급입니다."}</div>
             </div>
         `;
         container.appendChild(row);

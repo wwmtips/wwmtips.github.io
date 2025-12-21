@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q158",
+   "name": "배신자의 정체",
+   "location": "승은촌",
+   "type": "만사록",
+   "bgimg": "q158_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q158.html"
+ },
+  {
    "id": "q157",
    "name": "엇갈린 인연",
    "location": "홍구 운하",

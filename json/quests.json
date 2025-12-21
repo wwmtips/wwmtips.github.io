@@ -1,4 +1,13 @@
 [ 
+  {
+   "id": "q156",
+   "name": "연의 그림자",
+   "location": "비파 계곡",
+   "type": "만사록",
+   "bgimg": "q156_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q156.html"
+ },
 {
    "id": "q155",
    "name": "목적 달성",

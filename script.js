@@ -1082,13 +1082,14 @@ function loadViewer() {
     renderSlot('marts', m, 'v');
 }
 
+// [script.js] renderBuildList 함수 (작성자 표시 기능 추가됨)
 function renderBuildList(filterType) {
     const container = document.getElementById('build-list-container');
     if (!container) return;
     container.innerHTML = '';
 
     if (!globalData.builds || globalData.builds.length === 0) {
-        container.innerHTML = '<div style="padding:30px; text-align:center; color:#666;">불러오는 중...</div>';
+        container.innerHTML = '<div style="padding:30px; text-align:center; color:#666;">등록된 비급이 없습니다.</div>';
         return;
     }
 
@@ -1100,6 +1101,8 @@ function renderBuildList(filterType) {
     targetBuilds.forEach(build => {
         const w1Id = build.weapons[0];
         const w2Id = build.weapons[1];
+        
+        // 무기 이미지 가져오는 헬퍼 함수
         const getImg = (id) => {
             if (!builderData || !builderData.weapons) return 'images/logo.png';
             const item = builderData.weapons.find(w => w.id === id);
@@ -1117,14 +1120,20 @@ function renderBuildList(filterType) {
                 <div class="build-icon-box"><img src="${getImg(w2Id)}" alt="무기2"></div>
             </div>
             <div class="build-info-area">
-                <div class="build-header-row"><span class="build-title">${build.title}</span><span class="build-type-badge ${typeClass}">${build.type}</span></div>
+                <div class="build-header-row">
+                    <span class="build-title">${build.title}</span>
+                    <span class="build-type-badge ${typeClass}">${build.type}</span>
+                </div>
                 <div class="build-desc">${build.description || "설명이 없는 비급입니다."}</div>
+                
+                <div style="font-size: 0.8em; color: #999; margin-top: 6px; text-align: right;">
+                    작성자: <span style="color: #666; font-weight: bold;">${build.creator || '익명'}</span>
+                </div>
             </div>
         `;
         container.appendChild(row);
     });
 }
-
 function filterBuilds(type, btn) {
     const buttons = document.querySelectorAll('#tools-menu .guide-item-btn');
     buttons.forEach(b => b.classList.remove('active'));
@@ -2269,54 +2278,77 @@ function openGuideDirect(filename) {
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
 
 
-// 2. 서버 전송 함수 (닉네임/제목 분리 적용)
+// [script.js] shareBuildToCloud 함수 (모든 항목 필수 체크 적용)
 function shareBuildToCloud() {
-    // [수정] ID 변경에 따른 값 가져오기
+    // 1. 입력값 가져오기
     const title = document.getElementById('build-title').value.trim();     // 빌드 이름
     const creator = document.getElementById('build-creator').value.trim(); // 닉네임
-    const desc = document.getElementById('build-desc').value.trim();
-    const recWeapons = document.getElementById('rec-weapons').value.trim();
-    const recArmor = document.getElementById('rec-armor').value.trim();
+    const recWeapons = document.getElementById('rec-weapons').value.trim(); // 추천 무기
+    const recArmor = document.getElementById('rec-armor').value.trim();     // 추천 방어구
+    const desc = document.getElementById('build-desc').value.trim();       // 설명
 
     const typeRadio = document.querySelector('input[name="buildType"]:checked');
     const type = typeRadio ? typeRadio.value : "PvE";
 
-    // 필수값 체크
+    // 2. ★★★ [필수 입력 체크] 하나라도 비어있으면 차단 ★★★
     if (!title) {
-        alert("빌드 이름을 입력해주세요!");
+        alert("⚠️ 빌드 이름을 입력해주세요!");
         document.getElementById('build-title').focus();
         return;
     }
     if (!creator) {
-        alert("닉네임을 입력해주세요!");
+        alert("⚠️ 닉네임을 입력해주세요!");
         document.getElementById('build-creator').focus();
         return;
     }
+    if (!recWeapons) {
+        alert("⚠️ 추천 무기 세트를 입력해주세요! (예: 흑룡)");
+        document.getElementById('rec-weapons').focus();
+        return;
+    }
+    if (!recArmor) {
+        alert("⚠️ 추천 방어구 세트를 입력해주세요! (예: 광전사)");
+        document.getElementById('rec-armor').focus();
+        return;
+    }
+
+    // (참고: 설명은 선택사항으로 두었습니다. 만약 설명도 필수로 하려면 아래 주석을 해제하세요.)
+    /*
+    if (!desc) {
+        alert("⚠️ 설명을 입력해주세요!");
+        document.getElementById('build-desc').focus();
+        return;
+    }
+    */
 
     if (!confirm(`'${title}' 빌드를 공유하시겠습니까?`)) return;
 
+    // 3. 링크 생성
     generateBuildUrl(); 
     const link = document.getElementById('result-url').value;
 
     if (!link) {
-        alert("빌드 데이터를 생성하지 못했습니다.");
+        alert("빌드 데이터를 생성하지 못했습니다. 아이템을 선택했는지 확인해주세요.");
         return;
     }
 
+    // 4. 무기 데이터 추출
     let weapons = [];
     if (currentBuild && currentBuild.weapons) {
         weapons = currentBuild.weapons.filter(id => id !== null && id !== "");
     }
 
+    // 5. 전송 버튼 잠금 (중복 클릭 방지)
     const btn = event.target;
     const originalText = btn.innerText;
     btn.disabled = true;
     btn.innerText = "전송 중...";
 
+    // 6. 서버로 전송할 데이터 구성
     const params = new URLSearchParams({
         action: 'submit_build',
         title: title,
-        creator: creator, // [수정] 입력받은 닉네임 전송
+        creator: creator,
         type: type,
         desc: desc,
         weapons: JSON.stringify(weapons),
@@ -2325,29 +2357,31 @@ function shareBuildToCloud() {
         rec_armor: recArmor
     });
 
+    // 서버 주소 체크
     if (typeof BUILD_API_URL === 'undefined') {
-        alert("서버 주소 설정 오류");
+        alert("서버 주소 설정 오류: BUILD_API_URL을 찾을 수 없습니다.");
         btn.disabled = false;
         btn.innerText = originalText;
         return;
     }
 
+    // 7. 전송 시작
     fetch(`${BUILD_API_URL}?${params.toString()}`)
     .then(res => res.text())
     .then(data => {
         data = data.trim();
         if (data === "SUCCESS") {
-            alert("빌드가 성공적으로 공유되었습니다!");
-            // 초기화
+            alert("✅ 빌드가 성공적으로 공유되었습니다!");
+            // 입력창 초기화
             document.getElementById('build-title').value = "";
             document.getElementById('build-creator').value = "";
             document.getElementById('build-desc').value = "";
             document.getElementById('rec-weapons').value = ""; 
             document.getElementById('rec-armor').value = "";   
         } else if (data === "FAIL:BAD_WORD") {
-            alert("🚫 부적절한 단어가 포함되어 있습니다.");
+            alert("🚫 부적절한 단어(욕설, 비하, 홍보 등)가 포함되어 있습니다.\n바른 말을 사용해주세요.");
         } else if (data === "FAIL:TOO_LONG") {
-            alert("🚫 내용이 너무 깁니다.");
+            alert("🚫 입력한 내용이 너무 깁니다. 조금만 줄여주세요.");
         } else {
             alert("전송 실패: " + data);
         }
@@ -2357,6 +2391,7 @@ function shareBuildToCloud() {
         alert("서버 통신 오류가 발생했습니다.");
     })
     .finally(() => {
+        // 전송 끝난 후 버튼 복구
         btn.disabled = false;
         btn.innerText = originalText;
     });

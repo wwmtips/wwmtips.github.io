@@ -9,15 +9,6 @@
    "filepath": "/quests/q171.html"
  },
   {
-   "id": "q170",
-   "name": "여섯 환자의 탄식",
-   "location": "청심원",
-   "type": "만사록",
-   "bgimg": "q170_2.jpg",
-   "iconpath": "images/masa.jpg",
-   "filepath": "/quests/q170.html"
- },
-  {
    "id": "q169",
    "name": "해마다 오는 서신",
    "location": "청심원",

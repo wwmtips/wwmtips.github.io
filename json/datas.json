@@ -2,6 +2,10 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "향신료", "answer": "로즈마리", "user": "Dexter" },
+{ "hint": "수분 보충", "answer": "오이", "user": "ㅇㅇ" },
+{ "hint": "거대함", "answer": "고래", "user": "제므" },
+
     { "hint": "바다의 포식자", "answer": "상어", "user": "깜선생" },
 { "hint": "꼬리", "answer": "전갈", "user": "izell" },
 { "hint": "향신료", "answer": "로즈마리", "user": "핑주왘" },

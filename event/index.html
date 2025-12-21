@@ -106,6 +106,53 @@
         .list-table td { padding: 8px 5px; border-bottom: 1px solid #f5f5f5; color: #333; }
         .res-win { color: #d32f2f; font-weight: bold; }
         .res-lose { color: #aaa; }
+
+        /* ▼▼▼ [추가] 모바일 화면 최적화 스타일 ▼▼▼ */
+    @media (max-width: 480px) {
+        /* 1. 봉투 전체 크기를 화면에 맞춰 85%로 축소 */
+        .envelope-wrapper {
+            transform: scale(0.85); 
+            transform-origin: center top; /* 위쪽 중심으로 축소 */
+            margin-bottom: -30px; /* 축소되면서 생기는 하단 여백 제거 */
+            margin-top: 20px; /* 상단 여백 조금 추가 */
+        }
+
+        /* 2. 입력창 영역이 봉투를 벗어나지 않게 조정 */
+        .input-area {
+            width: 90%; /* 화면 꽉 차게 */
+            max-width: 280px; /* 너무 넓어지지 않게 제한 */
+            margin: 0 auto 30px auto; /* 중앙 정렬 및 하단 여백 */
+        }
+
+        /* 3. 닉네임 입력칸 디자인 개선 */
+        .input-nickname {
+            width: 60%; /* 버튼 공간 확보를 위해 줄임 */
+            font-size: 16px; /* 모바일에서 클릭 시 자동 확대 방지 */
+            padding: 8px;
+        }
+
+        /* 4. 확인 버튼 크기 조정 */
+        .start-btn {
+            width: 25%;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        /* 5. 하단 안내 문구(상품은 크지 않으니...) 스타일 개선 */
+        .input-area p, .input-area h3 {
+            word-break: keep-all; /* 단어 단위 줄바꿈 */
+            font-size: 0.9em; /* 글자 크기 살짝 줄임 */
+            line-height: 1.4; /* 줄 간격 확보 */
+            color: #fff; /* 빨간 배경 위에서 잘 보이게 흰색으로 변경 추천 (선택사항) */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3); /* 가독성을 위한 그림자 */
+        }
+        
+        /* 6. 봉투 안의 카드 텍스트가 잘리지 않게 조정 */
+        .card p {
+            font-size: 13px;
+            padding: 0 10px;
+        }
+    }
     </style>
 </head>
 <body>

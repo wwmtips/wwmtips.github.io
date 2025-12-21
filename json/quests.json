@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q163",
+   "name": "끈질긴 집념",
+   "location": "동쪽 외곽",
+   "type": "만사록",
+   "bgimg": "q163_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q163.html"
+ },
+  {
    "id": "q162",
    "name": "꽃가루를 전하는 벌",
    "location": "동쪽 외곽",

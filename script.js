@@ -2257,18 +2257,25 @@ function openGuideDirect(filename) {
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
 
 
-// ★★★ 빌드 공유하기 기능 (최종 수정: 주소 분리 및 전역 변수 사용) ★★★
+// ★★★ 빌드 공유하기 기능 (닉네임 추가 버전) ★★★
 function shareBuildToCloud() {
     // 1. 입력값 가져오기
-    const title = document.getElementById('creator-name').value.trim();
+    const nick = document.getElementById('creator-nick').value.trim(); // [추가] 닉네임
+    const title = document.getElementById('creator-name').value.trim(); // 제목
     const desc = document.getElementById('build-desc').value.trim();
     
     // 라디오 버튼값 가져오기
     const typeRadio = document.querySelector('input[name="buildType"]:checked');
     const type = typeRadio ? typeRadio.value : "PvE";
 
+    // 유효성 검사 (닉네임, 제목 필수)
+    if (!nick) {
+        alert("작성자 닉네임을 입력해주세요!");
+        document.getElementById('creator-nick').focus();
+        return;
+    }
     if (!title) {
-        alert("빌드 이름을 입력해주세요!");
+        alert("빌드 제목을 입력해주세요!");
         document.getElementById('creator-name').focus();
         return;
     }
@@ -2284,10 +2291,9 @@ function shareBuildToCloud() {
         return;
     }
 
-    // 3. 무기 ID 추출 (HTML 파싱 대신 전역 변수 currentBuild 사용 - 안전함)
+    // 3. 무기 ID 추출
     let weapons = [];
     if (currentBuild && currentBuild.weapons) {
-        // [null, "w1"] 처럼 비어있는 슬롯을 제외하고 실제 아이템 ID만 추출
         weapons = currentBuild.weapons.filter(id => id !== null && id !== "");
     }
 
@@ -2297,19 +2303,17 @@ function shareBuildToCloud() {
     btn.disabled = true;
     btn.innerText = "전송 중...";
 
-    // 전송 파라미터 구성
+    // 전송 파라미터 구성 (닉네임 포함)
     const params = new URLSearchParams({
         action: 'submit_build',
         title: title,
-        creator: '익명', 
+        creator: nick, // [수정] 입력받은 닉네임 사용
         type: type,
         desc: desc,
         weapons: JSON.stringify(weapons),
         link: link
     });
 
-    // ★★★ [핵심 변경] BUILD_API_URL 사용 (이벤트 URL과 분리) ★★★
-    // index.html에 선언된 주소 사용, 없으면 알림
     if (typeof BUILD_API_URL === 'undefined') {
         alert("서버 주소 설정 오류: BUILD_API_URL을 찾을 수 없습니다.");
         btn.disabled = false;
@@ -2325,6 +2329,7 @@ function shareBuildToCloud() {
             // 입력창 초기화
             document.getElementById('build-desc').value = "";
             document.getElementById('creator-name').value = "";
+            document.getElementById('creator-nick').value = ""; // 닉네임도 초기화
         } else {
             alert("전송 실패: " + data);
         }

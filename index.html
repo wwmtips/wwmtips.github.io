@@ -493,6 +493,7 @@
 
                     <div class="builder-footer">
                         <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 15px;">
+                            
                             <div style="display: flex; gap: 20px; margin-bottom: 15px; justify-content: center;">
                                 <label style="cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: bold;">
                                     <input type="radio" name="buildType" value="PvE" checked> 🌲 탐험 (PvE)
@@ -501,11 +502,19 @@
                                     <input type="radio" name="buildType" value="PvP"> ⚔️ 논검 (PvP)
                                 </label>
                             </div>
+
                             <div style="margin-bottom: 10px; text-align: left;">
-                                <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">✍️ 빌드 이름</span>
+                                <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">👤 작성자 닉네임</span>
+                                <input type="text" id="creator-nick" placeholder="예: 무림고수" maxlength="10" 
+                                       style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                            </div>
+
+                            <div style="margin-bottom: 10px; text-align: left;">
+                                <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">✍️ 빌드 제목</span>
                                 <input type="text" id="creator-name" placeholder="예: 무적의 우산 빌드" maxlength="20" 
                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
                             </div>
+
                             <div style="margin-bottom: 10px; text-align: left;">
                                 <span class="slot-label" style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">📝 설명 (선택)</span>
                                 <textarea id="build-desc" placeholder="빌드의 특징이나 운영법을 간단히 적어주세요." rows="3"

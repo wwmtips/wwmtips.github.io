@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // 3. 데이터 로딩 및 처리 (수정됨)
 // =========================================// script.js 파일의 loadData 함수 교체
 // =========================================
-// 3. 데이터 로딩 및 처리 (수정본: 단계별 로딩 적용)
+// 3. 데이터 로딩 및 처리 (수정본: 전체 미리 로드 + 빌드만 지연)
 // =========================================
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -90,7 +90,7 @@ function loadData() {
     const shortQuestId = urlParams.get('q'); 
     const chunjiId = urlParams.get('c');
 
-    // 1단계: 로컬 데이터(JSON) 먼저 빠르게 로드 (홈 화면용)
+    // 1단계: 로컬 JSON 데이터 모두 가져오기
     Promise.all([
         fetch('json/datas.json').then(res => res.json()).catch(err => ({})),
         fetch('json/quests.json').then(res => res.json()).catch(err => []), 
@@ -100,9 +100,9 @@ function loadData() {
         fetch('json/builder_data.json').then(res => res.json()).catch(err => null) 
     ])
     .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult]) => {
-        console.log("1단계: 기본 데이터 로드 완료");
+        console.log("기본 데이터 로드 완료");
 
-        // 데이터 할당 및 정렬
+        // 데이터 정제
         let quests = Array.isArray(questData) ? questData : (questData.quests || []);
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
@@ -116,23 +116,28 @@ function loadData() {
             });
         }
         
-        // 전역 변수 초기화 (빌드 데이터는 일단 빈 배열로 시작)
         globalData = { items: mainData.items || [], quiz: mainData.quiz || [], quests: quests, news: news, cnews: cnews, chunji: chunji, builds: [] };
         builderData = builderDataResult; 
         currentQuestData = globalData.quests;
         chunjiData = globalData.chunji;
         currentChunjiData = globalData.chunji;
         
-        // 필터 및 홈 화면 즉시 렌더링 (★ 속도 향상 핵심 ★)
+        // 필터 초기화
         updateLocationOptions(); 
         updateChunjiSubtypeOptions(); 
         
+        // ★★★ [핵심] 모든 탭의 내용을 미리 다 그려버립니다! ★★★
         renderHomeSlider(globalData.quests); 
         renderHomeRecentNews(globalData.news);     
         renderHomeCommunityNews(globalData.cnews);
-        renderFullNews(globalData.news);
+        
+        renderQuestList();        // 무림록 미리 그리기
+        renderChunjiList();       // 천지록 미리 그리기
+        renderQuizTable(globalData.quiz); // 족보 미리 그리기
+        updateQuizCounter();
+        renderFullNews(globalData.news);  // 뉴스 미리 그리기
 
-        // 상세 페이지로 바로 진입한 경우 처리
+        // 상세 페이지로 바로 진입한 경우 처리 (데이터가 이미 그려져 있으니 상세만 덮으면 됨)
         if (shortQuestId) {
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
@@ -146,21 +151,37 @@ function loadData() {
             }
         }
         else if (targetTab === 'quest' && targetId) {
-            const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
-            const foundQuest = globalData.quests.find(q => q.id === formattedId);
-            if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
+             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
+             const foundQuest = globalData.quests.find(q => q.id === formattedId);
+             if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
         }
-        else if (targetTab === 'quest') renderQuestList();
-        else if (targetTab === 'chunji') renderChunjiList();
-        else if (targetTab === 'quiz') { renderQuizTable(globalData.quiz); updateQuizCounter(); }
 
-        // 홈 화면이 다 뜬 뒤에 이벤트 상태 체크
+        // 이벤트 상태 체크
         if (typeof checkEventStatus === 'function') checkEventStatus();
 
-        // 2단계: 느린 데이터(구글 시트 빌드)는 뒷단에서 따로 로드
+        // 2단계: 빌드 데이터(구글 시트)만 백그라운드 로딩
         loadBuildsInBackground(targetTab);
     })
-    .catch(error => { console.error("기본 데이터 로드 실패:", error); });
+    .catch(error => { console.error("데이터 로드 실패:", error); });
+}
+
+// 빌드 데이터 로드 함수 (그대로 유지)
+function loadBuildsInBackground(targetTab) {
+    const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined') 
+        ? `${BUILD_API_URL}?action=list` 
+        : 'json/builds.json';
+
+    fetch(buildFetchUrl)
+    .then(res => res.json())
+    .then(buildsData => {
+        console.log("빌드 데이터 로드 완료");
+        globalData.builds = buildsData.builds || [];
+        // 빌드 목록은 데이터가 늦게 오므로 도착하면 그리기
+        renderBuildList('all');
+    })
+    .catch(err => {
+        globalData.builds = [];
+    });
 }
 
 // [추가된 함수] 빌드 데이터만 따로 불러와서 채워넣는 역할
@@ -884,25 +905,28 @@ function loadQuestDetail(filepath, id) {
         window.scrollTo(0, 0);
     });
 }
-
 function showQuestList() {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
     
-    // ★ [핵심 추가] 목록 상자가 비어있다면, 지금 그리기! 
-    // (상세 주소로 바로 들어왔을 때를 대비함)
-    const container = document.getElementById('quest-grid-container');
-    if (container && container.children.length === 0) {
-        renderQuestList();
-    }
-
+    // 이미 다 그려져 있으므로 보여주기만 하면 됨
     if(listView && detailView) { 
         listView.style.display = 'block'; 
         detailView.style.display = 'none'; 
     }
-    
-    // URL 정리 (상세 ID '?q=...'를 지우고 목록 상태로 변경)
     updateUrlQuery('quest');
+}
+
+function showChunjiList() {
+    const listView = document.getElementById('chunji-list-view');
+    const detailView = document.getElementById('chunji-detail-view');
+
+    // 이미 다 그려져 있으므로 보여주기만 하면 됨
+    if(listView && detailView) { 
+        listView.style.display = 'block'; 
+        detailView.style.display = 'none'; 
+    }
+    updateUrlQuery('chunji');
 }
 
 function filterQuestType(type, btnElement) {

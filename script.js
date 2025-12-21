@@ -1288,11 +1288,12 @@ function closeMartDetailSheet() {
 }
 
 // 12. 빌드 상세 보기 바텀시트 기능
+// [script.js] openBuildDetailSheet 함수 (링크 복사 버튼 추가됨)
 function openBuildDetailSheet(build) {
     const sheet = document.getElementById('build-detail-sheet');
     const contentArea = sheet.querySelector('.sheet-content');
     
-    // 링크에서 코드 추출
+    // 1. 링크에서 코드 추출 (기존 로직)
     let encodedData = null;
     if (build.link && build.link.includes('?b=')) {
         encodedData = build.link.split('?b=')[1];
@@ -1304,33 +1305,25 @@ function openBuildDetailSheet(build) {
         return;
     }
 
-    // 공백 보정
     encodedData = encodedData.replace(/ /g, '+');
-
     let parsedData = null;
 
-    // [이중 디코딩 로직 적용]
     try {
-        // [시도 1] 한글 지원 디코딩
         const decodedString = decodeURIComponent(escape(atob(encodedData)));
         parsedData = JSON.parse(decodedString);
     } catch (e1) {
-        console.warn("상세보기: 최신 디코딩 실패, 구버전 재시도");
         try {
-            // [시도 2] 일반 Base64 디코딩
             parsedData = JSON.parse(atob(encodedData));
         } catch (e2) {
-            console.error("Decoding error:", e2);
             contentArea.innerHTML = `<div style="padding: 50px; text-align: center; color: var(--wuxia-accent-red);">🚨 잘못된 빌드 코드 형식입니다.</div>`;
             openBuildDetailSheetView();
             return;
         }
     }
 
-    // 렌더링 로직 (기존과 동일)
+    // 2. 화면 그리기
     let html = `<div style="border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 20px;"><p style="margin: 0; color: #999; font-size: 0.9em;">${build.description || '작성된 설명이 없습니다.'}</p></div>`;
     
-    // 아이템 정보 가져오기 헬퍼
     const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
 
     const renderSection = (typeKey, title, slots) => {
@@ -1346,7 +1339,18 @@ function openBuildDetailSheet(build) {
     if (parsedData.h && parsedData.h.filter(id => id).length > 0) renderSection('hearts', '심법', parsedData.h);
     if (parsedData.m && parsedData.m.filter(id => id).length > 0) renderSection('marts', '비결', parsedData.m);
     
-    html += `<div style="text-align: center; margin-top: 30px;"></div>`;
+    // ▼▼▼ [추가됨] 맨 하단 링크 복사 버튼 ▼▼▼
+    // build.link 값을 그대로 copyToClipboard 함수에 전달합니다.
+    html += `
+        <div style="margin-top: 40px; margin-bottom: 20px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
+            <button onclick="copyToClipboard('${build.link}', this)" 
+                    style="width: 100%; padding: 12px; background-color: #333; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1em;">
+                🔗 이 빌드 링크 복사
+            </button>
+        </div>
+    `;
+    // ▲▲▲ 추가 끝 ▲▲▲
+
     document.getElementById('build-sheet-title').innerText = build.title;
     contentArea.innerHTML = html;
     openBuildDetailSheetView();

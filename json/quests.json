@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q153",
+   "name": "기러기의 소원",
+   "location": "육병관 유적",
+   "type": "만사록",
+   "bgimg": "q153_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q153.html"
+ },
+  {
    "id": "q152",
    "name": "곡물 가격 소동",
    "location": "남쪽 외곽",

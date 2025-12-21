@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q169",
+   "name": "해마다 오는 서신",
+   "location": "청심원",
+   "type": "만사록",
+   "bgimg": "q169_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q169.html"
+ },
+  {
    "id": "q168",
    "name": "일일천리",
    "location": "청심원",

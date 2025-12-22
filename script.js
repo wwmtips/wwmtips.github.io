@@ -480,23 +480,25 @@ function switchTab(tabName, updateHistory = true) {
 
 function updateUrlQuery(tab, id) {
     const url = new URL(window.location);
-    // 모든 파라미터 초기화
+    // [수정] 모든 파라미터 초기화 (r, b 추가)
     url.searchParams.delete('tab');
     url.searchParams.delete('id');
     url.searchParams.delete('q');
     url.searchParams.delete('g');
     url.searchParams.delete('c');
-    url.searchParams.delete('cp'); // 천지록 페이지
-    url.searchParams.delete('qp'); // [추가] 퀘스트 페이지
+    url.searchParams.delete('cp'); 
+    url.searchParams.delete('qp');
+    
+    // ▼▼▼ [추가된 부분] ▼▼▼
+    url.searchParams.delete('r'); // 보스 상세 ID 초기화
+    url.searchParams.delete('b'); // 빌더 ID 초기화
+    // ▲▲▲ 추가 끝 ▲▲▲
 
     if (tab === 'quest') {
         if (id) {
-            // 상세 보기일 때
             url.searchParams.set('q', id.toLowerCase().replace('q', ''));
         } else {
-            // 목록 보기일 때
             url.searchParams.set('tab', 'quest');
-            // [추가] 1페이지가 아니면 URL에 페이지 번호 저장
             if (currentPage > 1) {
                 url.searchParams.set('qp', currentPage);
             }
@@ -504,6 +506,8 @@ function updateUrlQuery(tab, id) {
     } 
     else if (tab === 'guide' && id) {
         url.searchParams.set('g', id);
+        // 보스 상세 페이지인 경우 r 파라미터 유지 필요 없음 (목록으로 갈 땐 id만 오므로)
+        // 만약 goBoss() 등을 통해 왔다면 여기서 처리하지 않고 history.pushState로 직접 처리함
     }
     else if (tab === 'chunji') {
         if (id) {
@@ -519,8 +523,10 @@ function updateUrlQuery(tab, id) {
         if (tab && tab !== 'home') url.searchParams.set('tab', tab);
         if (id) url.searchParams.set('id', id);
     }
+    
     if (url.toString() !== window.location.href) history.pushState(null, '', url);
 }
+
 
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);

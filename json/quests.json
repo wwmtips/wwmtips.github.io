@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q175",
+   "name": "세월의 진실",
+   "location": "남문 대로",
+   "type": "만사록",
+   "bgimg": "q175_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q175.html"
+ },
+  {
    "id": "q174",
    "name": "옛날의 배꽃",
    "location": "남문 대로",

@@ -1,79 +1,139 @@
 <div class="boss-page-container">
     
-    <div class="boss-section">
-        <div class="boss-section-header">
-            <h3>일반 보스</h3>
-        </div>
-
-        <div class="boss-grid">
-            <a href="boss/b1.html" class="boss-card" onclick="event.preventDefault(); loadContent('boss/b1.html');">
-                <div class="boss-img-wrapper">
-                    <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
-                    
-                    <div class="boss-info-overlay">
-                        <span class="boss-type-badge">일반</span>
-                        <span class="boss-name">풍화의 무도</span>
-                        <span class="boss-subtext">추천 전투력: 15,000</span>
-                    </div>
-                </div>
-            </a>
-            
-        </div>
+    <div class="filter-bar-wrapper" style="margin-bottom: 20px;">
+        <select id="boss-filter-select" class="custom-select" onchange="filterBoss()">
+            <option value="all">전체 보기</option>
+            <option value="normal">일반 보스</option>
+            <option value="heroic">협경 보스</option>
+        </select>
     </div>
 
-    <div class="boss-section" style="margin-top: 40px;">
-        <div class="boss-section-header">
-            <h3>협경 보스</h3>
-        </div>
-
-        <div class="boss-grid">
-            <a href="boss/b1.html" class="boss-card" onclick="event.preventDefault(); loadContent('boss/b1.html');">
-                <div class="boss-img-wrapper">
-                    <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
-                    <div class="boss-info-overlay">
-                        <span class="boss-type-badge red">협경</span>
-                        <span class="boss-name">풍화의 무도</span>
-                        <span class="boss-subtext">강력한 협경 보스입니다.</span>
-                    </div>
+    <div class="boss-grid" id="bossGrid">
+        
+        <a href="boss/b1.html" class="boss-card" data-type="normal" onclick="event.preventDefault(); loadContent('boss/b1.html');">
+            <div class="boss-img-wrapper">
+                <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
+                <div class="boss-info-overlay">
+                    <span class="boss-type-badge">일반</span>
+                    <span class="boss-name">풍화의 무도</span>
+                    <span class="boss-subtext">추천 전투력: 15,000 </span>
                 </div>
-            </a>
+            </div>
+        </a>
+
+        <a href="boss/b1.html" class="boss-card" data-type="heroic" onclick="event.preventDefault(); loadContent('boss/b1.html');">
+            <div class="boss-img-wrapper">
+                <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
+                <div class="boss-info-overlay">
+                    <span class="boss-type-badge red">협경</span>
+                    <span class="boss-name">풍화의 무도 (협경)</span>
+                    <span class="boss-subtext">강력한 협경 보스입니다.</span>
+                </div>
+            </div>
+        </a>
+
         </div>
-    </div>
 
 </div>
 
+<script>
+    function filterBoss() {
+        // 1. 드롭다운에서 선택된 값 가져오기
+        const select = document.getElementById('boss-filter-select');
+        const type = select.value;
+
+        // 2. 카드 필터링
+        const container = document.querySelector('.boss-page-container');
+        const cards = container.querySelectorAll('.boss-card');
+        
+        cards.forEach(card => {
+            const cardType = card.getAttribute('data-type');
+            
+            // 'all'이거나 타입이 일치하면 보여줌
+            if (type === 'all' || cardType === type) {
+                card.style.display = 'block';
+                // 애니메이션 리셋 (깜빡임 효과)
+                card.style.animation = 'none';
+                card.offsetHeight; /* trigger reflow */
+                card.style.animation = 'fadeIn 0.4s ease-in-out';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>
+
 <style>
-    /* 변수 설정 (스타일 통일) */
+    /* 변수 설정 */
     :root {
         --wuxia-accent-red: #b71c1c;
         --wuxia-accent-gold: #b08d55;
+        --wuxia-bg-dark: #1a1a1a;
     }
 
-    /* 보스 페이지 애니메이션 */
+    /* 페이지 컨테이너 */
     .boss-page-container {
         padding: 10px 0;
         animation: fadeIn 0.4s ease-in-out;
     }
 
-    /* 섹션 헤더 스타일 */
-    .boss-section-header {
+    /* ▼▼▼ [신규] 퀘스트 페이지 스타일과 맞춘 드롭다운 ▼▼▼ */
+    .filter-bar-wrapper {
         display: flex;
-        align-items: center;
-        border-bottom: 2px solid rgba(176, 141, 85, 0.2); /* 연한 금색 라인 */
-        padding-bottom: 10px;
-        margin-bottom: 20px;
+        gap: 10px;
+        flex-wrap: wrap;
     }
 
-    .boss-section-header h3 {
-        margin: 0;
-        /* 왼쪽 붉은 바는 style.css 상속 */
+    .custom-select {
+        /* 브라우저 기본 스타일 제거 */
+        appearance: none; 
+        -webkit-appearance: none; 
+        -moz-appearance: none;
+
+        /* 배경 및 테두리 */
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        
+        /* 폰트 설정 (사이트 통일) */
+        font-family: 'Noto Serif KR', serif;
+        font-size: 0.95em;
+        color: #333;
+        font-weight: bold;
+
+        /* 크기 및 간격 */
+        padding: 10px 35px 10px 15px;
+        min-width: 130px;
+        cursor: pointer;
+        
+        /* 그림자 및 전환 효과 */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        transition: all 0.2s ease;
+
+        /* 커스텀 화살표 아이콘 */
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px;
     }
+
+    .custom-select:hover {
+        border-color: var(--wuxia-accent-gold);
+        background-color: #fffcf5;
+    }
+
+    .custom-select:focus {
+        outline: none;
+        border-color: var(--wuxia-accent-red);
+    }
+    /* ▲▲▲ 드롭다운 스타일 끝 ▲▲▲ */
+
 
     /* 그리드 레이아웃 */
     .boss-grid {
         display: grid;
         grid-template-columns: 1fr; 
-        gap: 20px; /* 간격 조금 더 넓힘 */
+        gap: 20px;
     }
 
     @media (min-width: 768px) {
@@ -82,32 +142,32 @@
         }
     }
 
-    /* ▼▼▼ [핵심 수정] 카드 스타일 (금색 테마) ▼▼▼ */
+    /* 카드 스타일 (기존 유지) */
     .boss-card {
         display: block;
-        background-color: #1a1a1a; /* 어두운 배경 */
-        border: 1px solid var(--wuxia-accent-gold); /* 금색 테두리 */
-        border-radius: 6px; /* 모서리를 살짝만 둥글게 (고급스러움) */
+        background-color: var(--wuxia-bg-dark);
+        border: 1px solid var(--wuxia-accent-gold);
+        border-radius: 6px;
         text-decoration: none;
         overflow: hidden;
         position: relative;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* 기본 그림자 */
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         transition: all 0.3s ease;
+        animation: fadeIn 0.4s ease-in-out;
     }
 
-    /* 호버 효과: 위로 떠오르면서 금색 광채 */
     .boss-card:hover {
         transform: translateY(-4px);
-        border-color: var(--wuxia-accent-red); /* 마우스 올리면 붉은색 테두리로 변경 */
+        border-color: var(--wuxia-accent-red);
         box-shadow: 
             0 10px 20px rgba(0,0,0,0.5), 
-            0 0 15px rgba(183, 28, 28, 0.4); /* 붉은/금빛 광채 */
+            0 0 15px rgba(183, 28, 28, 0.4);
     }
 
     /* 이미지 래퍼 */
     .boss-img-wrapper {
         width: 100%;
-        padding-top: 48%; /* 와이드 비율 유지 */
+        padding-top: 48%; /* 와이드 비율 */
         position: relative;
     }
 
@@ -116,23 +176,22 @@
         top: 0; left: 0;
         width: 100%; height: 100%;
         object-fit: cover;
-        filter: sepia(0.1) contrast(1.1); /* 약간의 옛날 느낌 필터 */
+        filter: sepia(0.1) contrast(1.1);
         transition: transform 0.6s ease, filter 0.6s ease;
     }
 
     .boss-card:hover .boss-img {
         transform: scale(1.05);
-        filter: sepia(0) contrast(1.15); /* 호버 시 원본 색상 복구 */
+        filter: sepia(0) contrast(1.15);
     }
 
-    /* 텍스트 오버레이 (그라데이션 강화) */
+    /* 텍스트 오버레이 */
     .boss-info-overlay {
         position: absolute;
         bottom: 0; left: 0;
         width: 100%;
-        height: 100%; /* 전체를 덮되 그라데이션으로 조절 */
+        height: 100%;
         background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 100%);
-        
         display: flex;
         flex-direction: column; 
         justify-content: flex-end;
@@ -141,10 +200,9 @@
         text-align: left;
     }
 
-    /* 보스 이름 */
     .boss-name {
-        color: #fff; /* 금색 텍스트 */
-        font-family: 'Noto Serif KR', serif; /* 명조체 */
+        color: #fff;
+        font-family: 'Noto Serif KR', serif;
         font-size: 1.25em;
         font-weight: bold;
         text-shadow: 0 2px 4px rgba(0,0,0,0.8);
@@ -152,13 +210,11 @@
         line-height: 1.2;
     }
     
-    /* 호버 시 이름 색상 변경 */
     .boss-card:hover .boss-name {
         color: #fff;
         text-shadow: 0 0 10px rgba(183, 28, 28, 0.6);
     }
 
-    /* 서브 텍스트 */
     .boss-subtext {
         color: #ccc; 
         font-size: 0.85em;
@@ -171,7 +227,7 @@
         opacity: 0.9;
     }
 
-    /* [추가] 보스 타입 뱃지 (일반/협경 등) */
+    /* 뱃지 스타일 */
     .boss-type-badge {
         display: inline-block;
         font-size: 0.75em;
@@ -185,5 +241,11 @@
     }
     .boss-type-badge.red {
         background-color: var(--wuxia-accent-red);
+    }
+    
+    /* 페이드 인 키프레임 */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>

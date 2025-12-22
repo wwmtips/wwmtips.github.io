@@ -2540,3 +2540,27 @@ function loadContent(url) {
             container.style.opacity = '1';
         });
 }
+// ▼▼▼ script.js 맨 아래에 추가하세요 ▼▼▼
+
+// [추가] 보스 상세 페이지 탭 전환 기능
+function openBossTab(tabName, btnElement) {
+    // 1. 현재 페이지 내의 모든 탭 내용 숨기기
+    // (범위를 document 전체가 아닌, 버튼이 있는 컨테이너 주변으로 한정하면 더 안전하지만, 지금은 전체로 해도 무방합니다)
+    const container = btnElement.closest('.quest-detail-container') || document;
+    
+    container.querySelectorAll('.boss-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // 2. 모든 탭 버튼 비활성화
+    container.querySelectorAll('.boss-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // 3. 선택한 탭 활성화
+    const targetTab = container.querySelector('#tab-' + tabName);
+    if (targetTab) {
+        targetTab.classList.add('active');
+    }
+    btnElement.classList.add('active');
+}

@@ -11,8 +11,9 @@
                     <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
                     
                     <div class="boss-info-overlay">
+                        <span class="boss-type-badge">일반</span>
                         <span class="boss-name">풍화의 무도</span>
-                        <span class="boss-subtext">테스트</span>
+                        <span class="boss-subtext">추천 전투력: 15,000 / 드롭: 무공서</span>
                     </div>
                 </div>
             </a>
@@ -30,8 +31,9 @@
                 <div class="boss-img-wrapper">
                     <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
                     <div class="boss-info-overlay">
+                        <span class="boss-type-badge red">협경</span>
                         <span class="boss-name">풍화의 무도</span>
-                        <span class="boss-subtext">테스트.</span>
+                        <span class="boss-subtext">강력한 협경 보스입니다.</span>
                     </div>
                 </div>
             </a>
@@ -41,61 +43,71 @@
 </div>
 
 <style>
+    /* 변수 설정 (스타일 통일) */
+    :root {
+        --wuxia-accent-red: #b71c1c;
+        --wuxia-accent-gold: #b08d55;
+    }
+
     /* 보스 페이지 애니메이션 */
     .boss-page-container {
         padding: 10px 0;
-        animation: fadeIn 0.3s ease-in-out;
+        animation: fadeIn 0.4s ease-in-out;
     }
 
     /* 섹션 헤더 스타일 */
     .boss-section-header {
         display: flex;
         align-items: center;
-        border-bottom: 1px solid #eee; 
+        border-bottom: 2px solid rgba(176, 141, 85, 0.2); /* 연한 금색 라인 */
         padding-bottom: 10px;
         margin-bottom: 20px;
     }
 
-    /* h3 스타일은 style.css 상속 */
     .boss-section-header h3 {
         margin: 0;
+        /* 왼쪽 붉은 바는 style.css 상속 */
     }
 
-    /* 그리드 레이아웃 (1단 배열) */
+    /* 그리드 레이아웃 */
     .boss-grid {
         display: grid;
         grid-template-columns: 1fr; 
-        gap: 15px;
+        gap: 20px; /* 간격 조금 더 넓힘 */
     }
 
-    /* PC 화면에서는 2열 */
     @media (min-width: 768px) {
         .boss-grid {
             grid-template-columns: repeat(2, 1fr);
         }
     }
 
-    /* 카드 스타일 */
+    /* ▼▼▼ [핵심 수정] 카드 스타일 (금색 테마) ▼▼▼ */
     .boss-card {
         display: block;
-        background-color: #000;
-        border-radius: 8px;
+        background-color: #1a1a1a; /* 어두운 배경 */
+        border: 1px solid var(--wuxia-accent-gold); /* 금색 테두리 */
+        border-radius: 6px; /* 모서리를 살짝만 둥글게 (고급스러움) */
         text-decoration: none;
         overflow: hidden;
         position: relative;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* 기본 그림자 */
+        transition: all 0.3s ease;
     }
 
+    /* 호버 효과: 위로 떠오르면서 금색 광채 */
     .boss-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+        transform: translateY(-4px);
+        border-color: var(--wuxia-accent-red); /* 마우스 올리면 붉은색 테두리로 변경 */
+        box-shadow: 
+            0 10px 20px rgba(0,0,0,0.5), 
+            0 0 15px rgba(183, 28, 28, 0.4); /* 붉은/금빛 광채 */
     }
 
-    /* 이미지 래퍼 (와이드 비율) */
+    /* 이미지 래퍼 */
     .boss-img-wrapper {
         width: 100%;
-        padding-top: 48%; 
+        padding-top: 48%; /* 와이드 비율 유지 */
         position: relative;
     }
 
@@ -104,44 +116,74 @@
         top: 0; left: 0;
         width: 100%; height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease;
+        filter: sepia(0.1) contrast(1.1); /* 약간의 옛날 느낌 필터 */
+        transition: transform 0.6s ease, filter 0.6s ease;
     }
 
     .boss-card:hover .boss-img {
         transform: scale(1.05);
+        filter: sepia(0) contrast(1.15); /* 호버 시 원본 색상 복구 */
     }
 
-    /* 텍스트 오버레이 (왼쪽 정렬 적용됨) */
+    /* 텍스트 오버레이 (그라데이션 강화) */
     .boss-info-overlay {
         position: absolute;
         bottom: 0; left: 0;
         width: 100%;
-        padding: 50px 15px 15px 15px; 
-        background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%);
+        height: 100%; /* 전체를 덮되 그라데이션으로 조절 */
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 100%);
         
         display: flex;
         flex-direction: column; 
         justify-content: flex-end;
-        align-items: flex-start; /* [중요] 왼쪽 정렬 */
-        text-align: left;        /* [중요] 텍스트 왼쪽 정렬 */
+        align-items: flex-start;
+        padding: 20px;
+        text-align: left;
     }
 
+    /* 보스 이름 */
     .boss-name {
-        color: #fff;
-        font-size: 1.1em;
+        color: #fff; /* 금색 텍스트 */
+        font-family: 'Noto Serif KR', serif; /* 명조체 */
+        font-size: 1.25em;
         font-weight: bold;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.7);
-        margin-bottom: 4px; 
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        margin-bottom: 6px; 
+        line-height: 1.2;
+    }
+    
+    /* 호버 시 이름 색상 변경 */
+    .boss-card:hover .boss-name {
+        color: #fff;
+        text-shadow: 0 0 10px rgba(183, 28, 28, 0.6);
     }
 
+    /* 서브 텍스트 */
     .boss-subtext {
         color: #ccc; 
         font-size: 0.85em;
         font-weight: normal;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 100%;
+        opacity: 0.9;
+    }
+
+    /* [추가] 보스 타입 뱃지 (일반/협경 등) */
+    .boss-type-badge {
+        display: inline-block;
+        font-size: 0.75em;
+        font-weight: bold;
+        color: #fff;
+        background-color: var(--wuxia-accent-gold);
+        padding: 2px 6px;
+        border-radius: 2px;
+        margin-bottom: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .boss-type-badge.red {
+        background-color: var(--wuxia-accent-red);
     }
 </style>

@@ -526,6 +526,63 @@ function updateUrlQuery(tab, id) {
     
     if (url.toString() !== window.location.href) history.pushState(null, '', url);
 }
+// [수정] 가이드 콘텐츠 로드 함수 (r 파라미터 보존 로직 추가)
+function loadGuideContent(filename, btnElement) {
+    const innerContainer = document.getElementById('guide-dynamic-content');
+    if(!innerContainer) return;
+
+    // ★ [핵심 1] 주소가 바뀌기 전에 r 파라미터를 미리 가져옵니다!
+    const currentParams = new URLSearchParams(window.location.search);
+    const savedRaidId = currentParams.get('r'); 
+
+    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
+    
+    // 여기서 updateUrlQuery가 실행되면서 주소창의 ?r=... 이 지워집니다.
+    if (foundId) updateUrlQuery('guide', foundId);
+
+    if (btnElement) {
+        document.querySelectorAll('#view-guide .guide-item-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+    }
+
+    const codeView = document.querySelector('.code-page-container');
+    if(codeView) codeView.style.display = 'none';
+    
+    innerContainer.style.display = 'block';
+    
+    if (filename !== 'boss.html') {
+        innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
+    }
+    
+    fetch(filename)
+        .then(res => {
+            if (!res.ok) throw new Error("파일을 찾을 수 없습니다.");
+            return res.text();
+        })
+        .then(html => {
+            innerContainer.innerHTML = html;
+            
+            if (filename === 'news.html') renderGuideNewsList(); 
+            if (filename === 'harts.html') renderHeartLibrary();
+            if (filename === 'marts.html') renderMartLibrary(); 
+            if (filename === 'npc.html') initHomeworkChecklist(); 
+
+            // ★ [핵심 2] 아까 저장해둔 savedRaidId를 사용합니다.
+            if (filename === 'boss.html' && savedRaidId) {
+                // 1) 지워진 주소를 다시 복구 (보기 좋게)
+                const newUrl = '?g=boss&r=' + savedRaidId;
+                window.history.replaceState({path: newUrl}, '', newUrl);
+
+                // 2) 상세 페이지 로드
+                setTimeout(() => {
+                    loadContent('boss/' + savedRaidId + '.html');
+                }, 50); 
+            }
+        })
+        .catch(err => {
+            innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br>(${filename})</div>`;
+        });
+}
 
 
 function checkUrlParams() {
@@ -601,65 +658,6 @@ function findButtonByFile(filename) {
     });
     return foundBtn;
 }
-
-// [수정] 가이드 콘텐츠 로드 함수 (보스 상세 파라미터 체크 추가)
-// [수정] 가이드 콘텐츠 로드 함수 (보스 상세 파라미터 체크 추가)
-function loadGuideContent(filename, btnElement) {
-    const innerContainer = document.getElementById('guide-dynamic-content');
-    if(!innerContainer) return;
-
-    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
-    if (foundId) updateUrlQuery('guide', foundId);
-
-    if (btnElement) {
-        document.querySelectorAll('#view-guide .guide-item-btn').forEach(btn => btn.classList.remove('active'));
-        btnElement.classList.add('active');
-    }
-
-    const codeView = document.querySelector('.code-page-container');
-    if(codeView) codeView.style.display = 'none';
-    
-    innerContainer.style.display = 'block';
-    
-    // 로딩 표시 (boss.html은 깜빡임 방지를 위해 제외 가능)
-    if (filename !== 'boss.html') {
-        innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
-    }
-    
-    fetch(filename)
-        .then(res => {
-            if (!res.ok) throw new Error("파일을 찾을 수 없습니다.");
-            return res.text();
-        })
-        .then(html => {
-            innerContainer.innerHTML = html;
-            
-            // 기존 초기화 함수들
-            if (filename === 'news.html') renderGuideNewsList(); 
-            if (filename === 'harts.html') renderHeartLibrary();
-            if (filename === 'marts.html') renderMartLibrary(); 
-            if (filename === 'npc.html') initHomeworkChecklist(); 
-
-            // ▼▼▼ [핵심 추가] boss.html일 때 ?r= 파라미터 확인 ▼▼▼
-            if (filename === 'boss.html') {
-                const params = new URLSearchParams(window.location.search);
-                const raidId = params.get('r'); // URL에 &r=b1 이 있는지 확인
-                
-                if (raidId) {
-                    // 약간의 지연 후 상세 페이지 로드 (화면 전환 부드럽게)
-                    setTimeout(() => {
-                        // loadContent 함수가 script.js 맨 아래에 있어야 합니다.
-                        loadContent('boss/' + raidId + '.html');
-                    }, 50); 
-                }
-            }
-            // ▲▲▲ 추가 끝 ▲▲▲
-        })
-        .catch(err => {
-            innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br>(${filename})</div>`;
-        });
-}
-
 
 
 function renderGuideNewsList() {

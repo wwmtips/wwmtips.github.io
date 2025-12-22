@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q173",
+   "name": "눈물없는 이별",
+   "location": "남문 대로",
+   "type": "만사록",
+   "bgimg": "q173_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q173.html"
+ },
+  {
    "id": "q172",
    "name": "성년 잔치",
    "location": "남문 대로",

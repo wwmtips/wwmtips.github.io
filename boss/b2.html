@@ -1,0 +1,191 @@
+<div class="quest-detail-container" style="text-align: left;">
+    
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+            --wuxia-bg-tab: #f4f4f2;
+        }
+
+        /* 1. 유튜브 영상 컨테이너 (금색 테두리) */
+        .wuxia-video-container {
+            border: 3px solid var(--wuxia-accent-gold);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 30px rgba(176, 141, 85, 0.2), 
+                0 5px 20px rgba(176, 141, 85, 0.5);
+            background-color: #222;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 비율 */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+        }
+
+        /* 2. 패턴 박스 및 텍스트 스타일 */
+        .pattern-box {
+            background-color: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .pattern-title {
+            color: var(--wuxia-accent-red);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        h3 {
+            border-left: 4px solid var(--wuxia-accent-red);
+            padding-left: 10px;
+            margin: 30px 0 15px 0;
+            font-weight: bold;
+            color: var(--wuxia-text-main);
+            text-align: left;
+            font-size: 1.3em;
+        }
+        p {
+            text-align: left;
+            line-height: 1.7;
+            margin-bottom: 10px;
+            color: var(--wuxia-text-main);
+        }
+        b { color: #000; }
+
+        /* 3. 공략 이미지 컨테이너 (수묵화 테마) */
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 15px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.02); 
+            filter: sepia(0) contrast(1.05); 
+        }
+        .wuxia-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 1px solid rgba(176, 141, 85, 0.15); /* 금색 라인 */
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
+        /* 4. 뒤로가기 버튼 스타일 */
+        .back-button {
+            background-color: #fff;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.95em;
+            font-weight: bold;
+            font-family: 'Noto Serif KR', serif;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .back-button:hover {
+            background-color: #fafafa;
+            color: var(--wuxia-accent-red);
+            border-color: var(--wuxia-accent-red);
+            box-shadow: 0 2px 5px rgba(183, 28, 28, 0.15);
+        }
+    </style>
+
+    <div style="margin-bottom: 20px;">
+        <button class="back-button" onclick="goBossList()">
+            ← 목록으로 돌아가기
+        </button>
+    </div>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 15px; text-align: left;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">레이드</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            몽유도인
+        </h2>
+    </div>
+
+    <div class="wuxia-video-container">
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/Pz_hxQIim5s" title="몽유도인 공략 영상" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
+        <p style="margin: 0; color: #555; font-size: 0.95em;">
+            <b>몽유도인</b>은 당나귀를 활용한 독특한 기믹을 사용하는 보스입니다.<br>
+            특히 <b>'즉사기(공기 부유술)'</b> 파훼를 위해 파티원 간의 호흡이 필수적입니다.
+        </p>
+    </div>
+
+    <div class="detail-chunk">
+        <h3>주요 패턴 및 기믹</h3>
+        
+        <div class="pattern-box">
+            <span class="pattern-title">1. 나귀 변환진</span>
+            <p>보스가 크게 점프하여 바닥을 찍을 때 <b>나귀 변환진</b>을 생성합니다. 탱커를 대상으로 시전하므로 탱커는 파티원과 거리를 벌려야 합니다.</p>
+            <p>변환진에 들어가거나 당나귀의 방귀를 맞으면 <b>당나귀로 변신</b>하여 공격 불가 상태가 됩니다. 탱커는 찍기 직전에 회피하여 변신을 피하는 것이 좋습니다.</p>
+            <div class="wuxia-image-container">
+                <img src="boss/mongyu_pattern1.jpg" alt="나귀 변환진 패턴" onerror="this.style.display='none'">
+            </div>
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">2. 공기 부유술 (즉사기 파훼)</span>
+            <p>한 명의 플레이어를 공중에 띄우고 바닥에 작은 원이 생깁니다. 떨어진 플레이어는 <b>즉사</b>하게 됩니다.</p>
+            <p><b>[파훼법]:</b> 띄워진 사람을 제외한 다른 파티원이 <b>'나귀 변환진'에 들어가 당나귀로 변신</b>한 뒤, 바닥의 작은 원 안에서 대기해야 합니다. 떨어지는 플레이어가 당나귀 등에 타게 되어 즉사를 피할 수 있습니다.</p>
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">3. 환영의 당나귀</span>
+            <p>보스가 공중으로 올라가며 약 12마리의 당나귀를 소환합니다. 붉은 게이지가 차기 전에 모든 당나귀를 처치해야 합니다.</p>
+            <p>한 마리라도 남으면 전멸급 데미지가 들어옵니다. 당나귀 뒤쪽은 방귀 위험이 있으므로 <b>머리 쪽에서 공격</b>하세요.</p>
+            <div class="wuxia-image-container">
+                <img src="boss/mongyu_pattern2.jpg" alt="환영의 당나귀 패턴" onerror="this.style.display='none'">
+            </div>
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">4. 덩굴 소환</span>
+            <p>플레이어 발밑에 노란 원이 생기고 잠시 후 덩굴에 묶여 행동 불가 상태가 됩니다.</p>
+            <p>2명 이상 걸리면 서로 <b>붙어 있어야</b> 힐러가 케어하기 쉽고 광역기로 덩굴을 한꺼번에 제거하기 좋습니다.</p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <button class="back-button" onclick="goBossList()">
+            ← 목록으로 돌아가기
+        </button>
+    </div>
+
+</div>

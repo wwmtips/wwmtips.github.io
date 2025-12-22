@@ -2501,3 +2501,42 @@ function shareBuildToCloud() {
         }
     });
 }
+
+// ▼▼▼ script.js 맨 아래에 추가하세요 ▼▼▼
+
+// [추가] SPA 콘텐츠 로드 함수 (보스 상세 페이지 이동용)
+function loadContent(url) {
+    // 1. 콘텐츠를 넣을 컨테이너 찾기
+    // (우선순위: 가이드 내용 영역 -> 보스 전용 영역 -> 메인 콘텐츠 영역)
+    const container = document.getElementById('guide-dynamic-content') || 
+                      document.getElementById('view-boss') || 
+                      document.querySelector('.boss-page-container')?.parentElement;
+    
+    if (!container) {
+        console.error("콘텐츠를 표시할 영역을 찾을 수 없습니다.");
+        return;
+    }
+
+    // 로딩 표시
+    container.style.opacity = '0.5';
+
+    // 2. HTML 파일 불러오기
+    fetch(url)
+        .then(response => {
+            if (!response.ok) throw new Error('페이지를 찾을 수 없습니다.');
+            return response.text();
+        })
+        .then(html => {
+            // 내용 교체
+            container.innerHTML = html;
+            container.style.opacity = '1';
+            
+            // 화면 맨 위로 스크롤
+            window.scrollTo(0, 0);
+        })
+        .catch(error => {
+            console.error('로딩 실패:', error);
+            container.innerHTML = `<div style="text-align:center; padding:50px;">페이지를 불러올 수 없습니다.<br>(${url})</div>`;
+            container.style.opacity = '1';
+        });
+}

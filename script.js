@@ -478,9 +478,10 @@ function switchTab(tabName, updateHistory = true) {
     }
 }
 
+// [수정] URL 파라미터 관리 함수 (r 파라미터 초기화 포함)
 function updateUrlQuery(tab, id) {
     const url = new URL(window.location);
-    // [수정] 모든 파라미터 초기화 (r, b 추가)
+    // 모든 파라미터 초기화
     url.searchParams.delete('tab');
     url.searchParams.delete('id');
     url.searchParams.delete('q');
@@ -489,9 +490,9 @@ function updateUrlQuery(tab, id) {
     url.searchParams.delete('cp'); 
     url.searchParams.delete('qp');
     
-    // ▼▼▼ [추가된 부분] ▼▼▼
-    url.searchParams.delete('r'); // 보스 상세 ID 초기화
-    url.searchParams.delete('b'); // 빌더 ID 초기화
+    // ▼▼▼ [추가] 보스 상세(r), 빌더(b) 파라미터도 초기화 ▼▼▼
+    url.searchParams.delete('r'); 
+    url.searchParams.delete('b'); 
     // ▲▲▲ 추가 끝 ▲▲▲
 
     if (tab === 'quest') {
@@ -506,8 +507,7 @@ function updateUrlQuery(tab, id) {
     } 
     else if (tab === 'guide' && id) {
         url.searchParams.set('g', id);
-        // 보스 상세 페이지인 경우 r 파라미터 유지 필요 없음 (목록으로 갈 땐 id만 오므로)
-        // 만약 goBoss() 등을 통해 왔다면 여기서 처리하지 않고 history.pushState로 직접 처리함
+        // 여기서 r 파라미터는 설정하지 않습니다. (목록으로 돌아갈 때 r을 지우기 위함)
     }
     else if (tab === 'chunji') {
         if (id) {
@@ -603,11 +603,11 @@ function findButtonByFile(filename) {
 }
 
 // [수정] 가이드 콘텐츠 로드 함수 (보스 상세 파라미터 체크 추가)
+// [수정] 가이드 콘텐츠 로드 함수 (보스 상세 파라미터 체크 추가)
 function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
 
-    // URL 업데이트 (?g=boss 등)
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
     if (foundId) updateUrlQuery('guide', foundId);
 
@@ -621,8 +621,7 @@ function loadGuideContent(filename, btnElement) {
     
     innerContainer.style.display = 'block';
     
-    // 로딩 중 표시 (boss.html이 아닐 때만)
-    // boss.html은 깜빡임 방지를 위해 바로 내용 교체 시도
+    // 로딩 표시 (boss.html은 깜빡임 방지를 위해 제외 가능)
     if (filename !== 'boss.html') {
         innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
     }
@@ -635,20 +634,21 @@ function loadGuideContent(filename, btnElement) {
         .then(html => {
             innerContainer.innerHTML = html;
             
-            // 기존 가이드별 초기화 함수들
+            // 기존 초기화 함수들
             if (filename === 'news.html') renderGuideNewsList(); 
             if (filename === 'harts.html') renderHeartLibrary();
             if (filename === 'marts.html') renderMartLibrary(); 
             if (filename === 'npc.html') initHomeworkChecklist(); 
 
-            // ▼▼▼ [핵심 추가] 보스 페이지(boss.html)일 경우, URL 파라미터(?r=...) 확인 ▼▼▼
+            // ▼▼▼ [핵심 추가] boss.html일 때 ?r= 파라미터 확인 ▼▼▼
             if (filename === 'boss.html') {
                 const params = new URLSearchParams(window.location.search);
-                const raidId = params.get('r'); // 예: ?g=boss&r=b1
+                const raidId = params.get('r'); // URL에 &r=b1 이 있는지 확인
                 
                 if (raidId) {
-                    // 상세 페이지가 지정되어 있다면 바로 로드
+                    // 약간의 지연 후 상세 페이지 로드 (화면 전환 부드럽게)
                     setTimeout(() => {
+                        // loadContent 함수가 script.js 맨 아래에 있어야 합니다.
                         loadContent('boss/' + raidId + '.html');
                     }, 50); 
                 }
@@ -659,6 +659,7 @@ function loadGuideContent(filename, btnElement) {
             innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br>(${filename})</div>`;
         });
 }
+
 
 
 function renderGuideNewsList() {

@@ -1,9 +1,122 @@
-<div class="boss-detail-container">
-    <button onclick="loadContent('boss.html')" style="margin-bottom:20px; padding:10px; cursor:pointer;">
-        ← 목록으로 돌아가기
+<div class="quest-detail-container">
+    
+    <style>
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+        }
+
+        .quest-detail-container {
+            font-family: 'Noto Serif KR', serif; /* 명조체 계열 */
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: var(--wuxia-text-main);
+            line-height: 1.6;
+        }
+
+        /* 뒤로가기 버튼 (q104 스타일 X -> 기존 유지하되 심플하게) */
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background-color: #f4f4f2;
+            border: 1px solid #dcdcdc;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.9em;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .back-btn:hover {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        /* 이미지 컨테이너 (q104 스타일) */
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02); /* 약간의 옛날 느낌 필터 */
+            transition: transform 0.5s ease;
+        }
+        .wuxia-image-container:hover img {
+            transform: scale(1.02);
+        }
+
+        /* 텍스트 스타일 */
+        h2 {
+            color: var(--wuxia-accent-red);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        h3 {
+            color: var(--wuxia-text-main);
+            font-size: 1.3em;
+            border-left: 4px solid var(--wuxia-accent-red);
+            padding-left: 10px;
+            margin: 30px 0 10px 0;
+            font-weight: bold;
+        }
+
+        p {
+            color: var(--wuxia-text-main);
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        /* 하단 강조 박스 (q104 스타일) */
+        .info-box {
+            text-align: center;
+            margin-top: 30px;
+            padding: 30px;
+            border: 1px solid var(--wuxia-accent-red);
+            border-radius: 4px;
+            background-color: #fff5f5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+    </style>
+
+    <button onclick="loadContent('boss.html')" class="back-btn">
+        ← 목록으로
     </button>
     
-    <h2>풍화의 무도 상세 공략</h2>
-    <p>작성 중...</p>
-</div>
+    <h2>풍화의 무도</h2>
 
+    <div>
+        <h3>기본 정보</h3>
+        
+        <p>
+            <b>풍화의 무도</b>는 우아아
+        </p>
+
+        <div class="wuxia-image-container">
+            <img src="boss/b1.jpg" alt="풍화의 무도">
+        </div>
+
+        <div class="info-box">
+            <p style="font-size: 1.1em; font-weight: bold; margin: 0;">
+                추천 거위력: 15,000 이상
+            </p>
+            <p style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                테스트으
+            </p>
+        </div>
+    </div>
+
+</div>

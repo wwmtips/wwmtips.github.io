@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q174",
+   "name": "옛날의 배꽃",
+   "location": "남문 대로",
+   "type": "만사록",
+   "bgimg": "q174_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q174.html"
+ },
+  {
    "id": "q173",
    "name": "눈물없는 이별",
    "location": "남문 대로",

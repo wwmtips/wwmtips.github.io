@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>무림서부 WIKI - 보스 공략</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css"> <style>
+        /* 보스 전용 페이지 추가 스타일 */
+        body {
+            background-color: var(--wuxia-bg-deep, #f4f4f2);
+        }
+        #boss-dynamic-content {
+            min-height: 500px;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-dark text-white py-3 shadow-sm border-bottom border-secondary">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="../index.html" class="d-flex align-items-center text-white text-decoration-none">
+                <img src="../img/logo.png" alt="무림서부 로고" width="40" height="40" class="me-2 rounded-circle border border-secondary">
+                <span class="h4 mb-0 fw-bold">무림서부 WIKI</span>
+            </a>
+            <nav class="d-none d-md-flex gap-3">
+                <a href="../index.html" class="nav-link link-light px-2">홈</a>
+                <a href="../boss.html" class="nav-link link-light px-2 active">보스</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container my-4">
+        <div id="boss-dynamic-content">
+            <div style="text-align:center; padding:50px; color:#666;">
+                <div class="spinner-border text-secondary" role="status"></div>
+                <p class="mt-2">문서를 불러오는 중입니다...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white py-3 text-center mt-auto border-top border-secondary">
+        <div class="container">
+            <p class="mb-0">&copy; 2024 무림서부 WIKI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // URL 파라미터 확인 (?id=...)
+            const params = new URLSearchParams(window.location.search);
+            const bossId = params.get('id'); // 예: b1
+            
+            if (bossId) {
+                // 파라미터가 있으면 해당 상세 페이지 로드 (예: b1.html)
+                loadBossDetail(bossId + '.html');
+            } else {
+                // 파라미터가 없으면 보스 목록(상위 폴더의 boss.html) 로드
+                loadBossList();
+            }
+        });
+
+        // 상세 페이지 로드 함수
+        function loadBossDetail(filename) {
+            const container = document.getElementById('boss-dynamic-content');
+            
+            // 현재 폴더(boss/) 안에 있는 파일(b1.html)을 가져옴
+            fetch(filename)
+            .then(res => {
+                if(!res.ok) throw new Error("파일을 찾을 수 없습니다.");
+                return res.text();
+            })
+            .then(html => {
+                container.innerHTML = html;
+                
+                // ★ [중요] 경로 보정 스크립트 ★
+                // b1.html은 원래 Root에서 로드되도록 설계되어 이미지 경로가 'boss/b1.jpg'로 되어 있음
+                // 하지만 지금은 이미 'boss' 폴더 안이므로 'boss/'를 제거해야 이미지가 엑박이 안 뜸
+                container.querySelectorAll('img').forEach(img => {
+                    const src = img.getAttribute('src');
+                    if(src && src.startsWith('boss/')) {
+                        img.src = src.replace('boss/', ''); // 'boss/b1.jpg' -> 'b1.jpg'
+                    }
+                });
+
+                // ★ [중요] 탭 기능 활성화 (script.js가 없으므로 여기서 주입)
+                injectTabScript();
+            })
+            .catch(err => {
+                container.innerHTML = `<div style="text-align:center; padding:50px;">
+                    <h3>문서를 찾을 수 없습니다.</h3>
+                    <p>${filename} 파일이 존재하는지 확인해주세요.</p>
+                    <a href="index.html" class="btn btn-secondary btn-sm">목록으로</a>
+                </div>`;
+            });
+        }
+
+        // 목록 로드 함수 (상위 폴더 boss.html 가져오기)
+        function loadBossList() {
+            const container = document.getElementById('boss-dynamic-content');
+            fetch('../boss.html')
+            .then(res => res.text())
+            .then(html => {
+                container.innerHTML = html;
+                // 목록에서는 이미지 경로가 'boss/...'가 맞으므로 수정 불필요 (단, 상위폴더에서 가져왔으므로 링크 수정 필요할 수 있음)
+                
+                // 목록의 링크들을 가로채서 이 페이지(index.html?id=...)로 리다이렉트
+                container.querySelectorAll('a.boss-card').forEach(link => {
+                    link.onclick = function(e) {
+                        e.preventDefault();
+                        // href="boss/b1.html" 에서 "b1" 추출
+                        const href = this.getAttribute('href'); 
+                        // 예: boss/b1.html -> b1
+                        const id = href.split('/').pop().replace('.html', '');
+                        
+                        // URL 변경 (새로고침 없이)
+                        const newUrl = `?id=${id}`;
+                        window.history.pushState({path: newUrl}, '', newUrl);
+                        loadBossDetail(id + '.html');
+                    };
+                });
+            });
+        }
+
+        // 상세 페이지 내부의 [목록으로 돌아가기] 등 버튼 대응 함수
+        function loadContent(url) {
+            if(url === 'boss.html') {
+                // URL 정리
+                window.history.pushState({}, '', window.location.pathname);
+                loadBossList();
+            } else {
+                // b1.html 등을 직접 부를 때
+                const id = url.split('/').pop().replace('.html', '');
+                window.history.pushState({path: `?id=${id}`}, '', `?id=${id}`);
+                loadBossDetail(url.split('/').pop());
+            }
+        }
+
+        // 상세 페이지 탭 전환 스크립트 (script.js 없이도 작동하게)
+        function injectTabScript() {
+            window.openBossTab = function(tabName, btnElement) {
+                const container = document.getElementById('boss-dynamic-content');
+                container.querySelectorAll('.boss-tab-content').forEach(content => content.classList.remove('active'));
+                container.querySelectorAll('.boss-tab-btn').forEach(btn => btn.classList.remove('active'));
+                
+                const target = document.getElementById('tab-' + tabName);
+                if(target) target.classList.add('active');
+                if(btnElement) btnElement.classList.add('active');
+            };
+        }
+    </script>
+</body>
+</html>

@@ -2564,3 +2564,35 @@ function openBossTab(tabName, btnElement) {
     }
     btnElement.classList.add('active');
 }
+// ▼▼▼ script.js 맨 아래에 추가하세요 ▼▼▼
+
+// [추가] 보스 페이지 필터링 기능 (드롭다운)
+function filterBoss(selectElement) {
+    // 1. 드롭다운 요소 찾기 (이벤트로 넘어온 요소가 없으면 ID로 찾음)
+    const select = selectElement || document.getElementById('boss-filter-select');
+    if (!select) return;
+
+    const type = select.value;
+    
+    // 2. 보스 그리드 찾기
+    const grid = document.getElementById('bossGrid');
+    if (!grid) return;
+
+    const cards = grid.querySelectorAll('.boss-card');
+    
+    // 3. 필터링 로직 수행
+    cards.forEach(card => {
+        const cardType = card.getAttribute('data-type');
+        
+        // 'all'이거나 타입이 일치하면 보여줌
+        if (type === 'all' || cardType === type) {
+            card.style.display = 'block';
+            // 깜빡이는 애니메이션 효과 재실행
+            card.style.animation = 'none';
+            card.offsetHeight; /* 리플로우 강제 트리거 */
+            card.style.animation = 'fadeIn 0.4s ease-in-out';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}

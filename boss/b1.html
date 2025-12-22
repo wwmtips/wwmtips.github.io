@@ -1,23 +1,25 @@
 <div class="quest-detail-container">
     
     <style>
+        /* [수묵화 테마] 스타일 유지 */
         :root {
             --wuxia-accent-red: #b71c1c;
             --wuxia-accent-gold: #b08d55;
             --wuxia-text-main: #333;
             --wuxia-text-sub: #666;
+            --wuxia-bg-tab: #f4f4f2;
         }
 
-        .wuxia-image-container {
+        /* 유튜브 영상 컨테이너 */
+        .wuxia-video-container {
             border: 1px solid #ddd;
             border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             background-color: #000;
-            margin: 20px 0;
+            margin-bottom: 20px; /* 탭과의 간격 */
             position: relative;
         }
-        /* 유튜브 영상 반응형 처리 */
         .video-wrapper {
             position: relative;
             padding-bottom: 56.25%; /* 16:9 비율 */
@@ -30,17 +32,49 @@
             width: 100%; height: 100%;
         }
 
-        /* 텍스트 스타일 */
-        h3 {
-            color: var(--wuxia-text-main);
-            font-size: 1.3em;
-            border-left: 4px solid var(--wuxia-accent-red);
-            padding-left: 10px;
-            margin: 30px 0 10px 0;
-            font-weight: bold;
+        /* 탭(Tab) 스타일 정의 */
+        .boss-tab-header {
+            display: flex;
+            background-color: var(--wuxia-bg-tab);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            border-bottom: 3px solid var(--wuxia-accent-red);
+            margin-bottom: 20px;
         }
-        
-        /* 패턴 강조 박스 */
+
+        .boss-tab-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #888;
+            transition: all 0.3s ease;
+        }
+
+        .boss-tab-btn:hover {
+            background-color: rgba(183, 28, 28, 0.05);
+            color: var(--wuxia-accent-red);
+        }
+
+        .boss-tab-btn.active {
+            background-color: var(--wuxia-accent-red);
+            color: #fff;
+        }
+
+        /* 탭 내용 영역 */
+        .boss-tab-content {
+            display: none; /* 기본 숨김 */
+            animation: fadeIn 0.4s ease;
+        }
+        .boss-tab-content.active {
+            display: block; /* 활성화 시 표시 */
+        }
+
+        /* 기존 스타일 상속 */
         .pattern-box {
             background-color: #fafafa;
             border: 1px solid #eee;
@@ -54,80 +88,83 @@
             display: block;
             margin-bottom: 5px;
         }
+        h3 {
+            border-left: 4px solid var(--wuxia-accent-red);
+            padding-left: 10px;
+            margin: 20px 0 10px 0;
+            font-weight: bold;
+            color: var(--wuxia-text-main);
+        }
     </style>
 
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 15px;">
         <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">레이드</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
             쌍사자 (쌍사 영웅)
         </h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">
-            핵심 기믹: 공 이어받기 / 기둥 파괴 / 패링(쳐내기)
-        </p>
     </div>
 
-    <div class="wuxia-image-container">
+    <div class="wuxia-video-container">
         <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/n-UrKhmJo5I" title="쌍사자 공략 가이드" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/n-UrKhmJo5I" title="보스 공략 영상" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
-    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 20px; border-radius: 4px; margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em; border:none; padding:0;">📜 공략 핵심 요약</h3>
-        <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
-            <b>탱커의 역할</b>이 매우 중요한 보스입니다. '공'을 들고 있는 사람에게 어그로가 끌리며, 
-            출혈 스택이 쌓이기 전에 <b>팀원에게 공을 패스(F키)</b>해야 합니다.<br>
-            광폭화 시 전원이 <b>패링(쳐내기)</b>을 성공시켜 보스의 기력을 깎아야 클리어할 수 있습니다.
-        </p>
+    <div class="boss-tab-header">
+        <button class="boss-tab-btn active" onclick="openBossTab('yongyeon', this)">
+            [용연]
+        </button>
+        <button class="boss-tab-btn" onclick="openBossTab('sajatal', this)">
+            [사자탈]
+        </button>
     </div>
 
-    <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3>주요 패턴 분석</h3>
-
-        <div class="pattern-box">
-            <span class="pattern-title">1. 공 이어받기 (어그로 관리)</span>
-            <p>
-                전투 시작 시 공을 든 사람(주로 탱커)에게 어그로와 <b>출혈 디버프</b>가 쌓입니다.<br>
-                화면 중앙 게이지가 가득 차면 보스가 공을 뺏어가고 광폭화하므로, 
-                <b>게이지가 차기 전 'F키'를 눌러</b> 다른 탱커나 팀원에게 공을 던져야 합니다.
+    <div id="tab-yongyeon" class="boss-tab-content active">
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+            <p style="margin: 0; color: #555; font-size: 0.95em;">
+                <b>용연</b>은 전투 초반부에 등장하며, 주로 광역 장판과 기둥 패턴을 사용합니다.<br>
+                기둥 파괴 기믹을 완벽하게 숙지해야 전멸을 피할 수 있습니다.
             </p>
         </div>
 
-        <div class="pattern-box">
-            <span class="pattern-title">2. 기둥 패턴 (전멸기 방지)</span>
-            <p>
-                보스가 기둥을 소환하고 위로 올라가 광역 공격을 시도합니다.<br>
-                <b>마지막 기둥(앞에 화살표가 없는 기둥)</b>을 찾아 집중 공격하여 파괴하세요.<br>
-                기둥을 부수면 보스가 추락하며 그로기 상태에 빠집니다.
-            </p>
-        </div>
-
-        <div class="pattern-box">
-            <span class="pattern-title">3. 동전 사격 (DPS 체크)</span>
-            <p>
-                맵 중앙에 거대한 동전이 나타나고 보라색 선이 연결됩니다.<br>
-                모든 파티원은 <b>활(Bow)</b>을 꺼내 동전을 빠르게 사격해야 합니다.<br>
-                차징샷보다는 <b>일반 사격 연타</b>가 효율적입니다. 힐러를 위해 중앙(동전 아래)으로 모이는 것이 좋습니다.
-            </p>
-        </div>
-
-        <div class="pattern-box">
-            <span class="pattern-title">4. 광폭화와 쳐내기 (필수)</span>
-            <p>
-                보스가 공을 가져가거나 특정 페이즈가 되면 광폭화하여 데미지가 잘 들어가지 않습니다.<br>
-                이때 <b>내려찍기(광역)</b>와 <b>장판 공격</b>을 시전하는데, 피하지 말고 <b>정확한 타이밍에 '쳐내기(Parry)'</b>를 성공시켜야 합니다.<br>
-                패링에 성공할수록 보스의 기력이 깎이고 광폭화가 해제됩니다.
-            </p>
+        <div class="detail-chunk">
+            <h3>주요 패턴: 기둥과 추락</h3>
+            <div class="pattern-box">
+                <span class="pattern-title">1. 기둥 소환</span>
+                <p>보스가 기둥 위로 올라가면 <b>마지막 기둥(표식이 없는 기둥)</b>을 찾아 집중 공격하여 파괴하세요.</p>
+            </div>
+            <div class="pattern-box">
+                <span class="pattern-title">2. 광역 내려찍기</span>
+                <p>보스가 공중에서 내려찍을 때 타이밍에 맞춰 <b>회피(Dodge)</b> 혹은 <b>방어</b>를 사용해야 합니다.</p>
+            </div>
         </div>
     </div>
 
-    <div style="text-align: center; margin-top: 30px; padding: 20px; border: 1px solid var(--wuxia-accent-red); border-radius: 4px; background-color: #fff5f5;">
-        <p style="color: var(--wuxia-text-main); font-weight: bold; margin: 0;">
-            <span style="color: var(--wuxia-accent-red);">TIP:</span> 하늘에 나타나는 '초록색 사다리'를 타면<br>
-            방어력 버프를 획득하여 생존율이 올라갑니다.
-        </p>
+    <div id="tab-sajatal" class="boss-tab-content">
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-red); padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+            <p style="margin: 0; color: #555; font-size: 0.95em;">
+                <b>사자탈</b>은 '공 이어받기' 기믹과 '패링'이 핵심입니다.<br>
+                탱커 간의 호흡과 파티원 전체의 패링 능력이 요구됩니다.
+            </p>
+        </div>
+
+        <div class="detail-chunk">
+            <h3>주요 패턴: 공과 패링</h3>
+            <div class="pattern-box">
+                <span class="pattern-title">1. 공 이어받기 (드리블)</span>
+                <p>출혈 스택이 쌓이기 전에 <b>F키</b>를 눌러 다른 팀원에게 공을 패스하세요. 게이지 관리가 필수입니다.</p>
+            </div>
+            <div class="pattern-box">
+                <span class="pattern-title">2. 동전 사격</span>
+                <p>중앙에 거대 동전이 나타나면 전원이 <b>활</b>로 교체하여 빠르게 타격해야 합니다.</p>
+            </div>
+            <div class="pattern-box">
+                <span class="pattern-title">3. 광폭화 쳐내기</span>
+                <p>광폭화 상태의 공격은 일반 방어로 막을 수 없습니다. <b>정확한 타이밍의 쳐내기(Parry)</b>만이 살길입니다.</p>
+            </div>
+        </div>
     </div>
-    
+
     <div style="text-align: center; margin-top: 40px;">
         <button onclick="loadContent('boss.html')" 
                 style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
@@ -135,4 +172,21 @@
         </button>
     </div>
 
+    <script>
+        function openBossTab(tabName, btnElement) {
+            // 1. 모든 탭 내용 숨기기
+            document.querySelectorAll('.boss-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 2. 모든 버튼 비활성화
+            document.querySelectorAll('.boss-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 3. 선택한 탭 활성화
+            document.getElementById('tab-' + tabName).classList.add('active');
+            btnElement.classList.add('active');
+        }
+    </script>
 </div>

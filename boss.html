@@ -1,7 +1,7 @@
 <div class="boss-page-container">
     
     <div class="filter-bar-wrapper" style="margin-bottom: 20px;">
-        <select id="boss-filter-select" class="custom-select" onchange="filterBoss()">
+        <select id="boss-filter-select" class="custom-select" onchange="filterBoss(this)">
             <option value="all">전체 보기</option>
             <option value="normal">일반 보스</option>
             <option value="heroic">협경 보스</option>
@@ -16,7 +16,7 @@
                 <div class="boss-info-overlay">
                     <span class="boss-type-badge">일반</span>
                     <span class="boss-name">풍화의 무도</span>
-                    <span class="boss-subtext">추천 전투력: 15,000 </span>
+                    <span class="boss-subtext">추천 전투력: 15,000 / 드롭: 무공서</span>
                 </div>
             </div>
         </a>
@@ -36,33 +36,6 @@
 
 </div>
 
-<script>
-    function filterBoss() {
-        // 1. 드롭다운에서 선택된 값 가져오기
-        const select = document.getElementById('boss-filter-select');
-        const type = select.value;
-
-        // 2. 카드 필터링
-        const container = document.querySelector('.boss-page-container');
-        const cards = container.querySelectorAll('.boss-card');
-        
-        cards.forEach(card => {
-            const cardType = card.getAttribute('data-type');
-            
-            // 'all'이거나 타입이 일치하면 보여줌
-            if (type === 'all' || cardType === type) {
-                card.style.display = 'block';
-                // 애니메이션 리셋 (깜빡임 효과)
-                card.style.animation = 'none';
-                card.offsetHeight; /* trigger reflow */
-                card.style.animation = 'fadeIn 0.4s ease-in-out';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
-</script>
-
 <style>
     /* 변수 설정 */
     :root {
@@ -77,7 +50,7 @@
         animation: fadeIn 0.4s ease-in-out;
     }
 
-    /* ▼▼▼ [신규] 퀘스트 페이지 스타일과 맞춘 드롭다운 ▼▼▼ */
+    /* 드롭다운 스타일 (퀘스트 페이지 통일) */
     .filter-bar-wrapper {
         display: flex;
         gap: 10px;
@@ -85,32 +58,21 @@
     }
 
     .custom-select {
-        /* 브라우저 기본 스타일 제거 */
         appearance: none; 
         -webkit-appearance: none; 
         -moz-appearance: none;
-
-        /* 배경 및 테두리 */
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 4px;
-        
-        /* 폰트 설정 (사이트 통일) */
         font-family: 'Noto Serif KR', serif;
         font-size: 0.95em;
         color: #333;
         font-weight: bold;
-
-        /* 크기 및 간격 */
         padding: 10px 35px 10px 15px;
         min-width: 130px;
         cursor: pointer;
-        
-        /* 그림자 및 전환 효과 */
         box-shadow: 0 2px 4px rgba(0,0,0,0.03);
         transition: all 0.2s ease;
-
-        /* 커스텀 화살표 아이콘 */
         background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
         background-repeat: no-repeat;
         background-position: right 10px center;
@@ -126,8 +88,6 @@
         outline: none;
         border-color: var(--wuxia-accent-red);
     }
-    /* ▲▲▲ 드롭다운 스타일 끝 ▲▲▲ */
-
 
     /* 그리드 레이아웃 */
     .boss-grid {
@@ -142,7 +102,7 @@
         }
     }
 
-    /* 카드 스타일 (기존 유지) */
+    /* 카드 스타일 */
     .boss-card {
         display: block;
         background-color: var(--wuxia-bg-dark);
@@ -243,7 +203,6 @@
         background-color: var(--wuxia-accent-red);
     }
     
-    /* 페이드 인 키프레임 */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(5px); }
         to { opacity: 1; transform: translateY(0); }

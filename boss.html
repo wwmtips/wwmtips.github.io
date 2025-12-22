@@ -17,7 +17,7 @@
                 </div>
             </a>
             
-            </div>
+        </div>
     </div>
 
     <div class="boss-section" style="margin-top: 40px;">
@@ -47,23 +47,19 @@
         animation: fadeIn 0.3s ease-in-out;
     }
 
-    /* 섹션 헤더 스타일 (중복 장식 제거됨) */
+    /* 섹션 헤더 스타일 */
     .boss-section-header {
         display: flex;
         align-items: center;
-        /* 기존 css의 h3와 겹치지 않게 하단 라인만 은은하게 유지 (필요 없으면 삭제 가능) */
         border-bottom: 1px solid #eee; 
         padding-bottom: 10px;
         margin-bottom: 20px;
     }
 
-    /* h3 스타일은 style.css의 전역 설정을 따름 (왼쪽 붉은 바 자동 적용) */
+    /* h3 스타일은 style.css 상속 */
     .boss-section-header h3 {
         margin: 0;
-        /* 폰트나 색상은 전역 h3 스타일을 상속받음 */
     }
-
-    /* .header-deco 클래스는 삭제했습니다. */
 
     /* 그리드 레이아웃 (1단 배열) */
     .boss-grid {
@@ -96,7 +92,7 @@
         box-shadow: 0 5px 12px rgba(0,0,0,0.2);
     }
 
-    /* 이미지 래퍼 (21:9 비율) */
+    /* 이미지 래퍼 (와이드 비율) */
     .boss-img-wrapper {
         width: 100%;
         padding-top: 48%; 
@@ -115,16 +111,19 @@
         transform: scale(1.05);
     }
 
-    /* 텍스트 오버레이 */
+    /* 텍스트 오버레이 (왼쪽 정렬 적용됨) */
     .boss-info-overlay {
         position: absolute;
         bottom: 0; left: 0;
         width: 100%;
         padding: 50px 15px 15px 15px; 
         background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%);
+        
         display: flex;
         flex-direction: column; 
         justify-content: flex-end;
+        align-items: flex-start; /* [중요] 왼쪽 정렬 */
+        text-align: left;        /* [중요] 텍스트 왼쪽 정렬 */
     }
 
     .boss-name {
@@ -143,5 +142,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        max-width: 100%;
     }
 </style>

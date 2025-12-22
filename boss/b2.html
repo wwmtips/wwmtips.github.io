@@ -10,7 +10,33 @@
             --wuxia-bg-tab: #f4f4f2;
         }
 
-        /* 1. 유튜브 영상 컨테이너 (금색 테두리) */
+        /* ▼▼▼ [스타일 통일] 뒤로가기 버튼 (.back-button) ▼▼▼ */
+        .back-button {
+            background-color: #fff;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.95em;
+            font-weight: bold;
+            font-family: 'Noto Serif KR', serif;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .back-button:hover {
+            background-color: #fafafa;
+            color: var(--wuxia-accent-red);
+            border-color: var(--wuxia-accent-red);
+            box-shadow: 0 2px 5px rgba(183, 28, 28, 0.15);
+        }
+        /* ▲▲▲ 스타일 통일 끝 ▲▲▲ */
+
+        /* 유튜브 영상 컨테이너 */
         .wuxia-video-container {
             border: 3px solid var(--wuxia-accent-gold);
             border-radius: 8px;
@@ -34,7 +60,50 @@
             width: 100%; height: 100%;
         }
 
-        /* 2. 패턴 박스 및 텍스트 스타일 */
+        /* 탭(Tab) 스타일 */
+        .boss-tab-header {
+            display: flex;
+            background-color: var(--wuxia-bg-tab);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            border-bottom: 3px solid var(--wuxia-accent-red);
+            margin-bottom: 20px;
+        }
+
+        .boss-tab-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #888;
+            transition: all 0.3s ease;
+        }
+
+        .boss-tab-btn:hover {
+            background-color: rgba(183, 28, 28, 0.05);
+            color: var(--wuxia-accent-red);
+        }
+
+        .boss-tab-btn.active {
+            background-color: var(--wuxia-accent-red);
+            color: #fff;
+        }
+
+        /* 탭 내용 영역 */
+        .boss-tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+            text-align: left;
+        }
+        .boss-tab-content.active {
+            display: block;
+        }
+
+        /* 패턴 박스 스타일 */
         .pattern-box {
             background-color: #fafafa;
             border: 1px solid #eee;
@@ -67,7 +136,7 @@
         }
         b { color: #000; }
 
-        /* 3. 공략 이미지 컨테이너 (수묵화 테마) */
+        /* 공략 이미지 컨테이너 (수묵화 테마) */
         .wuxia-image-container {
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -92,33 +161,9 @@
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            border: 1px solid rgba(176, 141, 85, 0.15); /* 금색 라인 */
+            border: 1px solid rgba(176, 141, 85, 0.15); /* 금색 라인 장식 */
             box-sizing: border-box;
             pointer-events: none;
-        }
-
-        /* 4. 뒤로가기 버튼 스타일 */
-        .back-button {
-            background-color: #fff;
-            color: #555;
-            border: 1px solid #ddd;
-            padding: 8px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 0.95em;
-            font-weight: bold;
-            font-family: 'Noto Serif KR', serif;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .back-button:hover {
-            background-color: #fafafa;
-            color: var(--wuxia-accent-red);
-            border-color: var(--wuxia-accent-red);
-            box-shadow: 0 2px 5px rgba(183, 28, 28, 0.15);
         }
     </style>
 
@@ -131,52 +176,101 @@
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 15px; text-align: left;">
         <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">레이드</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            몽유도인
+            검무장 (몽유도인 & 용연)
         </h2>
     </div>
 
     <div class="wuxia-video-container">
         <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/Pz_hxQIim5s" title="몽유도인 공략 영상" frameborder="0" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/Pz_hxQIim5s" title="공략 영상" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
-    <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
-        <p style="margin: 0; color: #555; font-size: 0.95em;">
-            <b>몽유도인</b>은 당나귀를 활용한 독특한 기믹을 사용하는 보스입니다.<br>
-            특히 <b>'즉사기(공기 부유술)'</b> 파훼를 위해 파티원 간의 호흡이 필수적입니다.
-        </p>
+    <div class="boss-tab-header">
+        <button class="boss-tab-btn active" onclick="openBossTab('mongyu', this)">
+            [1넴] 몽유도인
+        </button>
+        <button class="boss-tab-btn" onclick="openBossTab('yongyeon', this)">
+            [2넴] 용연
+        </button>
     </div>
 
-    <div class="detail-chunk">
-        <h3>주요 패턴 및 기믹</h3>
-        
-        <div class="pattern-box">
-            <span class="pattern-title">1. 나귀 변환진</span>
-            <p>보스가 크게 점프하여 바닥을 찍을 때 <b>나귀 변환진</b>을 생성합니다. 탱커를 대상으로 시전하므로 탱커는 파티원과 거리를 벌려야 합니다.</p>
-            <p>변환진에 들어가거나 당나귀의 방귀를 맞으면 <b>당나귀로 변신</b>하여 공격 불가 상태가 됩니다. 탱커는 찍기 직전에 회피하여 변신을 피하는 것이 좋습니다.</p>
-           
+    <div id="tab-mongyu" class="boss-tab-content active">
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
+            <p style="margin: 0; color: #555; font-size: 0.95em;">
+                <b>몽유도인</b>은 당나귀를 활용한 독특한 기믹을 사용하는 보스입니다.<br>
+                특히 <b>'즉사기(공기 부유술)'</b> 파훼를 위해 파티원 간의 호흡이 필수적입니다.
+            </p>
         </div>
 
-        <div class="pattern-box">
-            <span class="pattern-title">2. 공기 부유술 (즉사기 파훼)</span>
-            <p>한 명의 플레이어를 공중에 띄우고 바닥에 작은 원이 생깁니다. 떨어진 플레이어는 <b>즉사</b>하게 됩니다.</p>
-            <p><b>[파훼법]:</b> 띄워진 사람을 제외한 다른 파티원이 <b>'나귀 변환진'에 들어가 당나귀로 변신</b>한 뒤, 바닥의 작은 원 안에서 대기해야 합니다. 떨어지는 플레이어가 당나귀 등에 타게 되어 즉사를 피할 수 있습니다.</p>
+        <div class="detail-chunk">
+            <h3>주요 패턴 및 기믹</h3>
+            
+            <div class="pattern-box">
+                <span class="pattern-title">1. 나귀 변환진</span>
+                <p>보스가 크게 점프하여 바닥을 찍을 때 <b>나귀 변환진</b>을 생성합니다. 탱커를 대상으로 시전하므로 탱커는 파티원과 거리를 벌려야 합니다.</p>
+                <p>변환진에 들어가거나 당나귀의 방귀를 맞으면 <b>당나귀로 변신</b>하여 공격 불가 상태가 됩니다. 탱커는 찍기 직전에 회피하여 변신을 피하는 것이 좋습니다.</p>
+            </div>
+
+            <div class="pattern-box">
+                <span class="pattern-title">2. 공기 부유술 (즉사기 파훼)</span>
+                <p>한 명의 플레이어를 공중에 띄우고 바닥에 작은 원이 생깁니다. 떨어진 플레이어는 <b>즉사</b>하게 됩니다.</p>
+                <p><b>[파훼법]:</b> 띄워진 사람을 제외한 다른 파티원이 <b>'나귀 변환진'에 들어가 당나귀로 변신</b>한 뒤, 바닥의 작은 원 안에서 대기해야 합니다. 떨어지는 플레이어가 당나귀 등에 타게 되어 즉사를 피할 수 있습니다.</p>
+            </div>
+
+            <div class="pattern-box">
+                <span class="pattern-title">3. 환영의 당나귀</span>
+                <p>보스가 공중으로 올라가며 약 12마리의 당나귀를 소환합니다. 붉은 게이지가 차기 전에 모든 당나귀를 처치해야 합니다.</p>
+                <p>한 마리라도 남으면 전멸급 데미지가 들어옵니다. 당나귀 뒤쪽은 방귀 위험이 있으므로 <b>머리 쪽에서 공격</b>하세요.</p>
+            </div>
+
+            <div class="pattern-box">
+                <span class="pattern-title">4. 덩굴 소환</span>
+                <p>플레이어 발밑에 노란 원이 생기고 잠시 후 덩굴에 묶여 행동 불가 상태가 됩니다.</p>
+                <p>2명 이상 걸리면 서로 <b>붙어 있어야</b> 힐러가 케어하기 쉽고 광역기로 덩굴을 한꺼번에 제거하기 좋습니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-yongyeon" class="boss-tab-content">
+        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-red); padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
+            <p style="margin: 0; color: #555; font-size: 0.95em;">
+                <b>용연</b>은 <b>화약통 관리</b>가 핵심인 보스입니다.<br>
+                화약통끼리 닿아 빨갛게 빛나면 <b>즉사급 폭발</b>이 일어나므로, 모든 파티원이 통을 예의주시해야 합니다.
+            </p>
         </div>
 
-        <div class="pattern-box">
-            <span class="pattern-title">3. 환영의 당나귀</span>
-            <p>보스가 공중으로 올라가며 약 12마리의 당나귀를 소환합니다. 붉은 게이지가 차기 전에 모든 당나귀를 처치해야 합니다.</p>
-            <p>한 마리라도 남으면 전멸급 데미지가 들어옵니다. 당나귀 뒤쪽은 방귀 위험이 있으므로 <b>머리 쪽에서 공격</b>하세요.</p>
-            <!--<div class="wuxia-image-container">
-                <img src="boss/mongyu_pattern2.jpg" alt="환영의 당나귀 패턴" onerror="this.style.display='none'">
-            </div>-->
-        </div>
+        <div class="detail-chunk">
+            <h3>주요 패턴 및 기믹</h3>
 
-        <div class="pattern-box">
-            <span class="pattern-title">4. 덩굴 소환</span>
-            <p>플레이어 발밑에 노란 원이 생기고 잠시 후 덩굴에 묶여 행동 불가 상태가 됩니다.</p>
-            <p>2명 이상 걸리면 서로 <b>붙어 있어야</b> 힐러가 케어하기 쉽고 광역기로 덩굴을 한꺼번에 제거하기 좋습니다.</p>
+            <div class="pattern-box">
+                <span class="pattern-title">1. 화약통 기본 관리 (핵심)</span>
+                <p>필드에 떨어지는 화약통은 서로 가까이 붙으면 <b>붉게 변하며 폭발</b>합니다. 이는 즉사급 데미지를 주므로 절대 붙어있게 두면 안 됩니다.</p>
+                <p>탱커를 제외한 모든 파티원은 수시로 화약통을 들어(F키) 서로 겹치지 않도록 옮겨주어야 합니다.</p>
+            </div>
+            
+            <div class="pattern-box">
+                <span class="pattern-title">2. 발밑 화약통 & 화염새</span>
+                <p>3명의 플레이어 발밑에 노란 원이 생기고 잠시 후 화약통이 떨어집니다. 대상자끼리는 <b>서로 멀리 떨어져서</b> 통이 겹치지 않게 해야 합니다.</p>
+                <p>이후 <b>화염새</b>가 내려와 공격하는데, 이때 주변의 통을 유폭시켜 자연스럽게 제거하는 것이 좋습니다.</p>
+            </div>
+
+            <div class="pattern-box">
+                <span class="pattern-title">3. 화염새 소환 (DPS 체크)</span>
+                <p>화염새가 화약통 2개를 들고 내려옵니다. 일정 시간 내에 처치하지 못하면 폭발하여 전멸합니다.</p>
+                <p><b>[파훼법]:</b> 노란 원 대상자들은 멀리 떨어져 통을 처리하고, 비대상자는 화염새 근처의 <b>붉은 통을 1개만 남기고 밖으로 빼낸 뒤</b> 화염새를 점사합니다.</p>
+            </div>
+
+            <div class="pattern-box">
+                <span class="pattern-title">4. 화해 명령 (불바다)</span>
+                <p>화면 상단의 노란 게이지가 차면 <b>'불바다'</b> 패턴이 시작되며 다수의 화약통이 떨어집니다.</p>
+                <p>바닥의 노란 장판은 통이 터지는 곳, 아닌 곳은 안전지대입니다. 파티원은 통을 노란 장판(폭발 구역)으로 옮겨 제거하거나 안전지대로 피신시켜야 합니다.</p>
+            </div>
+
+            <div class="pattern-box">
+                <span class="pattern-title">5. 단절 (탱커 구출)</span>
+                <p>딜이 부족할 때 나오는 패턴입니다. 보스와 탱커가 대치하며 탱커가 행동 불능 상태가 되고 체력이 지속적으로 깎입니다. 딜러들은 실드를 빠르게 제거하고 힐러는 탱커 힐에 집중하세요.</p>
+            </div>
         </div>
     </div>
 

@@ -596,10 +596,12 @@ function findButtonByFile(filename) {
     return foundBtn;
 }
 
+// [수정] 가이드 콘텐츠 로드 함수 (보스 상세 파라미터 체크 추가)
 function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if(!innerContainer) return;
 
+    // URL 업데이트 (?g=boss 등)
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
     if (foundId) updateUrlQuery('guide', foundId);
 
@@ -612,7 +614,12 @@ function loadGuideContent(filename, btnElement) {
     if(codeView) codeView.style.display = 'none';
     
     innerContainer.style.display = 'block';
-    innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
+    
+    // 로딩 중 표시 (boss.html이 아닐 때만)
+    // boss.html은 깜빡임 방지를 위해 바로 내용 교체 시도
+    if (filename !== 'boss.html') {
+        innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
+    }
     
     fetch(filename)
         .then(res => {
@@ -621,15 +628,32 @@ function loadGuideContent(filename, btnElement) {
         })
         .then(html => {
             innerContainer.innerHTML = html;
+            
+            // 기존 가이드별 초기화 함수들
             if (filename === 'news.html') renderGuideNewsList(); 
             if (filename === 'harts.html') renderHeartLibrary();
             if (filename === 'marts.html') renderMartLibrary(); 
             if (filename === 'npc.html') initHomeworkChecklist(); 
+
+            // ▼▼▼ [핵심 추가] 보스 페이지(boss.html)일 경우, URL 파라미터(?r=...) 확인 ▼▼▼
+            if (filename === 'boss.html') {
+                const params = new URLSearchParams(window.location.search);
+                const raidId = params.get('r'); // 예: ?g=boss&r=b1
+                
+                if (raidId) {
+                    // 상세 페이지가 지정되어 있다면 바로 로드
+                    setTimeout(() => {
+                        loadContent('boss/' + raidId + '.html');
+                    }, 50); 
+                }
+            }
+            // ▲▲▲ 추가 끝 ▲▲▲
         })
         .catch(err => {
             innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br>(${filename})</div>`;
         });
 }
+
 
 function renderGuideNewsList() {
     const container = document.getElementById('guide-inner-news-list');
@@ -2595,4 +2619,26 @@ function filterBoss(selectElement) {
             card.style.display = 'none';
         }
     });
+}
+// ▼▼▼ script.js 맨 아래에 수정하여 덮어쓰기 ▼▼▼
+
+// [수정] 보스 상세 페이지 이동 (?g=boss&r=ID)
+function goBoss(id) {
+    // 1. 주소창 URL 변경 (기존 ?g=boss 유지하면서 &r=id 추가)
+    const newUrl = '?g=boss&r=' + id;
+    window.history.pushState({path: newUrl}, '', newUrl);
+    
+    // 2. 내용 로드 (깜빡임 없이)
+    loadContent('boss/' + id + '.html');
+}
+
+// [수정] 보스 목록으로 돌아가기 (?g=boss)
+function goBossList() {
+    // 1. URL에서 파라미터 제거 (?g=boss 상태로 복귀)
+    const newUrl = '?g=boss';
+    window.history.pushState({path: newUrl}, '', newUrl);
+    
+    // 2. 보스 목록(boss.html) 다시 로드
+    // loadContent는 단순히 파일 내용을 innerHTML로 넣는 함수이므로 boss.html을 다시 부르면 됨
+    loadContent('boss.html');
 }

@@ -1,1 +1,164 @@
+<div class="boss-page-container">
+    
+    <div class="boss-section">
+        <div class="boss-section-header">
+            <span class="header-deco"></span>
+            <h3>일반 보스</h3>
+        </div>
+
+        <!--<div class="boss-grid">
+            <a href="boss_1.html" class="boss-card" onclick="event.preventDefault(); loadContent('boss/b1.html');">
+                <div class="boss-img-wrapper">
+                    <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
+                    
+                    <div class="boss-info-overlay">
+                        <span class="boss-name">풍화의 무도</span>
+                        <span class="boss-subtext">추천 전투력: 15,000 / 드롭: 무공서</span>
+                    </div>
+                </div>
+            </a>
+            
+            </div>-->
+    </div>
+
+    <div class="boss-section" style="margin-top: 40px;">
+        <div class="boss-section-header">
+            <span class="header-deco"></span>
+            <h3>협경 보스</h3>
+        </div>
+
+        <div class="boss-grid">
+            <a href="boss_1.html" class="boss-card" onclick="event.preventDefault(); loadContent('boss/b1.html');">
+                <div class="boss-img-wrapper">
+                    <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
+                    <div class="boss-info-overlay">
+                        <span class="boss-name">풍화의 무도</span>
+                        <span class="boss-subtext">강력한 협경 보스입니다.</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    /* 보스 페이지 애니메이션 */
+    .boss-page-container {
+        padding: 10px 0;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    /* 섹션 헤더 스타일 */
+    .boss-section-header {
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    .boss-section-header h3 {
+        margin: 0;
+        font-size: 1.2em;
+        color: var(--wuxia-text-main, #333);
+        font-weight: bold;
+    }
+
+    .header-deco {
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        background-color: var(--wuxia-accent-red, #b71c1c);
+        margin-right: 10px;
+        border-radius: 2px;
+    }
+
+    /* ▼▼▼ [핵심 변경] 그리드 레이아웃 (1단 배열) ▼▼▼ */
+    .boss-grid {
+        display: grid;
+        /* 기본적으로 1열(가로 가득 참)로 설정 */
+        grid-template-columns: 1fr; 
+        gap: 15px;
+    }
+
+    /* PC 화면(768px 이상)에서는 2열로 보여주기 (너무 크면 부담스러우니) */
+    @media (min-width: 768px) {
+        .boss-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* 카드 스타일 */
+    .boss-card {
+        display: block;
+        background-color: #000;
+        border-radius: 8px;
+        text-decoration: none;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .boss-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
+
+    /* 이미지 래퍼 (비율 설정) */
+    .boss-img-wrapper {
+        width: 100%;
+        /* 21:9 비율로 더 와이드하게 변경 (가로가 꽉 차므로 세로를 줄임) */
+        padding-top: 48%; 
+        position: relative;
+    }
+
+    .boss-img {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .boss-card:hover .boss-img {
+        transform: scale(1.05);
+    }
+
+    /* 텍스트 오버레이 (하단 그라데이션) */
+    .boss-info-overlay {
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%;
+        /* 텍스트가 잘 보이도록 그라데이션 영역 확보 */
+        padding: 50px 15px 15px 15px; 
+        background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%);
+        display: flex;
+        flex-direction: column; /* 세로 정렬 (제목 위, 설명 아래) */
+        justify-content: flex-end;
+    }
+
+    /* 보스 이름 */
+    .boss-name {
+        color: #fff;
+        font-size: 1.1em;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+        margin-bottom: 4px; /* 설명과의 간격 */
+    }
+
+    /* ▼▼▼ [추가] 서브 텍스트 스타일 ▼▼▼ */
+    .boss-subtext {
+        color: #ccc; /* 약간 흐린 회색 */
+        font-size: 0.85em;
+        font-weight: normal;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        
+        /* 긴 텍스트 말줄임 처리 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
 

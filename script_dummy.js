@@ -3141,13 +3141,14 @@ function addComboStep() { openBuilderModal('combo', currentBuild.combo.length); 
 function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splice(idx, 1); renderComboSlots(); }
 
 
-
-// 보스 목록 그리기 함수
+/* =========================================
+   [보스 목록 그리기] 지역 정보(Map) 스타일 적용
+   ========================================= */
 function renderBossList(containerId, filterType = 'all', limit = 0) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    if (!globalBossData || globalBossData.length === 0) {
+    if (globalBossData.length === 0) {
         if(!container.innerHTML) container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
         return;
     }
@@ -3160,7 +3161,6 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
         targets = targets.filter(boss => boss.type === filterType);
     }
 
-    // 개수 제한 (0이면 제한 없음)
     if (limit > 0) {
         targets = targets.slice(0, limit);
     }
@@ -3170,22 +3170,24 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
         return;
     }
 
-    // HTML 생성
     let html = '';
     targets.forEach(boss => {
-        const badgeClass = boss.type === 'heroic' ? 'red' : '';
+        const badgeClass = boss.type === 'heroic' ? 'red' : 'gray';
         const badgeName = boss.type === 'heroic' ? '협경' : '일반';
+        
+        // 이미지 경로 처리 (없으면 로고)
+        const bgImage = boss.img ? boss.img : 'images/logo.png';
 
         html += `
-        <a href="${boss.link}" class="boss-card" data-type="${boss.type}" onclick="event.preventDefault(); loadContent('${boss.link}');">
-            <div class="boss-img-wrapper">
-                <img src="${boss.img}" alt="${boss.name}" class="boss-img" onerror="this.src='images/logo.png'">
-                <div class="boss-info-overlay">
-                    <span class="boss-type-badge ${badgeClass}">${badgeName}</span>
-                    <span class="boss-name">${boss.name}</span>
-                    <span class="boss-subtext">${boss.subtext}</span>
-                </div>
-            </div> 
+        <a href="${boss.link}" class="boss-card-map-style" onclick="event.preventDefault(); loadContent('${boss.link}');">
+            <div class="boss-hero-bg" style="background-image: url('${bgImage}');">
+                <span class="boss-badge ${badgeClass}">${badgeName}</span>
+            </div>
+            
+            <div class="boss-content-box">
+                <div class="boss-title">${boss.name}</div>
+                <div class="boss-desc">${boss.subtext}</div>
+            </div>
         </a>`;
     });
 

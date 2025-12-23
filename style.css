@@ -3008,3 +3008,100 @@ h3 {
         cursor: grab;
     }
 }
+
+
+/* =========================================
+   [보스 목록] 지역 정보(Map) 스타일
+   ========================================= */
+
+/* 1. 그리드 레이아웃 (모바일 2열, PC 3~4열) */
+.boss-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 기본 2개씩 */
+    gap: 15px;
+    padding: 10px 5px;
+}
+
+@media (min-width: 768px) {
+    .boss-grid {
+        grid-template-columns: repeat(3, 1fr); /* 태블릿 3개 */
+    }
+}
+@media (min-width: 1024px) {
+    .boss-grid {
+        grid-template-columns: repeat(4, 1fr); /* PC 4개 */
+    }
+}
+
+/* 2. 카드 전체 틀 */
+.boss-card-map-style {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 부드러운 그림자 */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none; /* 링크 밑줄 제거 */
+    border: 1px solid #eee;
+}
+
+.boss-card-map-style:active {
+    transform: scale(0.98);
+}
+
+/* 3. 상단 이미지 영역 (Hero BG) */
+.boss-hero-bg {
+    width: 100%;
+    padding-top: 65%; /* 16:9 비율보다 약간 높게 (카드 비율 맞춤) */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    background-color: #f0f0f0; /* 이미지 로딩 전 배경색 */
+}
+
+/* 4. 배지 (협경/일반) - 이미지 좌측 상단 */
+.boss-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 8px;
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+.boss-badge.red { background-color: #d32f2f; } /* 협경 - 빨강 */
+.boss-badge.gray { background-color: #757575; } /* 일반 - 회색 */
+
+/* 5. 하단 텍스트 박스 */
+.boss-content-box {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 보스 이름 */
+.boss-title {
+    font-size: 1.05em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    font-family: 'Noto Serif KR', serif; /* 명조체 느낌 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 보스 설명 (지역/드랍템) */
+.boss-desc {
+    font-size: 0.85em;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

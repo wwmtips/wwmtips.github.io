@@ -1669,8 +1669,52 @@ function openBuildDetailSheet(build) {
 
 
 function openBuildDetailSheetView() { document.body.classList.add('build-sheet-open'); }
-function closeBuildDetailSheet() { document.body.classList.remove('build-sheet-open'); }
+/* [추가] 시트 열고 닫기 강제 제어 (PC 버그 수정용) */
 
+// 1. 닫기 기능 (확실하게 숨김)
+function closeBuildDetailSheet(event) {
+    if (event) event.stopPropagation();
+    const sheet = document.getElementById('build-detail-sheet');
+    const overlay = document.getElementById('build-detail-overlay');
+    
+    if (sheet) {
+        sheet.style.display = 'none'; // 강제로 숨김
+        sheet.classList.remove('active'); // 애니메이션 클래스 제거
+    }
+    if (overlay) {
+        overlay.style.display = 'none'; // 배경 어두운 것도 숨김
+        overlay.style.opacity = '0';
+    }
+}
+
+// 2. 열기 기능 보강 (기존 openBuildDetailSheetView 덮어쓰기 or 보조)
+// 기존 함수가 있다면 덮어씌워지고, 없다면 새로 작동합니다.
+const originalOpenView = typeof openBuildDetailSheetView !== 'undefined' ? openBuildDetailSheetView : null;
+
+openBuildDetailSheetView = function() {
+    const sheet = document.getElementById('build-detail-sheet');
+    const overlay = document.getElementById('build-detail-overlay');
+    
+    if (sheet) {
+        sheet.style.display = 'flex'; // ★ 핵심: PC에서 보이게 강제 설정
+        sheet.style.flexDirection = 'column';
+        
+        // 약간의 딜레이 후 애니메이션 효과 (모바일용)
+        setTimeout(() => {
+            sheet.classList.add('active');
+        }, 10);
+    }
+    
+    if (overlay) {
+        overlay.style.display = 'block';
+        setTimeout(() => {
+            overlay.style.opacity = '1';
+        }, 10);
+    }
+    
+    // 원래 있던 로직이 있다면 실행
+    if (originalOpenView) originalOpenView();
+};
 // 13. 지도 상세 뷰 기능
 function openMapDetail(mapName, mapKey) {
     // 다른 뷰 숨기기

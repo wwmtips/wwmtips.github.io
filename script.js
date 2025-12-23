@@ -99,9 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // =========================================
 // 3. 데이터 로딩 및 처리 (수정됨)
 // =========================================// script.js 파일의 loadData 함수 교체
-// =========================================
-// 3. 데이터 로딩 및 처리 (수정본: 전체 미리 로드 + 빌드만 지연)
-// =========================================
+// [수정] 데이터 로딩 함수 (보스 데이터 로드 추가됨)
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab');
@@ -116,9 +114,11 @@ function loadData() {
         fetch('json/news.json').then(res => res.json()).catch(err => []),
         fetch('json/cnews.json').then(res => res.json()).catch(err => []),
         fetch('json/chunji.json').then(res => res.json()).catch(err => ({ chunji: [] })),
-        fetch('json/builder_data.json').then(res => res.json()).catch(err => null) 
+        fetch('json/builder_data.json').then(res => res.json()).catch(err => null),
+        // ★ [추가] 보스 데이터 불러오기
+        fetch('boss.json').then(res => res.json()).catch(err => [])
     ])
-    .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult]) => {
+    .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult, bossDataResult]) => {
         console.log("기본 데이터 로드 완료");
 
         // 데이터 정제
@@ -127,6 +127,9 @@ function loadData() {
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
         let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
         
+        // 보스 데이터 저장 (전역 변수)
+        globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
+
         if (quests.length > 0) {
             quests.sort((a, b) => {
                 const numA = parseInt((a.id || "").replace('q', '')) || 0;
@@ -145,19 +148,27 @@ function loadData() {
         updateLocationOptions(); 
         updateChunjiSubtypeOptions(); 
         
-        // ★★★ [핵심] 모든 탭의 내용을 미리 다 그려버립니다! ★★★
+        // 화면 그리기
         renderHomeSlider(globalData.quests); 
         renderHomeRecentNews(globalData.news);     
         renderHomeCommunityNews(globalData.cnews);
         
-        renderQuestList();        // 무림록 미리 그리기
-        renderChunjiList();       // 천지록 미리 그리기
-        renderQuizTable(globalData.quiz); // 족보 미리 그리기
+        renderQuestList();        
+        renderChunjiList();       
+        renderQuizTable(globalData.quiz); 
         updateQuizCounter();
-        renderFullNews(globalData.news);  // 뉴스 미리 그리기
-       renderComboSlots(); 
+        renderFullNews(globalData.news);  
+        renderComboSlots(); 
 
-        // 상세 페이지로 바로 진입한 경우 처리 (데이터가 이미 그려져 있으니 상세만 덮으면 됨)
+        // ★ [추가] 현재 페이지에 보스 목록 영역이 있다면 그리기
+        if (document.getElementById('bossGrid')) {
+            renderBossList('bossGrid', 'all'); 
+        }
+        if (document.getElementById('home-boss-list')) {
+            renderBossList('home-boss-list', 'heroic', 2);
+        }
+
+        // 상세 페이지 진입 처리
         if (shortQuestId) {
             const fullId = 'q' + shortQuestId;
             const foundQuest = globalData.quests.find(q => q.id === fullId);
@@ -165,10 +176,7 @@ function loadData() {
         }
         else if (chunjiId) {
             const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
-            if (foundChunji) {
-                switchTab('chunji');
-                loadChunjiDetail(foundChunji);
-            }
+            if (foundChunji) { switchTab('chunji'); loadChunjiDetail(foundChunji); }
         }
         else if (targetTab === 'quest' && targetId) {
              const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
@@ -176,10 +184,7 @@ function loadData() {
              if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
         }
 
-        // 이벤트 상태 체크
         if (typeof checkEventStatus === 'function') checkEventStatus();
-
-        // 2단계: 빌드 데이터(구글 시트)만 백그라운드 로딩
         loadBuildsInBackground(targetTab);
     })
     .catch(error => { console.error("데이터 로드 실패:", error); });
@@ -1092,118 +1097,6 @@ function closeBuilderInterface() {
 }
 
 
-// [수정] 모달 열기 (비결 리스트 표시 기능 추가)
-function openBuilderModal(type, index) {
-    if (!builderData) return alert("데이터를 불러오는 중입니다...");
-    currentSlot = { type, index }; 
-    
-    const modal = document.getElementById('builder-modal');
-    const list = document.getElementById('builder-modal-list');
-    const title = document.getElementById('builder-modal-title');
-    
-    list.innerHTML = '';
-    
-    // 취소 버튼
-    const closeDiv = document.createElement('div');
-    closeDiv.className = 'select-item';
-    closeDiv.innerHTML = '<div style="width:48px;height:48px;background:#eee;line-height:48px;margin:0 auto;font-weight:bold;color:#888;">✕</div><p>취소</p>';
-    closeDiv.onclick = () => closeBuilderModal(null);
-    list.appendChild(closeDiv);
-
-    // ★ 콤보 선택일 때
-    if (type === 'combo') {
-        title.innerText = `콤보 ${parseInt(index)+1}단계 선택`;
-        
-        // 1) 기본 조작키
-        Object.keys(KEY_MAP).forEach(key => {
-            const k = KEY_MAP[key];
-            const div = document.createElement('div');
-            div.className = 'select-item';
-            div.innerHTML = `<div class="key-cap ${k.color} ${k.hold?'hold':''}" style="margin:0 auto;"><span>${k.text}</span></div><p>${k.desc}</p>`;
-            div.onclick = () => selectBuilderItem(key, null, k.desc);
-            list.appendChild(div);
-        });
-
-        // 2) 장착한 비결 리스트 (여기가 중요!)
-        const activeMarts = currentBuild.marts.filter(id => id);
-        if (activeMarts.length > 0) {
-            const sep = document.createElement('div');
-            sep.style.cssText = "width:100%; border-top:1px dashed #ddd; margin:10px 0; grid-column: 1 / -1; text-align:center; font-size:0.8em; color:#999; padding-top:5px;";
-            sep.innerText = "▼ 장착한 비결 ▼";
-            list.appendChild(sep);
-
-            activeMarts.forEach(id => {
-                const item = builderData.marts.find(m => m.id === id);
-                if (item) {
-                    const div = document.createElement('div');
-                    div.className = 'select-item';
-                    div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
-                    div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
-                    list.appendChild(div);
-                }
-            });
-        }
-    } 
-    // ★ 일반 아이템 선택일 때 (기존 유지)
-    else {
-        title.innerText = `${type==='weapons'?'무기':type==='hearts'?'심법':'비결'} 선택`;
-        const currentList = currentBuild[type];
-        const usedIds = currentList.filter((id, idx) => id !== null && idx !== parseInt(index));
-        if (builderData[type]) {
-            builderData[type].forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'select-item';
-                div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
-                if (usedIds.includes(item.id)) div.classList.add('disabled');
-                else div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
-                list.appendChild(div);
-            });
-        }
-    }
-    modal.style.display = 'flex';
-}
-
-// [수정] 아이템 선택 처리 (콤보 배열 push 기능 추가)
-function selectBuilderItem(itemId, imgSrc, itemName) {
-    const { type, index } = currentSlot;
-    
-    // ★ 콤보인 경우
-    if (type === 'combo') {
-        // 인덱스가 현재 길이와 같으면 '추가' (push)
-        if (index === currentBuild.combo.length) {
-            currentBuild.combo.push(itemId);
-        } else {
-            // 아니면 '수정'
-            currentBuild.combo[index] = itemId;
-        }
-        renderComboSlots();
-        closeBuilderModal(null);
-        return;
-    }
-
-
-    // ★ 일반 아이템인 경우 (기존 로직)
-    currentBuild[type][index] = itemId;
-    const imgEl = document.getElementById(`slot-${type}-${index}`);
-    const nameEl = document.getElementById(`name-${type}-${index}`);
-    const slotEl = imgEl.parentElement;
-    const plusSpan = slotEl.querySelector('span');
-
-    if (itemId) {
-        imgEl.src = imgSrc;
-        imgEl.style.display = 'block';
-        if(plusSpan) plusSpan.style.display = 'none';
-        slotEl.style.borderStyle = 'solid';
-        if(nameEl) nameEl.innerText = itemName;
-    } else {
-        imgEl.src = '';
-        imgEl.style.display = 'none';
-        if(plusSpan) plusSpan.style.display = 'block';
-        slotEl.style.borderStyle = 'dashed';
-        if(nameEl) nameEl.innerText = '';
-    }
-    closeBuilderModal(null); 
-}
 
 
 function closeBuilderModal(e) {
@@ -3136,42 +3029,23 @@ function resetComboSlots() {
 function addComboStep() { openBuilderModal('combo', currentBuild.combo.length); }
 function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splice(idx, 1); renderComboSlots(); }
 
+/* =========================================
+   [보스 데이터 처리 함수]
+   ========================================= */
 
-
-//보스
-// 1. 보스 데이터 불러오기 (페이지 로드 시 자동 실행)
-async function loadBossData() {
-    try {
-        const response = await fetch('boss.json'); // boss.json 파일 읽기
-        globalBossData = await response.json();    // 변수에 저장
-        
-        // 데이터 로드 후, 현재 페이지에 보스 목록이 필요하면 즉시 그림
-        if (document.getElementById('bossGrid')) {
-            // boss.html인 경우 (필터링 로직은 HTML 내 select에서 처리)
-            renderBossList('bossGrid', 'all'); 
-        }
-        if (document.getElementById('home-boss-list')) {
-            // index.html인 경우 (협경 보스 2개만)
-            renderBossList('home-boss-list', 'heroic', 2);
-        }
-        
-    } catch (error) {
-        console.error('보스 데이터를 불러오는 중 오류 발생:', error);
-    }
-}
-
-// 2. 보스 목록 그리기 함수
+// 보스 목록 그리기 함수
 function renderBossList(containerId, filterType = 'all', limit = 0) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    // 데이터가 아직 안 불러와졌으면 로딩 중 표시
     if (globalBossData.length === 0) {
-        container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
+        // 데이터가 아직 없거나 로딩 중일 때
+        // (loadData에서 불러오는 중이라면 잠시 후 그려집니다)
+        if (!container.innerHTML) container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
         return;
     }
 
-    container.innerHTML = ''; // 초기화
+    container.innerHTML = ''; 
 
     // 필터링
     let targets = globalBossData;
@@ -3179,7 +3053,7 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
         targets = targets.filter(boss => boss.type === filterType);
     }
 
-    // 개수 제한 (0이면 제한 없음)
+    // 개수 제한
     if (limit > 0) {
         targets = targets.slice(0, limit);
     }
@@ -3196,7 +3070,7 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
         const badgeName = boss.type === 'heroic' ? '협경' : '일반';
 
         html += `
-        <a href="${boss.link}" class="boss-card" onclick="event.preventDefault(); loadContent('${boss.link}');">
+        <a href="${boss.link}" class="boss-card" data-type="${boss.type}" onclick="event.preventDefault(); loadContent('${boss.link}');">
             <div class="boss-img-wrapper">
                 <img src="${boss.img}" alt="${boss.name}" class="boss-img">
                 <div class="boss-info-overlay">
@@ -3210,8 +3084,3 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
 
     container.innerHTML = html;
 }
-
-// 3. 페이지가 로드되면 바로 데이터 가져오기 실행
-document.addEventListener("DOMContentLoaded", () => {
-    loadBossData();
-});

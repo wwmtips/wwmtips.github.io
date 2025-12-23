@@ -3107,3 +3107,47 @@ h3 {
 }
 .boss-badge.red { background-color: rgba(211, 47, 47, 0.9); }
 .boss-badge.gray { background-color: rgba(117, 117, 117, 0.9); }
+
+/* =========================================
+   [모바일 반응형] 가로 스크롤 (Horizontal Scroll)
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+    /* 1. 그리드를 플렉스(일렬)로 변경 */
+    .combo-viewer-grid {
+        display: flex;             /* 한 줄로 나열 */
+        flex-wrap: nowrap;         /* 줄바꿈 금지 */
+        overflow-x: auto;          /* 가로 스크롤 허용 */
+        justify-content: flex-start; /* 왼쪽부터 정렬 */
+        gap: 10px;                 /* 간격 */
+        padding: 15px;             /* 터치 여백 */
+        
+        /* 스크롤바 숨기기 (깔끔하게) */
+        -ms-overflow-style: none;  /* IE, Edge */
+        scrollbar-width: none;     /* Firefox */
+    }
+    
+    .combo-viewer-grid::-webkit-scrollbar {
+        display: none;             /* Chrome, Safari, Opera */
+    }
+
+    /* 2. 아이템 박스 크기 고정 */
+    .combo-item-box {
+        /* 찌그러지지 않게 고정 크기 부여 */
+        flex: 0 0 auto; 
+        width: 70px;  /* 모바일에서 적당한 크기 */
+        height: 70px; /* 정사각형 유지 */
+    }
+
+    /* 3. 모바일 글씨 크기 미세 조정 */
+    .key-cap-viewer {
+        font-size: 1.2em; /* 약간 줄임 */
+    }
+    
+    /* 4. 모바일 순서 번호 크기 조정 */
+    .combo-step-num {
+        font-size: 0.7em;
+        top: 3px;
+        left: 5px;
+    }
+}

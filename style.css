@@ -3008,3 +3008,90 @@ h3 {
     height: 100%;
     object-fit: cover;
 }
+/* =========================================
+   [뷰어] 수묵화 스타일 콤보 디자인 (복구용)
+   ========================================= */
+
+/* 1. 콤보 전체 틀 (한지 색상 + 4열 배치) */
+.combo-viewer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 무조건 한 줄에 4개 */
+    gap: 15px 5px; /* 위아래 15px, 좌우 5px */
+    padding: 20px 10px;
+    background-color: #fffcf5; /* 연한 미색 배경 */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* 2. 개별 아이템 덩어리 (박스 + 화살표) */
+.combo-step-unit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: 2px;
+}
+
+/* 3. 아이템 박스 (네모칸) */
+.combo-item-box {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 4. 왼쪽 위 순서 번호 (1, 2, 3...) */
+.combo-step-num {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    font-size: 0.65em;
+    color: #bbb;
+    font-family: serif;
+    z-index: 5;
+}
+
+/* 5. 화살표 (>) 스타일 */
+.combo-flow-arrow {
+    font-family: serif;
+    font-size: 1.2em;
+    color: #b0bec5;
+    font-weight: bold;
+    width: 15px;
+    text-align: center;
+}
+
+/* 6. 키보드 키캡 스타일 (뷰어 전용) */
+.key-cap-viewer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #fff;
+}
+.key-cap-viewer.hold::after {
+    content: 'HOLD';
+    position: absolute;
+    bottom: 2px;
+    font-size: 0.4em;
+    opacity: 0.8;
+}
+
+/* 7. 비결 이미지 꽉 차게 */
+.combo-mart-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}

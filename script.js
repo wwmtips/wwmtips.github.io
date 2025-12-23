@@ -3032,32 +3032,35 @@ function selectBuilderItem(itemId, imgSrc, itemName) {
    ========================================= */
 
 // 1. 콤보 슬롯 렌더링
+
+
+
+
+/* [수정] 콤보 슬롯 렌더링 (+버튼 포함 버전) */
 function renderComboSlots() {
     const container = document.getElementById('combo-slot-container');
     if (!container) return;
     container.innerHTML = '';
 
-    // A. 입력된 콤보 그리기
+    // 1. 현재 입력된 콤보들 그리기
     currentBuild.combo.forEach((val, index) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'slot-wrapper';
-        wrapper.style.position = 'relative'; // 삭제 버튼 위치 잡기용
+        wrapper.style.position = 'relative';
 
         let contentHtml = '';
-        
+        let borderStyle = 'solid';
+
         if (val) {
             // 키(Key)인지 확인
             if (typeof KEY_MAP !== 'undefined' && KEY_MAP[val]) {
                 const k = KEY_MAP[val];
                 contentHtml = `<div class="key-cap ${k.color} ${k.hold?'hold':''}" style="width:100%; height:100%; border-radius:4px; box-shadow:none; font-size:0.9em;"><span>${k.text}</span></div>`;
             } 
-            // 아니면 아이템(비결)으로 간주
+            // 비결 아이템인지 확인
             else {
-                let item = null;
-                if (builderData) {
-                    item = builderData.marts.find(m => m.id === val);
-                    if (!item) item = builderData.weapons.find(w => w.id === val);
-                }
+                let item = builderData.marts ? builderData.marts.find(m => m.id === val) : null;
+                if (!item && builderData.weapons) item = builderData.weapons.find(w => w.id === val);
                 
                 if (item) contentHtml = `<img src="${item.img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">`;
                 else contentHtml = `<div style="font-size:0.7em; word-break:break-all;">${val}</div>`;
@@ -3065,7 +3068,7 @@ function renderComboSlots() {
         }
 
         wrapper.innerHTML = `
-            <div class="item-slot" onclick="openBuilderModal('combo', ${index})" style="border-style: solid; padding:0; overflow:visible; cursor:pointer;">
+            <div class="item-slot" onclick="openBuilderModal('combo', ${index})" style="border-style: ${borderStyle}; padding:0; overflow:visible; cursor:pointer;">
                 ${contentHtml}
                 <div class="combo-remove-overlay" onclick="removeComboStep(event, ${index})" style="position:absolute; top:-5px; right:-5px; width:18px; height:18px; background:#d32f2f; color:white; border-radius:50%; font-size:12px; display:flex; align-items:center; justify-content:center; z-index:10;">✕</div>
             </div>
@@ -3074,13 +3077,13 @@ function renderComboSlots() {
         container.appendChild(wrapper);
     });
 
-    // B. [+] 버튼 추가 (최대 20개까지)
+    // 2. 마지막에 [+] 버튼 추가 (최대 20개까지만)
     if (currentBuild.combo.length < 20) {
         const addWrapper = document.createElement('div');
         addWrapper.className = 'slot-wrapper';
         addWrapper.innerHTML = `
             <div class="item-slot" onclick="addComboStep()" style="border-style: dashed; border-color:#ccc; cursor:pointer; display:flex; align-items:center; justify-content:center;">
-                <div style="font-size:24px; color:#aaa;">+</div>
+                <div class="combo-add-btn" style="font-size:24px; color:#aaa;">+</div>
             </div>
             <div class="slot-name" style="font-size:0.7em; margin-top:2px; color:#ccc;">추가</div>
         `;
@@ -3088,19 +3091,12 @@ function renderComboSlots() {
     }
 }
 
-// 2. 콤보 추가/삭제/초기화 함수들
-function addComboStep() {
-    // 현재 길이(맨 끝) 번호로 모달 열기
-    openBuilderModal('combo', currentBuild.combo.length);
-}
-
-function removeComboStep(event, index) {
-    event.stopPropagation(); // 모달 열림 방지
-    currentBuild.combo.splice(index, 1); // 배열에서 삭제
-    renderComboSlots(); // 다시 그리기
-}
-
+/* [수정] 콤보 초기화 (빈 배열로 초기화) */
 function resetComboSlots() {
-    currentBuild.combo = [];
+    currentBuild.combo = []; // 12칸이 아니라 빈 배열로!
     renderComboSlots();
 }
+
+/* [추가] 콤보 추가/삭제 함수 (없으면 추가하세요) */
+function addComboStep() { openBuilderModal('combo', currentBuild.combo.length); }
+function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splice(idx, 1); renderComboSlots(); }

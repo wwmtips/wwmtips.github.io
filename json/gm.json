@@ -8,7 +8,7 @@
     "x": 2140,
     "desc": "귀여운 고양이다",
     "link": "",
-    "image": "images/cat/62.jpg"
+    "image": "https://wwm.tips/images/cat/62.jpg"
   },
   {
     "id": 1766467368623,
@@ -18,7 +18,7 @@
     "x": 2058,
     "desc": "귀여운 고양이다",
     "link": "",
-    "image": "../images/cat/61.jpg"
+    "image": "https://wwm.tips/images/cat/63.jpg"
   },
   {
     "id": 1766037481798,

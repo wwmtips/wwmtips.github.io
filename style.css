@@ -2897,3 +2897,40 @@ h3 {
     background: #000;
     object-fit: cover;
 }
+/* [추가] 콤보 슬롯 추가(+) 버튼 스타일 */
+.combo-add-btn {
+    width: 100%;
+    height: 100%;
+    background-color: #f9f9f9;
+    color: #aaa;
+    font-size: 1.5em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.combo-add-btn:hover {
+    background-color: #eee;
+    color: #333;
+}
+
+/* [추가] 콤보 슬롯 내 삭제(x) 버튼 (마우스 오버 시 표시) */
+.combo-remove-overlay {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    background: #d32f2f;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}

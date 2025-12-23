@@ -2936,116 +2936,107 @@ h3 {
 }
 
 /* =========================================
-   [뷰어] 스케치 반영 (Outline Style)
+   [긴급 복구] 빌더/뷰어 통합 스타일 (Solid Flat)
    ========================================= */
 
-/* 1. 콤보 그리드 (깨끗한 흰색 배경) */
+/* 1. 콤보 그리드 (뷰어용) */
 .combo-viewer-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 10px;
     padding: 20px;
-    background-color: #fff; /* 완전 흰색 */
+    background-color: #fff; /* 깔끔한 흰색 배경 */
     border: 1px solid #eee;
-    border-radius: 16px;
+    border-radius: 12px;
     margin-top: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
 
-/* 2. 아이템 박스 (투명하게, 내용물이 꽉 차게) */
+/* 2. 아이템 박스 (뷰어용) */
 .combo-item-box {
     aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 8px;
     position: relative;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    overflow: visible; /* 번호가 잘리지 않게 */
+    overflow: hidden;
+    border: 1px solid #e9ecef;
 }
 
-/* 3. 순서 번호 (왼쪽 상단, 손글씨 느낌) */
+/* 3. 순서 번호 (왼쪽 상단) */
 .combo-step-num {
     position: absolute;
-    top: -5px; /* 박스보다 살짝 위로 */
-    left: -5px; /* 박스보다 살짝 왼쪽으로 */
-    font-size: 1em;
-    font-weight: 800; /* 두껍게 */
-    color: #333; /* 진한 검정 */
-    font-family: 'Indie Flower', cursive, sans-serif; /* 손글씨체 느낌 (없으면 산세리프) */
-    z-index: 20;
-    background: #fff; /* 뒤에 선 가리기용 */
-    padding: 0 4px;
-    border-radius: 50%;
+    top: 4px;
+    left: 6px;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #999;
+    font-family: sans-serif;
+    z-index: 10;
+    pointer-events: none;
 }
 
-/* 4. 키캡 (흰색 바탕 + 컬러 테두리 + 큰 글씨) */
+/* 4. 키캡 공통 디자인 (빌더/뷰어 모두 영향 없음, 뷰어 전용) */
 .key-cap-viewer {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #fff;
-    border: 2px solid currentColor; /* ★핵심: 글자색을 테두리색으로 사용 */
-    border-radius: 12px; /* 둥근 모서리 */
-    font-family: sans-serif; /* 깔끔한 고딕 */
-    font-weight: 300; /* 얇은 글씨 (스케치 느낌) */
-    font-size: 2.2em; /* 아주 크게 */
-    box-sizing: border-box;
-    box-shadow: 2px 2px 0px rgba(0,0,0,0.05); /* 살짝 뜨는 느낌 */
+    font-family: sans-serif;
+    font-weight: 700;
+    font-size: 1.1em;
+    color: #fff !important; /* 글씨는 무조건 흰색 */
+    border-radius: 6px;
+    box-shadow: none !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* 5. [핵심] 컬러 팔레트 (아웃라인용 진한 색상) */
+/* 5. ★★★ [핵심 복구] 공통 컬러 팔레트 ★★★ 
+   (여기를 background-color로 되돌려야 빌더가 안 깨집니다!) */
 
-/* Q (빨강) */
-.key-red { color: #FF5252; } 
+/* Q (무공) - 코랄 레드 */
+.key-red { background-color: #EF5350 !important; color: #fff !important; border: none !important; }
 
-/* ~ (파랑) */
-.key-blue { color: #448AFF; }
+/* ~ (특수) - 스카이 블루 */
+.key-blue { background-color: #42A5F5 !important; color: #fff !important; border: none !important; }
 
-/* LMB (초록) */
-.key-gray { color: #00E676; } /* 약공은 밝은 초록 */
+/* LMB (약공) - 그래스 그린 */
+.key-gray { background-color: #66BB6A !important; color: #fff !important; border: none !important; }
 
-/* R (노랑/주황) */
-.key-orange { color: #FFAB00; }
+/* R (강공) - 웜 오렌지 */
+.key-orange { background-color: #FFA726 !important; color: #fff !important; border: none !important; }
 
-/* TAB (청록) */
-.key-teal { color: #00BCD4; }
+/* TAB (교체) - 틸/청록 */
+.key-teal { background-color: #26C6DA !important; color: #fff !important; border: none !important; }
 
-/* E (보라) */
-.key-purple { color: #E040FB; }
+/* E (반격) - 블루 그레이 */
+.key-purple { background-color: #78909C !important; color: #fff !important; border: none !important; }
 
-/* SCR (회색) */
-.key-gray.scr { color: #607D8B; } 
+/* SCR (무기교체) - 진한 회색 */
+.key-gray.scr { background-color: #546E7A !important; }
 
 
-/* 6. 글씨가 너무 긴 경우 (LMB, HOLD 등) 사이즈 조절 */
-.key-cap-viewer span {
-    font-size: 1em;
-}
-/* 약공(LMB)이나 특수키는 글자가 기니까 조금 작게 */
-.key-cap-viewer:not(.key-red):not(.key-orange):not(.key-blue) {
-    font-size: 1.2em; 
-    font-weight: 700; /* 긴 글씨는 두껍게 */
-}
-
-/* 7. HOLD (꾹 누르기) 표시 */
+/* 6. HOLD (꾹 누르기) */
 .key-cap-viewer.hold::after {
     content: 'HOLD';
     position: absolute;
-    bottom: 2px;
-    font-size: 0.3em;
+    bottom: 4px;
+    font-size: 0.5em;
     font-weight: bold;
-    background: currentColor; /* 테두리색과 동일 */
+    background: rgba(0,0,0,0.2);
+    padding: 1px 4px;
+    border-radius: 3px;
     color: #fff;
-    padding: 1px 6px;
-    border-radius: 10px;
 }
 
-/* 8. 비결 이미지 (테두리 없음, 깔끔하게) */
+/* 7. 비결 이미지 */
 .combo-mart-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 12px;
-    border: 1px solid #eee; /* 아주 연한 테두리 */
+    border-radius: 6px;
 }
+

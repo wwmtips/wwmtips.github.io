@@ -190,6 +190,24 @@ function loadData() {
     .catch(error => { console.error("데이터 로드 실패:", error); });
 }
 
+// 빌드 데이터 로드 함수 (그대로 유지)
+function loadBuildsInBackground(targetTab) {
+    const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined') 
+        ? `${BUILD_API_URL}?action=list` 
+        : 'json/builds.json';
+
+    fetch(buildFetchUrl)
+    .then(res => res.json())
+    .then(buildsData => {
+        console.log("빌드 데이터 로드 완료");
+        globalData.builds = buildsData.builds || [];
+        // 빌드 목록은 데이터가 늦게 오므로 도착하면 그리기
+        renderBuildList('all');
+    })
+    .catch(err => {
+        globalData.builds = [];
+    });
+}
 
 // [추가된 함수] 빌드 데이터만 따로 불러와서 채워넣는 역할
 function loadBuildsInBackground(targetTab) {
@@ -1079,6 +1097,118 @@ function closeBuilderInterface() {
 }
 
 
+// [수정] 모달 열기 (비결 리스트 표시 기능 추가)
+function openBuilderModal(type, index) {
+    if (!builderData) return alert("데이터를 불러오는 중입니다...");
+    currentSlot = { type, index }; 
+    
+    const modal = document.getElementById('builder-modal');
+    const list = document.getElementById('builder-modal-list');
+    const title = document.getElementById('builder-modal-title');
+    
+    list.innerHTML = '';
+    
+    // 취소 버튼
+    const closeDiv = document.createElement('div');
+    closeDiv.className = 'select-item';
+    closeDiv.innerHTML = '<div style="width:48px;height:48px;background:#eee;line-height:48px;margin:0 auto;font-weight:bold;color:#888;">✕</div><p>취소</p>';
+    closeDiv.onclick = () => closeBuilderModal(null);
+    list.appendChild(closeDiv);
+
+    // ★ 콤보 선택일 때
+    if (type === 'combo') {
+        title.innerText = `콤보 ${parseInt(index)+1}단계 선택`;
+        
+        // 1) 기본 조작키
+        Object.keys(KEY_MAP).forEach(key => {
+            const k = KEY_MAP[key];
+            const div = document.createElement('div');
+            div.className = 'select-item';
+            div.innerHTML = `<div class="key-cap ${k.color} ${k.hold?'hold':''}" style="margin:0 auto;"><span>${k.text}</span></div><p>${k.desc}</p>`;
+            div.onclick = () => selectBuilderItem(key, null, k.desc);
+            list.appendChild(div);
+        });
+
+        // 2) 장착한 비결 리스트 (여기가 중요!)
+        const activeMarts = currentBuild.marts.filter(id => id);
+        if (activeMarts.length > 0) {
+            const sep = document.createElement('div');
+            sep.style.cssText = "width:100%; border-top:1px dashed #ddd; margin:10px 0; grid-column: 1 / -1; text-align:center; font-size:0.8em; color:#999; padding-top:5px;";
+            sep.innerText = "▼ 장착한 비결 ▼";
+            list.appendChild(sep);
+
+            activeMarts.forEach(id => {
+                const item = builderData.marts.find(m => m.id === id);
+                if (item) {
+                    const div = document.createElement('div');
+                    div.className = 'select-item';
+                    div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
+                    div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
+                    list.appendChild(div);
+                }
+            });
+        }
+    } 
+    // ★ 일반 아이템 선택일 때 (기존 유지)
+    else {
+        title.innerText = `${type==='weapons'?'무기':type==='hearts'?'심법':'비결'} 선택`;
+        const currentList = currentBuild[type];
+        const usedIds = currentList.filter((id, idx) => id !== null && idx !== parseInt(index));
+        if (builderData[type]) {
+            builderData[type].forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'select-item';
+                div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
+                if (usedIds.includes(item.id)) div.classList.add('disabled');
+                else div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
+                list.appendChild(div);
+            });
+        }
+    }
+    modal.style.display = 'flex';
+}
+
+// [수정] 아이템 선택 처리 (콤보 배열 push 기능 추가)
+function selectBuilderItem(itemId, imgSrc, itemName) {
+    const { type, index } = currentSlot;
+    
+    // ★ 콤보인 경우
+    if (type === 'combo') {
+        // 인덱스가 현재 길이와 같으면 '추가' (push)
+        if (index === currentBuild.combo.length) {
+            currentBuild.combo.push(itemId);
+        } else {
+            // 아니면 '수정'
+            currentBuild.combo[index] = itemId;
+        }
+        renderComboSlots();
+        closeBuilderModal(null);
+        return;
+    }
+
+
+    // ★ 일반 아이템인 경우 (기존 로직)
+    currentBuild[type][index] = itemId;
+    const imgEl = document.getElementById(`slot-${type}-${index}`);
+    const nameEl = document.getElementById(`name-${type}-${index}`);
+    const slotEl = imgEl.parentElement;
+    const plusSpan = slotEl.querySelector('span');
+
+    if (itemId) {
+        imgEl.src = imgSrc;
+        imgEl.style.display = 'block';
+        if(plusSpan) plusSpan.style.display = 'none';
+        slotEl.style.borderStyle = 'solid';
+        if(nameEl) nameEl.innerText = itemName;
+    } else {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+        if(plusSpan) plusSpan.style.display = 'block';
+        slotEl.style.borderStyle = 'dashed';
+        if(nameEl) nameEl.innerText = '';
+    }
+    closeBuilderModal(null); 
+}
 
 
 function closeBuilderModal(e) {
@@ -1289,6 +1419,31 @@ function renderHeartLibrary() {
     });
 }
 
+/* B. 비결(Mart) 리스트 렌더링 */
+function renderMartLibrary() {
+    const container = document.getElementById('mart-library-list');
+    if (!container) return;
+
+    if (!builderData) {
+        fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data; renderMartLibrary(); }).catch(err => { container.innerHTML = "데이터를 불러올 수 없습니다."; });
+        return;
+    }
+
+    if (!builderData.marts || builderData.marts.length === 0) {
+        container.innerHTML = "등록된 비결이 없습니다.";
+        return;
+    }
+
+    container.innerHTML = '';
+    builderData.marts.forEach(mart => {
+        const item = document.createElement('div');
+        item.className = 'heart-lib-item'; // 스타일 공유
+        item.onclick = () => openMartDetailSheet(mart.id);
+        item.innerHTML = `<img src="${mart.img}" class="heart-lib-img" onerror="this.src='images/logo.png'"><div class="heart-lib-name">${mart.name}</div>`;
+        container.appendChild(item);
+    });
+}
+
 /* [공통] 유튜브 주소 자동 변환 함수 */
 function convertYoutubeToEmbed(text) {
     if (!text) return '획득 방법 정보가 없습니다.';
@@ -1341,6 +1496,39 @@ function closeHeartDetailSheet() {
     document.body.classList.remove('heart-sheet-open');
 }
 
+/* [추가] 비결 상세 바텀시트 열기 */
+function openMartDetailSheet(martId) {
+    if (!builderData || !builderData.marts) return;
+    const mart = builderData.marts.find(m => m.id === martId);
+    if (!mart) return;
+
+    const titleEl = document.getElementById('mart-sheet-title');
+    const contentEl = document.getElementById('mart-sheet-content');
+
+    if (titleEl) titleEl.innerText = mart.name;
+    
+    if (contentEl) {
+        const acquireContent = convertYoutubeToEmbed(mart.acquire);
+        contentEl.innerHTML = `
+            <div style="text-align:center; margin-bottom:20px; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
+                <img src="${mart.img}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
+            </div>
+            <div class="detail-chunk" style="margin-bottom: 25px;">
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">효과</h4>
+                <p style="color: #555; line-height: 1.6; background: #fff; padding: 10px; border: 1px dashed #ddd; border-radius: 4px;">
+                    ${mart.desc || '효과 정보가 없습니다.'}
+                </p>
+            </div>
+            <div class="detail-chunk">
+                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">획득 방법</h4>
+                <div style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+                    ${acquireContent}
+                </div>
+            </div>
+        `;
+    }
+    document.body.classList.add('mart-sheet-open');
+}
 
 function closeMartDetailSheet() {
     document.body.classList.remove('mart-sheet-open');
@@ -1906,6 +2094,36 @@ function loadChunjiDetail(item, index) {
 // =========================================
 // [수정/통합] 천지록(Chunji) 기능 로직
 // =========================================
+
+// 목록 렌더링
+// 목록 렌더링 (수정됨: 타입 정보 추가)
+function renderChunjiList() {
+    const container = document.getElementById('chunji-list-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!chunjiData || chunjiData.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">데이터가 없습니다.</div>';
+        return;
+    }
+
+    chunjiData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'chunji-item';
+        div.onclick = () => loadChunjiDetail(item, index);
+        
+        // ▼▼▼ [수정] 제목과 타입(type)을 감싸는 래퍼 추가 ▼▼▼
+        div.innerHTML = `
+            <div class="chunji-text-group">
+                <div class="chunji-title">${item.title}</div>
+                <div class="chunji-type">${item.type || '분류 없음'}</div>
+            </div>
+            <div class="arrow-icon">›</div>
+        `;
+        
+        container.appendChild(div);
+    });
+}
 
 // =========================================
 // [최종 완료] 천지록(Chunji) 기능 (페이징 + 필터 포함)
@@ -2923,58 +3141,3 @@ function resetComboSlots() {
 function addComboStep() { openBuilderModal('combo', currentBuild.combo.length); }
 function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splice(idx, 1); renderComboSlots(); }
 
-/* =========================================
-   [보스 데이터 처리 함수]
-   ========================================= */
-
-// 보스 목록 그리기 함수
-function renderBossList(containerId, filterType = 'all', limit = 0) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    if (globalBossData.length === 0) {
-        // 데이터가 아직 없거나 로딩 중일 때
-        // (loadData에서 불러오는 중이라면 잠시 후 그려집니다)
-        if (!container.innerHTML) container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
-        return;
-    }
-
-    container.innerHTML = ''; 
-
-    // 필터링
-    let targets = globalBossData;
-    if (filterType !== 'all') {
-        targets = targets.filter(boss => boss.type === filterType);
-    }
-
-    // 개수 제한
-    if (limit > 0) {
-        targets = targets.slice(0, limit);
-    }
-
-    if (targets.length === 0) {
-        container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">해당하는 보스가 없습니다.</div>';
-        return;
-    }
-
-    // HTML 생성
-    let html = '';
-    targets.forEach(boss => {
-        const badgeClass = boss.type === 'heroic' ? 'red' : '';
-        const badgeName = boss.type === 'heroic' ? '협경' : '일반';
-
-        html += `
-        <a href="${boss.link}" class="boss-card" data-type="${boss.type}" onclick="event.preventDefault(); loadContent('${boss.link}');">
-            <div class="boss-img-wrapper">
-                <img src="${boss.img}" alt="${boss.name}" class="boss-img">
-                <div class="boss-info-overlay">
-                    <span class="boss-type-badge ${badgeClass}">${badgeName}</span>
-                    <span class="boss-name">${boss.name}</span>
-                    <span class="boss-subtext">${boss.subtext}</span>
-                </div>
-            </div> 
-        </a>`;
-    });
-
-    container.innerHTML = html;
-}

@@ -97,8 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // =========================================
-// 3. 데이터 로딩 및 처리 (수정됨)
-// =========================================// script.js 파일의 loadData 함수 교체
 // [수정] 데이터 로딩 함수 (보스 데이터 로드 추가됨)
 function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -127,7 +125,7 @@ function loadData() {
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
         let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
         
-        // 보스 데이터 저장 (전역 변수)
+        // ★ 보스 데이터 전역 변수에 저장
         globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
 
         if (quests.length > 0) {
@@ -160,10 +158,11 @@ function loadData() {
         renderFullNews(globalData.news);  
         renderComboSlots(); 
 
-        // ★ [추가] 현재 페이지에 보스 목록 영역이 있다면 그리기
+        // ★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
         if (document.getElementById('bossGrid')) {
             renderBossList('bossGrid', 'all'); 
         }
+        // 홈 화면에 보스 섹션이 있다면 (예: id="home-boss-list")
         if (document.getElementById('home-boss-list')) {
             renderBossList('home-boss-list', 'heroic', 2);
         }
@@ -3141,3 +3140,60 @@ function resetComboSlots() {
 function addComboStep() { openBuilderModal('combo', currentBuild.combo.length); }
 function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splice(idx, 1); renderComboSlots(); }
 
+
+
+// 2. 보스 목록 그리기 함수
+function renderBossList(containerId, filterType = 'all', limit = 0) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // 데이터가 아직 안 불러와졌으면 로딩 중 표시
+    if (globalBossData.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
+        return;
+    }
+
+    container.innerHTML = ''; // 초기화
+
+    // 필터링
+    let targets = globalBossData;
+    if (filterType !== 'all') {
+        targets = targets.filter(boss => boss.type === filterType);
+    }
+
+    // 개수 제한 (0이면 제한 없음)
+    if (limit > 0) {
+        targets = targets.slice(0, limit);
+    }
+
+    if (targets.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">해당하는 보스가 없습니다.</div>';
+        return;
+    }
+
+    // HTML 생성
+    let html = '';
+    targets.forEach(boss => {
+        const badgeClass = boss.type === 'heroic' ? 'red' : '';
+        const badgeName = boss.type === 'heroic' ? '협경' : '일반';
+
+        html += `
+        <a href="${boss.link}" class="boss-card" onclick="event.preventDefault(); loadContent('${boss.link}');">
+            <div class="boss-img-wrapper">
+                <img src="${boss.img}" alt="${boss.name}" class="boss-img">
+                <div class="boss-info-overlay">
+                    <span class="boss-type-badge ${badgeClass}">${badgeName}</span>
+                    <span class="boss-name">${boss.name}</span>
+                    <span class="boss-subtext">${boss.subtext}</span>
+                </div>
+            </div> 
+        </a>`;
+    });
+
+    container.innerHTML = html;
+}
+
+// 3. 페이지가 로드되면 바로 데이터 가져오기 실행
+document.addEventListener("DOMContentLoaded", () => {
+    loadBossData();
+});

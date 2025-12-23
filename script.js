@@ -29,7 +29,17 @@ let currentBuild = {
     marts: new Array(8).fill(null),
     combo: new Array(12).fill(null) // [추가] 콤보 12칸
 };
-
+const KEY_MAP = {
+    'Q': { text: 'Q', color: 'key-red', desc: '무공' },
+    '~': { text: '~', color: 'key-blue', desc: '특수' },
+    'LMB': { text: 'LMB', color: 'key-gray', desc: '약공' },
+    'LMB_H': { text: 'LMB', color: 'key-gray', desc: '약공', hold: true },
+    'R': { text: 'R', color: 'key-orange', desc: '강공' },
+    'R_H': { text: 'R', color: 'key-orange', desc: '강공', hold: true },
+    'TAB': { text: 'TAB', color: 'key-teal', desc: '교체공격' },
+    'E': { text: 'E', color: 'key-purple', desc: '반격' },
+    'SCR': { text: 'SCR', color: 'key-gray', desc: '무기교체' }
+};
 
 // [지도 더미 데이터]
 const dummyMapData = [
@@ -1458,17 +1468,7 @@ function closeMartDetailSheet() {
 // 12. 빌드 상세 보기 바텀시트 기능
 // [script.js] /* [수정] 빌드 상세 바텀시트 (아이콘 클릭 시 팝업 연결) */
 // [상수 정의] 키 매핑 정보 (함수 밖에 두거나 openBuildDetailSheet 안에 둬도 됨)
-const KEY_MAP = {
-    'Q': { text: 'Q', color: 'key-red', desc: '무공' },
-    '~': { text: '~', color: 'key-blue', desc: '특수' },
-    'LMB': { text: 'LMB', color: 'key-gray', desc: '약공' },
-    'LMB_H': { text: 'LMB', color: 'key-gray', desc: '약공', hold: true },
-    'R': { text: 'R', color: 'key-orange', desc: '강공' },
-    'R_H': { text: 'R', color: 'key-orange', desc: '강공', hold: true },
-    'TAB': { text: 'TAB', color: 'key-teal', desc: '교체공격' },
-    'E': { text: 'E', color: 'key-purple', desc: '반격' },
-    'SCR': { text: 'SCR', color: 'key-gray', desc: '무기교체' }
-};
+
 
 /* [수정] 빌드 상세 바텀시트 (콤보 기능 추가) */
 /* [수정] 빌드 상세 바텀시트 (모달 연결 + 콤보 기능 통합) */

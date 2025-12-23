@@ -1,6 +1,36 @@
 [
   
   {
+    "id": 1766470240984,
+    "name": "흑살기의 음양술",
+    "type": "만사록",
+    "y": 4129,
+    "x": 484,
+    "desc": "건륭관 뒤쪽 괴상한 도사 운재 구하기",
+    "link": "https://wwm.tips/?q=143",
+    "image": "https://wwm.tips/quests/images/q143_2.jpg"
+  },
+  {
+    "id": 1766470181623,
+    "name": "첫 번째 향로",
+    "type": "만사록",
+    "y": 4156,
+    "x": 606,
+    "desc": "부의산 정상 사당에서의 만남",
+    "link": "https://wwm.tips/?q=142",
+    "image": "https://wwm.tips/quests/images/q142_2.jpg"
+  },
+  {
+    "id": 1766469856926,
+    "name": "군주를 위한 검",
+    "type": "만사록",
+    "y": 3908,
+    "x": 1010,
+    "desc": "술로 근심을 달래는 노인 성일검",
+    "link": "https://wwm.tips/?q=141",
+    "image": "https://wwm.tips/quests/images/q141_2.jpg"
+  },
+  {
     "id": 1766250770610,
     "name": "산수유 향기",
     "type": "만사록",

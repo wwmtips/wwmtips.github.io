@@ -1426,7 +1426,21 @@ function openBuildDetailSheet(build) {
 
     // 2. 화면 그리기
     let html = `<div style="border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 20px;"><p style="margin: 0; color: #999; font-size: 0.9em;">${build.description || '작성된 설명이 없습니다.'}</p></div>`;
-    
+     if (parsedData.rw || parsedData.ra) {
+        html += `<div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h4 style="margin: 0 0 10px 0; font-size: 0.95em; color: #555;">⚔️ 추천 장비</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="background: #fff; padding: 8px; border: 1px solid #eee; border-radius: 4px; font-size: 0.9em; text-align: center;">
+                    <span style="display:block; font-size:0.8em; color:#999;">무기</span>
+                    <span style="color: #333; font-weight: bold;">${parsedData.rw || '-'}</span>
+                </div>
+                <div style="background: #fff; padding: 8px; border: 1px solid #eee; border-radius: 4px; font-size: 0.9em; text-align: center;">
+                    <span style="display:block; font-size:0.8em; color:#999;">방어구</span>
+                    <span style="color: #333; font-weight: bold;">${parsedData.ra || '-'}</span>
+                </div>
+            </div>
+        </div>`;
+     }
     const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
 
     const renderSection = (typeKey, title, slots) => {

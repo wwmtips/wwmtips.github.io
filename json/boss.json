@@ -14,5 +14,21 @@
     "subtext": "몽유도인/용연",
     "img": "boss/b2.jpg",
     "link": "boss/b2.html"
+  },
+    {
+    "id": "b3",
+    "type": "heroic",
+    "name": "풍화의 무도",
+    "subtext": "용연/사자탈",
+    "img": "boss/b1.jpg",
+    "link": "boss/b1.html"
+  },
+  {
+    "id": "b4",
+    "type": "heroic",
+    "name": "적운의 파몽",
+    "subtext": "몽유도인/용연",
+    "img": "boss/b2.jpg",
+    "link": "boss/b2.html"
   }
 ]

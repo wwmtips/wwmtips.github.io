@@ -3059,7 +3059,7 @@ h3 {
         display: none; 
         
         /* 카드 형태 디자인 */
-        max-width: 420px;
+        max-width: 520px;
         width: 100%;
         position: fixed; /* 위치 고정 */
         left: 50%;

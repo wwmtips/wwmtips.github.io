@@ -3121,51 +3121,53 @@ h3 {
 /* =========================================
    [모바일 최종] 4열 격자 정렬 (Grid Fix)
    ========================================= */
+/* =========================================
+   [모바일 최종] 4열 자동 리사이징 (Fix)
+   ========================================= */
 
 @media screen and (max-width: 900px) {
     
-    /* 1. 가로 스크롤을 끄고 4개씩 격자로 정렬 */
+    /* 1. 그리드: 화면 폭을 4등분해서 박스를 집어넣음 */
     #build-detail-sheet .combo-viewer-grid,
     .combo-viewer-grid {
-        display: grid !important;             /* 플렉스 해제 후 그리드 적용 */
-        grid-template-columns: repeat(4, 1fr) !important; /* 무조건 4열 */
-        flex-wrap: wrap !important;           /* 줄바꿈 허용 */
-        overflow-x: hidden !important;        /* 가로 스크롤 차단 */
-        
-        width: 100% !important;
+        display: grid !important;
+        /* 1fr 4개는 화면을 정확히 4등분하라는 뜻입니다 */
+        grid-template-columns: repeat(4, 1fr) !important; 
+        gap: 8px !important;                 /* 박스 사이 간격 좁힘 */
         padding: 15px 10px !important;
-        gap: 8px !important;                 /* 모바일은 좁으므로 간격 축소 */
+        width: 100% !important;
         box-sizing: border-box !important;
+        overflow-x: hidden !important;        /* 옆으로 삐져나오지 않게 함 */
     }
 
-    /* 2. 아이템 박스 크기 자동 조절 */
+    /* 2. 아이템 박스: 너비를 고정하지 않고 부모(그리드) 칸에 맞춤 */
     #build-detail-sheet .combo-item-box,
     .combo-item-box {
         display: flex !important;
-        flex: unset !important;               /* 고정 너비 해제 */
-        width: 100% !important;               /* 그리드 칸에 맞춤 */
-        max-width: none !important;
-        min-width: 0 !important;              /* 최소 너비 제한 해제 */
+        width: 100% !important;               /* 부모 칸 너비 100% 사용 */
         height: auto !important;
-        aspect-ratio: 1 / 1 !important;       /* 정사각형 유지 */
-        margin: 0 !important;
+        aspect-ratio: 1 / 1 !important;       /* 가로세로 1:1 유지 */
+        min-width: 0 !important;              /* 중요: 너비 강제 고정 해제 */
+        flex: unset !important;               /* flex 고정 해제 */
     }
     
-    /* 3. 모바일 글씨 및 숫자 크기 최적화 */
+    /* 3. 글씨 및 숫자 크기: 박스가 작아지므로 함께 축소 */
     #build-detail-sheet .key-cap-viewer,
     .key-cap-viewer {
-        font-size: 1.0em !important;          /* 4열일 때 폰트가 크면 깨지므로 약간 축소 */
+        font-size: 0.95em !important;         /* 텍스트가 박스를 넘지 않게 조절 */
+        line-height: 1 !important;
     }
 
     .combo-step-num {
-        font-size: 0.7em !important;
-        top: 3px !important;
-        left: 5px !important;
+        font-size: 0.65em !important;         /* 숫자 크기 축소 */
+        top: 2px !important;
+        left: 4px !important;
     }
 
-    /* 4. 비결 이미지 크기 정렬 */
+    /* 4. 이미지 콤보(비결) 처리 */
     .combo-mart-img {
         width: 100% !important;
         height: 100% !important;
+        object-fit: cover !important;
     }
 }

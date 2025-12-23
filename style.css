@@ -2939,46 +2939,52 @@ h3 {
    [긴급 복구] 빌더/뷰어 통합 스타일 (Solid Flat)
    ========================================= */
 
-/* 1. 콤보 그리드 (뷰어용) */
+/* =========================================
+   [뷰어] 블랙 & 커맨드 네온 (Final Fix)
+   ========================================= */
+
+/* 1. 콤보 그리드 (전체 배경: 다크 그레이) */
 .combo-viewer-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 12px;
     padding: 20px;
-    background-color: #fff; /* 깔끔한 흰색 배경 */
-    border: 1px solid #eee;
+    background-color: #1a1a1a; /* 전체 배경 어둡게 */
+    border: 1px solid #333;
     border-radius: 12px;
     margin-top: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
 }
 
-/* 2. 아이템 박스 (뷰어용) */
+/* 2. 아이템 박스 (★배경: 완전 검정 #000) */
 .combo-item-box {
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f8f9fa;
+    background-color: #000000; /* 이미지/텍스트 모두 검은 배경 */
+    border: 1px solid #333;
     border-radius: 8px;
     position: relative;
     overflow: hidden;
-    border: 1px solid #e9ecef;
 }
 
-/* 3. 순서 번호 (왼쪽 상단) */
+/* 3. 순서 번호 (★수정: 그림자 제거, 깔끔한 흰색) */
 .combo-step-num {
     position: absolute;
-    top: 4px;
-    left: 6px;
+    top: 5px;
+    left: 7px;
     font-size: 0.8em;
     font-weight: 700;
-    color: #999;
+    color: #fff; /* 흰색 */
     font-family: sans-serif;
-    z-index: 10;
+    z-index: 20;
     pointer-events: none;
+    text-shadow: none; /* 그림자 뺌 */
+    opacity: 0.8; /* 너무 튀지 않게 살짝 투명도 */
 }
 
-/* 4. 키캡 공통 디자인 (빌더/뷰어 모두 영향 없음, 뷰어 전용) */
+/* 4. 키캡 (배경 제거, 글씨만 남김) */
 .key-cap-viewer {
     width: 100%;
     height: 100%;
@@ -2986,87 +2992,80 @@ h3 {
     align-items: center;
     justify-content: center;
     font-family: sans-serif;
-    font-weight: 700;
-    font-size: 1.1em;
-    color: #fff !important; /* 글씨는 무조건 흰색 */
-    border-radius: 6px;
+    font-weight: 900; /* 글씨 매우 두껍게 */
+    font-size: 1.5em; /* 글씨 크기 확대 */
+    background-color: transparent !important; /* 배경 투명 */
+    border: none !important;
     box-shadow: none !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* 5. ★★★ [핵심 복구] 공통 컬러 팔레트 ★★★ 
-   (여기를 background-color로 되돌려야 빌더가 안 깨집니다!) */
+/* 5. [핵심] 커맨드 컬러 + 네온 그림자 효과 (여기로 그림자 이동) */
 
-/* Q (무공) - 코랄 레드 */
-.key-red { background-color: #EF5350 !important; color: #fff !important; border: none !important; }
+/* Q (빨강) */
+.key-red { 
+    color: #FF5252 !important; 
+    text-shadow: 0 0 15px rgba(255, 82, 82, 0.9); /* 붉은 빛 */
+}
 
-/* ~ (특수) - 스카이 블루 */
-.key-blue { background-color: #42A5F5 !important; color: #fff !important; border: none !important; }
+/* ~ (파랑) */
+.key-blue { 
+    color: #448AFF !important; 
+    text-shadow: 0 0 15px rgba(68, 138, 255, 0.9); /* 파란 빛 */
+}
 
-/* LMB (약공) - 그래스 그린 */
-.key-gray { background-color: #66BB6A !important; color: #fff !important; border: none !important; }
+/* LMB (초록) */
+.key-gray { 
+    color: #00E676 !important; 
+    text-shadow: 0 0 15px rgba(0, 230, 118, 0.9); /* 초록 빛 */
+}
 
-/* R (강공) - 웜 오렌지 */
-.key-orange { background-color: #FFA726 !important; color: #fff !important; border: none !important; }
+/* R (주황/골드) */
+.key-orange { 
+    color: #FFAB00 !important; 
+    text-shadow: 0 0 15px rgba(255, 171, 0, 0.9); /* 황금 빛 */
+}
 
-/* TAB (교체) - 틸/청록 */
-.key-teal { background-color: #26C6DA !important; color: #fff !important; border: none !important; }
+/* TAB (청록) */
+.key-teal { 
+    color: #00E5FF !important; 
+    text-shadow: 0 0 15px rgba(0, 229, 255, 0.9); /* 청록 빛 */
+}
 
-/* E (반격) - 블루 그레이 */
-.key-purple { background-color: #78909C !important; color: #fff !important; border: none !important; }
+/* E (보라) */
+.key-purple { 
+    color: #E040FB !important; 
+    text-shadow: 0 0 15px rgba(224, 64, 251, 0.9); /* 보라 빛 */
+}
 
-/* SCR (무기교체) - 진한 회색 */
-.key-gray.scr { background-color: #546E7A !important; }
+/* SCR (회색) */
+.key-gray.scr { 
+    color: #B0BEC5 !important; 
+    text-shadow: none; 
+}
 
 
-/* 6. HOLD (꾹 누르기) */
+/* 6. 글씨가 긴 경우 (사이즈 조절) */
+.key-cap-viewer:not(.key-red):not(.key-orange):not(.key-blue) {
+    font-size: 1.1em; 
+}
+
+/* 7. HOLD (꾹 누르기) */
 .key-cap-viewer.hold::after {
     content: 'HOLD';
     position: absolute;
-    bottom: 4px;
-    font-size: 0.5em;
+    bottom: 5px;
+    font-size: 0.3em;
     font-weight: bold;
-    background: rgba(0,0,0,0.2);
-    padding: 1px 4px;
-    border-radius: 3px;
     color: #fff;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    text-shadow: none; /* 작은 글씨는 그림자 없이 선명하게 */
 }
 
-/* 7. 비결 이미지 */
+/* 8. 비결 이미지 (배경이 검정이므로 자연스럽게 어울림) */
 .combo-mart-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 6px;
-}
-
-/* =========================================
-   [최종 수정] 순서 번호 (배경 없음 + 그림자)
-   ========================================= */
-
-.combo-step-num {
-    position: absolute;
-    top: 3px;
-    left: 7px;
-    
-    /* 1. 배경 제거 (투명) */
-    background: none;
-    border: none;
-    box-shadow: none;
-    width: auto;
-    height: auto;
-    
-    /* 2. 글자 스타일 (흰색 + 굵게) */
-    color: #ffffff; 
-    font-size: 1.0em; /* 크기 적당히 */
-    font-weight: 900; /* 아주 두껍게 */
-    font-family: sans-serif;
-    
-    /* 3. ★핵심: 진한 그림자로 가독성 확보 */
-    text-shadow: 
-        0 1px 3px rgba(0,0,0, 0.9),   /* 진한 그림자 */
-        0 0 2px rgba(0,0,0, 0.5);     /* 번짐 효과로 배경 분리 */
-        
-    z-index: 20;
-    pointer-events: none;
+    /* 테두리나 그림자 없이 깔끔하게 */
 }

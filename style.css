@@ -3011,97 +3011,99 @@ h3 {
 
 
 /* =========================================
-   [보스 목록] 지역 정보(Map) 스타일
+   [보스 목록] 지역 정보(Map) 스타일 복사 적용
    ========================================= */
 
-/* 1. 그리드 레이아웃 (모바일 2열, PC 3~4열) */
+/* 1. 그리드 (지도와 동일하게: 모바일 2개 / PC 4개) */
+#home-boss-list, 
 .boss-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 기본 2개씩 */
-    gap: 15px;
-    padding: 10px 5px;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 12px; /* 간격도 지도와 비슷하게 */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
+    #home-boss-list, 
     .boss-grid {
-        grid-template-columns: repeat(3, 1fr); /* 태블릿 3개 */
-    }
-}
-@media (min-width: 1024px) {
-    .boss-grid {
-        grid-template-columns: repeat(4, 1fr); /* PC 4개 */
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
-/* 2. 카드 전체 틀 */
-.boss-card-map-style {
+/* 2. 카드 본체 (지도 카드 스타일 복사) */
+.boss-card {
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 부드러운 그림자 */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-decoration: none; /* 링크 밑줄 제거 */
     border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    height: 100%;
 }
 
-.boss-card-map-style:active {
-    transform: scale(0.98);
+.boss-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* 3. 상단 이미지 영역 (Hero BG) */
+/* 3. 상단 이미지 (★핵심: 지도처럼 높이 고정) */
 .boss-hero-bg {
     width: 100%;
-    padding-top: 65%; /* 16:9 비율보다 약간 높게 (카드 비율 맞춤) */
+    height: 100px; /* 지도가 100~120px 정도입니다 */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    background-color: #f0f0f0; /* 이미지 로딩 전 배경색 */
+    background-color: #f5f5f5;
 }
 
-/* 4. 배지 (협경/일반) - 이미지 좌측 상단 */
-.boss-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 4px 8px;
-    font-size: 0.75em;
-    font-weight: bold;
-    color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    z-index: 2;
-}
-.boss-badge.red { background-color: #d32f2f; } /* 협경 - 빨강 */
-.boss-badge.gray { background-color: #757575; } /* 일반 - 회색 */
-
-/* 5. 하단 텍스트 박스 */
-.boss-content-box {
-    padding: 15px;
+/* 4. 하단 설명 (지도 텍스트 스타일 복사) */
+.boss-content {
+    padding: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: #fff;
+    flex-grow: 1;
 }
 
-/* 보스 이름 */
 .boss-title {
-    font-size: 1.05em;
+    font-size: 0.95em;
     font-weight: bold;
     color: #333;
-    margin-bottom: 5px;
-    font-family: 'Noto Serif KR', serif; /* 명조체 느낌 */
+    margin-bottom: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-family: 'Noto Serif KR', serif;
 }
 
-/* 보스 설명 (지역/드랍템) */
 .boss-desc {
-    font-size: 0.85em;
+    font-size: 0.8em;
     color: #888;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.4;
 }
+
+/* 5. 배지 (추가 옵션) */
+.boss-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    padding: 2px 6px;
+    font-size: 0.65em;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 3px;
+    z-index: 2;
+}
+.boss-badge.red { background-color: rgba(211, 47, 47, 0.9); }
+.boss-badge.gray { background-color: rgba(117, 117, 117, 0.9); }

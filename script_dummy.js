@@ -3142,14 +3142,15 @@ function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splic
 
 
 /* =========================================
-   [보스 목록 그리기] 지역 정보(Map) 스타일 적용
+/* =========================================
+   [보스 목록] 지역 정보(Map)와 동일한 구조로 변경
    ========================================= */
 function renderBossList(containerId, filterType = 'all', limit = 0) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     if (globalBossData.length === 0) {
-        if(!container.innerHTML) container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
+        if(!container.innerHTML.trim()) container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
         return;
     }
 
@@ -3160,10 +3161,7 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
     if (filterType !== 'all') {
         targets = targets.filter(boss => boss.type === filterType);
     }
-
-    if (limit > 0) {
-        targets = targets.slice(0, limit);
-    }
+    if (limit > 0) targets = targets.slice(0, limit);
 
     if (targets.length === 0) {
         container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">해당하는 보스가 없습니다.</div>';
@@ -3174,17 +3172,15 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
     targets.forEach(boss => {
         const badgeClass = boss.type === 'heroic' ? 'red' : 'gray';
         const badgeName = boss.type === 'heroic' ? '협경' : '일반';
-        
-        // 이미지 경로 처리 (없으면 로고)
         const bgImage = boss.img ? boss.img : 'images/logo.png';
 
+        // ★ 핵심: 지도 카드(map-card)와 똑같은 클래스명 패턴 사용 (.boss-card)
         html += `
-        <a href="${boss.link}" class="boss-card-map-style" onclick="event.preventDefault(); loadContent('${boss.link}');">
+        <a href="${boss.link}" class="boss-card" onclick="event.preventDefault(); loadContent('${boss.link}');">
             <div class="boss-hero-bg" style="background-image: url('${bgImage}');">
                 <span class="boss-badge ${badgeClass}">${badgeName}</span>
             </div>
-            
-            <div class="boss-content-box">
+            <div class="boss-content">
                 <div class="boss-title">${boss.name}</div>
                 <div class="boss-desc">${boss.subtext}</div>
             </div>

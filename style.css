@@ -3052,31 +3052,43 @@ h3 {
 /* =========================================
    [반응형] 큰 화면(PC)에서 바텀시트 크기 제한
    ========================================= */
+/* =========================================
+   [반응형] PC 화면 바텀시트 (안 닫힘 해결)
+   ========================================= */
 
 @media (min-width: 768px) {
+    /* 1. 기본 상태 (숨겨져 있어야 함) */
     #build-detail-sheet {
-        /* ★중요: 여기서 display: flex를 삭제하여 JS가 제어하게 둠 */
-        
-        /* 1. 크기 및 위치 제한 */
-        max-width: 420px; /* 너무 넓지 않게 카드 크기 조절 */
+        max-width: 420px;
         width: 100%;
         
-        /* 2. 화면 정중앙 배치 */
+        /* 위치 잡기 */
         left: 50%;
-        transform: translateX(-50%); /* 정확히 가운데 정렬 */
-        bottom: 30px; /* 바닥에서 살짝 띄움 */
+        bottom: 30px;
         
-        /* 3. 디자인 디테일 */
-        border-radius: 20px !important; /* 전체 둥글게 */
-        box-shadow: 0 10px 40px rgba(0,0,0,0.5); /* 그림자 진하게 */
+        /* ★핵심 수정 1: 가로 중앙(-50%) 유지하면서, 세로로는 화면 밖(120%)으로 내려놓기 */
+        transform: translate(-50%, 120%); 
         
-        /* 4. 내용이 길면 스크롤 */
+        /* 디자인 */
+        border-radius: 20px !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         max-height: 85vh;
-        overflow-y: auto; 
-        scrollbar-width: thin; /* 스크롤바 얇게 */
+        overflow-y: auto;
+        scrollbar-width: thin;
+        
+        /* 애니메이션 */
+        transition: transform 0.3s ease-out;
+        z-index: 10001; /* 오버레이보다 위에 */
     }
 
-    /* 5. 닫기 버튼 위치 조정 (PC에선 좀 더 잘 보이게) */
+    /* 2. 활성화 상태 (나타나야 함) */
+    /* JS가 'active' 클래스를 붙이면 이 코드가 작동합니다 */
+    #build-detail-sheet.active {
+        /* ★핵심 수정 2: 가로 중앙(-50%) 유지하면서, 세로 위치를 원래대로(0) 올림 */
+        transform: translate(-50%, 0) !important;
+    }
+
+    /* 헤더 둥글기 */
     .sheet-header {
         border-radius: 20px 20px 0 0;
     }

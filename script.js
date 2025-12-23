@@ -1126,21 +1126,40 @@ function closeBuilderModal(e) {
     }
 }
 // 1. 링크 생성 함수 (닉네임 ID 변경 적용)
+// [수정] 링크 생성 함수 (추천 장비 정보 포함)
 function generateBuildUrl() {
-    // [수정] 닉네임 가져오는 ID 변경 (creator-name -> build-creator)
+    // 1. 입력된 정보 가져오기 (ID 확인: build-creator, rec-weapons, rec-armor)
     const creatorName = document.getElementById('build-creator').value.trim();
-    
-    const buildData = { w: currentBuild.weapons, h: currentBuild.hearts, m: currentBuild.marts, c: creatorName };
+    const recWeapons = document.getElementById('rec-weapons').value.trim();
+    const recArmor = document.getElementById('rec-armor').value.trim();
+
+    // 2. 데이터 객체 생성 (rw: 무기, ra: 방어구 추가)
+    const buildData = { 
+        w: currentBuild.weapons, 
+        h: currentBuild.hearts, 
+        m: currentBuild.marts, 
+        c: creatorName,
+        rw: recWeapons, // [추가] 추천 무기
+        ra: recArmor    // [추가] 추천 방어구
+    };
+
+    // 3. 인코딩 및 URL 생성
     const encodedString = btoa(unescape(encodeURIComponent(JSON.stringify(buildData))));
     const origin = window.location.origin;
     let basePath = window.location.pathname.replace('index.html', ''); 
     if (!basePath.endsWith('/')) basePath += '/';
+    
     const viewerUrl = `${origin}${basePath}viewer.html?b=${encodedString}`;
+    
+    // 4. 결과창에 넣기
     const urlInput = document.getElementById('result-url');
     urlInput.value = viewerUrl;
     urlInput.style.display = 'block';
-    navigator.clipboard.writeText(viewerUrl).then(() => alert("빌드 코드가 생성되었습니다!")).catch(() => alert("주소가 생성되었습니다."));
+    
+    // (선택) 클립보드 복사 알림은 shareBuildToCloud에서 처리하므로 여기선 생략 가능
+    // navigator.clipboard.writeText(viewerUrl)... 
 }
+
 
 function loadViewer() {
     if (!builderData) {

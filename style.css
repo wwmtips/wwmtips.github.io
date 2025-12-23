@@ -3112,42 +3112,52 @@ h3 {
    [모바일 반응형] 가로 스크롤 (Horizontal Scroll)
    ========================================= */
 
+/* =========================================
+   [모바일 강력 패치] 무조건 한 줄 가로 스크롤
+   ========================================= */
+
 @media screen and (max-width: 768px) {
-    /* 1. 그리드를 플렉스(일렬)로 변경 */
     .combo-viewer-grid {
-        display: flex;             /* 한 줄로 나열 */
-        flex-wrap: nowrap;         /* 줄바꿈 금지 */
-        overflow-x: auto;          /* 가로 스크롤 허용 */
-        justify-content: flex-start; /* 왼쪽부터 정렬 */
-        gap: 10px;                 /* 간격 */
-        padding: 15px;             /* 터치 여백 */
+        /* 1. 그리드(4칸) 설정을 강제로 끕니다 */
+        display: flex !important;             
+        grid-template-columns: none !important; 
+        
+        /* 2. 한 줄로만 배치하고, 넘치면 스크롤 */
+        flex-wrap: nowrap !important;         
+        overflow-x: auto !important;          
+        justify-content: flex-start !important; 
+        
+        /* 3. 간격 및 여백 */
+        gap: 12px;                 
+        padding: 15px 10px;             
+        width: 100%;
+        box-sizing: border-box;
         
         /* 스크롤바 숨기기 (깔끔하게) */
-        -ms-overflow-style: none;  /* IE, Edge */
-        scrollbar-width: none;     /* Firefox */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
     
     .combo-viewer-grid::-webkit-scrollbar {
-        display: none;             /* Chrome, Safari, Opera */
+        display: none;
     }
 
-    /* 2. 아이템 박스 크기 고정 */
+    /* 4. 아이템 박스 크기 고정 (찌그러짐 방지) */
     .combo-item-box {
-        /* 찌그러지지 않게 고정 크기 부여 */
-        flex: 0 0 auto; 
-        width: 70px;  /* 모바일에서 적당한 크기 */
-        height: 70px; /* 정사각형 유지 */
+        flex: 0 0 70px !important; /* 크기 고정 */
+        width: 70px !important;
+        height: 70px !important;
+        min-width: 70px !important; /* 최소 너비 보장 */
     }
 
-    /* 3. 모바일 글씨 크기 미세 조정 */
+    /* 5. 모바일에서 글씨 크기 살짝 조정 */
     .key-cap-viewer {
-        font-size: 1.2em; /* 약간 줄임 */
+        font-size: 1.2em !important;
     }
     
-    /* 4. 모바일 순서 번호 크기 조정 */
     .combo-step-num {
-        font-size: 0.7em;
-        top: 3px;
-        left: 5px;
+        font-size: 0.7em !important;
+        top: 3px !important;
+        left: 5px !important;
     }
 }

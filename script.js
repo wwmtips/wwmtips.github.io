@@ -41,7 +41,7 @@ const KEY_MAP = {
     'TAB': { text: 'TAB', color: 'key-teal', desc: '교체공격' },
     'E': { text: 'E', color: 'key-purple', desc: '반격' },
     'SCR': { text: 'SCR', color: 'key-gray', desc: '무기교체' },
-    'G': { text: 'SCR', color: 'key-yellow', desc: '막기' }
+    'G': { text: 'G', color: 'key-yellow', desc: '막기' }
 };
 
 // [지도 더미 데이터]

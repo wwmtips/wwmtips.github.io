@@ -3143,7 +3143,7 @@ function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splic
 
 /* =========================================
 /* =========================================
-   [보스 목록] 지역 정보(Map) HTML 구조 그대로 사용
+   [보스 목록] 클릭 시 탭 이동 기능 추가 (enterBossDetail)
    ========================================= */
 function renderBossList(containerId, filterType = 'all', limit = 0) {
     const container = document.getElementById(containerId);
@@ -3171,12 +3171,12 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
     let html = '';
     targets.forEach(boss => {
         const badgeName = boss.type === 'heroic' ? '협경' : '일반';
-        const badgeColor = boss.type === 'heroic' ? '#d32f2f' : '#757575'; // 빨강 / 회색
+        const badgeColor = boss.type === 'heroic' ? '#d32f2f' : '#757575'; 
         const bgImage = boss.img ? boss.img : 'images/logo.png';
 
-        // ★ 핵심: 사용자가 보여준 map-card 구조 그대로 사용 (+배지 추가)
+        // ★ 핵심 변경: 클릭 시 enterBossDetail 함수 실행
         html += `
-        <div class="map-card" onclick="loadContent('${boss.link}')" style="cursor: pointer;">
+        <div class="map-card" onclick="enterBossDetail('${boss.link}')" style="cursor: pointer;">
             <div class="map-hero-bg" style="background-image: url('${bgImage}'); position: relative;">
                 <span style="position: absolute; top: 8px; left: 8px; padding: 2px 6px; font-size: 0.7em; font-weight: bold; color: #fff; background-color: ${badgeColor}; border-radius: 3px; z-index: 2; box-shadow: 0 1px 2px rgba(0,0,0,0.3);">
                     ${badgeName}
@@ -3190,4 +3190,40 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
     });
 
     container.innerHTML = html;
+}
+
+/* [추가] 홈 화면에서 보스 클릭 시 -> 가이드 탭으로 이동하며 로드 */
+function enterBossDetail(link) {
+    // 1. 모든 뷰 숨기고 가이드 뷰만 보이기 (강제 전환)
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
+    views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+    
+    const guideView = document.getElementById('view-guide');
+    if(guideView) guideView.style.display = 'block';
+    
+    // 네비게이션 활성화
+    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
+    navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
+    const navCode = document.getElementById('nav-code');
+    if(navCode) navCode.classList.add('active');
+
+    // 2. URL 파라미터 업데이트 (새로고침 대비)
+    const parts = link.split('/');
+    const id = parts[parts.length - 1].replace('.html', ''); // 'b1'
+    
+    const url = new URL(window.location);
+    url.searchParams.set('tab', 'guide');
+    url.searchParams.set('g', 'boss');
+    url.searchParams.set('r', id);
+    window.history.pushState(null, '', url);
+
+    // 3. 로딩 처리
+    // 가이드 프레임(guide.html)이 이미 로드되어 있다면 -> 바로 콘텐츠 교체
+    if (isGuideLoaded) {
+        loadContent(link);
+    } 
+    // 로드 안 되어 있다면 -> loadGuideView 실행 (위에서 설정한 URL 파라미터를 보고 알아서 로드함)
+    else {
+        loadGuideView();
+    }
 }

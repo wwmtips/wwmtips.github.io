@@ -2938,38 +2938,38 @@ h3 {
 /* =========================================
    [긴급 복구] 빌더/뷰어 통합 스타일 (Solid Flat)
    ========================================= */
-
 /* =========================================
-   [뷰어] 블랙 & 커맨드 네온 (Final Fix)
+   [뷰어] 최종 수정 (컬러박스 + 글자 그림자 + 이미지 배경 검정)
    ========================================= */
 
-/* 1. 콤보 그리드 (전체 배경: 다크 그레이) */
+/* 1. 콤보 그리드 (전체 틀: 다크 그레이) */
 .combo-viewer-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
     padding: 20px;
-    background-color: #1a1a1a; /* 전체 배경 어둡게 */
+    background-color: #1a1a1a; /* 전체 배경은 어둡게 유지 */
     border: 1px solid #333;
     border-radius: 12px;
     margin-top: 15px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
-/* 2. 아이템 박스 (★배경: 완전 검정 #000) */
+/* 2. 아이템 박스 (기본 배경: 검은색) */
+/* -> 비결(이미지)은 이 검은 배경이 보이고, 키는 컬러박스가 덮습니다. */
 .combo-item-box {
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #000000; /* 이미지/텍스트 모두 검은 배경 */
+    background-color: #000000; /* ★ 핵심: 이미지는 여기서 검은 배경 */
     border: 1px solid #333;
     border-radius: 8px;
     position: relative;
     overflow: hidden;
 }
 
-/* 3. 순서 번호 (★수정: 그림자 제거, 깔끔한 흰색) */
+/* 3. 순서 번호 (흰색, 그림자 제거) */
 .combo-step-num {
     position: absolute;
     top: 5px;
@@ -2980,11 +2980,11 @@ h3 {
     font-family: sans-serif;
     z-index: 20;
     pointer-events: none;
-    text-shadow: none; /* 그림자 뺌 */
-    opacity: 0.8; /* 너무 튀지 않게 살짝 투명도 */
+    text-shadow: none !important; /* ★ 그림자 뺐음 */
+    opacity: 0.9;
 }
 
-/* 4. 키캡 (배경 제거, 글씨만 남김) */
+/* 4. 키캡 공통 (꽉 찬 컬러 박스 + 글씨 그림자) */
 .key-cap-viewer {
     width: 100%;
     height: 100%;
@@ -2992,80 +2992,60 @@ h3 {
     align-items: center;
     justify-content: center;
     font-family: sans-serif;
-    font-weight: 900; /* 글씨 매우 두껍게 */
-    font-size: 1.5em; /* 글씨 크기 확대 */
-    background-color: transparent !important; /* 배경 투명 */
-    border: none !important;
+    font-weight: 800; /* 두껍게 */
+    font-size: 1.3em;
+    color: #fff !important; /* 글씨 흰색 */
+    border-radius: 6px;
+    
+    /* ★ 핵심: 박스 그림자 없고, 글씨에만 그림자 */
     box-shadow: none !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important; 
 }
 
-/* 5. [핵심] 커맨드 컬러 + 네온 그림자 효과 (여기로 그림자 이동) */
+/* 5. [컬러] 원래 색상 유지 (Solid Color) */
+/* 키가 들어가면 이 색상이 검은 배경을 덮어씁니다 */
 
 /* Q (빨강) */
-.key-red { 
-    color: #FF5252 !important; 
-    text-shadow: 0 0 15px rgba(255, 82, 82, 0.9); /* 붉은 빛 */
-}
+.key-red { background-color: #EF5350 !important; }
 
 /* ~ (파랑) */
-.key-blue { 
-    color: #448AFF !important; 
-    text-shadow: 0 0 15px rgba(68, 138, 255, 0.9); /* 파란 빛 */
-}
+.key-blue { background-color: #42A5F5 !important; }
 
 /* LMB (초록) */
-.key-gray { 
-    color: #00E676 !important; 
-    text-shadow: 0 0 15px rgba(0, 230, 118, 0.9); /* 초록 빛 */
-}
+.key-gray { background-color: #66BB6A !important; }
 
-/* R (주황/골드) */
-.key-orange { 
-    color: #FFAB00 !important; 
-    text-shadow: 0 0 15px rgba(255, 171, 0, 0.9); /* 황금 빛 */
-}
+/* R (주황) */
+.key-orange { background-color: #FFA726 !important; }
 
 /* TAB (청록) */
-.key-teal { 
-    color: #00E5FF !important; 
-    text-shadow: 0 0 15px rgba(0, 229, 255, 0.9); /* 청록 빛 */
-}
+.key-teal { background-color: #26C6DA !important; }
 
-/* E (보라) */
-.key-purple { 
-    color: #E040FB !important; 
-    text-shadow: 0 0 15px rgba(224, 64, 251, 0.9); /* 보라 빛 */
-}
+/* E (보라-블루그레이) */
+.key-purple { background-color: #78909C !important; }
 
 /* SCR (회색) */
-.key-gray.scr { 
-    color: #B0BEC5 !important; 
-    text-shadow: none; 
+.key-gray.scr { background-color: #546E7A !important; }
+
+
+/* 6. HOLD (꾹 누르기) */
+.key-cap-viewer.hold {
+    background-color: #AB47BC !important; /* 보라색 */
 }
-
-
-/* 6. 글씨가 긴 경우 (사이즈 조절) */
-.key-cap-viewer:not(.key-red):not(.key-orange):not(.key-blue) {
-    font-size: 1.1em; 
-}
-
-/* 7. HOLD (꾹 누르기) */
 .key-cap-viewer.hold::after {
     content: 'HOLD';
     position: absolute;
-    bottom: 5px;
-    font-size: 0.3em;
+    bottom: 3px;
+    font-size: 0.4em;
     font-weight: bold;
     color: #fff;
-    opacity: 0.7;
-    letter-spacing: 1px;
-    text-shadow: none; /* 작은 글씨는 그림자 없이 선명하게 */
+    opacity: 0.8;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
 }
 
-/* 8. 비결 이미지 (배경이 검정이므로 자연스럽게 어울림) */
+/* 7. 비결 이미지 */
 .combo-mart-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* 테두리나 그림자 없이 깔끔하게 */
+    /* 배경이 검정이므로 이미지만 둥둥 떠있는 느낌 */
 }

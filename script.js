@@ -19,7 +19,7 @@ let globalData = { items: [], quiz: [], quests: [], news: [], cnews: [], builds:
 let builderData = null; 
 let chunjiData = []; // 천지록 데이터 전역 변수
 let currentChunjiData = [];
-
+let globalBossData = []; // 데이터를 담아둘 전역 변수
 
 let currentSlot = { type: '', index: 0 };
 // [수정] 빌드 상태 관리 객체 (combo 배열 추가)
@@ -3135,3 +3135,83 @@ function resetComboSlots() {
 /* [추가] 콤보 추가/삭제 함수 (없으면 추가하세요) */
 function addComboStep() { openBuilderModal('combo', currentBuild.combo.length); }
 function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splice(idx, 1); renderComboSlots(); }
+
+
+
+//보스
+// 1. 보스 데이터 불러오기 (페이지 로드 시 자동 실행)
+async function loadBossData() {
+    try {
+        const response = await fetch('boss.json'); // boss.json 파일 읽기
+        globalBossData = await response.json();    // 변수에 저장
+        
+        // 데이터 로드 후, 현재 페이지에 보스 목록이 필요하면 즉시 그림
+        if (document.getElementById('bossGrid')) {
+            // boss.html인 경우 (필터링 로직은 HTML 내 select에서 처리)
+            renderBossList('bossGrid', 'all'); 
+        }
+        if (document.getElementById('home-boss-list')) {
+            // index.html인 경우 (협경 보스 2개만)
+            renderBossList('home-boss-list', 'heroic', 2);
+        }
+        
+    } catch (error) {
+        console.error('보스 데이터를 불러오는 중 오류 발생:', error);
+    }
+}
+
+// 2. 보스 목록 그리기 함수
+function renderBossList(containerId, filterType = 'all', limit = 0) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // 데이터가 아직 안 불러와졌으면 로딩 중 표시
+    if (globalBossData.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
+        return;
+    }
+
+    container.innerHTML = ''; // 초기화
+
+    // 필터링
+    let targets = globalBossData;
+    if (filterType !== 'all') {
+        targets = targets.filter(boss => boss.type === filterType);
+    }
+
+    // 개수 제한 (0이면 제한 없음)
+    if (limit > 0) {
+        targets = targets.slice(0, limit);
+    }
+
+    if (targets.length === 0) {
+        container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">해당하는 보스가 없습니다.</div>';
+        return;
+    }
+
+    // HTML 생성
+    let html = '';
+    targets.forEach(boss => {
+        const badgeClass = boss.type === 'heroic' ? 'red' : '';
+        const badgeName = boss.type === 'heroic' ? '협경' : '일반';
+
+        html += `
+        <a href="${boss.link}" class="boss-card" onclick="event.preventDefault(); loadContent('${boss.link}');">
+            <div class="boss-img-wrapper">
+                <img src="${boss.img}" alt="${boss.name}" class="boss-img">
+                <div class="boss-info-overlay">
+                    <span class="boss-type-badge ${badgeClass}">${badgeName}</span>
+                    <span class="boss-name">${boss.name}</span>
+                    <span class="boss-subtext">${boss.subtext}</span>
+                </div>
+            </div> 
+        </a>`;
+    });
+
+    container.innerHTML = html;
+}
+
+// 3. 페이지가 로드되면 바로 데이터 가져오기 실행
+document.addEventListener("DOMContentLoaded", () => {
+    loadBossData();
+});

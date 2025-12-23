@@ -6,176 +6,133 @@
     <title>연운 빌드 뷰어</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css"> 
-    <link rel="apple-touch-icon" sizes="57x57" href="/fav/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/fav/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/fav/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/fav/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/fav/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/fav/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/fav/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/fav/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/fav/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/fav/android-icon-192x192.png">
+    
     <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/fav/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-        /* 뷰어 전용 스타일 */
+        /* 뷰어 전용 스타일 추가/수정 */
         body.viewer-mode {
-            background-color: var(--wuxia-bg-deep, #f4f4f2);
+            background-color: #f4f4f2;
             font-family: 'Noto Serif KR', serif;
             padding: 20px;
             text-align: center;
         }
-
         .viewer-container {
             max-width: 600px;
             margin: 0 auto;
             background-color: #fff;
-            padding: 40px 20px; /* 상단 여백 조금 더 줌 */
+            padding: 40px 20px;
             border-radius: 8px;
             border: 1px solid #ddd;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* [수정] 메인 타이틀 (제작자 이름의 빌드) */
+        /* 1. 메인 타이틀 (빌드 이름) */
         .viewer-title {
-            color: var(--wuxia-text-main, #1a1a1a); /* 이름은 진하게 */
-            font-size: 2.2em; /* 크기 키움 */
-            margin: 0 0 10px 0;
+            color: #1a1a1a;
+            font-size: 2.0em;
+            margin: 0 0 5px 0;
             font-weight: bold;
             line-height: 1.2;
+            word-break: keep-all;
         }
 
-        /* [수정] 서브 타이틀 (추천 무공 조합 - 고정) */
+        /* 2. 작성자 정보 */
+        .viewer-creator {
+            font-size: 0.95em;
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        /* 3. 추천 장비 박스 */
+        .viewer-rec-box {
+            display: flex;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 30px;
+            gap: 15px;
+            text-align: left;
+        }
+        .rec-item {
+            flex: 1;
+        }
+        .rec-label {
+            display: block;
+            font-size: 0.8em;
+            color: #999;
+            margin-bottom: 3px;
+        }
+        .rec-value {
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 서브 타이틀 (추천 무공 조합) */
         .viewer-subtitle {
             display: inline-block;
-            color: var(--wuxia-accent-gold, #a08040); /* 금색 포인트 */
+            color: #a08040;
             font-size: 1.1em;
             font-weight: bold;
             padding: 5px 20px;
             border-top: 1px solid #ddd;
             border-bottom: 1px solid #ddd;
-            margin-bottom: 40px; /* 슬롯과의 간격 */
+            margin-bottom: 30px;
         }
 
-        /* 섹션 라벨 */
+        /* 슬롯 라벨 & 그룹 (기존 유지) */
         .slot-label {
             display: block;
             text-align: left;
             font-weight: bold;
-            color: var(--wuxia-text-main, #1a1a1a);
-            margin: 25px 0 15px 0;
-            font-size: 1.1em;
-            border-left: 4px solid var(--wuxia-accent-red, #b71c1c);
+            color: #1a1a1a;
+            margin: 20px 0 10px 0;
+            font-size: 1.0em;
+            border-left: 4px solid #b71c1c;
             padding-left: 10px;
         }
-
-        /* 슬롯 그룹 */
         .slot-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
         }
-
-        /* 아이템 슬롯 */
         .item-slot {
-            width: 70px;
-            height: 70px;
+            width: 64px; height: 64px;
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            transition: transform 0.2s;
+            display: flex; align-items: center; justify-content: center;
         }
-        .item-slot:hover {
-            border-color: var(--wuxia-accent-gold, #a08040);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-        }
-
         .item-slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 6px;
-            display: none;
+            width: 100%; height: 100%; object-fit: cover; border-radius: 6px; display: none;
         }
-
-        /* 아이템 이름 */
         .slot-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 70px;
+            display: flex; flex-direction: column; align-items: center; width: 64px;
         }
         .slot-name {
-            font-size: 0.8em;
-            color: #555;
-            margin-top: 8px;
-            line-height: 1.3;
-            word-break: keep-all;
-            min-height: 2.4em;
+            font-size: 0.75em; color: #555; margin-top: 5px; line-height: 1.2; min-height: 2.4em;
         }
 
-        /* 하단 버튼 */
+        /* 푸터 버튼 */
         .viewer-footer {
-            margin-top: 50px;
+            margin-top: 40px;
             padding-top: 20px;
             border-top: 1px dashed #ddd;
+            display: flex; justify-content: center; gap: 10px;
         }
         .action-btn {
-            background-color: var(--wuxia-accent-gold, #a08040);
-            color: #fff;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-            font-family: 'Noto Serif KR', serif;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: background 0.2s;
+            background-color: #a08040; color: #fff; border: none;
+            padding: 10px 20px; font-size: 0.95em; font-weight: bold;
+            cursor: pointer; border-radius: 4px;
         }
-        .action-btn:hover {
-            background-color: #8d6e35;
-        }
-        /* [NEW] 버튼 그룹 스타일 (버튼 두 개를 나란히 배치) */
-        .viewer-footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px dashed #ddd;
-            display: flex;
-            justify-content: center;
-            gap: 15px; /* 버튼 사이 간격 */
-        }
-
-        /* [NEW] 다운로드 버튼 색상 (진한 먹색) */
-        .download-btn {
-            background-color: var(--wuxia-text-main, #1a1a1a);
-        }
-        .download-btn:hover {
-            background-color: #333;
-        }
+        .download-btn { background-color: #333; }
         
-        /* 모바일에서 버튼 세로 배치 */
         @media (max-width: 600px) {
-            .viewer-footer {
-                flex-direction: column;
-            }
-            .action-btn {
-                width: 100%;
-            }
+            .viewer-footer { flex-direction: column; }
         }
     </style>
 </head>
@@ -183,24 +140,29 @@
 
     <div class="viewer-container" id="capture-area">
         
-        <h1 class="viewer-title" id="build-main-title">
-            로딩 중...
-        </h1>
+        <h1 class="viewer-title" id="build-main-title">로딩 중...</h1>
         
+        <div class="viewer-creator" id="build-creator-info"></div>
+
+        <div class="viewer-rec-box" id="viewer-rec-container" style="display: none;">
+            <div class="rec-item">
+                <span class="rec-label">⚔️ 추천 무기</span>
+                <span class="rec-value" id="view-rec-weapon">-</span>
+            </div>
+            <div class="rec-item" style="border-left: 1px solid #eee; padding-left: 15px;">
+                <span class="rec-label">🛡️ 추천 방어구</span>
+                <span class="rec-value" id="view-rec-armor">-</span>
+            </div>
+        </div>
+
         <div class="viewer-subtitle">
-            추천 무공 조합
+            무공 및 내공 조합
         </div>
         
         <div class="slot-label">무기 및 무술</div>
         <div class="slot-group" id="weapon-slots">
-            <div class="slot-wrapper">
-                <div class="item-slot" id="v-weapons-0"><img src="" alt=""></div>
-                <div class="slot-name" id="name-v-weapons-0"></div>
-            </div>
-            <div class="slot-wrapper">
-                <div class="item-slot" id="v-weapons-1"><img src="" alt=""></div>
-                <div class="slot-name" id="name-v-weapons-1"></div>
-            </div>
+            <div class="slot-wrapper"><div class="item-slot" id="v-weapons-0"><img src="" alt=""></div><div class="slot-name" id="name-v-weapons-0"></div></div>
+            <div class="slot-wrapper"><div class="item-slot" id="v-weapons-1"><img src="" alt=""></div><div class="slot-name" id="name-v-weapons-1"></div></div>
         </div>
 
         <div class="slot-label">심법</div>

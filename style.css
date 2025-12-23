@@ -2815,6 +2815,7 @@ h3 {
 .key-red { background-color: #ef5350; }    /* Q (스킬) */
 .key-teal { background-color: #26c6da; }   /* TAB */
 .key-purple { background-color: #ab47bc; } /* E (반격) */
+.key-yellow { background-color: #f1df39; } /* E (반격) */
 
 /* 비결 아이콘 (콤보 내) */
 .combo-mart-icon {

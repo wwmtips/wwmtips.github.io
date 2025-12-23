@@ -3106,7 +3106,7 @@ h3 {
     z-index: 2;
 }
 .boss-badge.red { background-color: rgba(211, 47, 47, 0.9); }
-.boss-badge.gray { background-color: rgba(117, 117, 117, 0.9); }
+.boss-badge.gray { background-color: rgba(231, 150, 27, 0.9); }
 
 /* =========================================
    [모바일 반응형] 가로 스크롤 (Horizontal Scroll)

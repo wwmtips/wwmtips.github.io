@@ -160,7 +160,7 @@ function loadData() {
 
         // ★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
         if (document.getElementById('bossGrid')) {
-            renderBossList('bossGrid', 'all'); 
+            renderBossList('bossGrid', 'all',0); 
         }
         // 홈 화면에 보스 섹션이 있다면 (예: id="home-boss-list")
         if (document.getElementById('home-boss-list')) {

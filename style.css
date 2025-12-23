@@ -2936,110 +2936,116 @@ h3 {
 }
 
 /* =========================================
-   [뷰어] 다크 모드 & 레퍼런스 컬러 (Final)
+   [뷰어] 스케치 반영 (Outline Style)
    ========================================= */
 
-/* 1. 콤보 그리드 (배경을 어두운 다크 그레이로 변경) */
+/* 1. 콤보 그리드 (깨끗한 흰색 배경) */
 .combo-viewer-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+    gap: 12px;
     padding: 20px;
-    /* ★ 핵심: 다크 배경 적용 */
-    background-color: #1a1a1a; 
-    border: 1px solid #333;
-    border-radius: 12px;
+    background-color: #fff; /* 완전 흰색 */
+    border: 1px solid #eee;
+    border-radius: 16px;
     margin-top: 15px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5); /* 안쪽으로 깊이감 */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.03);
 }
 
-/* 2. 아이템 박스 (배경보다 살짝 밝은 톤) */
+/* 2. 아이템 박스 (투명하게, 내용물이 꽉 차게) */
 .combo-item-box {
     aspect-ratio: 1 / 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #252525; /* 슬롯 배경 */
-    border: 1px solid #333;
-    border-radius: 8px;
     position: relative;
-    overflow: hidden;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible; /* 번호가 잘리지 않게 */
 }
 
-/* 3. 순서 번호 (어두운 배경에 맞춰 밝은 회색) */
+/* 3. 순서 번호 (왼쪽 상단, 손글씨 느낌) */
 .combo-step-num {
     position: absolute;
-    top: 5px;
-    left: 8px;
-    font-size: 0.75em;
-    font-weight: 700;
-    color: #555; /* 너무 튀지 않게 */
-    font-family: sans-serif;
-    z-index: 10;
-    pointer-events: none;
+    top: -5px; /* 박스보다 살짝 위로 */
+    left: -5px; /* 박스보다 살짝 왼쪽으로 */
+    font-size: 1em;
+    font-weight: 800; /* 두껍게 */
+    color: #333; /* 진한 검정 */
+    font-family: 'Indie Flower', cursive, sans-serif; /* 손글씨체 느낌 (없으면 산세리프) */
+    z-index: 20;
+    background: #fff; /* 뒤에 선 가리기용 */
+    padding: 0 4px;
+    border-radius: 50%;
 }
 
-/* 4. 키캡 공통 (테두리/그림자 없는 매트한 플랫) */
+/* 4. 키캡 (흰색 바탕 + 컬러 테두리 + 큰 글씨) */
 .key-cap-viewer {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: sans-serif;
-    font-weight: 700;
-    font-size: 1.15em;
-    color: #fff;
-    border-radius: 6px; /* 박스 안에서 살짝 여백 */
-    box-shadow: none !important;
+    background-color: #fff;
+    border: 2px solid currentColor; /* ★핵심: 글자색을 테두리색으로 사용 */
+    border-radius: 12px; /* 둥근 모서리 */
+    font-family: sans-serif; /* 깔끔한 고딕 */
+    font-weight: 300; /* 얇은 글씨 (스케치 느낌) */
+    font-size: 2.2em; /* 아주 크게 */
+    box-sizing: border-box;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.05); /* 살짝 뜨는 느낌 */
 }
 
-/* 5. [핵심] 레퍼런스 이미지 완벽 매칭 컬러 */
+/* 5. [핵심] 컬러 팔레트 (아웃라인용 진한 색상) */
 
-/* Q (무공) -> 코랄 레드 */
-.key-red { background-color: #F06560; } 
+/* Q (빨강) */
+.key-red { color: #FF5252; } 
 
-/* ~ (특수) -> 스카이 블루 */
-.key-blue { background-color: #42A5F5; }
+/* ~ (파랑) */
+.key-blue { color: #448AFF; }
 
-/* LMB (약공) -> ★레퍼런스에 맞춰 [초록색]으로 변경 */
-.key-gray { background-color: #66BB6A; } 
+/* LMB (초록) */
+.key-gray { color: #00E676; } /* 약공은 밝은 초록 */
 
-/* R (강공) -> 웜 오렌지 */
-.key-orange { background-color: #FFA726; }
+/* R (노랑/주황) */
+.key-orange { color: #FFAB00; }
 
-/* TAB (교체) -> 사이안/청록 */
-.key-teal { background-color: #26C6DA; }
+/* TAB (청록) */
+.key-teal { color: #00BCD4; }
 
-/* E (반격) -> ★레퍼런스에 맞춰 [블루그레이]로 변경 */
-.key-purple { background-color: #78909C; }
+/* E (보라) */
+.key-purple { color: #E040FB; }
+
+/* SCR (회색) */
+.key-gray.scr { color: #607D8B; } 
 
 
-/* 6. ★ [중요] Hold(꾹 누르기)는 무조건 [보라색] (레퍼런스 반영) */
-.key-cap-viewer.hold {
-    background-color: #AB47BC !important; /* 강제로 보라색 덮어쓰기 */
-    position: relative;
+/* 6. 글씨가 너무 긴 경우 (LMB, HOLD 등) 사이즈 조절 */
+.key-cap-viewer span {
+    font-size: 1em;
+}
+/* 약공(LMB)이나 특수키는 글자가 기니까 조금 작게 */
+.key-cap-viewer:not(.key-red):not(.key-orange):not(.key-blue) {
+    font-size: 1.2em; 
+    font-weight: 700; /* 긴 글씨는 두껍게 */
 }
 
-/* Hold 텍스트 */
+/* 7. HOLD (꾹 누르기) 표시 */
 .key-cap-viewer.hold::after {
     content: 'HOLD';
     position: absolute;
-    bottom: 4px;
-    font-size: 0.45em;
-    font-weight: normal;
-    letter-spacing: 0.5px;
-    background: rgba(0,0,0,0.2);
-    padding: 1px 4px;
-    border-radius: 3px;
+    bottom: 2px;
+    font-size: 0.3em;
+    font-weight: bold;
+    background: currentColor; /* 테두리색과 동일 */
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 10px;
 }
 
-/* 7. 비결 이미지 */
+/* 8. 비결 이미지 (테두리 없음, 깔끔하게) */
 .combo-mart-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 6px;
-    opacity: 0.9; /* 너무 쨍하지 않게 */
+    border-radius: 12px;
+    border: 1px solid #eee; /* 아주 연한 테두리 */
 }
-

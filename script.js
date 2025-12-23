@@ -1172,8 +1172,8 @@ function generateBuildUrl() {
 }
 
 /* [수정] 뷰어 로드 함수 (제목/작성자/장비 표시 로직 추가) */
+/* [수정] 뷰어 로드 함수 (추천 장비 복구 + 팝업 연결) */
 function loadViewer() {
-    // 데이터가 로드되지 않았다면 재귀 호출
     if (!builderData) {
         fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data; loadViewer(); });
         return;
@@ -1181,47 +1181,30 @@ function loadViewer() {
 
     const params = new URLSearchParams(window.location.search);
     const encodedData = params.get('b');
-    
-    // 기본값 설정
-    let w = [], h = [], m = [];
-    let title = "나만의 빌드", creator = "익명";
-    let rw = "", ra = "";
+    let w = [], h = [], m = [], title = "무제", creator = "익명", rw = "", ra = "";
 
     if (encodedData) {
         try {
-            // 디코딩 (한글 깨짐 방지 로직 포함)
             const decoded = decodeURIComponent(escape(atob(encodedData)));
             const parsed = JSON.parse(decoded);
-            
-            w = parsed.w || [];
-            h = parsed.h || [];
-            m = parsed.m || [];
-            title = parsed.t || "무제";    // 제목 가져오기
-            creator = parsed.c || "익명";  // 작성자 가져오기
-            rw = parsed.rw || "";          // 추천 무기
-            ra = parsed.ra || "";          // 추천 방어구
-
+            w = parsed.w || []; h = parsed.h || []; m = parsed.m || [];
+            title = parsed.t || "무제"; creator = parsed.c || "익명";
+            rw = parsed.rw || ""; ra = parsed.ra || "";
         } catch (e) {
-            console.error("주소 파싱 실패:", e);
-            // 구버전(Base64 only) 호환 시도
-            try {
-                const parsed = JSON.parse(atob(encodedData));
-                w = parsed.w || []; h = parsed.h || []; m = parsed.m || []; creator = parsed.c || "";
-            } catch (e2) {}
+            try { const parsed = JSON.parse(atob(encodedData)); w = parsed.w || []; h = parsed.h || []; m = parsed.m || []; creator = parsed.c || ""; } catch (e2) {}
         }
     }
 
-    // 1. 텍스트 정보 표시
+    // 텍스트 정보 표시
     const titleEl = document.getElementById('build-main-title');
     const creatorEl = document.getElementById('build-creator-info');
+    if (titleEl) titleEl.innerText = title;
+    if (creatorEl) creatorEl.innerText = "작성자: " + creator;
+
+    // [복구됨] 추천 장비 표시
     const rwEl = document.getElementById('view-rec-weapon');
     const raEl = document.getElementById('view-rec-armor');
     const recContainer = document.getElementById('viewer-rec-container');
-
-    if (titleEl) titleEl.innerText = title; // 제목 설정
-    if (creatorEl) creatorEl.innerText = "작성자: " + creator; // 작성자 설정
-
-    // 추천 장비가 하나라도 있으면 표시, 없으면 숨김
     if (rw || ra) {
         if(recContainer) recContainer.style.display = 'flex';
         if(rwEl) rwEl.innerText = rw || '-';
@@ -1230,25 +1213,24 @@ function loadViewer() {
         if(recContainer) recContainer.style.display = 'none';
     }
 
-    // 2. 아이템 슬롯 렌더링 헬퍼
+    // 아이콘 슬롯 렌더링 + 클릭 이벤트 연결
     const renderSlot = (type, ids, prefix) => {
         ids.forEach((id, idx) => {
             if (!id) return;
             const itemData = builderData[type].find(i => i.id === id);
             if (itemData) {
                 const slotEl = document.getElementById(`${prefix}-${type}-${idx}`);
-                const nameEl = document.getElementById(`name-${prefix}-${type}-${idx}`);
                 if (slotEl) {
                     const img = slotEl.querySelector('img');
                     if (img) { img.src = itemData.img; img.style.display = 'block'; }
-                    slotEl.style.border = '1px solid var(--wuxia-accent-gold)';
+                    
+                    // 클릭하면 정보창 열기
+                    slotEl.style.cursor = "pointer";
+                    slotEl.onclick = () => openInfoModal(itemData); 
                 }
-                if (nameEl) nameEl.innerText = itemData.name;
             }
         });
     };
-
-    // 3. 슬롯 채우기
     renderSlot('weapons', w, 'v');
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');
@@ -1462,86 +1444,88 @@ function closeMartDetailSheet() {
 
 // 12. 빌드 상세 보기 바텀시트 기능
 // [script.js] openBuildDetailSheet 함수 (링크 복사 버튼 추가됨)
+/* [수정] 빌드 상세 바텀시트 (뷰어 디자인과 통일) */
 function openBuildDetailSheet(build) {
     const sheet = document.getElementById('build-detail-sheet');
     const contentArea = sheet.querySelector('.sheet-content');
     
-    // 1. 링크에서 코드 추출 (기존 로직)
     let encodedData = null;
-    if (build.link && build.link.includes('?b=')) {
-        encodedData = build.link.split('?b=')[1];
-    }
+    if (build.link && build.link.includes('?b=')) encodedData = build.link.split('?b=')[1];
 
     if (!encodedData || !builderData) {
-        contentArea.innerHTML = `<div style="padding: 50px; text-align: center; color: var(--wuxia-accent-red);">🚨 상세 빌드 정보를 불러올 수 없습니다.</div>`;
-        openBuildDetailSheetView();
-        return;
+        contentArea.innerHTML = `<div style="padding: 50px; text-align: center;">🚨 상세 정보를 불러올 수 없습니다.</div>`;
+        openBuildDetailSheetView(); return;
     }
 
     encodedData = encodedData.replace(/ /g, '+');
     let parsedData = null;
+    try { parsedData = JSON.parse(decodeURIComponent(escape(atob(encodedData)))); } 
+    catch (e) { try { parsedData = JSON.parse(atob(encodedData)); } catch (e2) { contentArea.innerHTML = "데이터 오류"; return; } }
 
-    try {
-        const decodedString = decodeURIComponent(escape(atob(encodedData)));
-        parsedData = JSON.parse(decodedString);
-    } catch (e1) {
-        try {
-            parsedData = JSON.parse(atob(encodedData));
-        } catch (e2) {
-            contentArea.innerHTML = `<div style="padding: 50px; text-align: center; color: var(--wuxia-accent-red);">🚨 잘못된 빌드 코드 형식입니다.</div>`;
-            openBuildDetailSheetView();
-            return;
-        }
-    }
-
-    // 2. 화면 그리기
-    let html = `<div style="border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 20px;"><p style="margin: 0; color: #999; font-size: 0.9em;">${build.description || '작성된 설명이 없습니다.'}</p></div>`;
-     if (parsedData.rw || parsedData.ra) {
+    // 설명문
+    let html = `<div style="border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 20px;">
+                    <p style="margin: 0; color: #999; font-size: 0.9em;">${build.description || '작성된 설명이 없습니다.'}</p>
+                </div>`;
+    
+    // 추천 장비
+    if (parsedData.rw || parsedData.ra) {
         html += `<div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
             <h4 style="margin: 0 0 10px 0; font-size: 0.95em; color: #555;">⚔️ 추천 장비</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div style="background: #fff; padding: 8px; border: 1px solid #eee; border-radius: 4px; font-size: 0.9em; text-align: center;">
-                    <span style="display:block; font-size:0.8em; color:#999;">무기</span>
-                    <span style="color: #333; font-weight: bold;">${parsedData.rw || '-'}</span>
+                    <span style="display:block; font-size:0.8em; color:#999;">무기</span><span style="color: #333; font-weight: bold;">${parsedData.rw || '-'}</span>
                 </div>
                 <div style="background: #fff; padding: 8px; border: 1px solid #eee; border-radius: 4px; font-size: 0.9em; text-align: center;">
-                    <span style="display:block; font-size:0.8em; color:#999;">방어구</span>
-                    <span style="color: #333; font-weight: bold;">${parsedData.ra || '-'}</span>
+                    <span style="display:block; font-size:0.8em; color:#999;">방어구</span><span style="color: #333; font-weight: bold;">${parsedData.ra || '-'}</span>
                 </div>
             </div>
         </div>`;
-     }
+    }
+
     const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
 
-    const renderSection = (typeKey, title, slots) => {
-        html += `<h4 style="color: #333; margin-top: 20px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 8px;">${title}</h4><div class="slot-group" style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 15px;">`;
-        slots.forEach(id => {
-            const item = getItemDetail(typeKey, id);
-            html += `<div style="width: 80px; text-align: center;"><img src="${item.img}" style="width: 60px; height: 60px; border: 1px solid #ddd; border-radius: 4px; object-fit: cover;" onerror="this.src='images/logo.png'"><p style="font-size: 0.75em; color: #333; margin: 5px 0 0 0; line-height: 1.2;">${item.name}</p></div>`;
-        });
-        html += `</div>`;
-    };
-
-    if (parsedData.w && parsedData.w.filter(id => id).length > 0) renderSection('weapons', '무기 및 무술', parsedData.w);
-    if (parsedData.h && parsedData.h.filter(id => id).length > 0) renderSection('hearts', '심법', parsedData.h);
-    if (parsedData.m && parsedData.m.filter(id => id).length > 0) renderSection('marts', '비결', parsedData.m);
+    // [스타일 적용] 상단 데크 (빨강 + 파랑 좌우 배치)
+    html += `<div style="display: flex; justify-content: space-evenly; align-items: center; gap: 15px; padding: 15px 10px; background: #fafafa; border-radius: 12px; border: 1px dashed #ddd; margin-bottom: 15px;">`;
     
-    // ▼▼▼ [추가됨] 맨 하단 링크 복사 버튼 ▼▼▼
-    // build.link 값을 그대로 copyToClipboard 함수에 전달합니다.
-    html += `
-        <div style="margin-top: 40px; margin-bottom: 20px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
-            <button onclick="copyToClipboard('${build.link}', this)" 
-                    style="width: 100%; padding: 12px; background-color: #333; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1em;">
-                🔗 이 빌드 링크 복사
-            </button>
-        </div>
-    `;
-    // ▲▲▲ 추가 끝 ▲▲▲
+    // 무기 (빨강)
+    html += `<div style="display: flex; gap: 8px;">`;
+    (parsedData.w || [null, null]).forEach(id => {
+        if(!id) return;
+        const item = getItemDetail('weapons', id);
+        html += `<div style="width: 60px; height: 60px; background: #fff; border-radius: 50%; border: 2.5px solid #d32f2f; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'"></div>`;
+    });
+    html += `</div>`;
+
+    // 심법 (파랑 2x2)
+    html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">`;
+    (parsedData.h || [null, null, null, null]).forEach(id => {
+        if(!id) return;
+        const item = getItemDetail('hearts', id);
+        html += `<div style="width: 38px; height: 38px; background: #fff; border-radius: 50%; border: 1.5px solid #1976d2; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'"></div>`;
+    });
+    html += `</div></div>`; 
+
+    // [스타일 적용] 하단 데크 (노랑 4개씩 줄바꿈)
+    const validMarts = (parsedData.m || []).filter(id => id);
+    if(validMarts.length > 0) {
+        html += `<div style="padding: 15px 10px; background: #fafafa; border-radius: 12px; border: 1px dashed #ddd; display: flex; justify-content: center;"><div style="display: grid; grid-template-columns: repeat(4, auto); gap: 8px;">`;
+        validMarts.forEach(id => {
+            const item = getItemDetail('marts', id);
+            html += `<div style="width: 36px; height: 36px; background: #fff; border-radius: 50%; border: 1.5px solid #fbc02d; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/logo.png'"></div>`;
+        });
+        html += `</div></div>`;
+    }
+
+    // 링크 복사 버튼
+    html += `<div style="margin-top: 30px; margin-bottom: 20px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
+                <button onclick="copyToClipboard('${build.link}', this)" style="width: 100%; padding: 12px; background-color: #333; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1em;">🔗 이 빌드 링크 복사</button>
+            </div>`;
 
     document.getElementById('build-sheet-title').innerText = build.title;
     contentArea.innerHTML = html;
     openBuildDetailSheetView();
 }
+
 
 function openBuildDetailSheetView() { document.body.classList.add('build-sheet-open'); }
 function closeBuildDetailSheet() { document.body.classList.remove('build-sheet-open'); }
@@ -2730,4 +2714,27 @@ function goBossList() {
     // 2. 보스 목록(boss.html) 다시 로드
     // loadContent는 단순히 파일 내용을 innerHTML로 넣는 함수이므로 boss.html을 다시 부르면 됨
     loadContent('boss.html');
+}
+
+/* [추가] 상세 정보 모달 열기 */
+function openInfoModal(item) {
+    const modal = document.getElementById('info-modal');
+    const img = document.getElementById('modal-img');
+    const name = document.getElementById('modal-name');
+    const desc = document.getElementById('modal-desc');
+
+    if (modal) {
+        if(img) img.src = item.img || 'images/logo.png';
+        if(name) name.innerText = item.name;
+        // 설명이 있으면 설명, 없으면 획득처, 둘 다 없으면 기본 메시지
+        if(desc) desc.innerHTML = item.desc || item.acquire || "상세 정보가 없습니다.";
+        
+        modal.style.display = 'flex';
+    }
+}
+
+/* [추가] 상세 정보 모달 닫기 */
+function closeInfoModal() {
+    const modal = document.getElementById('info-modal');
+    if (modal) modal.style.display = 'none';
 }

@@ -1535,9 +1535,7 @@ function closeMartDetailSheet() {
 
 
 /* [수정] 빌드 상세 바텀시트 (콤보 기능 추가) */
-/* [수정] 빌드 상세 바텀시트 (모달 연결 + 콤보 기능 통합) */
-/* [수정] 빌드 상세 뷰어 (수묵화 스타일 + 4열 그리드 적용) */
-/* [수정] 빌드 상세 뷰어 (아이콘 복구 + 수묵화 콤보 적용) */
+/* [수정] 빌드 상세 뷰어 (정사각형 + 번호 오버레이) */
 function openBuildDetailSheet(build) {
     const sheet = document.getElementById('build-detail-sheet');
     const contentArea = sheet.querySelector('.sheet-content');
@@ -1562,14 +1560,12 @@ function openBuildDetailSheet(build) {
     // 아이템 정보 찾기 헬퍼
     const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
 
-    // --- [HTML 생성 시작] ---
-
     // 2. 설명문
     let html = `<div style="border-bottom: 1px dashed #ccc; padding-bottom: 15px; margin-bottom: 20px;">
                     <p style="margin: 0; color: #555; font-size: 0.95em; line-height:1.6; font-family: 'Noto Serif KR', serif;">${build.description || '작성된 설명이 없습니다.'}</p>
                 </div>`;
     
-    // 3. 추천 장비 (텍스트)
+    // 3. 추천 장비
     if (parsedData.rw || parsedData.ra) {
         html += `<div style="background: #fffcf5; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; margin-bottom: 20px;">
             <h4 style="margin: 0 0 10px 0; font-size: 0.95em; color: #444; border-left: 3px solid #d4af37; padding-left: 8px;">⚔️ 추천 장비</h4>
@@ -1586,10 +1582,9 @@ function openBuildDetailSheet(build) {
         </div>`;
     }
 
-    // 4. ★ [복구됨] 무기 & 심법 아이콘 섹션 ★
+    // 4. 무기 & 심법 아이콘 섹션
     html += `<div style="display: flex; justify-content: space-evenly; align-items: center; gap: 10px; padding: 15px 10px; background: #fffcf5; border-radius: 12px; border: 1px solid #e0e0e0; margin-bottom: 15px;">`;
     
-    // 무기 (큰 원)
     html += `<div style="display: flex; gap: 8px;">`;
     (parsedData.w || [null, null]).forEach(id => {
         if(!id) return;
@@ -1600,7 +1595,6 @@ function openBuildDetailSheet(build) {
     });
     html += `</div>`;
 
-    // 심법 (작은 원 4개)
     html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">`;
     (parsedData.h || [null, null, null, null]).forEach(id => {
         if(!id) return;
@@ -1611,7 +1605,7 @@ function openBuildDetailSheet(build) {
     });
     html += `</div></div>`; 
 
-    // 5. ★ [복구됨] 비결 아이콘 섹션 (있을 경우만 표시) ★
+    // 5. 비결 아이콘 섹션
     const validMarts = (parsedData.m || []).filter(id => id);
     if(validMarts.length > 0) {
         html += `<div style="padding: 15px 10px; background: #fffcf5; border-radius: 12px; border: 1px solid #e0e0e0; display: flex; justify-content: center; margin-bottom: 15px;">
@@ -1625,24 +1619,24 @@ function openBuildDetailSheet(build) {
         html += `</div></div>`;
     }
 
-    // 6. 콤보 섹션 (수묵화풍 그리드)
+    // 6. ★★★ [콤보 섹션 수정] 정사각형 그리드 + 번호 오버레이 ★★★
     const comboData = parsedData.k || []; 
     if (comboData && comboData.length > 0) {
         html += `<h4 style="margin: 25px 0 10px 0; font-size: 0.95em; color: #444; border-left: 3px solid #d4af37; padding-left: 8px;">🔥 추천 콤보</h4>`;
         
+        // 화살표 없이 깔끔한 그리드 컨테이너
         html += `<div class="combo-viewer-grid">`;
         
         comboData.forEach((key, index) => {
-            const isLast = index === comboData.length - 1;
-
-            html += `<div class="combo-step-unit">`;
-            
-            // 박스
+            // 박스 시작
             html += `<div class="combo-item-box">`;
+            
+            // ★ 번호를 박스 안으로 넣음 (Overlay)
             html += `<span class="combo-step-num">${index + 1}</span>`;
 
             if (KEY_MAP[key]) {
                 const k = KEY_MAP[key];
+                // 키캡 (배경색 꽉 채우기)
                 html += `<div class="key-cap-viewer ${k.color} ${k.hold?'hold':''}"><span>${k.text}</span></div>`;
             } else {
                 let item = builderData.marts ? builderData.marts.find(m => m.id === key) : null;
@@ -1654,19 +1648,10 @@ function openBuildDetailSheet(build) {
                     html += `<span style="font-size:0.8em; color:#999;">?</span>`;
                 }
             }
-            html += `</div>`; 
-
-            // 화살표
-            if (!isLast) {
-                html += `<div class="combo-flow-arrow">›</div>`;
-            } else {
-                html += `<div class="combo-flow-arrow" style="opacity:0;">›</div>`;
-            }
-
-            html += `</div>`; 
+            html += `</div>`; // 박스 끝
         });
 
-        html += `</div>`; 
+        html += `</div>`; // 그리드 끝
     }
 
     // 7. 하단 버튼
@@ -1681,7 +1666,6 @@ function openBuildDetailSheet(build) {
     contentArea.innerHTML = html;
     openBuildDetailSheetView();
 }
-
 
 
 function openBuildDetailSheetView() { document.body.classList.add('build-sheet-open'); }

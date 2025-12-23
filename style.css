@@ -3055,35 +3055,29 @@ h3 {
 
 @media (min-width: 768px) {
     #build-detail-sheet {
-        /* 1. 너비 강제 제한 (너무 넓지 않게) */
-        max-width: 480px; 
+        /* ★중요: 여기서 display: flex를 삭제하여 JS가 제어하게 둠 */
+        
+        /* 1. 크기 및 위치 제한 */
+        max-width: 420px; /* 너무 넓지 않게 카드 크기 조절 */
         width: 100%;
         
-        /* 2. 화면 정중앙 하단에 위치 */
+        /* 2. 화면 정중앙 배치 */
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%); /* 정확히 가운데 정렬 */
+        bottom: 30px; /* 바닥에서 살짝 띄움 */
         
-        /* 3. 바닥에 붙지 않고 살짝 띄움 (카드 느낌) */
-        bottom: 30px; 
+        /* 3. 디자인 디테일 */
+        border-radius: 20px !important; /* 전체 둥글게 */
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5); /* 그림자 진하게 */
         
-        /* 4. 위쪽만 둥근 게 아니라 전체를 둥글게 */
-        border-radius: 24px !important; 
-        
-        /* 5. PC용 그림자 강화 */
-        box-shadow: 0 15px 50px rgba(0,0,0,0.4);
-        
-        /* 6. 내용이 너무 길면 스크롤 */
+        /* 4. 내용이 길면 스크롤 */
         max-height: 85vh;
-        display: flex;
-        flex-direction: column;
+        overflow-y: auto; 
+        scrollbar-width: thin; /* 스크롤바 얇게 */
     }
 
-    /* 내부 콘텐츠 스크롤 처리 */
-    #build-detail-sheet .sheet-content {
-        overflow-y: auto;
-        max-height: 100%;
-        /* 스크롤바 예쁘게 */
-        scrollbar-width: thin;
-        scrollbar-color: #888 #f1f1f1;
+    /* 5. 닫기 버튼 위치 조정 (PC에선 좀 더 잘 보이게) */
+    .sheet-header {
+        border-radius: 20px 20px 0 0;
     }
 }

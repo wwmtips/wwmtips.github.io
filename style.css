@@ -1684,79 +1684,6 @@ h3 {
 
 
 /* =========================================
-   [추가] 네비게이션 더보기 드롭다운 스타일
-   ========================================= */
-.nav-dropdown-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-/* 드롭다운 메뉴 박스 스타일 수정 */
-.nav-dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    
-    /* ▼▼▼ [핵심 수정] 정렬 기준 변경 ▼▼▼ */
-    left: auto;   /* 기존 left: 0 제거 (또는 덮어쓰기) */
-    right: 0;     /* 오른쪽 끝을 부모 요소(더보기 버튼)와 맞춤 */
-    /* ▲▲▲ 수정 끝 ▲▲▲ */
-
-    background-color: #fff;
-    min-width: 120px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    z-index: 3000;
-    overflow: hidden;
-    margin-top: 5px;
-}
-
-/* 드롭다운 활성화 시 보이기 */
-.nav-dropdown-content.show {
-    display: block;
-    animation: fadeIn 0.2s ease;
-}
-
-/* 드롭다운 내부 버튼 스타일 */
-.dropdown-item {
-    display: block;
-    width: 100%;
-    padding: 12px 15px;
-    text-align: left;
-    background: none;
-    border: none;
-    border-bottom: 1px solid #f0f0f0;
-    font-family: 'Noto Serif KR', serif;
-    font-size: 0.95em;
-    color: #333;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.dropdown-item:last-child {
-    border-bottom: none;
-}
-
-.dropdown-item:hover {
-    background-color: #fffcf5;
-    color: var(--wuxia-accent-gold);
-}
-
-/* 현재 탭 활성화 표시 (드롭다운 내부) */
-.dropdown-item.active {
-    color: var(--wuxia-accent-red);
-    font-weight: bold;
-    background-color: #fff8e1;
-}
-
-/* 더보기 버튼 활성화 상태 */
-#nav-more.active {
-    color: var(--wuxia-text-main);
-    border-bottom: 3px solid var(--wuxia-accent-red);
-}
-/* =========================================
    [추가] 네비게이션 더보기 화살표 디자인 개선
    ========================================= */
 
@@ -2397,6 +2324,7 @@ h3 {
         font-size: 0.9em;
     }
 }
+
 /* 1. '족보' 버튼을 감싸는 부모 태그 */
 .nav-dropdown-wrapper {
     /* ▼▼▼ [핵심] 자식(드롭다운)의 기준점이 되도록 설정 ▼▼▼ */
@@ -2416,7 +2344,7 @@ h3 {
     top: 100%; 
     
     /* 부모의 가운데 정렬 (원하시면 left: 0 으로 해도 됩니다) */
-    left: 50%;
+    left: 0%;
     transform: translateX(-50%);
     
     /* 우측 끝으로 가는 현상 방지 */

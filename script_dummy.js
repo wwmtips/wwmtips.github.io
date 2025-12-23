@@ -114,7 +114,7 @@ function loadData() {
         fetch('json/chunji.json').then(res => res.json()).catch(err => ({ chunji: [] })),
         fetch('json/builder_data.json').then(res => res.json()).catch(err => null),
         // ★ [추가] 보스 데이터 불러오기
-        fetch('boss.json').then(res => res.json()).catch(err => [])
+        fetch('json/boss.json').then(res => res.json()).catch(err => [])
     ])
     .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult, bossDataResult]) => {
         console.log("기본 데이터 로드 완료");

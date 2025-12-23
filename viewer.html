@@ -6,20 +6,21 @@
     <title>연운 빌드 뷰어</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css"> 
-    
     <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png">
     
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-        /* 뷰어 전용 스타일 추가/수정 */
+        /* 1. 기본 스타일 */
         body.viewer-mode {
             background-color: #f4f4f2;
             font-family: 'Noto Serif KR', serif;
             padding: 20px;
             text-align: center;
+            color: #1a1a1a;
         }
+
         .viewer-container {
-            max-width: 600px;
+            max-width: 520px;
             margin: 0 auto;
             background-color: #fff;
             padding: 40px 20px;
@@ -28,111 +29,136 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* 1. 메인 타이틀 (빌드 이름) */
+        /* 헤더 영역 */
+        .viewer-header-area {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #1a1a1a;
+        }
         .viewer-title {
             color: #1a1a1a;
-            font-size: 2.0em;
+            font-size: 1.8em;
             margin: 0 0 5px 0;
             font-weight: bold;
-            line-height: 1.2;
-            word-break: keep-all;
+            line-height: 1.3;
         }
-
-        /* 2. 작성자 정보 */
         .viewer-creator {
             font-size: 0.95em;
             color: #888;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        /* 3. 추천 장비 박스 */
         .viewer-rec-box {
             display: flex;
-            background-color: #f9f9f9;
-            border: 1px solid #eee;
+            background-color: #fffcf5;
+            border: 1px solid #e0e0e0;
             border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 30px;
+            padding: 12px 15px;
             gap: 15px;
             text-align: left;
         }
-        .rec-item {
-            flex: 1;
-        }
-        .rec-label {
-            display: block;
-            font-size: 0.8em;
-            color: #999;
-            margin-bottom: 3px;
-        }
-        .rec-value {
-            font-size: 1em;
-            font-weight: bold;
-            color: #333;
-        }
+        .rec-item { flex: 1; }
+        .rec-label { display: block; font-size: 0.8em; color: #a08040; margin-bottom: 4px; font-weight: bold; }
+        .rec-value { font-size: 1em; font-weight: bold; color: #333; }
 
-        /* 서브 타이틀 (추천 무공 조합) */
-        .viewer-subtitle {
-            display: inline-block;
-            color: #a08040;
-            font-size: 1.1em;
-            font-weight: bold;
-            padding: 5px 20px;
-            border-top: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 30px;
-        }
 
-        /* 슬롯 라벨 & 그룹 (기존 유지) */
-        .slot-label {
-            display: block;
-            text-align: left;
-            font-weight: bold;
-            color: #1a1a1a;
-            margin: 20px 0 10px 0;
-            font-size: 1.0em;
-            border-left: 4px solid #b71c1c;
-            padding-left: 10px;
-        }
-        .slot-group {
+        /* =========================================
+           [레이아웃] 상단(무기/심법) + 하단(비결)
+           ========================================= */
+        
+        /* 상단 구역 (무기 + 심법) */
+        .upper-deck {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            gap: 30px; 
+            padding: 25px 15px;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 1px dashed #ddd;
+            margin-bottom: 15px;
+        }
+
+        /* 하단 구역 (비결) */
+        .lower-deck {
+            padding: 20px 10px;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 1px dashed #ddd;
+            display: flex;
             justify-content: center;
         }
-        .item-slot {
-            width: 64px; height: 64px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .item-slot img {
-            width: 100%; height: 100%; object-fit: cover; border-radius: 6px; display: none;
-        }
-        .slot-wrapper {
-            display: flex; flex-direction: column; align-items: center; width: 64px;
-        }
-        .slot-name {
-            font-size: 0.75em; color: #555; margin-top: 5px; line-height: 1.2; min-height: 2.4em;
-        }
 
-        /* 푸터 버튼 */
+        /* 아이템 슬롯 공통 */
+        .item-slot {
+            background-color: #fff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .item-slot img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* 🔴 무기 (빨강) */
+        .weapon-group { display: flex; gap: 15px; }
+        .slot-weapon { width: 80px; height: 80px; border: 3px solid #d32f2f; }
+
+        /* 🔵 심법 (파랑) */
+        .heart-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .slot-heart { width: 50px; height: 50px; border: 2px solid #1976d2; }
+
+        /* 🟡 비결 (노랑) - [수정] 4개씩 2줄 배치 */
+        .mart-group { 
+            display: grid; 
+            grid-template-columns: repeat(4, auto); /* 한 줄에 4개 */
+            gap: 12px; 
+            justify-content: center; 
+        }
+        .slot-mart { width: 42px; height: 42px; border: 2px solid #fbc02d; }
+
+        .slot-name { display: none; }
+
+        /* 푸터 */
         .viewer-footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px dashed #ddd;
+            margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ddd;
             display: flex; justify-content: center; gap: 10px;
         }
         .action-btn {
             background-color: #a08040; color: #fff; border: none;
-            padding: 10px 20px; font-size: 0.95em; font-weight: bold;
-            cursor: pointer; border-radius: 4px;
+            padding: 10px 20px; font-size: 0.9em; font-weight: bold;
+            cursor: pointer; border-radius: 4px; font-family: 'Noto Serif KR', serif;
         }
+        .action-btn:hover { background-color: #8d6e35; }
         .download-btn { background-color: #333; }
         
-        @media (max-width: 600px) {
-            .viewer-footer { flex-direction: column; }
+        
+        /* =========================================
+           [모바일 대응] 화면이 좁을 때 (480px 이하)
+           ========================================= */
+        @media (max-width: 480px) {
+            .viewer-container { padding: 30px 15px; }
+
+            /* 상단 구역 가로 배치 강제 유지 */
+            .upper-deck {
+                flex-direction: row !important; 
+                gap: 15px;
+                padding: 15px 10px;
+                justify-content: space-evenly;
+            }
+
+            /* 슬롯 크기 축소 */
+            .slot-weapon { width: 60px; height: 60px; border-width: 2.5px; }
+            .slot-heart { width: 38px; height: 38px; border-width: 1.5px; }
+            .slot-mart { width: 36px; height: 36px; border-width: 1.5px; }
+
+            /* 간격 미세 조정 */
+            .weapon-group { gap: 8px; }
+            .heart-group { gap: 6px; }
+            .mart-group { gap: 8px; } /* 비결 간격 조정 */
+            
+            .viewer-title { font-size: 1.5em; }
         }
     </style>
 </head>
@@ -140,54 +166,52 @@
 
     <div class="viewer-container" id="capture-area">
         
-        <h1 class="viewer-title" id="build-main-title">로딩 중...</h1>
-        
-        <div class="viewer-creator" id="build-creator-info"></div>
+        <div class="viewer-header-area">
+            <h1 class="viewer-title" id="build-main-title">로딩 중...</h1>
+            <div class="viewer-creator" id="build-creator-info"></div>
 
-        <div class="viewer-rec-box" id="viewer-rec-container" style="display: none;">
-            <div class="rec-item">
-                <span class="rec-label">⚔️ 추천 무기</span>
-                <span class="rec-value" id="view-rec-weapon">-</span>
+            <div class="viewer-rec-box" id="viewer-rec-container" style="display: none;">
+                <div class="rec-item">
+                    <span class="rec-label">⚔️ 추천 무기</span>
+                    <span class="rec-value" id="view-rec-weapon">-</span>
+                </div>
+                <div class="rec-item" style="border-left: 1px solid #e0e0e0; padding-left: 15px;">
+                    <span class="rec-label">🛡️ 추천 방어구</span>
+                    <span class="rec-value" id="view-rec-armor">-</span>
+                </div>
             </div>
-            <div class="rec-item" style="border-left: 1px solid #eee; padding-left: 15px;">
-                <span class="rec-label">🛡️ 추천 방어구</span>
-                <span class="rec-value" id="view-rec-armor">-</span>
+        </div>
+
+        <div class="upper-deck">
+            <div class="weapon-group" id="weapon-slots">
+                <div class="item-slot slot-weapon" id="v-weapons-0"><img src="" alt=""></div>
+                <div class="item-slot slot-weapon" id="v-weapons-1"><img src="" alt=""></div>
+            </div>
+
+            <div class="heart-group" id="heart-slots">
+                <div class="item-slot slot-heart" id="v-hearts-0"><img src="" alt=""></div>
+                <div class="item-slot slot-heart" id="v-hearts-1"><img src="" alt=""></div>
+                <div class="item-slot slot-heart" id="v-hearts-2"><img src="" alt=""></div>
+                <div class="item-slot slot-heart" id="v-hearts-3"><img src="" alt=""></div>
             </div>
         </div>
 
-        <div class="viewer-subtitle">
-            무공 및 내공 조합
-        </div>
-        
-        <div class="slot-label">무기 및 무술</div>
-        <div class="slot-group" id="weapon-slots">
-            <div class="slot-wrapper"><div class="item-slot" id="v-weapons-0"><img src="" alt=""></div><div class="slot-name" id="name-v-weapons-0"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-weapons-1"><img src="" alt=""></div><div class="slot-name" id="name-v-weapons-1"></div></div>
-        </div>
-
-        <div class="slot-label">심법</div>
-        <div class="slot-group" id="heart-slots">
-            <div class="slot-wrapper"><div class="item-slot" id="v-hearts-0"><img src="" alt=""></div><div class="slot-name" id="name-v-hearts-0"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-hearts-1"><img src="" alt=""></div><div class="slot-name" id="name-v-hearts-1"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-hearts-2"><img src="" alt=""></div><div class="slot-name" id="name-v-hearts-2"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-hearts-3"><img src="" alt=""></div><div class="slot-name" id="name-v-hearts-3"></div></div>
-        </div>
-
-        <div class="slot-label">비결</div>
-        <div class="slot-group" id="mart-slots">
-            <div class="slot-wrapper"><div class="item-slot" id="v-marts-0"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-0"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-marts-1"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-1"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-marts-2"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-2"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-marts-3"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-3"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-marts-4"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-4"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-marts-5"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-5"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-marts-6"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-6"></div></div>
-            <div class="slot-wrapper"><div class="item-slot" id="v-marts-7"><img src="" alt=""></div><div class="slot-name" id="name-v-marts-7"></div></div>
+        <div class="lower-deck">
+            <div class="mart-group" id="mart-slots">
+                <div class="item-slot slot-mart" id="v-marts-0"><img src="" alt=""></div>
+                <div class="item-slot slot-mart" id="v-marts-1"><img src="" alt=""></div>
+                <div class="item-slot slot-mart" id="v-marts-2"><img src="" alt=""></div>
+                <div class="item-slot slot-mart" id="v-marts-3"><img src="" alt=""></div>
+                <div class="item-slot slot-mart" id="v-marts-4"><img src="" alt=""></div>
+                <div class="item-slot slot-mart" id="v-marts-5"><img src="" alt=""></div>
+                <div class="item-slot slot-mart" id="v-marts-6"><img src="" alt=""></div>
+                <div class="item-slot slot-mart" id="v-marts-7"><img src="" alt=""></div>
+            </div>
         </div>
 
        <div class="viewer-footer" data-html2canvas-ignore="true">
-            <button class="action-btn download-btn" onclick="downloadBuildImage()">💾 이미지로 저장</button>
-            <button class="action-btn" onclick="location.href='index.html?tab=builder'">⚔️ 나만의 빌드 만들기</button>
+            <button class="action-btn download-btn" onclick="downloadBuildImage()">💾 이미지 저장</button>
+            <button class="action-btn" onclick="location.href='index.html?tab=builder'">⚔️ 빌드 만들기</button>
         </div>
     </div>
 

@@ -3049,3 +3049,41 @@ h3 {
     object-fit: cover;
     /* 배경이 검정이므로 이미지만 둥둥 떠있는 느낌 */
 }
+/* =========================================
+   [반응형] 큰 화면(PC)에서 바텀시트 크기 제한
+   ========================================= */
+
+@media (min-width: 768px) {
+    #build-detail-sheet {
+        /* 1. 너비 강제 제한 (너무 넓지 않게) */
+        max-width: 480px; 
+        width: 100%;
+        
+        /* 2. 화면 정중앙 하단에 위치 */
+        left: 50%;
+        transform: translateX(-50%);
+        
+        /* 3. 바닥에 붙지 않고 살짝 띄움 (카드 느낌) */
+        bottom: 30px; 
+        
+        /* 4. 위쪽만 둥근 게 아니라 전체를 둥글게 */
+        border-radius: 24px !important; 
+        
+        /* 5. PC용 그림자 강화 */
+        box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        
+        /* 6. 내용이 너무 길면 스크롤 */
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 내부 콘텐츠 스크롤 처리 */
+    #build-detail-sheet .sheet-content {
+        overflow-y: auto;
+        max-height: 100%;
+        /* 스크롤바 예쁘게 */
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+    }
+}

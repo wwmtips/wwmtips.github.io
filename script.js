@@ -1443,8 +1443,7 @@ function closeMartDetailSheet() {
 }
 
 // 12. 빌드 상세 보기 바텀시트 기능
-// [script.js] openBuildDetailSheet 함수 (링크 복사 버튼 추가됨)
-/* [수정] 빌드 상세 바텀시트 (뷰어 디자인과 통일) */
+// [script.js] /* [수정] 빌드 상세 바텀시트 (아이콘 클릭 시 팝업 연결) */
 function openBuildDetailSheet(build) {
     const sheet = document.getElementById('build-detail-sheet');
     const contentArea = sheet.querySelector('.sheet-content');
@@ -1484,34 +1483,43 @@ function openBuildDetailSheet(build) {
 
     const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
 
-    // [스타일 적용] 상단 데크 (빨강 + 파랑 좌우 배치)
+    // 상단 데크 (빨강 + 파랑)
     html += `<div style="display: flex; justify-content: space-evenly; align-items: center; gap: 15px; padding: 15px 10px; background: #fafafa; border-radius: 12px; border: 1px dashed #ddd; margin-bottom: 15px;">`;
     
-    // 무기 (빨강)
+    // 🔴 무기 그룹
     html += `<div style="display: flex; gap: 8px;">`;
     (parsedData.w || [null, null]).forEach(id => {
         if(!id) return;
         const item = getItemDetail('weapons', id);
-        html += `<div style="width: 60px; height: 60px; background: #fff; border-radius: 50%; border: 2.5px solid #d32f2f; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'"></div>`;
+        // ▼▼▼ onclick 추가됨 ▼▼▼
+        html += `<div onclick="openInfoModalById('weapons', '${id}')" style="cursor: pointer; width: 60px; height: 60px; background: #fff; border-radius: 50%; border: 2.5px solid #d32f2f; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+                 </div>`;
     });
     html += `</div>`;
 
-    // 심법 (파랑 2x2)
+    // 🔵 심법 그룹
     html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">`;
     (parsedData.h || [null, null, null, null]).forEach(id => {
         if(!id) return;
         const item = getItemDetail('hearts', id);
-        html += `<div style="width: 38px; height: 38px; background: #fff; border-radius: 50%; border: 1.5px solid #1976d2; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'"></div>`;
+        // ▼▼▼ onclick 추가됨 ▼▼▼
+        html += `<div onclick="openInfoModalById('hearts', '${id}')" style="cursor: pointer; width: 38px; height: 38px; background: #fff; border-radius: 50%; border: 1.5px solid #1976d2; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+                 </div>`;
     });
     html += `</div></div>`; 
 
-    // [스타일 적용] 하단 데크 (노랑 4개씩 줄바꿈)
+    // 하단 데크 (노랑)
     const validMarts = (parsedData.m || []).filter(id => id);
     if(validMarts.length > 0) {
         html += `<div style="padding: 15px 10px; background: #fafafa; border-radius: 12px; border: 1px dashed #ddd; display: flex; justify-content: center;"><div style="display: grid; grid-template-columns: repeat(4, auto); gap: 8px;">`;
         validMarts.forEach(id => {
             const item = getItemDetail('marts', id);
-            html += `<div style="width: 36px; height: 36px; background: #fff; border-radius: 50%; border: 1.5px solid #fbc02d; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/logo.png'"></div>`;
+            // ▼▼▼ onclick 추가됨 ▼▼▼
+            html += `<div onclick="openInfoModalById('marts', '${id}')" style="cursor: pointer; width: 36px; height: 36px; background: #fff; border-radius: 50%; border: 1.5px solid #fbc02d; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/logo.png'">
+                     </div>`;
         });
         html += `</div></div>`;
     }
@@ -1525,6 +1533,7 @@ function openBuildDetailSheet(build) {
     contentArea.innerHTML = html;
     openBuildDetailSheetView();
 }
+
 
 
 function openBuildDetailSheetView() { document.body.classList.add('build-sheet-open'); }
@@ -2737,4 +2746,10 @@ function openInfoModal(item) {
 function closeInfoModal() {
     const modal = document.getElementById('info-modal');
     if (modal) modal.style.display = 'none';
+}
+/* [추가] ID로 아이템을 찾아 상세 정보 모달을 여는 함수 (바텀시트용) */
+function openInfoModalById(type, id) {
+    if (!builderData || !builderData[type]) return;
+    const item = builderData[type].find(i => i.id === id);
+    if (item) openInfoModal(item);
 }

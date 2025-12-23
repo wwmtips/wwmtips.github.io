@@ -164,7 +164,7 @@ function loadData() {
         }
         // 홈 화면에 보스 섹션이 있다면 (예: id="home-boss-list")
         if (document.getElementById('home-boss-list')) {
-            renderBossList('home-boss-list', 'all', 2);
+            renderBossList('home-boss-list', 'all', 0);
         }
 
         // 상세 페이지 진입 처리

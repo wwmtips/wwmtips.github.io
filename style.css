@@ -2934,282 +2934,104 @@ h3 {
     z-index: 10;
     box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
-/* [뷰어] 수묵화 스타일 콤보 그리드 (4열 배치) */
-.combo-viewer-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 강제 */
-    gap: 12px; /* 아이템 사이 간격 */
-    padding: 15px;
-    background-color: #fffcf5; /* 연한 미색 (한지 느낌) */
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-top: 10px;
-}
-
-/* 콤보 아이템 카드 스타일 */
-.combo-viewer-item {
-    aspect-ratio: 1 / 1; /* 정사각형 유지 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s;
-}
-
-/* 콤보 순서 번호 (왼쪽 상단 조그만 숫자) */
-.combo-step-badge {
-    position: absolute;
-    top: 2px;
-    left: 4px;
-    font-size: 0.7em;
-    color: #bbb;
-    font-family: 'Noto Serif KR', serif;
-}
-
-/* 키캡 스타일 (수묵화풍으로 정돈) */
-.key-cap-viewer {
-    width: 80%;
-    height: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 1.1em;
-    color: #fff;
-    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.2);
-}
-
-/* 색상 테마 (기존 색상을 좀 더 차분하게) */
-.key-red { background-color: #d32f2f; }
-.key-blue { background-color: #1976d2; }
-.key-gray { background-color: #757575; }
-.key-orange { background-color: #f57c00; }
-.key-teal { background-color: #00897b; }
-.key-purple { background-color: #8e24aa; }
-
-/* 꾹 누르기(Hold) 표시 */
-.key-cap-viewer.hold::after {
-    content: 'Hold';
-    position: absolute;
-    bottom: 2px;
-    font-size: 0.5em;
-    opacity: 0.8;
-}
-
-/* 비결 아이콘 스타일 */
-.combo-mart-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-/* =========================================
-   [뷰어] 수묵화 스타일 콤보 디자인 (복구용)
-   ========================================= */
-
-/* 1. 콤보 전체 틀 (한지 색상 + 4열 배치) */
-
-
-/* 2. 개별 아이템 덩어리 (박스 + 화살표) */
-.combo-step-unit {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    gap: 2px;
-}
-
-/* 3. 아이템 박스 (네모칸) */
-.combo-item-box {
-    width: 55px;
-    height: 55px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    position: relative;
-    overflow: hidden;
-}
-
-/* 4. 왼쪽 위 순서 번호 (1, 2, 3...) */
-.combo-step-num {
-    position: absolute;
-    top: 2px;
-    left: 4px;
-    font-size: 0.65em;
-    color: #bbb;
-    font-family: serif;
-    z-index: 5;
-}
-
-/* [뷰어] 정사각형 콤보 그리드 (4열) */
-.combo-viewer-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 */
-    gap: 10px; /* 아이템 간격 */
-    padding: 20px;
-    background-color: #fffcf5; /* 한지 느낌 배경 */
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-top: 15px;
-}
-
-/* 콤보 아이템 박스 (완전한 정사각형) */
-.combo-item-box {
-    aspect-ratio: 1 / 1; /* ★ 가로세로 비율 1:1 강제 (정사각형) */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    position: relative; /* 번호 배치를 위한 기준점 */
-    overflow: hidden;
-}
-
-/* 순서 번호 (박스 안에 겹쳐서 표시) */
-.combo-step-num {
-    position: absolute;
-    top: 4px;
-    left: 6px;
-    font-size: 0.75em;
-    font-weight: bold;
-    color: #bbb; /* 연한 회색 */
-    font-family: serif;
-    z-index: 10;
-    pointer-events: none; /* 클릭 방해 안 하게 */
-}
-
-/* 키캡 스타일 (뷰어용) */
-.key-cap-viewer {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.2em; /* 글자 크기 키움 */
-    color: #fff;
-}
-
-/* 꾹 누르기(Hold) 텍스트 위치 조정 */
-.key-cap-viewer.hold::after {
-    content: 'HOLD';
-    position: absolute;
-    bottom: 3px;
-    font-size: 0.45em;
-    opacity: 0.8;
-}
-
-/* 비결 이미지 꽉 차게 */
-.combo-mart-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    cursor: pointer;
-}
 
 /* =========================================
-   [뷰어] 레퍼런스 스타일 (Flat & Vivid)
+   [뷰어] 다크 모드 & 레퍼런스 컬러 (Final)
    ========================================= */
 
-/* 1. 콤보 그리드 (배경은 깔끔한 화이트) */
+/* 1. 콤보 그리드 (배경을 어두운 다크 그레이로 변경) */
 .combo-viewer-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     padding: 20px;
-    background-color: #fff; 
-    border: 1px solid #eee;
+    /* ★ 핵심: 다크 배경 적용 */
+    background-color: #1a1a1a; 
+    border: 1px solid #333;
     border-radius: 12px;
     margin-top: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5); /* 안쪽으로 깊이감 */
 }
 
-/* 2. 아이템 박스 (외곽선 제거, 심플함 강조) */
+/* 2. 아이템 박스 (배경보다 살짝 밝은 톤) */
 .combo-item-box {
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f5f5f5;
-    border-radius: 8px; /* 둥글게 */
+    background-color: #252525; /* 슬롯 배경 */
+    border: 1px solid #333;
+    border-radius: 8px;
     position: relative;
     overflow: hidden;
-    border: none; /* 테두리 제거 */
 }
 
-/* 3. 순서 번호 (왼쪽 상단, 작고 진하게) */
+/* 3. 순서 번호 (어두운 배경에 맞춰 밝은 회색) */
 .combo-step-num {
     position: absolute;
     top: 5px;
     left: 8px;
-    font-size: 0.8em;
+    font-size: 0.75em;
     font-weight: 700;
-    color: #90a4ae; /* 차분한 블루그레이 */
+    color: #555; /* 너무 튀지 않게 */
     font-family: sans-serif;
     z-index: 10;
     pointer-events: none;
 }
 
-/* 4. 키캡 공통 (그림자 없는 완전 평면) */
+/* 4. 키캡 공통 (테두리/그림자 없는 매트한 플랫) */
 .key-cap-viewer {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: sans-serif; /* 고딕체로 변경 (레퍼런스 느낌) */
-    font-weight: 600;
-    font-size: 1.1em;
+    font-family: sans-serif;
+    font-weight: 700;
+    font-size: 1.15em;
     color: #fff;
-    border-radius: 8px;
+    border-radius: 6px; /* 박스 안에서 살짝 여백 */
     box-shadow: none !important;
-    text-shadow: none !important;
 }
 
-/* 5. [핵심] 레퍼런스 컬러 적용 */
+/* 5. [핵심] 레퍼런스 이미지 완벽 매칭 컬러 */
 
-/* Q (무공) - 코랄 핑크/레드 */
-.key-red { background-color: #EF5350; } 
+/* Q (무공) -> 코랄 레드 */
+.key-red { background-color: #F06560; } 
 
-/* ~ (특수) - 스카이 블루 */
+/* ~ (특수) -> 스카이 블루 */
 .key-blue { background-color: #42A5F5; }
 
-/* LMB (약공) - 그래스 그린 (레퍼런스 LMB 색상) */
+/* LMB (약공) -> ★레퍼런스에 맞춰 [초록색]으로 변경 */
 .key-gray { background-color: #66BB6A; } 
 
-/* R (강공) - 웜 오렌지 */
+/* R (강공) -> 웜 오렌지 */
 .key-orange { background-color: #FFA726; }
 
-/* TAB (교체) - 틸/청록색 */
+/* TAB (교체) -> 사이안/청록 */
 .key-teal { background-color: #26C6DA; }
 
-/* E (반격) - 슬레이트 블루/그레이 (레퍼런스 E 색상) */
+/* E (반격) -> ★레퍼런스에 맞춰 [블루그레이]로 변경 */
 .key-purple { background-color: #78909C; }
 
 
-/* 6. HOLD (꾹 누르기) 스타일 */
+/* 6. ★ [중요] Hold(꾹 누르기)는 무조건 [보라색] (레퍼런스 반영) */
+.key-cap-viewer.hold {
+    background-color: #AB47BC !important; /* 강제로 보라색 덮어쓰기 */
+    position: relative;
+}
+
+/* Hold 텍스트 */
 .key-cap-viewer.hold::after {
     content: 'HOLD';
-    display: block;
     position: absolute;
     bottom: 4px;
-    font-size: 0.5em;
-    font-weight: bold;
-    background: rgba(0,0,0,0.15); /* 반투명 박스 */
+    font-size: 0.45em;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    background: rgba(0,0,0,0.2);
     padding: 1px 4px;
     border-radius: 3px;
-    color: #fff;
 }
 
 /* 7. 비결 이미지 */
@@ -3217,5 +3039,7 @@ h3 {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 6px;
+    opacity: 0.9; /* 너무 쨍하지 않게 */
 }
+

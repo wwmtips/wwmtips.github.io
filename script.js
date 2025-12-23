@@ -3142,18 +3142,17 @@ function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splic
 
 
 
-// 2. 보스 목록 그리기 함수
+// 보스 목록 그리기 함수
 function renderBossList(containerId, filterType = 'all', limit = 0) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    // 데이터가 아직 안 불러와졌으면 로딩 중 표시
-    if (globalBossData.length === 0) {
-        container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
+    if (!globalBossData || globalBossData.length === 0) {
+        if(!container.innerHTML) container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
         return;
     }
 
-    container.innerHTML = ''; // 초기화
+    container.innerHTML = ''; 
 
     // 필터링
     let targets = globalBossData;
@@ -3178,9 +3177,9 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
         const badgeName = boss.type === 'heroic' ? '협경' : '일반';
 
         html += `
-        <a href="${boss.link}" class="boss-card" onclick="event.preventDefault(); loadContent('${boss.link}');">
+        <a href="${boss.link}" class="boss-card" data-type="${boss.type}" onclick="event.preventDefault(); loadContent('${boss.link}');">
             <div class="boss-img-wrapper">
-                <img src="${boss.img}" alt="${boss.name}" class="boss-img">
+                <img src="${boss.img}" alt="${boss.name}" class="boss-img" onerror="this.src='images/logo.png'">
                 <div class="boss-info-overlay">
                     <span class="boss-type-badge ${badgeClass}">${badgeName}</span>
                     <span class="boss-name">${boss.name}</span>
@@ -3192,8 +3191,3 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
 
     container.innerHTML = html;
 }
-
-// 3. 페이지가 로드되면 바로 데이터 가져오기 실행
-document.addEventListener("DOMContentLoaded", () => {
-    loadBossData();
-});

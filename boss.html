@@ -14,22 +14,6 @@
 
 </div>
 
-<script>
-    // 1. 페이지 로드 시 전체('all') 목록을 0(제한없음)개 불러옵니다.
-    // (renderBossList 함수가 globalData를 참조하여 bossGrid 안에 HTML을 생성합니다)
-    if (typeof renderBossList === 'function') {
-        renderBossList('bossGrid', 'all');
-    } else {
-        console.error("renderBossList 함수를 찾을 수 없습니다. script.js가 로드되었는지 확인하세요.");
-    }
-
-    // 2. 필터 변경 시 실행될 함수 정의
-    // (이미 script.js에 있을 수 있지만, 없다면 여기서 정의)
-    window.filterBoss = function(type) {
-        renderBossList('bossGrid', type, 0);
-    };
-</script>
-
 <style>
     /* 기존 스타일 그대로 유지 */
     :root {

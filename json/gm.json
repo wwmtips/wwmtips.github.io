@@ -1,6 +1,26 @@
 [
   
   {
+    "id": 1766468097736,
+    "name": "판관",
+    "type": "고양이",
+    "y": 2324,
+    "x": 1616,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/64.jpg"
+  },
+  {
+    "id": 1766467887311,
+    "name": "맹파",
+    "type": "고양이",
+    "y": 1565,
+    "x": 1756,
+    "desc": "귀여운 고양이다",
+    "link": "",
+    "image": "https://wwm.tips/images/cat/63.jpg"
+  },
+  {
     "id": 1766467596277,
     "name": "무상",
     "type": "고양이",

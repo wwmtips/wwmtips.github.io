@@ -190,24 +190,6 @@ function loadData() {
     .catch(error => { console.error("데이터 로드 실패:", error); });
 }
 
-// 빌드 데이터 로드 함수 (그대로 유지)
-function loadBuildsInBackground(targetTab) {
-    const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined') 
-        ? `${BUILD_API_URL}?action=list` 
-        : 'json/builds.json';
-
-    fetch(buildFetchUrl)
-    .then(res => res.json())
-    .then(buildsData => {
-        console.log("빌드 데이터 로드 완료");
-        globalData.builds = buildsData.builds || [];
-        // 빌드 목록은 데이터가 늦게 오므로 도착하면 그리기
-        renderBuildList('all');
-    })
-    .catch(err => {
-        globalData.builds = [];
-    });
-}
 
 // [추가된 함수] 빌드 데이터만 따로 불러와서 채워넣는 역할
 function loadBuildsInBackground(targetTab) {
@@ -1307,31 +1289,6 @@ function renderHeartLibrary() {
     });
 }
 
-/* B. 비결(Mart) 리스트 렌더링 */
-function renderMartLibrary() {
-    const container = document.getElementById('mart-library-list');
-    if (!container) return;
-
-    if (!builderData) {
-        fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data; renderMartLibrary(); }).catch(err => { container.innerHTML = "데이터를 불러올 수 없습니다."; });
-        return;
-    }
-
-    if (!builderData.marts || builderData.marts.length === 0) {
-        container.innerHTML = "등록된 비결이 없습니다.";
-        return;
-    }
-
-    container.innerHTML = '';
-    builderData.marts.forEach(mart => {
-        const item = document.createElement('div');
-        item.className = 'heart-lib-item'; // 스타일 공유
-        item.onclick = () => openMartDetailSheet(mart.id);
-        item.innerHTML = `<img src="${mart.img}" class="heart-lib-img" onerror="this.src='images/logo.png'"><div class="heart-lib-name">${mart.name}</div>`;
-        container.appendChild(item);
-    });
-}
-
 /* [공통] 유튜브 주소 자동 변환 함수 */
 function convertYoutubeToEmbed(text) {
     if (!text) return '획득 방법 정보가 없습니다.';
@@ -1384,39 +1341,6 @@ function closeHeartDetailSheet() {
     document.body.classList.remove('heart-sheet-open');
 }
 
-/* [추가] 비결 상세 바텀시트 열기 */
-function openMartDetailSheet(martId) {
-    if (!builderData || !builderData.marts) return;
-    const mart = builderData.marts.find(m => m.id === martId);
-    if (!mart) return;
-
-    const titleEl = document.getElementById('mart-sheet-title');
-    const contentEl = document.getElementById('mart-sheet-content');
-
-    if (titleEl) titleEl.innerText = mart.name;
-    
-    if (contentEl) {
-        const acquireContent = convertYoutubeToEmbed(mart.acquire);
-        contentEl.innerHTML = `
-            <div style="text-align:center; margin-bottom:20px; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
-                <img src="${mart.img}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='images/logo.png'">
-            </div>
-            <div class="detail-chunk" style="margin-bottom: 25px;">
-                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">효과</h4>
-                <p style="color: #555; line-height: 1.6; background: #fff; padding: 10px; border: 1px dashed #ddd; border-radius: 4px;">
-                    ${mart.desc || '효과 정보가 없습니다.'}
-                </p>
-            </div>
-            <div class="detail-chunk">
-                <h4 style="color: #333; margin-bottom: 10px; border-left: 3px solid var(--wuxia-accent-gold); padding-left: 10px;">획득 방법</h4>
-                <div style="color: #555; line-height: 1.6; background: #fffcf5; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
-                    ${acquireContent}
-                </div>
-            </div>
-        `;
-    }
-    document.body.classList.add('mart-sheet-open');
-}
 
 function closeMartDetailSheet() {
     document.body.classList.remove('mart-sheet-open');
@@ -1982,36 +1906,6 @@ function loadChunjiDetail(item, index) {
 // =========================================
 // [수정/통합] 천지록(Chunji) 기능 로직
 // =========================================
-
-// 목록 렌더링
-// 목록 렌더링 (수정됨: 타입 정보 추가)
-function renderChunjiList() {
-    const container = document.getElementById('chunji-list-container');
-    if (!container) return;
-    container.innerHTML = '';
-
-    if (!chunjiData || chunjiData.length === 0) {
-        container.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">데이터가 없습니다.</div>';
-        return;
-    }
-
-    chunjiData.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'chunji-item';
-        div.onclick = () => loadChunjiDetail(item, index);
-        
-        // ▼▼▼ [수정] 제목과 타입(type)을 감싸는 래퍼 추가 ▼▼▼
-        div.innerHTML = `
-            <div class="chunji-text-group">
-                <div class="chunji-title">${item.title}</div>
-                <div class="chunji-type">${item.type || '분류 없음'}</div>
-            </div>
-            <div class="arrow-icon">›</div>
-        `;
-        
-        container.appendChild(div);
-    });
-}
 
 // =========================================
 // [최종 완료] 천지록(Chunji) 기능 (페이징 + 필터 포함)

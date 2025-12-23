@@ -472,7 +472,15 @@
                             <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('hearts', 2)"><span>+</span><img id="slot-hearts-2" style="display:none;"></div><div class="slot-name" id="name-hearts-2"></div></div>
                             <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('hearts', 3)"><span>+</span><img id="slot-hearts-3" style="display:none;"></div><div class="slot-name" id="name-hearts-3"></div></div>
                         </div>
-                    
+                    <div style="margin-bottom: 30px;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="slot-label" style="margin-top: 0;">🔥 콤보 (최대 12단계)</span>
+        <button onclick="resetComboSlots()" style="font-size:0.8em; color:#999; background:none; border:none; cursor:pointer;">↺ 초기화</button>
+    </div>
+    
+    <div class="slot-group" id="combo-slot-container">
+        </div>
+                    </div>
                         <span class="slot-label">비결 (8)</span>
                         <div class="slot-group">
                             <div class="slot-wrapper"><div class="item-slot" onclick="openBuilderModal('marts', 0)"><span>+</span><img id="slot-marts-0" style="display:none;"></div><div class="slot-name" id="name-marts-0"></div></div>

@@ -1537,6 +1537,7 @@ function closeMartDetailSheet() {
 /* [수정] 빌드 상세 바텀시트 (콤보 기능 추가) */
 /* [수정] 빌드 상세 바텀시트 (모달 연결 + 콤보 기능 통합) */
 /* [수정] 빌드 상세 뷰어 (수묵화 스타일 + 4열 그리드 적용) */
+/* [수정] 빌드 상세 뷰어 (아이콘 복구 + 수묵화 콤보 적용) */
 function openBuildDetailSheet(build) {
     const sheet = document.getElementById('build-detail-sheet');
     const contentArea = sheet.querySelector('.sheet-content');
@@ -1558,21 +1559,26 @@ function openBuildDetailSheet(build) {
         try { parsedData = JSON.parse(atob(encodedData)); } catch (e2) { contentArea.innerHTML = "데이터 오류"; return; }
     }
 
+    // 아이템 정보 찾기 헬퍼
+    const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
+
+    // --- [HTML 생성 시작] ---
+
     // 2. 설명문
     let html = `<div style="border-bottom: 1px dashed #ccc; padding-bottom: 15px; margin-bottom: 20px;">
-                    <p style="margin: 0; color: #555; font-size: 0.95em; line-height:1.5;">${build.description || '작성된 설명이 없습니다.'}</p>
+                    <p style="margin: 0; color: #555; font-size: 0.95em; line-height:1.6; font-family: 'Noto Serif KR', serif;">${build.description || '작성된 설명이 없습니다.'}</p>
                 </div>`;
     
-    // 3. 추천 장비
+    // 3. 추천 장비 (텍스트)
     if (parsedData.rw || parsedData.ra) {
-        html += `<div style="background: #fffcf5; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 20px;">
-            <h4 style="margin: 0 0 10px 0; font-size: 0.95em; color: #333; border-left: 3px solid #d4af37; padding-left: 8px;">⚔️ 추천 장비</h4>
+        html += `<div style="background: #fffcf5; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; margin-bottom: 20px;">
+            <h4 style="margin: 0 0 10px 0; font-size: 0.95em; color: #444; border-left: 3px solid #d4af37; padding-left: 8px;">⚔️ 추천 장비</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div style="background: #fff; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px; text-align: center;">
+                <div style="background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 4px; text-align: center;">
                     <span style="display:block; font-size:0.8em; color:#999; margin-bottom:4px;">무기</span>
                     <span style="color: #333; font-weight: bold;">${parsedData.rw || '-'}</span>
                 </div>
-                <div style="background: #fff; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px; text-align: center;">
+                <div style="background: #fff; padding: 10px; border: 1px solid #eee; border-radius: 4px; text-align: center;">
                     <span style="display:block; font-size:0.8em; color:#999; margin-bottom:4px;">방어구</span>
                     <span style="color: #333; font-weight: bold;">${parsedData.ra || '-'}</span>
                 </div>
@@ -1580,50 +1586,90 @@ function openBuildDetailSheet(build) {
         </div>`;
     }
 
-    // 4. 아이템 슬롯 (무기/심법/비결) - 기존 로직 유지하되 디자인만 다듬음
-    const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
-
-    // (무기/심법 렌더링 생략 - 기존과 동일하게 유지하거나 필요시 수정 가능)
-    // 여기서는 콤보가 핵심이므로 콤보 부분만 집중적으로 수정합니다.
+    // 4. ★ [복구됨] 무기 & 심법 아이콘 섹션 ★
+    html += `<div style="display: flex; justify-content: space-evenly; align-items: center; gap: 10px; padding: 15px 10px; background: #fffcf5; border-radius: 12px; border: 1px solid #e0e0e0; margin-bottom: 15px;">`;
     
-    // 5. ★★★ [핵심 수정] 콤보 섹션 (4열 그리드) ★★★
+    // 무기 (큰 원)
+    html += `<div style="display: flex; gap: 8px;">`;
+    (parsedData.w || [null, null]).forEach(id => {
+        if(!id) return;
+        const item = getItemDetail('weapons', id);
+        html += `<div onclick="openInfoModalById('weapons', '${id}')" style="cursor: pointer; width: 55px; height: 55px; background: #fff; border-radius: 50%; border: 2px solid #d32f2f; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+                 </div>`;
+    });
+    html += `</div>`;
+
+    // 심법 (작은 원 4개)
+    html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">`;
+    (parsedData.h || [null, null, null, null]).forEach(id => {
+        if(!id) return;
+        const item = getItemDetail('hearts', id);
+        html += `<div onclick="openInfoModalById('hearts', '${id}')" style="cursor: pointer; width: 34px; height: 34px; background: #fff; border-radius: 50%; border: 1.5px solid #1976d2; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+                 </div>`;
+    });
+    html += `</div></div>`; 
+
+    // 5. ★ [복구됨] 비결 아이콘 섹션 (있을 경우만 표시) ★
+    const validMarts = (parsedData.m || []).filter(id => id);
+    if(validMarts.length > 0) {
+        html += `<div style="padding: 15px 10px; background: #fffcf5; border-radius: 12px; border: 1px solid #e0e0e0; display: flex; justify-content: center; margin-bottom: 15px;">
+                    <div style="display: grid; grid-template-columns: repeat(4, auto); gap: 8px;">`;
+        validMarts.forEach(id => {
+            const item = getItemDetail('marts', id);
+            html += `<div onclick="openInfoModalById('marts', '${id}')" style="cursor: pointer; width: 34px; height: 34px; background: #fff; border-radius: 50%; border: 1.5px solid #fbc02d; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/logo.png'">
+                     </div>`;
+        });
+        html += `</div></div>`;
+    }
+
+    // 6. 콤보 섹션 (수묵화풍 그리드)
     const comboData = parsedData.k || []; 
     if (comboData && comboData.length > 0) {
-        html += `<h4 style="margin: 20px 0 10px 0; font-size: 0.95em; color: #333; border-left: 3px solid #d4af37; padding-left: 8px;">🔥 추천 콤보</h4>`;
+        html += `<h4 style="margin: 25px 0 10px 0; font-size: 0.95em; color: #444; border-left: 3px solid #d4af37; padding-left: 8px;">🔥 추천 콤보</h4>`;
         
-        // 여기서부터 4열 그리드 시작
         html += `<div class="combo-viewer-grid">`;
         
         comboData.forEach((key, index) => {
-            html += `<div class="combo-viewer-item">`;
-            html += `<span class="combo-step-badge">${index + 1}</span>`; // 순서 번호
+            const isLast = index === comboData.length - 1;
 
-            // A. 키(Key)인 경우
+            html += `<div class="combo-step-unit">`;
+            
+            // 박스
+            html += `<div class="combo-item-box">`;
+            html += `<span class="combo-step-num">${index + 1}</span>`;
+
             if (KEY_MAP[key]) {
                 const k = KEY_MAP[key];
-                html += `<div class="key-cap-viewer ${k.color} ${k.hold?'hold':''}">
-                            <span>${k.text}</span>
-                         </div>`;
-            } 
-            // B. 아이템(비결)인 경우
-            else {
+                html += `<div class="key-cap-viewer ${k.color} ${k.hold?'hold':''}"><span>${k.text}</span></div>`;
+            } else {
                 let item = builderData.marts ? builderData.marts.find(m => m.id === key) : null;
                 if (!item && builderData.weapons) item = builderData.weapons.find(w => w.id === key);
                 
                 if (item) {
-                    // 클릭 시 상세 정보 팝업
                     html += `<img src="${item.img}" class="combo-mart-img" onclick="openInfoModalById('marts', '${key}')" onerror="this.src='images/logo.png'">`;
                 } else {
                     html += `<span style="font-size:0.8em; color:#999;">?</span>`;
                 }
             }
-            html += `</div>`; // item 닫기
+            html += `</div>`; 
+
+            // 화살표
+            if (!isLast) {
+                html += `<div class="combo-flow-arrow">›</div>`;
+            } else {
+                html += `<div class="combo-flow-arrow" style="opacity:0;">›</div>`;
+            }
+
+            html += `</div>`; 
         });
 
-        html += `</div>`; // grid 닫기
+        html += `</div>`; 
     }
 
-    // 6. 하단 버튼
+    // 7. 하단 버튼
     html += `<div style="margin-top: 30px; margin-bottom: 20px; text-align: center;">
                 <button onclick="copyToClipboard('${build.link}', this)" 
                         style="width: 100%; padding: 12px; background-color: #333; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-family: 'Noto Serif KR', serif;">
@@ -1635,6 +1681,7 @@ function openBuildDetailSheet(build) {
     contentArea.innerHTML = html;
     openBuildDetailSheetView();
 }
+
 
 
 function openBuildDetailSheetView() { document.body.classList.add('build-sheet-open'); }

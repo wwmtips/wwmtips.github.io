@@ -1127,23 +1127,34 @@ function closeBuilderModal(e) {
 }
 // 1. 링크 생성 함수 (닉네임 ID 변경 적용)
 // [수정] 링크 생성 함수 (추천 장비 정보 포함)
+
+/* [수정] 링크 생성 함수 (빌드 제목, 추천 장비 포함) */
 function generateBuildUrl() {
-    // 1. 입력된 정보 가져오기 (ID 확인: build-creator, rec-weapons, rec-armor)
+    // 1. 입력된 정보 가져오기
+    const title = document.getElementById('build-title').value.trim(); // [추가] 빌드 이름
     const creatorName = document.getElementById('build-creator').value.trim();
     const recWeapons = document.getElementById('rec-weapons').value.trim();
     const recArmor = document.getElementById('rec-armor').value.trim();
 
-    // 2. 데이터 객체 생성 (rw: 무기, ra: 방어구 추가)
+    // 2. 제목이 없으면 경고
+    if (!title) {
+        alert("빌드 이름을 입력해주세요!");
+        document.getElementById('build-title').focus();
+        return;
+    }
+
+    // 3. 데이터 객체 생성 (t: 제목 추가)
     const buildData = { 
+        t: title,        // [추가] 제목
+        c: creatorName,  // 작성자
         w: currentBuild.weapons, 
         h: currentBuild.hearts, 
         m: currentBuild.marts, 
-        c: creatorName,
-        rw: recWeapons, // [추가] 추천 무기
-        ra: recArmor    // [추가] 추천 방어구
+        rw: recWeapons,  // 추천 무기
+        ra: recArmor     // 추천 방어구
     };
 
-    // 3. 인코딩 및 URL 생성
+    // 4. 인코딩 및 URL 생성
     const encodedString = btoa(unescape(encodeURIComponent(JSON.stringify(buildData))));
     const origin = window.location.origin;
     let basePath = window.location.pathname.replace('index.html', ''); 
@@ -1151,38 +1162,75 @@ function generateBuildUrl() {
     
     const viewerUrl = `${origin}${basePath}viewer.html?b=${encodedString}`;
     
-    // 4. 결과창에 넣기
+    // 5. 결과창 표시
     const urlInput = document.getElementById('result-url');
     urlInput.value = viewerUrl;
     urlInput.style.display = 'block';
     
-    // (선택) 클립보드 복사 알림은 shareBuildToCloud에서 처리하므로 여기선 생략 가능
-    // navigator.clipboard.writeText(viewerUrl)... 
+    // 알림 (선택 사항)
+    // alert("링크가 생성되었습니다. 복사해서 사용하세요!");
 }
 
-
+/* [수정] 뷰어 로드 함수 (제목/작성자/장비 표시 로직 추가) */
 function loadViewer() {
+    // 데이터가 로드되지 않았다면 재귀 호출
     if (!builderData) {
         fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data; loadViewer(); });
         return;
     }
+
     const params = new URLSearchParams(window.location.search);
     const encodedData = params.get('b');
-    let w = [], h = [], m = [], creator = "";
+    
+    // 기본값 설정
+    let w = [], h = [], m = [];
+    let title = "나만의 빌드", creator = "익명";
+    let rw = "", ra = "";
 
     if (encodedData) {
         try {
-            const parsedData = JSON.parse(decodeURIComponent(escape(atob(encodedData))));
-            w = parsedData.w || []; h = parsedData.h || []; m = parsedData.m || []; creator = parsedData.c || "";
+            // 디코딩 (한글 깨짐 방지 로직 포함)
+            const decoded = decodeURIComponent(escape(atob(encodedData)));
+            const parsed = JSON.parse(decoded);
+            
+            w = parsed.w || [];
+            h = parsed.h || [];
+            m = parsed.m || [];
+            title = parsed.t || "무제";    // 제목 가져오기
+            creator = parsed.c || "익명";  // 작성자 가져오기
+            rw = parsed.rw || "";          // 추천 무기
+            ra = parsed.ra || "";          // 추천 방어구
+
         } catch (e) {
-            console.error("잘못된 빌드 주소입니다.", e);
-            return;
+            console.error("주소 파싱 실패:", e);
+            // 구버전(Base64 only) 호환 시도
+            try {
+                const parsed = JSON.parse(atob(encodedData));
+                w = parsed.w || []; h = parsed.h || []; m = parsed.m || []; creator = parsed.c || "";
+            } catch (e2) {}
         }
     }
 
+    // 1. 텍스트 정보 표시
     const titleEl = document.getElementById('build-main-title');
-    if (titleEl) titleEl.innerText = creator ? `${creator}` : "익명의 협객의 빌드";
+    const creatorEl = document.getElementById('build-creator-info');
+    const rwEl = document.getElementById('view-rec-weapon');
+    const raEl = document.getElementById('view-rec-armor');
+    const recContainer = document.getElementById('viewer-rec-container');
 
+    if (titleEl) titleEl.innerText = title; // 제목 설정
+    if (creatorEl) creatorEl.innerText = "작성자: " + creator; // 작성자 설정
+
+    // 추천 장비가 하나라도 있으면 표시, 없으면 숨김
+    if (rw || ra) {
+        if(recContainer) recContainer.style.display = 'flex';
+        if(rwEl) rwEl.innerText = rw || '-';
+        if(raEl) raEl.innerText = ra || '-';
+    } else {
+        if(recContainer) recContainer.style.display = 'none';
+    }
+
+    // 2. 아이템 슬롯 렌더링 헬퍼
     const renderSlot = (type, ids, prefix) => {
         ids.forEach((id, idx) => {
             if (!id) return;
@@ -1199,10 +1247,13 @@ function loadViewer() {
             }
         });
     };
+
+    // 3. 슬롯 채우기
     renderSlot('weapons', w, 'v');
     renderSlot('hearts', h, 'v');
     renderSlot('marts', m, 'v');
 }
+
 
 // [script.js] renderBuildList 함수 (작성자 위치 왼쪽으로 이동)
 function renderBuildList(filterType) {

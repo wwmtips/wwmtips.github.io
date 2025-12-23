@@ -3115,49 +3115,48 @@ h3 {
 /* =========================================
    [모바일 강력 패치] 무조건 한 줄 가로 스크롤
    ========================================= */
+/* =========================================
+   [모바일 최종] 강제 가로 스크롤 (Priority Fix)
+   ========================================= */
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) { /* 적용 범위를 좀 더 넓게 잡음 */
+    
+    /* ID 선택자(#build-detail-sheet)를 붙여서 우선순위를 최상으로 높임 */
+    #build-detail-sheet .combo-viewer-grid,
     .combo-viewer-grid {
-        /* 1. 그리드(4칸) 설정을 강제로 끕니다 */
-        display: flex !important;             
-        grid-template-columns: none !important; 
+        display: flex !important;             /* 그리드 끄고 플렉스 적용 */
+        grid-template-columns: unset !important; /* 컬럼 설정 초기화 */
+        flex-wrap: nowrap !important;         /* 줄바꿈 절대 금지 */
+        overflow-x: auto !important;          /* 가로 스크롤 허용 */
+        justify-content: flex-start !important; /* 왼쪽 정렬 */
         
-        /* 2. 한 줄로만 배치하고, 넘치면 스크롤 */
-        flex-wrap: nowrap !important;         
-        overflow-x: auto !important;          
-        justify-content: flex-start !important; 
+        width: 100% !important;
+        padding: 15px 10px !important;
+        gap: 12px !important;
         
-        /* 3. 간격 및 여백 */
-        gap: 12px;                 
-        padding: 15px 10px;             
-        width: 100%;
-        box-sizing: border-box;
-        
-        /* 스크롤바 숨기기 (깔끔하게) */
+        /* 스크롤바 숨기기 */
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
-    
+
     .combo-viewer-grid::-webkit-scrollbar {
         display: none;
     }
 
-    /* 4. 아이템 박스 크기 고정 (찌그러짐 방지) */
+    /* 아이템 박스도 강제로 크기 고정 */
+    #build-detail-sheet .combo-item-box,
     .combo-item-box {
-        flex: 0 0 70px !important; /* 크기 고정 */
+        display: flex !important;
+        flex: 0 0 70px !important; /* 크기 고정 (줄어들지 않음) */
         width: 70px !important;
         height: 70px !important;
-        min-width: 70px !important; /* 최소 너비 보장 */
-    }
-
-    /* 5. 모바일에서 글씨 크기 살짝 조정 */
-    .key-cap-viewer {
-        font-size: 1.2em !important;
+        min-width: 70px !important;
+        margin: 0 !important;
     }
     
-    .combo-step-num {
-        font-size: 0.7em !important;
-        top: 3px !important;
-        left: 5px !important;
+    /* 모바일 글씨 크기 조정 */
+    #build-detail-sheet .key-cap-viewer,
+    .key-cap-viewer {
+        font-size: 1.1em !important;
     }
 }

@@ -1180,6 +1180,7 @@ function selectBuilderItem(itemId, imgSrc, itemName) {
         return;
     }
 
+
     // ★ 일반 아이템인 경우 (기존 로직)
     currentBuild[type][index] = itemId;
     const imgEl = document.getElementById(`slot-${type}-${index}`);
@@ -3034,15 +3035,20 @@ function selectBuilderItem(itemId, imgSrc, itemName) {
 // 1. 콤보 슬롯 렌더링
 
 
-
+function removeComboStep(event, index) {
+    event.stopPropagation(); // 모달 열림 방지
+    currentBuild.combo.splice(index, 1); // 배열에서 삭제
+    renderComboSlots(); // 다시 그리기
+}
 
 /* [수정] 콤보 슬롯 렌더링 (+버튼 포함 버전) */
+// 1. 콤보 슬롯 렌더링 (수정됨: + 버튼 그리기 로직 추가)
 function renderComboSlots() {
     const container = document.getElementById('combo-slot-container');
     if (!container) return;
     container.innerHTML = '';
 
-    // 1. 현재 입력된 콤보들 그리기
+    // A. 현재 입력된 콤보들 그리기
     currentBuild.combo.forEach((val, index) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'slot-wrapper';
@@ -3057,10 +3063,13 @@ function renderComboSlots() {
                 const k = KEY_MAP[val];
                 contentHtml = `<div class="key-cap ${k.color} ${k.hold?'hold':''}" style="width:100%; height:100%; border-radius:4px; box-shadow:none; font-size:0.9em;"><span>${k.text}</span></div>`;
             } 
-            // 비결 아이템인지 확인
+            // 아니면 아이템(비결)으로 간주
             else {
-                let item = builderData.marts ? builderData.marts.find(m => m.id === val) : null;
-                if (!item && builderData.weapons) item = builderData.weapons.find(w => w.id === val);
+                let item = null;
+                if (builderData) {
+                    item = builderData.marts ? builderData.marts.find(m => m.id === val) : null;
+                    if (!item && builderData.weapons) item = builderData.weapons.find(w => w.id === val);
+                }
                 
                 if (item) contentHtml = `<img src="${item.img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">`;
                 else contentHtml = `<div style="font-size:0.7em; word-break:break-all;">${val}</div>`;
@@ -3077,7 +3086,8 @@ function renderComboSlots() {
         container.appendChild(wrapper);
     });
 
-    // 2. 마지막에 [+] 버튼 추가 (최대 20개까지만)
+    // ▼▼▼ [이 부분이 빠져 있어서 안 나왔던 겁니다!] ▼▼▼
+    // B. 마지막에 [+] 버튼 추가 (최대 20개까지만)
     if (currentBuild.combo.length < 20) {
         const addWrapper = document.createElement('div');
         addWrapper.className = 'slot-wrapper';

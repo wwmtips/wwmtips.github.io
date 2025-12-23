@@ -155,6 +155,7 @@ function loadData() {
         renderQuizTable(globalData.quiz); // 족보 미리 그리기
         updateQuizCounter();
         renderFullNews(globalData.news);  // 뉴스 미리 그리기
+       renderComboSlots(); 
 
         // 상세 페이지로 바로 진입한 경우 처리 (데이터가 이미 그려져 있으니 상세만 덮으면 됨)
         if (shortQuestId) {

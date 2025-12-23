@@ -3143,7 +3143,7 @@ function removeComboStep(e, idx) { e.stopPropagation(); currentBuild.combo.splic
 
 /* =========================================
 /* =========================================
-   [보스 목록] 지역 정보(Map)와 동일한 구조로 변경
+   [보스 목록] 지역 정보(Map) HTML 구조 그대로 사용
    ========================================= */
 function renderBossList(containerId, filterType = 'all', limit = 0) {
     const container = document.getElementById(containerId);
@@ -3170,21 +3170,23 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
 
     let html = '';
     targets.forEach(boss => {
-        const badgeClass = boss.type === 'heroic' ? 'red' : 'gray';
         const badgeName = boss.type === 'heroic' ? '협경' : '일반';
+        const badgeColor = boss.type === 'heroic' ? '#d32f2f' : '#757575'; // 빨강 / 회색
         const bgImage = boss.img ? boss.img : 'images/logo.png';
 
-        // ★ 핵심: 지도 카드(map-card)와 똑같은 클래스명 패턴 사용 (.boss-card)
+        // ★ 핵심: 사용자가 보여준 map-card 구조 그대로 사용 (+배지 추가)
         html += `
-        <a href="${boss.link}" class="boss-card" onclick="event.preventDefault(); loadContent('${boss.link}');">
-            <div class="boss-hero-bg" style="background-image: url('${bgImage}');">
-                <span class="boss-badge ${badgeClass}">${badgeName}</span>
+        <div class="map-card" onclick="loadContent('${boss.link}')" style="cursor: pointer;">
+            <div class="map-hero-bg" style="background-image: url('${bgImage}'); position: relative;">
+                <span style="position: absolute; top: 8px; left: 8px; padding: 2px 6px; font-size: 0.7em; font-weight: bold; color: #fff; background-color: ${badgeColor}; border-radius: 3px; z-index: 2; box-shadow: 0 1px 2px rgba(0,0,0,0.3);">
+                    ${badgeName}
+                </span>
             </div>
-            <div class="boss-content">
-                <div class="boss-title">${boss.name}</div>
-                <div class="boss-desc">${boss.subtext}</div>
+            <div class="map-content">
+                <div class="map-title">${boss.name}</div>
+                <p class="map-desc">${boss.subtext}</p>
             </div>
-        </a>`;
+        </div>`;
     });
 
     container.innerHTML = html;

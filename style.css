@@ -2815,3 +2815,85 @@ h3 {
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* [추가] 콤보(Combo) 섹션 스타일 */
+.combo-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 15px 10px;
+    background: #222; /* 어두운 배경 (참고 이미지 느낌) */
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.combo-step {
+    display: flex;
+    align-items: center;
+}
+
+/* 화살표 (>) */
+.combo-arrow {
+    color: #666;
+    margin: 0 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/* 키 버튼 공통 스타일 */
+.key-cap {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1em;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+    position: relative;
+    user-select: none;
+}
+
+.key-cap span {
+    pointer-events: none;
+}
+
+.key-sub {
+    font-size: 0.5em;
+    font-weight: normal;
+    margin-top: -2px;
+    opacity: 0.8;
+}
+
+/* 홀드(차지) 표시 */
+.key-cap.hold::after {
+    content: 'Hold';
+    position: absolute;
+    bottom: 2px;
+    font-size: 0.5em;
+    opacity: 0.7;
+    text-transform: uppercase;
+}
+
+/* 색상 테마 (이미지 참고) */
+.key-blue { background-color: #42a5f5; }   /* ~ (특수) */
+.key-gray { background-color: #90a4ae; }   /* SCR, LMB */
+.key-orange { background-color: #ffb74d; } /* R (강공) */
+.key-red { background-color: #ef5350; }    /* Q (스킬) */
+.key-teal { background-color: #26c6da; }   /* TAB */
+.key-purple { background-color: #ab47bc; } /* E (반격) */
+
+/* 비결 아이콘 (콤보 내) */
+.combo-mart-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    border: 2px solid #555;
+    background: #000;
+    object-fit: cover;
+}

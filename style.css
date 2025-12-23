@@ -3118,45 +3118,54 @@ h3 {
 /* =========================================
    [모바일 최종] 강제 가로 스크롤 (Priority Fix)
    ========================================= */
+/* =========================================
+   [모바일 최종] 4열 격자 정렬 (Grid Fix)
+   ========================================= */
 
-@media screen and (max-width: 900px) { /* 적용 범위를 좀 더 넓게 잡음 */
+@media screen and (max-width: 900px) {
     
-    /* ID 선택자(#build-detail-sheet)를 붙여서 우선순위를 최상으로 높임 */
+    /* 1. 가로 스크롤을 끄고 4개씩 격자로 정렬 */
     #build-detail-sheet .combo-viewer-grid,
     .combo-viewer-grid {
-        display: flex !important;             /* 그리드 끄고 플렉스 적용 */
-        grid-template-columns: unset !important; /* 컬럼 설정 초기화 */
-        flex-wrap: nowrap !important;         /* 줄바꿈 절대 금지 */
-        overflow-x: auto !important;          /* 가로 스크롤 허용 */
-        justify-content: flex-start !important; /* 왼쪽 정렬 */
+        display: grid !important;             /* 플렉스 해제 후 그리드 적용 */
+        grid-template-columns: repeat(4, 1fr) !important; /* 무조건 4열 */
+        flex-wrap: wrap !important;           /* 줄바꿈 허용 */
+        overflow-x: hidden !important;        /* 가로 스크롤 차단 */
         
         width: 100% !important;
         padding: 15px 10px !important;
-        gap: 12px !important;
-        
-        /* 스크롤바 숨기기 */
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        gap: 8px !important;                 /* 모바일은 좁으므로 간격 축소 */
+        box-sizing: border-box !important;
     }
 
-    .combo-viewer-grid::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* 아이템 박스도 강제로 크기 고정 */
+    /* 2. 아이템 박스 크기 자동 조절 */
     #build-detail-sheet .combo-item-box,
     .combo-item-box {
         display: flex !important;
-        flex: 0 0 70px !important; /* 크기 고정 (줄어들지 않음) */
-        width: 70px !important;
-        height: 70px !important;
-        min-width: 70px !important;
+        flex: unset !important;               /* 고정 너비 해제 */
+        width: 100% !important;               /* 그리드 칸에 맞춤 */
+        max-width: none !important;
+        min-width: 0 !important;              /* 최소 너비 제한 해제 */
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;       /* 정사각형 유지 */
         margin: 0 !important;
     }
     
-    /* 모바일 글씨 크기 조정 */
+    /* 3. 모바일 글씨 및 숫자 크기 최적화 */
     #build-detail-sheet .key-cap-viewer,
     .key-cap-viewer {
-        font-size: 1.1em !important;
+        font-size: 1.0em !important;          /* 4열일 때 폰트가 크면 깨지므로 약간 축소 */
+    }
+
+    .combo-step-num {
+        font-size: 0.7em !important;
+        top: 3px !important;
+        left: 5px !important;
+    }
+
+    /* 4. 비결 이미지 크기 정렬 */
+    .combo-mart-img {
+        width: 100% !important;
+        height: 100% !important;
     }
 }

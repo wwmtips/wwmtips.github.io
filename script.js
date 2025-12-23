@@ -20,9 +20,16 @@ let builderData = null;
 let chunjiData = []; // 천지록 데이터 전역 변수
 let currentChunjiData = [];
 
-// 빌더 상태 관리
-let currentBuild = { weapons: [null,null], hearts: [null,null,null,null], marts: new Array(8).fill(null) };
+
 let currentSlot = { type: '', index: 0 };
+// [수정] 빌드 상태 관리 객체 (combo 배열 추가)
+let currentBuild = { 
+    weapons: [null,null], 
+    hearts: [null,null,null,null], 
+    marts: new Array(8).fill(null),
+    combo: new Array(12).fill(null) // [추가] 콤보 12칸
+};
+
 
 // [지도 더미 데이터]
 const dummyMapData = [
@@ -1057,7 +1064,12 @@ function openBuilderInterface() {
     document.getElementById('tools-menu').style.display = 'none';
     document.getElementById('builder-interface').style.display = 'block';
     if (!builderData) {
-         fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data; });
+         fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data;
+         renderComboSlots(); 
+             
+         });
+    }else{
+        renderComboSlots(); 
     }
 }
 
@@ -1144,14 +1156,15 @@ function generateBuildUrl() {
     }
 
     // 3. 데이터 객체 생성 (t: 제목 추가)
-    const buildData = { 
-        t: title,        // [추가] 제목
-        c: creatorName,  // 작성자
+   const buildData = { 
+        t: title,
+        c: creatorName,
         w: currentBuild.weapons, 
         h: currentBuild.hearts, 
         m: currentBuild.marts, 
-        rw: recWeapons,  // 추천 무기
-        ra: recArmor     // 추천 방어구
+        rw: recWeapons,
+        ra: recArmor,
+        k: currentBuild.combo // [수정] 콤보 배열 저장
     };
 
     // 4. 인코딩 및 URL 생성
@@ -1458,37 +1471,56 @@ const KEY_MAP = {
 };
 
 /* [수정] 빌드 상세 바텀시트 (콤보 기능 추가) */
+/* [수정] 빌드 상세 바텀시트 (모달 연결 + 콤보 기능 통합) */
 function openBuildDetailSheet(build) {
     const sheet = document.getElementById('build-detail-sheet');
     const contentArea = sheet.querySelector('.sheet-content');
     
+    // 1. 데이터 디코딩 및 파싱
     let encodedData = null;
-    if (build.link && build.link.includes('?b=')) encodedData = build.link.split('?b=')[1];
+    if (build.link && build.link.includes('?b=')) {
+        encodedData = build.link.split('?b=')[1];
+    }
 
     if (!encodedData || !builderData) {
-        contentArea.innerHTML = `<div style="padding: 50px; text-align: center;">🚨 상세 정보를 불러올 수 없습니다.</div>`;
-        openBuildDetailSheetView(); return;
+        contentArea.innerHTML = `<div style="padding: 50px; text-align: center; color: var(--wuxia-accent-red);">🚨 상세 빌드 정보를 불러올 수 없습니다.</div>`;
+        openBuildDetailSheetView();
+        return;
     }
 
     encodedData = encodedData.replace(/ /g, '+');
     let parsedData = null;
-    try { parsedData = JSON.parse(decodeURIComponent(escape(atob(encodedData)))); } 
-    catch (e) { try { parsedData = JSON.parse(atob(encodedData)); } catch (e2) { contentArea.innerHTML = "데이터 오류"; return; } }
 
-    // 1. 설명 및 추천 장비 (기존 유지)
+    try {
+        const decodedString = decodeURIComponent(escape(atob(encodedData)));
+        parsedData = JSON.parse(decodedString);
+    } catch (e1) {
+        try {
+            parsedData = JSON.parse(atob(encodedData));
+        } catch (e2) {
+            contentArea.innerHTML = `<div style="padding: 50px; text-align: center; color: var(--wuxia-accent-red);">🚨 잘못된 빌드 코드 형식입니다.</div>`;
+            openBuildDetailSheetView();
+            return;
+        }
+    }
+
+    // 2. 설명문 표시
     let html = `<div style="border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 20px;">
                     <p style="margin: 0; color: #999; font-size: 0.9em;">${build.description || '작성된 설명이 없습니다.'}</p>
                 </div>`;
     
+    // 3. 추천 장비 표시
     if (parsedData.rw || parsedData.ra) {
         html += `<div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
             <h4 style="margin: 0 0 10px 0; font-size: 0.95em; color: #555;">⚔️ 추천 장비</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div style="background: #fff; padding: 8px; border: 1px solid #eee; border-radius: 4px; font-size: 0.9em; text-align: center;">
-                    <span style="display:block; font-size:0.8em; color:#999;">무기</span><span style="color: #333; font-weight: bold;">${parsedData.rw || '-'}</span>
+                    <span style="display:block; font-size:0.8em; color:#999;">무기</span>
+                    <span style="color: #333; font-weight: bold;">${parsedData.rw || '-'}</span>
                 </div>
                 <div style="background: #fff; padding: 8px; border: 1px solid #eee; border-radius: 4px; font-size: 0.9em; text-align: center;">
-                    <span style="display:block; font-size:0.8em; color:#999;">방어구</span><span style="color: #333; font-weight: bold;">${parsedData.ra || '-'}</span>
+                    <span style="display:block; font-size:0.8em; color:#999;">방어구</span>
+                    <span style="color: #333; font-weight: bold;">${parsedData.ra || '-'}</span>
                 </div>
             </div>
         </div>`;
@@ -1496,52 +1528,61 @@ function openBuildDetailSheet(build) {
 
     const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
 
-    // 2. 상단 데크 (무기/심법)
+    // 4. 아이템 슬롯 표시 (상단 데크: 무기 + 심법)
     html += `<div style="display: flex; justify-content: space-evenly; align-items: center; gap: 15px; padding: 15px 10px; background: #fafafa; border-radius: 12px; border: 1px dashed #ddd; margin-bottom: 15px;">`;
+    
+    // 🔴 무기 그룹
     html += `<div style="display: flex; gap: 8px;">`;
     (parsedData.w || [null, null]).forEach(id => {
         if(!id) return;
         const item = getItemDetail('weapons', id);
-        html += `<div onclick="openInfoModalById('weapons', '${id}')" style="cursor: pointer; width: 60px; height: 60px; background: #fff; border-radius: 50%; border: 2.5px solid #d32f2f; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'"></div>`;
+        // 클릭 시 모달 열기 연결 (openInfoModalById)
+        html += `<div onclick="openInfoModalById('weapons', '${id}')" style="cursor: pointer; width: 60px; height: 60px; background: #fff; border-radius: 50%; border: 2.5px solid #d32f2f; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+                 </div>`;
     });
-    html += `</div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">`;
+    html += `</div>`;
+
+    // 🔵 심법 그룹
+    html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">`;
     (parsedData.h || [null, null, null, null]).forEach(id => {
         if(!id) return;
         const item = getItemDetail('hearts', id);
-        html += `<div onclick="openInfoModalById('hearts', '${id}')" style="cursor: pointer; width: 38px; height: 38px; background: #fff; border-radius: 50%; border: 1.5px solid #1976d2; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'"></div>`;
+        html += `<div onclick="openInfoModalById('hearts', '${id}')" style="cursor: pointer; width: 38px; height: 38px; background: #fff; border-radius: 50%; border: 1.5px solid #1976d2; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
+                 </div>`;
     });
     html += `</div></div>`; 
 
-    // 3. 하단 데크 (비결)
+    // 5. 아이템 슬롯 표시 (하단 데크: 비결)
     const validMarts = (parsedData.m || []).filter(id => id);
     if(validMarts.length > 0) {
         html += `<div style="padding: 15px 10px; background: #fafafa; border-radius: 12px; border: 1px dashed #ddd; display: flex; justify-content: center; margin-bottom: 15px;">
                     <div style="display: grid; grid-template-columns: repeat(4, auto); gap: 8px;">`;
         validMarts.forEach(id => {
             const item = getItemDetail('marts', id);
-            html += `<div onclick="openInfoModalById('marts', '${id}')" style="cursor: pointer; width: 36px; height: 36px; background: #fff; border-radius: 50%; border: 1.5px solid #fbc02d; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);"><img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/logo.png'"></div>`;
+            html += `<div onclick="openInfoModalById('marts', '${id}')" style="cursor: pointer; width: 36px; height: 36px; background: #fff; border-radius: 50%; border: 1.5px solid #fbc02d; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/logo.png'">
+                     </div>`;
         });
         html += `</div></div>`;
     }
 
-    // ▼▼▼ [추가] 콤보(Combo) 섹션 ▼▼▼
-    // 데이터 필드명: k (keys) 로 가정
+    // 6. 콤보(Combo) 섹션 표시
     const comboData = parsedData.k || []; 
-    // ★테스트용 더미 데이터 (데이터가 없을 때 테스트하려면 아래 주석 해제)★
-    const comboData = ['~', 'SCR', 'R', 'R', 'R', 'Q', 'mart_01', 'R', 'R', 'TAB']; 
-
+    
     if (comboData && comboData.length > 0) {
-        html += `<h4 style="margin: 0 0 10px 0; font-size: 0.95em; color: #555;">🔥 추천 콤보[테스트중]</h4>`;
+        html += `<h4 style="margin: 0 0 10px 0; font-size: 0.95em; color: #555;">🔥 추천 콤보</h4>`;
         html += `<div class="combo-container">`;
         
         comboData.forEach((key, index) => {
-            // 화살표 (첫 번째 아이템 제외)
+            // 화살표 추가 (첫 번째 제외)
             if (index > 0) {
                 html += `<div class="combo-arrow">›</div>`;
             }
 
-            // A. 일반 키 (KEY_MAP에 있는 경우)
-            if (KEY_MAP[key]) {
+            // A. 일반 조작키 (KEY_MAP에 있는 경우)
+            if (typeof KEY_MAP !== 'undefined' && KEY_MAP[key]) {
                 const kInfo = KEY_MAP[key];
                 const holdClass = kInfo.hold ? 'hold' : '';
                 html += `<div class="combo-step">
@@ -1550,14 +1591,13 @@ function openBuildDetailSheet(build) {
                             </div>
                          </div>`;
             } 
-            // B. 비결/아이템 (빌더 데이터에 있는 ID인 경우)
+            // B. 비결/아이템 (ID인 경우)
             else {
-                // 비결인지 확인 (marts)
                 let item = builderData.marts ? builderData.marts.find(m => m.id === key) : null;
-                // 없으면 무기나 심법에서도 찾아봄 (확장성)
                 if (!item && builderData.weapons) item = builderData.weapons.find(w => w.id === key);
                 
                 if (item) {
+                    // 비결 클릭 시 상세 정보 모달 열기
                     html += `<div class="combo-step" onclick="openInfoModalById('marts', '${key}')" style="cursor:pointer;">
                                 <img src="${item.img}" class="combo-mart-icon" onerror="this.src='images/logo.png'">
                              </div>`;
@@ -1569,17 +1609,19 @@ function openBuildDetailSheet(build) {
         });
         html += `</div>`;
     }
-    // ▲▲▲ 콤보 섹션 끝 ▲▲▲
 
+    // 7. 링크 복사 버튼
     html += `<div style="margin-top: 30px; margin-bottom: 20px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
-                <button onclick="copyToClipboard('${build.link}', this)" style="width: 100%; padding: 12px; background-color: #333; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1em;">🔗 이 빌드 링크 복사</button>
+                <button onclick="copyToClipboard('${build.link}', this)" 
+                        style="width: 100%; padding: 12px; background-color: #333; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1em;">
+                    🔗 이 빌드 링크 복사
+                </button>
             </div>`;
 
     document.getElementById('build-sheet-title').innerText = build.title;
     contentArea.innerHTML = html;
     openBuildDetailSheetView();
 }
-
 
 
 function openBuildDetailSheetView() { document.body.classList.add('build-sheet-open'); }
@@ -2798,4 +2840,181 @@ function openInfoModalById(type, id) {
     if (!builderData || !builderData[type]) return;
     const item = builderData[type].find(i => i.id === id);
     if (item) openInfoModal(item);
+}
+
+
+/* =========================================
+   [신규] 콤보 슬롯 시스템 (모달 선택 방식)
+   ========================================= */
+
+// 1. 콤보 슬롯 렌더링 (페이지 로드/초기화 시 호출 필요)
+function renderComboSlots() {
+    const container = document.getElementById('combo-slot-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    currentBuild.combo.forEach((val, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'slot-wrapper';
+        
+        let contentHtml = '<span>+</span>';
+        let borderStyle = 'dashed';
+        let displayStyle = 'none'; // 이미지 숨김 기본
+        let imgSrc = '';
+
+        // 값이 있는 경우 (키 또는 비결 ID)
+        if (val) {
+            borderStyle = 'solid';
+            
+            // A. 일반 키 (KEY_MAP에 있는 경우)
+            if (typeof KEY_MAP !== 'undefined' && KEY_MAP[val]) {
+                const k = KEY_MAP[val];
+                // 키캡 스타일 div를 이미지 대신 넣거나, 이미지를 숨기고 div를 보여줌
+                // 여기서는 slot 안에 key-cap div를 append하는 방식으로 처리
+                contentHtml = `<div class="key-cap ${k.color} ${k.hold?'hold':''}" style="width:100%; height:100%; border-radius:4px; box-shadow:none; font-size:0.9em;"><span>${k.text}</span></div>`;
+            } 
+            // B. 비결 아이템 (ID인 경우)
+            else {
+                // 비결 데이터 찾기
+                let item = builderData.marts ? builderData.marts.find(m => m.id === val) : null;
+                // 없으면 무기에서도 찾기 (혹시 무기 스킬 넣을 수도 있으니)
+                if (!item && builderData.weapons) item = builderData.weapons.find(w => w.id === val);
+                
+                if (item) {
+                    contentHtml = `<img src="${item.img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">`;
+                } else {
+                    contentHtml = `<div style="font-size:0.7em;">${val}</div>`;
+                }
+            }
+        }
+
+        wrapper.innerHTML = `
+            <div class="item-slot" id="slot-combo-${index}" onclick="openBuilderModal('combo', ${index})" style="border-style: ${borderStyle}; padding:0; overflow:hidden;">
+                ${contentHtml}
+            </div>
+            <div class="slot-name" style="font-size:0.7em; margin-top:2px; color:#999;">${index + 1}</div>
+        `;
+        container.appendChild(wrapper);
+    });
+}
+
+// 2. 콤보 초기화
+function resetComboSlots() {
+    currentBuild.combo = new Array(12).fill(null);
+    renderComboSlots();
+}
+
+// 3. [중요] 모달 열기 함수 수정 (기존 openBuilderModal 함수를 덮어쓰세요)
+function openBuilderModal(type, index) {
+    if (!builderData) return alert("데이터를 불러오는 중입니다...");
+    currentSlot = { type, index }; // 현재 선택한 슬롯 저장
+    
+    const modal = document.getElementById('builder-modal');
+    const list = document.getElementById('builder-modal-list');
+    const title = document.getElementById('builder-modal-title');
+    
+    list.innerHTML = '';
+    
+    // [해제] 버튼 추가
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'select-item';
+    emptyDiv.innerHTML = '<div style="width:48px;height:48px;background:#eee;line-height:48px;margin:0 auto;font-weight:bold;color:#888;">X</div><p>해제</p>';
+    emptyDiv.onclick = () => selectBuilderItem(null, '', '');
+    list.appendChild(emptyDiv);
+
+    // ★ 콤보 선택 모달일 경우
+    if (type === 'combo') {
+        title.innerText = `콤보 ${parseInt(index)+1}단계 선택`;
+        
+        // 1) 기본 조작키 추가
+        Object.keys(KEY_MAP).forEach(key => {
+            const k = KEY_MAP[key];
+            const div = document.createElement('div');
+            div.className = 'select-item';
+            // 키캡 모양 미리보기
+            div.innerHTML = `
+                <div class="key-cap ${k.color} ${k.hold?'hold':''}" style="margin:0 auto;"><span>${k.text}</span></div>
+                <p>${k.desc}</p>
+            `;
+            div.onclick = () => selectBuilderItem(key, null, k.desc); // 이미지는 없음
+            list.appendChild(div);
+        });
+
+        // 2) 장착한 비결 추가 (현재 슬롯에 장착된 비결만)
+        const activeMarts = currentBuild.marts.filter(id => id);
+        if (activeMarts.length > 0) {
+            // 구분선
+            const sep = document.createElement('div');
+            sep.style.cssText = "width:100%; border-top:1px dashed #ddd; margin:10px 0; grid-column: 1 / -1; text-align:center; font-size:0.8em; color:#999; padding-top:5px;";
+            sep.innerText = "▼ 장착한 비결 ▼";
+            list.appendChild(sep);
+
+            activeMarts.forEach(id => {
+                const item = builderData.marts.find(m => m.id === id);
+                if (item) {
+                    const div = document.createElement('div');
+                    div.className = 'select-item';
+                    div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
+                    div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
+                    list.appendChild(div);
+                }
+            });
+        }
+    } 
+    // ★ 기존 아이템(무기/심법/비결) 선택 모달일 경우
+    else {
+        title.innerText = `${type === 'weapons' ? '무기' : type === 'hearts' ? '심법' : '비결'} 선택`;
+        const currentList = currentBuild[type];
+        const usedIds = currentList.filter((id, idx) => id !== null && idx !== parseInt(index));
+
+        if (builderData[type]) {
+            builderData[type].forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'select-item';
+                div.innerHTML = `<img src="${item.img}" onerror="this.src='images/logo.png'"><p>${item.name}</p>`;
+                if (usedIds.includes(item.id)) div.classList.add('disabled');
+                else div.onclick = () => selectBuilderItem(item.id, item.img, item.name);
+                list.appendChild(div);
+            });
+        }
+    }
+    
+    modal.style.display = 'flex';
+}
+
+// 4. [중요] 아이템 선택 처리 함수 수정 (기존 selectBuilderItem 덮어쓰기)
+function selectBuilderItem(itemId, imgSrc, itemName) {
+    const { type, index } = currentSlot;
+    
+    // 데이터 저장
+    currentBuild[type][index] = itemId;
+
+    // ★ 콤보 타입인 경우 렌더링 다시 하고 종료 (DOM 구조가 달라서 별도 처리)
+    if (type === 'combo') {
+        renderComboSlots();
+        closeBuilderModal(null);
+        return;
+    }
+
+    // 기존 슬롯(무기/심법/비결) 처리 로직
+    const imgEl = document.getElementById(`slot-${type}-${index}`);
+    const nameEl = document.getElementById(`name-${type}-${index}`);
+    const slotEl = imgEl.parentElement;
+    const plusSpan = slotEl.querySelector('span');
+
+    if (itemId) {
+        imgEl.src = imgSrc;
+        imgEl.style.display = 'block';
+        if(plusSpan) plusSpan.style.display = 'none';
+        slotEl.style.borderStyle = 'solid';
+        if(nameEl) nameEl.innerText = itemName;
+    } else {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+        if(plusSpan) plusSpan.style.display = 'block';
+        slotEl.style.borderStyle = 'dashed';
+        if(nameEl) nameEl.innerText = '';
+    }
+    
+    closeBuilderModal(null); 
 }

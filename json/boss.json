@@ -1,4 +1,12 @@
 [
+    {
+    "id": "b3",
+    "type": "normal",
+    "name": "연심",
+    "subtext": "약수안 진수전",
+    "img": "boss/b3.jpg",
+    "link": "boss/b1.html"
+  },
   {
     "id": "b1",
     "type": "heroic",
@@ -14,14 +22,6 @@
     "subtext": "몽유도인/용연",
     "img": "boss/b2.jpg",
     "link": "boss/b2.html"
-  },
-    {
-    "id": "b3",
-    "type": "normal",
-    "name": "연심",
-    "subtext": "약수안 진수전",
-    "img": "boss/b3.jpg",
-    "link": "boss/b1.html"
   },
   {
     "id": "b4",

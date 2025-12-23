@@ -31,7 +31,7 @@
 
         /* 헤더 영역 */
         .viewer-header-area {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             padding-bottom: 20px;
             border-bottom: 2px solid #1a1a1a;
         }
@@ -98,7 +98,9 @@
             position: relative;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             transition: transform 0.2s;
+            cursor: pointer; /* 클릭 가능 표시 */
         }
+        .item-slot:active { transform: scale(0.95); }
         .item-slot img { width: 100%; height: 100%; object-fit: cover; }
         
         /* 🔴 무기 (빨강) */
@@ -109,10 +111,10 @@
         .heart-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .slot-heart { width: 50px; height: 50px; border: 2px solid #1976d2; }
 
-        /* 🟡 비결 (노랑) - [수정] 4개씩 2줄 배치 */
+        /* 🟡 비결 (노랑) - 4개씩 2줄 배치 */
         .mart-group { 
             display: grid; 
-            grid-template-columns: repeat(4, auto); /* 한 줄에 4개 */
+            grid-template-columns: repeat(4, auto); 
             gap: 12px; 
             justify-content: center; 
         }
@@ -133,7 +135,46 @@
         .action-btn:hover { background-color: #8d6e35; }
         .download-btn { background-color: #333; }
         
-        
+        /* 상세 정보 모달 스타일 */
+        .info-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center; justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.2s ease-out;
+        }
+        .info-modal-card {
+            background-color: #fff;
+            width: 85%; max-width: 320px;
+            border-radius: 12px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+            border: 1px solid #ddd;
+        }
+        .close-modal-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: none; border: none; font-size: 1.5em; color: #999; cursor: pointer;
+            line-height: 1; padding: 5px;
+        }
+        .info-header img {
+            width: 70px; height: 70px;
+            border-radius: 50%; border: 1px solid #ddd;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+        .info-header h3 {
+            margin: 0 0 15px 0; color: #1a1a1a; font-size: 1.3em; font-weight: bold;
+        }
+        .info-body p {
+            color: #555; font-size: 0.95em; line-height: 1.6; margin: 0;
+            word-break: keep-all; background-color: #f9f9f9; padding: 15px; border-radius: 8px;
+            text-align: left; border: 1px solid #eee;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         /* =========================================
            [모바일 대응] 화면이 좁을 때 (480px 이하)
            ========================================= */
@@ -156,7 +197,7 @@
             /* 간격 미세 조정 */
             .weapon-group { gap: 8px; }
             .heart-group { gap: 6px; }
-            .mart-group { gap: 8px; } /* 비결 간격 조정 */
+            .mart-group { gap: 8px; } 
             
             .viewer-title { font-size: 1.5em; }
         }
@@ -166,6 +207,7 @@
 
     <div class="viewer-container" id="capture-area">
         
+    
         <div class="viewer-header-area">
             <h1 class="viewer-title" id="build-main-title">로딩 중...</h1>
             <div class="viewer-creator" id="build-creator-info"></div>
@@ -208,10 +250,26 @@
                 <div class="item-slot slot-mart" id="v-marts-7"><img src="" alt=""></div>
             </div>
         </div>
+<div style="text-align: center; color: #999; font-size: 0.8em; margin-bottom: 10px;">
+            💡 아이콘을 터치하면 상세 정보를 볼 수 있습니다.
+        </div>
 
        <div class="viewer-footer" data-html2canvas-ignore="true">
             <button class="action-btn download-btn" onclick="downloadBuildImage()">💾 이미지 저장</button>
             <button class="action-btn" onclick="location.href='index.html?tab=builder'">⚔️ 빌드 만들기</button>
+        </div>
+    </div>
+
+    <div id="info-modal" class="info-modal-overlay" onclick="closeInfoModal()">
+        <div class="info-modal-card" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="closeInfoModal()">✕</button>
+            <div class="info-header">
+                <img id="modal-img" src="" onerror="this.src='images/logo.png'">
+                <h3 id="modal-name">아이템 이름</h3>
+            </div>
+            <div class="info-body">
+                <p id="modal-desc">설명 데이터가 없습니다.</p>
+            </div>
         </div>
     </div>
 

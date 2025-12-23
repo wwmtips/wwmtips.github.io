@@ -3059,17 +3059,46 @@ h3 {
     z-index: 5;
 }
 
-/* 5. 화살표 (>) 스타일 */
-.combo-flow-arrow {
-    font-family: serif;
-    font-size: 1.2em;
-    color: #b0bec5;
-    font-weight: bold;
-    width: 15px;
-    text-align: center;
+/* [뷰어] 정사각형 콤보 그리드 (4열) */
+.combo-viewer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 */
+    gap: 10px; /* 아이템 간격 */
+    padding: 20px;
+    background-color: #fffcf5; /* 한지 느낌 배경 */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-top: 15px;
 }
 
-/* 6. 키보드 키캡 스타일 (뷰어 전용) */
+/* 콤보 아이템 박스 (완전한 정사각형) */
+.combo-item-box {
+    aspect-ratio: 1 / 1; /* ★ 가로세로 비율 1:1 강제 (정사각형) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: relative; /* 번호 배치를 위한 기준점 */
+    overflow: hidden;
+}
+
+/* 순서 번호 (박스 안에 겹쳐서 표시) */
+.combo-step-num {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #bbb; /* 연한 회색 */
+    font-family: serif;
+    z-index: 10;
+    pointer-events: none; /* 클릭 방해 안 하게 */
+}
+
+/* 키캡 스타일 (뷰어용) */
 .key-cap-viewer {
     width: 100%;
     height: 100%;
@@ -3077,21 +3106,24 @@ h3 {
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.2em; /* 글자 크기 키움 */
     color: #fff;
 }
+
+/* 꾹 누르기(Hold) 텍스트 위치 조정 */
 .key-cap-viewer.hold::after {
     content: 'HOLD';
     position: absolute;
-    bottom: 2px;
-    font-size: 0.4em;
+    bottom: 3px;
+    font-size: 0.45em;
     opacity: 0.8;
 }
 
-/* 7. 비결 이미지 꽉 차게 */
+/* 비결 이미지 꽉 차게 */
 .combo-mart-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     cursor: pointer;
 }
+

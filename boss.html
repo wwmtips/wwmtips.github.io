@@ -1,7 +1,7 @@
 <div class="boss-page-container">
     
     <div class="filter-bar-wrapper" style="margin-bottom: 20px;">
-        <select id="boss-filter-select" class="custom-select" onchange="filterBoss(this.value)">
+        <select id="boss-filter-select" class="custom-select" onchange="filterBoss(this)">
             <option value="all">전체</option>
             <option value="normal">일반 보스</option>
             <option value="heroic">협경 보스</option>
@@ -9,23 +9,57 @@
     </div>
 
     <div class="boss-grid" id="bossGrid">
-        <p style="color: #999; text-align: center; grid-column: 1 / -1;">데이터를 불러오는 중...</p>
-    </div>
+        
+
+        <a href="boss/b3.html" class="boss-card" data-type="normal" onclick="event.preventDefault(); loadContent('boss/b3.html');">
+            <div class="boss-img-wrapper">
+                <img src="boss/b3.jpg" alt="풍화의 무도" class="boss-img">
+                <div class="boss-info-overlay">
+                    <span class="boss-type-badge red">진수전</span>
+                    <span class="boss-name">연심</span>
+                    <span class="boss-subtext">약수안 진수전</span>
+                </div>
+            </div> 
+        </a>
+        <a href="boss/b1.html" class="boss-card" data-type="heroic" onclick="event.preventDefault(); loadContent('boss/b1.html');">
+            <div class="boss-img-wrapper">
+                <img src="boss/b1.jpg" alt="풍화의 무도" class="boss-img">
+                <div class="boss-info-overlay">
+                    <span class="boss-type-badge red">협경</span>
+                    <span class="boss-name">풍화의 무도</span>
+                    <span class="boss-subtext">용연/사자탈</span>
+                </div>
+            </div> 
+        </a>
+         <a href="boss/b2.html" class="boss-card" data-type="heroic" onclick="event.preventDefault(); loadContent('boss/b2.html');">
+            <div class="boss-img-wrapper">
+                <img src="boss/b2.jpg" alt="풍화의 무도" class="boss-img">
+                <div class="boss-info-overlay">
+                    <span class="boss-type-badge red">검무장</span>
+                    <span class="boss-name">적운의 파몽</span>
+                    <span class="boss-subtext">몽유도인/용연</span>
+                </div>
+            </div> 
+        </a>
+
+        </div>
 
 </div>
 
 <style>
-    /* 기존 스타일 그대로 유지 */
+    /* 변수 설정 */
     :root {
         --wuxia-accent-red: #b71c1c;
         --wuxia-accent-gold: #b08d55;
         --wuxia-bg-dark: #1a1a1a;
     }
 
+    /* 페이지 컨테이너 */
     .boss-page-container {
         animation: fadeIn 0.4s ease-in-out;
     }
 
+    /* 드롭다운 스타일 (퀘스트 페이지 통일) */
     .filter-bar-wrapper {
         display: flex;
         gap: 10px;
@@ -64,6 +98,7 @@
         border-color: var(--wuxia-accent-red);
     }
 
+    /* 그리드 레이아웃 */
     .boss-grid {
         display: grid;
         grid-template-columns: 1fr; 
@@ -76,6 +111,7 @@
         }
     }
 
+    /* 카드 스타일 */
     .boss-card {
         display: block;
         background-color: var(--wuxia-bg-dark);
@@ -97,9 +133,10 @@
             0 0 15px rgba(183, 28, 28, 0.4);
     }
 
+    /* 이미지 래퍼 */
     .boss-img-wrapper {
         width: 100%;
-        padding-top: 48%; 
+        padding-top: 48%; /* 와이드 비율 */
         position: relative;
     }
 
@@ -117,6 +154,7 @@
         filter: sepia(0) contrast(1.15);
     }
 
+    /* 텍스트 오버레이 */
     .boss-info-overlay {
         position: absolute;
         bottom: 0; left: 0;
@@ -158,6 +196,7 @@
         opacity: 0.9;
     }
 
+    /* 뱃지 스타일 */
     .boss-type-badge {
         display: inline-block;
         font-size: 0.75em;

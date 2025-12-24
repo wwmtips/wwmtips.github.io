@@ -780,7 +780,43 @@
         </div>
     </div>
 </div>
+<script>
+    /* =========================================
+   다크 모드 제어 스크립트
+   ========================================= */
+document.addEventListener("DOMContentLoaded", function() {
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    const body = document.body;
+    
+    // 1. 저장된 테마 불러오기 (없으면 시스템 설정 따름)
+    const savedTheme = localStorage.getItem('wwm_theme');
+    
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+        themeBtn.innerText = '☀️'; // 해 아이콘으로 변경
+    } else if (savedTheme === 'light') {
+        body.classList.remove('dark-mode');
+        themeBtn.innerText = '🌙'; // 달 아이콘
+    }
 
+    // 2. 버튼 클릭 이벤트
+    if(themeBtn) {
+        themeBtn.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            
+            // 현재 상태 확인
+            const isDark = body.classList.contains('dark-mode');
+            
+            // 아이콘 변경
+            themeBtn.innerText = isDark ? '☀️' : '🌙';
+            
+            // 상태 저장
+            localStorage.setItem('wwm_theme', isDark ? 'dark' : 'light');
+        });
+    }
+});
+
+</script>
 </body> 
 </html>
 

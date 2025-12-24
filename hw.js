@@ -11,7 +11,7 @@
         const taskData = [
             // [월간]
             { id: 'm_1', freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
-            { id: 'm_2', freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 구매' }
+            { id: 'm_2', freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 구매' },
             // [주간]
             { id: 'w_7', freq: 'weekly', type: '전투', loc: '협경', title: '협경 클리어' },
             { id: 'w_8', freq: 'weekly', type: '전투', loc: '검무장', title: '검무장 클리어' },

@@ -3217,7 +3217,7 @@ h3 {
 }
 
 .timer-title {
-    font-size: 0.95em;
+    font-size: 0.9em;
     font-weight: bold;
     color: #333;
     white-space: nowrap;
@@ -3241,7 +3241,7 @@ h3 {
 
 .timer-clock {
     font-family: 'Noto Serif KR', serif; /* 숫자 폰트 */
-    font-size: 0.9em; /* 시간은 조금 크게 */
+    font-size: 0.8em; /* 시간은 조금 크게 */
     font-weight: bold;
     color: #333;
     font-variant-numeric: tabular-nums; /* 숫자 간격 일정하게 */
@@ -3319,7 +3319,7 @@ h3 {
 .task-check-icon {
     font-weight: bold;
     color: var(--wuxia-accent-gold);
-    font-size: 1.2em;
+    font-size: 1.0em;
     min-width: 24px;
     text-align: right;
 }

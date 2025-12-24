@@ -1,10 +1,10 @@
 /**
- * 강호 시시각각(時時刻刻) - 최종 통합본
- * 기능: 일일/주간/월간 숙제 관리 + 기간 한정 이벤트 타이머
+ * 강호 시시각각(時時刻刻) - 최종 수정본
+ * 수정사항: 월간 숙제 취소선 제거, 시간 포맷 변경 (일 HH:MM:SS)
  */
 
 // ============================================================
-// [데이터 1] 숙제 세부 목록 (바텀시트에 표시될 내용)
+// [데이터 1] 숙제 세부 목록
 // ============================================================
 const TASK_DATA = [
     // [월간]
@@ -25,16 +25,16 @@ const TASK_DATA = [
 ];
 
 // ============================================================
-// [데이터 2] 타이머 설정 (메인 화면에 표시될 줄)
+// [데이터 2] 타이머 설정
 // ============================================================
 const TIMERS = [
     // 1. 일일 초기화
     {
         id: 'daily',
-        type: 'reset', // 초기화 타입
-        freq: 'daily', // TASK_DATA와 매칭될 키
-        name: '일일 숙제',
-        desc: '매일 오전 06:00 초기화',
+        type: 'reset',
+        freq: 'daily',
+        name: '일일 할 일',
+        desc: '매일 오전 6시 갱신',
         badgeClass: 'status-ing'
     },
     // 2. 주간 초기화
@@ -42,23 +42,23 @@ const TIMERS = [
         id: 'weekly',
         type: 'reset',
         freq: 'weekly',
-        name: '주간 숙제',
-        desc: '매주 월요일 06:00 초기화',
-        badgeClass: 'status-urgent'
+        name: '주간 할 일',
+        desc: '매주 월요일 6시 갱신',
+        badgeClass: 'status-ing' // (수정) urgent 대신 ing로 통일
     },
-    // 3. 월간 초기화
+    // 3. 월간 초기화 (수정됨: status-end -> status-ing)
     {
         id: 'monthly',
         type: 'reset',
         freq: 'monthly',
-        name: '월간 숙제',
-        desc: '매월 1일 06:00 초기화',
-        badgeClass: 'status-end'
+        name: '월간 할 일',
+        desc: '매월 1일 6시 갱신',
+        badgeClass: 'status-ing' // ★여기가 원인이었습니다★
     },
-    // 4. 이벤트 (기간 한정)
+    // 4. 이벤트
     {
         id: 'event_winter',
-        type: 'event', // 이벤트 타입
+        type: 'event',
         name: '불꽃놀이 축제',
         desc: '강호의 밤을 수놓는 불꽃 축제입니다.',
         startTime: '2024-12-25T00:00:00',
@@ -68,7 +68,7 @@ const TIMERS = [
 ];
 
 // ============================================================
-// ▼ 로직 영역 (자동 실행)
+// ▼ 로직 영역
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -98,12 +98,12 @@ function updateTimers() {
         let timeStr = "";
         let isUrgent = false;
 
-        // 타입에 따른 시간 계산
+        // 시간 계산 분기
         if (timer.type === 'reset') {
             const target = getNextResetTime(timer.freq, now);
             const diff = target - now;
-            timeStr = formatDuration(diff, false, false); // HH:MM:SS
-            if (diff < 3 * 60 * 60 * 1000) isUrgent = true; // 3시간 전 긴급
+            timeStr = formatDuration(diff); // 포맷 함수 변경됨
+            if (diff < 3 * 60 * 60 * 1000) isUrgent = true;
         } 
         else if (timer.type === 'event') {
             const start = new Date(timer.startTime);
@@ -115,12 +115,11 @@ function updateTimers() {
                 timeStr = "종료됨";
             } else {
                 const diff = end - now;
-                timeStr = formatDuration(diff, false, true); //일 단위 포함
-                if (diff < 24 * 60 * 60 * 1000) isUrgent = true; // 1일 전 긴급
+                timeStr = formatDuration(diff); // 포맷 함수 변경됨
+                if (diff < 24 * 60 * 60 * 1000) isUrgent = true;
             }
         }
 
-        // HTML 렌더링
         row.innerHTML = `
             <div class="timer-left">
                 <div class="timer-title">${timer.name}</div>
@@ -161,22 +160,30 @@ function getNextResetTime(freq, now) {
     return target;
 }
 
-// 시간 포맷
-function formatDuration(ms, isEnded, showDays) {
+// ★★★ 시간 포맷 수정 (일 HH:MM:SS) ★★★
+function formatDuration(ms) {
     if (ms <= 0) return "00:00:00";
+    
     const d = Math.floor(ms / (1000 * 60 * 60 * 24));
     const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
     const s = Math.floor((ms % (1000 * 60)) / 1000);
 
-    if (showDays && d > 0) return `${d}일 ${h}시간`;
+    // 시, 분, 초는 항상 2자리로 맞춤 (05:03:01)
+    const hStr = String(h).padStart(2, '0');
+    const mStr = String(m).padStart(2, '0');
+    const sStr = String(s).padStart(2, '0');
+
+    // 1일 이상 남았으면 "3일 12:30:55" 형식
+    if (d > 0) {
+        return `${d}일 ${hStr}:${mStr}:${sStr}`;
+    }
     
-    // HH:MM:SS (날짜가 있으면 시간에 합산)
-    const totalH = String(h + (d * 24)).padStart(2, '0');
-    return `${totalH}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    // 24시간 미만이면 "12:30:55" 형식
+    return `${hStr}:${mStr}:${sStr}`;
 }
 
-// ★★★ 바텀시트 열기 (여기가 중요합니다) ★★★
+// 바텀시트 열기
 function openTimerSheet(timer) {
     const modal = document.getElementById('timer-sheet-modal');
     if (!modal) return;
@@ -187,7 +194,6 @@ function openTimerSheet(timer) {
                     <p style="font-size:0.85em; color:#888;">${timer.desc}</p>
                 </div>`;
 
-    // [CASE 1] 숙제(Reset) 타입 -> 리스트 표시
     if (timer.type === 'reset') {
         const tasks = TASK_DATA.filter(t => t.freq === timer.freq);
         if (tasks.length > 0) {
@@ -204,7 +210,6 @@ function openTimerSheet(timer) {
             html += `<p style="text-align:center; color:#999;">등록된 상세 내역이 없습니다.</p>`;
         }
     } 
-    // [CASE 2] 이벤트(Event) 타입 -> 설명 표시
     else if (timer.type === 'event') {
         const start = timer.startTime.split('T')[0];
         const end = timer.endTime.split('T')[0];

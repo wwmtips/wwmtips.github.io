@@ -1,97 +1,139 @@
 /**
- * 강호 시시각각(時時刻刻) - 리스트형 타이머
- * 수정사항: DOMContentLoaded 추가 (로딩 안전장치), 레이아웃 좌우 분할
+ * 강호 시시각각(時時刻刻) - 최종 통합본
+ * 기능: 일일/주간/월간 숙제 관리 + 기간 한정 이벤트 타이머
  */
 
-// ★★★ 데이터 설정 영역 ★★★
-const GANGHO_EVENTS = [
-    // 1. [매일 반복] type: 'daily'
+// ============================================================
+// [데이터 1] 숙제 세부 목록 (바텀시트에 표시될 내용)
+// ============================================================
+const TASK_DATA = [
+    // [월간]
+    { freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
+    { freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 구매' },
+    // [주간]
+    { freq: 'weekly', type: '전투', loc: '협경', title: '협경 클리어 (보상 수령)' },
+    { freq: 'weekly', type: '전투', loc: '검무장', title: '검무장 클리어' },
+    { freq: 'weekly', type: '구매', loc: '강호백진', title: '음의 선율 구매' },
+    { freq: 'weekly', type: '구매', loc: '시즌상점', title: '주간 한정 물품 구매' },
+    { freq: 'weekly', type: '활동', loc: '동맹', title: '화물 운송' },
+    { freq: 'weekly', type: '활동', loc: '무역', title: '시매사 교환' },
+    // [일일]
+    { freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령 완료' },
+    { freq: 'daily', type: '활동', loc: '꿈속', title: '엽비휴와 도박' },
+    { freq: 'daily', type: '활동', loc: '필드', title: '비결 재료 채집' },
+    { freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령 수행' }
+];
+
+// ============================================================
+// [데이터 2] 타이머 설정 (메인 화면에 표시될 줄)
+// ============================================================
+const TIMERS = [
+    // 1. 일일 초기화
     {
-        id: 'daily_boss',
-        type: 'daily',
-        name: '필드 보스 출현',
-        desc: '강호 곳곳에 보스가 출현합니다. (매일 낮)',
-        startTime: '12:00',
-        endTime: '14:00'
+        id: 'daily',
+        type: 'reset', // 초기화 타입
+        freq: 'daily', // TASK_DATA와 매칭될 키
+        name: '일일 숙제',
+        desc: '매일 오전 06:00 초기화',
+        badgeClass: 'status-ing'
     },
+    // 2. 주간 초기화
     {
-        id: 'daily_shop',
-        type: 'daily',
-        name: '비전 상점 (저녁)',
-        desc: '희귀 재료 상점이 열립니다. (매일 저녁)',
-        startTime: '18:00',
-        endTime: '23:59'
+        id: 'weekly',
+        type: 'reset',
+        freq: 'weekly',
+        name: '주간 숙제',
+        desc: '매주 월요일 06:00 초기화',
+        badgeClass: 'status-urgent'
     },
-    // 2. [기간 한정] type: 'period' (날짜 포함 YYYY-MM-DDTHH:MM:SS)
+    // 3. 월간 초기화
+    {
+        id: 'monthly',
+        type: 'reset',
+        freq: 'monthly',
+        name: '월간 숙제',
+        desc: '매월 1일 06:00 초기화',
+        badgeClass: 'status-end'
+    },
+    // 4. 이벤트 (기간 한정)
     {
         id: 'event_winter',
-        type: 'period',
-        name: '불꽃놀이 축제 (연말)',
-        desc: '강호의 밤을 수놓는 불꽃 축제',
+        type: 'event', // 이벤트 타입
+        name: '불꽃놀이 축제',
+        desc: '강호의 밤을 수놓는 불꽃 축제입니다.',
         startTime: '2024-12-25T00:00:00',
-        endTime: '2025-12-31T23:59:59'
+        endTime: '2025-12-31T23:59:59',
+        badgeClass: 'status-event'
     }
 ];
 
 // ============================================================
-// ▼ 로직 영역 (수정 불필요)
+// ▼ 로직 영역 (자동 실행)
 // ============================================================
 
-// 1. DOM이 로드된 후 실행 (오류 방지)
 document.addEventListener("DOMContentLoaded", function() {
-    updateGanghoTimers(); // 즉시 1회 실행
-    setInterval(updateGanghoTimers, 1000); // 1초마다 갱신
+    updateTimers();
+    setInterval(updateTimers, 1000);
 });
 
-function updateGanghoTimers() {
+function updateTimers() {
     const container = document.getElementById('gangho-timer-list');
-    if (!container) return; // 컨테이너가 없으면 중단
+    if (!container) return;
 
-    // 기존 "로딩 중" 메시지가 있다면 제거 (첫 실행 시)
-    if (container.innerText.includes('시간을 읽는 중')) {
-        container.innerHTML = '';
-    }
+    if (container.innerText.includes('시간을 읽는 중')) container.innerHTML = '';
 
     const now = new Date();
 
-    GANGHO_EVENTS.forEach(event => {
-        let row = document.getElementById(`timer-row-${event.id}`);
+    TIMERS.forEach(timer => {
+        let row = document.getElementById(`timer-row-${timer.id}`);
         
-        // 요소가 없으면 새로 생성 (Create)
         if (!row) {
             row = document.createElement('div');
-            row.id = `timer-row-${event.id}`;
+            row.id = `timer-row-${timer.id}`;
             row.className = 'timer-row';
-            row.onclick = () => openTimerDetailSheet(event); // 클릭 이벤트 연결
+            row.onclick = () => openTimerSheet(timer);
             container.appendChild(row);
         }
 
-        // 시간 계산
-        const result = (event.type === 'period') 
-            ? calculatePeriodTime(event, now) 
-            : calculateDailyTime(event, now);
+        let timeStr = "";
+        let isUrgent = false;
 
-        const { status, timeStr, isUrgent, isEnded } = result;
+        // 타입에 따른 시간 계산
+        if (timer.type === 'reset') {
+            const target = getNextResetTime(timer.freq, now);
+            const diff = target - now;
+            timeStr = formatDuration(diff, false, false); // HH:MM:SS
+            if (diff < 3 * 60 * 60 * 1000) isUrgent = true; // 3시간 전 긴급
+        } 
+        else if (timer.type === 'event') {
+            const start = new Date(timer.startTime);
+            const end = new Date(timer.endTime);
+            
+            if (now < start) {
+                timeStr = "시작 전";
+            } else if (now > end) {
+                timeStr = "종료됨";
+            } else {
+                const diff = end - now;
+                timeStr = formatDuration(diff, false, true); //일 단위 포함
+                if (diff < 24 * 60 * 60 * 1000) isUrgent = true; // 1일 전 긴급
+            }
+        }
 
-        // 상태별 스타일 클래스 결정
-        let statusClass = 'status-ing';
-        if (isUrgent) statusClass = 'status-urgent';
-        if (isEnded) statusClass = 'status-end';
-
-        // HTML 갱신 (좌측: 제목+상태 / 우측: 시간)
+        // HTML 렌더링
         row.innerHTML = `
             <div class="timer-left">
-                <div class="timer-title" style="${isEnded ? 'color:#aaa;' : ''}">
-                    ${event.name}
-                </div>
+                <div class="timer-title">${timer.name}</div>
                 <div class="timer-status-row">
-                    <span class="status-badge ${statusClass}">${status}</span>
+                    <span class="status-badge ${timer.badgeClass}">
+                        ${timer.type === 'event' ? 'EVENT' : timer.freq.toUpperCase()}
+                    </span>
                     <span style="color:#ddd;">|</span>
-                    <span>${result.subInfo}</span>
+                    <span>${timer.desc}</span>
                 </div>
             </div>
             <div class="timer-right">
-                <div class="timer-clock" style="${isEnded ? 'color:#ccc;' : (isUrgent ? 'color:var(--wuxia-accent-red);' : '')}">
+                <div class="timer-clock" style="color: ${isUrgent ? 'var(--wuxia-accent-red)' : '#333'}">
                     ${timeStr}
                 </div>
             </div>
@@ -99,142 +141,88 @@ function updateGanghoTimers() {
     });
 }
 
-// [계산 1] 기간 한정 이벤트
-function calculatePeriodTime(event, now) {
-    const start = new Date(event.startTime);
-    const end = new Date(event.endTime);
-    let diff = 0;
-    let status = "";
-    let isUrgent = false;
-    let isEnded = false;
-    let subInfo = `${start.getMonth()+1}.${start.getDate()}~${end.getMonth()+1}.${end.getDate()}`;
-
-    if (now < start) {
-        status = "시작 전";
-        diff = start - now;
-    } else if (now >= start && now <= end) {
-        status = "진행 중"; // 또는 '종료까지'
-        diff = end - now;
-        if (diff < 86400000) { status = "종료 임박"; isUrgent = true; }
-    } else {
-        status = "종료됨";
-        isEnded = true;
+// 초기화 시간 계산
+function getNextResetTime(freq, now) {
+    let target = new Date(now);
+    if (freq === 'daily') {
+        if (now.getHours() >= 6) target.setDate(target.getDate() + 1);
+        target.setHours(6, 0, 0, 0);
+    } else if (freq === 'weekly') {
+        const day = now.getDay();
+        const diffToMon = (1 + 7 - day) % 7;
+        target.setDate(target.getDate() + diffToMon);
+        target.setHours(6, 0, 0, 0);
+        if (diffToMon === 0 && now.getHours() >= 6) target.setDate(target.getDate() + 7);
+    } else if (freq === 'monthly') {
+        target.setMonth(target.getMonth() + 1);
+        target.setDate(1);
+        target.setHours(6, 0, 0, 0);
     }
-
-    return { 
-        status, 
-        timeStr: formatDuration(diff, isEnded, true), // true = 일(Day) 단위 표시
-        isUrgent, 
-        isEnded,
-        subInfo
-    };
+    return target;
 }
 
-// [계산 2] 매일 반복 일정
-function calculateDailyTime(event, now) {
-    const [sH, sM] = event.startTime.split(':').map(Number);
-    const [eH, eM] = event.endTime.split(':').map(Number);
-    
-    const start = new Date(now); start.setHours(sH, sM, 0, 0);
-    const end = new Date(now); end.setHours(eH, eM, 0, 0);
-    
-    let diff = 0;
-    let status = "";
-    let isUrgent = false;
-    let isEnded = false;
-    let subInfo = `${event.startTime}~${event.endTime}`;
-
-    if (now < start) {
-        status = "시작 전";
-        diff = start - now;
-    } else if (now >= start && now <= end) {
-        status = "진행 중";
-        diff = end - now;
-        if (diff < 600000) { status = "마감 임박"; isUrgent = true; }
-    } else {
-        status = "금일 종료";
-        isEnded = true;
-    }
-
-    return { 
-        status, 
-        timeStr: formatDuration(diff, isEnded, false), 
-        isUrgent, 
-        isEnded,
-        subInfo
-    };
-}
-
-// 공통 시간 포맷터
+// 시간 포맷
 function formatDuration(ms, isEnded, showDays) {
-    if (isEnded) return "00:00:00";
-    
+    if (ms <= 0) return "00:00:00";
     const d = Math.floor(ms / (1000 * 60 * 60 * 24));
     const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
     const s = Math.floor((ms % (1000 * 60)) / 1000);
 
-    // 기간 한정이면서 1일 이상 남았을 때: "6일 13시간"
-    if (showDays && d > 0) {
-        return `${d}일 ${h}시간`;
-    }
+    if (showDays && d > 0) return `${d}일 ${h}시간`;
     
-    // 그 외 (24시간 미만 or 매일 반복): "HH:MM:SS"
-    const hh = String(h + (d*24)).padStart(2,'0'); // 날짜가 0일 경우 시간으로 합산
-    return `${hh}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    // HH:MM:SS (날짜가 있으면 시간에 합산)
+    const totalH = String(h + (d * 24)).padStart(2, '0');
+    return `${totalH}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-// 바텀시트 열기 (상세 정보)
-function openTimerDetailSheet(event) {
-    const modal = document.getElementById('timer-sheet-modal');
-    // 모달이 HTML에 존재해야 함
-    if (modal) {
-        // 모달 내부 콘텐츠 영역 찾기 (사용자의 HTML 구조에 맞춤)
-        let contentBox = modal.querySelector('#timer-detail-content') || modal.querySelector('.sheet-body-content');
-        
-        if (contentBox) {
-            contentBox.innerHTML = `
-                <div style="text-align:center; padding: 20px 0;">
-                    <h3 style="color:var(--wuxia-accent-gold); margin:0 0 10px 0;">${event.name}</h3>
-                    <p style="font-size:0.9em; color:#666; margin-bottom:20px;">
-                        ${event.type === 'period' ? '기간 한정 이벤트' : '매일 반복 콘텐츠'}
-                    </p>
-                    <div style="background:#f9f9f9; padding:15px; border-radius:8px; text-align:left; border:1px solid #eee;">
-                        <p style="font-weight:bold; color:#333; margin-bottom:5px;">⏳ 시간</p>
-                        <p style="color:#555; margin-bottom:15px;">
-                            ${event.type === 'period' 
-                                ? event.startTime.replace('T',' ') + ' ~ ' + event.endTime.replace('T',' ') 
-                                : event.startTime + ' ~ ' + event.endTime}
-                        </p>
-                        <p style="font-weight:bold; color:#333; margin-bottom:5px;">📜 설명</p>
-                        <p style="color:#555; line-height:1.5;">${event.desc}</p>
-                    </div>
-                </div>
-            `;
-        }
-        modal.classList.add('show');
-    } else {
-        console.error("오류: 'timer-sheet-modal' ID를 가진 요소를 찾을 수 없습니다.");
-    }
-}
-
-// ==========================================
-// ▼ 바텀시트 닫기 기능 (이 코드를 파일 맨 끝에 붙여넣으세요)
-// ==========================================
-
-function closeTimerSheet(e) {
+// ★★★ 바텀시트 열기 (여기가 중요합니다) ★★★
+function openTimerSheet(timer) {
     const modal = document.getElementById('timer-sheet-modal');
     if (!modal) return;
+    const contentBox = modal.querySelector('.sheet-body-content') || modal.querySelector('#timer-detail-content');
 
-    // 상황 1: X 버튼을 눌렀을 때 (인자 e가 없이 호출됨) -> 무조건 닫기
-    if (!e) {
-        modal.classList.remove('show');
-        return;
+    let html = `<div style="text-align:center; margin-bottom:15px;">
+                    <h3 style="color:var(--wuxia-accent-gold); margin:0;">${timer.name}</h3>
+                    <p style="font-size:0.85em; color:#888;">${timer.desc}</p>
+                </div>`;
+
+    // [CASE 1] 숙제(Reset) 타입 -> 리스트 표시
+    if (timer.type === 'reset') {
+        const tasks = TASK_DATA.filter(t => t.freq === timer.freq);
+        if (tasks.length > 0) {
+            html += `<div class="task-list-wrapper">`;
+            tasks.forEach(task => {
+                html += `
+                    <div class="task-item">
+                        <span class="task-loc">[${task.loc}]</span>
+                        <span class="task-title">${task.title}</span>
+                    </div>`;
+            });
+            html += `</div>`;
+        } else {
+            html += `<p style="text-align:center; color:#999;">등록된 상세 내역이 없습니다.</p>`;
+        }
+    } 
+    // [CASE 2] 이벤트(Event) 타입 -> 설명 표시
+    else if (timer.type === 'event') {
+        const start = timer.startTime.split('T')[0];
+        const end = timer.endTime.split('T')[0];
+        html += `
+            <div style="background:#f9f9f9; padding:20px; border-radius:8px; border:1px solid #eee;">
+                <p><strong>기간:</strong> ${start} ~ ${end}</p>
+                <hr style="border:0; border-top:1px dashed #ddd; margin:10px 0;">
+                <p style="line-height:1.6; color:#555;">${timer.desc}</p>
+            </div>
+        `;
     }
 
-    // 상황 2: 배경(오버레이)을 클릭했을 때 -> 닫기
-    // (내용물인 흰색 박스를 클릭했을 때는 닫히지 않도록 막아줍니다)
-    if (e.target === modal) {
-        modal.classList.remove('show');
-    }
+    contentBox.innerHTML = html;
+    modal.classList.add('show');
+}
+
+// 닫기
+function closeTimerSheet(e) {
+    const modal = document.getElementById('timer-sheet-modal');
+    if (modal && (!e || e.target === modal)) modal.classList.remove('show');
 }

@@ -217,3 +217,24 @@ function openTimerDetailSheet(event) {
         console.error("오류: 'timer-sheet-modal' ID를 가진 요소를 찾을 수 없습니다.");
     }
 }
+
+// ==========================================
+// ▼ 바텀시트 닫기 기능 (이 코드를 파일 맨 끝에 붙여넣으세요)
+// ==========================================
+
+function closeTimerSheet(e) {
+    const modal = document.getElementById('timer-sheet-modal');
+    if (!modal) return;
+
+    // 상황 1: X 버튼을 눌렀을 때 (인자 e가 없이 호출됨) -> 무조건 닫기
+    if (!e) {
+        modal.classList.remove('show');
+        return;
+    }
+
+    // 상황 2: 배경(오버레이)을 클릭했을 때 -> 닫기
+    // (내용물인 흰색 박스를 클릭했을 때는 닫히지 않도록 막아줍니다)
+    if (e.target === modal) {
+        modal.classList.remove('show');
+    }
+}

@@ -1,9 +1,9 @@
 /**
- * 강호 시시각각(時時刻刻) - 최종 완성본
- * 기능: 숙제 동기화, 진행도 표시, 한글 카테고리 적용
+ * 강호 시시각각(時時刻刻) - 최종 통합본
+ * 기능: 텍스트 변경 적용(필수 등) + 완료 항목 자동 내림 정렬
  */
 
-// 1. 숙제 데이터 (hw.js와 동일한 ID 사용 필수)
+// 1. 숙제 데이터
 const TASK_DATA = [
     // [월간]
     { id: 'm_1', freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
@@ -29,7 +29,7 @@ const TASK_DATA = [
     { id: 'd_3', freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령' }
 ];
 
-// 2. 타이머 정의
+// 2. 타이머 정의 (텍스트 변경 유지)
 const TIMERS = [
     { id: 'daily', type: 'reset', freq: 'daily', name: '일일 숙제', desc: '매일 6시 갱신', badgeClass: 'status-ing' },
     { id: 'weekly', type: 'reset', freq: 'weekly', name: '주간 숙제', desc: '매주 월 6시 갱신', badgeClass: 'status-ing' },
@@ -85,7 +85,7 @@ function updateTimers() {
         let isUrgent = false;
         let progressHtml = ""; 
 
-        // [수정됨] 한글 카테고리명 변환
+        // [유지] 한글 카테고리명 변환 (사용자 커스텀: 필수)
         let categoryLabel = "";
         if (timer.type === 'event') {
             categoryLabel = "이벤트";
@@ -113,7 +113,6 @@ function updateTimers() {
                 const color = isAllDone ? 'var(--wuxia-accent-gold)' : '#888';
                 progressHtml = `<span style="font-size:0.8em; color:${color}; margin-left:5px; font-weight:bold;">(${done}/${total})</span>`;
                 
-                // 완료 시 클래스 추가
                 if(isAllDone) row.classList.add('row-completed');
                 else row.classList.remove('row-completed');
             }
@@ -171,8 +170,11 @@ function openTimerSheet(timer) {
             html += `<div class="task-list-wrapper">`;
             tasks.forEach(task => {
                 const isChecked = statusData.checked[task.id];
+                // [추가] 초기 정렬 적용 (체크됨=1=하단, 안됨=0=상단)
+                const orderStyle = isChecked ? 'style="order:1;"' : 'style="order:0;"';
+                
                 html += `
-                    <div class="task-item ${isChecked ? 'completed' : ''}" onclick="toggleTaskCheck('${task.id}', this)">
+                    <div class="task-item ${isChecked ? 'completed' : ''}" ${orderStyle} onclick="toggleTaskCheck('${task.id}', this)">
                         <div style="flex:1;">
                             <span class="task-loc">[${task.loc}]</span>
                             <span class="task-title">${task.title}</span>
@@ -202,13 +204,17 @@ function toggleTaskCheck(taskId, el) {
     const statusData = getChecklistStatus();
     
     if (statusData.checked[taskId]) {
+        // 체크 해제
         delete statusData.checked[taskId];
         el.classList.remove('completed');
         el.querySelector('.task-check-icon').innerText = '';
+        el.style.order = 0; // [추가] 위로 올림
     } else {
+        // 체크 완료
         statusData.checked[taskId] = true;
         el.classList.add('completed');
         el.querySelector('.task-check-icon').innerText = '✔';
+        el.style.order = 1; // [추가] 아래로 내림
     }
     saveChecklistStatus(statusData);
 }

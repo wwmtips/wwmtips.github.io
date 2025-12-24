@@ -178,12 +178,7 @@ function openTimerSheet(timer) {
             });
             html += `</div>`;
             
-            // 바로가기 버튼 추가 ( npc.html로 이동 )
-            html += `
-                <div style="margin-top:20px; text-align:center;">
-                    <button class="sheet-action-btn" onclick="location.href='npc.html'">상세 페이지로 이동</button>
-                </div>
-            `;
+            
         } else {
             html += `<p style="text-align:center; color:#999;">등록된 내용이 없습니다.</p>`;
         }

@@ -140,16 +140,21 @@
 
     <div id="fixed-top-bar">
         <header id="main-header">
-            <div class="logo">
-                <span class="logo-icon"><a href="#" onclick="switchTab('home'); return false;"><img src="images/logo.png" width="36px" height="36px" alt="로고"></a></span> 
-            </div>
-            
-            <div class="search-container">
-                <input type="text" id="header-search-input" placeholder="통합 검색 (무림록, 족보 등)" autocomplete="off">
-                <button id="search-clear-btn" class="search-clear-btn" style="display:none;">X</button>
-                <div id="global-search-results" class="search-dropdown"></div>
-            </div>
-        </header>
+    <div class="logo">
+        <span class="logo-icon"><a href="#" onclick="switchTab('home'); return false;"><img src="images/logo.png" width="36px" height="36px" alt="로고"></a></span> 
+    </div>
+    
+    <div class="search-container">
+        <input type="text" id="header-search-input" placeholder="통합 검색 (무림록, 족보 등)" autocomplete="off">
+        <button id="search-clear-btn" class="search-clear-btn" style="display:none;">X</button>
+        <div id="global-search-results" class="search-dropdown"></div>
+    </div>
+
+    <button id="theme-toggle-btn" class="theme-btn" aria-label="다크 모드 전환">
+        🌙
+    </button>
+</header>
+
 <nav id="category-nav">
             <button class="nav-item active" id="nav-home" onclick="switchTab('home')">
                 <span class="icon"></span>홈

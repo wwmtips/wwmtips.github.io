@@ -34,7 +34,7 @@ const TIMERS = [
     { id: 'daily', type: 'reset', freq: 'daily', name: '일일 숙제', desc: '매일 6시 갱신', badgeClass: 'status-ing' },
     { id: 'weekly', type: 'reset', freq: 'weekly', name: '주간 숙제', desc: '매주 월 6시 갱신', badgeClass: 'status-ing' },
     { id: 'monthly', type: 'reset', freq: 'monthly', name: '월간 숙제', desc: '매월 1일 6시 갱신', badgeClass: 'status-ing' },
-    { id: 'event_winter', type: 'event', name: '겨울의 선율', desc: '한정 미니 패스', startTime: '2024-12-25T00:00:00', endTime: '2026-01-09T06:00:00', badgeClass: 'status-event' }
+    { id: 'event_winter', type: 'event', name: '겨울의 선율', desc: '26년 1월 9일 6시까지', startTime: '2024-12-25T00:00:00', endTime: '2026-01-09T06:00:00', badgeClass: 'status-event' }
 ];
 
 const STORAGE_KEY = 'wwm_checklist_v3';

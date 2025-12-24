@@ -3173,10 +3173,8 @@ h3 {
     }
 }
 
-
-
 /* =========================================
-   강호 시시각각 (타이머) - 슬림 스타일
+   강호 시시각각 (타이머) - 초슬림 스타일 (최종)
    ========================================= */
 #gangho-timer-list {
     display: flex;
@@ -3193,9 +3191,9 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* [수정] 패딩을 줄여서 날렵하게 (12px -> 10px) */
-    padding: 10px 15px;
-    border-bottom: 1px solid #f5f5f5;
+    /* 패딩: 상하 8px, 좌우 12px (더 슬림하게) */
+    padding: 8px 12px;
+    border-bottom: 1px solid #f9f9f9;
     cursor: pointer;
     background: #fff;
     transition: background 0.2s;
@@ -3205,19 +3203,19 @@ h3 {
     background-color: #fffcf5;
 }
 
+/* 좌측 정보 영역 */
 .timer-left {
     display: flex;
     flex-direction: column;
-    /* [수정] 제목과 설명 사이 간격 축소 */
-    gap: 2px; 
+    gap: 1px; /* 간격 최소화 */
     flex: 1;
     min-width: 0;
     margin-right: 10px;
 }
 
 .timer-title {
-    /* [수정] 폰트 크기 축소 (최근 소식과 비슷하게) */
-    font-size: 0.9em; 
+    /* 제목 크기: 0.85em (작고 단정하게) */
+    font-size: 0.85em;
     font-weight: bold;
     color: #333;
     white-space: nowrap;
@@ -3227,8 +3225,39 @@ h3 {
 }
 
 .timer-status-row {
-    /* [수정] 설명 폰트 아주 작게 */
-    font-size: 0.7em; 
+    /* 설명 크기: 0.7em (아주 작게) */
+    font-size: 0.7em;
     color: #999;
     display: flex;
-    align-items:
+    align-items: center;
+    gap: 4px;
+    line-height: 1.2;
+}
+
+/* 우측 시간 영역 */
+.timer-right {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.timer-clock {
+    /* [핵심 수정] 시간 크기 대폭 축소 (0.95em -> 0.85em) */
+    /* 이제 제목(.timer-title)과 거의 같은 크기입니다 */
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.85em; 
+    font-weight: bold;
+    color: #444; /* 색상도 약간 연하게(#333 -> #444) */
+    font-variant-numeric: tabular-nums; /* 숫자 떨림 방지 */
+    letter-spacing: -0.3px; 
+}
+
+/* 뱃지 스타일 */
+.status-badge {
+    font-weight: bold;
+    font-size: 0.9em; /* 부모 대비 0.9배 */
+}
+
+.status-ing { color: var(--wuxia-accent-gold); }
+.status-urgent { color: var(--wuxia-accent-red); }
+.status-end { color: #ccc; text-decoration: none; }
+.status-event { color: #ff9800; }

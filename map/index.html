@@ -705,7 +705,7 @@
 
         window.copyToClipboard = function(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => alert("복사 완료!")).catch(() => fallbackCopy(text));
+               // navigator.clipboard.writeText(text).then(() => alert("복사 완료!")).catch(() => fallbackCopy(text));
             } else { fallbackCopy(text); }
         };
 

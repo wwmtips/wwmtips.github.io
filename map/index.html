@@ -440,9 +440,17 @@
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
-            // 초기 로딩 시 모든 레이어 추가
-            for (const key in layerGroups) layerGroups[key].addTo(map);
-
+ // [수정됨] 초기 로딩 시 저장된 필터 설정 확인 후 레이어 추가
+            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+            
+            for (const key in layerGroups) {
+                // 저장된 값이 없으면(undefined) 기본값 true(보임), 있으면 그 값 따름
+                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
+                
+                if (shouldShow) {
+                    layerGroups[key].addTo(map);
+                }
+            }
             // URL 파라미터 이동
             const targetId = urlParams.get('marker');
             if (targetId) {
@@ -461,7 +469,15 @@
                 }
             }
         }
-
+// [추가됨] 현재 필터 상태를 로컬 스토리지에 저장하는 함수
+        function saveFilterState() {
+            const status = {};
+            for (const key in layerGroups) {
+                // 지도에 레이어가 올라와 있으면 true, 없으면 false
+                status[key] = map.hasLayer(layerGroups[key]);
+            }
+            localStorage.setItem('map_filter_settings', JSON.stringify(status));
+        }
         // ==========================================
         // 4. 사이드바 로직 (리뉴얼됨)
         // ==========================================
@@ -521,6 +537,7 @@
                         div.classList.remove('inactive'); div.classList.add('active');
                         toggleLayer(type, true);
                     }
+                    saveFilterState(); // ★
                 };
                 filterList.appendChild(div);
             }
@@ -545,7 +562,9 @@
                     div.classList.remove('active'); div.classList.add('inactive');
                     toggleLayer(typeName, false);
                 }
+                
             });
+            saveFilterState(); // ★
         }
 
         function toggleSidebar() { document.getElementById('map-sidebar').classList.toggle('open'); }

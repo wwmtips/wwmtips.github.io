@@ -11,7 +11,7 @@
         const taskData = [
             // [월간]
             { id: 'm_1', freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
-            { id: 'm_2', freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 구매' },
+            { id: 'm_2', freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 구매' }
             // [주간]
             { id: 'w_7', freq: 'weekly', type: '전투', loc: '협경', title: '협경 클리어' },
             { id: 'w_8', freq: 'weekly', type: '전투', loc: '검무장', title: '검무장 클리어' },
@@ -28,7 +28,9 @@
             { id: 'w_12', freq: 'weekly', type: '구매', loc: '심득교환', title: '심법 선택 상자 구매' },
             // [일일]
             { id: 'd_2', freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령' },
-            { id: 'd_3', freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령' },
+            { id: 'd_4', freq: 'daily', type: '활동', loc: '꿈속의 불선선', title: '엽비휴와 도박 상기' },
+            { id: 'd_5', freq: 'daily', type: '활동', loc: '각 지역', title: '비결 재료 채집'},
+            { id: 'd_3', freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령' }
         ];
 
         const STORAGE_KEY = 'wwm_checklist_v3';

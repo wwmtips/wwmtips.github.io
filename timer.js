@@ -91,9 +91,9 @@ function updateTimers() {
             categoryLabel = "이벤트";
         } else {
             const labelMap = {
-                'daily': '일일',
-                'weekly': '주간',
-                'monthly': '월간'
+                'daily': '필수',
+                'weekly': '필수',
+                'monthly': '필수'
             };
             categoryLabel = labelMap[timer.freq] || timer.freq;
         }

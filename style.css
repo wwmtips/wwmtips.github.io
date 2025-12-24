@@ -3481,16 +3481,27 @@ body.dark-mode .timer-row:hover {
 /* =========================================
    [추가] 유튜브 뉴스 그리드 스타일
    ========================================= */
+/* =========================================
+   [수정] 유튜브 뉴스 그리드 스타일 (지역 정보 스타일 적용)
+   ========================================= */
 
-/* 1. 그리드 레이아웃 (지도 그리드와 유사하게 반응형) */
+/* 1. 그리드 레이아웃 (지역 정보와 동일하게: 모바일 2열 / PC 4열) */
 .video-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 모바일: 2열 */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 12px;
     margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* 2. 비디오 카드 스타일 */
+@media (min-width: 768px) {
+    .video-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* 2. 비디오 카드 스타일 (지도 카드 스타일 복사) */
 .video-card {
     display: flex;
     flex-direction: column;
@@ -3501,83 +3512,96 @@ body.dark-mode .timer-row:hover {
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     text-decoration: none;
+    height: 100%; /* 카드 높이 맞춤 */
 }
 
 .video-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     border-color: var(--wuxia-accent-gold);
 }
 
-/* 3. 썸네일 영역 (16:9 비율 유지) */
+/* 3. 썸네일 영역 (★핵심: 16:9 비율 대신 고정 높이 사용) */
 .video-thumb-box {
     position: relative;
     width: 100%;
-    padding-top: 56.25%; /* 16:9 비율 */
+    height: 110px; /* 지역 정보 카드와 동일한 높이 */
     background-color: #000;
     overflow: hidden;
+    flex-shrink: 0; /* 높이 줄어들지 않게 고정 */
 }
 
 .video-thumb-box img {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* 이미지가 박스에 꽉 차게 (위아래 잘림 허용) */
+    transition: transform 0.3s ease;
 }
 
-/* 재생 버튼 오버레이 (선택사항) */
+.video-card:hover .video-thumb-box img {
+    transform: scale(1.05); /* 마우스 올리면 살짝 확대 */
+}
+
+/* 재생 아이콘 (작게 조정) */
 .video-play-icon {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 40px; height: 40px;
+    width: 30px; height: 30px;
     background: rgba(0,0,0,0.6);
     border-radius: 50%;
     display: flex;
     align-items: center; justify-content: center;
+    pointer-events: none; /* 클릭 통과 */
 }
 .video-play-icon::after {
     content: '▶';
     color: #fff;
-    font-size: 1.2em;
-    margin-left: 3px;
+    font-size: 0.9em;
+    margin-left: 2px;
 }
 
-/* 4. 정보 영역 */
+/* 4. 정보 영역 (지도 텍스트 스타일 적용) */
 .video-info {
-    padding: 10px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     flex-grow: 1;
+    background-color: #fff;
 }
 
 .video-title {
-    font-size: 0.9em;
+    font-size: 0.95em; /* 제목 크기 */
     font-weight: bold;
-    color: var(--wuxia-text-main);
-    margin-bottom: 5px;
+    color: #333; /* 진한 회색 */
+    margin-bottom: 4px;
+    
+    /* 긴 제목은 ... 처리 */
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 최대 2줄 */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.3;
+    font-family: 'Noto Serif KR', serif;
 }
 
 .video-channel {
-    font-size: 0.75em;
+    font-size: 0.8em; /* 채널명 작게 */
     color: #888;
     display: flex;
     align-items: center;
     gap: 4px;
+    margin-top: auto; /* 아래로 밀기 */
 }
 
 /* 다크모드 대응 */
 body.dark-mode .video-card {
     background-color: #1e1e1e;
     border-color: #444;
+}
+body.dark-mode .video-info {
+    background-color: #1e1e1e;
 }
 body.dark-mode .video-title {
     color: #e0e0e0;

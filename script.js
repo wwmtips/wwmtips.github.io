@@ -3228,8 +3228,9 @@ function enterBossDetail(link) {
         loadGuideView();
     }
 }/* script.js - renderHomeRecentNews 함수 교체 */
+/* script.js */
 
-// 유튜브 ID 추출 함수 (기존에 추가했다면 유지, 없으면 추가)
+// 유튜브 ID 추출 함수 (없으면 추가하세요)
 function getYoutubeId(url) {
     if (!url) return null;
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -3237,8 +3238,9 @@ function getYoutubeId(url) {
     return (match && match[2].length === 11) ? match[2] : null;
 }
 
-// [수정] 최근 소식을 '지역 정보(Map)' 스타일 그대로 렌더링
+// [수정] 유튜브 뉴스 렌더링 (video- 클래스 사용)
 function renderHomeRecentNews(newsList) {
+    // ★ ID를 정확히 'home-recent-news'로 타겟팅
     const container = document.getElementById('home-recent-news');
     if (!container) return;
     
@@ -3249,7 +3251,7 @@ function renderHomeRecentNews(newsList) {
         return;
     }
 
-    // 4개만 보여주기 (지도 그리드에 맞춤)
+    // 4개만 보여주기
     const listToRender = newsList.slice(0, 4); 
 
     listToRender.forEach(item => {
@@ -3259,22 +3261,20 @@ function renderHomeRecentNews(newsList) {
 
         const card = document.createElement('div');
         
-        // ★ 핵심: 별도 CSS 없이 기존 'map-card' 클래스 사용
-        card.className = 'map-card'; 
-        
+        // ★ CSS에서 정의한 .video-card 사용
+        card.className = 'video-card'; 
         card.onclick = () => { if (item.link) window.open(item.link, '_blank'); };
         
-        // ★ 핵심: 내부 구조도 'map-hero-bg', 'map-content' 등 지도와 똑같이 작성
-        // (배경 이미지를 썸네일로 설정)
+        // ★ 내부 구조도 CSS와 매칭되게 수정 (hero-bg, content 등)
         card.innerHTML = `
-            <div class="map-hero-bg" style="background-image: url('${thumbUrl}'); position: relative;">
-                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30px; height: 30px; background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <span style="color: #fff; font-size: 0.8em; margin-left: 2px;">▶</span>
+            <div class="video-hero-bg" style="background-image: url('${thumbUrl}');">
+                <div class="video-play-overlay">
+                    <span>▶</span>
                 </div>
             </div>
-            <div class="map-content">
-                <div class="map-title">${item.title}</div>
-                <p class="map-desc">📺 ${channelName}</p>
+            <div class="video-content">
+                <div class="video-title">${item.title}</div>
+                <div class="video-desc">📺 ${channelName}</div>
             </div>
         `;
         container.appendChild(card);

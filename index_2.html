@@ -228,19 +228,27 @@
                 </div>
                 <div id="home-recent-news" class="quest-grid"></div>
             </section>
-<section class="boss-section">
-    <div class="section-header-clickable" onclick="openGuideDirect('boss.html')">
-        <h3><span class="deco-bar"></span>주요 보스 공략</h3>
+            
+<section class="timer-section">
+    <div class="section-header-clickable">
+        <h3><span class="deco-bar"></span>강호 시시각각(時時刻刻)</h3>
     </div>
-    
-    <div id="home-boss-list" class="boss-grid" style="grid-template-columns: 1fr 1fr;"></div>
+    <div id="gangho-timer-list" class="map-grid">
+        </div>
 </section>
-            <section class="map-section">
-                <div class="section-header-clickable">
-                    <h3><span class="deco-bar"></span>지역 정보</h3>
+
+<div id="timer-sheet-modal" class="bottom-sheet-modal" onclick="closeTimerSheet(event)">
+    <div class="sheet-container">
+        <button type="button" class="sheet-close-btn" onclick="closeTimerSheet()">&times;</button>
+        <div class="sheet-body-content" style="padding-top: 20px;">
+            <div id="timer-detail-content">
                 </div>
-                <div id="home-map-list" class="map-grid"></div>
-            </section>
+        </div>
+    </div>
+</div>
+
+<script src="timer.js"></script>
+
 
             
            <!-- 제보 -->

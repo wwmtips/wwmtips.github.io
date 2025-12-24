@@ -3172,3 +3172,64 @@ h3 {
         object-fit: cover !important;
     }
 }
+
+/* 강호 타이머 전용 스타일 */
+.timer-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.timer-card:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+}
+
+.timer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.timer-label {
+    font-size: 0.75em;
+    color: var(--wuxia-accent-red);
+    font-weight: bold;
+}
+
+.timer-display {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+}
+
+.timer-name {
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.timer-status-text {
+    font-size: 0.8em;
+    color: #888;
+}
+
+/* 종료 임박 시 깜빡임 효과 */
+.timer-urgent .timer-display {
+    color: var(--wuxia-accent-red);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}

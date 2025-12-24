@@ -3227,4 +3227,57 @@ function enterBossDetail(link) {
     else {
         loadGuideView();
     }
+}/* script.js */
+
+// [추가] 유튜브 URL에서 Video ID 추출하는 함수
+function getYoutubeId(url) {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+
+// [수정] 최근 소식 렌더링 함수 (유튜브 썸네일 버전)
+function renderHomeRecentNews(newsList) {
+    const container = document.getElementById('home-recent-news');
+    if (!container) return;
+    
+    container.innerHTML = '';
+
+    // 데이터가 없을 경우
+    if (!newsList || newsList.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1 / -1; padding:30px; color:#888; text-align:center;">등록된 영상이 없습니다.</div>';
+        return;
+    }
+
+    // 최신 4개만 표시 (PC 기준 1줄 꽉 채우기 위해 4개, 모바일은 2줄)
+    const listToRender = newsList.slice(0, 4); 
+
+    listToRender.forEach(item => {
+        const videoId = getYoutubeId(item.link);
+        // 썸네일 주소 (mqdefault: 중간화질, hqdefault: 고화질)
+        const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : 'images/logo.png';
+        
+        // date 필드를 채널명으로 사용
+        const channelName = item.date || '연운'; 
+
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        // 클릭 시 새 창으로 유튜브 이동
+        card.onclick = () => { if (item.link) window.open(item.link, '_blank'); };
+        
+        card.innerHTML = `
+            <div class="video-thumb-box">
+                <img src="${thumbUrl}" alt="${item.title}" onerror="this.src='images/logo.png'">
+                <div class="video-play-icon"></div>
+            </div>
+            <div class="video-info">
+                <div class="video-title">${item.title}</div>
+                <div class="video-channel">
+                    <span>📺</span> ${channelName}
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
 }

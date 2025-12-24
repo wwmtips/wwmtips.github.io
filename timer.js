@@ -7,8 +7,8 @@ const GANGHO_EVENTS = [
         id: 'world_boss',
         name: '필드 보스 출현',
         desc: '강호 곳곳에 강력한 보스가 나타납니다. 협객들과 힘을 합쳐 물리치십시오.',
-        startTime: '12:00', // 매일 시작 시간
-        endTime: '14:00',   // 매일 종료 시간
+        startTime: '00:00', // 매일 시작 시간
+        endTime: '24:00',   // 매일 종료 시간
         type: 'daily'
     },
     {

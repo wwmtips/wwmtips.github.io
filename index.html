@@ -221,13 +221,27 @@
                 <div class="lucky-action-btn">열어보기 ➔</div>
             </div>
             
+            
+<section class="timer-section">
+    <div class="section-header-clickable">
+        <h3><span class="deco-bar"></span>강호령</h3>
+    </div>
+    <div id="gangho-timer-list" class="map-grid">
+        </div>
+</section>
 
-            <section class="recent-updates-section">
-                <div class="section-header-clickable" onclick="switchTab('guide')">
-                    <h3><span class="deco-bar"></span>최근 소식</h3>
+<div id="timer-sheet-modal" class="bottom-sheet-modal" onclick="closeTimerSheet(event)">
+    <div class="sheet-container">
+        <button type="button" class="sheet-close-btn" onclick="closeTimerSheet()">&times;</button>
+        <div class="sheet-body-content" style="padding-top: 20px;">
+            <div id="timer-detail-content">
                 </div>
-                <div id="home-recent-news" class="quest-grid"></div>
-            </section>
+        </div>
+    </div>
+</div>
+
+<script src="timer.js"></script>
+            
             <!--
 <section class="boss-section">
     <div class="section-header-clickable" onclick="openGuideDirect('boss.html')">
@@ -243,6 +257,12 @@
                 <div id="home-map-list" class="map-grid"></div>
             </section>
 
+            <section class="recent-updates-section">
+                <div class="section-header-clickable" onclick="switchTab('guide')">
+                    <h3><span class="deco-bar"></span>최근 소식</h3>
+                </div>
+                <div id="home-recent-news" class="quest-grid"></div>
+            </section>
             
            <!-- 제보 -->
            <section class="profile-section" style="margin-top: 0; margin-bottom: 0;">

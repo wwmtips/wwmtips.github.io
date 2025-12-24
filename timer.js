@@ -1,6 +1,6 @@
 /**
- * 강호 시시각각(時時刻刻) - 동기화 버전
- * 기능: npc.html(hw.js)과 데이터 연동, 양방향 체크 가능
+ * 강호 시시각각(時時刻刻) - 최종 완성본
+ * 기능: 숙제 동기화, 진행도 표시, 한글 카테고리 적용
  */
 
 // 1. 숙제 데이터 (hw.js와 동일한 ID 사용 필수)
@@ -34,14 +34,11 @@ const TIMERS = [
     { id: 'daily', type: 'reset', freq: 'daily', name: '일일 숙제', desc: '06:00 갱신', badgeClass: 'status-ing' },
     { id: 'weekly', type: 'reset', freq: 'weekly', name: '주간 숙제', desc: '월 06:00 갱신', badgeClass: 'status-ing' },
     { id: 'monthly', type: 'reset', freq: 'monthly', name: '월간 숙제', desc: '1일 06:00 갱신', badgeClass: 'status-ing' },
-    // 이벤트 등은 그대로 유지
     { id: 'event_winter', type: 'event', name: '불꽃놀이 축제', desc: '강호의 밤을 수놓는 불꽃 축제', startTime: '2024-12-25T00:00:00', endTime: '2025-12-31T23:59:59', badgeClass: 'status-event' }
 ];
 
-// ★ 중요: hw.js와 동일한 키 사용
 const STORAGE_KEY = 'wwm_checklist_v3';
 
-// 데이터 불러오기 헬퍼
 function getChecklistStatus() {
     try {
         const data = localStorage.getItem(STORAGE_KEY);
@@ -51,10 +48,8 @@ function getChecklistStatus() {
     }
 }
 
-// 데이터 저장 헬퍼
 function saveChecklistStatus(status) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(status));
-    // 저장 후 즉시 UI 갱신 (홈 화면 진행도 업데이트)
     updateTimers(); 
 }
 
@@ -73,7 +68,7 @@ function updateTimers() {
     if (container.innerText.includes('시간을 읽는 중')) container.innerHTML = '';
 
     const now = new Date();
-    const statusData = getChecklistStatus(); // 저장된 상태 불러오기
+    const statusData = getChecklistStatus(); 
 
     TIMERS.forEach(timer => {
         let row = document.getElementById(`timer-row-${timer.id}`);
@@ -88,7 +83,20 @@ function updateTimers() {
 
         let timeStr = "";
         let isUrgent = false;
-        let progressHtml = ""; // 진행도 표시용
+        let progressHtml = ""; 
+
+        // [수정됨] 한글 카테고리명 변환
+        let categoryLabel = "";
+        if (timer.type === 'event') {
+            categoryLabel = "이벤트";
+        } else {
+            const labelMap = {
+                'daily': '일일',
+                'weekly': '주간',
+                'monthly': '월간'
+            };
+            categoryLabel = labelMap[timer.freq] || timer.freq;
+        }
 
         if (timer.type === 'reset') {
             const target = getNextResetTime(timer.freq, now);
@@ -96,7 +104,6 @@ function updateTimers() {
             timeStr = formatDuration(diff);
             if (diff < 3 * 60 * 60 * 1000) isUrgent = true;
 
-            // [추가] 진행도 계산
             const tasks = TASK_DATA.filter(t => t.freq === timer.freq);
             const total = tasks.length;
             const done = tasks.filter(t => statusData.checked[t.id]).length;
@@ -106,13 +113,12 @@ function updateTimers() {
                 const color = isAllDone ? 'var(--wuxia-accent-gold)' : '#888';
                 progressHtml = `<span style="font-size:0.8em; color:${color}; margin-left:5px; font-weight:bold;">(${done}/${total})</span>`;
                 
-                // 완료 시 타이머 색상 변경 (선택 사항)
+                // 완료 시 클래스 추가
                 if(isAllDone) row.classList.add('row-completed');
                 else row.classList.remove('row-completed');
             }
         } 
         else if (timer.type === 'event') {
-            // 이벤트 로직 (기존 동일)
             const start = new Date(timer.startTime);
             const end = new Date(timer.endTime);
             if (now < start) timeStr = "시작 전";
@@ -128,10 +134,11 @@ function updateTimers() {
             <div class="timer-left">
                 <div class="timer-title">
                     ${timer.name}
-                    ${progressHtml} </div>
+                    ${progressHtml}
+                </div>
                 <div class="timer-status-row">
                     <span class="status-badge ${timer.badgeClass}">
-                        ${timer.type === 'event' ? 'EVENT' : timer.freq.toUpperCase()}
+                        ${categoryLabel}
                     </span>
                     <span style="color:#eee;">|</span>
                     <span>${timer.desc}</span>
@@ -146,13 +153,11 @@ function updateTimers() {
     });
 }
 
-// [동기화 핵심] 바텀시트 열기 & 리스트 렌더링
 function openTimerSheet(timer) {
     const modal = document.getElementById('timer-sheet-modal');
     if (!modal) return;
     const contentBox = modal.querySelector('.sheet-body-content') || modal.querySelector('#timer-detail-content');
 
-    // 현재 저장된 상태 다시 읽기 (최신화)
     const statusData = getChecklistStatus();
 
     let html = `<div style="text-align:center; margin-bottom:15px;">
@@ -166,7 +171,6 @@ function openTimerSheet(timer) {
             html += `<div class="task-list-wrapper">`;
             tasks.forEach(task => {
                 const isChecked = statusData.checked[task.id];
-                // 클릭 시 toggleTaskCheck 실행
                 html += `
                     <div class="task-item ${isChecked ? 'completed' : ''}" onclick="toggleTaskCheck('${task.id}', this)">
                         <div style="flex:1;">
@@ -177,8 +181,6 @@ function openTimerSheet(timer) {
                     </div>`;
             });
             html += `</div>`;
-            
-            
         } else {
             html += `<p style="text-align:center; color:#999;">등록된 내용이 없습니다.</p>`;
         }
@@ -196,11 +198,9 @@ function openTimerSheet(timer) {
     modal.classList.add('show');
 }
 
-// [동기화 핵심] 체크박스 토글 함수
 function toggleTaskCheck(taskId, el) {
     const statusData = getChecklistStatus();
     
-    // 상태 반전
     if (statusData.checked[taskId]) {
         delete statusData.checked[taskId];
         el.classList.remove('completed');
@@ -210,12 +210,9 @@ function toggleTaskCheck(taskId, el) {
         el.classList.add('completed');
         el.querySelector('.task-check-icon').innerText = '✔';
     }
-
-    // 저장
     saveChecklistStatus(statusData);
 }
 
-// 시간 계산 등 유틸리티 함수 (기존 유지)
 function getNextResetTime(freq, now) {
     let target = new Date(now);
     if (freq === 'daily') {

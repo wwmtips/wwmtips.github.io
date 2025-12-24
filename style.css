@@ -3331,3 +3331,45 @@ h3 {
 .row-completed .timer-clock {
     opacity: 0.5; /* 시간 흐리게 */
 }
+/* =========================================
+   [동기화 & 완료 표시] 업데이트된 스타일
+   ========================================= */
+
+/* 바텀시트 내 완료된 항목 */
+.task-item.completed {
+    background-color: #f5f5f5;
+    border-color: #eee;
+}
+
+.task-item.completed .task-title {
+    text-decoration: line-through; /* 취소선 */
+    color: #bbb;
+}
+
+.task-item.completed .task-loc {
+    color: #ccc;
+}
+
+.task-check-icon {
+    font-weight: bold;
+    color: var(--wuxia-accent-gold);
+    font-size: 1.2em;
+    min-width: 24px;
+    text-align: right;
+}
+
+/* ★ 메인 화면 타이머 완료 시 스타일 ★ */
+.row-completed {
+    background-color: #fafafa;
+}
+
+/* 제목에 취소선 적용 */
+.row-completed .timer-title {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+/* 시간도 약간 흐리게 */
+.row-completed .timer-clock {
+    opacity: 0.5;
+}

@@ -158,6 +158,8 @@ function loadData() {
         updateQuizCounter();
         renderFullNews(globalData.news);  
         renderComboSlots(); 
+        // [추가] 가이드 별도 섹션 렌더링 실행
+renderQuestGuideList();  // <--- 이 줄을 추가하세요!
 
         // ★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
         if (document.getElementById('bossGrid')) {
@@ -2481,7 +2483,9 @@ function updateLocationOptions() {
     locationSelect.value = 'all'; 
 }
 
-// 3. 실제 필터링 적용 및 렌더링 함수 (기존 로직 유지/보완)
+/* script.js */
+
+// 기존 applyQuestFilter 함수를 아래 내용으로 교체하세요.
 function applyQuestFilter() {
     const typeSelect = document.getElementById('quest-type-select');
     const locationSelect = document.getElementById('quest-location-select');
@@ -2491,6 +2495,9 @@ function applyQuestFilter() {
 
     // 데이터 필터링 (AND 조건)
     currentQuestData = globalData.quests.filter(item => {
+        // [수정] 메인 리스트에는 '가이드' 타입을 무조건 제외함
+        if (item.type === '가이드') return false;
+
         const typeMatch = (selectedType === 'all') || (item.type === selectedType);
         const locationMatch = (selectedLocation === 'all') || (item.location === selectedLocation);
         return typeMatch && locationMatch;
@@ -3227,4 +3234,30 @@ function enterBossDetail(link) {
     else {
         loadGuideView();
     }
+}/* script.js 하단에 추가 */
+
+// [신규] 무림록 하단 가이드 별도 렌더링 함수
+function renderQuestGuideList() {
+    const section = document.getElementById('quest-guide-section');
+    const container = document.getElementById('quest-guide-container');
+    
+    if (!section || !container || !globalData.quests) return;
+    
+    // 1. '가이드' 타입만 필터링
+    const guideItems = globalData.quests.filter(q => q.type === '가이드');
+
+    // 2. 데이터가 없으면 섹션 숨김
+    if (guideItems.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+
+    // 3. 데이터가 있으면 섹션 표시 및 렌더링
+    section.style.display = 'block';
+    container.innerHTML = '';
+
+    guideItems.forEach(quest => {
+        // 기존 카드 생성 함수 재사용 (디자인 통일)
+        createQuestCard(quest, container);
+    });
 }

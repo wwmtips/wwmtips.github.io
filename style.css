@@ -3173,13 +3173,15 @@ h3 {
     }
 }
 
+
+
 /* =========================================
-   강호 시시각각 (타이머) - 리스트형 스타일
+   강호 시시각각 (타이머) - 슬림 스타일
    ========================================= */
 #gangho-timer-list {
     display: flex;
     flex-direction: column;
-    gap: 0; /* 간격을 없애 리스트처럼 붙임 */
+    gap: 0;
     border: 1px solid #eee;
     border-radius: 4px;
     background-color: #fff;
@@ -3190,109 +3192,43 @@ h3 {
 .timer-row {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* 수직 중앙 정렬 */
-    padding: 12px 15px;  /* 높이 축소 (최근 소식과 비슷하게) */
-    border-bottom: 1px solid #eee;
+    align-items: center;
+    /* [수정] 패딩을 줄여서 날렵하게 (12px -> 10px) */
+    padding: 10px 15px;
+    border-bottom: 1px solid #f5f5f5;
     cursor: pointer;
-    transition: background-color 0.2s;
-    position: relative;
-}
-
-.timer-row:last-child {
-    border-bottom: none;
+    background: #fff;
+    transition: background 0.2s;
 }
 
 .timer-row:hover {
-    background-color: #fffcf5; /* 마우스 올리면 미색 배경 */
+    background-color: #fffcf5;
 }
 
-/* 좌측 정보 영역 (제목 + 상태) */
 .timer-left {
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    flex: 1; /* 남은 공간 차지 */
-    min-width: 0; /* 말줄임표 작동을 위해 필수 */
-    margin-right: 15px;
+    /* [수정] 제목과 설명 사이 간격 축소 */
+    gap: 2px; 
+    flex: 1;
+    min-width: 0;
+    margin-right: 10px;
 }
 
 .timer-title {
-    font-size: 0.95em;
+    /* [수정] 폰트 크기 축소 (최근 소식과 비슷하게) */
+    font-size: 0.9em; 
     font-weight: bold;
     color: #333;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-family: 'Noto Serif KR', serif;
 }
 
 .timer-status-row {
-    font-size: 0.75em;
-    color: #888;
+    /* [수정] 설명 폰트 아주 작게 */
+    font-size: 0.7em; 
+    color: #999;
     display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* 우측 시간 영역 (타이머) */
-.timer-right {
-    text-align: right;
-    flex-shrink: 0;
-}
-
-.timer-clock {
-    font-family: 'Noto Serif KR', serif; /* 숫자 폰트 */
-    font-size: 1.1em; /* 시간은 조금 크게 */
-    font-weight: bold;
-    color: #333;
-    font-variant-numeric: tabular-nums; /* 숫자 간격 일정하게 */
-}
-
-/* 상태별 색상 포인트 */
-.status-badge {
-    font-weight: bold;
-}
-.status-ing { color: var(--wuxia-accent-gold); } /* 진행중 */
-.status-urgent { color: var(--wuxia-accent-red); animation: blink 1.5s infinite; } /* 마감 임박 */
-.status-end { color: #aaa; text-decoration: line-through; } /* 종료 */
-
-@keyframes blink { 50% { opacity: 0.5; } }
-/* 타이머 행 스타일 (작은 사이즈 유지) */
-.timer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 15px; /* 컴팩트한 패딩 */
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    background: #fff;
-    transition: background 0.2s;
-}
-.timer-row:hover { background-color: #fffcf5; }
-
-/* 바텀시트 내부 리스트 스타일 */
-.task-list-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-height: 50vh;
-    overflow-y: auto;
-    text-align: left; /* 리스트는 왼쪽 정렬 */
-}
-
-.task-item {
-    background-color: #f9f9f9;
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #eee;
-    font-size: 0.95em;
-    display: flex;
-    align-items: center;
-}
-
-.task-loc {
-    color: var(--wuxia-accent-gold);
-    font-weight: bold;
-    margin-right: 8px;
-    font-size: 0.85em;
-    white-space: nowrap;
-        }
+    align-items:

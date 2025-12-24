@@ -5,9 +5,9 @@
    "name": "엽비휴와 도박 상기판",
    "location": "꿈속의 불선선",
    "type": "가이드",
-   "bgimg": "q176_2.jpg",
+   "bgimg": "q176_1.jpg",
    "iconpath": "images/masa.jpg",
-   "filepath": "/quests/q175.html"
+   "filepath": "/quests/q176.html"
  },
   {
    "id": "q175",

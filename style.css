@@ -3485,22 +3485,24 @@ body.dark-mode .timer-row:hover {
    [수정] 유튜브 뉴스 그리드 스타일 (지역 정보 스타일 적용)
    ========================================= */
 
-/* 1. 그리드 레이아웃 (지역 정보와 동일하게: 모바일 2열 / PC 4열) */
+/* 1. 그리드 레이아웃 */
 .video-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 12px;
+    /* [모바일] 기본 1열 (하나씩 큼직하게) */
+    grid-template-columns: 1fr; 
+    gap: 15px;
     margin-top: 10px;
     width: 100%;
     box-sizing: border-box;
 }
 
+/* [태블릿/PC] 화면이 768px 이상일 때 */
 @media (min-width: 768px) {
     .video-grid {
-        grid-template-columns: repeat(4, 1fr);
+        /* PC에서는 4열로 (혹은 2열을 원하시면 repeat(2, 1fr)로 변경) */
+        grid-template-columns: repeat(4, 1fr); 
     }
 }
-
 /* 2. 비디오 카드 스타일 (지도 카드 스타일 복사) */
 .video-card {
     display: flex;

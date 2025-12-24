@@ -1,4 +1,14 @@
 [ 
+  
+  {
+   "id": "q175",
+   "name": "엽비휴와 도박 상기",
+   "location": "꿈속의 불선선",
+   "type": "가이드",
+   "bgimg": "q176_2.jpg",
+   "iconpath": "images/masa.jpg",
+   "filepath": "/quests/q175.html"
+ },
   {
    "id": "q175",
    "name": "세월의 진실",

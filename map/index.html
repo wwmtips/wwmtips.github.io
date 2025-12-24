@@ -250,7 +250,7 @@
         // ==========================================
         const mapsDB = {
             "qinghe": { name: "청하", img: "../map/images/qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
-            "gesh": { name: "청하(지하) | 장군 사당", img: "../map/images/gesh.jpg", json: "../json/gesh.json", w: 1662, h: 1787 },
+            "gesh": { name: "장군 사당", img: "../map/images/dream.jpg", json: "../json/drs.json", w: 1662, h: 1787 },
             "drs": { name: "꿈속의 불선선", img: "../map/images/dream.jpg", json: "../json/drs.json", w: 4545, h: 2743 },
             "kaifeng": { name: "개봉", img: "../map/images/kaifeng.jpg", json: "../json/kaifeng.json", w: 5159, h: 7000 },
             "gm": { name: "귀문시장", img: "../map/images/gm.jpg", json: "../json/gm.json", w: 5482, h: 3534 }
@@ -260,13 +260,13 @@
         const typeMapping = { 
             "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
             "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
-            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj", "천애객": "ic_chun"
+            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
         const colorMapping = {
             "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
             "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
-            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad", "천애객": "#42f5d1"
+            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -379,9 +379,7 @@
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const lightTypes = [""]; // 밝은 배경 타입
-        
-        // 실행
-        drawTextLabels();
+
             data.forEach(item => {
                 if (!layerGroups[item.type]) {
                     if (isClusterOn) {
@@ -660,9 +658,6 @@
             return (match && match[2].length === 11) ? match[2] : null;
         }
 
-        // ==========================================
-        // ★ [수정됨] JSON 복사 시 지도에 임시 표시 남기기
-        // ==========================================
         window.copyMarkerJson = function(y, x) {
             const name = document.getElementById('input_name').value || "이름 없음";
             const type = document.getElementById('input_type').value;
@@ -670,8 +665,6 @@
             const link = document.getElementById('input_link').value || "";
             const image = document.getElementById('input_image').value || "";
             const uniqueId = Date.now(); 
-
-            // 1. JSON 생성 및 복사
             const jsonString = `
   {
     "id": ${uniqueId},
@@ -684,25 +677,6 @@
     "image": "${image}"
   },`;
             copyToClipboard(jsonString);
-
-            // 2. ★ [추가됨] 지도에 임시 마커 찍기 (새로고침 전까지 유지)
-            // 눈에 잘 띄게 '형광 자주색(Magenta)' 점으로 표시합니다.
-            const tempMarker = L.circleMarker([y, x], {
-                color: '#ff00ff',      // 테두리: 형광 자주색
-                fillColor: '#ff00ff',  // 채우기: 형광 자주색
-                fillOpacity: 1,        // 투명도: 불투명
-                radius: 6              // 크기
-            }).addTo(map);
-
-            // 3. 마커 위에 이름표 달기 (항상 보이게)
-            tempMarker.bindTooltip(name, { 
-                permanent: true, 
-                direction: 'top',
-                className: 'dev-temp-label' // 스타일 클래스 (아래 CSS 추가)
-            });
-
-            // 4. 입력창 팝업 닫기 (작업 편의성)
-            map.closePopup();
         };
 
         window.copyToClipboard = function(text) {

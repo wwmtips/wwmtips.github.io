@@ -3227,9 +3227,9 @@ function enterBossDetail(link) {
     else {
         loadGuideView();
     }
-}/* script.js */
+}/* script.js - renderHomeRecentNews 함수 교체 */
 
-// [추가] 유튜브 URL에서 Video ID 추출하는 함수
+// 유튜브 ID 추출 함수 (기존에 추가했다면 유지, 없으면 추가)
 function getYoutubeId(url) {
     if (!url) return null;
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -3237,45 +3237,44 @@ function getYoutubeId(url) {
     return (match && match[2].length === 11) ? match[2] : null;
 }
 
-// [수정] 최근 소식 렌더링 함수 (유튜브 썸네일 버전)
+// [수정] 최근 소식을 '지역 정보(Map)' 스타일 그대로 렌더링
 function renderHomeRecentNews(newsList) {
     const container = document.getElementById('home-recent-news');
     if (!container) return;
     
     container.innerHTML = '';
 
-    // 데이터가 없을 경우
     if (!newsList || newsList.length === 0) {
         container.innerHTML = '<div style="grid-column: 1 / -1; padding:30px; color:#888; text-align:center;">등록된 영상이 없습니다.</div>';
         return;
     }
 
-    // 최신 4개만 표시 (PC 기준 1줄 꽉 채우기 위해 4개, 모바일은 2줄)
+    // 4개만 보여주기 (지도 그리드에 맞춤)
     const listToRender = newsList.slice(0, 4); 
 
     listToRender.forEach(item => {
         const videoId = getYoutubeId(item.link);
-        // 썸네일 주소 (mqdefault: 중간화질, hqdefault: 고화질)
         const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : 'images/logo.png';
-        
-        // date 필드를 채널명으로 사용
         const channelName = item.date || '연운'; 
 
         const card = document.createElement('div');
-        card.className = 'video-card';
-        // 클릭 시 새 창으로 유튜브 이동
+        
+        // ★ 핵심: 별도 CSS 없이 기존 'map-card' 클래스 사용
+        card.className = 'map-card'; 
+        
         card.onclick = () => { if (item.link) window.open(item.link, '_blank'); };
         
+        // ★ 핵심: 내부 구조도 'map-hero-bg', 'map-content' 등 지도와 똑같이 작성
+        // (배경 이미지를 썸네일로 설정)
         card.innerHTML = `
-            <div class="video-thumb-box">
-                <img src="${thumbUrl}" alt="${item.title}" onerror="this.src='images/logo.png'">
-                <div class="video-play-icon"></div>
-            </div>
-            <div class="video-info">
-                <div class="video-title">${item.title}</div>
-                <div class="video-channel">
-                    <span>📺</span> ${channelName}
+            <div class="map-hero-bg" style="background-image: url('${thumbUrl}'); position: relative;">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30px; height: 30px; background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: #fff; font-size: 0.8em; margin-left: 2px;">▶</span>
                 </div>
+            </div>
+            <div class="map-content">
+                <div class="map-title">${item.title}</div>
+                <p class="map-desc">📺 ${channelName}</p>
             </div>
         `;
         container.appendChild(card);

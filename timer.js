@@ -34,7 +34,7 @@ const TIMERS = [
     { id: 'daily', type: 'reset', freq: 'daily', name: '일일 숙제', desc: '06:00 갱신', badgeClass: 'status-ing' },
     { id: 'weekly', type: 'reset', freq: 'weekly', name: '주간 숙제', desc: '월 06:00 갱신', badgeClass: 'status-ing' },
     { id: 'monthly', type: 'reset', freq: 'monthly', name: '월간 숙제', desc: '1일 06:00 갱신', badgeClass: 'status-ing' },
-    { id: 'event_winter', type: 'event', name: '불꽃놀이 축제', desc: '강호의 밤을 수놓는 불꽃 축제', startTime: '2024-12-25T00:00:00', endTime: '2025-12-31T23:59:59', badgeClass: 'status-event' }
+    { id: 'event_winter', type: 'event', name: '불꽃놀이 축제', desc: '번루 불꽃 축제', startTime: '2024-12-25T00:00:00', endTime: '2025-12-31T23:59:59', badgeClass: 'status-event' }
 ];
 
 const STORAGE_KEY = 'wwm_checklist_v3';

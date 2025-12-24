@@ -3296,3 +3296,38 @@ h3 {
     font-size: 0.85em;
     white-space: nowrap;
    }
+/* =========================================
+   [동기화] 바텀시트 체크리스트 스타일
+   ========================================= */
+
+/* 완료된 항목 스타일 */
+.task-item.completed {
+    background-color: #f0f0f0; /* 배경 회색 */
+    border-color: #e0e0e0;
+}
+
+.task-item.completed .task-title {
+    text-decoration: line-through; /* 취소선 */
+    color: #bbb;
+}
+
+.task-item.completed .task-loc {
+    color: #bbb; /* 지역 태그도 흐리게 */
+}
+
+/* 체크 아이콘 (우측) */
+.task-check-icon {
+    font-weight: bold;
+    color: var(--wuxia-accent-gold);
+    font-size: 1.2em;
+    min-width: 24px;
+    text-align: right;
+}
+
+/* 홈 화면 타이머 행 완료 시 은은한 배경 */
+.row-completed {
+    background-color: #fdfdfd;
+}
+.row-completed .timer-clock {
+    opacity: 0.5; /* 시간 흐리게 */
+}

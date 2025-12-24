@@ -1,5 +1,14 @@
 [ 
-  
+
+  {
+    "id": "q176",
+    "name": "암류 5장",
+    "location": "개봉",
+    "type": "인연의 궤적",
+    "bgimg": "q78_5.jpg",
+    "iconpath": "images/man.jpg",
+    "filepath": "/quests/q78.html"
+  },  
   {
    "id": "q175",
    "name": "엽비휴와 도박 상기판",
@@ -1261,15 +1270,6 @@
     "bgimg": "q77_1.jpg",
     "iconpath": "images/man.jpg",
     "filepath": "/quests/q77.html"
-  },
-  {
-    "id": "q78",
-    "name": "암류 5장",
-    "location": "개봉",
-    "type": "인연의 궤적",
-    "bgimg": "q78_1.jpg",
-    "iconpath": "images/man.jpg",
-    "filepath": "/quests/q78.html"
   },
   {
     "id": "q79",

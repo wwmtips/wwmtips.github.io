@@ -10,7 +10,7 @@
 <div class="quest-detail-container">
     
     <style>
-        /* [수묵화 테마] 스타일 정의 (동일 유지) */
+        /* [수묵화 테마] 스타일 정의 */
         :root {
             --wuxia-accent-red: #b71c1c;
             --wuxia-accent-gold: #b08d55;
@@ -62,19 +62,14 @@
             font-weight: bold;
             margin-top: 40px;
         }
-        .locked-item {
-            background-color: #f5f5f5;
-            border: 1px dashed #bbb;
-            color: #777;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-        .locked-title {
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 5px;
-            display: block;
+        .tip-box {
+            background-color: #f0f8ff;
+            padding: 10px 15px;
+            border-left: 3px solid #4682b4;
+            margin: 10px 0;
+            border-radius: 0 4px 4px 0;
+            color: #333;
+            font-size: 0.9em;
         }
     </style>
 
@@ -83,20 +78,19 @@
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
             인연의 암류 5장
         </h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">현재 완료 불가 (일부 미개방)</p>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">암류 5장 수집 요소 가이드</p>
     </div>
 
     <div class="info-box">
         <h3 style="color: var(--wuxia-accent-gold); margin: 0 0 10px 0; font-size: 1.1em;">📜 수집 개요</h3>
         <p style="color: var(--wuxia-text-main); margin: 0; line-height: 1.6;">
-            현재 버전에서는 모든 항목을 수집할 수 없습니다.<br>
-            획득 가능한 항목과 향후 개방될 조건을 확인하세요.
+            인연의 암류 5장에서 획득 가능한 총 6가지 수집 항목의 위치와 조건입니다.
         </p>
     </div>
 
-    <h3 class="category-title">1. 천하의 조운</h3>
+    <h3 class="category-title">천하의 조운</h3>
     <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-        <b>획득 방법:</b> 아래 위치로 이동하여 NPC <b>'연륜'</b>과 대화하면 획득할 수 있습니다.
+        아래 위치로 이동하여 NPC <b>'연륜'</b>과 대화하면 획득할 수 있습니다.
     </p>
     <div class="wuxia-image-container">
         <img src="../quests/images/q78_1.jpg" alt="연륜 대화">
@@ -107,28 +101,58 @@
 
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
-    <h3 class="category-title" style="color: #777; border-color: #999;">🔒 미개방 항목 (2~4번)</h3>
-    
-    <div class="locked-item">
-        <span class="locked-title">2. 알 수 없음</span>
-        다음 <b>'진수전'</b> 컨텐츠가 개방되어야 획득 가능합니다.
-    </div>
+    <h3 class="category-title">아내를 잃은 고통</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>천상래 진수전</b>을 진행하는 도중 자연스럽게 획득할 수 있습니다.
+    </p>
 
-    <div class="locked-item">
-        <span class="locked-title">3. 알 수 없음</span>
-        <b>'개봉 서부'</b> 지역이 개방되어야 획득 가능합니다.
-    </div>
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
-    <div class="locked-item">
-        <span class="locked-title">4. 알 수 없음</span>
-        <b>'개봉 북부'</b> 지역이 개방되어야 획득 가능합니다.
+    <h3 class="category-title">소설천청</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        아래 표시된 장소로 이동하여 놓여 있는 <b>큰 북</b>을 조사하면 획득합니다.
+    </p>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q78_3.jpg" alt="큰 북 위치">
+    </div>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q78_4.jpg" alt="큰 북 상세">
     </div>
 
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
 
-    <h3 class="category-title">5. 허를 찌르는 전략</h3>
+    <h3 class="category-title">하진에서의 만남</h3>
     <p style="color: var(--wuxia-text-main); line-height: 1.8;">
-        <b>획득 방법:</b> <b>'상평창 진수전'</b>을 진행하면 자동으로 획득할 수 있습니다.
+        아래 장소에서 책상 위에 놓인 <b>초대장</b>을 조사하여 획득할 수 있습니다.
+    </p>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q78_5.jpg" alt="초대장 위치">
+    </div>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q78_6.jpg" alt="초대장 상세">
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">낙신의 뱃사공</h3>
+    <div class="tip-box" style="margin-bottom: 15px;">
+        <b>⚠️ 선행 조건:</b> '천상래 진수전' 을 먼저 획득해야 조사가 가능합니다.
+    </div>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        아래 장소를 조사하여 획득하세요.
+    </p>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q78_7.jpg" alt="낙신의 뱃사공 위치">
+    </div>
+    <div class="wuxia-image-container">
+        <img src="../quests/images/q78_8.jpg" alt="낙신의 뱃사공 상세">
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+    <h3 class="category-title">허를 찌르는 전략</h3>
+    <p style="color: var(--wuxia-text-main); line-height: 1.8;">
+        <b>상평창 진수전</b>을 진행하면 자동으로 획득할 수 있습니다.
     </p>
     
     <div style="text-align: center; margin-top: 40px;">

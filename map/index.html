@@ -658,6 +658,9 @@
             return (match && match[2].length === 11) ? match[2] : null;
         }
 
+       // ==========================================
+        // ★ [수정됨] JSON 복사 시 지도에 임시 표시 남기기
+        // ==========================================
         window.copyMarkerJson = function(y, x) {
             const name = document.getElementById('input_name').value || "이름 없음";
             const type = document.getElementById('input_type').value;
@@ -665,6 +668,8 @@
             const link = document.getElementById('input_link').value || "";
             const image = document.getElementById('input_image').value || "";
             const uniqueId = Date.now(); 
+
+            // 1. JSON 생성 및 복사
             const jsonString = `
   {
     "id": ${uniqueId},
@@ -677,6 +682,25 @@
     "image": "${image}"
   },`;
             copyToClipboard(jsonString);
+
+            // 2. ★ [추가됨] 지도에 임시 마커 찍기 (새로고침 전까지 유지)
+            // 눈에 잘 띄게 '형광 자주색(Magenta)' 점으로 표시합니다.
+            const tempMarker = L.circleMarker([y, x], {
+                color: '#ff00ff',      // 테두리: 형광 자주색
+                fillColor: '#ff00ff',  // 채우기: 형광 자주색
+                fillOpacity: 1,        // 투명도: 불투명
+                radius: 6              // 크기
+            }).addTo(map);
+
+            // 3. 마커 위에 이름표 달기 (항상 보이게)
+            tempMarker.bindTooltip(name, { 
+                permanent: true, 
+                direction: 'top',
+                className: 'dev-temp-label' // 스타일 클래스 (아래 CSS 추가)
+            });
+
+            // 4. 입력창 팝업 닫기 (작업 편의성)
+            map.closePopup();
         };
 
         window.copyToClipboard = function(text) {

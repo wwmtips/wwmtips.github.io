@@ -1,233 +1,3298 @@
-/**
- * 강호 시시각각(時時刻刻) - 최종 수정본
- * 수정사항: 월간 숙제 취소선 제거, 시간 포맷 변경 (일 HH:MM:SS)
- */
+/* =========================================
+   style.css (최종 수정본: 빌드 리스트 개선 및 전체 통합)
+   ========================================= */
 
-// ============================================================
-// [데이터 1] 숙제 세부 목록
-// ============================================================
-const TASK_DATA = [
-    // [월간]
-    { freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
-    { freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 구매' },
-    // [주간]
-    { freq: 'weekly', type: '전투', loc: '협경', title: '협경 클리어 (보상 수령)' },
-    { freq: 'weekly', type: '전투', loc: '검무장', title: '검무장 클리어' },
-    { freq: 'weekly', type: '구매', loc: '강호백진', title: '음의 선율 구매' },
-    { freq: 'weekly', type: '구매', loc: '시즌상점', title: '주간 한정 물품 구매' },
-    { freq: 'weekly', type: '활동', loc: '동맹', title: '화물 운송' },
-    { freq: 'weekly', type: '활동', loc: '무역', title: '시매사 교환' },
-    // [일일]
-    { freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령 완료' },
-    { freq: 'daily', type: '활동', loc: '꿈속', title: '엽비휴와 도박' },
-    { freq: 'daily', type: '활동', loc: '필드', title: '비결 재료 채집' },
-    { freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령 수행' }
-];
+/* 1. 폰트 및 기본 변수 설정 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap');
 
-// ============================================================
-// [데이터 2] 타이머 설정
-// ============================================================
-const TIMERS = [
-    // 1. 일일 초기화
-    {
-        id: 'daily',
-        type: 'reset',
-        freq: 'daily',
-        name: '일일 숙제',
-        desc: '매일 오전 06:00 초기화',
-        badgeClass: 'status-ing'
-    },
-    // 2. 주간 초기화
-    {
-        id: 'weekly',
-        type: 'reset',
-        freq: 'weekly',
-        name: '주간 숙제',
-        desc: '매주 월요일 06:00 초기화',
-        badgeClass: 'status-ing' // (수정) urgent 대신 ing로 통일
-    },
-    // 3. 월간 초기화 (수정됨: status-end -> status-ing)
-    {
-        id: 'monthly',
-        type: 'reset',
-        freq: 'monthly',
-        name: '월간 숙제',
-        desc: '매월 1일 06:00 초기화',
-        badgeClass: 'status-ing' // ★여기가 원인이었습니다★
-    },
-    // 4. 이벤트
-    {
-        id: 'event_winter',
-        type: 'event',
-        name: '불꽃놀이 축제',
-        desc: '강호의 밤을 수놓는 불꽃 축제입니다.',
-        startTime: '2024-12-25T00:00:00',
-        endTime: '2025-12-31T23:59:59',
-        badgeClass: 'status-event'
-    }
-];
-
-// ============================================================
-// ▼ 로직 영역
-// ============================================================
-
-document.addEventListener("DOMContentLoaded", function() {
-    updateTimers();
-    setInterval(updateTimers, 1000);
-});
-
-function updateTimers() {
-    const container = document.getElementById('gangho-timer-list');
-    if (!container) return;
-
-    if (container.innerText.includes('시간을 읽는 중')) container.innerHTML = '';
-
-    const now = new Date();
-
-    TIMERS.forEach(timer => {
-        let row = document.getElementById(`timer-row-${timer.id}`);
-        
-        if (!row) {
-            row = document.createElement('div');
-            row.id = `timer-row-${timer.id}`;
-            row.className = 'timer-row';
-            row.onclick = () => openTimerSheet(timer);
-            container.appendChild(row);
-        }
-
-        let timeStr = "";
-        let isUrgent = false;
-
-        // 시간 계산 분기
-        if (timer.type === 'reset') {
-            const target = getNextResetTime(timer.freq, now);
-            const diff = target - now;
-            timeStr = formatDuration(diff); // 포맷 함수 변경됨
-            if (diff < 3 * 60 * 60 * 1000) isUrgent = true;
-        } 
-        else if (timer.type === 'event') {
-            const start = new Date(timer.startTime);
-            const end = new Date(timer.endTime);
-            
-            if (now < start) {
-                timeStr = "시작 전";
-            } else if (now > end) {
-                timeStr = "종료됨";
-            } else {
-                const diff = end - now;
-                timeStr = formatDuration(diff); // 포맷 함수 변경됨
-                if (diff < 24 * 60 * 60 * 1000) isUrgent = true;
-            }
-        }
-
-        row.innerHTML = `
-            <div class="timer-left">
-                <div class="timer-title">${timer.name}</div>
-                <div class="timer-status-row">
-                    <span class="status-badge ${timer.badgeClass}">
-                        ${timer.type === 'event' ? 'EVENT' : timer.freq.toUpperCase()}
-                    </span>
-                    <span style="color:#ddd;">|</span>
-                    <span>${timer.desc}</span>
-                </div>
-            </div>
-            <div class="timer-right">
-                <div class="timer-clock" style="color: ${isUrgent ? 'var(--wuxia-accent-red)' : '#333'}">
-                    ${timeStr}
-                </div>
-            </div>
-        `;
-    });
-}
-
-// 초기화 시간 계산
-function getNextResetTime(freq, now) {
-    let target = new Date(now);
-    if (freq === 'daily') {
-        if (now.getHours() >= 6) target.setDate(target.getDate() + 1);
-        target.setHours(6, 0, 0, 0);
-    } else if (freq === 'weekly') {
-        const day = now.getDay();
-        const diffToMon = (1 + 7 - day) % 7;
-        target.setDate(target.getDate() + diffToMon);
-        target.setHours(6, 0, 0, 0);
-        if (diffToMon === 0 && now.getHours() >= 6) target.setDate(target.getDate() + 7);
-    } else if (freq === 'monthly') {
-        target.setMonth(target.getMonth() + 1);
-        target.setDate(1);
-        target.setHours(6, 0, 0, 0);
-    }
-    return target;
-}
-
-// ★★★ 시간 포맷 수정 (일 HH:MM:SS) ★★★
-function formatDuration(ms) {
-    if (ms <= 0) return "00:00:00";
+:root {
+    /* [레어도 색상] */
+    --rarity-common: #555555;    
+    --rarity-uncommon: #2e7d32;  
+    --rarity-rare: #1565c0;      
+    --rarity-epic: #7b1fa2;      
+    --rarity-legendary: #e65100; 
     
-    const d = Math.floor(ms / (1000 * 60 * 60 * 24));
-    const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((ms % (1000 * 60)) / 1000);
-
-    // 시, 분, 초는 항상 2자리로 맞춤 (05:03:01)
-    const hStr = String(h).padStart(2, '0');
-    const mStr = String(m).padStart(2, '0');
-    const sStr = String(s).padStart(2, '0');
-
-    // 1일 이상 남았으면 "3일 12:30:55" 형식
-    if (d > 0) {
-        return `${d}일 ${hStr}:${mStr}:${sStr}`;
-    }
+    /* [수묵화(한지) 라이트 테마 팔레트] */
+    --wuxia-bg-deep: #f4f4f2;     /* 배경: 미색 */
+    --wuxia-bg-panel: #ffffff;    /* 패널: 순백색 */
+    --wuxia-bg-input: #e0e0e0;    /* 입력창 */
     
-    // 24시간 미만이면 "12:30:55" 형식
-    return `${hStr}:${mStr}:${sStr}`;
+    --wuxia-border: #dcdcdc;      /* 경계선 */
+    
+    --wuxia-accent-gold: #a08040; /* 강조: 금색 */
+    --wuxia-accent-red: #b71c1c;  /* 강조: 인주색 */
+    
+    --wuxia-text-main: #1a1a1a;   /* 텍스트: 진한 검정 */
+    --wuxia-text-sub: #555555;    /* 보조 텍스트: 진한 회색 */
 }
 
-// 바텀시트 열기
-function openTimerSheet(timer) {
-    const modal = document.getElementById('timer-sheet-modal');
-    if (!modal) return;
-    const contentBox = modal.querySelector('.sheet-body-content') || modal.querySelector('#timer-detail-content');
 
-    let html = `<div style="text-align:center; margin-bottom:15px;">
-                    <h3 style="color:var(--wuxia-accent-gold); margin:0;">${timer.name}</h3>
-                    <p style="font-size:0.85em; color:#888;">${timer.desc}</p>
-                </div>`;
+/* =========================================
+   2. 기본 레이아웃 및 리셋
+   ========================================= */
+body {
+    background-color: var(--wuxia-bg-deep);
+    color: var(--wuxia-text-main);
+    font-family: 'Noto Serif KR', serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+}
 
-    if (timer.type === 'reset') {
-        const tasks = TASK_DATA.filter(t => t.freq === timer.freq);
-        if (tasks.length > 0) {
-            html += `<div class="task-list-wrapper">`;
-            tasks.forEach(task => {
-                html += `
-                    <div class="task-item">
-                        <span class="task-loc">[${task.loc}]</span>
-                        <span class="task-title">${task.title}</span>
-                    </div>`;
-            });
-            html += `</div>`;
-        } else {
-            html += `<p style="text-align:center; color:#999;">등록된 상세 내역이 없습니다.</p>`;
-        }
+h2, h3, p, button, input {
+    font-family: inherit;
+}
+
+/* =========================================
+   3. 상단 고정 헤더 영역
+   ========================================= */
+#fixed-top-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid var(--wuxia-border);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    backdrop-filter: blur(5px);
+}
+
+#main-header {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-icon img {
+    padding-top: 6px; 
+    vertical-align: middle;
+}
+
+/* 검색 컨테이너 */
+.search-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    background-color: var(--wuxia-bg-deep);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 5px 15px;
+    margin-left: 20px;
+    position: relative;
+    transition: border 0.2s;
+}
+
+.search-container:focus-within {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fff;
+}
+
+#header-search-input {
+    padding: 5px 0;
+    padding-right: 30px;
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    color: var(--wuxia-text-main);
+    outline: none;
+    font-size: 0.95em;
+    font-family: inherit;
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    z-index: 10;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.search-clear-btn:hover { color: var(--wuxia-accent-red); }
+
+/* 통합 검색 드롭다운 */
+.search-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid var(--wuxia-accent-gold); 
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    z-index: 2000;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    text-decoration: none;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background-color: #fffcf5;
+}
+
+.result-text {
+    color: #333;
+    font-size: 0.95em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.badge {
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+}
+.badge.quiz { background-color: var(--wuxia-accent-red); }
+.badge.item { background-color: var(--wuxia-accent-gold); color: #fff; }
+.badge.info { background-color: #2e7d32; }
+
+
+/* =========================================
+   4. 네비게이션
+   ========================================= */
+#category-nav {
+    padding-left: 15px;
+    padding-top: 10px;
+    display: flex;
+    gap: 25px;
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--wuxia-text-sub);
+    font-size: 1.0em;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px 5px;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+}
+
+.nav-item:hover {
+    color: var(--wuxia-text-main);
+}
+
+.nav-item.active {
+    color: var(--wuxia-text-main);
+    border-bottom: 3px solid var(--wuxia-accent-red);
+}
+
+/* =========================================
+   5. 메인 콘텐츠 및 뷰(View) 공통
+   ========================================= */
+#main-content {
+    padding-top: 110px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* 화면 전환 애니메이션 */
+#view-home, #view-quiz, #view-quest, #view-builder {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   버튼 및 섹션 헤더 공통
+   ========================================= */
+.browse-button {
+    background-color: var(--wuxia-accent-gold);
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    font-size: 1.0em;
+    font-weight: bold;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    display: block;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.browse-button:hover {
+    background-color: #9e7d4a;
+}
+
+.section-header-clickable {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--wuxia-border);
+    margin-bottom: 5px !important;
+    padding-bottom: 0 !important;
+    padding-right: 10px;
+}
+
+.section-header-clickable:hover h3 {
+    color: var(--wuxia-accent-red);
+}
+
+h3 {
+    font-size: 1.1em;
+    border-left: 4px solid var(--wuxia-accent-red);
+    padding-left: 10px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    color: var(--wuxia-text-main);
+}
+
+/* 홈 화면 제목 여백 조정 */
+.section-header-clickable h3 {
+    margin-bottom: 0 !important;
+    margin-top: 10px !important;
+}
+#view-home .section-header-clickable {
+    border-bottom: none !important;
+}
+
+/* =========================================
+   6. 뉴스 리스트 (홈/전체)
+   ========================================= */
+.item-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.news-item {
+    background-color: var(--wuxia-bg-panel);
+    border: 1px solid var(--wuxia-border);
+    border-radius: 4px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.news-item:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.news-title {
+    font-weight: bold;
+    color: var(--wuxia-text-main);
+    font-size: 1em;
+}
+
+.news-date {
+    font-size: 0.8em;
+    color: #888;
+    min-width: 80px;
+    text-align: right;
+}
+
+.news-content {
+    font-size: 0.9em;
+    color: var(--wuxia-text-sub);
+    line-height: 1.5;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #ddd;
+    display: none;
+}
+
+.news-item.active .news-content { display: block; }
+.news-item.active .news-title { color: var(--wuxia-accent-red); }
+
+.news-link-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.8em;
+    border-radius: 2px;
+}
+.news-link-btn:hover { background-color: #ddd; }
+/* =========================================
+   [통합 스타일] 홈 리스트 컨테이너 (최근 소식 & 커뮤니티 공통)
+   ========================================= */
+#home-recent-news, 
+#home-community-news {
+    display: flex;
+    flex-direction: column;
+    gap: 0 !important;       /* 간격 제거 */
+    border: 1px solid #eee;  /* 전체 테두리 */
+    border-radius: 4px;      /* 둥근 모서리 */
+    overflow: hidden;
+    background-color: #fff;
+    margin-top: 10px;        /* 상단 여백 */
+}
+
+/* =========================================
+   [최근 소식] 아이템 스타일 (커뮤니티와 높이/폰트 통일)
+   ========================================= */
+.recent-news-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;           /* [핵심] 진행도 바와 동일한 패딩 */
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    cursor: pointer;             /* 뉴스는 클릭 가능하므로 포인터 유지 */
+    transition: background-color 0.2s;
+    height: auto;
+    min-height: 32px;            /* 최소 높이 통일 */
+}
+
+/* 마지막 항목은 구분선 제거 */
+.recent-news-item:last-child {
+    border-bottom: none;
+}
+
+/* 마우스 올렸을 때 효과 (뉴스는 클릭 가능하므로 유지) */
+.recent-news-item:hover {
+    background-color: #f9f9f9;
+}
+
+/* 뉴스 제목 텍스트 (진행도 제목과 스타일 통일) */
+.news-title-text {
+    font-size: 0.85em;           /* [핵심] 폰트 크기 축소 (16px -> 0.85em) */
+    color: var(--wuxia-text-main);
+    font-weight: bold;           /* 굵게 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 15px;
+    flex: 1;
+    text-align: left;
+}
+
+/* 뉴스 날짜 텍스트 */
+.news-date-text {
+    font-size: 0.8em;            /* 날짜 크기 조정 */
+    color: #999;
+    min-width: 70px;
+    text-align: right;
+    white-space: nowrap;
+    font-family: 'Noto Serif KR', serif; /* 숫자 폰트 통일 */
+}
+
+/* 홈 섹션 간격 */
+.recent-updates-section, .community-updates-section, .map-section {
+    margin-top: 10px !important;
+    padding-top: 0 !important;
+}
+
+
+/* =========================================
+   7. 족보 페이지 (Answer) 스타일
+   ========================================= */
+#answer-container {
+    width: calc(100% + 30px); 
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 10px; 
+    border-top: 1px solid var(--wuxia-border);
+    border-bottom: 1px solid var(--wuxia-border);
+    height: 75vh; 
+    background-color: var(--wuxia-bg-panel);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.status-bar {
+    background-color: #f9f9f9;
+    color: var(--wuxia-text-main);
+    transition: all 0.3s ease-in-out;
+    max-height: 100px; 
+    opacity: 1;
+    overflow: hidden;
+    padding: 15px 20px;
+    font-size: 0.95em;
+    font-weight: bold;
+    border-bottom: 1px solid var(--wuxia-border);
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.status-bar.hidden {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    opacity: 0;
+}
+
+.inner-search-area {
+    padding: 15px;
+    background-color: #fff;
+    border-bottom: 1px solid var(--wuxia-border);
+    flex-shrink: 0;
+}
+
+.inner-search-box {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    color: #333;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+.inner-search-box:focus {
+    background-color: #fff;
+    border-color: var(--wuxia-accent-gold);
+}
+
+.list-scroll-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #fff;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f0f0f0;
+}
+
+.answer-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    table-layout: fixed;
+}
+
+.answer-table th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 15px;
+    border-bottom: 2px solid #ddd;
+    font-size: 1.05em;
+    font-weight: bold;
+}
+
+.answer-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+    word-break: keep-all;
+    font-size: 0.95em;
+}
+
+.answer-table tr:hover {
+    background-color: #fffcf5;
+}
+
+.highlight {
+    background-color: #ffe082;
+    color: #000;
+    border-radius: 2px;
+    padding: 0 2px;
+    font-weight: bold;
+}
+
+.rainbow-text {
+    background: linear-gradient(to right, #ff0000, #ffa500, #ffff00, #008000, #0000ff, #4b0082, #ee82ee, #ff0000);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    animation: shine 2s linear infinite;
+}
+@keyframes shine { to { background-position: 200% center; } }
+
+
+/* =========================================
+   8. 퀘스트 뷰 & 가이드 공통
+   ========================================= */
+.guide-grid-menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 8px; 
+    margin-bottom: 0px;
+    margin-top: 20px; 
+}
+
+.guide-item-btn {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ddd;
+    height: auto; 
+    min-height: auto;
+    padding: 12px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9em; 
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Noto Serif KR', serif;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.guide-item-btn:hover {
+    background-color: #fffcf5;
+    border-color: var(--wuxia-accent-gold);
+    color: #8a6d3b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.guide-item-btn.active {
+    background-color: #fffcf5;
+    color: var(--wuxia-accent-gold);
+    border: 1px solid var(--wuxia-accent-gold);
+    box-shadow: 0 0 5px rgba(160, 128, 64, 0.2);
+}
+
+.guide-item-btn.special {
+    background-color: #fff8e1;
+    border: 1px solid #ffe082;
+    color: #f57f17;
+}
+
+#quest-list-view {
+    margin-top: 0;
+    padding-left: 0;
+}
+
+.quest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    padding-bottom: 0px;
+}
+
+/* =========================================
+   [수정] 퀘스트 카드 스타일 (왼쪽 라인 추가)
+   ========================================= */
+.quest-card {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    /* 천지록과 동일한 패딩 적용 */
+    padding: 10px; 
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+
+    /* ▼▼▼ [핵심] 왼쪽에 포인트 라인 추가 ▼▼▼ */
+    /* 퀘스트 테마에 맞춰 '붉은색'으로 설정했습니다. */
+    border-left: 4px solid var(--wuxia-accent-red);
+    /* 만약 천지록과 똑같은 '회색'을 원하시면 위 줄을 지우고 아래 주석을 푸세요 */
+    /* border-left: 4px solid #aaa; */
+}
+
+.quest-card:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+
+.quest-card:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+.quest-icon-wrapper {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    border: 1px solid #ccc;
+    flex-shrink: 0;
+    background-color: #f0f0f0;
+}
+.quest-icon-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+.quest-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.quest-name {
+    color: #222;
+    font-weight: bold;
+    font-size: 0.95em;
+    margin-bottom: 4px;
+    
+    /* 아래 내용 추가 */
+    white-space: nowrap;      /* 줄바꿈 금지 */
+    overflow: hidden;         /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis;  /* 넘치는 부분 ... 처리 */
+    max-width: 150px;         /* (선택사항) 말줄임표가 시작될 최대 너비 지정 */
+    display: block;           /* 블록 요소로 동작하게 함 */
+}
+.quest-type {
+    color: #777;
+    font-size: 0.8em;
+}
+
+.quest-badge {
+    background-color: #f5f5f5;
+    color: #555;
+    font-weight: bold;
+    font-size: 0.85em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: var(--wuxia-accent-gold);
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    padding: 10px 0;
+    font-family: inherit;
+}
+.back-button:hover { color: var(--wuxia-accent-red); text-decoration: underline; }
+
+.detail-content-box {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    min-height: 400px;
+    color: #333;
+    line-height: 1.6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding-bottom: 20px;
+}
+
+.pagination-btn {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #666;
+    padding: 8px 12px;
+    min-width: 36px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Noto Serif KR', serif;
+    transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    border-color: var(--wuxia-accent-gold);
+    color: var(--wuxia-accent-gold);
+}
+
+.pagination-btn.active {
+    background-color: var(--wuxia-accent-gold);
+    border-color: var(--wuxia-accent-gold);
+    color: #fff;
+}
+.pagination-btn:disabled { opacity: 0.5; cursor: default; }
+
+
+/* =========================================
+   9. 푸터 & 지도 카드 등 기타
+   ========================================= */
+#main-footer {
+    background-color: #e0e0e0;
+    color: #666;
+    padding: 40px 20px;
+    margin-top: 60px;
+    border-top: 1px solid #ccc;
+    text-align: center;
+}
+
+.version-info {
+    font-size: 1.0em;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.copyright-disclaimer {
+    font-size: 0.8em;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.guide-page-container { padding-bottom:30px; }
+#guide-dynamic-content {
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+/* 지도 섹션 카드 */
+
+.map-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #1a1a1a; 
+    border: 1px solid #333;    
+    overflow: hidden;          
+    text-decoration: none;     
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.map-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    border-color: var(--wuxia-accent-gold);
+}
+
+.map-card:hover .map-hero-bg {
+    transform: scale(1.05);
+}
+
+.map-title::after {
+    content: "↗";
+    font-size: 0.8em;
+    color: var(--wuxia-accent-gold);
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+.map-card:hover .map-title::after { opacity: 1; }
+
+/* =========================================
+   [수정] 지도 섹션 카드 스타일 (소형화)
+   ========================================= */
+
+/* 1. 그리드 배치 수정 */
+.map-grid {
+    display: grid;
+    /* [핵심] 300px -> 220px로 축소 (화면이 좁아도 여러 개 들어감) */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    gap: 15px;       
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* ... .map-card 스타일은 그대로 유지 ... */
+
+/* 2. 이미지 높이 대폭 축소 */
+.map-hero-bg {
+    width: 100%;
+    /* [핵심] 기존 180px -> 110px로 변경 (세로 길이 줄이기) */
+    height: 110px; 
+    background-size: cover;    
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #333;
+    transition: transform 0.5s ease;
+}
+
+/* 3. 내부 텍스트 여백 축소 */
+.map-content {
+    /* [핵심] 기존 20px -> 12px 15px로 변경 (위아래 여백 줄임) */
+    padding: 12px 15px;
+    background-color: #1a1a1a; 
+    position: relative;
+    z-index: 1;
+}
+
+/* 4. 제목 크기 미세 조정 */
+.map-title {
+    color: #fff;
+    /* [핵심] 1.2em -> 1.05em (살짝 줄임) */
+    font-size: 1.05em;
+    font-weight: bold;
+    margin-bottom: 5px; /* 간격 줄임 */
+    font-family: 'Noto Serif KR', serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 5. 설명글 줄 수 제한 (3줄 -> 2줄) */
+.map-desc {
+    color: #aaa;      
+    font-size: 0.85em; /* 0.9em -> 0.85em */
+    line-height: 1.4;
+    margin: 0;
+    display: -webkit-box;
+    /* [핵심] 설명이 길면 2줄까지만 보여주고 ... 처리 */
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+    #recent-list.item-list-container, .quest-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+}
+@media (max-width: 768px) {
+    .quest-grid { grid-template-columns: 1fr; }
+    .guide-item-btn { font-size: 0.85em; padding: 10px 2px; }
+}
+
+
+/* =========================================
+   10. 빌더 (Builder) 슬롯 및 모달
+   ========================================= */
+.slot-label {
+    display: block;
+    font-weight: bold;
+    color: var(--wuxia-text-main);
+    margin-bottom: 10px;
+    margin-top: 20px;
+    font-size: 0.95em;
+    border-left: 3px solid var(--wuxia-accent-gold);
+    padding-left: 8px;
+}
+
+.slot-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.item-slot {
+    width: 64px;
+    height: 64px;
+    background-color: #fff;
+    border: 1px dashed var(--wuxia-accent-gold);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5em;
+    color: #ccc;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.item-slot:hover {
+    background-color: #fffcf5;
+    border-style: solid;
+    color: var(--wuxia-accent-gold);
+}
+
+.item-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 500px;
+    max-height: 70vh;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border: 1px solid var(--wuxia-accent-gold);
+}
+
+.item-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+}
+
+.select-item {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    background: #f9f9f9;
+}
+.select-item:hover {
+    border-color: var(--wuxia-accent-gold);
+    background: #fffcf5;
+}
+.select-item img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+.select-item p {
+    font-size: 0.7em;
+    margin: 5px 0 0 0;
+    color: #333;
+    word-break: keep-all;
+    line-height: 1.2;
+}
+
+.slot-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 64px; 
+}
+
+.slot-name {
+    font-size: 0.75em;
+    color: var(--wuxia-text-main);
+    text-align: center;
+    margin-top: 5px;
+    line-height: 1.2;
+    word-break: keep-all; 
+    min-height: 2.4em;
+}
+
+.builder-footer {
+    margin-top: 30px;
+    padding-bottom: 50px; 
+}
+
+#result-url {
+    box-sizing: border-box; 
+    width: 100%;            
+    max-width: 100%;        
+    margin-top: 10px; 
+    padding: 12px;
+    border: 1px solid var(--wuxia-accent-gold);
+    background-color: #f9f9f9;
+    color: #555;
+    font-size: 0.9em;
+    border-radius: 4px;
+    display: none; 
+    outline: none; 
+}
+
+#result-url:focus {
+    border-color: var(--wuxia-accent-red); 
+    background-color: #fff;
+}
+
+.select-item.disabled {
+    opacity: 0.4;              
+    cursor: not-allowed;       
+    background-color: #e0e0e0; 
+    border-color: #ccc;        
+    pointer-events: none;      
+}
+
+.select-item.disabled::after {
+    content: "사용 중";
+    display: block;
+    font-size: 0.7em;
+    color: #d32f2f; 
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+
+/* =========================================
+   11. [수정됨] 무공전수 (Builds) 리스트 스타일 
+   ========================================= */
+
+/* 카드 전체 레이아웃 */
+.build-row-card {
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 12px;
+    padding: 12px; /* 패딩 약간 축소 */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+.build-row-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--wuxia-accent-gold);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* 아이콘 영역 (세로 배치로 변경) */
+.build-icons-area {
+    display: flex;
+    flex-direction: column; /* [핵심] 세로 정렬 */
+    gap: 4px; /* 아이콘 간 간격 좁힘 */
+    margin-right: 15px; /* 텍스트와의 간격 */
+    flex-shrink: 0;
+    align-items: center;
+}
+
+/* 아이콘 박스 (사이즈 축소) */
+.build-icon-box {
+    width: 36px; /* [핵심] 48px -> 36px로 축소 */
+    height: 36px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.build-icon-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 텍스트 정보 영역 (공간 확보) */
+.build-info-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0; /* 텍스트 말줄임표 작동을 위한 필수 속성 */
+}
+
+.build-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 뱃지와 제목 높이 맞춤 */
+    margin-bottom: 4px;
+}
+
+/* 제목 스타일 */
+.build-title {
+    color: #333;
+    font-size: 1.05em;
+    font-weight: bold;
+    line-height: 1.3;
+    margin-right: 8px;
+    white-space: nowrap;      /* [추가] 한 줄 표시 */
+    overflow: hidden;         /* [추가] 넘침 숨김 */
+    text-overflow: ellipsis;  /* [추가] 말줄임표 (...) */
+    flex: 1;                  /* [추가] 남은 공간 차지 */
+}
+
+/* 설명 텍스트 */
+.build-desc {
+    color: #757575;
+    font-size: 0.9em;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 최대 2줄 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+}
+
+/* 뱃지 스타일 (기존 유지) */
+.build-type-badge {
+    font-size: 0.75em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+    white-space: nowrap;
+    border: 1px solid;
+    flex-shrink: 0; /* 뱃지 크기 유지 */
+}
+
+.type-pve {
+    color: #2e7d32;
+    border-color: #a5d6a7;
+    background: #e8f5e9;
+}
+
+.type-pvp {
+    color: #c62828;
+    border-color: #ef9a9a;
+    background: #ffebee;
+}
+
+/* =========================================
+   12. 나만의 빌드 생성 배너 스타일 
+   ========================================= */
+.create-build-banner {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-left: 4px solid var(--wuxia-accent-red);
+    padding: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.create-build-banner:hover {
+    border-color: var(--wuxia-accent-gold);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.create-build-banner h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-left: none !important; /* 내부 붉은 선 제거 */
+    padding-left: 0 !important;
+}
+
+.create-build-banner p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.banner-arrow {
+    color: var(--wuxia-accent-gold);
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+
+/* =========================================
+   13. 심법 도감 & 바텀시트
+   ========================================= */
+
+/* 가이드 버튼 */
+.guide-action-btn {
+    background-color: #333;
+    color: var(--wuxia-accent-gold);
+    border: 1px solid var(--wuxia-accent-gold);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9em;
+}
+
+.guide-action-btn:hover {
+    background-color: var(--wuxia-accent-gold);
+    color: #fff;
+}
+
+/* 심법 그리드 리스트 */
+.heart-library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.heart-lib-item {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.heart-lib-item:hover {
+    transform: translateY(-3px);
+    border-color: var(--wuxia-accent-gold);
+}
+
+.heart-lib-img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    background-color: #fafafa;
+    border-radius: 4px;
+}
+
+.heart-lib-name {
+    font-size: 0.85em;
+    color: #333;
+    font-weight: bold;
+    word-break: keep-all;
+    line-height: 1.3;
+}
+
+/* 바텀시트 (Bottom Sheet) */
+.bottom-sheet-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.bottom-sheet {
+    position: fixed;
+    bottom: -100%;
+    left: 0; width: 100%;
+    height: 80vh;
+    background: #fff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    z-index: 9999;
+    transition: bottom 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.sheet-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.sheet-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.close-sheet-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #999;
+}
+
+.sheet-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* 심법 가이드 활성화 클래스 */
+.sheet-open .bottom-sheet-overlay {
+    display: block;
+    opacity: 1;
+}
+
+.sheet-open .bottom-sheet {
+    bottom: 0;
+}
+
+/* 빌드 상세 바텀시트 활성화 클래스 */
+.build-sheet-open .bottom-sheet-overlay {
+    display: block;
+    opacity: 1;
+}
+
+.build-sheet-open #build-detail-sheet {
+    bottom: 0;
+}
+
+
+/* =========================================
+   14. [복구됨] 메인 슬라이더 스타일
+   ========================================= */
+.hero-slider-wrapper {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    height: 320px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background-color: #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.slider-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.hero-slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
+}
+
+.slide-content {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1000px;
+    box-sizing: border-box;
+    padding: 0 35px 40px 35px;
+    z-index: 2;
+    color: #fff;
+}
+
+.slide-tag {
+    display: inline-block;
+    border: 1px solid var(--wuxia-accent-gold);
+    color: var(--wuxia-accent-gold);
+    padding: 2px 8px;
+    font-size: 0.8em;
+    margin-bottom: 10px;
+    background: rgba(0,0,0,0.5);
+    font-weight: bold;
+}
+
+.slide-title {
+    font-size: 2.0em;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+    font-family: 'Noto Serif KR', serif;
+    color: #fff;
+}
+
+.slide-desc {
+    font-size: 0.95em;
+    color: #ddd;
+    margin-bottom: 0;
+    max-width: 600px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.9;
+}
+
+.slide-link-btn {
+    position: absolute;
+    right: 35px;
+    bottom: 40px;
+    padding: 8px 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 0.9em;
+    text-decoration: none;
+    transition: all 0.3s;
+    backdrop-filter: blur(2px);
+}
+
+.slide-link-btn:hover {
+    background-color: var(--wuxia-accent-gold);
+    border-color: var(--wuxia-accent-gold);
+    color: #000;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 3em;
+    padding: 20px;
+    cursor: pointer;
+    z-index: 10;
+    transition: color 0.3s;
+}
+.slider-btn:hover { color: #fff; }
+
+.prev { left: max(20px, calc(50vw - 580px)); } 
+.next { right: max(20px, calc(50vw - 580px)); }
+
+.slider-indicators {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.indicator.active {
+    background-color: var(--wuxia-accent-gold);
+    width: 20px;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .hero-slider-wrapper { height: 250px; }
+    .slide-title { font-size: 1.5em; }
+    .slide-desc { 
+        display: block;
+        font-size: 0.85em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 5px;
     } 
-    else if (timer.type === 'event') {
-        const start = timer.startTime.split('T')[0];
-        const end = timer.endTime.split('T')[0];
-        html += `
-            <div style="background:#f9f9f9; padding:20px; border-radius:8px; border:1px solid #eee;">
-                <p><strong>기간:</strong> ${start} ~ ${end}</p>
-                <hr style="border:0; border-top:1px dashed #ddd; margin:10px 0;">
-                <p style="line-height:1.6; color:#555;">${timer.desc}</p>
-            </div>
-        `;
+    .slide-link-btn { display: none; }
+    .slide-content { padding: 0 20px 30px 20px; }
+    .prev, .next { display: none; }
+}
+/* =========================================
+   [최종 수정] 커뮤니티 진행도 (초소형 리스트 스타일)
+   ========================================= */
+
+/* 1. 컨테이너: 항목 간의 갭을 없애서 리스트처럼 만듦 */
+#home-community-news {
+    display: flex;
+    flex-direction: column;
+    gap: 0 !important; /* [핵심] 간격 제거 */
+    border: 1px solid #eee; /* 전체 테두리 감싸기 */
+    border-radius: 4px;
+    overflow: hidden; /* 모서리 둥글게 유지 */
+    background-color: #fff;
+}
+
+/* 2. 개별 항목: 패딩을 줄이고 높이를 압축 */
+.progress-update-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;       /* [핵심] 위아래 패딩 6px로 축소 */
+    border-bottom: 1px solid #eee; /* 항목 사이 구분선 */
+    background-color: #fff;
+    cursor: default;
+    height: auto;            /* 높이 자동 조절 */
+    min-height: 32px;        /* 최소 높이 설정 */
+}
+
+/* 마지막 항목은 구분선 제거 */
+.progress-update-item:last-child {
+    border-bottom: none;
+}
+
+/* 3. 제목: 글자 크기 조정 및 여백 */
+.progress-title {
+    font-size: 0.85em;       /* 글자 크기 약간 축소 */
+    font-weight: bold;
+    color: var(--wuxia-text-main);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+}
+
+/* 4. 프로그레스 바 트랙 */
+.progress-bar-track {
+    width: 60px;             /* 바 길이 약간 축소 (공간 확보) */
+    height: 5px;             /* 두께 얇게 조정 */
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* 5. 프로그레스 바 채움 */
+.progress-bar-fill {
+    height: 100%;
+    background-color: var(--wuxia-accent-gold);
+    width: 0%;
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 6. 퍼센트 텍스트 */
+.progress-percent-text {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: bold;
+    font-size: 0.8em;
+    color: var(--wuxia-accent-gold);
+    width: 35px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* 완료 상태 스타일 */
+.progress-update-item.completed .progress-percent-text {
+    color: var(--rarity-uncommon);
+}
+.progress-update-item.completed .progress-bar-fill {
+    background-color: var(--rarity-uncommon);
+}
+
+
+
+
+
+
+/* 1. 검색창 컨테이너 (드롭다운의 기준점 역할) */
+.search-container {
+    position: relative; /* 필수: 이게 있어야 드롭다운이 검색창에 딱 붙습니다 */
+    /* 기존 스타일이 있다면 유지 */
+}
+
+/* 2. 드롭다운 박스 (숨겨져 있다가 JS가 display:block으로 바꿔줌) */
+.search-dropdown {
+    display: none;          /* 기본적으로 숨김 */
+    position: absolute;     /* 공중에 띄움 */
+    top: 100%;              /* 검색창 바로 아래에 위치 */
+    left: 0;
+    width: 100%;            /* 검색창 너비와 동일하게 */
+    background-color: #fff; /* 배경 흰색 (없으면 투명해서 글자가 겹침) */
+    border: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* 그림자 효과 */
+    z-index: 10000;         /* 다른 모든 요소보다 위에 오도록 높은 숫자 */
+    max-height: 300px;      /* 너무 길어지면 스크롤 */
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+/* 3. 검색 결과 아이템 스타일 */
+.search-result-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    font-size: 0.95em;
+    color: #333;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+    background-color: #f5f5f5; /* 마우스 올렸을 때 회색 배경 */
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+/* 4. 뱃지 스타일 (정보, 족보, 퀘스트 구분 태그) */
+.badge {
+    font-size: 0.75em;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-right: 8px;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* 뱃지 색상 */
+.badge.info { background-color: #2196F3; } /* 파란색 */
+.badge.quiz { background-color: #FF9800; } /* 주황색 */
+.badge.item { background-color: #4CAF50; } /* 초록색 */
+
+/* 결과 텍스트 말줄임 처리 */
+.result-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+크기 적당히 조절 */
+
+
+/* =========================================
+   [추가] 네비게이션 더보기 화살표 디자인 개선
+   ========================================= */
+
+/* 1. 더보기 버튼 정렬 */
+#nav-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 2. CSS로 만드는 깔끔한 화살표 (Chevron) */
+#nav-more::after {
+    content: '';
+    display: inline-block;
+    width: 6px;  /* 화살표 너비 */
+    height: 6px; /* 화살표 높이 */
+    margin-left: 8px; /* 글자와의 간격 */
+    
+    /* 얇은 선으로 V자 만들기 */
+    border-right: 2px solid #888; /* 평소 색상 (회색) */
+    border-bottom: 2px solid #888;
+    
+    /* 45도 회전시켜서 아래 방향 화살표로 만듦 */
+    transform: rotate(45deg); 
+    margin-bottom: 3px; /* 위치 미세 조정 */
+    transition: all 0.2s ease; /* 부드러운 색상 변경 애니메이션 */
+}
+
+/* 3. 활성화되었을 때 (눌렀을 때 또는 하위 메뉴 선택 시) 화살표 색상 변경 */
+#nav-more.active::after,
+.nav-dropdown-wrapper:hover #nav-more::after {
+    border-color: var(--wuxia-accent-red); /* 활성화 색상 (붉은색) */
+    /* 만약 메뉴가 열릴 때 화살표를 돌리고 싶다면 아래 주석 해제 */
+    /* transform: rotate(225deg) translate(-2px, -2px); */
+}
+
+/* =========================================
+   [통합 정리] 천지록 (Chunji) 전체 스타일
+   ========================================= */
+
+/* -----------------------------------------
+   1. 목록 화면 (List View)
+   ----------------------------------------- */
+.chunji-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#chunji-list-container {
+    display: grid;
+    /* [핵심] 화면 너비에 따라 자동 조절 (최소 300px 너비 확보) */
+    /* PC에서는 3~4개씩, 모바일에서는 1개씩 자동 배치됩니다 */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 15px; /* 카드 사이 간격 */
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* 리스트 아이템 (카드) 스타일 보완 */
+
+
+/* -----------------------------------------
+   2. 상세 화면 (Detail View) - 수묵화 테마
+   ----------------------------------------- */
+.chunji-header-area {
+    border-bottom: 2px solid var(--wuxia-accent-red);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.chunji-badge {
+    background-color: #5d4037;
+    color: #fff;
+    padding: 3px 8px;
+    font-size: 0.8em;
+    border-radius: 2px;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.chunji-main-title {
+    display: inline-block;
+    margin: 0 0 0 10px;
+    font-size: 1.6em;
+    color: var(--wuxia-accent-gold);
+    vertical-align: middle;
+    font-family: 'Noto Serif KR', serif;
+}
+
+.chunji-section {
+    margin-bottom: 40px;
+}
+
+/* 붓터치 느낌 소제목 */
+.chunji-sub-title {
+    font-size: 1.2em;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 10px;
+    font-family: 'Noto Serif KR', serif;
+   border-left: 4px solid var(--wuxia-accent-red); 
+    padding-left: 10px; 
+    
+    font-weight: bold;
+    font-family: 'Noto Serif KR', serif;
+}
+
+.chunji-text {
+    line-height: 1.7;
+    color: #444;
+    font-size: 0.95em;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.brush-stroke {
+    display: none !important; /* JS에 남아있는 태그를 CSS로 강제 숨김 */
+}
+/* -----------------------------------------
+   3. 이미지 그리드 & 카드 스타일 (퀘스트 스타일 이식)
+   ----------------------------------------- */
+.chunji-img-grid {
+    display: grid;
+    /* 화면 크기에 따라 열 개수 자동 조절 */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* 이미지 래퍼 (액자 역할) */
+.detail-img-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* 16:9 비율 고정 */
+    
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background-color: #f4f4f2;
+    position: relative; /* 내부 장식 배치를 위해 필수 */
+}
+
+/* 실제 이미지 (필터 효과 적용) */
+.detail-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 빈 공간 없이 꽉 채움 */
+    object-position: center;
+    display: block;
+    
+    /* 수묵화 느낌 필터 */
+    filter: sepia(0.05) contrast(1.02);
+    transition: transform 0.5s ease, filter 0.5s ease;
+    cursor: zoom-in;
+}
+
+/* 마우스 올렸을 때 (확대 + 선명함) */
+.detail-img-wrapper:hover img {
+    transform: scale(1.03); 
+    filter: sepia(0) contrast(1.05);
+}
+
+/* 내부 금색 테두리 장식 (고급스러운 느낌) */
+.detail-img-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border: 1px solid rgba(176, 141, 85, 0.15); /* 은은한 금색 */
+    box-sizing: border-box;
+    pointer-events: none; /* 마우스 클릭 통과 */
+    z-index: 1;
+}
+
+/* =========================================
+   [추가/수정] 천지록 리스트 타입 스타일
+   ========================================= */
+
+/* 3. 타입(분류) 스타일 */
+.chunji-type {
+    font-size: 0.8em;
+    color: #888;
+    font-weight: normal;
+    font-family: 'Noto Serif KR', serif;
+    
+    /* [핵심] 여백 초기화 */
+    margin: 0;
+}
+
+
+/* =========================================
+   [최종 수정] 천지록 리스트 아이템 (퀘스트 카드와 규격 통일)
+   ========================================= */
+
+/* 1. 리스트 아이템 (카드) */
+.chunji-item {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    
+    /* [수정] 퀘스트 카드와 동일한 패딩 (12px 15px -> 10px) */
+    padding: 10px; 
+    
+    /* [수정] 강제 높이 제거 (내용물에 맞게 자동 조절) */
+    min-height: auto; 
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    
+    /* 퀘스트와 구분되는 회색 포인트 라인 */
+    border-left: 4px solid #aaa; 
+}
+
+.chunji-item:hover {
+    border-color: var(--wuxia-accent-gold);
+    background-color: #fffcf5;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+/* 2. 텍스트 그룹 (제목 + 타입) */
+.chunji-text-group {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: flex-start; /* 왼쪽 정렬 */
+    
+    /* [수정] 간격 미세 조정 */
+    gap: 2px; 
+    
+    overflow: hidden;
+    margin-left: 5px; 
+}
+
+/* 3. 제목 스타일 */
+.chunji-title {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #222;
+    font-family: 'Noto Serif KR', serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+}
+
+/* 4. 화살표 아이콘 (위치 보정) */
+.arrow-icon {
+    font-size: 1.2em;
+    color: #ccc;
+    font-weight: bold; /* 굵게 */
+    line-height: 1;
+    flex-shrink: 0;
+    margin-right: 5px; /* 오른쪽 여백 확보 */
+}
+
+
+/* =========================================
+   [최종] 인게임 제보 카드 (이미지 확대 + 여백 축소형)
+   ========================================= */
+
+/* 1. 카드 컨테이너 */
+.ingame-report-card {
+    display: flex;
+    align-items: stretch; /* 높이 꽉 채우기 */
+    
+    /* [유지] 박스 내부 여백 0 -> 이미지가 벽에 붙음 */
+    padding: 0; 
+    
+    background-color: #fff;
+    border: 1px solid #eee; 
+    border-radius: 0; /* 직각 모서리 (최근 소식과 통일) */
+    
+    /* [수정] 하단 여백 축소 (20px -> 10px) */
+    margin-bottom: 10px; 
+}
+
+/* 2. 배경 장식 제거 */
+.card-bg-deco { display: none; }
+
+/* 3. 프로필 사진 영역 (왼쪽 벽 역할 - 사이즈 확대) */
+.char-portrait-box {
+    position: relative;
+    
+    /* [수정] 이미지 크기 확대 (60px -> 85px) */
+    /* 너비를 키우면 카드 전체 높이도 자동으로 커져서 답답함이 사라집니다. */
+    width: 70px; 
+    min-height: 70px; 
+    flex-shrink: 0;
+    
+    border-right: 1px solid #eee; 
+}
+
+.char-portrait-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 0;
+}
+
+/* 4. 레벨 표시 (이미지 하단 덮기) */
+.char-level-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    
+    background: rgba(0, 0, 0, 0.7); 
+    padding: 2px 0;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2; 
+}
+
+.lvl-num {
+    color: #fff;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* 5. 텍스트 정보 영역 */
+.char-info-box {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    /* [수정] 텍스트 좌우 여백 약간 확보 (답답하지 않게) */
+    padding: 0 15px; 
+}
+
+.char-header {
+    margin-bottom: 3px;
+}
+
+/* 닉네임 (폰트 축소) */
+.char-name {
+    font-family: 'Noto Serif KR', serif;
+    /* [수정] 폰트 사이즈 축소 (0.95em -> 0.9em) */
+    font-size: 0.9em; 
+    font-weight: bold;
+    color: #333;
+    line-height: 1.3;
+}
+
+/* 설명 텍스트 (폰트 축소) */
+.char-id-row .label {
+    /* [수정] 폰트 사이즈 축소 (0.8em -> 0.75em) */
+    font-size: 0.75em; 
+    color: #888;
+    line-height: 1.4;
+    display: block;
+    
+    /* 긴 텍스트 줄바꿈 자연스럽게 */
+    word-break: keep-all; 
+}
+
+/* =========================================
+   [추가] 바텀 시트 및 탭 스타일
+   ========================================= */
+
+/* 1. 모달 배경 (어둡게) */
+.bottom-sheet-modal {
+    display: none; /* 평소엔 숨김 */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    align-items: flex-end; /* 바닥 정렬 */
+    justify-content: center;
+}
+
+.bottom-sheet-modal.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 2. 시트 본체 */
+/* 1. 시트 컨테이너 (위쪽 여백 확보) */
+.sheet-container {
+    background: #fff;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 20px 20px 0 0;
+    
+    /* [수정] 위쪽 패딩을 25px -> 50px로 대폭 늘림 */
+    /* 이렇게 하면 탭 메뉴가 아래로 내려가서 X 버튼과 겹치지 않습니다. */
+    padding: 50px 20px 40px 20px;
+    
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 2. 닫기 버튼 (위치 및 크기 조정) */
+.sheet-close-btn {
+    position: absolute;
+    
+    /* [수정] 위쪽과 오른쪽에서 적당히 띄움 */
+    top: 15px; 
+    right: 20px;
+    
+    background: none;
+    border: none;
+    color: #888; /* 너무 진하지 않게 */
+    
+    /* [수정] 크기를 키워서 누르기 쉽게 함 */
+    font-size: 26px; 
+    
+    line-height: 1;
+    cursor: pointer;
+    padding: 5px; /* 터치 영역 확보 */
+    z-index: 10;
+    
+    transition: color 0.2s;
+}
+
+.sheet-close-btn:hover {
+    color: #333;
+}
+
+
+.bottom-sheet-modal.show .sheet-container {
+    transform: translateY(0);
+}
+
+/* 3. 핸들바 */
+.sheet-handle-bar {
+    width: 40px;
+    height: 5px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    margin: 10px auto 20px auto;
+}
+
+/* 4. [핵심] 탭 네비게이션 스타일 */
+.sheet-tabs {
+    display: flex;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 0;
+}
+
+.sheet-tab-btn {
+    flex: 1; /* 반반 차지 */
+    padding: 12px 0;
+    background: none;
+    border: none;
+    font-size: 1em;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    position: relative;
+    font-family: 'Noto Serif KR', serif;
+}
+
+/* 활성화된 탭 스타일 */
+.sheet-tab-btn.active {
+    color: #333;
+}
+
+/* 활성화된 탭 밑줄 (애니메이션 효과) */
+.sheet-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; /* 줄 위치 */
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--wuxia-accent-red); /* 테마색 */
+}
+
+/* 5. 탭 내용 숨김/보임 처리 */
+.tab-content-item {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* =========================================
+   [최종 완결] 무림록 & 천지록 리스트 정렬 통일
+   ========================================= */
+
+/* 1. 카드 박스 내부 패딩 (상하좌우 여백) 통일 */
+.quest-card, .chunji-item {
+    /* [중요] 두 카드의 패딩을 100% 동일하게 강제 설정 */
+    padding: 12px 15px !important; 
+    
+    /* 배치 설정 */
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    
+    /* 혹시 모를 외부 마진 제거 (그리드 gap으로만 간격 조절) */
+    margin: 0 !important;
+}
+
+/* 2. 텍스트 뭉치 (제목+설명) 위치 정렬 */
+.quest-text-group, .chunji-text-group {
+    /* [핵심 수정] 왼쪽 마진 제거 -> 텍스트 밀림 현상 해결 */
+    margin-left: 0 !important; 
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3px; /* 제목과 설명 사이 간격 */
+    overflow: hidden;
+}
+
+/* 3. 제목 폰트 라인 높이 보정 */
+.quest-name, .chunji-title {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2;
+}
+
+/* =========================================
+   [추가] PC 화면(768px 이상)에서 인게임 제보 2열 배치
+   ========================================= */
+@media (min-width: 768px) {
+    
+    /* 프로필 섹션을 그리드 레이아웃으로 변경 */
+    .profile-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 1:1 비율로 2칸 나눔 */
+        gap: 15px; /* 카드 사이 간격 */
+        align-items: stretch; /* 카드 높이 동일하게 맞춤 */
     }
 
-    contentBox.innerHTML = html;
-    modal.classList.add('show');
+    /* 섹션 제목("인게임 제보")은 한 줄 전체를 차지하게 함 */
+    .profile-section .section-header-clickable {
+        grid-column: 1 / -1; /* 첫 번째 라인부터 끝 라인까지 확장 */
+        margin-bottom: 5px; /* 제목과 카드 사이 간격 */
+    }
+
+    /* PC에서는 카드 자체의 하단 여백 제거 (그리드 gap으로 대체) */
+    .profile-section .ingame-report-card {
+        margin-bottom: 0;
+        height: auto; /* 높이 자동 조절 */
+    }
 }
 
-// 닫기
-function closeTimerSheet(e) {
-    const modal = document.getElementById('timer-sheet-modal');
-    if (modal && (!e || e.target === modal)) modal.classList.remove('show');
+/* =========================================
+   [추가] 필터 드롭다운 스타일 (무협 테마 적용)
+   ========================================= */
+
+/* 1. 필터 바 래퍼 */
+.filter-bar-wrapper {
+    display: flex;
+    gap: 10px;             /* 드롭다운 사이 간격 */
+    flex-wrap: wrap;       /* 화면 좁으면 줄바꿈 */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0 5px;        /* 좌우 살짝 여백 */
 }
+
+/* 2. 커스텀 셀렉트 박스 디자인 */
+.custom-select {
+    /* 브라우저 기본 스타일 제거 (화살표 직접 커스텀하기 위해) */
+    appearance: none; 
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+
+    /* 배경 및 테두리 */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    
+    /* 폰트 설정 (사이트 통일) */
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.95em;
+    color: #333;
+    font-weight: bold; /* 가독성을 위해 약간 굵게 */
+
+    /* 크기 및 간격 */
+    padding: 10px 35px 10px 15px; /* 오른쪽 패딩은 화살표 공간 */
+    min-width: 130px; /* 너무 작아지지 않게 */
+    cursor: pointer;
+    
+    /* 그림자 및 전환 효과 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    transition: all 0.2s ease;
+
+    /* ▼ 커스텀 화살표 아이콘 (SVG 데이터 URI 사용) */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* 3. 마우스 올렸을 때 (Hover) */
+.custom-select:hover {
+    border-color: var(--wuxia-accent-gold); /* 테마 금색 */
+    background-color: #fffcf5; /* 살짝 따뜻한 배경색 */
+    color: #000;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+/* 4. 클릭/포커스 상태 (Focus) */
+.custom-select:focus {
+    outline: none;
+    border-color: var(--wuxia-accent-red); /* 테마 적색 포인트 */
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(183, 28, 28, 0.1); /* 적색 글로우 효과 */
+}
+
+/* (선택사항) 모바일 환경 최적화 */
+@media (max-width: 768px) {
+    .filter-bar-wrapper {
+        gap: 8px;
+    }
+    .custom-select {
+        flex: 1; /* 모바일에서는 꽉 차게 */
+        min-width: auto;
+        font-size: 0.9em;
+    }
+}
+
+/* 1. '족보' 버튼을 감싸는 부모 태그 */
+.nav-dropdown-wrapper {
+    /* ▼▼▼ [핵심] 자식(드롭다운)의 기준점이 되도록 설정 ▼▼▼ */
+    position: relative !important; 
+    
+    display: inline-flex; /* 혹은 flex */
+    align-items: center;
+    height: 100%; /* 네비게이션 높이 맞춤 */
+}
+
+/* 2. 드롭다운 메뉴 박스 */
+.nav-dropdown-content {
+    /* 부모(.nav-dropdown-wrapper) 기준으로 배치 */
+    position: absolute; 
+    
+    /* 부모의 바로 아래(100%)에 위치 */
+    top: 100%; 
+    
+    /* 부모의 가운데 정렬 (원하시면 left: 0 으로 해도 됩니다) */
+    left: 0%;
+    transform: translateX(-50%);
+    
+    /* 우측 끝으로 가는 현상 방지 */
+    right: auto; 
+    
+    /* 디자인 요소 (기존 유지) */
+    min-width: 100px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    padding: 5px 0;
+    z-index: 2000;
+    display: none; /* 평소엔 숨김 */
+    
+    /* 텍스트 줄바꿈 방지 */
+    white-space: nowrap;
+}
+
+/* 3. 메뉴가 활성화되었을 때 */
+.nav-dropdown-content.show {
+    display: block; /* 보이기 */
+}
+
+/* 4. 드롭다운 내부 버튼 스타일 (참고용) */
+.nav-dropdown-content .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    text-align: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
+}
+.nav-dropdown-content .dropdown-item:hover {
+    background-color: #f5f5f5;
+    color: var(--wuxia-accent-gold); /* 기존 테마색 */
+}
+
+/* =========================================
+   [추가] 행운 봉투 이벤트 배너 스타일
+   ========================================= */
+.lucky-event-banner {
+    /* 봉투 색상 (진한 빨강) */
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    border: 1px solid #e57373;
+    border-radius: 8px;
+    
+    /* 배치 및 여백 */
+    margin: 20px 0; /* 위아래 간격 */
+    padding: 15px 20px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    
+    /* 그림자 및 전환 효과 */
+    box-shadow: 0 4px 10px rgba(183, 28, 28, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* 마우스 올렸을 때 효과 */
+.lucky-event-banner:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(183, 28, 28, 0.3);
+    border-color: #ffcdd2;
+}
+
+/* 금색 테두리 장식 (왼쪽) */
+.lucky-event-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(to bottom, #f9d675, #e0aa3e);
+}
+
+.lucky-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 씰(福) 아이콘 디자인 */
+.lucky-seal-icon {
+    width: 42px;
+    height: 42px;
+    background: radial-gradient(circle, #f9d675 0%, #e0aa3e 100%);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.lucky-seal-icon span {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: bold;
+    color: #c41e28; /* 글자는 빨간색 */
+    font-size: 1.2em;
+    line-height: 1;
+    margin-top: 2px; /* 시각적 중앙 보정 */
+}
+
+/* 마우스 올리면 씰이 흔들림 */
+.lucky-event-banner:hover .lucky-seal-icon {
+    animation: luckyShake 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes luckyShake {
+    0% { transform: rotate(-10deg); }
+    100% { transform: rotate(10deg); }
+}
+
+/* 텍스트 그룹 */
+.lucky-text-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.lucky-title {
+    color: #fff;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 3px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.lucky-desc {
+    color: #ffcdd2; /* 연한 분홍색 */
+    font-size: 0.9em;
+}
+
+/* 오른쪽 화살표 버튼 */
+.lucky-action-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 0.85em;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-weight: bold;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.lucky-event-banner:hover .lucky-action-btn {
+    background-color: #fff;
+    color: #b71c1c;
+}
+
+/* 모바일 대응 */
+@media (max-width: 480px) {
+    .lucky-desc { font-size: 0.8em; }
+    .lucky-title { font-size: 1.0em; }
+    .lucky-action-btn { display: none; } /* 화면 좁으면 버튼 숨김 */
+}
+/* =========================================
+   [추가] 행운 봉투 이벤트 배너 스타일
+   ========================================= */
+.lucky-event-banner {
+    /* 봉투 색상 (진한 빨강) */
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    border: 1px solid #e57373;
+    border-radius: 8px;
+    
+    /* 배치 및 여백 */
+    margin: 20px 0; /* 위아래 간격 */
+    padding: 15px 20px;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    
+    /* 그림자 및 전환 효과 */
+    box-shadow: 0 4px 10px rgba(183, 28, 28, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* 마우스 올렸을 때 효과 */
+.lucky-event-banner:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(183, 28, 28, 0.3);
+    border-color: #ffcdd2;
+}
+
+/* 금색 테두리 장식 (왼쪽) */
+.lucky-event-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(to bottom, #f9d675, #e0aa3e);
+}
+
+.lucky-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 씰(福) 아이콘 디자인 */
+.lucky-seal-icon {
+    width: 42px;
+    height: 42px;
+    background: radial-gradient(circle, #f9d675 0%, #e0aa3e 100%);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.lucky-seal-icon span {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: bold;
+    color: #c41e28; /* 글자는 빨간색 */
+    font-size: 1.2em;
+    line-height: 1;
+    margin-top: 2px; /* 시각적 중앙 보정 */
+}
+
+/* 마우스 올리면 씰이 흔들림 */
+.lucky-event-banner:hover .lucky-seal-icon {
+    animation: luckyShake 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes luckyShake {
+    0% { transform: rotate(-10deg); }
+    100% { transform: rotate(10deg); }
+}
+
+/* 텍스트 그룹 */
+.lucky-text-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.lucky-title {
+    color: #fff;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 3px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.lucky-desc {
+    color: #ffcdd2; /* 연한 분홍색 */
+    font-size: 0.9em;
+}
+
+/* 오른쪽 화살표 버튼 */
+.lucky-action-btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 0.85em;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-weight: bold;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.lucky-event-banner:hover .lucky-action-btn {
+    background-color: #fff;
+    color: #b71c1c;
+}
+
+/* 모바일 대응 */
+@media (max-width: 480px) {
+    .lucky-desc { font-size: 0.8em; }
+    .lucky-title { font-size: 1.0em; }
+    .lucky-action-btn { display: none; } /* 화면 좁으면 버튼 숨김 */
+}
+
+/* =========================================
+   [추가] 행운 봉투 종료 상태 (Dim 처리)
+   ========================================= */
+.lucky-event-banner.ended {
+    /* 흑백 처리 */
+    filter: grayscale(100%);
+    /* 투명도 (Dim) */
+    opacity: 0.6;
+    /* 클릭 커서 변경 */
+    cursor: default;
+    /* 배경색 변경 (회색조) */
+    background: #555;
+    border-color: #888;
+    box-shadow: none;
+}
+
+/* 종료 시 마우스 올려도 반응 없게 */
+.lucky-event-banner.ended:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* 종료 시 씰 애니메이션 멈춤 */
+.lucky-event-banner.ended .lucky-seal-icon {
+    animation: none;
+    background: #ccc;
+    border-color: #999;
+}
+
+.lucky-event-banner.ended .lucky-seal-icon span {
+    color: #fff;
+}
+
+.lucky-event-banner.ended .lucky-action-btn {
+    display: none; /* 버튼 숨김 */
+}
+/* [공통] 상세 정보 모달 스타일 */
+.info-modal-overlay {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center; 
+    justify-content: center;
+    
+    /* ▼▼▼ [중요] 바텀 시트(보통 2000~3000)보다 훨씬 높게 설정 ▼▼▼ */
+    z-index: 10000; 
+    
+    animation: fadeIn 0.2s ease-out;
+}
+
+.info-modal-card {
+    background-color: #fff;
+    width: 85%; 
+    max-width: 320px;
+    border-radius: 12px;
+    padding: 25px 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    text-align: center;
+    position: relative;
+    border: 1px solid #ddd;
+}
+
+.close-modal-btn {
+    position: absolute; 
+    top: 10px; 
+    right: 10px;
+    background: none; 
+    border: none; 
+    font-size: 1.5em; 
+    color: #999; 
+    cursor: pointer;
+    line-height: 1; 
+    padding: 5px;
+}
+
+.info-header img {
+    width: 70px; 
+    height: 70px;
+    border-radius: 50%; 
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+.info-header h3 {
+    margin: 0 0 15px 0; 
+    color: #1a1a1a; 
+    font-size: 1.3em; 
+    font-weight: bold;
+}
+
+.info-body p {
+    color: #555; 
+    font-size: 0.95em; 
+    line-height: 1.6; 
+    margin: 0;
+    word-break: keep-all; 
+    background-color: #f9f9f9; 
+    padding: 15px; 
+    border-radius: 8px;
+    text-align: left; 
+    border: 1px solid #eee;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* [추가] 콤보(Combo) 섹션 스타일 */
+.combo-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 15px 10px;
+    background: #222; /* 어두운 배경 (참고 이미지 느낌) */
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.combo-step {
+    display: flex;
+    align-items: center;
+}
+
+/* 화살표 (>) */
+.combo-arrow {
+    color: #666;
+    margin: 0 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/* 키 버튼 공통 스타일 */
+.key-cap {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #1a1a1a;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1em;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+    position: relative;
+    user-select: none;
+}
+
+.key-cap span {
+    pointer-events: none;
+}
+
+.key-sub {
+    font-size: 0.5em;
+    font-weight: normal;
+    margin-top: -2px;
+    opacity: 0.8;
+}
+
+/* 홀드(차지) 표시 */
+.key-cap.hold::after {
+    content: 'Hold';
+    position: absolute;
+    bottom: 2px;
+    font-size: 0.5em;
+    opacity: 0.7;
+    text-transform: uppercase;
+}
+
+/* 색상 테마 (이미지 참고) */
+.key-blue { background-color: #42a5f5; }   /* ~ (특수) */
+.key-gray { background-color: #90a4ae; }   /* SCR, LMB */
+.key-orange { background-color: #ffb74d; } /* R (강공) */
+.key-red { background-color: #ef5350; }    /* Q (스킬) */
+.key-teal { background-color: #26c6da; }   /* TAB */
+.key-purple { background-color: #ab47bc; } /* E (반격) */
+.key-yellow { background-color: #f1df39; } /* E (반격) */
+
+/* 비결 아이콘 (콤보 내) */
+.combo-mart-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    border: 2px solid #555;
+    background: #000;
+    object-fit: cover;
+}
+/* [추가] 콤보 슬롯 추가(+) 버튼 스타일 */
+.combo-add-btn {
+    width: 100%;
+    height: 100%;
+    background-color: #f9f9f9;
+    color: #aaa;
+    font-size: 1.5em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.combo-add-btn:hover {
+    background-color: #eee;
+    color: #333;
+}
+
+/* [추가] 콤보 슬롯 내 삭제(x) 버튼 (마우스 오버 시 표시) */
+.combo-remove-overlay {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    background: #d32f2f;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* =========================================
+   [긴급 복구] 빌더/뷰어 통합 스타일 (Solid Flat)
+   ========================================= */
+/* =========================================
+   [뷰어] 최종 수정 (컬러박스 + 글자 그림자 + 이미지 배경 검정)
+   ========================================= */
+
+/* 1. 콤보 그리드 (전체 틀: 다크 그레이) */
+.combo-viewer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 20px;
+    background-color: #1a1a1a; /* 전체 배경은 어둡게 유지 */
+    border: 1px solid #333;
+    border-radius: 12px;
+    margin-top: 15px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* 2. 아이템 박스 (기본 배경: 검은색) */
+/* -> 비결(이미지)은 이 검은 배경이 보이고, 키는 컬러박스가 덮습니다. */
+.combo-item-box {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000; /* ★ 핵심: 이미지는 여기서 검은 배경 */
+    border: 1px solid #333;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 3. 순서 번호 (흰색, 그림자 제거) */
+.combo-step-num {
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #fff; /* 흰색 */
+    font-family: sans-serif;
+    z-index: 20;
+    pointer-events: none;
+    text-shadow: none !important; /* ★ 그림자 뺐음 */
+    opacity: 0.9;
+}
+
+/* 4. 키캡 공통 (꽉 찬 컬러 박스 + 글씨 그림자) */
+.key-cap-viewer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    font-weight: 800; /* 두껍게 */
+    font-size: 1.3em;
+    color: #fff !important; /* 글씨 흰색 */
+    border-radius: 6px;
+    
+    /* ★ 핵심: 박스 그림자 없고, 글씨에만 그림자 */
+    box-shadow: none !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important; 
+}
+
+/* 5. [컬러] 원래 색상 유지 (Solid Color) */
+/* 키가 들어가면 이 색상이 검은 배경을 덮어씁니다 */
+
+/* Q (빨강) */
+.key-red { background-color: #EF5350 !important; }
+
+/* ~ (파랑) */
+.key-blue { background-color: #42A5F5 !important; }
+
+/* LMB (초록) */
+.key-gray { background-color: #66BB6A !important; }
+
+/* R (주황) */
+.key-orange { background-color: #FFA726 !important; }
+
+/* TAB (청록) */
+.key-teal { background-color: #26C6DA !important; }
+
+/* E (보라-블루그레이) */
+.key-purple { background-color: #78909C !important; }
+
+/* SCR (회색) */
+.key-gray.scr { background-color: #546E7A !important; }
+
+
+/* 6. HOLD (꾹 누르기) */
+.key-cap-viewer.hold {
+    background-color: #AB47BC !important; /* 보라색 */
+}
+.key-cap-viewer.hold::after {
+    content: 'HOLD';
+    position: absolute;
+    bottom: 3px;
+    font-size: 0.4em;
+    font-weight: bold;
+    color: #fff;
+    opacity: 0.8;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+}
+
+/* 7. 비결 이미지 */
+.combo-mart-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 배경이 검정이므로 이미지만 둥둥 떠있는 느낌 */
+}
+/* =========================================
+   [반응형] 큰 화면(PC)에서 바텀시트 크기 제한
+   ========================================= */
+
+@media (min-width: 768px) {
+    #build-detail-sheet {
+        /* ★핵심: PC에서는 기본적으로 숨김 (JS가 열어줄 때만 보이게) */
+        display: none; 
+        
+        /* 카드 형태 디자인 */
+        max-width: 520px;
+        width: 100%;
+        position: fixed; /* 위치 고정 */
+        left: 50%;
+        transform: translateX(-50%); /* 좌우 중앙 정렬 */
+        bottom: 30px; /* 바닥에서 띄움 */
+        
+        border-radius: 20px !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        max-height: 85vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        z-index: 9999; /* 제일 위에 표시 */
+    }
+
+    /* 닫기 버튼 영역 */
+    .sheet-header {
+        border-radius: 20px 20px 0 0;
+        cursor: grab;
+    }
+}
+
+
+/* =========================================
+   [보스 목록] 지역 정보(Map) 스타일 복사 적용
+   ========================================= */
+
+/* 1. 그리드 (지도와 동일하게: 모바일 2개 / PC 4개) */
+#home-boss-list, 
+.boss-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 12px; /* 간격도 지도와 비슷하게 */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    #home-boss-list, 
+    .boss-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* 2. 카드 본체 (지도 카드 스타일 복사) */
+.boss-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    height: 100%;
+}
+
+.boss-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 3. 상단 이미지 (★핵심: 지도처럼 높이 고정) */
+.boss-hero-bg {
+    width: 100%;
+    height: 100px; /* 지도가 100~120px 정도입니다 */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    background-color: #f5f5f5;
+}
+
+/* 4. 하단 설명 (지도 텍스트 스타일 복사) */
+.boss-content {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    flex-grow: 1;
+}
+
+.boss-title {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Noto Serif KR', serif;
+}
+
+.boss-desc {
+    font-size: 0.8em;
+    color: #888;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+}
+
+/* 5. 배지 (추가 옵션) */
+.boss-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    padding: 2px 6px;
+    font-size: 0.65em;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 3px;
+    z-index: 2;
+}
+.boss-badge.red { background-color: rgba(211, 47, 47, 0.9); }
+.boss-badge.gray { background-color: rgba(117, 117, 117, 0.9); }
+
+/* =========================================
+   [모바일 반응형] 가로 스크롤 (Horizontal Scroll)
+   ========================================= */
+
+/* =========================================
+   [모바일 강력 패치] 무조건 한 줄 가로 스크롤
+   ========================================= */
+/* =========================================
+   [모바일 최종] 강제 가로 스크롤 (Priority Fix)
+   ========================================= */
+/* =========================================
+   [모바일 최종] 4열 격자 정렬 (Grid Fix)
+   ========================================= */
+/* =========================================
+   [모바일 최종] 4열 자동 리사이징 (Fix)
+   ========================================= */
+
+@media screen and (max-width: 900px) {
+    
+    /* 1. 그리드: 화면 폭을 4등분해서 박스를 집어넣음 */
+    #build-detail-sheet .combo-viewer-grid,
+    .combo-viewer-grid {
+        display: grid !important;
+        /* 1fr 4개는 화면을 정확히 4등분하라는 뜻입니다 */
+        grid-template-columns: repeat(4, 1fr) !important; 
+        gap: 8px !important;                 /* 박스 사이 간격 좁힘 */
+        padding: 15px 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;        /* 옆으로 삐져나오지 않게 함 */
+    }
+
+    /* 2. 아이템 박스: 너비를 고정하지 않고 부모(그리드) 칸에 맞춤 */
+    #build-detail-sheet .combo-item-box,
+    .combo-item-box {
+        display: flex !important;
+        width: 100% !important;               /* 부모 칸 너비 100% 사용 */
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;       /* 가로세로 1:1 유지 */
+        min-width: 0 !important;              /* 중요: 너비 강제 고정 해제 */
+        flex: unset !important;               /* flex 고정 해제 */
+    }
+    
+    /* 3. 글씨 및 숫자 크기: 박스가 작아지므로 함께 축소 */
+    #build-detail-sheet .key-cap-viewer,
+    .key-cap-viewer {
+        font-size: 0.95em !important;         /* 텍스트가 박스를 넘지 않게 조절 */
+        line-height: 1 !important;
+    }
+
+    .combo-step-num {
+        font-size: 0.65em !important;         /* 숫자 크기 축소 */
+        top: 2px !important;
+        left: 4px !important;
+    }
+
+    /* 4. 이미지 콤보(비결) 처리 */
+    .combo-mart-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+}
+
+/* =========================================
+   강호 시시각각 (타이머) - 리스트형 스타일
+   ========================================= */
+#gangho-timer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* 간격을 없애 리스트처럼 붙임 */
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #fff;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.timer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 수직 중앙 정렬 */
+    padding: 12px 15px;  /* 높이 축소 (최근 소식과 비슷하게) */
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+.timer-row:last-child {
+    border-bottom: none;
+}
+
+.timer-row:hover {
+    background-color: #fffcf5; /* 마우스 올리면 미색 배경 */
+}
+
+/* 좌측 정보 영역 (제목 + 상태) */
+.timer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1; /* 남은 공간 차지 */
+    min-width: 0; /* 말줄임표 작동을 위해 필수 */
+    margin-right: 15px;
+}
+
+.timer-title {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timer-status-row {
+    font-size: 0.75em;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 우측 시간 영역 (타이머) */
+.timer-right {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.timer-clock {
+    font-family: 'Noto Serif KR', serif; /* 숫자 폰트 */
+    font-size: 1.1em; /* 시간은 조금 크게 */
+    font-weight: bold;
+    color: #333;
+    font-variant-numeric: tabular-nums; /* 숫자 간격 일정하게 */
+}
+
+/* 상태별 색상 포인트 */
+.status-badge {
+    font-weight: bold;
+}
+.status-ing { color: var(--wuxia-accent-gold); } /* 진행중 */
+.status-urgent { color: var(--wuxia-accent-red); animation: blink 1.5s infinite; } /* 마감 임박 */
+.status-end { color: #aaa; text-decoration: line-through; } /* 종료 */
+
+@keyframes blink { 50% { opacity: 0.5; } }
+/* 타이머 행 스타일 (작은 사이즈 유지) */
+.timer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px; /* 컴팩트한 패딩 */
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    background: #fff;
+    transition: background 0.2s;
+}
+.timer-row:hover { background-color: #fffcf5; }
+
+/* 바텀시트 내부 리스트 스타일 */
+.task-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 50vh;
+    overflow-y: auto;
+    text-align: left; /* 리스트는 왼쪽 정렬 */
+}
+
+.task-item {
+    background-color: #f9f9f9;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+}
+
+.task-loc {
+    color: var(--wuxia-accent-gold);
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 0.85em;
+    white-space: nowrap;
+        }

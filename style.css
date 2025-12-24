@@ -3241,7 +3241,7 @@ h3 {
 
 .timer-clock {
     font-family: 'Noto Serif KR', serif; /* 숫자 폰트 */
-    font-size: 1.1em; /* 시간은 조금 크게 */
+    font-size: 0.9em; /* 시간은 조금 크게 */
     font-weight: bold;
     color: #333;
     font-variant-numeric: tabular-nums; /* 숫자 간격 일정하게 */

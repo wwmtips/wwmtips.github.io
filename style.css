@@ -3477,23 +3477,22 @@ body.dark-mode .timer-row {
 }
 body.dark-mode .timer-row:hover {
     background-color: #2a2a2a;
-}
-/* =========================================
-   [최종 수정] 유튜브 뉴스 그리드 (지역 정보 스타일 복제)
+}/* =========================================
+   [최종 수정] 유튜브 뉴스 그리드 (간격 20px, 지도 스타일)
    ========================================= */
 
-/* 1. 그리드 레이아웃 (지역 정보와 동일한 자동 배열) */
+/* 1. 그리드 레이아웃 */
 .video-grid {
     display: grid;
-    /* 화면 크기에 맞춰 자동 조절 (PC 4개, 모바일 1~2개) */
+    /* [핵심] 화면이 좁으면 1개, 넓으면 4개가 자동으로 배치됨 */
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-    gap: 15px;
+    gap: 20px; /* [수정] 카드가 붙지 않게 간격을 20px로 넓힘 */
     margin-top: 15px;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* 2. 카드 스타일 (지도 카드와 동일) */
+/* 2. 카드 본체 스타일 */
 .video-card {
     display: flex;
     flex-direction: column;
@@ -3502,10 +3501,13 @@ body.dark-mode .timer-row:hover {
     border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
     text-decoration: none;
     height: 100%;
     box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    /* [안전장치] 그리드가 안 먹힐 경우를 대비해 마진 추가 */
+    margin-bottom: 0; 
 }
 
 .video-card:hover {
@@ -3514,35 +3516,37 @@ body.dark-mode .timer-row:hover {
     border-color: var(--wuxia-accent-gold);
 }
 
-/* 3. 썸네일 영역 (지도 이미지와 동일한 높이 110px) */
+/* 3. 썸네일 영역 (높이 110px 고정) */
 .video-hero-bg {
     width: 100%;
-    height: 110px; /* 지역 정보와 높이 통일 */
+    height: 110px !important; /* [중요] 높이 강제 고정 (이미지가 커지는 것 방지) */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
     border-bottom: 1px solid #eee;
+    background-color: #000;
 }
 
-/* 재생 아이콘 (썸네일 위에 표시) */
+/* 재생 아이콘 */
 .video-play-overlay {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 30px; height: 30px;
+    width: 32px; height: 32px;
     background: rgba(0,0,0,0.6);
     border-radius: 50%;
     display: flex;
     align-items: center; justify-content: center;
+    z-index: 2;
 }
 .video-play-overlay span {
-    color: #fff; font-size: 0.8em; margin-left: 2px;
+    color: #fff; font-size: 0.9em; margin-left: 2px;
 }
 
-/* 4. 정보 영역 (지도 텍스트와 동일한 여백) */
+/* 4. 텍스트 정보 영역 */
 .video-content {
-    padding: 12px 15px; /* 지역 정보 패딩 */
+    padding: 12px 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -3550,21 +3554,19 @@ body.dark-mode .timer-row:hover {
     background-color: #fff;
 }
 
-/* 제목 스타일 */
 .video-title {
-    font-size: 1.05em;
+    font-size: 1.0em;
     font-weight: bold;
     color: #333;
     margin-bottom: 5px;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 2줄까지만 표시 */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.3;
     font-family: 'Noto Serif KR', serif;
 }
 
-/* 채널명 스타일 (지도 설명글 스타일 적용) */
 .video-desc {
     font-size: 0.85em;
     color: #888;
@@ -3572,7 +3574,4 @@ body.dark-mode .timer-row:hover {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: flex;
-    align-items: center;
-    gap: 4px;
 }

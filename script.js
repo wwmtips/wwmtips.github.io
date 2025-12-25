@@ -3254,46 +3254,38 @@ function getYoutubeId(url) {
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
 }
-
-// [수정] 유튜브 뉴스 렌더링 (video- 클래스 사용)
+// [수정] 홈 화면 뉴스 리스트 렌더링 (단순 텍스트 리스트 형태)
 function renderHomeRecentNews(newsList) {
-    // ★ ID를 정확히 'home-recent-news'로 타겟팅
     const container = document.getElementById('home-recent-news');
     if (!container) return;
     
     container.innerHTML = '';
 
     if (!newsList || newsList.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1 / -1; padding:30px; color:#888; text-align:center;">등록된 영상이 없습니다.</div>';
+        container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">등록된 소식이 없습니다.</div>';
         return;
     }
 
-    // 4개만 보여주기
-    const listToRender = newsList.slice(0, 4); 
+    // 최대 5개까지만 리스트로 표시
+    const listToRender = newsList.slice(0, 5); 
 
     listToRender.forEach(item => {
-        const videoId = getYoutubeId(item.link);
-        const thumbUrl = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : 'images/logo.png';
-        const channelName = item.date || '연운'; 
-
-        const card = document.createElement('div');
+        const div = document.createElement('div');
         
-        // ★ CSS에서 정의한 .video-card 사용
-        card.className = 'video-card'; 
-        card.onclick = () => { if (item.link) window.open(item.link, '_blank'); };
+        // 스타일: 숙제 리스트처럼 깔끔한 가로줄 형태
+        // (CSS 클래스가 없어도 동작하도록 인라인 스타일을 적용했습니다)
+        div.style.cssText = "padding: 12px 4px; border-bottom: 1px dashed #e0e0e0; display: flex; flex-direction: column; justify-content: center;";
         
-        // ★ 내부 구조도 CSS와 매칭되게 수정 (hero-bg, content 등)
-        card.innerHTML = `
-            <div class="video-hero-bg" style="background-image: url('${thumbUrl}');">
-                <div class="video-play-overlay">
-                    <span>▶</span>
-                </div>
+        div.innerHTML = `
+            <div style="font-size: 0.95em; font-weight: bold; color: #333; margin-bottom: 4px; line-height: 1.4;">
+                ${item.title}
             </div>
-            <div class="video-content">
-                <div class="video-title">${item.title}</div>
-                <div class="video-desc">📺 ${channelName}</div>
+            <div style="font-size: 0.85em; color: #999;">
+                ${item.date}
             </div>
         `;
-        container.appendChild(card);
+        
+        // 링크 이동 기능(onclick)은 요청하신 대로 제거되었습니다.
+        container.appendChild(div);
     });
 }

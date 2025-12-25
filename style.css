@@ -3602,13 +3602,13 @@ body.dark-mode .timer-row:hover {
     /* ★ 핵심: Flex 아이템 내부에서 말줄임표가 작동하려면 이게 필수입니다 ★ */
     flex: 1;        /* 남은 공간 차지 */
     min-width: 0;   /* 자식 요소가 넘칠 때 줄어들도록 허용 */
-    
+    padding-left: 10px;
     padding-right: 15px; /* 오른쪽 날짜와 간격 */
 }
 
 /* 제목 스타일 */
 .news-row-title {
-    font-size: 0.95rem;
+    font-size: 0.9em;
     font-weight: 600;
     color: #333;
     line-height: 1.3;

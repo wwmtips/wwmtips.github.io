@@ -3635,7 +3635,7 @@ body.dark-mode .timer-row:hover {
 /* 3. 오른쪽 영역 (날짜) - 줄바꿈 안 되게 고정 */
 .news-right-col {
     font-size: 0.9rem;
-    color: #d32f2f; /* 붉은색 타이머 느낌 */
+    color: #999; /* 붉은색 타이머 느낌 */
     font-weight: 500;
     white-space: nowrap; /* 날짜가 좁아져도 줄바꿈 안 됨 */
     flex-shrink: 0;      /* 너비가 줄어들지 않음 */

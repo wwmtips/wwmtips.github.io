@@ -3253,33 +3253,38 @@ function getYoutubeId(url) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
-}/* [수정] 홈 화면 뉴스 리스트 렌더링 (숙제 리스트 스타일 적용) */
+}
+
+
 function renderHomeRecentNews(newsList) {
-    // 1. 컨테이너 찾기
     const container = document.getElementById('home-recent-news');
     if (!container) return;
     
-    // 2. 초기화
     container.innerHTML = '';
 
-    // 3. 데이터가 없을 경우
     if (!newsList || newsList.length === 0) {
         container.innerHTML = '<div style="padding:20px; color:#999; text-align:center; font-size:0.9em;">등록된 소식이 없습니다.</div>';
         return;
     }
 
-    // 4. 리스트 생성 (최대 5개)
+    // 5개만 표시
     const listToRender = newsList.slice(0, 5); 
 
     listToRender.forEach(item => {
         const row = document.createElement('div');
-        row.className = 'news-list-row'; // CSS 스타일 적용을 위한 클래스
+        row.className = 'news-list-row'; 
         
-        // 클릭 이벤트(onclick) 제거됨, 타이틀과 날짜(작성자)만 표시
+        // 링크가 없으면 빈 문자열
+        const linkText = item.link ? item.link : '';
+
+        // 구조: 왼쪽(제목+설명) / 오른쪽(날짜)
         row.innerHTML = `
-            <div class="news-row-content">
+            <div class="news-left-col">
                 <div class="news-row-title">${item.title}</div>
-                <div class="news-row-date">${item.date}</div>
+                <div class="news-row-desc">${linkText}</div>
+            </div>
+            <div class="news-right-col">
+                ${item.date}
             </div>
         `;
         

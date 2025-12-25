@@ -2,14 +2,14 @@
     
   {
     "id": "2",
-    "title": "심지어 데미지도 어마무시해요",
-    "date": "덴브 Denv",
+    "title": "[개선] 행운봉투 변동 확률 적용",
+    "date": "행운 봉투 이벤트는 매일 조금씩 확률이 증가하는 구조로 개선했습니다.",
     "link": "https://youtu.be/6aCEi-kxdws?si=TkV-gPFZCgEFR1Y-"
   },  
   {
     "id": "1",
-    "title": "당신의 모든 낭만이 현실이 되는 무협 세계에서 살아남기",
-    "date": "GCL 지씨엘",
+    "title": "[개선] 지도 정보 개선",
+    "date": "지도 이미지 내 소실된 정보를 추가했습니다.",
     "link": "https://youtu.be/01bpPu48sN8?si=vvq0-hLYfqF4oLrl"
   }
 ]

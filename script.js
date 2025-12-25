@@ -3253,39 +3253,36 @@ function getYoutubeId(url) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
-}
-// [수정] 홈 화면 뉴스 리스트 렌더링 (단순 텍스트 리스트 형태)
+}/* [수정] 홈 화면 뉴스 리스트 렌더링 (숙제 리스트 스타일 적용) */
 function renderHomeRecentNews(newsList) {
+    // 1. 컨테이너 찾기
     const container = document.getElementById('home-recent-news');
     if (!container) return;
     
+    // 2. 초기화
     container.innerHTML = '';
 
+    // 3. 데이터가 없을 경우
     if (!newsList || newsList.length === 0) {
-        container.innerHTML = '<div style="padding:20px; color:#888; text-align:center;">등록된 소식이 없습니다.</div>';
+        container.innerHTML = '<div style="padding:20px; color:#999; text-align:center; font-size:0.9em;">등록된 소식이 없습니다.</div>';
         return;
     }
 
-    // 최대 5개까지만 리스트로 표시
+    // 4. 리스트 생성 (최대 5개)
     const listToRender = newsList.slice(0, 5); 
 
     listToRender.forEach(item => {
-        const div = document.createElement('div');
+        const row = document.createElement('div');
+        row.className = 'news-list-row'; // CSS 스타일 적용을 위한 클래스
         
-        // 스타일: 숙제 리스트처럼 깔끔한 가로줄 형태
-        // (CSS 클래스가 없어도 동작하도록 인라인 스타일을 적용했습니다)
-        div.style.cssText = "padding: 12px 4px; border-bottom: 1px dashed #e0e0e0; display: flex; flex-direction: column; justify-content: center;";
-        
-        div.innerHTML = `
-            <div style="font-size: 0.95em; font-weight: bold; color: #333; margin-bottom: 4px; line-height: 1.4;">
-                ${item.title}
-            </div>
-            <div style="font-size: 0.85em; color: #999;">
-                ${item.date}
+        // 클릭 이벤트(onclick) 제거됨, 타이틀과 날짜(작성자)만 표시
+        row.innerHTML = `
+            <div class="news-row-content">
+                <div class="news-row-title">${item.title}</div>
+                <div class="news-row-date">${item.date}</div>
             </div>
         `;
         
-        // 링크 이동 기능(onclick)은 요청하신 대로 제거되었습니다.
-        container.appendChild(div);
+        container.appendChild(row);
     });
 }

@@ -51,7 +51,7 @@ const TIMERS = [
         id: 'fireworks_weekly', 
         type: 'schedule', 
         name: '불꽃놀이 축제', 
-        desc: '토 21:30 / 일 09:30 (30분)', 
+        desc: '토 21:30 / 일 09:30', 
         badgeClass: 'status-event',
         schedules: [
             { day: 6, hour: 21, min: 30, duration: 30 },

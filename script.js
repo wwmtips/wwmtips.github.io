@@ -347,7 +347,7 @@ function renderNewsListGeneric(dataList, container, type) {
     listToRender.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'recent-news-item';
-        itemDiv.onclick = () => { if (item.link) window.open(item.link, '_blank'); };
+       // itemDiv.onclick = () => { if (item.link) window.open(item.link, '_blank'); };
         itemDiv.innerHTML = `<div class="news-title-text">${item.title}</div><div class="news-date-text">${item.date}</div>`;
         container.appendChild(itemDiv);
     });

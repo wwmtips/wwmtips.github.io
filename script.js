@@ -6,8 +6,8 @@
 // 1. 전역 변수 및 데이터 저장소
 // =========================================
 let currentQuestData = [];
-let currentPage = 1;
-const itemsPerPage = 12;
+let currentPage = 1;// [수정] 고정 상수에서 가변 변수로 변경
+let itemsPerPage = 12;
 let isGuideLoaded = false;
 
 // 슬라이더 관련 변수
@@ -72,6 +72,14 @@ const dummyMapData = [
    }
 ];
 
+// [신규] 화면 크기에 따라 페이지당 아이템 개수 설정
+function updateItemsPerPage() {
+    if (window.innerWidth >= 1024) {
+        itemsPerPage = 18; // PC 버전
+    } else {
+        itemsPerPage = 12; // 모바일/태블릿 버전
+    }
+}
 // =========================================
 // 2. 초기화 (DOMContentLoaded)
 // =========================================
@@ -94,6 +102,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ▼▼▼ [추가할 코드] 뒤로 가기 감지 이벤트 리스너 ▼▼▼
     window.addEventListener('popstate', handleHistoryChange);
+    // [추가] 브라우저 창 크기가 바뀔 때 실시간 대응 (선택 사항)
+window.addEventListener('resize', () => {
+    const oldLimit = itemsPerPage;
+    updateItemsPerPage();
+    
+    // 개수가 바뀌었을 때만 리스트를 새로 그림
+    if (oldLimit !== itemsPerPage) {
+        if (document.getElementById('view-quest').style.display === 'block') {
+            renderQuestList();
+        }
+        if (document.getElementById('view-chunji').style.display === 'block') {
+            renderChunjiList();
+        }
+    }
 });
 
 

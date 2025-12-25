@@ -99,21 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // D. URL 파라미터 체크 및 탭 이동
     checkUrlParams();
-
-    // ▼▼▼ [추가할 코드] 뒤로 가기 감지 이벤트 리스너 ▼▼▼
-    window.addEventListener('popstate', handleHistoryChange);
-    document.addEventListener("DOMContentLoaded", () => {
-    // A. 개수 설정 먼저 실행
-    updateItemsPerPage(); 
-    
-    // B. 기존 데이터 로드 실행
-    loadData();
-    // ... 나머지 기존 코드들 ...
-});
-
-// [추가] 브라우저 창 크기가 바뀔 때 실시간 대응 (선택 사항)
-window.addEventListener('resize', () => {
-    const oldLimit = itemsPerPage;
+   const oldLimit = itemsPerPage;
     updateItemsPerPage();
     
     // 개수가 바뀌었을 때만 리스트를 새로 그림
@@ -125,7 +111,6 @@ window.addEventListener('resize', () => {
             renderChunjiList();
         }
     }
-});
 });
 
 

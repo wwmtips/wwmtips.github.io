@@ -279,13 +279,3 @@
         <button onclick="showQuestList()" style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold;">목록으로 돌아가기</button>
     </div>
 </div>
-
-<script>
-    // SPA에서 HTML 조각을 삽입한 직후 실행되도록 유도
-    // 프레임워크(React, Vue 등)를 쓴다면 해당 컴포넌트의 mount 시점에 initQuestTracker('q179')를 호출하는게 가장 좋습니다.
-    setTimeout(() => {
-        if (typeof window.initQuestTracker === 'function') {
-            window.initQuestTracker('q178');
-        }
-    }, 100); 
-</script>

@@ -22,6 +22,7 @@ const TASK_DATA = [
     { id: 'w_10', freq: 'weekly', type: '구매', loc: '시즌상점', title: '기술 필기 구매' },
     { id: 'w_11', freq: 'weekly', type: '구매', loc: '기술양성', title: '기술 선택 상자 구매' },
     { id: 'w_12', freq: 'weekly', type: '구매', loc: '심득교환', title: '심법 선택 상자 구매' },
+            { id: 'w_13', freq: 'weekly', type: '구매', loc: '유파시련', title: '심법/비결 상자 구매' },
     // [일일]
     { id: 'd_2', freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령' },
     { id: 'd_4', freq: 'daily', type: '활동', loc: '꿈속', title: '엽비휴의 도박 상기판' },

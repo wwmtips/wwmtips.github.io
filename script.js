@@ -115,8 +115,11 @@ document.addEventListener("DOMContentLoaded", () => {
 /**
  * 퀘스트 진행도 저장 및 로드 시스템 (개선판)
  */
+/**
+ * 퀘스트 진행도 저장 및 로드 시스템 (SPA 대응 강화판)
+ */
 
-// 1. 체크박스 변경 시 저장하는 로직 (이벤트 위임)
+// 1. 체크박스 변경 시 저장 로직
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('item-checkbox')) {
         const wrapper = e.target.closest('.check-wrapper');
@@ -124,48 +127,46 @@ document.addEventListener('change', function(e) {
         
         if (!wrapper || !container) return;
         
-        // 컨테이너 ID에서 퀘스트 식별자 추출 (예: q179-container -> q179)
         const questId = container.id.replace('-container', '');
         const storageKey = `wwm_exploration_${questId}`;
         const itemId = wrapper.getAttribute('data-id');
         
-        // 데이터 불러오기 및 업데이트
         let savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
         savedData[itemId] = e.target.checked;
-        
-        // 로컬 스토리지에 저장
         localStorage.setItem(storageKey, JSON.stringify(savedData));
         
-        // 시각적 업데이트
         if (e.target.checked) {
             wrapper.classList.add('completed');
         } else {
             wrapper.classList.remove('completed');
         }
-        
-        console.log(`저장됨: ${storageKey} - ${itemId}: ${e.target.checked}`);
+        console.log(`[저장성공] ${storageKey} - ${itemId}: ${e.target.checked}`);
     }
 });
 
-// 2. 초기 로드 함수 (데이터 불러오기)
-window.initQuestTracker = function(questId) {
-    const storageKey = `wwm_exploration_${questId}`;
-    const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
-    
-    // 현재 화면에 있는 해당 퀘스트 컨테이너 내의 wrapper들만 타겟팅
+// 2. 초기 로드 함수 (재시도 로직 포함)
+window.initQuestTracker = function(questId, retryCount = 0) {
     const container = document.getElementById(`${questId}-container`);
+    
+    // SPA에서 DOM 렌더링이 늦어질 경우를 대비해 최대 5번 재시도 (약 1초)
     if (!container) {
-        console.warn(`${questId}-container 를 찾을 수 없습니다.`);
+        if (retryCount < 5) {
+            setTimeout(() => window.initQuestTracker(questId, retryCount + 1), 200);
+        } else {
+            console.error(`[로드실패] ${questId}-container를 찾을 수 없습니다.`);
+        }
         return;
     }
 
+    const storageKey = `wwm_exploration_${questId}`;
+    const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
     const wrappers = container.querySelectorAll('.check-wrapper');
     
     wrappers.forEach(wrapper => {
         const id = wrapper.getAttribute('data-id');
         const checkbox = wrapper.querySelector('.item-checkbox');
         
-        if (savedData[id]) {
+        if (savedData && savedData[id]) {
             if (checkbox) checkbox.checked = true;
             wrapper.classList.add('completed');
         } else {
@@ -174,7 +175,7 @@ window.initQuestTracker = function(questId) {
         }
     });
     
-    console.log(`${questId} 데이터 로드 완료`, savedData);
+    console.log(`[로드완료] ${questId} 데이터가 화면에 반영되었습니다.`, savedData);
 };
 
 // =========================================

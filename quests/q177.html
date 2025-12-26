@@ -6,11 +6,21 @@
   gtag('config', 'G-5SMVDZTDST');
 </script>
 <script>
-    // 페이지 로드 시 즉시 로드 함수 호출
+    // HTML이 로드될 때 전역 함수를 호출하여 상태 복구
     (function() {
-        if (window.initQuestTracker) {
-            window.initQuestTracker('q177'); // 각 번호에 맞게 수정
+        const questId = 'q177'; // 파일 번호에 맞게 변경 (q177, q178 등)
+        
+        function loadTask() {
+            if (window.initQuestTracker) {
+                window.initQuestTracker(questId);
+            } else {
+                // 아직 script.js가 로드 전이라면 잠시 후 다시 시도
+                setTimeout(loadTask, 50);
+            }
         }
+        
+        // 브라우저가 다음 페인팅을 준비할 때 실행 (가장 안전한 시점)
+        window.requestAnimationFrame ? requestAnimationFrame(loadTask) : setTimeout(loadTask, 100);
     })();
 </script>
 <div class="quest-detail-container" id="q177-container">

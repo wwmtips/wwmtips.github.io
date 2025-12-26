@@ -112,52 +112,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
-/**
- * 퀘스트 진행도 저장 및 로드 시스템 (개선판)
- */
-/**
- * 퀘스트 진행도 저장 및 로드 시스템 (SPA 대응 강화판)
- */
-
-// 1. 체크박스 변경 시 저장 로직
-document.addEventListener('change', function(e) {
-    if (e.target.classList.contains('item-checkbox')) {
-        const wrapper = e.target.closest('.check-wrapper');
-        const container = e.target.closest('.quest-detail-container');
-        
-        if (!wrapper || !container) return;
-        
-        const questId = container.id.replace('-container', '');
-        const storageKey = `wwm_exploration_${questId}`;
-        const itemId = wrapper.getAttribute('data-id');
-        
-        let savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
-        savedData[itemId] = e.target.checked;
-        localStorage.setItem(storageKey, JSON.stringify(savedData));
-        
-        if (e.target.checked) {
-            wrapper.classList.add('completed');
-        } else {
-            wrapper.classList.remove('completed');
-        }
-        console.log(`[저장성공] ${storageKey} - ${itemId}: ${e.target.checked}`);
-    }
-});
-
-// 2. 초기 로드 함수 (재시도 로직 포함)
-window.initQuestTracker = function(questId, retryCount = 0) {
+// window 객체에 할당하여 어디서든 호출 가능하게 함
+window.initQuestTracker = function(questId) {
     const container = document.getElementById(`${questId}-container`);
     
-    // SPA에서 DOM 렌더링이 늦어질 경우를 대비해 최대 5번 재시도 (약 1초)
     if (!container) {
-        if (retryCount < 5) {
-            setTimeout(() => window.initQuestTracker(questId, retryCount + 1), 200);
-        } else {
-            console.error(`[로드실패] ${questId}-container를 찾을 수 없습니다.`);
-        }
+        // 호출은 되었으나 아직 DOM에 컨테이너가 없다면 
+        // 100ms 뒤에 한 번만 더 시도
+        setTimeout(() => {
+            const retryContainer = document.getElementById(`${questId}-container`);
+            if (retryContainer) window.applyQuestData(retryContainer, questId);
+        }, 100);
         return;
     }
 
+    window.applyQuestData(container, questId);
+};
+
+// 실제 데이터를 UI에 입히는 내부 함수
+window.applyQuestData = function(container, questId) {
     const storageKey = `wwm_exploration_${questId}`;
     const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
     const wrappers = container.querySelectorAll('.check-wrapper');
@@ -166,7 +139,7 @@ window.initQuestTracker = function(questId, retryCount = 0) {
         const id = wrapper.getAttribute('data-id');
         const checkbox = wrapper.querySelector('.item-checkbox');
         
-        if (savedData && savedData[id]) {
+        if (savedData[id]) {
             if (checkbox) checkbox.checked = true;
             wrapper.classList.add('completed');
         } else {
@@ -174,10 +147,8 @@ window.initQuestTracker = function(questId, retryCount = 0) {
             wrapper.classList.remove('completed');
         }
     });
-    
-    console.log(`[로드완료] ${questId} 데이터가 화면에 반영되었습니다.`, savedData);
+    console.log(`[UI반영완료] ${questId}`);
 };
-
 // =========================================
 // [수정] 데이터 로딩 함수 (보스 데이터 로드 추가됨)
 function loadData() {

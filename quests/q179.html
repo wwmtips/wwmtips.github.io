@@ -107,6 +107,60 @@
             font-size: 1.05em;
             color: var(--wuxia-text-main);
         }
+        /* 기본 폰트 및 여백 조정 */
+.box-title {
+    font-weight: bold;
+    font-size: 0.95em; /* 1.05em에서 축소 */
+    color: var(--wuxia-text-main);
+    line-height: 1.4;
+}
+
+/* 체크박스 컨테이너 여백 축소 */
+.check-wrapper {
+    display: flex;
+    align-items: center; /* 세부 설명이 짧으면 중앙 정렬이 더 깔끔함 */
+    padding: 10px 12px; /* 15px에서 축소 */
+    border: 1px solid #eee;
+    border-radius: 6px; /* 모바일에서 더 부드럽게 */
+    margin-bottom: 8px; /* 항목 간 간격 축소 */
+    background: #fff;
+    transition: all 0.3s ease;
+    order: 1;
+}
+
+/* 체크박스 크기 미세 조정 */
+.item-checkbox {
+    width: 18px; /* 22px에서 축소 */
+    height: 18px;
+    margin-right: 12px;
+    cursor: pointer;
+    accent-color: var(--wuxia-accent-gold);
+}
+
+/* 지도 정보 버튼 크기 및 폰트 축소 */
+.map-link-btn {
+    background-color: #fdfaf5;
+    border: 1px solid var(--wuxia-accent-gold);
+    color: var(--wuxia-accent-gold);
+    padding: 2px 6px; /* 3px 8px에서 축소 */
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.7em; /* 0.75em에서 축소 */
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* 이미지 컨테이너 간격 조정 */
+.wuxia-image-container {
+    margin: 8px 0 0 0; /* 이미지 상단 여백 최소화 */
+}
+
+/* 섹션 헤더 크기 조정 */
+.step-header {
+    font-size: 1.1em; /* 1.2em에서 축소 */
+    margin-top: 20px;
+    margin-bottom: 12px;
+}
     </style>
 
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">

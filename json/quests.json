@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q180",
+   "type": "탐색",
+   "location": "완석포",
+   "name": "완석포 탐색 공략",
+   "bgimg": "q180_13.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q180.html"
+ },
+  {
    "id": "q179",
    "name": "칠벌 고개 탐색 공략",
    "location": "칠벌 고개",

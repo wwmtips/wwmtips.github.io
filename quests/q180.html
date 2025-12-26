@@ -1,0 +1,342 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-5SMVDZTDST');
+</script>
+
+<div class="quest-detail-container" id="q180-container">
+    <style>
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+            --finish-bg: #f9f9f9;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background-color: #f4f4f2;
+            margin: 8px 0 0 0;
+            position: relative;
+        }
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(0.05) contrast(1.02);
+        }
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.1em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            font-weight: bold;
+            margin: 20px 0 12px 0;
+        }
+
+        .section-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+        }
+
+        .check-wrapper {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 12px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            background: #fff;
+            transition: all 0.3s ease;
+            order: 1;
+        }
+        .check-wrapper.completed {
+            background-color: var(--finish-bg);
+            opacity: 0.5;
+            order: 99;
+        }
+        .check-wrapper.completed .item-content {
+            text-decoration: line-through;
+            color: #999;
+        }
+        .item-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--wuxia-accent-gold);
+        }
+        .item-content {
+            flex: 1;
+        }
+
+        .title-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .map-link-btn {
+            background-color: #fdfaf5;
+            border: 1px solid var(--wuxia-accent-gold);
+            color: var(--wuxia-accent-gold);
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.7em;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .map-link-btn:hover {
+            background-color: var(--wuxia-accent-gold);
+            color: #fff;
+        }
+
+        .box-title {
+            font-weight: bold;
+            font-size: 0.95em;
+            color: var(--wuxia-text-main);
+            line-height: 1.4;
+        }
+        
+
+/* 체크박스 크기 미세 조정 */
+.item-checkbox {
+    width: 18px; /* 22px에서 축소 */
+    height: 18px;
+    margin-right: 12px;
+    cursor: pointer;
+    accent-color: var(--wuxia-accent-gold);
+}
+
+/* 지도 정보 버튼 크기 및 폰트 축소 */
+.map-link-btn {
+    background-color: #fdfaf5;
+    border: 1px solid var(--wuxia-accent-gold);
+    color: var(--wuxia-accent-gold);
+    padding: 2px 6px; /* 3px 8px에서 축소 */
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.7em; /* 0.75em에서 축소 */
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* 이미지 컨테이너 간격 조정 */
+.wuxia-image-container {
+    margin: 8px 0 0 0; /* 이미지 상단 여백 최소화 */
+}
+
+/* 섹션 헤더 크기 조정 */
+.step-header {
+    font-size: 1.1em; /* 1.2em에서 축소 */
+    margin-top: 20px;
+    margin-bottom: 12px;
+}
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">탐색</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">완석포 / 완석포 탐색 공략</h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">완석포 지역 100% 달성 가이드입니다.</p>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">유물 (1개)</div>
+        <div class="check-wrapper" data-id="yumul-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">불선선 경계석 위 집안 상자</span><br>
+                아래 장소에서 상자를 엽니다.
+                <div class="wuxia-image-container"><img src="../quests/images/q180_1.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q180_2.jpg"></div>
+                불선선 경계석 위 집안에 큰 상자를 열면 완료됩니다.
+                <div class="wuxia-image-container"><img src="../quests/images/q180_3.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q180_4.jpg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">경계석 (1개)</div>
+        <div class="check-wrapper" data-id="stone-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <div class="title-line">
+                    <span class="box-title">완석포 경계석</span>
+                    <a href="https://wwm.tips/map/?marker=1765976289976" target="_blank" class="map-link-btn">지도 정보</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">사건 (3개)</div>
+        <div class="check-wrapper" data-id="event-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">1번째 사건</span><br>
+                양철지와 대화 후 금옥점혈수로 석상과 동일한 포즈로 만들어 주기
+                <div class="wuxia-image-container"><img src="../quests/images/q180_5.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q180_6.jpg"></div>
+            </div>
+        </div>
+        <div class="check-wrapper" data-id="event-2">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">2번째 사건</span><br>
+                앉아있는 절무심과 대화 후 바로 옆 거위를 처치하고 상자 획득
+                <div class="wuxia-image-container"><img src="../quests/images/q180_7.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q180_8.jpg"></div>
+            </div>
+        </div>
+        <div class="check-wrapper" data-id="event-3">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">3번째 사건</span><br>
+                해당 장소에 있는 NPC를 금옥점혈수를 사용해 동작 싱크 맞추기
+                <div class="wuxia-image-container"><img src="../quests/images/q180_9.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q180_10.jpg"></div>
+            </div>
+        </div>
+    </div>
+<div class="section-group">
+        <div class="step-header">묘묘냥 (1개)</div>
+        <div class="check-wrapper" data-id="miao-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <div class="title-line">
+                    <span class="box-title">불상 시선 맞추기</span>
+                    <a href="https://wwm.tips/map/?marker=1766127241946" target="_blank" class="map-link-btn">지도 정보</a>
+                </div>
+                불상이 서로 바라보게 조절하면 완료됩니다.
+            </div>
+        </div>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">고양이 놀이 (1개)</div>
+        <div class="check-wrapper" data-id="cat-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <div class="title-line">
+                    <span class="box-title">꽃무늬</span>
+                    <a href="https://wwm.tips/map/?marker=1765986064561" target="_blank" class="map-link-btn">지도 정보</a>
+                </div>
+                <div class="wuxia-image-container"><img src="https://wwm.tips/images/cat/7.jpg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">무술로 맺는 인연 (1개)</div>
+        <div class="check-wrapper" data-id="musul-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">NPC와 결투</span><br>
+                아래 장소의 NPC와 결투 후 승리 시 획득
+                <div class="wuxia-image-container"><img src="../quests/images/q180_11.jpg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">낚시 대결 (1개)</div>
+        <div class="check-wrapper" data-id="musul-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">NPC와 대결</span><br>
+                아래 장소의 NPC와 낚시 대결 후 승리 시 획득
+                <div class="wuxia-image-container"><img src="../quests/images/q180_11_1.jpg"></div>
+            </div>
+        </div>
+    </div>
+    <div class="section-group">
+        <div class="step-header">강호의 벗 (2개)</div>
+        <div class="check-wrapper" data-id="friend-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">팔대완과 의기투합</span><br>
+                팔대완과 대화로 의기투합한다 (위치는 지도상에 고정 표시)
+                <div class="wuxia-image-container"><img src="../quests/images/q180_12.jpg"></div>
+            </div>
+        </div>
+        <div class="check-wrapper" data-id="friend-2">
+            <input type="checkbox" class="input-checkbox">
+            <div class="item-content">
+                <span class="box-title">진금송과 의기투합</span><br>
+                진금송과 대화로 의기투합한다
+                <div class="wuxia-image-container"><img src="../quests/images/q180_13.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q180_13_1.jpg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">묘물채집 (5개)</div>
+        <div class="check-wrapper" data-id="coll-1"><input type="checkbox" class="item-checkbox"><div class="item-content"><div class="title-line"><span class="box-title">비견 장군 1</span><a href="https://wwm.tips/map/?marker=1765994230378" target="_blank" class="map-link-btn">지도 정보</a></div></div></div>
+        <div class="check-wrapper" data-id="coll-2"><input type="checkbox" class="item-checkbox"><div class="item-content"><div class="title-line"><span class="box-title">비견 장군 2</span><a href="https://wwm.tips/map/?marker=1765994379330" target="_blank" class="map-link-btn">지도 정보</a></div></div></div>
+        <div class="check-wrapper" data-id="coll-3"><input type="checkbox" class="item-checkbox"><div class="item-content"><div class="title-line"><span class="box-title">비견 장군 3</span><a href="https://wwm.tips/map/?marker=1765994419786" target="_blank" class="map-link-btn">지도 정보</a></div></div></div>
+        <div class="check-wrapper" data-id="coll-4"><input type="checkbox" class="item-checkbox"><div class="item-content"><div class="title-line"><span class="box-title">벌집</span><a href="https://wwm.tips/map/?marker=1765994366170" target="_blank" class="map-link-btn">지도 정보</a></div></div></div>
+        <div class="check-wrapper" data-id="coll-5"><input type="checkbox" class="item-checkbox"><div class="item-content"><div class="title-line"><span class="box-title">금강사마귀</span><a href="https://wwm.tips/map/?marker=1765994398171" target="_blank" class="map-link-btn">지도 정보</a></div></div></div>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">영지 (2개)</div>
+        <div class="check-wrapper" data-id="territory-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">1번째 영지</span><br>
+                영지 적 처치 후 상자 열기
+                <div class="wuxia-image-container"><img src="../quests/images/q180_14.jpg"></div>
+            </div>
+        </div>
+        <div class="check-wrapper" data-id="territory-2">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">2번째 영지</span><br>
+                영지 적 처치 후 상자 열기
+                <div class="wuxia-image-container"><img src="../quests/images/q180_15.jpg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-group">
+        <div class="step-header">상자 (8개)</div>
+        <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">총 상자 8개 중 2개는 영지를 클리어하면서 획득 할 수 있습니다.<br>남은 6개 상자 위치는 아래를 참고해주세요.</p>
+
+        <div class="check-wrapper" data-id="chest-1"><input type="checkbox" class="item-checkbox">
+            <div class="item-content"><span class="box-title">1번째 상자</span><br><div class="wuxia-image-container"><img src="../quests/images/q180_16.jpg"></div></div></div>
+        <div class="check-wrapper" data-id="chest-2"><input type="checkbox" class="item-checkbox"><div class="item-content">
+            <span class="box-title">2번째 상자</span>
+        <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">큰 돌 위에 올려져 있음</p>
+        <div class="wuxia-image-container"><img src="../quests/images/q180_17.jpg"></div></div></div>
+            
+        <div class="check-wrapper" data-id="chest-3"><input type="checkbox" class="item-checkbox"><div class="item-content">
+            <span class="box-title">3번째 상자</span>
+        <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">장치를 가동해 획득</p>
+         <div class="wuxia-image-container"><img src="../quests/images/q180_18_1.jpg"></div>
+        <div class="wuxia-image-container"><img src="../quests/images/q180_18.jpg"></div></div></div>
+
+        <div class="check-wrapper" data-id="chest-4"><input type="checkbox" class="item-checkbox"><div class="item-content">
+            <span class="box-title">4번째 상자</span><br><div class="wuxia-image-container"><img src="../quests/images/q180_19.jpg"></div></div></div>
+        <div class="check-wrapper" data-id="chest-5"><input type="checkbox" class="item-checkbox"><div class="item-content"
+            <span class="box-title">5번째 상자</span><br><div class="wuxia-image-container"><img src="../quests/images/q180_20.jpg"></div></div></div>
+        <div class="check-wrapper" data-id="chest-6"><input type="checkbox" class="item-checkbox"><div class="item-content">
+            <span class="box-title">6번째 상자</span>
+        <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">월신 동굴 마지막 지역 상자를 통해 획득 (바닥에 물 빼는 퀘스트)</p>
+    </div></div>
+    </div>
+    <div style="text-align: center; margin-top: 40px; padding-bottom: 50px;">
+        <button onclick="showQuestList()" style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold;">목록으로 돌아가기</button>
+    </div>
+</div>

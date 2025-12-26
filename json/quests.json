@@ -1,4 +1,13 @@
 [ 
+  {
+   "id": "q178",
+   "name": "대나무 숲 옛집 탐색",
+   "location": "청하",
+   "type": "탐색",
+   "bgimg": "q178_29.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q178.html"
+ },
 {
    "id": "q177",
    "name": "장군사당 지역 탐색 공략",

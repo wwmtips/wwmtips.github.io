@@ -187,11 +187,13 @@
         <button onclick="showQuestList()" style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold;">목록으로 돌아가기</button>
     </div>
 </div>
-
 <script>
+    // DOM이 확실히 렌더링된 후 실행되도록 200ms 정도 지연을 줍니다.
     setTimeout(() => {
         if (typeof window.initQuestTracker === 'function') {
             window.initQuestTracker('q179');
+        } else {
+            console.error('initQuestTracker 함수가 정의되지 않았습니다. script.js 로드 확인 필요');
         }
-    }, 100); 
+    }, 200); 
 </script>

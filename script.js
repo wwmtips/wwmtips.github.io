@@ -112,7 +112,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
-// 체크박스 클릭 시 데이터를 저장하고 시각적 효과를 주는 전역 리스너
+/**
+ * 퀘스트 진행도 저장 및 로드 시스템 (개선판)
+ */
+
+// 1. 체크박스 변경 시 저장하는 로직 (이벤트 위임)
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('item-checkbox')) {
         const wrapper = e.target.closest('.check-wrapper');
@@ -120,30 +124,42 @@ document.addEventListener('change', function(e) {
         
         if (!wrapper || !container) return;
         
-        // 컨테이너 ID에서 퀘스트 번호 추출 (예: id="q179-container" -> q179)
-        const questId = container.id.split('-')[0];
+        // 컨테이너 ID에서 퀘스트 식별자 추출 (예: q179-container -> q179)
+        const questId = container.id.replace('-container', '');
         const storageKey = `wwm_exploration_${questId}`;
         const itemId = wrapper.getAttribute('data-id');
         
-        // 데이터 저장
+        // 데이터 불러오기 및 업데이트
         let savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
         savedData[itemId] = e.target.checked;
+        
+        // 로컬 스토리지에 저장
         localStorage.setItem(storageKey, JSON.stringify(savedData));
         
-        // 완료 클래스 토글 (CSS의 order: 99를 작동시킴)
+        // 시각적 업데이트
         if (e.target.checked) {
             wrapper.classList.add('completed');
         } else {
             wrapper.classList.remove('completed');
         }
+        
+        console.log(`저장됨: ${storageKey} - ${itemId}: ${e.target.checked}`);
     }
 });
 
-// 페이지 로드 시 저장된 데이터를 불러오는 함수
+// 2. 초기 로드 함수 (데이터 불러오기)
 window.initQuestTracker = function(questId) {
     const storageKey = `wwm_exploration_${questId}`;
     const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
-    const wrappers = document.querySelectorAll('.check-wrapper');
+    
+    // 현재 화면에 있는 해당 퀘스트 컨테이너 내의 wrapper들만 타겟팅
+    const container = document.getElementById(`${questId}-container`);
+    if (!container) {
+        console.warn(`${questId}-container 를 찾을 수 없습니다.`);
+        return;
+    }
+
+    const wrappers = container.querySelectorAll('.check-wrapper');
     
     wrappers.forEach(wrapper => {
         const id = wrapper.getAttribute('data-id');
@@ -157,6 +173,8 @@ window.initQuestTracker = function(questId) {
             wrapper.classList.remove('completed');
         }
     });
+    
+    console.log(`${questId} 데이터 로드 완료`, savedData);
 };
 
 // =========================================

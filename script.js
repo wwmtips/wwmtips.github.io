@@ -3336,30 +3336,3 @@ function renderHomeRecentNews(newsList) {
         container.appendChild(row);
     });
 }
-
-/**
- * 퀘스트/탐색 진행도 관리 시스템
- * SPA 환경에서 동적으로 생성되는 요소를 제어하기 위한 전역 설정
- */
-
-// 1. 상태 업데이트 함수 (전역에서 호출 가능하게 설정)
-window.initQuestTracker = function(questId) {
-    const storageKey = `wwm_exploration_${questId}`;
-    const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
-    
-    // 해당 ID를 가진 컨테이너 내의 모든 체크박스 확인
-    const wrappers = document.querySelectorAll('.check-wrapper');
-    
-    wrappers.forEach(wrapper => {
-        const id = wrapper.getAttribute('data-id');
-        const checkbox = wrapper.querySelector('.item-checkbox');
-        
-        if (savedData[id]) {
-            if (checkbox) checkbox.checked = true;
-            wrapper.classList.add('completed');
-        } else {
-            if (checkbox) checkbox.checked = false;
-            wrapper.classList.remove('completed');
-        }
-    });
-};

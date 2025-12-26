@@ -1,5 +1,13 @@
 [ 
-
+{
+   "id": "q177",
+   "name": "장군사당 지역 탐색 공략",
+   "location": "장군사당",
+   "type": "탐색",
+   "bgimg": "q177_10.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q177.html"
+ },
   {
     "id": "q176",
     "name": "황하의 주인",

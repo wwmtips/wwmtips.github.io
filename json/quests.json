@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q179",
+   "name": "칠벌 고개 탐색 공략",
+   "location": "칠벌 고개",
+   "type": "탐색",
+   "bgimg": "q179_7.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q179.html"
+ },
+  {
    "id": "q178",
    "name": "대나무 숲 옛집 탐색 공략",
    "location": "대나무 숲 옛집",

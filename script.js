@@ -111,23 +111,26 @@ document.addEventListener("DOMContentLoaded", () => {
             renderChunjiList();
         }
     }
+});
+// 체크박스 클릭 시 데이터를 저장하고 시각적 효과를 주는 전역 리스너
+document.addEventListener('change', function(e) {
     if (e.target.classList.contains('item-checkbox')) {
         const wrapper = e.target.closest('.check-wrapper');
         const container = e.target.closest('.quest-detail-container');
         
         if (!wrapper || !container) return;
         
-        // 컨테이너 ID에서 퀘스트 번호 추출 (예: q179-container -> q179)
+        // 컨테이너 ID에서 퀘스트 번호 추출 (예: id="q179-container" -> q179)
         const questId = container.id.split('-')[0];
         const storageKey = `wwm_exploration_${questId}`;
         const itemId = wrapper.getAttribute('data-id');
         
-        // 데이터 로드 및 저장
+        // 데이터 저장
         let savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
         savedData[itemId] = e.target.checked;
         localStorage.setItem(storageKey, JSON.stringify(savedData));
         
-        // 시각적 상태 업데이트 (클래스 부여로 order 속성 작동)
+        // 완료 클래스 토글 (CSS의 order: 99를 작동시킴)
         if (e.target.checked) {
             wrapper.classList.add('completed');
         } else {
@@ -136,6 +139,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// 페이지 로드 시 저장된 데이터를 불러오는 함수
+window.initQuestTracker = function(questId) {
+    const storageKey = `wwm_exploration_${questId}`;
+    const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
+    const wrappers = document.querySelectorAll('.check-wrapper');
+    
+    wrappers.forEach(wrapper => {
+        const id = wrapper.getAttribute('data-id');
+        const checkbox = wrapper.querySelector('.item-checkbox');
+        
+        if (savedData[id]) {
+            if (checkbox) checkbox.checked = true;
+            wrapper.classList.add('completed');
+        } else {
+            if (checkbox) checkbox.checked = false;
+            wrapper.classList.remove('completed');
+        }
+    });
+};
 
 // =========================================
 // [수정] 데이터 로딩 함수 (보스 데이터 로드 추가됨)

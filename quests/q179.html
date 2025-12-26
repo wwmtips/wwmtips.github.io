@@ -56,11 +56,12 @@
             margin-bottom: 10px;
             background: #fff;
             transition: all 0.3s ease;
+            order: 1; /* 기본 순서 */
         }
         .check-wrapper.completed {
             background-color: var(--finish-bg);
             opacity: 0.5;
-            order: 99;
+            order: 99; /* 체크 시 하단 이동 */
         }
         .check-wrapper.completed .item-content {
             text-decoration: line-through;
@@ -188,35 +189,9 @@
 </div>
 
 <script>
-(function() {
-    const STORAGE_KEY = 'wwm_exploration_q179';
-    const container = document.getElementById('q179-container');
-    let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-
-    function updateList() {
-        document.querySelectorAll('.check-wrapper').forEach(wrapper => {
-            const id = wrapper.getAttribute('data-id');
-            const checkbox = wrapper.querySelector('.item-checkbox');
-            if (savedData[id]) {
-                checkbox.checked = true;
-                wrapper.classList.add('completed');
-            } else {
-                checkbox.checked = false;
-                wrapper.classList.remove('completed');
-            }
-        });
-    }
-
-    updateList();
-
-    container.addEventListener('change', (e) => {
-        if (e.target.classList.contains('item-checkbox')) {
-            const wrapper = e.target.closest('.check-wrapper');
-            const id = wrapper.getAttribute('data-id');
-            savedData[id] = e.target.checked;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
-            updateList();
+    setTimeout(() => {
+        if (typeof window.initQuestTracker === 'function') {
+            window.initQuestTracker('q179');
         }
-    });
-})();
+    }, 100); 
 </script>

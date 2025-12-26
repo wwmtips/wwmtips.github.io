@@ -281,35 +281,11 @@
 </div>
 
 <script>
-(function() {
-    const STORAGE_KEY = 'wwm_exploration_q178';
-    const container = document.getElementById('q178-container');
-    let savedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-
-    function updateList() {
-        document.querySelectorAll('.check-wrapper').forEach(wrapper => {
-            const id = wrapper.getAttribute('data-id');
-            const checkbox = wrapper.querySelector('.item-checkbox');
-            if (savedData[id]) {
-                checkbox.checked = true;
-                wrapper.classList.add('completed');
-            } else {
-                checkbox.checked = false;
-                wrapper.classList.remove('completed');
-            }
-        });
-    }
-
-    updateList();
-
-    container.addEventListener('change', (e) => {
-        if (e.target.classList.contains('item-checkbox')) {
-            const wrapper = e.target.closest('.check-wrapper');
-            const id = wrapper.getAttribute('data-id');
-            savedData[id] = e.target.checked;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(savedData));
-            updateList();
+    // SPA에서 HTML 조각을 삽입한 직후 실행되도록 유도
+    // 프레임워크(React, Vue 등)를 쓴다면 해당 컴포넌트의 mount 시점에 initQuestTracker('q179')를 호출하는게 가장 좋습니다.
+    setTimeout(() => {
+        if (typeof window.initQuestTracker === 'function') {
+            window.initQuestTracker('q179');
         }
-    });
-})();
+    }, 100); 
 </script>

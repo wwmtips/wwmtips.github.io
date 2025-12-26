@@ -112,43 +112,79 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
-// window 객체에 할당하여 어디서든 호출 가능하게 함
-window.initQuestTracker = function(questId) {
-    const container = document.getElementById(`${questId}-container`);
-    
-    if (!container) {
-        // 호출은 되었으나 아직 DOM에 컨테이너가 없다면 
-        // 100ms 뒤에 한 번만 더 시도
-        setTimeout(() => {
-            const retryContainer = document.getElementById(`${questId}-container`);
-            if (retryContainer) window.applyQuestData(retryContainer, questId);
-        }, 100);
-        return;
-    }
 
-    window.applyQuestData(container, questId);
-};
+/**
+ * 퀘스트 진행도 시스템 (SPA 완전 대응판)
+ * HTML 내부에 스크립트를 넣을 필요가 없습니다.
+ */
 
-// 실제 데이터를 UI에 입히는 내부 함수
-window.applyQuestData = function(container, questId) {
-    const storageKey = `wwm_exploration_${questId}`;
-    const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
-    const wrappers = container.querySelectorAll('.check-wrapper');
-    
-    wrappers.forEach(wrapper => {
-        const id = wrapper.getAttribute('data-id');
-        const checkbox = wrapper.querySelector('.item-checkbox');
-        
-        if (savedData[id]) {
-            if (checkbox) checkbox.checked = true;
-            wrapper.classList.add('completed');
-        } else {
-            if (checkbox) checkbox.checked = false;
-            wrapper.classList.remove('completed');
+(function() {
+    // 1. 데이터 저장 로직 (이벤트 위임)
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('item-checkbox')) {
+            const wrapper = e.target.closest('.check-wrapper');
+            const container = e.target.closest('.quest-detail-container');
+            if (!wrapper || !container) return;
+
+            const questId = container.id.replace('-container', '');
+            const storageKey = `wwm_exploration_${questId}`;
+            const itemId = wrapper.getAttribute('data-id');
+
+            let savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
+            savedData[itemId] = e.target.checked;
+            localStorage.setItem(storageKey, JSON.stringify(savedData));
+
+            e.target.checked ? wrapper.classList.add('completed') : wrapper.classList.remove('completed');
+            console.log(`[저장됨] ${questId} - ${itemId}`);
         }
     });
-    console.log(`[UI반영완료] ${questId}`);
-};
+
+    // 2. 화면에 데이터를 입히는 핵심 함수
+    function applyQuestData() {
+        const containers = document.querySelectorAll('.quest-detail-container');
+        containers.forEach(container => {
+            const questId = container.id.replace('-container', '');
+            const storageKey = `wwm_exploration_${questId}`;
+            const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
+            const wrappers = container.querySelectorAll('.check-wrapper');
+
+            wrappers.forEach(wrapper => {
+                const itemId = wrapper.getAttribute('data-id');
+                const checkbox = wrapper.querySelector('.item-checkbox');
+                if (savedData[itemId]) {
+                    if (checkbox) checkbox.checked = true;
+                    wrapper.classList.add('completed');
+                } else {
+                    if (checkbox) checkbox.checked = false;
+                    wrapper.classList.remove('completed');
+                }
+            });
+        });
+    }
+
+    // 3. SPA 대응: DOM 변화 감지 (핵심)
+    // 새로운 HTML 조각이 삽입되면 자동으로 applyQuestData를 실행합니다.
+    const observer = new MutationObserver((mutations) => {
+        for (let mutation of mutations) {
+            if (mutation.addedNodes.length) {
+                applyQuestData();
+                break;
+            }
+        }
+    });
+
+    // 초기 실행 및 관찰 시작
+    document.addEventListener('DOMContentLoaded', () => {
+        applyQuestData();
+        observer.observe(document.body, { childList: true, subtree: true });
+    });
+
+    // 만약 이미 로드가 끝난 상태라면 즉시 실행
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        applyQuestData();
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+})();
 // =========================================
 // [수정] 데이터 로딩 함수 (보스 데이터 로드 추가됨)
 function loadData() {

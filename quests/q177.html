@@ -5,7 +5,14 @@
   gtag('js', new Date());
   gtag('config', 'G-5SMVDZTDST');
 </script>
-
+<script>
+    // 페이지 로드 시 즉시 로드 함수 호출
+    (function() {
+        if (window.initQuestTracker) {
+            window.initQuestTracker('q177'); // 각 번호에 맞게 수정
+        }
+    })();
+</script>
 <div class="quest-detail-container" id="q177-container">
     <style>
         :root {
@@ -192,13 +199,3 @@
         <button onclick="showQuestList()" style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold;">목록으로 돌아가기</button>
     </div>
 </div>
-<script>
-    // DOM이 확실히 렌더링된 후 실행되도록 200ms 정도 지연을 줍니다.
-    setTimeout(() => {
-        if (typeof window.initQuestTracker === 'function') {
-            window.initQuestTracker('q177');
-        } else {
-            console.error('initQuestTracker 함수가 정의되지 않았습니다. script.js 로드 확인 필요');
-        }
-    }, 100); 
-</script>

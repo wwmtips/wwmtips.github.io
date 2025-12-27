@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q184",
+   "type": "탐험",
+   "location": "약수안",
+   "name": "약수안 탐색 공략",
+   "bgimg": "q184_2.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q184.html"
+ },
+  {
    "id": "q183",
    "type": "탐색",
    "location": "소자령",

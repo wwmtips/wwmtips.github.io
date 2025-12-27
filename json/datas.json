@@ -2,6 +2,11 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "새", "answer": "파랑새", "user": "꽂" },
+{ "hint": "시계", "answer": "뻐꾸기", "user": "환환고" },
+{ "hint": "바다", "answer": "낚시", "user": "다함" },
+{ "hint": "목", "answer": "목걸이", "user": "설현아" },
+{ "hint": "채소", "answer": "가지", "user": "수녀" },
     { "hint": "영양 공급", "answer": "구기자", "user": "하이빵까루" },
 { "hint": "서명", "answer": "도장", "user": "" },
 { "hint": "가시", "answer": "찔레꽃", "user": "" },

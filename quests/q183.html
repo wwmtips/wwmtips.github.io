@@ -15,7 +15,28 @@
             --wuxia-text-sub: #666;
             --finish-bg: #f9f9f9;
         }
+/* 무협 스타일 구분선 */
+hr.wuxia-divider {
+    border: 0;
+    height: 1.5px; /* 선 두께 */
+    background-image: linear-gradient(to right, rgba(176, 141, 85, 0), rgba(176, 141, 85, 0.75), rgba(176, 141, 85, 0));
+    margin: 30px 0; /* 상하 여백 */
+    position: relative;
+}
 
+/* 구분선 중앙에 작은 장식 포인트를 주고 싶을 때 (선택 사항) */
+hr.wuxia-divider::after {
+    content: "◈"; /* 중앙 문양 */
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0 10px;
+    background-color: #fff; /* 배경색과 맞춰서 선을 가림 */
+    color: var(--wuxia-accent-gold);
+    font-size: 0.8em;
+}
         .wuxia-image-container {
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -164,7 +185,59 @@
             </div>
         </div>
     </div>
+<div class="section-group">
+        <div class="step-header">고양이 놀이 (1개)</div>
+        <div class="check-wrapper" data-id="cat-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <div class="title-line">
+                    <span class="box-title">재복</span>
+                    <a href="https://wwm.tips/map/?marker=1765986968970" target="_blank" class="map-link-btn">지도 정보</a>
+                </div>
+                <div class="wuxia-image-container"><img src="https://wwm.tips/images/cat/13.jpg"></div>
+            </div>
+        </div>
+    </div>
 
+    <div class="section-group">
+        <div class="step-header">묘물채집 (4개)</div>
+        <div class="check-wrapper" data-id="coll-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <div class="title-line">
+                    <span class="box-title">금강사마귀 1</span>
+                    <a href="https://wwm.tips/map/?id=qinghe&marker=1766839783009" target="_blank" class="map-link-btn">지도 정보</a>
+                </div>
+            </div>
+        </div>
+        <div class="check-wrapper" data-id="coll-2">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <div class="title-line">
+                    <span class="box-title">금강사마귀 2</span>
+                    <a href="https://wwm.tips/map/?id=qinghe&marker=1766839988105" target="_blank" class="map-link-btn">지도 정보</a>
+                </div>
+            </div>
+        </div>
+        <div class="check-wrapper" data-id="coll-3">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <div class="title-line">
+                    <span class="box-title">비견장군</span>
+                    <a href="https://wwm.tips/map/?id=qinghe&marker=1766839901298" target="_blank" class="map-link-btn">지도 정보</a>
+                </div>
+            </div>
+        </div>
+        <div class="check-wrapper" data-id="coll-4">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <div class="title-line">
+                    <span class="box-title">빨간버섯</span>
+                    <a href="https://wwm.tips/map/?id=qinghe&marker=1765997325005" target="_blank" class="map-link-btn">지도 정보</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="section-group">
         <div class="step-header">영지 (1개)</div>
         <div class="check-wrapper" data-id="territory-1">
@@ -191,6 +264,19 @@
     </div>
 
     <div class="section-group">
+        <div class="step-header">궁술 대결 (1개)</div>
+        <div class="check-wrapper" data-id="bow-1">
+            <input type="checkbox" class="item-checkbox">
+            <div class="item-content">
+                <span class="box-title">궁술 대결 승리</span><br>
+                아래 장소에서 10초안에 화약통을 7개 터트리면 획득합니다.
+                <div class="wuxia-image-container"><img src="../quests/images/q183_8.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q183_8_1.jpg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-group">
         <div class="step-header">강호의 벗 (1개)</div>
         <div class="check-wrapper" data-id="friend-1">
             <input type="checkbox" class="item-checkbox">
@@ -204,18 +290,86 @@
     </div>
 
     <div class="section-group">
-        <div class="step-header">궁술 대결 (1개)</div>
-        <div class="check-wrapper" data-id="bow-1">
-            <input type="checkbox" class="item-checkbox">
-            <div class="item-content">
-                <span class="box-title">궁술 대결 승리</span><br>
-                아래 장소에서 10초안에 화약통을 7개 터트리면 획득합니다.
-                <div class="wuxia-image-container"><img src="../quests/images/q183_8.jpg"></div>
-                <div class="wuxia-image-container"><img src="../quests/images/q183_8_1.jpg"></div>
-            </div>
-        </div>
-    </div>
+        <div class="step-header">상자 (19개)</div>
+        <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">소자령 지역의 상자 위치 정보입니다. 영지에서 획득하는 1개를 제외한 18개 상자의 위치입니다.</p>
 
+        <div class="check-wrapper" data-id="chest-1"><input type="checkbox" class="item-checkbox">
+            <div class="item-content"><span class="box-title">1번째 상자</span>
+                <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">큰 돌 위에 있습니다.</p>
+                <div class="wuxia-image-container"><img src="../quests/images/q183_9.jpg"></div></div></div>
+
+        <div class="check-wrapper" data-id="chest-2"><input type="checkbox" class="item-checkbox">
+            <div class="item-content"><span class="box-title">2번째 상자</span>
+                  <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">허공섭물로 가져와야 합니다.</p>
+
+                <div class="wuxia-image-container"><img src="../quests/images/q183_10_1.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q183_10.jpg"></div>
+            </div></div>
+
+        <div class="check-wrapper" data-id="chest-3"><input type="checkbox" class="item-checkbox">
+            <div class="item-content"><span class="box-title">3번째 상자</span><br>
+                <div class="wuxia-image-container"><img src="../quests/images/q183_11.jpg"></div></div></div>
+
+        <div class="check-wrapper" data-id="chest-4"><input type="checkbox" class="item-checkbox">
+            <div class="item-content"><span class="box-title">4번째 상자</span>
+                 <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">허공섭물로 가져와야 합니다.</p>
+                <div class="wuxia-image-container"><img src="../quests/images/q183_12.jpg"></div></div></div>
+
+        <div class="check-wrapper" data-id="chest-5"><input type="checkbox" class="item-checkbox">
+            <div class="item-content"><span class="box-title">5번째 상자</span><br>
+                <div class="wuxia-image-container"><img src="../quests/images/q183_13.jpg"></div></div></div>
+
+        <div class="check-wrapper" data-id="chest-6"><input type="checkbox" class="item-checkbox">
+            <div class="item-content"><span class="box-title">6~18번째 상자</span><br>
+                <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;">남은 상자는 고별주 저장고에서 획득할 수 있습니다. 지도가 표시되지 않기 때문에 아래 이미지를 통해 위치를 파악하시기 바랍니다.</p>
+              <hr class="wuxia-divider">
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>들어가는 길</b></p>
+               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_14.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q183_15.jpg"></div>
+
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>6번째</b> - 쭉 내려가서 왼쪽 금벽 앞</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_16.jpg"></div>
+                
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>7번째</b> - 6번을 먹고 오른쪽 윗길로 올라가 바로 왼쪽 정면</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_17.jpg"></div>
+                
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>8번째</b> - 6번을 먹고 오른쪽 윗길로 올라가 바로 오른쪽 방 안</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_18.jpg"></div>
+                
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>9번째</b> - 다시 한층 위로 올라가 왼쪽 지하 돌 위</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_19.jpg"></div>
+
+                
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>10번째</b> - 은월산 계곡 경계석에서 왼쪽으로 이동해 수금루 병사 옆</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_20_1.jpg"></div>           
+                <div class="wuxia-image-container"><img src="../quests/images/q183_20.jpg"></div>
+                
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>11번째</b> - 10번을 먹고 바로 뒤로 돌아 끝 방</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_21.jpg"></div>
+
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>12번째</b> - 11번을 먹고 다시 밖으로 나와 중앙 방에서 정면으로 쭉 직진하면 틈사이로 들어오는 길이 있는데 해당 공간으로 들어와 길따라 이동하면 발견</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_22_1.jpg"></div>
+                <div class="wuxia-image-container"><img src="../quests/images/q183_22.jpg"></div>
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>13번째</b> - 다시 은월산 계곡 경계석으로 이동해 정면으로 올라가면 시체 앞 상자 </p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_23.jpg"></div>
+                
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>14~15번째</b> - 13번방 구석 통 사이 (석상 좌우로 총 2개) </p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_24.jpg"></div>
+                
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>16번째</b> - 13번방에서 왼쪽 길로 나와 길따라가다보면 통이 있는데 통을 부시고 왼쪽 벽을 보면 숨겨진 공간에 있는 상자</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_25.jpg"></div>
+                
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>17번째</b> - 15번을 먹은 곳에서 오른쪽 길을 따라가다보면 난간 위에 있는 상자</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_26.jpg"></div>
+
+               <p style="color: var(--wuxia-text-main); margin-bottom: 10px; font-size: 0.9em;"><b>18번째</b> - 다시 뒤로 나오면 아래로 내려가는 장치가 있는데 타고 내려가면 바로 앞에 있는 상자</p>               
+                <div class="wuxia-image-container"><img src="../quests/images/q183_27_1.jpg"></div>
+                 <div class="wuxia-image-container"><img src="../quests/images/q183_27.jpg"></div>
+               
+
+            </div></div>
+     </div>
     <div style="text-align: center; margin-top: 40px; padding-bottom: 50px;">
         <button onclick="showQuestList()" style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold;">목록으로 돌아가기</button>
     </div>

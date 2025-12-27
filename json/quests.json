@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q183",
+   "type": "탐색",
+   "location": "소자령",
+   "name": "소자령 탐색",
+   "bgimg": "q183_14.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q183.html"
+ },
+  {
    "id": "q182",
    "type": "탐색",
    "location": "불선선",

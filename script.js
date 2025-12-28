@@ -1048,11 +1048,9 @@ function loadQuestDetail(filepath, id) {
         if(contentBox) contentBox.innerHTML = html;
         window.scrollTo(0, 0);
 
-        // ★ [핵심] HTML이 삽입된 "직후"에 서버에서 좋아요 수를 가져옵니다.
-                // 0.1초 정도 지연을 주어 DOM이 안정화된 후 실행하면 더 정확합니다.
-                setTimeout(() => {
-                    fetchLikeStatus(id); 
-                }, 100);
+ 
+         fetchLikeStatus(id); 
+        
 
     });
 }

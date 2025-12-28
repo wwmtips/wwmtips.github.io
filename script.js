@@ -3365,3 +3365,63 @@ function renderHomeRecentNews(newsList) {
 }
 // 브라우저의 뒤로 가기 / 앞으로 가기 버튼 클릭 시 화면 전환 실행
 window.addEventListener('popstate', handleHistoryChange);
+
+
+// script.js에 추가 또는 수정
+const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbz1RCeQUKOAeh6bChxAZjfsRzp2Qncuf2YYu7Bva7S4QQyPlxkJEOaLjVq6Q169I4zX/exec";
+
+// 좋아요 클릭 처리 (ID 직접 입력 방식 지원)
+async function handleLikeClick(manualId) {
+    // 1. ID 결정: 직접 입력된 값(manualId)이 있으면 사용, 없으면 URL에서 자동 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    let questId = manualId || urlParams.get('q') || urlParams.get('r');
+
+    if (!questId) return;
+
+    // ID에서 'q' 같은 문자를 제거하고 숫자만 남김 (서버 시트와 일치시키기 위함)
+    const pureId = questId.toString().replace('q', '');
+    const likeBtn = document.querySelector('.like-container');
+
+    // 중복 클릭 방지 (클라이언트 측)
+    if (likeBtn && likeBtn.classList.contains('active')) return;
+
+    try {
+        // 사용자 IP 확인
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const { ip } = await ipRes.json();
+
+        // 서버(GAS)에 직접 입력받은 ID 전송
+        const res = await fetch(`${LIKE_API_URL}?action=like&id=${pureId}&ip=${ip}`);
+        const result = await res.json();
+
+        if (result.success) {
+            updateLikeUI(result.count, true);
+        } else {
+            alert(result.message);
+            updateLikeUI(result.count, true);
+        }
+    } catch (err) {
+        console.error("좋아요 처리 실패:", err);
+    }
+}
+
+// 초기 로드 시 좋아요 수 가져오기
+async function fetchLikeCount(id) {
+    if (!id) return;
+    const pureId = id.toString().replace('q', '');
+    try {
+        const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}`);
+        const count = await res.text();
+        updateLikeUI(count, false);
+    } catch (err) {
+        console.warn("좋아요 로드 실패");
+    }
+}
+
+// UI 업데이트 함수
+function updateLikeUI(count, isActive) {
+    const countEl = document.querySelector('.like-count');
+    const container = document.querySelector('.like-container');
+    if (countEl) countEl.innerText = count;
+    if (isActive && container) container.classList.add('active');
+}

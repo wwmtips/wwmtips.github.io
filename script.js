@@ -11,6 +11,9 @@ let itemsPerPage = 12;
 let isGuideLoaded = false;
 let currentUserIp = null; // 전역 변수로 IP 저장
 
+let globalLikes = {}; // 전체 좋아요 캐시 저장소
+
+
 // 슬라이더 관련 변수
 let currentSlideIndex = 0;
 let slideInterval;
@@ -276,6 +279,7 @@ function loadData() {
 
         if (typeof checkEventStatus === 'function') checkEventStatus();
         loadBuildsInBackground(targetTab);
+        initializeLikeSystem();
     })
     .catch(error => { console.error("데이터 로드 실패:", error); });
 }
@@ -3374,11 +3378,27 @@ window.addEventListener('popstate', handleHistoryChange);
 
 
 // script.js에 추가 또는 수정
-const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbxW7193pIiszZvk76FpRsJ0eawYXnWRF6c4dPJmaf5NySAo8qcJ6j8uDTLogZxmyfkX/exec";
+const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbxqyLOKUrIF5pnoW0tMD97o-x4x3gDv-n5o7eVSYiJElvfgUHkX4xihwYOAhoV6wiuu/exec";
 
 
 
-// 1. 페이지 로드 시 상태 체크 (loadQuestDetail 등에서 호출)
+// 사이트 접속 시 즉시 실행
+async function initializeLikeSystem() {
+    try {
+        // IP와 전체 데이터를 동시에 병렬로 가져옴 (속도 향상)
+        const [ipRes, likesRes] = await Promise.all([
+            fetch('https://api.ipify.org?format=json').then(res => res.json()),
+            fetch(`${LIKE_API_URL}?action=get_all`).then(res => res.json())
+        ]);
+
+        currentUserIp = ipRes.ip;
+        globalLikes = likesRes;
+        console.log("좋아요 데이터 캐싱 완료");
+    } catch (err) {
+        console.warn("초기 로딩 실패:", err);
+    }
+}
+
 async function fetchLikeStatus(id) {
     if (!id) return;
     const pureId = id.toString().replace('q', '');
@@ -3387,35 +3407,28 @@ async function fetchLikeStatus(id) {
 
     if (!container || !countEl) return;
 
-    // [초기화] IP를 읽기 전까지 버튼 클릭 및 시각적 효과 제한
-    container.style.pointerEvents = "none";
-    container.style.opacity = "0.6";
+    // [최적화] 서버에 묻기 전에 캐시된 숫자를 먼저 즉시 표시합니다.
+    if (globalLikes[pureId] !== undefined) {
+        countEl.innerText = globalLikes[pureId];
+    }
 
-    try {
-        // 1. IP 먼저 가져오기 (이미 가져왔다면 재사용)
-        if (!currentUserIp) {
-            const ipRes = await fetch('https://api.ipify.org?format=json');
-            const ipData = await ipRes.json();
-            currentUserIp = ipData.ip;
+    // IP를 이미 알고 있다면 즉시 버튼 상태를 서버와 대조합니다.
+    if (currentUserIp) {
+        try {
+            const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}&ip=${currentUserIp}`);
+            const result = await res.json();
+            
+            // 최신값 갱신 및 내 추천 여부 확인
+            countEl.innerText = result.count;
+            if (result.hasLiked) {
+                setLikeButtonActive(container, true);
+            } else {
+                container.style.pointerEvents = "auto";
+                container.style.opacity = "1";
+            }
+        } catch (err) {
+            console.warn("상태 동기화 실패");
         }
-
-        // 2. 서버에서 좋아요 수 + 내 추천 여부 가져오기
-        const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}&ip=${currentUserIp}`);
-        const result = await res.json();
-
-        // 3. UI 업데이트
-        countEl.innerText = result.count || "0";
-
-        if (result.hasLiked) {
-            // 이미 좋아요를 누른 사용자라면
-            setLikeButtonActive(container, true);
-        } else {
-            // 안 누른 사용자라면 버튼 활성화
-            container.style.pointerEvents = "auto";
-            container.style.opacity = "1";
-        }
-    } catch (err) {
-        console.warn("상태 로드 실패:", err);
     }
 }
 

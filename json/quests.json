@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q186",
+   "type": "탐색",
+   "location": "형연",
+   "name": "형연 탐색 공략",
+   "bgimg": "q186_1.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q186.html"
+ },
+  {
    "id": "q185",
    "type": "탐색",
    "location": "침식의 숲",

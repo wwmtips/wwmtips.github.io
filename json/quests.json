@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q187",
+   "type": "탐색",
+   "location": "망천 평원",
+   "name": "망천 평원 탐색 공략",
+   "bgimg": "q187_c.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q187.html"
+ },
+  {
    "id": "q186",
    "type": "탐색",
    "location": "형연",

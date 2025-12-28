@@ -3403,42 +3403,45 @@ async function initializeLikeSystem() {
 
     return likeSystemPromise;
 }
-
-// 2. 상태 확인 함수 (초기화 완료를 기다림)
+// [개선] 프리로드 데이터를 우선 사용하고, 없을 때만 대기하는 로직
 async function fetchLikeStatus(id) {
     if (!id) return;
     const pureId = id.toString().replace('q', '');
     const container = document.querySelector('.like-container');
     const countEl = document.querySelector('.like-count');
-
     if (!container || !countEl) return;
 
-    // 데이터가 오기 전까지 로딩 표시
-    countEl.innerText = "..."; 
-    container.style.pointerEvents = "none";
-    container.style.opacity = "0.6";
+    // 1. [즉시 표시] 프리로드된 캐시가 이미 있다면 서버 응답을 기다리지 않고 바로 보여줍니다.
+    if (globalLikes[pureId] !== undefined) {
+        countEl.innerText = globalLikes[pureId];
+    } else {
+        countEl.innerText = "..."; // 데이터가 아직 없는 극히 짧은 순간만 표시
+    }
 
-    // ★ [핵심] 초기화(get_all)가 끝날 때까지 기다립니다.
+    // 2. [스마트 대기] 초기화가 아직 안 끝났다면 기다리고, 끝났다면 즉시 통과합니다.
     await initializeLikeSystem();
 
-    // 이제 globalLikes가 채워졌으므로 즉시 값을 보여줍니다.
+    // 3. [최종 데이터 확인] 서버의 최신값과 동기화하여 정확한 숫자를 다시 표시합니다.
     countEl.innerText = globalLikes[pureId] || "0";
 
+    // 4. [중복 체크] 내 IP 정보가 있고 이미 눌렀다면 빨간색으로 고정
     if (currentUserIp) {
         try {
-            // 개별 상태(내가 눌렀는지 여부)를 최종 확인
+            // 서버에 내 IP가 이 ID를 눌렀는지 묻습니다.
             const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}&ip=${currentUserIp}`);
             const result = await res.json();
             
             countEl.innerText = result.count;
             if (result.hasLiked) {
+                // 이미 눌렀다면 클릭 차단 및 빨간 버튼 고정
                 setLikeButtonActive(container, true);
             } else {
+                // 안 눌렀다면 즉시 클릭 가능 상태로 전환
                 container.style.pointerEvents = "auto";
                 container.style.opacity = "1";
             }
         } catch (err) {
-            console.warn("상태 동기화 실패");
+            // 에러 발생 시에도 기본적으로 클릭은 허용 (안전장치)
             container.style.pointerEvents = "auto";
             container.style.opacity = "1";
         }

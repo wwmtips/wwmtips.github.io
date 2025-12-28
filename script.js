@@ -111,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderChunjiList();
         }
     }
+   handleHistoryChange();
 });
 
 /**
@@ -3362,3 +3363,5 @@ function renderHomeRecentNews(newsList) {
         container.appendChild(row);
     });
 }
+// 브라우저의 뒤로 가기 / 앞으로 가기 버튼 클릭 시 화면 전환 실행
+window.addEventListener('popstate', handleHistoryChange);

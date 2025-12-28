@@ -3370,39 +3370,52 @@ window.addEventListener('popstate', handleHistoryChange);
 
 // script.js에 추가 또는 수정
 const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbz1RCeQUKOAeh6bChxAZjfsRzp2Qncuf2YYu7Bva7S4QQyPlxkJEOaLjVq6Q169I4zX/exec";
-
-// 좋아요 클릭 처리 (ID 직접 입력 방식 지원)
-async function handleLikeClick(manualId) {
-    // 1. ID 결정: 직접 입력된 값(manualId)이 있으면 사용, 없으면 URL에서 자동 추출
+// [수정] 즉시 반응형 좋아요 클릭 처리
+async function handleLikeClick() {
     const urlParams = new URLSearchParams(window.location.search);
-    let questId = manualId || urlParams.get('q') || urlParams.get('r');
+    const contentId = urlParams.get('q') || urlParams.get('r') || urlParams.get('c');
 
-    if (!questId) return;
+    if (!contentId) return;
 
-    // ID에서 'q' 같은 문자를 제거하고 숫자만 남김 (서버 시트와 일치시키기 위함)
-    const pureId = questId.toString().replace('q', '');
-    const likeBtn = document.querySelector('.like-container');
+    const pureId = contentId.toString().replace('q', '');
+    const container = document.querySelector('.like-container');
+    const countEl = document.querySelector('.like-count');
 
-    // 중복 클릭 방지 (클라이언트 측)
-    if (likeBtn && likeBtn.classList.contains('active')) return;
+    // 1. [즉시 차단] 이미 활성화 상태(active)라면 더 이상 실행하지 않음
+    if (container.classList.contains('active')) return;
+
+    // 2. [낙관적 업데이트] 서버 응답 전 화면부터 즉시 변경
+    container.classList.add('active'); // 즉시 빨간색으로 변경
+    
+    // 현재 숫자에 +1을 즉시 반영
+    let currentCount = parseInt(countEl.innerText) || 0;
+    countEl.innerText = currentCount + 1;
+
+    // 즉시 스타일 적용 (CSS active 클래스 활용)
+    container.style.borderColor = "#b71c1c";
+    container.style.backgroundColor = "#fff5f5";
+    container.querySelector('span').style.color = "#b71c1c";
 
     try {
-        // 사용자 IP 확인
+        // 3. 백그라운드에서 서버 전송 시작
         const ipRes = await fetch('https://api.ipify.org?format=json');
         const { ip } = await ipRes.json();
 
-        // 서버(GAS)에 직접 입력받은 ID 전송
         const res = await fetch(`${LIKE_API_URL}?action=like&id=${pureId}&ip=${ip}`);
         const result = await res.json();
 
+        // 4. 서버 응답 후 최종 데이터로 숫자 동기화
         if (result.success) {
-            updateLikeUI(result.count, true);
+            countEl.innerText = result.count;
         } else {
-            alert(result.message);
-            updateLikeUI(result.count, true);
+            // 이미 누른 IP인 경우 알림은 띄우되, 숫자는 서버에서 준 최신 값으로 보정
+            console.log(result.message);
+            countEl.innerText = result.count;
         }
     } catch (err) {
         console.error("좋아요 처리 실패:", err);
+        // 네트워크 에러 등이 발생했을 때만 다시 클릭 가능하게 하려면 아래 주석 해제
+        // container.classList.remove('active');
     }
 }
 

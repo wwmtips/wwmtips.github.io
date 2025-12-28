@@ -1,5 +1,14 @@
 [ 
   {
+   "id": "q188",
+   "type": "탐색",
+   "location": "풍화촌",
+   "name": "풍화촌 탐색 공략",
+   "bgimg": "q188_35.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q188.html"
+ },
+  {
    "id": "q187",
    "type": "탐색",
    "location": "망천 평원",

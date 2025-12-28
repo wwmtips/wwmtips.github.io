@@ -3376,7 +3376,7 @@ window.addEventListener('popstate', handleHistoryChange);
 
 
 // script.js에 추가 또는 수정
-const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbz1RCeQUKOAeh6bChxAZjfsRzp2Qncuf2YYu7Bva7S4QQyPlxkJEOaLjVq6Q169I4zX/exec";
+const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbxW7193pIiszZvk76FpRsJ0eawYXnWRF6c4dPJmaf5NySAo8qcJ6j8uDTLogZxmyfkX/exec";
 
 
 

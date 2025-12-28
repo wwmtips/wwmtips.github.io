@@ -9,6 +9,7 @@ let currentQuestData = [];
 let currentPage = 1;// [수정] 고정 상수에서 가변 변수로 변경
 let itemsPerPage = 12;
 let isGuideLoaded = false;
+let currentUserIp = null; // 전역 변수로 IP 저장
 
 // 슬라이더 관련 변수
 let currentSlideIndex = 0;
@@ -3376,69 +3377,89 @@ window.addEventListener('popstate', handleHistoryChange);
 
 // script.js에 추가 또는 수정
 const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbz1RCeQUKOAeh6bChxAZjfsRzp2Qncuf2YYu7Bva7S4QQyPlxkJEOaLjVq6Q169I4zX/exec";
-// script.js 맨 아래에 이 로직으로 덮어쓰세요.
+
+
+
+// 1. 페이지 로드 시 상태 체크 (loadQuestDetail 등에서 호출)
+async function fetchLikeStatus(id) {
+    if (!id) return;
+    const pureId = id.toString().replace('q', '');
+    const container = document.querySelector('.like-container');
+    const countEl = document.querySelector('.like-count');
+
+    if (!container || !countEl) return;
+
+    // [초기화] IP를 읽기 전까지 버튼 클릭 및 시각적 효과 제한
+    container.style.pointerEvents = "none";
+    container.style.opacity = "0.6";
+
+    try {
+        // 1. IP 먼저 가져오기 (이미 가져왔다면 재사용)
+        if (!currentUserIp) {
+            const ipRes = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipRes.json();
+            currentUserIp = ipData.ip;
+        }
+
+        // 2. 서버에서 좋아요 수 + 내 추천 여부 가져오기
+        const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}&ip=${currentUserIp}`);
+        const result = await res.json();
+
+        // 3. UI 업데이트
+        countEl.innerText = result.count || "0";
+
+        if (result.hasLiked) {
+            // 이미 좋아요를 누른 사용자라면
+            setLikeButtonActive(container, true);
+        } else {
+            // 안 누른 사용자라면 버튼 활성화
+            container.style.pointerEvents = "auto";
+            container.style.opacity = "1";
+        }
+    } catch (err) {
+        console.warn("상태 로드 실패:", err);
+    }
+}
+
+// 2. 좋아요 클릭 처리 (낙관적 업데이트 유지)
 async function handleLikeClick() {
     const urlParams = new URLSearchParams(window.location.search);
     const contentId = urlParams.get('q') || urlParams.get('r') || urlParams.get('c');
-    if (!contentId) return;
+    if (!contentId || !currentUserIp) return;
 
     const pureId = contentId.toString().replace('q', '');
-    
-    // 현재 화면에 있는 좋아요 컨테이너와 숫자 요소를 찾습니다.
     const container = document.querySelector('.like-container');
     const countEl = document.querySelector('.like-count');
-    if (!container || !countEl) return;
 
-    // 중복 클릭 방지
     if (container.classList.contains('active')) return;
 
-    // 1. [즉시 반영] 서버 응답 전 숫자를 먼저 올리고 색상을 바꿉니다.
-    container.classList.add('active');
+    // [낙관적 업데이트] 즉시 클릭 막고 UI 변경
+    setLikeButtonActive(container, true);
     let currentCount = parseInt(countEl.innerText) || 0;
-    countEl.innerText = currentCount + 1; // 화면상에서 즉시 +1
-
-    // 스타일 즉시 변경 (active 클래스에 색상 정의가 없다면 직접 부여)
-    container.style.borderColor = "#b71c1c";
-    container.style.backgroundColor = "#fff5f5";
-    const heartText = container.querySelector('span');
-    if (heartText) heartText.style.color = "#b71c1c";
+    countEl.innerText = currentCount + 1;
 
     try {
-        const ipRes = await fetch('https://api.ipify.org?format=json');
-        const { ip } = await ipRes.json();
-
-        // 2. 서버에 전송
-        const res = await fetch(`${LIKE_API_URL}?action=like&id=${pureId}&ip=${ip}`);
+        const res = await fetch(`${LIKE_API_URL}?action=like&id=${pureId}&ip=${currentUserIp}`);
         const result = await res.json();
-
-        // 3. 서버에서 받은 실제 최신값으로 다시 한번 동기화
-        if (result.count !== undefined) {
-            countEl.innerText = result.count;
-        }
+        
+        // 서버 최종값으로 동기화
+        countEl.innerText = result.count;
     } catch (err) {
         console.error("좋아요 처리 실패:", err);
     }
 }
-// 초기 로딩용 함수
-async function fetchLikeCount(id) {
-    const pureId = id.toString().replace('q', '');
-    const countEl = document.querySelector('.like-count');
-    if (!countEl) return;
 
-    try {
-        const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}`);
-        const count = await res.text();
-        // 서버에서 받아온 숫자로 0을 교체합니다.
-        countEl.innerText = count || "0";
-    } catch (err) {
-        console.warn("좋아요 수 로드 실패");
+// 3. 버튼 활성화 스타일 적용 함수
+function setLikeButtonActive(container, forceActive) {
+    if (!container) return;
+    
+    if (forceActive) {
+        container.classList.add('active');
+        container.style.pointerEvents = "none"; // 더 못 누르게 함
+        container.style.opacity = "1";
+        container.style.borderColor = "#b71c1c";
+        container.style.backgroundColor = "#fff5f5";
+        const heartText = container.querySelector('span');
+        if (heartText) heartText.style.color = "#b71c1c";
     }
-}
-
-// UI 업데이트 함수
-function updateLikeUI(count, isActive) {
-    const countEl = document.querySelector('.like-count');
-    const container = document.querySelector('.like-container');
-    if (countEl) countEl.innerText = count;
-    if (isActive && container) container.classList.add('active');
 }

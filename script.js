@@ -10,9 +10,8 @@ let currentPage = 1;// [수정] 고정 상수에서 가변 변수로 변경
 let itemsPerPage = 12;
 let isGuideLoaded = false;
 let currentUserIp = null; // 전역 변수로 IP 저장
-
 let globalLikes = {}; // 전체 좋아요 캐시 저장소
-
+let likeSystemPromise = null; // 초기화 상태를 추적하는 Promise
 
 // 슬라이더 관련 변수
 let currentSlideIndex = 0;
@@ -3380,23 +3379,32 @@ window.addEventListener('popstate', handleHistoryChange);
 // script.js에 추가 또는 수정
 const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbxqyLOKUrIF5pnoW0tMD97o-x4x3gDv-n5o7eVSYiJElvfgUHkX4xihwYOAhoV6wiuu/exec";
 
-// 사이트 접속 시 즉시 실행
-async function initializeLikeSystem() {
-    try {
-        // IP와 전체 데이터를 동시에 병렬로 가져옴 (속도 향상)
-        const [ipRes, likesRes] = await Promise.all([
-            fetch('https://api.ipify.org?format=json').then(res => res.json()),
-            fetch(`${LIKE_API_URL}?action=get_all`).then(res => res.json())
-        ]);
 
-        currentUserIp = ipRes.ip;
-        globalLikes = likesRes;
-        console.log("좋아요 데이터 캐싱 완료");
-    } catch (err) {
-        console.warn("초기 로딩 실패:", err);
-    }
+// 1. 시스템 초기화 (Promise를 반환하도록 수정)
+async function initializeLikeSystem() {
+    // 이미 로딩 중이라면 그 Promise를 반환
+    if (likeSystemPromise) return likeSystemPromise;
+
+    likeSystemPromise = (async () => {
+        try {
+            const [ipRes, likesRes] = await Promise.all([
+                fetch('https://api.ipify.org?format=json').then(res => res.json()),
+                fetch(`${LIKE_API_URL}?action=get_all`).then(res => res.json())
+            ]);
+
+            currentUserIp = ipRes.ip;
+            globalLikes = likesRes;
+            return true;
+        } catch (err) {
+            console.warn("초기 로딩 실패:", err);
+            return false;
+        }
+    })();
+
+    return likeSystemPromise;
 }
 
+// 2. 상태 확인 함수 (초기화 완료를 기다림)
 async function fetchLikeStatus(id) {
     if (!id) return;
     const pureId = id.toString().replace('q', '');
@@ -3405,18 +3413,23 @@ async function fetchLikeStatus(id) {
 
     if (!container || !countEl) return;
 
-    // [최적화] 서버에 묻기 전에 캐시된 숫자를 먼저 즉시 표시합니다.
-    if (globalLikes[pureId] !== undefined) {
-        countEl.innerText = globalLikes[pureId];
-    }
+    // 데이터가 오기 전까지 로딩 표시
+    countEl.innerText = "..."; 
+    container.style.pointerEvents = "none";
+    container.style.opacity = "0.6";
 
-    // IP를 이미 알고 있다면 즉시 버튼 상태를 서버와 대조합니다.
+    // ★ [핵심] 초기화(get_all)가 끝날 때까지 기다립니다.
+    await initializeLikeSystem();
+
+    // 이제 globalLikes가 채워졌으므로 즉시 값을 보여줍니다.
+    countEl.innerText = globalLikes[pureId] || "0";
+
     if (currentUserIp) {
         try {
+            // 개별 상태(내가 눌렀는지 여부)를 최종 확인
             const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}&ip=${currentUserIp}`);
             const result = await res.json();
             
-            // 최신값 갱신 및 내 추천 여부 확인
             countEl.innerText = result.count;
             if (result.hasLiked) {
                 setLikeButtonActive(container, true);
@@ -3426,6 +3439,8 @@ async function fetchLikeStatus(id) {
             }
         } catch (err) {
             console.warn("상태 동기화 실패");
+            container.style.pointerEvents = "auto";
+            container.style.opacity = "1";
         }
     }
 }

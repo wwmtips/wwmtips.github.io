@@ -3380,8 +3380,6 @@ window.addEventListener('popstate', handleHistoryChange);
 // script.js에 추가 또는 수정
 const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbxqyLOKUrIF5pnoW0tMD97o-x4x3gDv-n5o7eVSYiJElvfgUHkX4xihwYOAhoV6wiuu/exec";
 
-
-
 // 사이트 접속 시 즉시 실행
 async function initializeLikeSystem() {
     try {

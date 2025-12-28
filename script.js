@@ -1046,6 +1046,7 @@ function loadQuestDetail(filepath, id) {
     fetch(filepath).then(res => res.text()).then(html => {
         if(contentBox) contentBox.innerHTML = html;
         window.scrollTo(0, 0);
+        fetchLikeCount(id);
     });
 }
 function showQuestList() {

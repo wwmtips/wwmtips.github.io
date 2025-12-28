@@ -1046,7 +1046,13 @@ function loadQuestDetail(filepath, id) {
     fetch(filepath).then(res => res.text()).then(html => {
         if(contentBox) contentBox.innerHTML = html;
         window.scrollTo(0, 0);
-        fetchLikeCount(id);
+
+        // ★ [핵심] HTML이 삽입된 "직후"에 서버에서 좋아요 수를 가져옵니다.
+                // 0.1초 정도 지연을 주어 DOM이 안정화된 후 실행하면 더 정확합니다.
+                setTimeout(() => {
+                    fetchLikeCount(id); 
+                }, 100);
+
     });
 }
 function showQuestList() {
@@ -3370,65 +3376,62 @@ window.addEventListener('popstate', handleHistoryChange);
 
 // script.js에 추가 또는 수정
 const LIKE_API_URL = "https://script.google.com/macros/s/AKfycbz1RCeQUKOAeh6bChxAZjfsRzp2Qncuf2YYu7Bva7S4QQyPlxkJEOaLjVq6Q169I4zX/exec";
-// [수정] 즉시 반응형 좋아요 클릭 처리
+// script.js 맨 아래에 이 로직으로 덮어쓰세요.
 async function handleLikeClick() {
     const urlParams = new URLSearchParams(window.location.search);
     const contentId = urlParams.get('q') || urlParams.get('r') || urlParams.get('c');
-
     if (!contentId) return;
 
     const pureId = contentId.toString().replace('q', '');
+    
+    // 현재 화면에 있는 좋아요 컨테이너와 숫자 요소를 찾습니다.
     const container = document.querySelector('.like-container');
     const countEl = document.querySelector('.like-count');
+    if (!container || !countEl) return;
 
-    // 1. [즉시 차단] 이미 활성화 상태(active)라면 더 이상 실행하지 않음
+    // 중복 클릭 방지
     if (container.classList.contains('active')) return;
 
-    // 2. [낙관적 업데이트] 서버 응답 전 화면부터 즉시 변경
-    container.classList.add('active'); // 즉시 빨간색으로 변경
-    
-    // 현재 숫자에 +1을 즉시 반영
+    // 1. [즉시 반영] 서버 응답 전 숫자를 먼저 올리고 색상을 바꿉니다.
+    container.classList.add('active');
     let currentCount = parseInt(countEl.innerText) || 0;
-    countEl.innerText = currentCount + 1;
+    countEl.innerText = currentCount + 1; // 화면상에서 즉시 +1
 
-    // 즉시 스타일 적용 (CSS active 클래스 활용)
+    // 스타일 즉시 변경 (active 클래스에 색상 정의가 없다면 직접 부여)
     container.style.borderColor = "#b71c1c";
     container.style.backgroundColor = "#fff5f5";
-    container.querySelector('span').style.color = "#b71c1c";
+    const heartText = container.querySelector('span');
+    if (heartText) heartText.style.color = "#b71c1c";
 
     try {
-        // 3. 백그라운드에서 서버 전송 시작
         const ipRes = await fetch('https://api.ipify.org?format=json');
         const { ip } = await ipRes.json();
 
+        // 2. 서버에 전송
         const res = await fetch(`${LIKE_API_URL}?action=like&id=${pureId}&ip=${ip}`);
         const result = await res.json();
 
-        // 4. 서버 응답 후 최종 데이터로 숫자 동기화
-        if (result.success) {
-            countEl.innerText = result.count;
-        } else {
-            // 이미 누른 IP인 경우 알림은 띄우되, 숫자는 서버에서 준 최신 값으로 보정
-            console.log(result.message);
+        // 3. 서버에서 받은 실제 최신값으로 다시 한번 동기화
+        if (result.count !== undefined) {
             countEl.innerText = result.count;
         }
     } catch (err) {
         console.error("좋아요 처리 실패:", err);
-        // 네트워크 에러 등이 발생했을 때만 다시 클릭 가능하게 하려면 아래 주석 해제
-        // container.classList.remove('active');
     }
 }
-
-// 초기 로드 시 좋아요 수 가져오기
+// 초기 로딩용 함수
 async function fetchLikeCount(id) {
-    if (!id) return;
     const pureId = id.toString().replace('q', '');
+    const countEl = document.querySelector('.like-count');
+    if (!countEl) return;
+
     try {
         const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}`);
         const count = await res.text();
-        updateLikeUI(count, false);
+        // 서버에서 받아온 숫자로 0을 교체합니다.
+        countEl.innerText = count || "0";
     } catch (err) {
-        console.warn("좋아요 로드 실패");
+        console.warn("좋아요 수 로드 실패");
     }
 }
 

@@ -924,39 +924,111 @@
 }
 .marker-completed .pin-inner-circle { background-color: #888 !important; }
 
+/* =========================================
+   3. 핀 & 클러스터 (Game Token Style)
+   ========================================= */
 
-/* --- [2] 클러스터 스타일 (화이트 도넛 디자인) --- */
-/* 핀과 동일하게 '흰색 바탕'을 기본으로 하고, '색상'을 테두리로 뺍니다 */
-.simple-cluster-marker {
-    width: 100%; height: 100%;
-    border-radius: 50% !important; /* 원형 */
+/* --- [1] 개별 핀 (토큰 스타일) --- */
+.pin-marker {
+    position: relative; width: 100%; height: 100%;
     
-    /* ★ 핵심: 배경을 핀과 똑같은 흰색으로 변경 */
-    background-color: #ffffff !important;
+    /* ★ 핵심: 완전한 원형 */
+    border-radius: 50% !important;
+    transform: none !important; /* 회전 제거 */
     
-    /* ★ 핵심: 테두리를 3px 두께의 컬러로 변경 (도넛 모양) */
-    border: 3px solid var(--cluster-color, #a08040) !important;
+    /* 배경 및 테두리: 지도에 묻어나는 핵심 */
+    background: transparent; /* 배경 투명 (내부 원이 색상 담당) */
     
-    /* 글자색: 진한 회색 (가독성 확보) */
-    color: #444 !important;
+    /* 하얀색 테두리로 깔끔하게 마감 (참고 이미지 스타일) */
+    border: 2px solid #ffffff; 
+    box-sizing: border-box; /* 테두리가 크기 안에 포함되도록 */
+
+    /* 부드러운 그림자: 붕 떠있는 느낌 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
     
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 800;
-    font-family: 'Noto Sans KR', sans-serif;
-    
-    /* 그림자: 핀과 비슷한 깊이감 */
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
-    transition: all 0.2s ease;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 통통 튀는 애니메이션 */
 }
 
-/* 클러스터 호버 효과 */
-.simple-cluster-marker:hover {
-    transform: scale(1.1); z-index: 9999;
-    /* 호버 시: 배경이 색상으로 차오르고, 글자가 흰색으로 변함 (반전 효과) */
-    background-color: var(--cluster-color) !important;
+/* 내부 색상 원 */
+.pin-inner-circle {
+    width: 100%; height: 100%; /* 꽉 채움 */
+    border-radius: 50%;
+    
+    /* 배경색은 JS에서 들어옴 */
+    background-color: var(--pin-color, #333) !important;
+    
+    /* ★ 유기적인 느낌을 위한 미세한 그라데이션 (선택 사항) */
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 100%);
+    
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* 아이콘 이미지 */
+.pin-inner-circle img {
+    width: 60%; height: 60%; /* 아이콘 크기 조절 */
+    object-fit: contain; 
+    transform: none !important; /* 회전 제거 */
+    
+    /* 아이콘 그림자: 가독성 확보 */
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    opacity: 1;
+}
+
+/* 핀 호버 효과 */
+.pin-marker:hover {
+    transform: scale(1.2); /* 커지기만 함 */
+    z-index: 9999;
+    border-color: #fff;
+    /* 호버 시 빛나는 효과 (Glow) */
+    box-shadow: 0 0 10px #ffffff, 0 4px 8px rgba(0,0,0,0.5);
+}
+
+/* 완료된 핀 */
+.marker-completed .pin-marker {
+    opacity: 0.6;
+    filter: grayscale(1.0);
+    box-shadow: none;
+    border-color: #ccc;
+}
+.marker-completed .pin-inner-circle {
+    background-color: #555 !important;
+    background-image: none;
+}
+
+/* Dev 모드 선택 */
+.dev-selected .pin-marker {
+    border-color: #00e5ff;
+    box-shadow: 0 0 10px #00e5ff;
+}
+
+
+/* --- [2] 클러스터 (핀과 동일한 토큰 스타일) --- */
+.simple-cluster-marker {
+    width: 100%; height: 100%;
+    border-radius: 50% !important;
+    
+    /* 배경색 (JS 변수 사용) */
+    background-color: var(--cluster-color, #a08040) !important;
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.1) 100%);
+    
+    /* 핀과 동일한 하얀 테두리 */
+    border: 2px solid #ffffff !important;
+    box-sizing: border-box;
+    
     color: #ffffff !important;
-    border-color: #fff !important; /* 테두리는 흰색으로 */
-    box-shadow: 0 0 15px var(--cluster-color);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease;
+}
+
+.simple-cluster-marker:hover {
+    transform: scale(1.15); z-index: 9999;
+    box-shadow: 0 0 10px #ffffff;
 }
     </style>
 </head>
@@ -1496,22 +1568,22 @@
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || "#555";
 
-             /* createMarkers 함수 내부 */
-                const pinIcon = L.divIcon({
-                    className: isCompleted ? 'marker-completed' : '',
-                    /* HTML은 그대로 둬도 됩니다 */
-                    html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
-                            <div class="pin-inner-circle">
-                                <img src="${iconPath}" style="--bg-image: url('${iconPath}');" onerror="this.src='../images/stone.png'; this.style.setProperty('--bg-image', 'url(../images/stone.png)');">
-                            </div>
-                        </div>`,
-                    
-                    iconSize: pinSize, 
-                    
-                    /* ★ 여기를 수정하세요! (물방울 핀의 끝부분을 좌표로 설정) */
-                    iconAnchor: [pinSize[0] / 2, pinSize[1] * 0.9], 
-                    popupAnchor: [0, -(pinSize[1] * 0.8)]
-                });
+      // 기존 pinIcon 정의 부분을 아래 코드로 교체하세요.
+
+const pinIcon = L.divIcon({
+    className: isCompleted ? 'marker-completed' : '',
+    // 회전(transform)이나 복잡한 구조 없이 단순하게 변경
+    html: `<div class="pin-marker">
+               <div class="pin-inner-circle" style="background-color: ${pinColor};">
+                   <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+               </div>
+           </div>`,
+    
+    // ★ 핵심 변경: 사이즈는 유지하되, 앵커(중심점)를 정중앙으로 변경
+    iconSize: pinSize, 
+    iconAnchor: [pinSize[0] / 2, pinSize[1] / 2], // 가로/2, 세로/2 -> 정중앙
+    popupAnchor: [0, -(pinSize[1] / 2 + 5)]       // 팝업은 원의 위쪽 끝에 뜨도록
+});
 
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 

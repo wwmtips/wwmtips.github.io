@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v18 - Performance)</title>
+    <title>연운 한국어 맵 (Final v19 - Path Feature)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -38,26 +38,16 @@
         }
 
         /* =========================================
-           ★ [성능 최적화] GPU 가속 적용
-           ========================================= */
-        .leaflet-marker-icon, 
-        .leaflet-marker-shadow, 
-        .leaflet-zoom-animated {
-            will-change: transform; /* 브라우저에게 변형이 일어날 것임을 알려 GPU 사용 유도 */
-            transform-style: preserve-3d;
-        }
-
-        /* =========================================
            1. 핀 & 클러스터
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            border-radius: 50% 50% 50% 0; 
+            border-radius: 50% 50% 50% 0; /* 물방울 모양 */
             transform: rotate(-45deg);
             background: #ffffff; 
             box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.1s, z-index 0.1s; /* 애니메이션 시간 단축 (성능) */
+            transition: transform 0.2s, z-index 0.2s;
             cursor: pointer; pointer-events: auto;
         }
         
@@ -71,7 +61,7 @@
         .pin-inner-circle img {
             width: 70%; height: 70%; 
             object-fit: contain; 
-            transform: rotate(45deg); 
+            transform: rotate(45deg); /* 아이콘 정방향 */
             opacity: 1; filter: none;
         }
 
@@ -83,22 +73,25 @@
         .marker-completed .pin-inner-circle { background: #777 !important; }
         .marker-completed .pin-marker { opacity: 0.6; }
 
-        /* 클러스터 */
         .simple-cluster-marker {
             width: 100%; height: 100%; border-radius: 50%; 
-            border: 2px solid #ffffff; 
+            border: 2px solid #ffffff; color: #fff;
             display: flex; align-items: center; justify-content: center;
-            font-size: 13px; font-weight: 800; color: #fff;
+            font-size: 13px; font-weight: 800;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-            cursor: pointer; transition: transform 0.1s;
+            cursor: pointer; transition: transform 0.2s;
         }
         .simple-cluster-marker:hover { transform: scale(1.15); z-index: 5000; }
 
         /* =========================================
-           2. UI 컨트롤
+           2. UI 컨트롤 (Glass & Dark Style)
            ========================================= */
         .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
-        .top-right-controls { position: fixed; top: 20px; right: 20px; z-index: 2000; transition: opacity 0.3s; }
+        .top-right-controls { 
+            position: fixed; top: 20px; right: 20px; z-index: 2000; 
+            display: flex; flex-direction: column; gap: 10px; /* 버튼 간격 */
+            transition: opacity 0.3s; 
+        }
         body.controls-hidden .top-left-controls, body.controls-hidden .top-right-controls { opacity: 0; pointer-events: none; }
 
         .glass-select {
@@ -112,13 +105,17 @@
         }
         .glass-select option { background-color: #1a1a1a; color: white; }
 
+        /* 공통 버튼 스타일 */
         .glass-box {
-            width: 40px; height: 40px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            width: 44px; height: 44px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            color: #a08040; font-weight: 700; font-size: 16px; cursor: pointer;
+            color: #a08040; cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.2s;
         }
+        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
+        .glass-box.active { background-color: #a08040; color: #fff; border-color: #fff; }
 
         .bottom-ui-container {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000;
@@ -144,7 +141,7 @@
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
             color: #a08040; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        .icon-svg { width: 22px; height: 22px; fill: currentColor; }
+        .icon-svg { width: 24px; height: 24px; fill: currentColor; }
 
         .bottom-nav-bar {
             width: 100%; height: 60px; background-color: rgba(10, 10, 10, 0.85);
@@ -160,33 +157,67 @@
         .nav-item.active { color: #a08040; }
 
         /* =========================================
-           4. 패널 스타일
+           4. 패널 스타일 (검색, 필터, ★ 경로)
            ========================================= */
-        .search-panel {
+        .search-panel, .filter-panel, .path-panel {
             position: fixed; top: 0; left: 0; width: 100%;
             background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 15px 20px 20px 20px; box-sizing: border-box;
-            z-index: 3000; transform: translateY(-100%);
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex; flex-direction: column; gap: 10px;
+            z-index: 3000; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
+
+        /* 검색 패널 */
+        .search-panel {
+            padding: 15px 20px 20px 20px; box-sizing: border-box;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transform: translateY(-100%);
+        }
         .search-panel.active { transform: translateY(0); }
-        .panel-close-btn { position: absolute; top: 10px; right: 15px; color: #888; font-size: 24px; cursor: pointer; }
-        
+
+        /* 필터 패널 & 경로 패널 (바텀 시트) */
+        .filter-panel, .path-panel {
+            top: auto; bottom: 0; max-height: 60vh;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            padding-bottom: 80px; 
+            transform: translateY(100%);
+        }
+        .filter-panel.active, .path-panel.active { transform: translateY(0); }
+
+        /* 공통 헤더 스타일 */
+        .panel-header {
+            padding: 15px 20px; border-bottom: 1px solid #333;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-title { color: white; font-weight: 700; font-size: 16px; }
+        .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; }
+
+        /* 경로 리스트 */
+        .path-list-container {
+            padding: 10px 20px; overflow-y: auto;
+        }
+        .path-item {
+            padding: 15px; background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px; cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+            transition: all 0.2s;
+        }
+        .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
+        .path-icon { width: 20px; height: 20px; fill: #a08040; }
+        .path-name { color: #fff; font-weight: 700; font-size: 14px; }
+        .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
+
+        /* 검색 관련 */
         .sidebar-search-input {
             width: 100%; padding: 12px 10px 12px 40px; 
             background-color: #333333 !important; border: 1px solid #a08040 !important;
             border-radius: 8px; color: #ffffff !important; font-size: 16px; 
             -webkit-appearance: none; outline: none;
         }
-        .sidebar-search-input::placeholder { color: #aaaaaa !important; }
-        input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #333333 inset !important; -webkit-text-fill-color: white !important; }
-
         .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
         .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
-
         .search-results-container {
             max-height: 60vh; overflow-y: auto; margin-top: 10px;
             background-color: rgba(30, 30, 30, 0.95) !important;
@@ -198,29 +229,12 @@
         }
         .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
         .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
-        .result-type-icon { width: 24px; height: 24px; opacity: 0.9; }
 
-        .filter-panel {
-            position: fixed; bottom: 0; left: 0; width: 100%; max-height: 60vh;
-            background-color: rgba(20, 20, 20, 0.99); backdrop-filter: blur(10px);
-            border-top-left-radius: 20px; border-top-right-radius: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 3000; transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex; flex-direction: column; padding-bottom: 80px; 
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
-        }
-        .filter-panel.active { transform: translateY(0); }
-        .filter-header {
-            padding: 15px 20px; border-bottom: 1px solid #333;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .filter-title { color: white; font-weight: 700; font-size: 16px; }
-        .filter-controls { display: flex; gap: 6px; margin-top: 0; }
+        /* 필터 관련 */
+        .filter-controls { display: flex; gap: 6px; }
         .filter-control-btn {
             padding: 8px 12px; font-size: 11px; font-weight: 500; cursor: pointer;
             background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
-            white-space: nowrap; letter-spacing: -0.5px;
         }
         .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
         .filter-list-container {
@@ -238,7 +252,7 @@
         .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
         .filter-item.inactive { opacity: 0.4; }
 
-        /* 팝업 스타일 */
+        /* 팝업 관련 */
         .leaflet-popup-content-wrapper { 
             background: #ffffff !important; color: #333 !important; 
             border-radius: 12px !important; padding: 0 !important;
@@ -250,9 +264,7 @@
             top: 8px !important; right: 8px !important; color: #666 !important; font-size: 20px !important; z-index: 10;
         }
         .popup-inner { padding: 20px 15px 15px 15px; }
-        .popup-title { 
-            font-size: 18px; font-weight: 800; color: #111; margin-bottom: 5px; display: block; letter-spacing: -0.5px;
-        }
+        .popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 5px; display: block; }
         .popup-type-badge { 
             display: inline-block; font-size: 11px; color: #fff; background-color: #a08040;
             font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 12px;
@@ -276,19 +288,18 @@
             flex: 1; padding: 10px 0; border-radius: 8px; cursor: pointer; 
             font-size: 13px; font-weight: 700; border: none; color: white;
             text-align: center; text-decoration: none; display: flex;
-            align-items: center; justify-content: center; gap: 4px; transition: opacity 0.2s;
+            align-items: center; justify-content: center; gap: 4px;
         }
-        .action-btn:hover { opacity: 0.9; }
         .btn-wiki { background-color: #4a90e2; }
         .btn-complete { background-color: #2e7d32; }
         .btn-undo { background-color: #757575; }
 
         @media (min-width: 768px) {
-            .search-panel, .filter-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
+            .search-panel, .filter-panel, .path-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
             .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
             .search-panel.active { transform: translateX(-50%) translateY(0); }
-            .filter-panel { transform: translateX(-50%) translateY(100%); }
-            .filter-panel.active { transform: translateX(-50%) translateY(0); }
+            .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
+            .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
         }
     </style>
 </head>
@@ -299,7 +310,16 @@
     </div>
 
     <div class="top-right-controls">
-        <div class="glass-box" onclick="toggleClusterMode()" title="모아보기 토글">M</div>
+        <div class="glass-box" onclick="toggleClusterMode()" title="모아보기 토글">
+            <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+        </div>
+        <div class="glass-box" onclick="togglePanel('path')" title="추천 경로">
+            <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M20.2 5.9l.8-.8C21.6 4.5 22 3.7 22 2.8s-.4-1.7-1-2.3c-.6-.6-1.4-1-2.3-1-.9 0-1.7.4-2.3 1l-.8.8c-1.6 1.6-4.2 1.6-5.8 0l-.8-.8C8.4-.1 7.6-.5 6.7-.5c-.9 0-1.7.4-2.3 1-.6.6-1 1.4-1 2.3 0 .9.4 1.7 1 2.3l.8.8c.4.4.9.6 1.4.7l-3 7c-.2.5-.1 1.1.2 1.5.3.4.8.7 1.4.7h13.4c.6 0 1.1-.3 1.4-.7.3-.4.4-1 .2-1.5l-3-7c.5-.1 1-.3 1.4-.7z"/>
+            </svg>
+        </div>
     </div>
 
     <div class="bottom-ui-container">
@@ -346,15 +366,32 @@
     </div>
 
     <div id="filter-panel" class="filter-panel">
-        <div class="filter-header">
-            <span class="filter-title">필터 설정</span>
+        <div class="panel-header filter-header">
+            <span class="panel-title filter-title">필터 설정</span>
             <div class="filter-controls">
                 <button class="filter-control-btn" onclick="setAllFilters(true)">전체 켜기</button>
                 <button class="filter-control-btn" onclick="setAllFilters(false)">전체 끄기</button>
             </div>
-            <div style="color:#888; font-size:20px; cursor:pointer;" onclick="closeAllPanels()">✕</div>
+            <div class="panel-close-btn" onclick="closeAllPanels()">✕</div>
         </div>
         <div id="filter-list" class="filter-list-container"></div>
+    </div>
+
+    <div id="path-panel" class="path-panel">
+        <div class="panel-header">
+            <span class="panel-title">경로</span>
+            <div class="panel-close-btn" onclick="closeAllPanels()">✕</div>
+        </div>
+        <div class="path-list-container">
+            <div class="path-item" onclick="activatePath('gesh_route')">
+                <svg class="path-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <div class="path-info">
+                    <div class="path-name">장군사당 탐색</div>
+                    <div class="path-desc">효율적인 파밍 루트</div>
+                </div>
+            </div>
+            <button onclick="clearPath()" class="action-btn btn-undo" style="width:100%; margin-top:10px;">경로 종료</button>
+        </div>
     </div>
 
     <div id="map"></div>
@@ -363,14 +400,82 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
-        // ★ [성능 최적화] Canvas 모드 활성화 (맵 초기화 시점)
+        // 성능 최적화 옵션
         const map = L.map('map', {
             crs: L.CRS.Simple, 
             minZoom: -5, maxZoom: 2, 
             zoomControl: false, attributionControl: false,
-            preferCanvas: true, // Canvas 렌더러 우선 사용
-            wheelDebounceTime: 150 // 휠 줌 딜레이 줄임
+            preferCanvas: true,
+            wheelDebounceTime: 150 
         });
+
+        // ★ 경로 데이터 (예시 ID - 사용자가 실제 ID로 채워야 함)
+        const pathData = {
+            "gesh_route": [1, 2, 3, 4, 5, 6] // 예시 마커 ID
+        };
+        let currentPathLayer = null;
+
+        function activatePath(pathKey) {
+            clearPath(); // 기존 경로/마커 정리
+            const routeIds = pathData[pathKey];
+            if (!routeIds) return;
+
+            // 1. 기존 모든 마커 숨기기 (필터 무시)
+            for (const key in layerGroups) {
+                map.removeLayer(layerGroups[key]);
+            }
+
+            // 2. 경로 마커 및 선 생성
+            currentPathLayer = L.featureGroup();
+            const latlngs = [];
+
+            // 순서대로 마커 찾아서 추가
+            routeIds.forEach(id => {
+                const item = allMarkers.find(m => m.id === id);
+                if (item) {
+                    const latlng = item.marker.getLatLng();
+                    latlngs.push(latlng);
+                    
+                    // 마커 복제하여 추가 (기존 마커는 layerGroups에 있으므로)
+                    const markerClone = L.marker(latlng, { icon: item.marker.options.icon })
+                        .bindPopup(item.marker.getPopup().getContent());
+                    currentPathLayer.addLayer(markerClone);
+                }
+            });
+
+            // 3. 선 그리기 (금색 점선)
+            if (latlngs.length > 1) {
+                const polyline = L.polyline(latlngs, {
+                    color: '#ffd700',
+                    weight: 4,
+                    opacity: 0.8,
+                    dashArray: '10, 10',
+                    lineJoin: 'round'
+                });
+                currentPathLayer.addLayer(polyline);
+            }
+
+            // 4. 지도에 추가 및 이동
+            currentPathLayer.addTo(map);
+            if (latlngs.length > 0) {
+                map.fitBounds(currentPathLayer.getBounds(), { padding: [50, 50] });
+            }
+            
+            closeAllPanels(); // 패널 닫기
+        }
+
+        function clearPath() {
+            if (currentPathLayer) {
+                map.removeLayer(currentPathLayer);
+                currentPathLayer = null;
+            }
+            // 기존 필터 상태 복구
+            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+            for (const key in layerGroups) {
+                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
+                if (shouldShow) { layerGroups[key].addTo(map); }
+            }
+        }
 
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
@@ -420,18 +525,26 @@
         function togglePanel(type) {
             const searchPanel = document.getElementById('search-panel');
             const filterPanel = document.getElementById('filter-panel');
+            const pathPanel = document.getElementById('path-panel');
+            
+            // 모든 패널 닫기
+            searchPanel.classList.remove('active');
+            filterPanel.classList.remove('active');
+            pathPanel.classList.remove('active');
             
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-' + type).classList.add('active');
-
-            if (type === 'search') {
+            
+            if (type === 'path') {
+                pathPanel.classList.add('active'); // 경로 패널 열기
+                // 경로 버튼은 하단 네비게이션이 아니므로 별도 처리
+            } else if (type === 'search') {
                 searchPanel.classList.add('active');
-                filterPanel.classList.remove('active');
+                document.getElementById('nav-search').classList.add('active');
                 document.body.classList.add('controls-hidden');
                 setTimeout(() => document.getElementById('marker-search').focus(), 300);
             } else if (type === 'filter') {
                 filterPanel.classList.add('active');
-                searchPanel.classList.remove('active');
+                document.getElementById('nav-filter').classList.add('active');
                 document.body.classList.remove('controls-hidden');
             }
         }
@@ -439,6 +552,8 @@
         function closeAllPanels() {
             document.getElementById('search-panel').classList.remove('active');
             document.getElementById('filter-panel').classList.remove('active');
+            document.getElementById('path-panel').classList.remove('active');
+            
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-home').classList.add('active');
             document.body.classList.remove('controls-hidden');
@@ -458,17 +573,10 @@
             "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
-        // ★ [복구] 초기 버전 쥬얼 톤 컬러
         const colorMapping = {
-            "상자": "#00bfa5", 
-            "보스": "#d50000", 
-            "고양이": "#263238", 
-            "묘물": "#2e7d32", 
-            "만사록": "#ff6d00", 
-            "경계석": "#455a64", 
-            "기연": "#6a1b9a", 
-            "묘묘냥": "#c2185b", 
-            "천지록": "#1565c0"
+            "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
+            "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
+            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -563,10 +671,8 @@
                     const typeColor = colorMapping[type] || "#555";
                     if (!layerGroups[type]) {
                         layerGroups[type] = L.markerClusterGroup({
-                            // ★ [성능 최적화] 클러스터 옵션
                             disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
-                            chunkedLoading: true, chunkInterval: 100, // 렌더링 쪼개기
-                            removeOutsideVisibleBounds: true, // 화면 밖 요소 제거 (핵심)
+                            chunkedLoading: true, chunkInterval: 200,   
                             animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
                             iconCreateFunction: function(cluster) {
                                 const count = cluster.getChildCount();
@@ -641,7 +747,6 @@
                     const jumpZoom = Math.min(map.getZoom() + 3, 1); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     
-                    // ★ 클릭 시 팝업 열기 (확실하게)
                     map.once('moveend', function() {
                         item.marker.openPopup();
                     });
@@ -707,8 +812,6 @@
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
-            
-            // ★ 팝업 HTML 구조 개선
             let html = `<div class="popup-inner">`;
             html += `<span class="popup-title">${item.name}</span>`;
             html += `<div class="popup-type-badge">${item.type}</div>`;
@@ -736,7 +839,7 @@
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
             html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button>`;
-            html += `</div></div>`; // inner, container 닫기
+            html += `</div></div>`;
             return html;
         }
 

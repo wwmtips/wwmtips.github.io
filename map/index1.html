@@ -265,7 +265,7 @@
         "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp",
         "낚시대결":"ic_fish","투호대결":"ic_two","영지":"ic_camp","강호의벗":"ic_pic","유물":"ic_tr",
         "탐방":"logo","만물의울림":"ic_man","곡경심유":"ic_gk","궁술대결":"logo","기타":"logo","야외제사":"logo",
-        "무술로맺은인연":"logo", "화술논쟁":"logo"
+        "무술로맺은인연":"logo", "화술논쟁":"logo", "화술논쟁":"logo"
     };
 
        const colorMapping = {
@@ -413,7 +413,7 @@
 
                 // 개별 마커 아이콘 생성
                 const isCompleted = completedList.includes(item.id);
-                const imgName = typeMapping[item.type] || "stone"; 
+                const imgName = typeMapping[item.type] || "logo"; 
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || colorMapping["기타"];
 
@@ -421,7 +421,7 @@
                     className: isCompleted ? 'marker-completed' : '',
                     html: `<div class="pin-marker">
                                <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
-                                   <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                                   <img src="${iconPath}" onerror="this.src='../images/logo.png'">
                                </div>
                            </div>`,
                     iconSize: pinSize, 
@@ -542,7 +542,7 @@
             if (results.length === 0) { searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>'; return; }
             results.forEach(item => {
                 const row = document.createElement('div'); row.className = 'search-result-row';
-                const imgName = typeMapping[item.type] || "stone";
+                const imgName = typeMapping[item.type] || "logo";
                 row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
@@ -566,7 +566,7 @@
                 const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
                 div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
                 
-                const imgName = typeMapping[type] || "stone";
+                const imgName = typeMapping[type] || "logo";
                 div.innerHTML = `
                     <div class="filter-left-group">
                         <img src="../images/${imgName}.png" class="filter-icon-img" onerror="this.style.display='none'">

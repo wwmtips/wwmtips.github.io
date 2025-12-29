@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v19 - Path Feature)</title>
+    <title>연운 한국어 맵 (Final v21 - Path Design)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -38,11 +38,11 @@
         }
 
         /* =========================================
-           1. 핀 & 클러스터
+           ★ 1. 일반 마커 (기존 물방울 스타일 유지)
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            border-radius: 50% 50% 50% 0; /* 물방울 모양 */
+            border-radius: 50% 50% 50% 0; 
             transform: rotate(-45deg);
             background: #ffffff; 
             box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
@@ -50,26 +50,16 @@
             transition: transform 0.2s, z-index 0.2s;
             cursor: pointer; pointer-events: auto;
         }
-        
         .pin-inner-circle {
-            width: 88%; height: 88%; 
-            border-radius: 50%;
+            width: 88%; height: 88%; border-radius: 50%;
             background: var(--pin-color, #555);
             display: flex; align-items: center; justify-content: center;
         }
-        
         .pin-inner-circle img {
-            width: 70%; height: 70%; 
-            object-fit: contain; 
-            transform: rotate(45deg); /* 아이콘 정방향 */
-            opacity: 1; filter: none;
+            width: 70%; height: 70%; object-fit: contain; 
+            transform: rotate(45deg); opacity: 1; filter: none;
         }
-
-        .pin-marker:hover {
-            transform: rotate(-45deg) scale(1.2);
-            z-index: 9999;
-        }
-
+        .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
         .marker-completed .pin-inner-circle { background: #777 !important; }
         .marker-completed .pin-marker { opacity: 0.6; }
 
@@ -84,12 +74,53 @@
         .simple-cluster-marker:hover { transform: scale(1.15); z-index: 5000; }
 
         /* =========================================
-           2. UI 컨트롤 (Glass & Dark Style)
+           ★ 2. [New] 경로 마커 디자인 (첨부 이미지 스타일)
+           ========================================= */
+        .path-marker-box {
+            position: relative;
+            width: 100%; height: 100%;
+            background-color: #1c1c1c; /* 다크 그레이 배경 */
+            border-radius: 10px;       /* 둥근 사각형 */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .path-marker-box:hover {
+            transform: scale(1.15);
+            border-color: #a08040;
+            z-index: 9999;
+        }
+        
+        .path-marker-icon {
+            width: 65%; height: 65%;
+            object-fit: contain;
+            /* 이미지를 금색으로 변환하는 CSS 필터 */
+            filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
+        }
+
+        /* 순서 뱃지 (우측 하단) */
+        .path-order-badge {
+            position: absolute;
+            bottom: -6px; right: -6px;
+            background-color: #a08040;
+            color: #fff;
+            font-size: 10px; font-weight: 800;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #1c1c1c;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* =========================================
+           3. UI 컨트롤
            ========================================= */
         .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
         .top-right-controls { 
             position: fixed; top: 20px; right: 20px; z-index: 2000; 
-            display: flex; flex-direction: column; gap: 10px; /* 버튼 간격 */
+            display: flex; flex-direction: column; gap: 10px; 
             transition: opacity 0.3s; 
         }
         body.controls-hidden .top-left-controls, body.controls-hidden .top-right-controls { opacity: 0; pointer-events: none; }
@@ -105,7 +136,6 @@
         }
         .glass-select option { background-color: #1a1a1a; color: white; }
 
-        /* 공통 버튼 스타일 */
         .glass-box {
             width: 44px; height: 44px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
@@ -115,7 +145,6 @@
             transition: all 0.2s;
         }
         .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
-        .glass-box.active { background-color: #a08040; color: #fff; border-color: #fff; }
 
         .bottom-ui-container {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000;
@@ -157,7 +186,7 @@
         .nav-item.active { color: #a08040; }
 
         /* =========================================
-           4. 패널 스타일 (검색, 필터, ★ 경로)
+           4. 패널 스타일
            ========================================= */
         .search-panel, .filter-panel, .path-panel {
             position: fixed; top: 0; left: 0; width: 100%;
@@ -167,7 +196,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        /* 검색 패널 */
         .search-panel {
             padding: 15px 20px 20px 20px; box-sizing: border-box;
             border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -175,7 +203,6 @@
         }
         .search-panel.active { transform: translateY(0); }
 
-        /* 필터 패널 & 경로 패널 (바텀 시트) */
         .filter-panel, .path-panel {
             top: auto; bottom: 0; max-height: 60vh;
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -185,7 +212,6 @@
         }
         .filter-panel.active, .path-panel.active { transform: translateY(0); }
 
-        /* 공통 헤더 스타일 */
         .panel-header {
             padding: 15px 20px; border-bottom: 1px solid #333;
             display: flex; align-items: center; justify-content: space-between;
@@ -194,9 +220,7 @@
         .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; }
 
         /* 경로 리스트 */
-        .path-list-container {
-            padding: 10px 20px; overflow-y: auto;
-        }
+        .path-list-container { padding: 10px 20px; overflow-y: auto; }
         .path-item {
             padding: 15px; background-color: rgba(255, 255, 255, 0.05);
             border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
@@ -209,7 +233,7 @@
         .path-name { color: #fff; font-weight: 700; font-size: 14px; }
         .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
 
-        /* 검색 관련 */
+        /* 검색 */
         .sidebar-search-input {
             width: 100%; padding: 12px 10px 12px 40px; 
             background-color: #333333 !important; border: 1px solid #a08040 !important;
@@ -230,7 +254,7 @@
         .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
         .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
 
-        /* 필터 관련 */
+        /* 필터 */
         .filter-controls { display: flex; gap: 6px; }
         .filter-control-btn {
             padding: 8px 12px; font-size: 11px; font-weight: 500; cursor: pointer;
@@ -252,7 +276,7 @@
         .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
         .filter-item.inactive { opacity: 0.4; }
 
-        /* 팝업 관련 */
+        /* 팝업 */
         .leaflet-popup-content-wrapper { 
             background: #ffffff !important; color: #333 !important; 
             border-radius: 12px !important; padding: 0 !important;
@@ -382,16 +406,9 @@
             <span class="panel-title">경로</span>
             <div class="panel-close-btn" onclick="closeAllPanels()">✕</div>
         </div>
-        <div class="path-list-container">
-            <div class="path-item" onclick="activatePath('gesh_route')">
-                <svg class="path-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <div class="path-info">
-                    <div class="path-name">장군사당 탐색</div>
-                    <div class="path-desc">효율적인 파밍 루트</div>
-                </div>
+        <div class="path-list-container" id="path-list-dynamic">
             </div>
-            <button onclick="clearPath()" class="action-btn btn-undo" style="width:100%; margin-top:10px;">경로 종료</button>
-        </div>
+        <button onclick="clearPath()" class="action-btn btn-undo" style="margin: 10px 20px; width: calc(100% - 40px);">경로 종료</button>
     </div>
 
     <div id="map"></div>
@@ -400,7 +417,6 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
-        // 성능 최적화 옵션
         const map = L.map('map', {
             crs: L.CRS.Simple, 
             minZoom: -5, maxZoom: 2, 
@@ -409,155 +425,9 @@
             wheelDebounceTime: 150 
         });
 
-        // ★ 경로 데이터 (예시 ID - 사용자가 실제 ID로 채워야 함)
-        const pathData = {
-            "gesh_route": [1, 2, 3, 4, 5, 6] // 예시 마커 ID
-        };
+        // ★ 경로 데이터 변수 (외부 JSON 로드용)
+        let pathData = {};
         let currentPathLayer = null;
-
-        function activatePath(pathKey) {
-            clearPath(); // 기존 경로/마커 정리
-            const routeIds = pathData[pathKey];
-            if (!routeIds) return;
-
-            // 1. 기존 모든 마커 숨기기 (필터 무시)
-            for (const key in layerGroups) {
-                map.removeLayer(layerGroups[key]);
-            }
-
-            // 2. 경로 마커 및 선 생성
-            currentPathLayer = L.featureGroup();
-            const latlngs = [];
-
-            // 순서대로 마커 찾아서 추가
-            routeIds.forEach(id => {
-                const item = allMarkers.find(m => m.id === id);
-                if (item) {
-                    const latlng = item.marker.getLatLng();
-                    latlngs.push(latlng);
-                    
-                    // 마커 복제하여 추가 (기존 마커는 layerGroups에 있으므로)
-                    const markerClone = L.marker(latlng, { icon: item.marker.options.icon })
-                        .bindPopup(item.marker.getPopup().getContent());
-                    currentPathLayer.addLayer(markerClone);
-                }
-            });
-
-            // 3. 선 그리기 (금색 점선)
-            if (latlngs.length > 1) {
-                const polyline = L.polyline(latlngs, {
-                    color: '#ffd700',
-                    weight: 4,
-                    opacity: 0.8,
-                    dashArray: '10, 10',
-                    lineJoin: 'round'
-                });
-                currentPathLayer.addLayer(polyline);
-            }
-
-            // 4. 지도에 추가 및 이동
-            currentPathLayer.addTo(map);
-            if (latlngs.length > 0) {
-                map.fitBounds(currentPathLayer.getBounds(), { padding: [50, 50] });
-            }
-            
-            closeAllPanels(); // 패널 닫기
-        }
-
-        function clearPath() {
-            if (currentPathLayer) {
-                map.removeLayer(currentPathLayer);
-                currentPathLayer = null;
-            }
-            // 기존 필터 상태 복구
-            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-            for (const key in layerGroups) {
-                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-                if (shouldShow) { layerGroups[key].addTo(map); }
-            }
-        }
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => { console.log(err); });
-            } else {
-                if (document.exitFullscreen) { document.exitFullscreen(); }
-            }
-        }
-
-        function fitMapToBounds() {
-            if (currentConfig && currentConfig.w && currentConfig.h) {
-                map.fitBounds([[0, 0], [currentConfig.h, currentConfig.w]], { padding: [20, 20] });
-            }
-        }
-
-        function exportCompletedPins() {
-            const storageKey = `completed_${currentMapId}`;
-            const data = localStorage.getItem(storageKey);
-            if (!data || data === "[]") { alert("저장할 완료 기록이 없습니다."); return; }
-            const blob = new Blob([data], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url; a.download = `completed_markers_${currentMapId}.json`;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function importCompletedPins(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const json = JSON.parse(e.target.result);
-                    if (!Array.isArray(json)) throw new Error("Invalid format");
-                    if (confirm(`불러온 기록으로 현재 완료 상태를 덮어쓰시겠습니까? (${json.length}개)`)) {
-                        const storageKey = `completed_${currentMapId}`;
-                        localStorage.setItem(storageKey, JSON.stringify(json));
-                        location.reload();
-                    }
-                } catch (err) { alert("파일 형식이 올바르지 않습니다."); }
-                input.value = ""; 
-            };
-            reader.readAsText(file);
-        }
-
-        function togglePanel(type) {
-            const searchPanel = document.getElementById('search-panel');
-            const filterPanel = document.getElementById('filter-panel');
-            const pathPanel = document.getElementById('path-panel');
-            
-            // 모든 패널 닫기
-            searchPanel.classList.remove('active');
-            filterPanel.classList.remove('active');
-            pathPanel.classList.remove('active');
-            
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
-            if (type === 'path') {
-                pathPanel.classList.add('active'); // 경로 패널 열기
-                // 경로 버튼은 하단 네비게이션이 아니므로 별도 처리
-            } else if (type === 'search') {
-                searchPanel.classList.add('active');
-                document.getElementById('nav-search').classList.add('active');
-                document.body.classList.add('controls-hidden');
-                setTimeout(() => document.getElementById('marker-search').focus(), 300);
-            } else if (type === 'filter') {
-                filterPanel.classList.add('active');
-                document.getElementById('nav-filter').classList.add('active');
-                document.body.classList.remove('controls-hidden');
-            }
-        }
-
-        function closeAllPanels() {
-            document.getElementById('search-panel').classList.remove('active');
-            document.getElementById('filter-panel').classList.remove('active');
-            document.getElementById('path-panel').classList.remove('active');
-            
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-home').classList.add('active');
-            document.body.classList.remove('controls-hidden');
-        }
 
         const mapsDB = {
             "qinghe": { name: "청하", img: "../map/images/qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
@@ -624,8 +494,99 @@
                 cachedData = data;
                 createMarkers(data);
                 generateSidebar(data);
+                loadPathData(); // 경로 데이터 로드
             })
             .catch(err => { console.error(err); });
+
+        // ★ 외부 path.json 로드
+        function loadPathData() {
+            fetch('../json/path.json')
+                .then(res => res.json())
+                .then(data => {
+                    pathData = data;
+                    const container = document.getElementById('path-list-dynamic');
+                    container.innerHTML = '';
+                    
+                    for (const [key, info] of Object.entries(pathData)) {
+                        const div = document.createElement('div');
+                        div.className = 'path-item';
+                        div.onclick = () => activatePath(key);
+                        div.innerHTML = `
+                            <svg class="path-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <div class="path-info">
+                                <div class="path-name">${info.title}</div>
+                                <div class="path-desc">${info.desc}</div>
+                            </div>`;
+                        container.appendChild(div);
+                    }
+                })
+                .catch(err => console.log('Path data error:', err));
+        }
+
+        function activatePath(pathKey) {
+            clearPath();
+            const routeData = pathData[pathKey];
+            if (!routeData || !routeData.markers) return;
+            const routeIds = routeData.markers;
+
+            // 모든 마커 숨기기
+            for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
+
+            currentPathLayer = L.featureGroup();
+            const latlngs = [];
+
+            routeIds.forEach((id, index) => {
+                const item = allMarkers.find(m => m.id === id);
+                if (item) {
+                    const latlng = item.marker.getLatLng();
+                    latlngs.push(latlng);
+                    
+                    const itemIconPath = `../images/${typeMapping[item.type] || 'stone'}.png`;
+                    
+                    // ★ [New] 경로 전용 마커 (둥근 사각형 + 금색 아이콘)
+                    const pathIcon = L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div class="path-marker-box">
+                                   <img src="${itemIconPath}" class="path-marker-icon">
+                                   <div class="path-order-badge">${index + 1}</div>
+                               </div>`,
+                        iconSize: [34, 34], // 카드형 사이즈
+                        iconAnchor: [17, 17],
+                        popupAnchor: [0, -20]
+                    });
+
+                    const markerClone = L.marker(latlng, { icon: pathIcon })
+                        .bindPopup(item.marker.getPopup().getContent());
+                    currentPathLayer.addLayer(markerClone);
+                }
+            });
+
+            // 금색 선 연결
+            if (latlngs.length > 1) {
+                const polyline = L.polyline(latlngs, {
+                    color: '#a08040', weight: 4, opacity: 0.9, dashArray: '5, 10', lineJoin: 'round'
+                });
+                currentPathLayer.addLayer(polyline);
+            }
+
+            currentPathLayer.addTo(map);
+            if (latlngs.length > 0) {
+                map.fitBounds(currentPathLayer.getBounds(), { padding: [80, 80] });
+            }
+            closeAllPanels();
+        }
+
+        function clearPath() {
+            if (currentPathLayer) {
+                map.removeLayer(currentPathLayer);
+                currentPathLayer = null;
+            }
+            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+            for (const key in layerGroups) {
+                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
+                if (shouldShow) { layerGroups[key].addTo(map); }
+            }
+        }
 
         window.toggleClusterMode = function() {
             isClusterOn = !isClusterOn;
@@ -699,20 +660,6 @@
                 const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
                 if (shouldShow) { layerGroups[key].addTo(map); }
             }
-
-            const targetId = urlParams.get('marker');
-            if (targetId) {
-                const target = allMarkers.find(m => m.id == targetId);
-                if (target) {
-                    if (!map.hasLayer(layerGroups[target.type])) map.addLayer(layerGroups[target.type]);
-                    if (isClusterOn && layerGroups[target.type].zoomToShowLayer) {
-                        layerGroups[target.type].zoomToShowLayer(target.marker, function() { target.marker.openPopup(); });
-                    } else {
-                        map.setView(target.marker.getLatLng(), 0);
-                        setTimeout(() => target.marker.openPopup(), 500);
-                    }
-                }
-            }
         }
 
         function saveFilterState() {
@@ -743,7 +690,6 @@
                 
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
-                    
                     const jumpZoom = Math.min(map.getZoom() + 3, 1); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     
@@ -757,89 +703,27 @@
             });
         });
 
-        const filterList = document.getElementById('filter-list');
-        function generateSidebar(data) {
-            filterList.innerHTML = '';
-            const counts = {};
-            data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
-
-            for (const [type, count] of Object.entries(counts)) {
-                const div = document.createElement('div');
-                const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
-                div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
-                const imgName = typeMapping[type] || "stone";
-                div.innerHTML = `
-                    <div class="filter-left-group">
-                        <img src="../images/${imgName}.png" class="filter-icon-img" onerror="this.style.display='none'">
-                        <span class="filter-text-name">${type}</span>
-                    </div>
-                    <span class="filter-count">${count}</span>`;
-                div.onclick = function() {
-                    const isNowActive = div.classList.contains('active');
-                    if (isNowActive) {
-                        div.classList.remove('active'); div.classList.add('inactive');
-                        toggleLayer(type, false);
-                    } else {
-                        div.classList.remove('inactive'); div.classList.add('active');
-                        toggleLayer(type, true);
-                    }
-                    saveFilterState();
-                };
-                filterList.appendChild(div);
-            }
-        }
-
-        function toggleLayer(type, isChecked) {
-            if (isChecked) { if (layerGroups[type]) map.addLayer(layerGroups[type]); } 
-            else { if (layerGroups[type]) map.removeLayer(layerGroups[type]); }
-        }
-
-        function setAllFilters(status) {
-            const items = document.querySelectorAll('.filter-item');
-            items.forEach(div => {
-                const typeName = div.querySelector('.filter-text-name').innerText;
-                if (status) {
-                    div.classList.remove('inactive'); div.classList.add('active');
-                    toggleLayer(typeName, true);
-                } else {
-                    div.classList.remove('active'); div.classList.add('inactive');
-                    toggleLayer(typeName, false);
-                }
-            });
-            saveFilterState();
-        }
-
         function generatePopupContent(item, storageKey) {
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
-            let html = `<div class="popup-inner">`;
-            html += `<span class="popup-title">${item.name}</span>`;
-            html += `<div class="popup-type-badge">${item.type}</div>`;
+            let html = `<div class="popup-inner"><span class="popup-title">${item.name}</span><div class="popup-type-badge">${item.type}</div>`;
             
             if (item.image) {
                 const ytId = getYouTubeId(item.image);
                 if (ytId) {
-                    html += `<div class="popup-youtube-container">
-                                <iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe>
-                             </div>`;
+                    html += `<div class="popup-youtube-container"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>`;
                 } else {
                     html += `<img src="${item.image}" class="popup-img" alt="${item.name}">`;
                 }
             }
-
             if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
             
-            html += `<div class="btn-container">`;
-            html += `<button onclick="shareMarker(${item.id})" class="action-btn btn-wiki">🔗 공유</button>`;
-            
-            if (item.link) {
-                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">📖 공략</a>`;
-            }
+            html += `<div class="btn-container"><button onclick="shareMarker(${item.id})" class="action-btn btn-wiki">🔗 공유</button>`;
+            if (item.link) { html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">📖 공략</a>`; }
             
             const btnText = isCompleted ? "취소" : "완료";
             const btnClass = isCompleted ? "btn-undo" : "btn-complete";
-            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button>`;
-            html += `</div></div>`;
+            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div></div>`;
             return html;
         }
 
@@ -848,11 +732,8 @@
             const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
             if (!target) return;
             const marker = target.marker;
-            if (index > -1) { 
-                list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); 
-            } else { 
-                list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); 
-            }
+            if (index > -1) { list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); } 
+            else { list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); }
             localStorage.setItem(storageKey, JSON.stringify(list)); 
             marker.closePopup(); marker.openPopup();
         };
@@ -861,48 +742,6 @@
             const url = new URL(window.location.href);
             url.searchParams.set('marker', id);
             copyToClipboard(url.toString());
-        };
-
-        if (isDevMode) {
-            map.on('click', function(e) {
-                const y = Math.round(e.latlng.lat);
-                const x = Math.round(e.latlng.lng);
-                const content = `
-                    <div class="input-group" style="padding:10px;">
-                        <h4 style="margin:0 0 10px 0; color:#a08040;">새 위치 기록</h4>
-                        <label style="display:block;">이름</label> <input type="text" id="input_name" style="width:100%; margin-bottom:5px;">
-                        <label style="display:block;">종류</label> 
-                        <select id="input_type" onchange="autoFillDesc(this)" style="width:100%; margin-bottom:5px;">                        
-                            <option value="상자">상자</option>
-                            <option value="경계석">경계석</option> 
-                            <option value="묘묘냥">묘묘냥</option> 
-                            <option value="묘물">묘물</option>                           
-                            <option value="고양이">고양이</option> 
-                            <option value="만사록">만사록</option>
-                        </select>
-                        <label style="display:block;">설명</label> <textarea id="input_desc" style="width:100%; height:40px; margin-bottom:5px;"></textarea>
-                        <label style="display:block;">링크</label> <input type="text" id="input_link" style="width:100%; margin-bottom:5px;">
-                        <label style="display:block;">사진</label> <input type="text" id="input_image" style="width:100%; margin-bottom:5px;">
-                        <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})" style="width:100%; padding:8px; background:#a08040; color:white; border:none; border-radius:4px;">JSON 복사</button>
-                    </div>`;
-                L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
-                setTimeout(() => document.getElementById('input_name')?.focus(), 100);
-            });
-        }
-
-        window.autoFillDesc = function(selectElement) {
-            const descInput = document.getElementById('input_desc');
-            const titleInput = document.getElementById('input_name');
-            if (selectElement.value === '고양이') {
-                descInput.value = '귀여운 고양이다';
-            } else if (selectElement.value === '묘묘냥') {
-                descInput.value = '박식 스탯을 위해 필수 진행';
-                titleInput.value ='묘묘냥';
-            } else if (descInput.value === '귀여운 고양이다') {
-                descInput.value = '';
-            }else if (selectElement.value === '상자') {
-                titleInput.value ='상자';
-            }
         };
 
         function getYouTubeId(url) {

@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v29 - Robust Fix)</title>
+    <title>연운 한국어 맵 (Final v30 - Fail Safe)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -22,9 +22,15 @@
         #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
+        /* 지도 다크 필터 */
+        .leaflet-image-layer {
+            filter: brightness(0.6) contrast(1.2) saturate(0.85);
+            transition: filter 0.5s ease;
+        }
+
         /* UI 컨테이너는 클릭 통과, 자식 요소는 클릭 가능 */
         .top-left-controls, .top-right-controls, .bottom-ui-container {
-            z-index: 9000 !important; 
+            z-index: 90000 !important; 
             pointer-events: none !important; 
         }
         
@@ -32,20 +38,15 @@
         .glass-box, .glass-select, .nav-item, .glass-group-btn, 
         .glass-single-btn, .sidebar-search-input, .panel-close-btn, 
         .path-item, .search-result-row, .filter-control-btn, .filter-item,
-        .action-btn, .search-panel, .filter-panel, .path-panel {
+        .action-btn {
             pointer-events: auto !important;
             cursor: pointer !important;
         }
 
-        /* 패널들은 맵보다 훨씬 위에 */
+        /* ★ 패널들을 최상위로 올림 */
         .search-panel, .filter-panel, .path-panel {
-            z-index: 10000 !important;
-        }
-
-        /* 지도 다크 필터 */
-        .leaflet-image-layer {
-            filter: brightness(0.6) contrast(1.2) saturate(0.85);
-            transition: filter 0.5s ease;
+            z-index: 100001 !important; /* 맵, 컨트롤보다 무조건 위에 */
+            pointer-events: auto !important;
         }
 
         /* =========================================
@@ -83,7 +84,7 @@
         }
 
         /* =========================================
-           ★ 3. 경로 마커 (카드형)
+           ★ 3. 경로 마커 (카드형 - 요청 디자인)
            ========================================= */
         .path-marker-box {
             position: relative; width: 100%; height: 100%;
@@ -96,6 +97,7 @@
         .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
         .path-marker-icon {
             width: 60%; height: 60%; object-fit: contain;
+            /* 금색 필터 적용 */
             filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
         }
         .path-order-badge {
@@ -222,7 +224,7 @@
         }
         .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
         
-        /* ★ [New] 물방울 핀(Teardrop) 아이콘 */
+        /* ★ [New] 심플한 물방울 핀 아이콘 */
         .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
         
         .path-name { color: #fff; font-weight: 700; font-size: 14px; }
@@ -487,7 +489,6 @@
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 
-        // 맵 선택 드롭다운 채우기
         const mapSelect = document.getElementById('main-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -510,15 +511,15 @@
                 .then(data => {
                     cachedData = data;
                     createMarkers(data);
-                    generateSidebar(data);
+                    generateSidebar(data); // 데이터 성공 시 필터 생성
                     loadPathData();
                 })
                 .catch(err => { 
                     console.warn("Map data failed, using sample data:", err);
-                    // 실패 시 샘플 데이터로 초기화하여 버튼 기능 유지
+                    // 실패 시 샘플 데이터로 복구하여 기능 활성화
                     cachedData = sampleData;
                     createMarkers(sampleData);
-                    generateSidebar(sampleData);
+                    generateSidebar(sampleData); // 샘플 데이터로 필터 생성
                     loadPathData(true); // 샘플 경로 로드
                 });
         });
@@ -536,13 +537,14 @@
                 .then(data => renderPathList(data))
                 .catch(err => {
                     console.log("Path load failed, using sample:", err);
-                    renderPathList(samplePathData);
+                    renderPathList(samplePathData); // 실패 시 샘플 경로 로드
                 });
         }
 
         function renderPathList(data) {
             pathData = data;
             const container = document.getElementById('path-list-dynamic');
+            if(!container) return;
             container.innerHTML = '';
             
             for (const [key, info] of Object.entries(pathData)) {
@@ -649,6 +651,7 @@
             const filterPanel = document.getElementById('filter-panel');
             const pathPanel = document.getElementById('path-panel');
             
+            // 초기화
             searchPanel.classList.remove('active');
             filterPanel.classList.remove('active');
             pathPanel.classList.remove('active');
@@ -688,71 +691,123 @@
 
             const markersByType = {}; 
 
-            data.forEach(item => {
-                if (!markersByType[item.type]) { markersByType[item.type] = []; }
-                const isCompleted = completedList.includes(item.id);
-                const imgName = typeMapping[item.type] || "stone"; 
-                const iconPath = `../images/${imgName}.png`;
-                const pinColor = colorMapping[item.type] || "#555";
+            try {
+                data.forEach(item => {
+                    if (!markersByType[item.type]) { markersByType[item.type] = []; }
+                    const isCompleted = completedList.includes(item.id);
+                    const imgName = typeMapping[item.type] || "stone"; 
+                    const iconPath = `../images/${imgName}.png`;
+                    const pinColor = colorMapping[item.type] || "#555";
 
-                const pinIcon = L.divIcon({
-                    className: isCompleted ? 'marker-completed' : '',
-                    html: `<div class="pin-marker">
-                               <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
-                                   <img src="${iconPath}" onerror="this.src='../images/stone.png'">
-                               </div>
-                           </div>`,
-                    iconSize: pinSize, 
-                    iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9],
-                    popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    const pinIcon = L.divIcon({
+                        className: isCompleted ? 'marker-completed' : '',
+                        html: `<div class="pin-marker">
+                                <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
+                                    <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                                </div>
+                            </div>`,
+                        iconSize: pinSize, 
+                        iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9],
+                        popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    });
+
+                    const marker = L.marker([item.y, item.x], { icon: pinIcon });
+                    marker.bindPopup(() => generatePopupContent(item, storageKey));
+                    markersByType[item.type].push(marker);
+                    allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
                 });
 
-                const marker = L.marker([item.y, item.x], { icon: pinIcon });
-                marker.bindPopup(() => generatePopupContent(item, storageKey));
-                markersByType[item.type].push(marker);
-                allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
-            });
-
-            for (const type in markersByType) {
-                const markersArray = markersByType[type];
-                if (isClusterOn) {
-                    const typeColor = colorMapping[type] || "#555";
-                    if (!layerGroups[type]) {
-                        layerGroups[type] = L.markerClusterGroup({
-                            disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
-                            chunkedLoading: true, chunkInterval: 200,   
-                            animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
-                            iconCreateFunction: function(cluster) {
-                                const count = cluster.getChildCount();
-                                const countText = count > 99 ? '99+' : count;
-                                const html = `
-                                    <div class="simple-cluster-marker" style="background-color: ${typeColor};">
-                                        ${countText}
-                                    </div>`;
-                                return L.divIcon({
-                                    html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
-                                });
-                            }
-                        });
+                for (const type in markersByType) {
+                    const markersArray = markersByType[type];
+                    if (isClusterOn) {
+                        const typeColor = colorMapping[type] || "#555";
+                        if (!layerGroups[type]) {
+                            layerGroups[type] = L.markerClusterGroup({
+                                disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
+                                chunkedLoading: true, chunkInterval: 200,   
+                                animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
+                                iconCreateFunction: function(cluster) {
+                                    const count = cluster.getChildCount();
+                                    const countText = count > 99 ? '99+' : count;
+                                    const html = `
+                                        <div class="simple-cluster-marker" style="background-color: ${typeColor};">
+                                            ${countText}
+                                        </div>`;
+                                    return L.divIcon({
+                                        html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
+                                    });
+                                }
+                            });
+                        }
+                        layerGroups[type].addLayers(markersArray);
+                    } else {
+                        if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
+                        markersArray.forEach(m => layerGroups[type].addLayer(m));
                     }
-                    layerGroups[type].addLayers(markersArray);
-                } else {
-                    if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
-                    markersArray.forEach(m => layerGroups[type].addLayer(m));
                 }
-            }
 
-            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-            for (const key in layerGroups) {
-                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-                if (shouldShow) { layerGroups[key].addTo(map); }
-            }
+                const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+                for (const key in layerGroups) {
+                    const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
+                    if (shouldShow) { layerGroups[key].addTo(map); }
+                }
+            } catch (e) { console.error("Marker creation error:", e); }
         }
 
-        function saveFilterState() {
-            const status = {};
-            for (const key in layerGroups) { status[key] = map.hasLayer(layerGroups[key]); }
-            localStorage.setItem('map_filter_settings', JSON.stringify(status));
+        function generateSidebar(data) {
+            const filterList = document.getElementById('filter-list');
+            if(!filterList) return;
+            filterList.innerHTML = '';
+            
+            try {
+                const counts = {};
+                data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
+
+                for (const [type, count] of Object.entries(counts)) {
+                    const div = document.createElement('div');
+                    const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
+                    div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
+                    const imgName = typeMapping[type] || "stone";
+                    div.innerHTML = `
+                        <div class="filter-left-group">
+                            <img src="../images/${imgName}.png" class="filter-icon-img" onerror="this.style.display='none'">
+                            <span class="filter-text-name">${type}</span>
+                        </div>
+                        <span class="filter-count">${count}</span>`;
+                    div.onclick = function() {
+                        const isNowActive = div.classList.contains('active');
+                        if (isNowActive) {
+                            div.classList.remove('active'); div.classList.add('inactive');
+                            toggleLayer(type, false);
+                        } else {
+                            div.classList.remove('inactive'); div.classList.add('active');
+                            toggleLayer(type, true);
+                        }
+                        saveFilterState();
+                    };
+                    filterList.appendChild(div);
+                }
+            } catch (e) { console.error("Sidebar generation error:", e); }
+        }
+
+        function toggleLayer(type, isChecked) {
+            if (isChecked) { if (layerGroups[type]) map.addLayer(layerGroups[type]); } 
+            else { if (layerGroups[type]) map.removeLayer(layerGroups[type]); }
+        }
+
+        function setAllFilters(status) {
+            const items = document.querySelectorAll('.filter-item');
+            items.forEach(div => {
+                const typeName = div.querySelector('.filter-text-name').innerText;
+                if (status) {
+                    div.classList.remove('inactive'); div.classList.add('active');
+                    toggleLayer(typeName, true);
+                } else {
+                    div.classList.remove('active'); div.classList.add('inactive');
+                    toggleLayer(typeName, false);
+                }
+            });
+            saveFilterState();
         }
 
         const searchInput = document.getElementById('marker-search');

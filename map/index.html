@@ -1121,7 +1121,31 @@
                     console.error("현재 맵 데이터를 찾을 수 없습니다.");
                 }
 
-                loadPathData(false, targetPath);
+                // ★★★ [수정됨] URL에 marker 파라미터가 있으면 해당 위치로 점프 ★★★
+            const targetMarkerId = urlParams.get('marker');
+            // 경로 모드가 아닐 때만 여기서 바로 점프 (경로 모드는 activatePath에서 처리)
+            if (targetMarkerId && !targetPath) {
+                const targetItem = allMarkers.find(m => m.id == targetMarkerId);
+                if (targetItem) {
+                    // 클러스터 모드인지 확인하여 처리
+                    const group = layerGroups[targetItem.type];
+                    if (isClusterOn && group && group.zoomToShowLayer) {
+                        // 클러스터 내부에 숨어있다면 펼치면서 이동
+                        group.zoomToShowLayer(targetItem.marker, function() {
+                            targetItem.marker.openPopup();
+                        });
+                    } else {
+                        // 클러스터가 아니면 바로 이동 (줌 레벨 0)
+                        map.flyTo(targetItem.marker.getLatLng(), 0, { animate: true, duration: 1.0 });
+                        map.once('moveend', function() {
+                            targetItem.marker.openPopup();
+                        });
+                    }
+                }
+            }
+            // ★★★ 수정 끝 ★★★
+
+            loadPathData(false, targetPath);
             })
             .catch(err => { 
                 console.warn("데이터 로드 실패, 샘플 데이터 사용:", err);

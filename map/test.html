@@ -1139,14 +1139,28 @@
                     
                     // ★ [New] Dev Mode: 녹화 중이면 클릭 시 추가
                     marker.on('click', () => {
-                        if (devRecording) {
-                            devPathList.push({ id: item.id, map: currentMapId });
-                            L.DomUtil.addClass(marker._icon, 'dev-selected');
-                            document.getElementById('dev-count').innerText = devPathList.length;
-                        } else {
-                            // 일반 모드에서는 팝업 열기 (기본 동작은 bindPopup이 알아서 함)
-                        }
-                    });
+    if (devRecording) {
+        // 이미 선택된 마커인지 확인 (id와 map이 모두 일치하는지 체크)
+        const existingIndex = devPathList.findIndex(item => item.id === item.id && item.map === currentMapId);
+
+        if (existingIndex > -1) {
+            // 1. 이미 존재하면 배열에서 삭제
+            devPathList.splice(existingIndex, 1);
+            // 2. 선택 시각 효과(클래스) 제거
+            L.DomUtil.removeClass(marker._icon, 'dev-selected');
+        } else {
+            // 1. 존재하지 않으면 배열에 추가
+            devPathList.push({ id: item.id, map: currentMapId });
+            // 2. 선택 시각 효과(클래스) 추가
+            L.DomUtil.addClass(marker._icon, 'dev-selected');
+        }
+
+        // 3. 화면의 카운트 업데이트
+        document.getElementById('dev-count').innerText = devPathList.length;
+    } else {
+        // 일반 모드에서는 기존처럼 팝업 동작
+    }
+});
 
                     marker.bindPopup(() => generatePopupContent(item, storageKey));
                     markersByType[item.type].push(marker);

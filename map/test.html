@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v29 - Pin Icon)</title>
+    <title>연운 한국어 맵 (Final v29 - Robust Fix)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -22,19 +22,24 @@
         #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
-        /* UI 컨테이너는 클릭 통과 */
+        /* UI 컨테이너는 클릭 통과, 자식 요소는 클릭 가능 */
         .top-left-controls, .top-right-controls, .bottom-ui-container {
-            z-index: 99999 !important; 
+            z-index: 9000 !important; 
             pointer-events: none !important; 
         }
         
-        /* 버튼과 패널은 클릭 활성화 */
+        /* 버튼, 입력창, 패널 등은 클릭 활성화 */
         .glass-box, .glass-select, .nav-item, .glass-group-btn, 
         .glass-single-btn, .sidebar-search-input, .panel-close-btn, 
         .path-item, .search-result-row, .filter-control-btn, .filter-item,
         .action-btn, .search-panel, .filter-panel, .path-panel {
             pointer-events: auto !important;
             cursor: pointer !important;
+        }
+
+        /* 패널들은 맵보다 훨씬 위에 */
+        .search-panel, .filter-panel, .path-panel {
+            z-index: 10000 !important;
         }
 
         /* 지도 다크 필터 */
@@ -48,7 +53,7 @@
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            border-radius: 50% 50% 50% 0; 
+            border-radius: 50% 50% 50% 0; /* 물방울 모양 */
             transform: rotate(-45deg);
             background: #ffffff; 
             box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
@@ -78,7 +83,7 @@
         }
 
         /* =========================================
-           3. 경로 마커 (카드형)
+           ★ 3. 경로 마커 (카드형)
            ========================================= */
         .path-marker-box {
             position: relative; width: 100%; height: 100%;
@@ -181,7 +186,6 @@
         .search-panel, .filter-panel, .path-panel {
             position: fixed; top: 0; left: 0; width: 100%;
             background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
-            z-index: 10000; /* 맵보다 높게 */
             transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; flex-direction: column;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -218,7 +222,7 @@
         }
         .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
         
-        /* ★ [New] 단순하고 직관적인 물방울 핀 아이콘 */
+        /* ★ [New] 물방울 핀(Teardrop) 아이콘 */
         .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
         
         .path-name { color: #fff; font-weight: 700; font-size: 14px; }
@@ -313,6 +317,12 @@
             .search-panel.active { transform: translateX(-50%) translateY(0); }
             .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
             .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
+        }
+        
+        /* 버튼 클릭 안될 때 강제 처리용 클래스 */
+        body.controls-hidden .top-left-controls, 
+        body.controls-hidden .top-right-controls { 
+            opacity: 0; pointer-events: none !important; 
         }
     </style>
 </head>
@@ -490,26 +500,28 @@
             window.location.search = `?id=${nextId}`;
         };
 
-        // ★ [데이터 로드 로직 강화]
-        fetch(currentConfig.json)
-            .then(res => {
-                if (!res.ok) throw new Error("JSON load failed");
-                return res.json();
-            })
-            .then(data => {
-                cachedData = data;
-                createMarkers(data);
-                generateSidebar(data);
-                loadPathData();
-            })
-            .catch(err => { 
-                console.warn("Map data failed, using sample data:", err);
-                // 실패 시 샘플 데이터로 초기화하여 버튼 기능 유지
-                cachedData = sampleData;
-                createMarkers(sampleData);
-                generateSidebar(sampleData);
-                loadPathData(true); // 샘플 경로 로드
-            });
+        // ★ [안전한 데이터 로드 시작점]
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch(currentConfig.json)
+                .then(res => {
+                    if (!res.ok) throw new Error("JSON load failed");
+                    return res.json();
+                })
+                .then(data => {
+                    cachedData = data;
+                    createMarkers(data);
+                    generateSidebar(data);
+                    loadPathData();
+                })
+                .catch(err => { 
+                    console.warn("Map data failed, using sample data:", err);
+                    // 실패 시 샘플 데이터로 초기화하여 버튼 기능 유지
+                    cachedData = sampleData;
+                    createMarkers(sampleData);
+                    generateSidebar(sampleData);
+                    loadPathData(true); // 샘플 경로 로드
+                });
+        });
 
         function loadPathData(useSample = false) {
             if (useSample) {

@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v43 - Clean Share)</title>
+    <title>연운 한국어 맵 (Final v45 - Dev Tools)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     
     <style>
         /* =========================================
-           1. 기본 설정 및 클릭 문제 해결
+           1. 기본 설정
            ========================================= */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
         body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
@@ -27,9 +27,10 @@
             transition: filter 0.5s ease;
         }
 
-        /* UI 컨테이너 (클릭 통과) */
+        /* UI 컨테이너 */
         .top-left-controls, .top-right-controls, 
-        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls {
+        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls,
+        .dev-controls { /* Dev 컨트롤 추가 */
             position: fixed; z-index: 90000 !important; 
             pointer-events: none !important; 
             display: flex; flex-direction: column; gap: 8px;
@@ -44,8 +45,26 @@
             bottom: 25px; left: 70px; right: 70px;
             justify-content: center; align-items: center;
         }
+
+        /* ★ [New] 개발자 패널 스타일 */
+        .dev-controls {
+            top: 15px; left: 50%; transform: translateX(-50%);
+            flex-direction: row; display: none; /* 기본 숨김 */
+        }
+        .dev-controls.active { display: flex; }
         
-        /* 클릭 활성화 대상 */
+        .dev-btn {
+            background: rgba(0, 0, 0, 0.8); border: 1px solid #ff4444; color: #ff4444;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 12px;
+            cursor: pointer; pointer-events: auto !important;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .dev-btn.recording { background: #ff4444; color: white; animation: pulse 1.5s infinite; }
+        .dev-btn:hover { transform: scale(1.05); }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        /* 공통 클릭 활성화 */
         .glass-box, .glass-select, .glass-group-btn, .glass-single-btn,
         .sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
         .filter-control-btn, .filter-item, .action-btn, 
@@ -56,9 +75,7 @@
         }
 
         /* 패널 Z-index */
-        .search-panel, .filter-panel, .path-panel {
-            z-index: 100001 !important;
-        }
+        .search-panel, .filter-panel, .path-panel { z-index: 100001 !important; }
 
         /* =========================================
            2. UI 디자인 (Glass Style)
@@ -117,14 +134,12 @@
         .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
         .icon-svg { width: 20px; height: 20px; fill: currentColor; }
 
-        /* 저장/불러오기 팝업 메뉴 */
         .save-load-popup {
             position: absolute; bottom: 50px; left: 0;
             background-color: rgba(20, 20, 20, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 5px;
+            border-radius: 12px; padding: 5px;
             display: flex; flex-direction: column; gap: 2px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             width: 140px;
@@ -166,6 +181,13 @@
         .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
         .marker-completed .pin-inner-circle { background: #555 !important; }
         .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
+
+        /* Dev 모드 선택된 마커 (반짝임) */
+        .dev-selected .pin-marker {
+            background-color: #00e5ff !important;
+            transform: rotate(-45deg) scale(1.1);
+            box-shadow: 0 0 10px #00e5ff;
+        }
 
         .simple-cluster-marker {
             width: 100%; height: 100%; border-radius: 50%; 
@@ -267,10 +289,19 @@
         }
         .search-result-row {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 10px; border-bottom: 1px solid #444; cursor: pointer;
+            padding: 10px 12px; border-bottom: 1px solid #444; cursor: pointer; gap: 12px;
         }
-        .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
-        .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
+        .search-result-row:hover { background-color: rgba(255,255,255,0.05); }
+        .result-info { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+        .result-name { 
+            color: #a08040; font-weight: 700; font-size: 14px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .result-desc { 
+            color: #888; font-size: 11px; margin-top: 2px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .result-type-icon { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; opacity: 0.8; }
 
         .filter-controls { display: flex; gap: 6px; }
         .filter-control-btn {
@@ -293,47 +324,6 @@
         .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
         .filter-item.inactive { opacity: 0.4; }
 
-        /* 팝업 */
-        .leaflet-popup-content-wrapper { 
-            background: #ffffff !important; color: #333 !important; 
-            border-radius: 12px !important; padding: 0 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important; overflow: hidden;
-        }
-        .leaflet-popup-content { margin: 0 !important; width: 280px !important; text-align: center; line-height: 1.5; }
-        .leaflet-popup-tip { background: #ffffff !important; }
-        .leaflet-container a.leaflet-popup-close-button {
-            top: 8px !important; right: 8px !important; color: #666 !important; font-size: 20px !important; z-index: 10;
-        }
-        .popup-inner { padding: 20px 15px 15px 15px; }
-        .popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 5px; display: block; }
-        .popup-type-badge { 
-            display: inline-block; font-size: 11px; color: #fff; background-color: #a08040;
-            font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 12px;
-        }
-        .popup-desc { 
-            font-size: 14px; color: #444; background: #f5f5f7; 
-            padding: 12px; border-radius: 8px; margin: 0 0 12px 0; 
-            text-align: left; word-break: keep-all; line-height: 1.4;
-        }
-        .popup-img { 
-            width: 100%; height: auto; max-height: 200px; object-fit: cover;
-            border-radius: 8px; margin-bottom: 10px; display: block; border: 1px solid #eee;
-        }
-        .popup-youtube-container {
-            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
-            margin-bottom: 10px; border-radius: 8px; background: #000;
-        }
-        .popup-youtube-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .btn-container { display: flex; gap: 8px; margin-top: 5px; }
-        .action-btn { 
-            flex: 1; padding: 10px 0; border-radius: 8px; font-size: 13px; font-weight: 700; 
-            border: none; color: white; text-align: center; text-decoration: none; 
-            display: flex; align-items: center; justify-content: center; gap: 4px;
-        }
-        .btn-wiki { background-color: #4a90e2; }
-        .btn-complete { background-color: #2e7d32; }
-        .btn-undo { background-color: #757575; }
-
         @media (min-width: 768px) {
             .search-panel, .filter-panel, .path-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
             .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
@@ -347,6 +337,11 @@
 
     <div class="top-left-controls">
         <select id="main-map-select" class="glass-select"></select>
+    </div>
+
+    <div id="dev-panel" class="dev-controls">
+        <div class="dev-btn" id="dev-record-btn" onclick="toggleDevRecording()">⚫ REC</div>
+        <div class="dev-btn" onclick="copyDevPath()">📋 JSON 복사 (<span id="dev-count">0</span>)</div>
     </div>
 
     <div class="top-right-controls">
@@ -444,10 +439,7 @@
             "sample_route": {
                 "title": "예시 경로 (샘플)",
                 "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
-                "markers": [
-                    { "id": 101, "map": "qinghe" },
-                    { "id": 102, "map": "qinghe" }
-                ]
+                "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "qinghe" } ]
             }
         };
 
@@ -466,6 +458,10 @@
         let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; 
         let currentPathIds = []; 
         let activePathMarkersMap = {}; 
+        
+        // ★ [New] Dev Mode 변수
+        let devRecording = false;
+        let devPathList = [];
 
         const mapsDB = {
             "qinghe": { name: "청하", img: "../map/images/qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
@@ -500,7 +496,10 @@
         const isMobile = window.innerWidth <= 768;
         const pinSize = isMobile ? [26, 26] : [32, 32];
 
-        if (isDevMode) document.getElementById('map').classList.add('dev-mode-cursor');
+        if (isDevMode) {
+            document.getElementById('map').classList.add('dev-mode-cursor');
+            document.getElementById('dev-panel').classList.add('active'); // Dev 패널 표시
+        }
 
         const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
         L.imageOverlay(currentConfig.img, bounds).addTo(map);
@@ -545,13 +544,33 @@
                 });
         });
 
-        // ★ [New] 저장/로드 메뉴 토글
+        // ★ [New] Dev Mode 기능
+        window.toggleDevRecording = function() {
+            devRecording = !devRecording;
+            const btn = document.getElementById('dev-record-btn');
+            if(devRecording) {
+                btn.classList.add('recording');
+                btn.innerHTML = "🔴 REC ON";
+            } else {
+                btn.classList.remove('recording');
+                btn.innerHTML = "⚫ REC";
+            }
+        };
+
+        window.copyDevPath = function() {
+            if(devPathList.length === 0) { alert("추가된 마커가 없습니다."); return; }
+            const jsonStr = JSON.stringify(devPathList, null, 2);
+            navigator.clipboard.writeText(jsonStr).then(() => {
+                alert("경로 데이터가 복사되었습니다! path.json에 붙여넣으세요.");
+            });
+        };
+
+        // 저장/로드 메뉴 토글
         window.toggleSaveLoadMenu = function() {
             const menu = document.getElementById('save-load-menu');
             if (menu) menu.classList.toggle('active');
         };
 
-        // 메뉴 외부 클릭 시 닫기
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('save-load-menu');
             const btn = document.querySelector('.bottom-left-controls .glass-box');
@@ -626,21 +645,20 @@
             currentPathIds = routeIds; 
             activePathMarkersMap = {}; 
 
-            // 1. 현재 맵에 해당 경로의 마커가 하나라도 있는지 확인
-            const hasMarkersForCurrentMap = routeIds.some(entry => {
-                const m = (typeof entry === 'object') ? entry.map : currentMapId;
-                return m === currentMapId;
-            });
+            if (routeIds.length > 0) {
+                const hasMarkersForCurrentMap = routeIds.some(entry => {
+                    const m = (typeof entry === 'object') ? entry.map : currentMapId;
+                    return m === currentMapId;
+                });
 
-            // 2. 현재 맵에 마커가 없다면 -> 시작점(또는 첫번째 관련 맵)으로 이동
-            if (!hasMarkersForCurrentMap) {
-                const firstEntry = routeIds[0];
-                const firstMap = (typeof firstEntry === 'object') ? firstEntry.map : currentMapId;
-                const firstId = (typeof firstEntry === 'object') ? firstEntry.id : firstEntry;
-
-                localStorage.setItem('activePathKey', pathKey);
-                window.location.href = `?id=${firstMap}&marker=${firstId}&path=${pathKey}`;
-                return;
+                if (!hasMarkersForCurrentMap) {
+                    const firstEntry = routeIds[0];
+                    const firstMap = (typeof firstEntry === 'object') ? firstEntry.map : currentMapId;
+                    const firstId = (typeof firstEntry === 'object') ? firstEntry.id : firstEntry;
+                    localStorage.setItem('activePathKey', pathKey);
+                    window.location.href = `?id=${firstMap}&marker=${firstId}&path=${pathKey}`;
+                    return;
+                }
             }
 
             const storageKey = `completed_${currentMapId}`;
@@ -655,7 +673,6 @@
                 const markerId = (typeof entry === 'object') ? entry.id : entry;
                 const markerMap = (typeof entry === 'object') ? entry.map : currentMapId;
 
-                // 다음 맵 게이트웨이 체크
                 let isGateway = false;
                 if (index < routeIds.length - 1) {
                     const nextEntry = routeIds[index + 1];
@@ -765,6 +782,9 @@
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+            // ★ [Fix] 필터 설정 불러오기
+            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+            
             allMarkers = []; layerGroups = {}; const markersByType = {}; 
 
             try {
@@ -786,6 +806,18 @@
                     });
 
                     const marker = L.marker([item.y, item.x], { icon: pinIcon });
+                    
+                    // ★ [New] Dev Mode: 녹화 중이면 클릭 시 추가
+                    marker.on('click', () => {
+                        if (devRecording) {
+                            devPathList.push({ id: item.id, map: currentMapId });
+                            L.DomUtil.addClass(marker._icon, 'dev-selected');
+                            document.getElementById('dev-count').innerText = devPathList.length;
+                        } else {
+                            // 일반 모드에서는 팝업 열기 (기본 동작은 bindPopup이 알아서 함)
+                        }
+                    });
+
                     marker.bindPopup(() => generatePopupContent(item, storageKey));
                     markersByType[item.type].push(marker);
                     allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
@@ -820,7 +852,7 @@
                     }
                 }
 
-                const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+                // ★ [Fix] 저장된 필터 상태 반영
                 for (const key in layerGroups) {
                     const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
                     if (shouldShow) { layerGroups[key].addTo(map); }
@@ -833,13 +865,18 @@
             if(!filterList) return;
             filterList.innerHTML = '';
             
+            // ★ [Fix] 저장된 필터 상태 확인
+            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+
             try {
                 const counts = {};
                 data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
 
                 for (const [type, count] of Object.entries(counts)) {
                     const div = document.createElement('div');
+                    // layerGroups에 있고 맵에도 있으면 active
                     const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
+                    
                     div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
                     const imgName = typeMapping[type] || "stone";
                     div.innerHTML = `
@@ -862,6 +899,16 @@
                     filterList.appendChild(div);
                 }
             } catch (e) { console.error("Sidebar generation error:", e); }
+        }
+
+        // ★ [Fix] 필터 상태 저장 로직
+        function saveFilterState() {
+            const status = {};
+            // 현재 생성된 모든 레이어 그룹에 대해 상태 저장
+            for (const key in layerGroups) { 
+                status[key] = map.hasLayer(layerGroups[key]); 
+            }
+            localStorage.setItem('map_filter_settings', JSON.stringify(status));
         }
 
         function toggleLayer(type, isChecked) {
@@ -990,7 +1037,7 @@
         window.shareMarker = function(id) {
             const url = new URL(window.location.href);
             url.searchParams.set('marker', id);
-            url.searchParams.delete('path'); // ★ 경로 공유 방지 (Clean Share)
+            url.searchParams.delete('path'); 
             copyToClipboard(url.toString());
         };
 
@@ -1019,23 +1066,14 @@
                 if (!currentMapId) { alert("맵 ID를 찾을 수 없습니다."); return; }
                 const storageKey = `completed_${currentMapId}`;
                 const data = localStorage.getItem(storageKey);
-                
-                console.log("Exporting:", storageKey, data); 
-
-                if (!data || data === "[]") { 
-                    alert("저장할 완료 기록이 없습니다.\n마커를 '완료' 처리한 후 다시 시도해주세요."); 
-                    return; 
-                }
-                
+                if (!data || data === "[]") { alert("저장할 완료 기록이 없습니다."); return; }
                 const blob = new Blob([data], { type: "application/json" });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url; a.download = `completed_markers_${currentMapId}.json`;
                 document.body.appendChild(a); a.click(); document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-            } catch (err) {
-                alert("오류 발생: " + err.message);
-            }
+            } catch (err) { alert("오류 발생: " + err.message); }
         }
 
         function importCompletedPins(input) {

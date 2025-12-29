@@ -331,6 +331,336 @@
             .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
             .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
         }
+     
+     
+        /* =========================================
+           1. 기본 설정 및 클릭 문제 해결
+           ========================================= */
+        * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
+        body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
+        .dev-mode-cursor { cursor: crosshair !important; }
+
+        .leaflet-image-layer {
+            filter: brightness(0.6) contrast(1.2) saturate(0.85);
+            transition: filter 0.5s ease;
+        }
+
+        /* UI 컨테이너 (클릭 통과) */
+        .top-left-controls, .top-right-controls, 
+        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls {
+            position: fixed; z-index: 90000 !important; 
+            pointer-events: none !important; 
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .top-left-controls { top: 15px; left: 15px; }
+        .top-right-controls { top: 15px; right: 15px; }
+        .bottom-left-controls { bottom: 25px; left: 15px; overflow: visible; }
+        .bottom-right-controls { bottom: 25px; right: 15px; align-items: flex-end; }
+        
+        .bottom-center-controls {
+            bottom: 25px; left: 70px; right: 70px;
+            justify-content: center; align-items: center;
+        }
+        
+        /* 클릭 활성화 대상 */
+        .glass-box, .glass-select, .glass-group-btn, .glass-single-btn,
+        .sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
+        .filter-control-btn, .filter-item, .action-btn, 
+        .search-panel, .filter-panel, .path-panel, 
+        .save-load-popup, .popup-item {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        /* 패널 Z-index */
+        .search-panel, .filter-panel, .path-panel {
+            z-index: 100001 !important;
+        }
+
+        /* =========================================
+           2. UI 디자인 (Glass Style)
+           ========================================= */
+        .glass-select {
+            appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a08040; padding: 8px 28px 8px 12px; border-radius: 10px;
+            font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
+        }
+        .glass-select option { background-color: #1a1a1a; color: white; }
+
+        .glass-box {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
+
+        #path-toggle-btn {
+            width: 100%; max-width: 400px; height: 42px; padding: 0 20px; 
+            border-radius: 21px; gap: 8px;
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        #path-toggle-btn span { font-size: 13px; font-weight: 700; color: #ccc; letter-spacing: 0.5px; }
+        
+        #path-toggle-btn.path-active {
+            background-color: #a08040 !important; border-color: #fff !important;
+            box-shadow: 0 0 20px rgba(160, 128, 64, 0.6); transform: translateY(-2px);
+        }
+        #path-toggle-btn.path-active span, #path-toggle-btn.path-active svg { color: #fff !important; fill: #fff !important; }
+
+        .glass-group {
+            display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .glass-group-btn {
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
+        }
+        .glass-group-btn:last-child { border-bottom: none; }
+        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
+        
+        .glass-single-btn {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
+        .icon-svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* 저장/불러오기 팝업 메뉴 */
+        .save-load-popup {
+            position: absolute; bottom: 50px; left: 0;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 5px;
+            display: flex; flex-direction: column; gap: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 140px;
+            opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none !important;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: bottom left;
+        }
+        .save-load-popup.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
+
+        .popup-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 8px;
+            color: #ccc; font-size: 13px; font-weight: 500;
+            transition: background 0.2s;
+        }
+        .popup-item:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
+        .popup-item svg { width: 18px; height: 18px; fill: #a08040; }
+
+        /* =========================================
+           3. 핀 & 클러스터
+           ========================================= */
+        .pin-marker {
+            position: relative; width: 100%; height: 100%;
+            border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            background: #ffffff; 
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .pin-inner-circle {
+            width: 88%; height: 88%; border-radius: 50%;
+            background: var(--pin-color, #555);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pin-inner-circle img {
+            width: 70%; height: 70%; object-fit: contain; 
+            transform: rotate(45deg); opacity: 1; filter: none;
+        }
+        .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
+        .marker-completed .pin-inner-circle { background: #555 !important; }
+        .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
+
+        .simple-cluster-marker {
+            width: 100%; height: 100%; border-radius: 50%; 
+            border: 2px solid #ffffff; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 800;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* =========================================
+           4. 경로 마커
+           ========================================= */
+        .path-marker-box {
+            position: relative; width: 100%; height: 100%;
+            background-color: #1c1c1c; border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s, filter 0.2s; 
+        }
+        .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
+        .path-marker-icon {
+            width: 60%; height: 60%; object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
+        }
+        .path-order-badge {
+            position: absolute; bottom: -5px; right: -5px;
+            background-color: #a08040; color: #fff;
+            font-size: 10px; font-weight: 800; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .gateway-marker .path-marker-box { border-color: #00e5ff !important; box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+        .gateway-marker .path-order-badge { background-color: #00e5ff !important; color: #000 !important; }
+        .marker-completed .path-marker-box {
+            background-color: #333 !important; border-color: #555 !important;
+            filter: grayscale(100%) brightness(0.7); opacity: 0.8;
+        }
+        .marker-completed .path-order-badge { background-color: #555 !important; }
+
+        /* =========================================
+           5. 패널 스타일
+           ========================================= */
+        .search-panel, .filter-panel, .path-panel {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .search-panel {
+            padding: 15px 20px 20px 20px; box-sizing: border-box;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transform: translateY(-100%);
+        }
+        .search-panel.active { transform: translateY(0); }
+
+        .filter-panel, .path-panel {
+            top: auto; bottom: 0; max-height: 60vh;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            padding-bottom: 80px; transform: translateY(100%);
+        }
+        .filter-panel.active, .path-panel.active { transform: translateY(0); }
+
+        .panel-header {
+            padding: 15px 20px; border-bottom: 1px solid #333;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-title { color: white; font-weight: 700; font-size: 16px; }
+        .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; padding: 5px; }
+
+        .path-list-container { padding: 10px 20px; overflow-y: auto; }
+        .path-item {
+            padding: 15px; background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+            transition: all 0.2s;
+        }
+        .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
+        .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
+        .path-name { color: #fff; font-weight: 700; font-size: 14px; }
+        .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
+
+        .sidebar-search-input {
+            width: 100%; padding: 12px 10px 12px 40px; 
+            background-color: #333333 !important; border: 1px solid #a08040 !important;
+            border-radius: 8px; color: #ffffff !important; font-size: 16px; 
+            -webkit-appearance: none; outline: none;
+        }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
+        .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
+        
+        .search-results-container {
+            max-height: 60vh; overflow-y: auto; margin-top: 10px;
+            background-color: rgba(30, 30, 30, 0.95) !important;
+            border-radius: 8px; display: block !important;
+        }
+        .search-result-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 10px; border-bottom: 1px solid #444; cursor: pointer;
+        }
+        .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
+        .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
+
+        .filter-controls { display: flex; gap: 6px; }
+        .filter-control-btn {
+            padding: 8px 12px; font-size: 11px; font-weight: 500;
+            background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
+        }
+        .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
+        .filter-list-container {
+            padding: 10px 20px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .filter-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 5px; border-bottom: 1px solid #333;
+        }
+        .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
+        .filter-text-name { font-size: 13px; color: #aaa; }
+        .filter-count { color: #666; font-size: 12px; }
+        .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
+        .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+        .filter-item.inactive { opacity: 0.4; }
+
+        /* 팝업 */
+        .leaflet-popup-content-wrapper { 
+            background: #ffffff !important; color: #333 !important; 
+            border-radius: 12px !important; padding: 0 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important; overflow: hidden;
+        }
+        .leaflet-popup-content { margin: 0 !important; width: 280px !important; text-align: center; line-height: 1.5; }
+        .leaflet-popup-tip { background: #ffffff !important; }
+        .leaflet-container a.leaflet-popup-close-button {
+            top: 8px !important; right: 8px !important; color: #666 !important; font-size: 20px !important; z-index: 10;
+        }
+        .popup-inner { padding: 20px 15px 15px 15px; }
+        .popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 5px; display: block; }
+        .popup-type-badge { 
+            display: inline-block; font-size: 11px; color: #fff; background-color: #a08040;
+            font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 12px;
+        }
+        .popup-desc { 
+            font-size: 14px; color: #444; background: #f5f5f7; 
+            padding: 12px; border-radius: 8px; margin: 0 0 12px 0; 
+            text-align: left; word-break: keep-all; line-height: 1.4;
+        }
+        .popup-img { 
+            width: 100%; height: auto; max-height: 200px; object-fit: cover;
+            border-radius: 8px; margin-bottom: 10px; display: block; border: 1px solid #eee;
+        }
+        .popup-youtube-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            margin-bottom: 10px; border-radius: 8px; background: #000;
+        }
+        .popup-youtube-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .btn-container { display: flex; gap: 8px; margin-top: 5px; }
+        .action-btn { 
+            flex: 1; padding: 10px 0; border-radius: 8px; font-size: 13px; font-weight: 700; 
+            border: none; color: white; text-align: center; text-decoration: none; 
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+        }
+        .btn-wiki { background-color: #4a90e2; }
+        .btn-complete { background-color: #2e7d32; }
+        .btn-undo { background-color: #757575; }
+
+        @media (min-width: 768px) {
+            .search-panel, .filter-panel, .path-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
+            .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
+            .search-panel.active { transform: translateX(-50%) translateY(0); }
+            .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
+            .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
+        }
+    
     </style>
 </head>
 <body>
@@ -474,13 +804,13 @@
         const typeMapping = { 
             "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
             "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
-            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp"
+            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
         const colorMapping = {
             "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
             "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
-            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad","사건":"#3076ad"
+            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -1106,6 +1436,7 @@
             try { document.execCommand('copy'); } catch (err) { console.error(err); }
             document.body.removeChild(ta);
         }
+        
     </script>
 </body>
 </html>

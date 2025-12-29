@@ -835,6 +835,7 @@
         let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; 
         let currentPathIds = []; 
         let activePathMarkersMap = {}; 
+        let globalMarkerCache = {}; 
         
         // ★ [New] Dev Mode 변수
         let devRecording = false;
@@ -1042,10 +1043,9 @@
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
             for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
-
 const filterGroup = document.querySelector('.bottom-right-controls .glass-group');
- if(filterGroup) filterGroup.style.display = 'none';
-    // ▲▲▲ 추가 끝 ▲▲▲
+if (filterGroup) filterGroup.style.display = 'none';
+// ▲▲▲ 추가 끝 ▲▲▲
     if(filterGroup) filterGroup.style.display = 'flexconst filterGroup = document.querySel';
 
             currentPathLayer = L.featureGroup();
@@ -1174,6 +1174,7 @@ const filterGroup = document.querySelector('.bottom-right-controls .glass-group'
 
             try {
                 data.forEach(item => {
+                    globalMarkerCache[item.id] = { ...item, map: currentMapId };
                     if (!markersByType[item.type]) { markersByType[item.type] = []; }
                     const isCompleted = completedList.includes(item.id);
                     const imgName = typeMapping[item.type] || "stone"; 
@@ -1394,7 +1395,7 @@ const filterGroup = document.querySelector('.bottom-right-controls .glass-group'
             const isNowComplete = (index === -1);
             if (isNowComplete) { list.push(id); } else { list.splice(index, 1); }
             localStorage.setItem(storageKey, JSON.stringify(list)); 
-            
+            updatePathSummaryUI();
             let marker = target.marker;
             if (currentPathLayer && activePathMarkersMap[id]) {
                 marker = activePathMarkersMap[id];
@@ -1413,7 +1414,6 @@ const filterGroup = document.querySelector('.bottom-right-controls .glass-group'
                     const nextEntry = currentPathIds[pathIndex + 1];
                     const nextId = (typeof nextEntry === 'object') ? nextEntry.id : nextEntry;
                     const nextMap = (typeof nextEntry === 'object') ? nextEntry.map : currentMapId;
-updatePathSummaryUI();
                     if (nextMap === currentMapId) {
                         const nextMarker = activePathMarkersMap[nextId];
                         if (nextMarker) {
@@ -1553,6 +1553,56 @@ function updatePathSummaryUI() {
         container.innerHTML = html;
         container.style.display = 'flex';
     }
+}
+function updatePathSummaryUI() {
+    const container = document.getElementById('path-summary-bar');
+    if (!currentPathLayer) { container.style.display = 'none'; return; }
+    
+    const summary = {};
+    currentPathIds.forEach(entry => {
+        const id = (typeof entry === 'object') ? entry.id : entry;
+        const item = globalMarkerCache[id]; // 전역 캐시에서 조회
+        
+        if (item) {
+            if (!summary[item.type]) summary[item.type] = { total: 0, done: 0 };
+            summary[item.type].total++;
+            
+            // 해당 아이템 맵의 완료 기록 확인
+            const mapId = item.map || currentMapId;
+            const list = JSON.parse(localStorage.getItem(`completed_${mapId}`)) || [];
+            if (list.includes(id)) summary[item.type].done++;
+        }
+    });
+
+    container.innerHTML = Object.entries(summary).map(([type, d]) => 
+        `<div class="summary-chunk">${type} <b>(${d.done}/${d.total})</b></div>`
+    ).join('');
+    container.style.display = 'flex';
+}
+function updatePathSummaryUI() {
+    const container = document.getElementById('path-summary-bar');
+    if (!currentPathLayer) { container.style.display = 'none'; return; }
+    
+    const summary = {};
+    currentPathIds.forEach(entry => {
+        const id = (typeof entry === 'object') ? entry.id : entry;
+        const item = globalMarkerCache[id]; // 전역 캐시에서 조회
+        
+        if (item) {
+            if (!summary[item.type]) summary[item.type] = { total: 0, done: 0 };
+            summary[item.type].total++;
+            
+            // 해당 아이템 맵의 완료 기록 확인
+            const mapId = item.map || currentMapId;
+            const list = JSON.parse(localStorage.getItem(`completed_${mapId}`)) || [];
+            if (list.includes(id)) summary[item.type].done++;
+        }
+    });
+
+    container.innerHTML = Object.entries(summary).map(([type, d]) => 
+        `<div class="summary-chunk">${type} <b>(${d.done}/${d.total})</b></div>`
+    ).join('');
+    container.style.display = 'flex';
 }
 
     </script>

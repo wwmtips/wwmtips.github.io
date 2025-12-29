@@ -804,807 +804,819 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
-    <script>
-        // ★ [안전 모드] 샘플 데이터
-        const sampleData = [
-            { id: 101, name: "청하 상자 1", type: "상자", x: 2000, y: 3000, desc: "나무 아래" },
-            { id: 102, name: "장군 사당 입구", type: "경계석", x: 2500, y: 3200, desc: "워프 포인트" },
-            { id: 103, name: "숨겨진 보스", type: "보스", x: 3000, y: 1500, desc: "강력함" }
-        ];
-        
-        const samplePathData = {
-            "sample_route": {
-                "title": "예시 경로 (샘플)",
-                "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
-                "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "qinghe" } ]
-            }
-        };
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
-        const map = L.map('map', {
-            crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, 
-            zoomControl: false, attributionControl: false,
-            preferCanvas: true, wheelDebounceTime: 150 
-        });
-
-        // 전역 변수
-        let pathData = {};
-        let currentPathLayer = null;
-        let layerGroups = {}; 
-        let allMarkers = []; 
-        let cachedData = null; 
-        let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; 
-        let currentPathIds = []; 
-        let activePathMarkersMap = {}; 
-        let globalMarkerCache = {}; 
-        
-        // ★ [New] Dev Mode 변수
-        let devRecording = false;
-        let devPathList = [];
-
-        const mapsDB = {
-            "qinghe": { name: "청하", img: "../map/images/qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
-            "gesh": { name: "장군 사당", img: "../map/images/gesh.jpg", json: "../json/gesh.json", w: 1662, h: 1787 },
-            "drs": { name: "꿈속의 불선선", img: "../map/images/dream.jpg", json: "../json/drs.json", w: 4545, h: 2743 },
-            "kaifeng": { name: "개봉", img: "../map/images/kaifeng.jpg", json: "../json/kaifeng.json", w: 5159, h: 7000 },
-            "gm": { name: "귀문시장", img: "../map/images/gm.jpg", json: "../json/gm.json", w: 5482, h: 3534 }
-        };
-
-        const typeMapping = { 
-            "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
-            "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
-            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp"
-        };
-
-        const colorMapping = {
-            "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
-            "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
-            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad","사건":"#3076ad"
-        };
-
-        const urlParams = new URLSearchParams(window.location.search);
-        let rawId = urlParams.get('id') || "qinghe";
-        const isDevMode = rawId.endsWith('_dev');
-        let currentMapId = isDevMode ? rawId.replace('_dev', '') : rawId;
-
-        if (!mapsDB[currentMapId]) currentMapId = "qinghe";
-        const currentConfig = mapsDB[currentMapId];
-        
-        document.title = `${currentConfig.name} - 연운 지도`;
-
-        const isMobile = window.innerWidth <= 768;
-        const pinSize = isMobile ? [26, 26] : [32, 32];
-
-        if (isDevMode) {
-            document.getElementById('map').classList.add('dev-mode-cursor');
-            document.getElementById('dev-panel').classList.add('active'); // Dev 패널 표시
+<script>
+    // ★ [안전 모드] 샘플 데이터
+    const sampleData = [
+        { id: 101, name: "청하 상자 1", type: "상자", x: 2000, y: 3000, desc: "나무 아래" },
+        { id: 102, name: "장군 사당 입구", type: "경계석", x: 2500, y: 3200, desc: "워프 포인트" },
+        { id: 103, name: "숨겨진 보스", type: "보스", x: 3000, y: 1500, desc: "강력함" }
+    ];
+    
+    const samplePathData = {
+        "sample_route": {
+            "title": "예시 경로 (샘플)",
+            "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
+            "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "qinghe" } ]
         }
+    };
 
-        const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
-        L.imageOverlay(currentConfig.img, bounds).addTo(map);
+    // 맵 설정 데이터
+    const mapsDB = {
+        "qinghe": { name: "청하", img: "../map/images/qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
+        "gesh": { name: "장군 사당", img: "../map/images/gesh.jpg", json: "../json/gesh.json", w: 1662, h: 1787 },
+        "drs": { name: "꿈속의 불선선", img: "../map/images/dream.jpg", json: "../json/drs.json", w: 4545, h: 2743 },
+        "kaifeng": { name: "개봉", img: "../map/images/kaifeng.jpg", json: "../json/kaifeng.json", w: 5159, h: 7000 },
+        "gm": { name: "귀문시장", img: "../map/images/gm.jpg", json: "../json/gm.json", w: 5482, h: 3534 }
+    };
 
-        const zoomSettings = { pc: -1.5, mobile: -2.5 };
-        const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
-        map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
+    // 타입 및 색상 매핑
+    const typeMapping = { 
+        "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
+        "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
+        "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp"
+    };
 
-        const mapSelect = document.getElementById('main-map-select');
-        for (const [key, val] of Object.entries(mapsDB)) {
-            const option = document.createElement('option');
-            option.value = key; option.innerText = val.name;
-            if (key === currentMapId) option.selected = true;
-            mapSelect.appendChild(option);
-        }
-        mapSelect.onchange = function() {
-            const nextId = this.value + (isDevMode ? '_dev' : '');
-            window.location.search = `?id=${nextId}`;
-        };
+    const colorMapping = {
+        "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
+        "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
+        "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad","사건":"#3076ad"
+    };
 
-        // 데이터 로드
-        document.addEventListener('DOMContentLoaded', () => {
-            const targetPath = urlParams.get('path');
+    // URL 파라미터 처리
+    const urlParams = new URLSearchParams(window.location.search);
+    let rawId = urlParams.get('id') || "qinghe";
+    const isDevMode = rawId.endsWith('_dev');
+    let currentMapId = isDevMode ? rawId.replace('_dev', '') : rawId;
 
-            fetch(currentConfig.json)
+    if (!mapsDB[currentMapId]) currentMapId = "qinghe";
+    const currentConfig = mapsDB[currentMapId];
+    
+    document.title = `${currentConfig.name} - 연운 지도`;
+
+    // 맵 초기화
+    const map = L.map('map', {
+        crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, 
+        zoomControl: false, attributionControl: false,
+        preferCanvas: true, wheelDebounceTime: 150 
+    });
+
+    const isMobile = window.innerWidth <= 768;
+    const pinSize = isMobile ? [26, 26] : [32, 32];
+
+    if (isDevMode) {
+        document.getElementById('map').classList.add('dev-mode-cursor');
+        document.getElementById('dev-panel').classList.add('active'); 
+    }
+
+    const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
+    L.imageOverlay(currentConfig.img, bounds).addTo(map);
+
+    const zoomSettings = { pc: -1.5, mobile: -2.5 };
+    const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
+    map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
+
+    // 맵 선택 셀렉트 박스
+    const mapSelect = document.getElementById('main-map-select');
+    for (const [key, val] of Object.entries(mapsDB)) {
+        const option = document.createElement('option');
+        option.value = key; option.innerText = val.name;
+        if (key === currentMapId) option.selected = true;
+        mapSelect.appendChild(option);
+    }
+    mapSelect.onchange = function() {
+        const nextId = this.value + (isDevMode ? '_dev' : '');
+        window.location.search = `?id=${nextId}`;
+    };
+
+    // 전역 변수
+    let pathData = {};
+    let currentPathLayer = null;
+    let layerGroups = {}; 
+    let allMarkers = []; 
+    let cachedData = null; 
+    let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; 
+    let currentPathIds = []; 
+    let activePathMarkersMap = {}; 
+    let globalMarkerCache = {}; // 모든 맵의 마커 정보를 담을 전역 캐시
+    
+    // Dev Mode 변수
+    let devRecording = false;
+    let devPathList = [];
+
+    // ★ [데이터 로드] 모든 맵 데이터 한꺼번에 읽기 (Promise.all)
+    document.addEventListener('DOMContentLoaded', () => {
+        const targetPath = urlParams.get('path');
+        
+        // mapsDB에 있는 모든 JSON 로드
+        const fetchPromises = Object.keys(mapsDB).map(key => {
+            return fetch(mapsDB[key].json)
                 .then(res => {
-                    if (!res.ok) throw new Error("JSON load failed");
+                    if (!res.ok) throw new Error(`Failed to load ${key}`);
                     return res.json();
                 })
-                .then(data => {
-                    cachedData = data;
-                    createMarkers(data);
-                    generateSidebar(data);
-                    loadPathData(false, targetPath);
-                })
-                .catch(err => { 
-                    console.warn("Map data failed, using sample data:", err);
-                    cachedData = sampleData;
-                    createMarkers(sampleData);
-                    generateSidebar(sampleData);
-                    loadPathData(true); 
-                });
+                .then(data => ({ key, data }));
         });
 
-        // ★ [New] Dev Mode 기능
-        window.toggleDevRecording = function() {
-            devRecording = !devRecording;
-            const btn = document.getElementById('dev-record-btn');
-            if(devRecording) {
-                btn.classList.add('recording');
-                btn.innerHTML = "🔴 REC ON";
-            } else {
-                btn.classList.remove('recording');
-                btn.innerHTML = "⚫ REC";
-            }
-        };
-
-        window.copyDevPath = function() {
-            if(devPathList.length === 0) { alert("추가된 마커가 없습니다."); return; }
-            const jsonStr = JSON.stringify(devPathList, null, 2);
-            navigator.clipboard.writeText(jsonStr).then(() => {
-                alert("경로 데이터가 복사되었습니다! path.json에 붙여넣으세요.");
-            });
-        };
-
-        // 저장/로드 메뉴 토글
-        window.toggleSaveLoadMenu = function() {
-            const menu = document.getElementById('save-load-menu');
-            if (menu) menu.classList.toggle('active');
-        };
-
-        document.addEventListener('click', function(e) {
-            const menu = document.getElementById('save-load-menu');
-            const btn = document.querySelector('.bottom-left-controls .glass-box');
-            if (menu && menu.classList.contains('active')) {
-                if (!menu.contains(e.target) && !btn.contains(e.target)) {
-                    menu.classList.remove('active');
-                }
-            }
-        });
-
-        function loadPathData(useSample = false, autoStartPath = null) {
-            if (useSample) {
-                renderPathList(samplePathData);
-                return;
-            }
-            fetch('../json/path.json')
-                .then(res => {
-                    if (!res.ok) throw new Error("Path file not found");
-                    return res.json();
-                })
-                .then(data => {
-                    renderPathList(data);
-                    if (autoStartPath && data[autoStartPath]) {
-                        activatePath(autoStartPath);
-                    }
-                })
-                .catch(err => {
-                    console.log("Path load failed, using sample:", err);
-                    renderPathList(samplePathData);
-                });
-        }
-
-        function renderPathList(data) {
-            pathData = data;
-            const container = document.getElementById('path-list-dynamic');
-            if(!container) return;
-            container.innerHTML = '';
-            
-            for (const [key, info] of Object.entries(pathData)) {
-                const div = document.createElement('div');
-                div.className = 'path-item';
-                div.onclick = () => activatePath(key);
-                div.innerHTML = `
-                    <svg class="path-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                    <div class="path-info">
-                        <div class="path-name">${info.title}</div>
-                        <div class="path-desc">${info.desc}</div>
-                    </div>`;
-                container.appendChild(div);
-            }
-        }
-
-        window.handlePathButtonClick = function() {
-            if (currentPathLayer) {
-                clearPath();
-            } else {
-                const pathPanel = document.getElementById('path-panel');
-                if (pathPanel.classList.contains('active')) {
-                    closeAllPanels();
-                } else {
-                    togglePanel('path');
-                }
-            }
-        };
-
-        function activatePath(pathKey) {
-            clearPath();
-            const routeData = pathData[pathKey];
-            if (!routeData || !routeData.markers) return;
-            
-            const routeIds = routeData.markers;
-            currentPathIds = routeIds; 
-            activePathMarkersMap = {}; 
-
-            if (routeIds.length > 0) {
-                const hasMarkersForCurrentMap = routeIds.some(entry => {
-                    const m = (typeof entry === 'object') ? entry.map : currentMapId;
-                    return m === currentMapId;
-                });
-
-                if (!hasMarkersForCurrentMap) {
-                    const firstEntry = routeIds[0];
-                    const firstMap = (typeof firstEntry === 'object') ? firstEntry.map : currentMapId;
-                    const firstId = (typeof firstEntry === 'object') ? firstEntry.id : firstEntry;
-                    localStorage.setItem('activePathKey', pathKey);
-                    window.location.href = `?id=${firstMap}&marker=${firstId}&path=${pathKey}`;
-                    return;
-                }
-            }
-
-            const storageKey = `completed_${currentMapId}`;
-            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-
-            for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
-const filterGroup = document.querySelector('.bottom-right-controls .glass-group');
-if (filterGroup) filterGroup.style.display = 'none';
-// ▲▲▲ 추가 끝 ▲▲▲
-    if(filterGroup) filterGroup.style.display = 'flexconst filterGroup = document.querySel';
-
-            currentPathLayer = L.featureGroup();
-            const latlngs = [];
-
-            routeIds.forEach((entry, index) => {
-                const markerId = (typeof entry === 'object') ? entry.id : entry;
-                const markerMap = (typeof entry === 'object') ? entry.map : currentMapId;
-
-                let isGateway = false;
-                if (index < routeIds.length - 1) {
-                    const nextEntry = routeIds[index + 1];
-                    const nextMap = (typeof nextEntry === 'object') ? nextEntry.map : currentMapId;
-                    if (markerMap === currentMapId && nextMap !== currentMapId) {
-                        isGateway = true;
-                    }
-                }
-
-                if (markerMap !== currentMapId) return;
-
-                const item = allMarkers.find(m => m.id == markerId);
-                if (item) {
-                    const latlng = item.marker.getLatLng();
-                    latlngs.push(latlng);
-                    
-                    const itemIconPath = `../images/${typeMapping[item.type] || 'stone'}.png`;
-                    const isCompleted = completedList.includes(item.id);
-                    const completedClass = isCompleted ? 'marker-completed' : '';
-                    const gatewayClass = isGateway ? 'gateway-marker' : '';
-
-                    let badgeContent = index + 1;
-                    if (isGateway) {
-                        badgeContent = `<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:black;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>`;
-                    }
-
-                    const pathIcon = L.divIcon({
-                        className: `custom-div-icon ${completedClass} ${gatewayClass}`,
-                        html: `<div class="path-marker-box">
-                                   <img src="${itemIconPath}" class="path-marker-icon" onerror="this.src='../images/stone.png'">
-                                   <div class="path-order-badge">${badgeContent}</div>
-                               </div>`,
-                        iconSize: [34, 34], 
-                        iconAnchor: [17, 17],
-                        popupAnchor: [0, -20]
+        Promise.all(fetchPromises)
+            .then(results => {
+                // 결과를 globalMarkerCache에 통합 저장
+                results.forEach(({ key, data }) => {
+                    data.forEach(item => {
+                        // 각 마커에 소속 map 정보를 추가하여 저장
+                        globalMarkerCache[item.id] = { ...item, map: key };
                     });
 
-                    const markerClone = L.marker(latlng, { icon: pathIcon })
-                        .bindPopup(item.marker.getPopup().getContent());
-                    
-                    currentPathLayer.addLayer(markerClone);
-                    activePathMarkersMap[markerId] = markerClone; 
+                    // 현재 보여줄 맵 데이터 저장
+                    if (key === currentMapId) {
+                        cachedData = data;
+                    }
+                });
+
+                // 현재 맵 렌더링
+                if (cachedData) {
+                    createMarkers(cachedData);
+                    generateSidebar(cachedData);
+                } else {
+                    console.error("현재 맵 데이터를 찾을 수 없습니다.");
                 }
+
+                loadPathData(false, targetPath);
+            })
+            .catch(err => { 
+                console.warn("데이터 로드 실패, 샘플 데이터 사용:", err);
+                cachedData = sampleData;
+                // 샘플 데이터도 전역 캐시에 등록
+                sampleData.forEach(item => globalMarkerCache[item.id] = { ...item, map: currentMapId });
+                
+                createMarkers(sampleData);
+                generateSidebar(sampleData);
+                loadPathData(true); 
+            });
+    });
+
+    // Dev Mode 기능
+    window.toggleDevRecording = function() {
+        devRecording = !devRecording;
+        const btn = document.getElementById('dev-record-btn');
+        if(devRecording) {
+            btn.classList.add('recording');
+            btn.innerHTML = "🔴 REC ON";
+        } else {
+            btn.classList.remove('recording');
+            btn.innerHTML = "⚫ REC";
+        }
+    };
+
+    window.copyDevPath = function() {
+        if(devPathList.length === 0) { alert("추가된 마커가 없습니다."); return; }
+        const jsonStr = JSON.stringify(devPathList, null, 2);
+        navigator.clipboard.writeText(jsonStr).then(() => {
+            alert("경로 데이터가 복사되었습니다! path.json에 붙여넣으세요.");
+        });
+    };
+
+    // 저장/로드 메뉴 토글
+    window.toggleSaveLoadMenu = function() {
+        const menu = document.getElementById('save-load-menu');
+        if (menu) menu.classList.toggle('active');
+    };
+
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('save-load-menu');
+        const btn = document.querySelector('.bottom-left-controls .glass-box');
+        if (menu && menu.classList.contains('active')) {
+            if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.classList.remove('active');
+            }
+        }
+    });
+
+    // 경로 데이터 로드 함수
+    function loadPathData(useSample = false, autoStartPath = null) {
+        if (useSample) {
+            renderPathList(samplePathData);
+            return;
+        }
+        fetch('../json/path.json')
+            .then(res => {
+                if (!res.ok) throw new Error("Path file not found");
+                return res.json();
+            })
+            .then(data => {
+                renderPathList(data);
+                if (autoStartPath && data[autoStartPath]) {
+                    activatePath(autoStartPath);
+                }
+            })
+            .catch(err => {
+                console.log("Path load failed, using sample:", err);
+                renderPathList(samplePathData);
+            });
+    }
+
+    function renderPathList(data) {
+        pathData = data;
+        const container = document.getElementById('path-list-dynamic');
+        if(!container) return;
+        container.innerHTML = '';
+        
+        for (const [key, info] of Object.entries(pathData)) {
+            const div = document.createElement('div');
+            div.className = 'path-item';
+            div.onclick = () => activatePath(key);
+            div.innerHTML = `
+                <svg class="path-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <div class="path-info">
+                    <div class="path-name">${info.title}</div>
+                    <div class="path-desc">${info.desc}</div>
+                </div>`;
+            container.appendChild(div);
+        }
+    }
+
+    window.handlePathButtonClick = function() {
+        if (currentPathLayer) {
+            clearPath();
+        } else {
+            const pathPanel = document.getElementById('path-panel');
+            if (pathPanel.classList.contains('active')) {
+                closeAllPanels();
+            } else {
+                togglePanel('path');
+            }
+        }
+    };
+
+    // 경로 활성화
+    function activatePath(pathKey) {
+        clearPath();
+        const routeData = pathData[pathKey];
+        if (!routeData || !routeData.markers) return;
+        
+        const routeIds = routeData.markers;
+        currentPathIds = routeIds; 
+        activePathMarkersMap = {}; 
+
+        // 첫 시작점이 다른 맵이면 이동
+        if (routeIds.length > 0) {
+            const hasMarkersForCurrentMap = routeIds.some(entry => {
+                const m = (typeof entry === 'object') ? entry.map : currentMapId;
+                return m === currentMapId;
             });
 
-            if (latlngs.length > 1) {
-                const polyline = L.polyline(latlngs, {
-                    color: '#a08040', weight: 4, opacity: 0.9, dashArray: '5, 10', lineJoin: 'round'
-                });
-                currentPathLayer.addLayer(polyline);
+            if (!hasMarkersForCurrentMap) {
+                const firstEntry = routeIds[0];
+                const firstMap = (typeof firstEntry === 'object') ? firstEntry.map : currentMapId;
+                const firstId = (typeof firstEntry === 'object') ? firstEntry.id : firstEntry;
+                localStorage.setItem('activePathKey', pathKey);
+                window.location.href = `?id=${firstMap}&marker=${firstId}&path=${pathKey}`;
+                return;
             }
-
-            currentPathLayer.addTo(map);
-            document.getElementById('path-toggle-btn').classList.add('path-active');
-
-            if (latlngs.length > 0) {
-                map.flyTo(latlngs[0], 0, { animate: true, duration: 1.5 });
-            }
-            
-            localStorage.setItem('activePathKey', pathKey);
-            updatePathSummaryUI(); 
-            closeAllPanels();
         }
 
-        function clearPath() {
-            if (currentPathLayer) {
-                map.removeLayer(currentPathLayer);
-                currentPathLayer = null;
-                currentPathIds = [];
-                activePathMarkersMap = {};
-                localStorage.removeItem('activePathKey');
+        const storageKey = `completed_${currentMapId}`;
+        const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        // 기존 레이어 숨김
+        for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
+
+        // 필터 버튼 숨김 (★ 수정됨: 문법 에러 해결)
+        const filterGroup = document.querySelector('.bottom-right-controls .glass-group');
+        if (filterGroup) filterGroup.style.display = 'none';
+
+        currentPathLayer = L.featureGroup();
+        const latlngs = [];
+
+        routeIds.forEach((entry, index) => {
+            const markerId = (typeof entry === 'object') ? entry.id : entry;
+            const markerMap = (typeof entry === 'object') ? entry.map : currentMapId;
+
+            // Gateway(맵 이동 지점) 체크
+            let isGateway = false;
+            if (index < routeIds.length - 1) {
+                const nextEntry = routeIds[index + 1];
+                const nextMap = (typeof nextEntry === 'object') ? nextEntry.map : currentMapId;
+                if (markerMap === currentMapId && nextMap !== currentMapId) {
+                    isGateway = true;
+                }
             }
-            document.getElementById('path-toggle-btn').classList.remove('path-active');
-document.getElementById('path-summary-bar').style.display = 'none';
-const filterGroup = document.querySelector('.bottom-right-controls .glass-group');
-    if(filterGroup) filterGroup.style.display = 'flex';
-            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+
+            // 현재 맵에 있는 마커만 표시
+            if (markerMap !== currentMapId) return;
+
+            // globalMarkerCache 대신 현재 맵에 그려진 allMarkers에서 위치 정보 획득
+            const item = allMarkers.find(m => m.id == markerId);
+            if (item) {
+                const latlng = item.marker.getLatLng();
+                latlngs.push(latlng);
+                
+                const itemIconPath = `../images/${typeMapping[item.type] || 'stone'}.png`;
+                const isCompleted = completedList.includes(item.id);
+                const completedClass = isCompleted ? 'marker-completed' : '';
+                const gatewayClass = isGateway ? 'gateway-marker' : '';
+
+                let badgeContent = index + 1;
+                if (isGateway) {
+                    badgeContent = `<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:black;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>`;
+                }
+
+                const pathIcon = L.divIcon({
+                    className: `custom-div-icon ${completedClass} ${gatewayClass}`,
+                    html: `<div class="path-marker-box">
+                               <img src="${itemIconPath}" class="path-marker-icon" onerror="this.src='../images/stone.png'">
+                               <div class="path-order-badge">${badgeContent}</div>
+                           </div>`,
+                    iconSize: [34, 34], 
+                    iconAnchor: [17, 17],
+                    popupAnchor: [0, -20]
+                });
+
+                const markerClone = L.marker(latlng, { icon: pathIcon })
+                    .bindPopup(item.marker.getPopup().getContent());
+                
+                currentPathLayer.addLayer(markerClone);
+                activePathMarkersMap[markerId] = markerClone; 
+            }
+        });
+
+        if (latlngs.length > 1) {
+            const polyline = L.polyline(latlngs, {
+                color: '#a08040', weight: 4, opacity: 0.9, dashArray: '5, 10', lineJoin: 'round'
+            });
+            currentPathLayer.addLayer(polyline);
+        }
+
+        currentPathLayer.addTo(map);
+        document.getElementById('path-toggle-btn').classList.add('path-active');
+
+        if (latlngs.length > 0) {
+            map.flyTo(latlngs[0], 0, { animate: true, duration: 1.5 });
+        }
+        
+        localStorage.setItem('activePathKey', pathKey);
+        updatePathSummaryUI(); 
+        closeAllPanels();
+    }
+
+    // 경로 종료 및 UI 복원
+    function clearPath() {
+        if (currentPathLayer) {
+            map.removeLayer(currentPathLayer);
+            currentPathLayer = null;
+            currentPathIds = [];
+            activePathMarkersMap = {};
+            localStorage.removeItem('activePathKey');
+        }
+        document.getElementById('path-toggle-btn').classList.remove('path-active');
+
+        // 요약 바 숨기기
+        const summaryBar = document.getElementById('path-summary-bar');
+        if(summaryBar) summaryBar.style.display = 'none';
+
+        // 필터 버튼 다시 보이기
+        const filterGroup = document.querySelector('.bottom-right-controls .glass-group');
+        if(filterGroup) filterGroup.style.display = 'flex';
+
+        // 기존 필터 상태 복원
+        const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+        for (const key in layerGroups) {
+            const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
+            if (shouldShow) { layerGroups[key].addTo(map); }
+        }
+    }
+
+    function togglePanel(type) {
+        const searchPanel = document.getElementById('search-panel');
+        const filterPanel = document.getElementById('filter-panel');
+        const pathPanel = document.getElementById('path-panel');
+        
+        searchPanel.classList.remove('active');
+        filterPanel.classList.remove('active');
+        pathPanel.classList.remove('active');
+        
+        if (type === 'path') {
+            pathPanel.classList.add('active');
+        } else if (type === 'search') {
+            searchPanel.classList.add('active');
+            document.getElementById('marker-search').focus();
+        } else if (type === 'filter') {
+            filterPanel.classList.add('active');
+        }
+    }
+
+    function closeAllPanels() {
+        document.getElementById('search-panel').classList.remove('active');
+        document.getElementById('filter-panel').classList.remove('active');
+        document.getElementById('path-panel').classList.remove('active');
+    }
+
+    // 마커 생성 함수
+    function createMarkers(data) {
+        const storageKey = `completed_${currentMapId}`;
+        const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+        const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+        
+        allMarkers = []; layerGroups = {}; 
+        const markersByType = {}; 
+
+        try {
+            data.forEach(item => {
+                // 타입별 배열 초기화
+                if (!markersByType[item.type]) { markersByType[item.type] = []; }
+                
+                const isCompleted = completedList.includes(item.id);
+                const imgName = typeMapping[item.type] || "stone"; 
+                const iconPath = `../images/${imgName}.png`;
+                const pinColor = colorMapping[item.type] || "#555";
+
+                const pinIcon = L.divIcon({
+                    className: isCompleted ? 'marker-completed' : '',
+                    html: `<div class="pin-marker">
+                            <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
+                                <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                            </div>
+                        </div>`,
+                    iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], popupAnchor: [0, -(pinSize[1] * 0.8)]
+                });
+
+                const marker = L.marker([item.y, item.x], { icon: pinIcon });
+                
+                // Dev Mode 클릭 이벤트 (녹화)
+                marker.on('click', () => {
+                    if (devRecording) {
+                        const existingIndex = devPathList.findIndex(entry => entry.id === item.id && entry.map === currentMapId);
+                        if (existingIndex > -1) {
+                            devPathList.splice(existingIndex, 1);
+                            L.DomUtil.removeClass(marker._icon, 'dev-selected');
+                        } else {
+                            devPathList.push({ id: item.id, map: currentMapId });
+                            L.DomUtil.addClass(marker._icon, 'dev-selected');
+                        }
+                        document.getElementById('dev-count').innerText = devPathList.length;
+                    } 
+                    // 일반 모드에서는 팝업 열림 (기본 동작)
+                });
+
+                marker.bindPopup(() => generatePopupContent(item, storageKey));
+                markersByType[item.type].push(marker);
+                allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
+            });
+
+            // 클러스터 또는 일반 레이어 그룹 생성
+            for (const type in markersByType) {
+                const markersArray = markersByType[type];
+                if (isClusterOn) {
+                    const typeColor = colorMapping[type] || "#555";
+                    if (!layerGroups[type]) {
+                        layerGroups[type] = L.markerClusterGroup({
+                            disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
+                            chunkedLoading: true, chunkInterval: 200,   
+                            animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
+                            iconCreateFunction: function(cluster) {
+                                const count = cluster.getChildCount();
+                                const countText = count > 99 ? '99+' : count;
+                                const html = `
+                                    <div class="simple-cluster-marker" style="background-color: ${typeColor};">
+                                        ${countText}
+                                    </div>`;
+                                return L.divIcon({
+                                    html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
+                                });
+                            }
+                        });
+                    }
+                    layerGroups[type].addLayers(markersArray);
+                } else {
+                    if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
+                    markersArray.forEach(m => layerGroups[type].addLayer(m));
+                }
+            }
+
+            // 필터 상태 반영
             for (const key in layerGroups) {
                 const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
                 if (shouldShow) { layerGroups[key].addTo(map); }
             }
-        }
-
-        function togglePanel(type) {
-            const searchPanel = document.getElementById('search-panel');
-            const filterPanel = document.getElementById('filter-panel');
-            const pathPanel = document.getElementById('path-panel');
-            
-            searchPanel.classList.remove('active');
-            filterPanel.classList.remove('active');
-            pathPanel.classList.remove('active');
-            
-            if (type === 'path') {
-                pathPanel.classList.add('active');
-            } else if (type === 'search') {
-                searchPanel.classList.add('active');
-                document.getElementById('nav-search').classList.add('active');
-                setTimeout(() => document.getElementById('marker-search').focus(), 300);
-            } else if (type === 'filter') {
-                filterPanel.classList.add('active');
-            }
-        }
-
-        function closeAllPanels() {
-            document.getElementById('search-panel').classList.remove('active');
-            document.getElementById('filter-panel').classList.remove('active');
-            document.getElementById('path-panel').classList.remove('active');
-        }
-
-        function createMarkers(data) {
-            const storageKey = `completed_${currentMapId}`;
-            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            // ★ [Fix] 필터 설정 불러오기
-            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-            
-            allMarkers = []; layerGroups = {}; const markersByType = {}; 
-
-            try {
-                data.forEach(item => {
-                    globalMarkerCache[item.id] = { ...item, map: currentMapId };
-                    if (!markersByType[item.type]) { markersByType[item.type] = []; }
-                    const isCompleted = completedList.includes(item.id);
-                    const imgName = typeMapping[item.type] || "stone"; 
-                    const iconPath = `../images/${imgName}.png`;
-                    const pinColor = colorMapping[item.type] || "#555";
-
-                    const pinIcon = L.divIcon({
-                        className: isCompleted ? 'marker-completed' : '',
-                        html: `<div class="pin-marker">
-                                <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
-                                    <img src="${iconPath}" onerror="this.src='../images/stone.png'">
-                                </div>
-                            </div>`,
-                        iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], popupAnchor: [0, -(pinSize[1] * 0.8)]
-                    });
-
-                    const marker = L.marker([item.y, item.x], { icon: pinIcon });
-                    
-                    // ★ [New] Dev Mode: 녹화 중이면 클릭 시 추가
-                    marker.on('click', () => {
-    if (devRecording) {
-        // 이미 선택된 마커인지 확인 (id와 map이 모두 일치하는지 체크)
-        const existingIndex = devPathList.findIndex(item => item.id === item.id && item.map === currentMapId);
-
-        if (existingIndex > -1) {
-            // 1. 이미 존재하면 배열에서 삭제
-            devPathList.splice(existingIndex, 1);
-            // 2. 선택 시각 효과(클래스) 제거
-            L.DomUtil.removeClass(marker._icon, 'dev-selected');
-        } else {
-            // 1. 존재하지 않으면 배열에 추가
-            devPathList.push({ id: item.id, map: currentMapId });
-            // 2. 선택 시각 효과(클래스) 추가
-            L.DomUtil.addClass(marker._icon, 'dev-selected');
-        }
-
-        // 3. 화면의 카운트 업데이트
-        document.getElementById('dev-count').innerText = devPathList.length;
-    } else {
-        // 일반 모드에서는 기존처럼 팝업 동작
+        } catch (e) { console.error("Marker creation error:", e); }
     }
-});
 
-                    marker.bindPopup(() => generatePopupContent(item, storageKey));
-                    markersByType[item.type].push(marker);
-                    allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
-                });
+    // 사이드바 필터 생성
+    function generateSidebar(data) {
+        const filterList = document.getElementById('filter-list');
+        if(!filterList) return;
+        filterList.innerHTML = '';
+        
+        const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
 
-                for (const type in markersByType) {
-                    const markersArray = markersByType[type];
-                    if (isClusterOn) {
-                        const typeColor = colorMapping[type] || "#555";
-                        if (!layerGroups[type]) {
-                            layerGroups[type] = L.markerClusterGroup({
-                                disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
-                                chunkedLoading: true, chunkInterval: 200,   
-                                animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
-                                iconCreateFunction: function(cluster) {
-                                    const count = cluster.getChildCount();
-                                    const countText = count > 99 ? '99+' : count;
-                                    const html = `
-                                        <div class="simple-cluster-marker" style="background-color: ${typeColor};">
-                                            ${countText}
-                                        </div>`;
-                                    return L.divIcon({
-                                        html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
-                                    });
-                                }
-                            });
-                        }
-                        layerGroups[type].addLayers(markersArray);
-                    } else {
-                        if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
-                        markersArray.forEach(m => layerGroups[type].addLayer(m));
-                    }
-                }
+        try {
+            const counts = {};
+            data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
 
-                // ★ [Fix] 저장된 필터 상태 반영
-                for (const key in layerGroups) {
-                    const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-                    if (shouldShow) { layerGroups[key].addTo(map); }
-                }
-            } catch (e) { console.error("Marker creation error:", e); }
-        }
-
-        function generateSidebar(data) {
-            const filterList = document.getElementById('filter-list');
-            if(!filterList) return;
-            filterList.innerHTML = '';
-            
-            // ★ [Fix] 저장된 필터 상태 확인
-            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-
-            try {
-                const counts = {};
-                data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
-
-                for (const [type, count] of Object.entries(counts)) {
-                    const div = document.createElement('div');
-                    // layerGroups에 있고 맵에도 있으면 active
-                    const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
-                    
-                    div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
-                    const imgName = typeMapping[type] || "stone";
-                    div.innerHTML = `
-                        <div class="filter-left-group">
-                            <img src="../images/${imgName}.png" class="filter-icon-img" onerror="this.style.display='none'">
-                            <span class="filter-text-name">${type}</span>
-                        </div>
-                        <span class="filter-count">${count}</span>`;
-                    div.onclick = function() {
-                        const isNowActive = div.classList.contains('active');
-                        if (isNowActive) {
-                            div.classList.remove('active'); div.classList.add('inactive');
-                            toggleLayer(type, false);
-                        } else {
-                            div.classList.remove('inactive'); div.classList.add('active');
-                            toggleLayer(type, true);
-                        }
-                        saveFilterState();
-                    };
-                    filterList.appendChild(div);
-                }
-            } catch (e) { console.error("Sidebar generation error:", e); }
-        }
-
-        // ★ [Fix] 필터 상태 저장 로직
-        function saveFilterState() {
-            const status = {};
-            // 현재 생성된 모든 레이어 그룹에 대해 상태 저장
-            for (const key in layerGroups) { 
-                status[key] = map.hasLayer(layerGroups[key]); 
-            }
-            localStorage.setItem('map_filter_settings', JSON.stringify(status));
-        }
-
-        function toggleLayer(type, isChecked) {
-            if (isChecked) { if (layerGroups[type]) map.addLayer(layerGroups[type]); } 
-            else { if (layerGroups[type]) map.removeLayer(layerGroups[type]); }
-        }
-
-        function setAllFilters(status) {
-            const items = document.querySelectorAll('.filter-item');
-            items.forEach(div => {
-                const typeName = div.querySelector('.filter-text-name').innerText;
-                if (status) {
-                    div.classList.remove('inactive'); div.classList.add('active');
-                    toggleLayer(typeName, true);
-                } else {
-                    div.classList.remove('active'); div.classList.add('inactive');
-                    toggleLayer(typeName, false);
-                }
-            });
-            saveFilterState();
-        }
-
-        const searchInput = document.getElementById('marker-search');
-        const searchResultList = document.getElementById('search-result-list');
-
-        searchInput.addEventListener('input', function(e) {
-            const keyword = e.target.value.trim().toLowerCase();
-            searchResultList.innerHTML = '';
-            if (keyword === "") {
-                searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색어를 입력하세요.</div>';
-                return;
-            }
-            const results = allMarkers.filter(item => item.name.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword));
-            if (results.length === 0) { 
-                searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>'; 
-                return; 
-            }
-            results.forEach(item => {
-                const row = document.createElement('div'); row.className = 'search-result-row';
-                const imgName = typeMapping[item.type] || "stone";
-                row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
+            for (const [type, count] of Object.entries(counts)) {
+                const div = document.createElement('div');
+                const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
                 
-                row.onclick = () => {
-                    if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
-                    const jumpZoom = Math.min(map.getZoom() + 3, 1); 
-                    map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
-                    
-                    map.once('moveend', function() { item.marker.openPopup(); });
-                    if (window.innerWidth <= 480) closeAllPanels();
+                div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
+                const imgName = typeMapping[type] || "stone";
+                div.innerHTML = `
+                    <div class="filter-left-group">
+                        <img src="../images/${imgName}.png" class="filter-icon-img" onerror="this.style.display='none'">
+                        <span class="filter-text-name">${type}</span>
+                    </div>
+                    <span class="filter-count">${count}</span>`;
+                div.onclick = function() {
+                    const isNowActive = div.classList.contains('active');
+                    if (isNowActive) {
+                        div.classList.remove('active'); div.classList.add('inactive');
+                        toggleLayer(type, false);
+                    } else {
+                        div.classList.remove('inactive'); div.classList.add('active');
+                        toggleLayer(type, true);
+                    }
+                    saveFilterState();
                 };
-                searchResultList.appendChild(row);
-            });
-        });
-
-        function generatePopupContent(item, storageKey) {
-            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const isCompleted = completedList.includes(item.id);
-            let html = `<div class="popup-inner"><span class="popup-title">${item.name}</span><div class="popup-type-badge">${item.type}</div>`;
-            
-            if (item.image) {
-                const ytId = getYouTubeId(item.image);
-                if (ytId) {
-                    html += `<div class="popup-youtube-container"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>`;
-                } else {
-                    html += `<img src="${item.image}" class="popup-img" alt="${item.name}">`;
-                }
+                filterList.appendChild(div);
             }
-            if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
+        } catch (e) { console.error("Sidebar generation error:", e); }
+    }
+
+    function saveFilterState() {
+        const status = {};
+        for (const key in layerGroups) { 
+            status[key] = map.hasLayer(layerGroups[key]); 
+        }
+        localStorage.setItem('map_filter_settings', JSON.stringify(status));
+    }
+
+    function toggleLayer(type, isChecked) {
+        if (isChecked) { if (layerGroups[type]) map.addLayer(layerGroups[type]); } 
+        else { if (layerGroups[type]) map.removeLayer(layerGroups[type]); }
+    }
+
+    function setAllFilters(status) {
+        const items = document.querySelectorAll('.filter-item');
+        items.forEach(div => {
+            const typeName = div.querySelector('.filter-text-name').innerText;
+            if (status) {
+                div.classList.remove('inactive'); div.classList.add('active');
+                toggleLayer(typeName, true);
+            } else {
+                div.classList.remove('active'); div.classList.add('inactive');
+                toggleLayer(typeName, false);
+            }
+        });
+        saveFilterState();
+    }
+
+    // 검색 기능
+    const searchInput = document.getElementById('marker-search');
+    const searchResultList = document.getElementById('search-result-list');
+
+    searchInput.addEventListener('input', function(e) {
+        const keyword = e.target.value.trim().toLowerCase();
+        searchResultList.innerHTML = '';
+        if (keyword === "") {
+            searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색어를 입력하세요.</div>';
+            return;
+        }
+        const results = allMarkers.filter(item => item.name.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword));
+        if (results.length === 0) { 
+            searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>'; 
+            return; 
+        }
+        results.forEach(item => {
+            const row = document.createElement('div'); row.className = 'search-result-row';
+            const imgName = typeMapping[item.type] || "stone";
+            row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
             
-            html += `<div class="btn-container"><button onclick="shareMarker(${item.id})" class="action-btn btn-wiki">🔗 공유</button>`;
-            if (item.link) { html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">📖 공략</a>`; }
-            
-            const btnText = isCompleted ? "취소" : "완료";
-            const btnClass = isCompleted ? "btn-undo" : "btn-complete";
-            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div></div>`;
-            return html;
+            row.onclick = () => {
+                if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
+                const jumpZoom = Math.min(map.getZoom() + 3, 1); 
+                map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
+                
+                map.once('moveend', function() { item.marker.openPopup(); });
+                if (window.innerWidth <= 480) closeAllPanels();
+            };
+            searchResultList.appendChild(row);
+        });
+    });
+
+    // 팝업 내용 생성
+    function generatePopupContent(item, storageKey) {
+        const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+        const isCompleted = completedList.includes(item.id);
+        let html = `<div class="popup-inner"><span class="popup-title">${item.name}</span><div class="popup-type-badge">${item.type}</div>`;
+        
+        if (item.image) {
+            const ytId = getYouTubeId(item.image);
+            if (ytId) {
+                html += `<div class="popup-youtube-container"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>`;
+            } else {
+                html += `<img src="${item.image}" class="popup-img" alt="${item.name}">`;
+            }
+        }
+        if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
+        
+        html += `<div class="btn-container"><button onclick="shareMarker(${item.id})" class="action-btn btn-wiki">🔗 공유</button>`;
+        if (item.link) { html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki">📖 공략</a>`; }
+        
+        const btnText = isCompleted ? "취소" : "완료";
+        const btnClass = isCompleted ? "btn-undo" : "btn-complete";
+        html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button></div></div>`;
+        return html;
+    }
+
+    // 완료 처리 토글
+    window.toggleComplete = function(id, storageKey) {
+        let list = JSON.parse(localStorage.getItem(storageKey)) || [];
+        const index = list.indexOf(id); 
+        
+        // 지도상의 마커 찾기 (일반 마커 혹은 경로 모드 마커)
+        let targetMarkerObj = allMarkers.find(m => m.id === id);
+        let marker = targetMarkerObj ? targetMarkerObj.marker : null;
+        
+        if (currentPathLayer && activePathMarkersMap[id]) {
+            marker = activePathMarkersMap[id];
         }
 
-        window.toggleComplete = function(id, storageKey) {
-            let list = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
-            if (!target) return;
-            
-            const isNowComplete = (index === -1);
-            if (isNowComplete) { list.push(id); } else { list.splice(index, 1); }
-            localStorage.setItem(storageKey, JSON.stringify(list)); 
-            updatePathSummaryUI();
-            let marker = target.marker;
-            if (currentPathLayer && activePathMarkersMap[id]) {
-                marker = activePathMarkersMap[id];
-            }
-
+        const isNowComplete = (index === -1);
+        if (isNowComplete) { list.push(id); } else { list.splice(index, 1); }
+        localStorage.setItem(storageKey, JSON.stringify(list)); 
+        
+        // UI 업데이트
+        updatePathSummaryUI();
+        
+        if (marker) {
             if (isNowComplete) { L.DomUtil.addClass(marker._icon, 'marker-completed'); }
             else { L.DomUtil.removeClass(marker._icon, 'marker-completed'); }
             
-            marker.closePopup(); marker.openPopup();
+            // 팝업 갱신 (완료/취소 버튼 텍스트 변경을 위해)
+            marker.closePopup(); 
+            marker.openPopup();
+        }
 
-            if (isNowComplete && currentPathIds.length > 0) {
-                const currentEntry = currentPathIds.find(entry => (typeof entry === 'object' ? entry.id : entry) == id);
-                const pathIndex = currentPathIds.indexOf(currentEntry);
+        // 경로 모드일 때 자동 이동
+        if (isNowComplete && currentPathIds.length > 0) {
+            const currentEntry = currentPathIds.find(entry => (typeof entry === 'object' ? entry.id : entry) == id);
+            const pathIndex = currentPathIds.indexOf(currentEntry);
+            
+            if (pathIndex !== -1 && pathIndex < currentPathIds.length - 1) {
+                const nextEntry = currentPathIds[pathIndex + 1];
+                const nextId = (typeof nextEntry === 'object') ? nextEntry.id : nextEntry;
+                const nextMap = (typeof nextEntry === 'object') ? nextEntry.map : currentMapId;
                 
-                if (pathIndex !== -1 && pathIndex < currentPathIds.length - 1) {
-                    const nextEntry = currentPathIds[pathIndex + 1];
-                    const nextId = (typeof nextEntry === 'object') ? nextEntry.id : nextEntry;
-                    const nextMap = (typeof nextEntry === 'object') ? nextEntry.map : currentMapId;
-                    if (nextMap === currentMapId) {
-                        const nextMarker = activePathMarkersMap[nextId];
-                        if (nextMarker) {
-                            setTimeout(() => {
-                                map.flyTo(nextMarker.getLatLng(), 0, { animate: true, duration: 1.0 });
-                                map.once('moveend', () => nextMarker.openPopup());
-                            }, 500);
-                        }
-                    } 
-                    else {
+                if (nextMap === currentMapId) {
+                    const nextMarker = activePathMarkersMap[nextId];
+                    if (nextMarker) {
                         setTimeout(() => {
-                            const currentPathKey = localStorage.getItem('activePathKey') || '';
-                            window.location.href = `?id=${nextMap}&marker=${nextId}&path=${currentPathKey}`;
+                            map.flyTo(nextMarker.getLatLng(), 0, { animate: true, duration: 1.0 });
+                            map.once('moveend', () => nextMarker.openPopup());
                         }, 500);
                     }
+                } else {
+                    setTimeout(() => {
+                        const currentPathKey = localStorage.getItem('activePathKey') || '';
+                        window.location.href = `?id=${nextMap}&marker=${nextId}&path=${currentPathKey}`;
+                    }, 500);
                 }
             }
-        };
-
-        window.shareMarker = function(id) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('marker', id);
-            url.searchParams.delete('path'); 
-            copyToClipboard(url.toString());
-        };
-
-        function getYouTubeId(url) {
-            if (!url) return null;
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
         }
+    };
 
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => { console.log(err); }); } 
-            else { if (document.exitFullscreen) { document.exitFullscreen(); } }
-        }
+    window.shareMarker = function(id) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('marker', id);
+        url.searchParams.delete('path'); 
+        copyToClipboard(url.toString());
+    };
 
-        window.toggleClusterMode = function() {
-            isClusterOn = !isClusterOn;
-            localStorage.setItem('clusterMode', isClusterOn);
-            for (const key in layerGroups) map.removeLayer(layerGroups[key]);
-            layerGroups = {}; allMarkers = [];
-            if (cachedData) { createMarkers(cachedData); generateSidebar(cachedData); }
-        };
+    function getYouTubeId(url) {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
 
-        function exportCompletedPins() {
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => { console.log(err); }); } 
+        else { if (document.exitFullscreen) { document.exitFullscreen(); } }
+    }
+
+    window.toggleClusterMode = function() {
+        isClusterOn = !isClusterOn;
+        localStorage.setItem('clusterMode', isClusterOn);
+        for (const key in layerGroups) map.removeLayer(layerGroups[key]);
+        layerGroups = {}; allMarkers = [];
+        if (cachedData) { createMarkers(cachedData); generateSidebar(cachedData); }
+    };
+
+    function exportCompletedPins() {
+        try {
+            if (!currentMapId) { alert("맵 ID를 찾을 수 없습니다."); return; }
+            const storageKey = `completed_${currentMapId}`;
+            const data = localStorage.getItem(storageKey);
+            if (!data || data === "[]") { alert("저장할 완료 기록이 없습니다."); return; }
+            const blob = new Blob([data], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url; a.download = `completed_markers_${currentMapId}.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (err) { alert("오류 발생: " + err.message); }
+    }
+
+    function importCompletedPins(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
             try {
-                if (!currentMapId) { alert("맵 ID를 찾을 수 없습니다."); return; }
-                const storageKey = `completed_${currentMapId}`;
-                const data = localStorage.getItem(storageKey);
-                if (!data || data === "[]") { alert("저장할 완료 기록이 없습니다."); return; }
-                const blob = new Blob([data], { type: "application/json" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url; a.download = `completed_markers_${currentMapId}.json`;
-                document.body.appendChild(a); a.click(); document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            } catch (err) { alert("오류 발생: " + err.message); }
-        }
-
-        function importCompletedPins(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const json = JSON.parse(e.target.result);
-                    if (!Array.isArray(json)) throw new Error("Invalid format");
-                    if (confirm(`불러온 기록으로 현재 완료 상태를 덮어쓰시겠습니까? (${json.length}개)`)) {
-                        const storageKey = `completed_${currentMapId}`;
-                        localStorage.setItem(storageKey, JSON.stringify(json));
-                        location.reload();
-                    }
-                } catch (err) { alert("파일 형식이 올바르지 않습니다."); }
-                input.value = ""; 
-            };
-            reader.readAsText(file);
-        }
-
-        window.copyToClipboard = function(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).catch(() => fallbackCopy(text)); }
+                const json = JSON.parse(e.target.result);
+                if (!Array.isArray(json)) throw new Error("Invalid format");
+                if (confirm(`불러온 기록으로 현재 완료 상태를 덮어쓰시겠습니까? (${json.length}개)`)) {
+                    const storageKey = `completed_${currentMapId}`;
+                    localStorage.setItem(storageKey, JSON.stringify(json));
+                    location.reload();
+                }
+            } catch (err) { alert("파일 형식이 올바르지 않습니다."); }
+            input.value = ""; 
         };
-
-        function fallbackCopy(text) {
-            const ta = document.createElement("textarea"); ta.value = text;
-            ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
-            document.body.appendChild(ta); ta.focus(); ta.select();
-            try { document.execCommand('copy'); } catch (err) { console.error(err); }
-            document.body.removeChild(ta);
-        }
-        // ★ [New] 경로 진행도 계산 및 표시 함수
-function updatePathSummaryUI() {
-    const container = document.getElementById('path-summary-bar');
-    
-    // 경로가 없으면 숨김
-    if (!currentPathLayer) { 
-        container.style.display = 'none'; 
-        return; 
+        reader.readAsText(file);
     }
-    
-    const storageKey = `completed_${currentMapId}`;
-    const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-    const summary = {};
 
-    // 현재 경로의 모든 마커를 순회하며 계산
-    currentPathIds.forEach(entry => {
-        // ID와 맵 정보 추출
-        const id = (typeof entry === 'object') ? entry.id : entry;
-        const mapId = (typeof entry === 'object') ? entry.map : currentMapId;
-        
-        // 현재 맵에 있는 마커만 계산
-        if (mapId !== currentMapId) return;
+    window.copyToClipboard = function(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).catch(() => fallbackCopy(text)); }
+    };
 
-        // 전체 데이터(cachedData)에서 타입 정보 찾기
-        const item = cachedData.find(d => d.id == id);
-        if (item) {
-            if (!summary[item.type]) {
-                summary[item.type] = { total: 0, done: 0 };
-            }
-            summary[item.type].total++; // 전체 개수 증가
-            
-            if (completedList.includes(id)) {
-                summary[item.type].done++; // 완료 개수 증가
-            }
-        }
-    });
-
-    // HTML 생성 (예: "상자 (1/5)")
-    const html = Object.entries(summary).map(([type, data]) => 
-        `<div class="summary-chunk">${type} <b>(${data.done}/${data.total})</b></div>`
-    ).join('');
-
-    if (html === '') {
-        container.style.display = 'none';
-    } else {
-        container.innerHTML = html;
-        container.style.display = 'flex';
+    function fallbackCopy(text) {
+        const ta = document.createElement("textarea"); ta.value = text;
+        ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        try { document.execCommand('copy'); } catch (err) { console.error(err); }
+        document.body.removeChild(ta);
     }
-}
-function updatePathSummaryUI() {
-    const container = document.getElementById('path-summary-bar');
-    if (!currentPathLayer) { container.style.display = 'none'; return; }
-    
-    const summary = {};
-    currentPathIds.forEach(entry => {
-        const id = (typeof entry === 'object') ? entry.id : entry;
-        const item = globalMarkerCache[id]; // 전역 캐시에서 조회
+
+    // ★ [경로 요약] 모든 맵의 진행도를 통합 계산
+    function updatePathSummaryUI() {
+        const container = document.getElementById('path-summary-bar');
         
-        if (item) {
-            if (!summary[item.type]) summary[item.type] = { total: 0, done: 0 };
-            summary[item.type].total++;
-            
-            // 해당 아이템 맵의 완료 기록 확인
-            const mapId = item.map || currentMapId;
-            const list = JSON.parse(localStorage.getItem(`completed_${mapId}`)) || [];
-            if (list.includes(id)) summary[item.type].done++;
+        // 경로 레이어가 없으면 숨김
+        if (!currentPathLayer) { 
+            container.style.display = 'none'; 
+            return; 
         }
-    });
-
-    container.innerHTML = Object.entries(summary).map(([type, d]) => 
-        `<div class="summary-chunk">${type} <b>(${d.done}/${d.total})</b></div>`
-    ).join('');
-    container.style.display = 'flex';
-}
-function updatePathSummaryUI() {
-    const container = document.getElementById('path-summary-bar');
-    if (!currentPathLayer) { container.style.display = 'none'; return; }
-    
-    const summary = {};
-    currentPathIds.forEach(entry => {
-        const id = (typeof entry === 'object') ? entry.id : entry;
-        const item = globalMarkerCache[id]; // 전역 캐시에서 조회
         
-        if (item) {
-            if (!summary[item.type]) summary[item.type] = { total: 0, done: 0 };
-            summary[item.type].total++;
+        const summary = {};
+
+        currentPathIds.forEach(entry => {
+            // 1. ID와 Map ID 추출
+            let id, mapId;
+            if (typeof entry === 'object') {
+                id = entry.id;
+                mapId = entry.map;
+            } else {
+                id = entry;
+                // 객체가 아닌 경우, 캐시에서 맵 정보를 찾음. 없으면 현재 맵으로 가정
+                const cachedItem = globalMarkerCache[id];
+                mapId = cachedItem ? cachedItem.map : currentMapId;
+            }
+
+            // 2. 전역 캐시에서 아이템 정보 조회
+            const item = globalMarkerCache[id];
             
-            // 해당 아이템 맵의 완료 기록 확인
-            const mapId = item.map || currentMapId;
-            const list = JSON.parse(localStorage.getItem(`completed_${mapId}`)) || [];
-            if (list.includes(id)) summary[item.type].done++;
+            if (item) {
+                // 3. 해당 마커가 속한 맵의 완료 기록을 가져옴
+                const storageKey = `completed_${mapId}`;
+                const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+                if (!summary[item.type]) {
+                    summary[item.type] = { total: 0, done: 0 };
+                }
+                summary[item.type].total++;
+                
+                // 4. 완료 여부 체크
+                if (completedList.includes(id)) {
+                    summary[item.type].done++;
+                }
+            }
+        });
+
+        // HTML 생성
+        const htmlChunks = Object.entries(summary).map(([type, d]) => 
+            `<div class="summary-chunk">${type} <b>(${d.done}/${d.total})</b></div>`
+        );
+
+        if (htmlChunks.length === 0) {
+            container.style.display = 'none';
+        } else {
+            container.innerHTML = htmlChunks.join('');
+            container.style.display = 'flex';
         }
-    });
+    }
+</script>
 
-    container.innerHTML = Object.entries(summary).map(([type, d]) => 
-        `<div class="summary-chunk">${type} <b>(${d.done}/${d.total})</b></div>`
-    ).join('');
-    container.style.display = 'flex';
-}
-
-    </script>
-</body>
+   </body>
 </html>

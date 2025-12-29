@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v42 - Save Menu)</title>
+    <title>연운 한국어 맵 (Final v43 - Clean Share)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     
     <style>
         /* =========================================
-           1. 기본 설정
+           1. 기본 설정 및 클릭 문제 해결
            ========================================= */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
         body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
@@ -37,7 +37,7 @@
 
         .top-left-controls { top: 15px; left: 15px; }
         .top-right-controls { top: 15px; right: 15px; }
-        .bottom-left-controls { bottom: 25px; left: 15px; overflow: visible; } /* 팝업을 위해 overflow visible */
+        .bottom-left-controls { bottom: 25px; left: 15px; overflow: visible; }
         .bottom-right-controls { bottom: 25px; right: 15px; align-items: flex-end; }
         
         .bottom-center-controls {
@@ -50,7 +50,7 @@
         .sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
         .filter-control-btn, .filter-item, .action-btn, 
         .search-panel, .filter-panel, .path-panel, 
-        .save-load-popup, .popup-item { /* 팝업 메뉴 추가 */
+        .save-load-popup, .popup-item {
             pointer-events: auto !important;
             cursor: pointer !important;
         }
@@ -117,7 +117,7 @@
         .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
         .icon-svg { width: 20px; height: 20px; fill: currentColor; }
 
-        /* ★ [New] 저장/불러오기 팝업 메뉴 스타일 */
+        /* 저장/불러오기 팝업 메뉴 */
         .save-load-popup {
             position: absolute; bottom: 50px; left: 0;
             background-color: rgba(20, 20, 20, 0.95);
@@ -128,23 +128,16 @@
             display: flex; flex-direction: column; gap: 2px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             width: 140px;
-            
-            /* 애니메이션 */
             opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none !important;
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             transform-origin: bottom left;
         }
-        
-        .save-load-popup.active {
-            opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important;
-        }
+        .save-load-popup.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
 
         .popup-item {
             display: flex; align-items: center; gap: 10px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            color: #ccc;
-            font-size: 13px; font-weight: 500;
+            padding: 10px 12px; border-radius: 8px;
+            color: #ccc; font-size: 13px; font-weight: 500;
             transition: background 0.2s;
         }
         .popup-item:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
@@ -756,7 +749,7 @@
                 pathPanel.classList.add('active');
             } else if (type === 'search') {
                 searchPanel.classList.add('active');
-                document.getElementById('nav-search').classList.add('active'); // nav-search가 없어도 에러 안남
+                document.getElementById('nav-search').classList.add('active');
                 setTimeout(() => document.getElementById('marker-search').focus(), 300);
             } else if (type === 'filter') {
                 filterPanel.classList.add('active');
@@ -997,6 +990,7 @@
         window.shareMarker = function(id) {
             const url = new URL(window.location.href);
             url.searchParams.set('marker', id);
+            url.searchParams.delete('path'); // ★ 경로 공유 방지 (Clean Share)
             copyToClipboard(url.toString());
         };
 

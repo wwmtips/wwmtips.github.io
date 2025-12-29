@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v14)</title>
+    <title>연운 한국어 맵 (Final v15 - Dark Map)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -27,82 +27,26 @@
            기본 설정
            ========================================= */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
-        body { margin: 0; padding: 0; background-color: #1a1a1a; overflow: hidden; }
-        #map { width: 100vw; height: 100vh; background: #1a1a1a; z-index: 1; }
+        
+        /* 배경을 지도 필터톤과 비슷하게 아주 어둡게 설정 */
+        body { margin: 0; padding: 0; background-color: #0a0a0a; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; background: #0a0a0a; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
         /* =========================================
-           ★ 1. 팝업 디테일 스타일 (map_style.css에서 이식 및 수정)
+           ★ [New] 지도 이미지 다크 필터 적용
            ========================================= */
-        .leaflet-popup-content-wrapper { 
-            background: #ffffff !important; 
-            color: #333 !important; 
-            border-radius: 8px !important; 
-            padding: 0 !important;
-            box-shadow: 0 3px 14px rgba(0,0,0,0.4) !important;
-            overflow: hidden;
+        .leaflet-image-layer {
+            /* brightness(0.55): 밝기를 55%로 낮춤 (어둡게)
+               contrast(1.1): 대비를 10% 높임 (선명하게)
+               saturate(0.75): 채도를 75%로 낮춤 (차분하게)
+            */
+            filter: brightness(0.55) contrast(1.1) saturate(0.75);
+            transition: filter 0.5s ease; /* 부드러운 전환 */
         }
-        .leaflet-popup-content { 
-            margin: 15px !important; 
-            width: 260px !important; /* 너비 고정 */
-            text-align: center;
-            line-height: 1.4;
-        }
-        .leaflet-popup-tip { background: #ffffff !important; }
-        .leaflet-container a.leaflet-popup-close-button {
-            top: 5px !important; right: 5px !important;
-            color: #999 !important; font-size: 18px !important;
-        }
-
-        /* 팝업 내부 요소 */
-        .popup-title { 
-            font-size: 16px; font-weight: 700; color: #000; 
-            margin-bottom: 5px; padding-bottom: 5px;
-            border-bottom: 2px solid #a08040; display: inline-block;
-        }
-        .popup-type { 
-            font-size: 12px; color: #a08040; font-weight: bold; margin-bottom: 8px; 
-        }
-        .popup-desc { 
-            font-size: 13px; color: #555; background: #f8f8f8; 
-            padding: 10px; border-radius: 4px; margin: 8px 0; 
-            text-align: left; border: 1px solid #eee;
-            word-break: break-word;
-        }
-        
-        /* ★ [중요] 이미지/유튜브 깨짐 방지 */
-        .popup-img { 
-            width: 100%; height: auto; border-radius: 4px; 
-            margin-top: 8px; border: 1px solid #ddd; display: block;
-        }
-        .popup-youtube-container {
-            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
-            margin-top: 8px; border-radius: 4px; border: 1px solid #ddd;
-        }
-        .popup-youtube-container iframe {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        }
-
-        /* 버튼 컨테이너 */
-        .btn-container { display: flex; gap: 6px; margin-top: 10px; }
-        .action-btn { 
-            flex: 1; padding: 8px 0; border-radius: 4px; cursor: pointer; 
-            font-size: 13px; font-weight: bold; border: none; color: white;
-            text-align: center; text-decoration: none; display: inline-block;
-        }
-        /* 버튼 색상 (스크린샷 참조) */
-        .btn-wiki { background-color: #4a90e2; } /* 파란색 (공유/위키) */
-        .btn-wiki:hover { background-color: #357abd; }
-        
-        .btn-complete { background-color: #2e7d32; } /* 초록색 (완료) */
-        .btn-complete:hover { background-color: #1b5e20; }
-        
-        .btn-undo { background-color: #757575; } /* 회색 (취소) */
-        .btn-undo:hover { background-color: #616161; }
-
 
         /* =========================================
-           2. 핀 & 클러스터 (초기 버전)
+           1. 핀 & 클러스터 (초기 버전 스타일 유지)
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
@@ -136,7 +80,7 @@
         .simple-cluster-marker:hover { transform: scale(1.15); cursor: pointer; z-index: 5000; }
 
         /* =========================================
-           3. UI 컨트롤 스타일 (Glass & Dark)
+           2. UI 컨트롤 스타일 (Glass & Dark)
            ========================================= */
         .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
         .top-right-controls { position: fixed; top: 20px; right: 20px; z-index: 2000; transition: opacity 0.3s; }
@@ -200,7 +144,9 @@
         }
         .nav-item.active { color: #a08040; }
 
-        /* 검색 패널 */
+        /* =========================================
+           4. 패널 스타일 (검색/필터)
+           ========================================= */
         .search-panel {
             position: fixed; top: 0; left: 0; width: 100%;
             background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
@@ -239,7 +185,6 @@
         .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
         .result-type-icon { width: 24px; height: 24px; opacity: 0.9; }
 
-        /* 필터 패널 */
         .filter-panel {
             position: fixed; bottom: 0; left: 0; width: 100%; max-height: 60vh;
             background-color: rgba(20, 20, 20, 0.99); backdrop-filter: blur(10px);
@@ -277,7 +222,61 @@
         .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
         .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
         .filter-item.inactive { opacity: 0.4; }
-        
+
+        /* =========================================
+           ★ 5. 팝업 스타일 복구 및 최적화
+           ========================================= */
+        .leaflet-popup-content-wrapper { 
+            background: #ffffff !important; color: #333 !important; 
+            border-radius: 8px !important; padding: 0 !important;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.4) !important;
+            overflow: hidden;
+        }
+        .leaflet-popup-content { 
+            margin: 15px !important; width: 260px !important; 
+            text-align: center; line-height: 1.4;
+        }
+        .leaflet-popup-tip { background: #ffffff !important; }
+        .leaflet-container a.leaflet-popup-close-button {
+            top: 5px !important; right: 5px !important;
+            color: #999 !important; font-size: 18px !important;
+        }
+        .popup-title { 
+            font-size: 16px; font-weight: 700; color: #000; 
+            margin-bottom: 5px; padding-bottom: 5px;
+            border-bottom: 2px solid #a08040; display: inline-block;
+        }
+        .popup-type { font-size: 12px; color: #a08040; font-weight: bold; margin-bottom: 8px; }
+        .popup-desc { 
+            font-size: 13px; color: #555; background: #f8f8f8; 
+            padding: 10px; border-radius: 4px; margin: 8px 0; 
+            text-align: left; border: 1px solid #eee;
+            word-break: break-word;
+        }
+        .popup-img { 
+            width: 100%; height: auto; border-radius: 4px; 
+            margin-top: 8px; border: 1px solid #ddd; display: block;
+        }
+        .popup-youtube-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            margin-top: 8px; border-radius: 4px; border: 1px solid #ddd;
+        }
+        .popup-youtube-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .btn-container { display: flex; gap: 6px; margin-top: 10px; }
+        .action-btn { 
+            flex: 1; padding: 8px 0; border-radius: 4px; cursor: pointer; 
+            font-size: 13px; font-weight: bold; border: none; color: white;
+            text-align: center; text-decoration: none; display: inline-block;
+        }
+        .btn-wiki { background-color: #4a90e2; } 
+        .btn-wiki:hover { background-color: #357abd; }
+        .btn-complete { background-color: #2e7d32; } 
+        .btn-complete:hover { background-color: #1b5e20; }
+        .btn-undo { background-color: #757575; } 
+        .btn-undo:hover { background-color: #616161; }
+
         @media (min-width: 768px) {
             .search-panel, .filter-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
             .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
@@ -334,7 +333,7 @@
     <div id="search-panel" class="search-panel">
         <div class="panel-close-btn" onclick="closeAllPanels()">✕</div>
         <div class="search-wrapper">
-            <input type="text" id="marker-search" class="sidebar-search-input" placeholder="마커 이름 검색..." autocomplete="off">
+            <input type="text" id="marker-search" class="sidebar-search-input" placeholder="이름 또는 설명 검색..." autocomplete="off">
             <span class="search-icon">🔍</span>
         </div>
         <div id="search-result-list" class="search-results-container"></div>
@@ -444,10 +443,17 @@
             "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
+        // ★ [유지] 초기 버전 컬러 복구
         const colorMapping = {
-            "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
-            "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
-            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad"
+            "상자": "#2e7d32", 
+            "보스": "#b71c1c", 
+            "고양이": "#000000", 
+            "묘물": "#35945f", 
+            "만사록": "#a08040", 
+            "경계석": "#4b3947", 
+            "기연": "#f086ab", 
+            "묘묘냥": "#635e85", 
+            "천지록": "#4076ad"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -523,6 +529,7 @@
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || "#555";
 
+                // ★ [유지] 초기 버전 핀 모양 (물방울)
                 const pinIcon = L.divIcon({
                     className: isCompleted ? 'marker-completed' : '',
                     html: `<div class="pin-marker">
@@ -530,7 +537,9 @@
                                    <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                                </div>
                            </div>`,
-                    iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    iconSize: pinSize, 
+                    iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9],
+                    popupAnchor: [0, -(pinSize[1] * 0.8)]
                 });
 
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
@@ -621,7 +630,7 @@
                     const jumpZoom = Math.min(map.getZoom() + 3, 1); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     
-                    // ★ 클릭 시 팝업 열기 (확실하게)
+                    // ★ [유지] 클릭 시 팝업 열기
                     map.once('moveend', function() {
                         item.marker.openPopup();
                     });
@@ -683,101 +692,6 @@
             });
             saveFilterState();
         }
-
-        function generatePopupContent(item, storageKey) {
-            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const isCompleted = completedList.includes(item.id);
-            let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
-            
-            // ★ [수정] 이미지 있으면 표시 (반응형 적용)
-            if (item.image) {
-                const ytId = getYouTubeId(item.image);
-                if (ytId) {
-                    html += `<div class="popup-youtube-container">
-                                <iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe>
-                             </div>`;
-                } else {
-                    html += `<img src="${item.image}" class="popup-img" alt="${item.name}">`;
-                }
-            }
-
-            if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
-            
-            html += `<div class="btn-container">`;
-            html += `<button onclick="shareMarker(${item.id})" class="action-btn btn-wiki">🔗 공유</button>`;
-            if (item.link) {
-                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki" style="display:block; text-decoration:none; line-height:32px;">📖 공략</a>`;
-            }
-            
-            const btnText = isCompleted ? "취소" : "완료";
-            const btnClass = isCompleted ? "btn-undo" : "btn-complete";
-            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button>`;
-            html += `</div>`;
-            html += `</div>`;
-            return html;
-        }
-
-        window.toggleComplete = function(id, storageKey) {
-            let list = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
-            if (!target) return;
-            const marker = target.marker;
-            if (index > -1) { 
-                list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); 
-            } else { 
-                list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); 
-            }
-            localStorage.setItem(storageKey, JSON.stringify(list)); 
-            marker.closePopup(); marker.openPopup();
-        };
-
-        window.shareMarker = function(id) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('marker', id);
-            copyToClipboard(url.toString());
-        };
-
-        if (isDevMode) {
-            map.on('click', function(e) {
-                const y = Math.round(e.latlng.lat);
-                const x = Math.round(e.latlng.lng);
-                const content = `
-                    <div class="input-group">
-                        <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
-                        <label>이름</label> <input type="text" id="input_name">
-                        <label>종류</label> 
-                        <select id="input_type" onchange="autoFillDesc(this)">                        
-                            <option value="상자">상자</option>
-                            <option value="경계석">경계석</option> 
-                            <option value="묘묘냥">묘묘냥</option> 
-                            <option value="묘물">묘물</option>                           
-                            <option value="고양이">고양이</option> 
-                            <option value="만사록">만사록</option>
-                        </select>
-                        <label>설명</label> <textarea id="input_desc" style="height:40px;"></textarea>
-                        <label>링크</label> <input type="text" id="input_link">
-                        <label>사진</label> <input type="text" id="input_image">
-                        <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button>
-                    </div>`;
-                L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
-                setTimeout(() => document.getElementById('input_name')?.focus(), 100);
-            });
-        }
-
-        window.autoFillDesc = function(selectElement) {
-            const descInput = document.getElementById('input_desc');
-            const titleInput = document.getElementById('input_name');
-            if (selectElement.value === '고양이') {
-                descInput.value = '귀여운 고양이다';
-            } else if (selectElement.value === '묘묘냥') {
-                descInput.value = '박식 스탯을 위해 필수 진행';
-                titleInput.value ='묘묘냥';
-            } else if (descInput.value === '귀여운 고양이다') {
-                descInput.value = '';
-            }else if (selectElement.value === '상자') {
-                titleInput.value ='상자';
-            }
-        };
 
         function getYouTubeId(url) {
             if (!url) return null;

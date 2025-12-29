@@ -836,7 +836,35 @@
     border-width: 2px;
     box-shadow: 0 0 10px var(--cluster-color);
 }
-
+/* =========================================
+   ★ [PC Optimization] 경로 모드 버튼 크기 확대
+   ========================================= */
+@media (min-width: 769px) {
+    #path-toggle-btn {
+     
+        max-width: 100% !important;   /* 너비: 400px -> 500px */
+        border-radius: 28px !important; /* 둥근 모서리도 비율에 맞게 조정 */
+        
+        /* 2. 여백 및 간격 조정 */
+        padding: 0 30px !important;
+        gap: 12px !important;
+        
+        /* 3. 살짝 위로 띄우기 (시각적 균형) */
+        bottom: 35px !important; 
+    }
+    
+    /* 4. 글자 크기 시원하게 */
+    #path-toggle-btn span {
+        font-size: 16px !important;    /* 글자: 13px -> 16px */
+        letter-spacing: 1px !important;
+    }
+    
+    /* 5. 아이콘 크기 확대 */
+    #path-toggle-btn .icon-svg {
+        width: 24px !important;        /* 아이콘: 20px -> 24px */
+        height: 24px !important;
+    }
+}
     </style>
 </head>
 <body>

@@ -869,6 +869,51 @@
     background-color: rgba(0, 0, 0, 0.9) !important;
     box-shadow: 0 0 10px var(--cluster-color), 0 2px 5px rgba(0,0,0,0.5);
 }
+/* =========================================
+   6. 커스텀 스크롤바 디자인 (Dark Glass Style)
+   ========================================= */
+
+/* 스크롤바의 전체 너비 설정 */
+.path-list-container::-webkit-scrollbar {
+    width: 6px;  /* 얇고 세련되게 */
+}
+
+/* 스크롤바의 배경 (트랙) - 투명하게 처리 */
+.path-list-container::-webkit-scrollbar-track {
+    background: transparent; 
+    margin: 5px 0; /* 위아래 여백 */
+}
+
+/* 스크롤바 핸들 (움직이는 막대) */
+.path-list-container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15); /* 아주 연한 회색 */
+    border-radius: 3px; /* 둥근 모서리 */
+    transition: background-color 0.2s;
+}
+
+/* 스크롤바에 마우스를 올렸을 때 */
+.path-list-container::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* 좀 더 밝게 강조 */
+}
+
+/* (선택사항) 검색창이나 필터창에도 똑같이 적용하려면 아래 셀렉터를 추가하세요 */
+.search-results-container::-webkit-scrollbar,
+.filter-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+.search-results-container::-webkit-scrollbar-track,
+.filter-list-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.search-results-container::-webkit-scrollbar-thumb,
+.filter-list-container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+.search-results-container::-webkit-scrollbar-thumb:hover,
+.filter-list-container::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
 </style>
 </head>
 <body>

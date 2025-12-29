@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v37 - Loop Fix)</title>
+    <title>연운 한국어 맵 (Final v41 - Save Fix)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -27,25 +27,107 @@
             transition: filter 0.5s ease;
         }
 
-        .top-left-controls, .top-right-controls, .bottom-ui-container {
-            z-index: 90000 !important; 
+        /* UI 컨테이너 (클릭 통과) */
+        .top-left-controls, .top-right-controls, 
+        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls {
+            position: fixed; z-index: 90000 !important; 
             pointer-events: none !important; 
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        /* 위치 및 여백 조정 */
+        .top-left-controls { top: 15px; left: 15px; }
+        .top-right-controls { top: 15px; right: 15px; }
+        .bottom-left-controls { bottom: 25px; left: 15px; }
+        .bottom-right-controls { bottom: 25px; right: 15px; align-items: flex-end; }
+        
+        /* 하단 중앙 컨트롤 (경로 버튼용 - 넓게) */
+        .bottom-center-controls {
+            bottom: 25px; 
+            left: 70px;  /* 좌측 버튼 피함 */
+            right: 70px; /* 우측 버튼 피함 */
+            justify-content: center; 
+            align-items: center;
         }
         
-        .glass-box, .glass-select, .nav-item, .glass-group-btn, 
-        .glass-single-btn, .sidebar-search-input, .panel-close-btn, 
-        .path-item, .search-result-row, .filter-control-btn, .filter-item,
-        .action-btn, .search-panel, .filter-panel, .path-panel {
+        /* 버튼 및 패널 클릭 활성화 */
+        .glass-box, .glass-select, .glass-group-btn, .glass-single-btn,
+        .sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
+        .filter-control-btn, .filter-item, .action-btn, 
+        .search-panel, .filter-panel, .path-panel {
             pointer-events: auto !important;
             cursor: pointer !important;
         }
 
+        /* 패널 Z-index */
         .search-panel, .filter-panel, .path-panel {
             z-index: 100001 !important;
         }
 
         /* =========================================
-           2. 핀 & 클러스터
+           2. UI 디자인 (Compact Glass)
+           ========================================= */
+        
+        /* 드롭다운 */
+        .glass-select {
+            appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a08040; padding: 8px 28px 8px 12px; border-radius: 10px;
+            font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
+        }
+        .glass-select option { background-color: #1a1a1a; color: white; }
+
+        /* 기본 버튼 */
+        .glass-box {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
+
+        /* ★ 하단 중앙 경로 버튼 (넓게) */
+        #path-toggle-btn {
+            width: 100%; max-width: 400px; height: 42px; padding: 0 20px; 
+            border-radius: 21px; gap: 8px;
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        #path-toggle-btn span { font-size: 13px; font-weight: 700; color: #ccc; letter-spacing: 0.5px; }
+        
+        #path-toggle-btn.path-active {
+            background-color: #a08040 !important; border-color: #fff !important;
+            box-shadow: 0 0 20px rgba(160, 128, 64, 0.6); transform: translateY(-2px);
+        }
+        #path-toggle-btn.path-active span, #path-toggle-btn.path-active svg { color: #fff !important; fill: #fff !important; }
+
+        /* 그룹 버튼 */
+        .glass-group {
+            display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .glass-group-btn {
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
+        }
+        .glass-group-btn:last-child { border-bottom: none; }
+        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
+        
+        .glass-single-btn {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
+        .icon-svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* =========================================
+           3. 핀 & 클러스터
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
@@ -53,7 +135,7 @@
             background: #ffffff; 
             box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s; pointer-events: auto !important;
+            transition: transform 0.2s;
         }
         .pin-inner-circle {
             width: 88%; height: 88%; border-radius: 50%;
@@ -74,11 +156,10 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 13px; font-weight: 800;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-            cursor: pointer; pointer-events: auto !important;
         }
 
         /* =========================================
-           3. 경로 마커 (카드형)
+           4. 경로 마커
            ========================================= */
         .path-marker-box {
             position: relative; width: 100%; height: 100%;
@@ -87,10 +168,8 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
             display: flex; align-items: center; justify-content: center;
             transition: transform 0.2s, filter 0.2s; 
-            pointer-events: auto !important;
         }
         .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
-        
         .path-marker-icon {
             width: 60%; height: 60%; object-fit: contain;
             filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
@@ -102,100 +181,13 @@
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
-
-        /* 게이트웨이(지역이동) 마커 */
-        .gateway-marker .path-marker-box {
-            border-color: #00e5ff !important;
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
-        }
-        .gateway-marker .path-order-badge {
-            background-color: #00e5ff !important; color: #000 !important;
-        }
-
-        /* 완료된 경로 마커 */
+        .gateway-marker .path-marker-box { border-color: #00e5ff !important; box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+        .gateway-marker .path-order-badge { background-color: #00e5ff !important; color: #000 !important; }
         .marker-completed .path-marker-box {
-            background-color: #333 !important;
-            border-color: #555 !important;
-            filter: grayscale(100%) brightness(0.7);
-            opacity: 0.8;
+            background-color: #333 !important; border-color: #555 !important;
+            filter: grayscale(100%) brightness(0.7); opacity: 0.8;
         }
-        .marker-completed .path-order-badge {
-            background-color: #555 !important;
-        }
-
-        /* =========================================
-           4. UI 컨트롤
-           ========================================= */
-        .top-left-controls { position: fixed; top: 20px; left: 20px; }
-        .top-right-controls { 
-            position: fixed; top: 20px; right: 20px; 
-            display: flex; flex-direction: column; gap: 10px; 
-        }
-        
-        .glass-select {
-            appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
-            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #a08040; padding: 10px 35px 10px 15px; border-radius: 12px;
-            font-weight: 700; font-size: 14px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat; background-position: right 12px top 50%; background-size: 10px auto;
-        }
-        .glass-select option { background-color: #1a1a1a; color: white; }
-
-        .glass-box {
-            width: 44px; height: 44px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
-        }
-        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
-        .glass-box.path-active {
-            background-color: #a08040 !important; color: #fff !important; border-color: #fff !important;
-            box-shadow: 0 0 15px rgba(160, 128, 64, 0.6);
-        }
-
-        .bottom-ui-container {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .floating-actions { width: 100%; display: flex; justify-content: flex-end; padding: 0 20px 15px 20px; }
-        .fab-column { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; pointer-events: auto; }
-
-        .glass-group {
-            display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .glass-group-btn {
-            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
-        }
-        .glass-group-btn:last-child { border-bottom: none; }
-        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
-        
-        .glass-single-btn {
-            width: 40px; height: 40px; background-color: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
-        }
-        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
-        .icon-svg { width: 24px; height: 24px; fill: currentColor; }
-
-        .bottom-nav-bar {
-            width: 100%; height: 60px; background-color: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex; justify-content: space-around; align-items: center;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 4px; color: #888; font-size: 10px; width: 60px; height: 100%; transition: color 0.2s;
-        }
-        .nav-item:hover { color: #ccc; }
-        .nav-item.active { color: #a08040; }
+        .marker-completed .path-order-badge { background-color: #555 !important; }
 
         /* =========================================
            5. 패널 스타일
@@ -238,7 +230,6 @@
             transition: all 0.2s;
         }
         .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
-        
         .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
         .path-name { color: #fff; font-weight: 700; font-size: 14px; }
         .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
@@ -342,49 +333,43 @@
     </div>
 
     <div class="top-right-controls">
-        <div class="glass-box" onclick="toggleClusterMode()" title="모아보기 토글">
-            <svg class="icon-svg" viewBox="0 0 24 24">
-                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-            </svg>
+        <div class="glass-box" onclick="togglePanel('search')" title="검색">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         </div>
+    </div>
+
+    <div class="bottom-left-controls">
+        <div class="glass-group">
+            <div class="glass-group-btn" onclick="exportCompletedPins()" title="저장">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            </div>
+            <div class="glass-group-btn" onclick="document.getElementById('import-file').click()" title="불러오기">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+            </div>
+        </div>
+    </div>
+    <input type="file" id="import-file" style="display:none" accept=".json" onchange="importCompletedPins(this)">
+
+    <div class="bottom-center-controls">
         <div id="path-toggle-btn" class="glass-box" onclick="handlePathButtonClick()" title="추천 경로">
             <svg class="icon-svg" viewBox="0 0 24 24">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
             </svg>
+            <span>경로 모드</span>
         </div>
     </div>
 
-    <div class="bottom-ui-container">
-        <div class="floating-actions">
-            <div class="fab-column">
-                <div class="glass-group">
-                    <div class="glass-group-btn" onclick="exportCompletedPins()" title="저장">
-                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                    </div>
-                    <div class="glass-group-btn" onclick="document.getElementById('import-file').click()" title="불러오기">
-                        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
-                    </div>
-                </div>
-                <input type="file" id="import-file" style="display:none" accept=".json" onchange="importCompletedPins(this)">
-                <div class="glass-single-btn" onclick="toggleFullscreen()" title="전체 화면">
-                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z"/></svg>
-                </div>
+    <div class="bottom-right-controls">
+        <div class="glass-group">
+            <div class="glass-group-btn" onclick="toggleClusterMode()" title="모아보기 토글">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </div>
+            <div class="glass-group-btn" onclick="togglePanel('filter')" title="필터">
+                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
             </div>
         </div>
-
-        <div class="bottom-nav-bar">
-            <div class="nav-item active" id="nav-home" onclick="location.reload()">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                <span>홈</span>
-            </div>
-            <div class="nav-item" id="nav-search" onclick="togglePanel('search')">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                <span>검색</span>
-            </div>
-            <div class="nav-item" id="nav-filter" onclick="togglePanel('filter')">
-                <svg class="icon-svg" viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
-                <span>필터</span>
-            </div>
+        <div class="glass-single-btn" onclick="toggleFullscreen()" title="전체 화면">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z"/></svg>
         </div>
     </div>
 
@@ -414,8 +399,7 @@
             <span class="panel-title">경로</span>
             <div class="panel-close-btn" onclick="closeAllPanels()">✕</div>
         </div>
-        <div class="path-list-container" id="path-list-dynamic">
-            </div>
+        <div class="path-list-container" id="path-list-dynamic"></div>
         <button onclick="clearPath()" class="action-btn btn-undo" style="margin: 10px 20px; width: calc(100% - 40px);">경로 종료</button>
     </div>
 
@@ -436,10 +420,7 @@
             "sample_route": {
                 "title": "예시 경로 (샘플)",
                 "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
-                "markers": [
-                    { "id": 101, "map": "qinghe" },
-                    { "id": 102, "map": "qinghe" }
-                ]
+                "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "qinghe" } ]
             }
         };
 
@@ -449,7 +430,6 @@
             preferCanvas: true, wheelDebounceTime: 150 
         });
 
-        // 전역 변수
         let pathData = {};
         let currentPathLayer = null;
         let layerGroups = {}; 
@@ -513,7 +493,7 @@
             window.location.search = `?id=${nextId}`;
         };
 
-        // ★ [안전한 데이터 로드 시작점]
+        // 데이터 로드
         document.addEventListener('DOMContentLoaded', () => {
             const targetPath = urlParams.get('path');
 
@@ -592,7 +572,6 @@
             }
         };
 
-        // ★ [핵심] 경로 활성화 및 맵 이동 체크
         function activatePath(pathKey) {
             clearPath();
             const routeData = pathData[pathKey];
@@ -619,7 +598,6 @@
                 return;
             }
 
-            // 3. 현재 맵에 마커가 있다면 -> 렌더링 진행
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
@@ -655,7 +633,6 @@
                     const gatewayClass = isGateway ? 'gateway-marker' : '';
 
                     let badgeContent = index + 1;
-                    // 문 아이콘 SVG
                     if (isGateway) {
                         badgeContent = `<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:black;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>`;
                     }
@@ -689,7 +666,6 @@
             currentPathLayer.addTo(map);
             document.getElementById('path-toggle-btn').classList.add('path-active');
 
-            // 첫 번째 마커로 포커스
             if (latlngs.length > 0) {
                 map.flyTo(latlngs[0], 0, { animate: true, duration: 1.5 });
             }
@@ -724,8 +700,6 @@
             filterPanel.classList.remove('active');
             pathPanel.classList.remove('active');
             
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
             if (type === 'path') {
                 pathPanel.classList.add('active');
             } else if (type === 'search') {
@@ -742,8 +716,6 @@
             document.getElementById('search-panel').classList.remove('active');
             document.getElementById('filter-panel').classList.remove('active');
             document.getElementById('path-panel').classList.remove('active');
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-home').classList.add('active');
         }
 
         function createMarkers(data) {
@@ -929,12 +901,10 @@
             const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
             if (!target) return;
             
-            // 상태 업데이트
             const isNowComplete = (index === -1);
             if (isNowComplete) { list.push(id); } else { list.splice(index, 1); }
             localStorage.setItem(storageKey, JSON.stringify(list)); 
             
-            // 지도상 마커 스타일 갱신
             let marker = target.marker;
             if (currentPathLayer && activePathMarkersMap[id]) {
                 marker = activePathMarkersMap[id];
@@ -945,7 +915,6 @@
             
             marker.closePopup(); marker.openPopup();
 
-            // ★ [New] 자동 이동 및 맵 이동 기능 (경로 모드)
             if (isNowComplete && currentPathIds.length > 0) {
                 const currentEntry = currentPathIds.find(entry => (typeof entry === 'object' ? entry.id : entry) == id);
                 const pathIndex = currentPathIds.indexOf(currentEntry);
@@ -955,7 +924,6 @@
                     const nextId = (typeof nextEntry === 'object') ? nextEntry.id : nextEntry;
                     const nextMap = (typeof nextEntry === 'object') ? nextEntry.map : currentMapId;
 
-                    // 1. 다음 마커가 현재 맵에 있는 경우 -> 이동
                     if (nextMap === currentMapId) {
                         const nextMarker = activePathMarkersMap[nextId];
                         if (nextMarker) {
@@ -965,7 +933,6 @@
                             }, 500);
                         }
                     } 
-                    // 2. 다음 마커가 다른 맵인 경우 -> 페이지 자동 이동
                     else {
                         setTimeout(() => {
                             const currentPathKey = localStorage.getItem('activePathKey') || '';
@@ -1001,6 +968,50 @@
             layerGroups = {}; allMarkers = [];
             if (cachedData) { createMarkers(cachedData); generateSidebar(cachedData); }
         };
+
+        // ★ [JSON 저장 기능 수정]
+        function exportCompletedPins() {
+            try {
+                if (!currentMapId) { alert("맵 ID를 찾을 수 없습니다."); return; }
+                const storageKey = `completed_${currentMapId}`;
+                const data = localStorage.getItem(storageKey);
+                
+                console.log("Exporting:", storageKey, data); 
+
+                if (!data || data === "[]") { 
+                    alert("저장할 완료 기록이 없습니다.\n마커를 '완료' 처리한 후 다시 시도해주세요."); 
+                    return; 
+                }
+                
+                const blob = new Blob([data], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url; a.download = `completed_markers_${currentMapId}.json`;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                alert("오류 발생: " + err.message);
+            }
+        }
+
+        function importCompletedPins(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    if (!Array.isArray(json)) throw new Error("Invalid format");
+                    if (confirm(`불러온 기록으로 현재 완료 상태를 덮어쓰시겠습니까? (${json.length}개)`)) {
+                        const storageKey = `completed_${currentMapId}`;
+                        localStorage.setItem(storageKey, JSON.stringify(json));
+                        location.reload();
+                    }
+                } catch (err) { alert("파일 형식이 올바르지 않습니다."); }
+                input.value = ""; 
+            };
+            reader.readAsText(file);
+        }
 
         window.copyToClipboard = function(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).catch(() => fallbackCopy(text)); }

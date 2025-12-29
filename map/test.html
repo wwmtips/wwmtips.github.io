@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v30 - Fail Safe)</title>
+    <title>연운 한국어 맵 (Final v33 - Cross Map)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     
     <style>
         /* =========================================
-           1. 기본 설정 및 클릭 문제 해결 (강제 적용)
+           1. 기본 설정 및 클릭 문제 해결
            ========================================= */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
         body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
@@ -28,25 +28,24 @@
             transition: filter 0.5s ease;
         }
 
-        /* UI 컨테이너는 클릭 통과, 자식 요소는 클릭 가능 */
+        /* UI 클릭 통과 설정 */
         .top-left-controls, .top-right-controls, .bottom-ui-container {
             z-index: 90000 !important; 
             pointer-events: none !important; 
         }
         
-        /* 버튼, 입력창, 패널 등은 클릭 활성화 */
+        /* 버튼 등 실제 UI 클릭 활성화 */
         .glass-box, .glass-select, .nav-item, .glass-group-btn, 
         .glass-single-btn, .sidebar-search-input, .panel-close-btn, 
         .path-item, .search-result-row, .filter-control-btn, .filter-item,
-        .action-btn {
+        .action-btn, .search-panel, .filter-panel, .path-panel {
             pointer-events: auto !important;
             cursor: pointer !important;
         }
 
-        /* ★ 패널들을 최상위로 올림 */
+        /* 패널 Z-index 최상위 */
         .search-panel, .filter-panel, .path-panel {
-            z-index: 100001 !important; /* 맵, 컨트롤보다 무조건 위에 */
-            pointer-events: auto !important;
+            z-index: 100001 !important;
         }
 
         /* =========================================
@@ -54,7 +53,7 @@
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            border-radius: 50% 50% 50% 0; /* 물방울 모양 */
+            border-radius: 50% 50% 50% 0; 
             transform: rotate(-45deg);
             background: #ffffff; 
             box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
@@ -71,8 +70,10 @@
             transform: rotate(45deg); opacity: 1; filter: none;
         }
         .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
-        .marker-completed .pin-inner-circle { background: #777 !important; }
-        .marker-completed .pin-marker { opacity: 0.6; }
+        
+        /* 일반 마커 완료 스타일 */
+        .marker-completed .pin-inner-circle { background: #555 !important; }
+        .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
 
         .simple-cluster-marker {
             width: 100%; height: 100%; border-radius: 50%; 
@@ -84,7 +85,7 @@
         }
 
         /* =========================================
-           ★ 3. 경로 마커 (카드형 - 요청 디자인)
+           3. 경로 마커 (카드형)
            ========================================= */
         .path-marker-box {
             position: relative; width: 100%; height: 100%;
@@ -92,12 +93,13 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s; pointer-events: auto !important;
+            transition: transform 0.2s, filter 0.2s; 
+            pointer-events: auto !important;
         }
         .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
+        
         .path-marker-icon {
             width: 60%; height: 60%; object-fit: contain;
-            /* 금색 필터 적용 */
             filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
         }
         .path-order-badge {
@@ -106,6 +108,17 @@
             font-size: 10px; font-weight: 800; width: 18px; height: 18px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* 완료된 경로 마커 흑백 처리 */
+        .marker-completed .path-marker-box {
+            background-color: #333 !important;
+            border-color: #555 !important;
+            filter: grayscale(100%) brightness(0.7);
+            opacity: 0.8;
+        }
+        .marker-completed .path-order-badge {
+            background-color: #555 !important;
         }
 
         /* =========================================
@@ -224,7 +237,7 @@
         }
         .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
         
-        /* ★ [New] 심플한 물방울 핀 아이콘 */
+        /* 경로 아이콘 (물방울) */
         .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
         
         .path-name { color: #fff; font-weight: 700; font-size: 14px; }
@@ -319,12 +332,6 @@
             .search-panel.active { transform: translateX(-50%) translateY(0); }
             .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
             .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
-        }
-        
-        /* 버튼 클릭 안될 때 강제 처리용 클래스 */
-        body.controls-hidden .top-left-controls, 
-        body.controls-hidden .top-right-controls { 
-            opacity: 0; pointer-events: none !important; 
         }
     </style>
 </head>
@@ -429,7 +436,10 @@
             "sample_route": {
                 "title": "예시 경로 (샘플)",
                 "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
-                "markers": [101, 102, 103]
+                "markers": [
+                    { "id": 101, "map": "qinghe" },
+                    { "id": 102, "map": "qinghe" }
+                ]
             }
         };
 
@@ -446,6 +456,8 @@
         let allMarkers = []; 
         let cachedData = null; 
         let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; 
+        let currentPathIds = []; 
+        let activePathMarkersMap = {}; 
 
         const mapsDB = {
             "qinghe": { name: "청하", img: "../map/images/qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
@@ -458,13 +470,13 @@
         const typeMapping = { 
             "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
             "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
-            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj", "사건":"ic_pvp"
+            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
         const colorMapping = {
             "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
             "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
-            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad","사건": "#3076ad"
+            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -501,8 +513,11 @@
             window.location.search = `?id=${nextId}`;
         };
 
-        // ★ [안전한 데이터 로드 시작점]
+        // ★ [안전한 데이터 로드]
         document.addEventListener('DOMContentLoaded', () => {
+            // URL에 path 파라미터가 있으면 로드 후 실행
+            const targetPath = urlParams.get('path');
+
             fetch(currentConfig.json)
                 .then(res => {
                     if (!res.ok) throw new Error("JSON load failed");
@@ -511,20 +526,19 @@
                 .then(data => {
                     cachedData = data;
                     createMarkers(data);
-                    generateSidebar(data); // 데이터 성공 시 필터 생성
-                    loadPathData();
+                    generateSidebar(data);
+                    loadPathData(false, targetPath); // path 있으면 자동 실행
                 })
                 .catch(err => { 
                     console.warn("Map data failed, using sample data:", err);
-                    // 실패 시 샘플 데이터로 복구하여 기능 활성화
                     cachedData = sampleData;
                     createMarkers(sampleData);
-                    generateSidebar(sampleData); // 샘플 데이터로 필터 생성
-                    loadPathData(true); // 샘플 경로 로드
+                    generateSidebar(sampleData);
+                    loadPathData(true); 
                 });
         });
 
-        function loadPathData(useSample = false) {
+        function loadPathData(useSample = false, autoStartPath = null) {
             if (useSample) {
                 renderPathList(samplePathData);
                 return;
@@ -534,10 +548,15 @@
                     if (!res.ok) throw new Error("Path file not found");
                     return res.json();
                 })
-                .then(data => renderPathList(data))
+                .then(data => {
+                    renderPathList(data);
+                    if (autoStartPath && data[autoStartPath]) {
+                        activatePath(autoStartPath);
+                    }
+                })
                 .catch(err => {
                     console.log("Path load failed, using sample:", err);
-                    renderPathList(samplePathData); // 실패 시 샘플 경로 로드
+                    renderPathList(samplePathData);
                 });
         }
 
@@ -561,7 +580,7 @@
             }
         }
 
-        // ★ [New] 경로 버튼 클릭 핸들러 (토글)
+        // 경로 버튼 토글
         window.handlePathButtonClick = function() {
             if (currentPathLayer) {
                 clearPath();
@@ -579,24 +598,42 @@
             clearPath();
             const routeData = pathData[pathKey];
             if (!routeData || !routeData.markers) return;
+            
             const routeIds = routeData.markers;
+            currentPathIds = routeIds; 
+            activePathMarkersMap = {}; 
 
+            // 완료 상태 로드
+            const storageKey = `completed_${currentMapId}`;
+            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+            // 기존 마커 숨김
             for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
 
             currentPathLayer = L.featureGroup();
             const latlngs = [];
 
-            routeIds.forEach((id, index) => {
-                // ★ ID 비교 시 타입 무시 (==)
-                const item = allMarkers.find(m => m.id == id);
+            routeIds.forEach((entry, index) => {
+                // entry가 객체면 id 추출, 아니면 그대로 사용
+                const markerId = (typeof entry === 'object') ? entry.id : entry;
+                const markerMap = (typeof entry === 'object') ? entry.map : currentMapId;
+
+                // ★ 다른 맵의 마커는 건너뜀 (표시 불가)
+                if (markerMap !== currentMapId) return;
+
+                const item = allMarkers.find(m => m.id == markerId);
                 if (item) {
                     const latlng = item.marker.getLatLng();
                     latlngs.push(latlng);
                     
                     const itemIconPath = `../images/${typeMapping[item.type] || 'stone'}.png`;
                     
+                    // 완료 여부에 따라 스타일 적용
+                    const isCompleted = completedList.includes(item.id);
+                    const completedClass = isCompleted ? 'marker-completed' : '';
+
                     const pathIcon = L.divIcon({
-                        className: 'custom-div-icon',
+                        className: `custom-div-icon ${completedClass}`,
                         html: `<div class="path-marker-box">
                                    <img src="${itemIconPath}" class="path-marker-icon" onerror="this.src='../images/stone.png'">
                                    <div class="path-order-badge">${index + 1}</div>
@@ -608,7 +645,9 @@
 
                     const markerClone = L.marker(latlng, { icon: pathIcon })
                         .bindPopup(item.marker.getPopup().getContent());
+                    
                     currentPathLayer.addLayer(markerClone);
+                    activePathMarkersMap[markerId] = markerClone; 
                 }
             });
 
@@ -620,13 +659,15 @@
             }
 
             currentPathLayer.addTo(map);
-            
-            // ★ 버튼 스타일 변경 (활성화)
             document.getElementById('path-toggle-btn').classList.add('path-active');
 
             if (latlngs.length > 0) {
                 map.fitBounds(currentPathLayer.getBounds(), { padding: [80, 80] });
             }
+            
+            // 현재 경로 Key 저장 (이동 시 사용)
+            localStorage.setItem('activePathKey', pathKey);
+            
             closeAllPanels();
         }
 
@@ -634,11 +675,13 @@
             if (currentPathLayer) {
                 map.removeLayer(currentPathLayer);
                 currentPathLayer = null;
+                currentPathIds = [];
+                activePathMarkersMap = {};
+                localStorage.removeItem('activePathKey'); // 경로 상태 삭제
             }
-            
-            // ★ 버튼 스타일 복구 (비활성화)
             document.getElementById('path-toggle-btn').classList.remove('path-active');
 
+            // 필터 상태 복구
             const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
             for (const key in layerGroups) {
                 const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
@@ -651,7 +694,6 @@
             const filterPanel = document.getElementById('filter-panel');
             const pathPanel = document.getElementById('path-panel');
             
-            // 초기화
             searchPanel.classList.remove('active');
             filterPanel.classList.remove('active');
             pathPanel.classList.remove('active');
@@ -663,12 +705,10 @@
             } else if (type === 'search') {
                 searchPanel.classList.add('active');
                 document.getElementById('nav-search').classList.add('active');
-                document.body.classList.add('controls-hidden');
                 setTimeout(() => document.getElementById('marker-search').focus(), 300);
             } else if (type === 'filter') {
                 filterPanel.classList.add('active');
                 document.getElementById('nav-filter').classList.add('active');
-                document.body.classList.remove('controls-hidden');
             }
         }
 
@@ -678,18 +718,12 @@
             document.getElementById('path-panel').classList.remove('active');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-home').classList.add('active');
-            document.body.classList.remove('controls-hidden');
         }
 
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            
-            // 초기화
-            allMarkers = [];
-            layerGroups = {};
-
-            const markersByType = {}; 
+            allMarkers = []; layerGroups = {}; const markersByType = {}; 
 
             try {
                 data.forEach(item => {
@@ -706,9 +740,7 @@
                                     <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                                 </div>
                             </div>`,
-                        iconSize: pinSize, 
-                        iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9],
-                        popupAnchor: [0, -(pinSize[1] * 0.8)]
+                        iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], popupAnchor: [0, -(pinSize[1] * 0.8)]
                     });
 
                     const marker = L.marker([item.y, item.x], { icon: pinIcon });
@@ -870,11 +902,55 @@
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
             const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
             if (!target) return;
-            const marker = target.marker;
-            if (index > -1) { list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); } 
-            else { list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); }
+            
+            // 상태 업데이트
+            const isNowComplete = (index === -1);
+            if (isNowComplete) { list.push(id); } else { list.splice(index, 1); }
             localStorage.setItem(storageKey, JSON.stringify(list)); 
+            
+            // 지도상 마커 스타일 갱신
+            let marker = target.marker;
+            // 경로 모드 활성화 시 경로 마커 우선
+            if (currentPathLayer && activePathMarkersMap[id]) {
+                marker = activePathMarkersMap[id];
+            }
+
+            if (isNowComplete) { L.DomUtil.addClass(marker._icon, 'marker-completed'); }
+            else { L.DomUtil.removeClass(marker._icon, 'marker-completed'); }
+            
             marker.closePopup(); marker.openPopup();
+
+            // ★ [New] 자동 이동 및 맵 이동 기능
+            if (isNowComplete && currentPathIds.length > 0) {
+                const currentEntry = currentPathIds.find(entry => (typeof entry === 'object' ? entry.id : entry) == id);
+                const pathIndex = currentPathIds.indexOf(currentEntry);
+                
+                if (pathIndex !== -1 && pathIndex < currentPathIds.length - 1) {
+                    const nextEntry = currentPathIds[pathIndex + 1];
+                    const nextId = (typeof nextEntry === 'object') ? nextEntry.id : nextEntry;
+                    const nextMap = (typeof nextEntry === 'object') ? nextEntry.map : currentMapId;
+
+                    // 1. 다음 마커가 현재 맵에 있는 경우 -> 이동
+                    if (nextMap === currentMapId) {
+                        const nextMarker = activePathMarkersMap[nextId];
+                        if (nextMarker) {
+                            setTimeout(() => {
+                                map.flyTo(nextMarker.getLatLng(), 0, { animate: true, duration: 1.0 });
+                                map.once('moveend', () => nextMarker.openPopup());
+                            }, 500);
+                        }
+                    } 
+                    // 2. 다음 마커가 다른 맵인 경우 -> 페이지 이동
+                    else {
+                        setTimeout(() => {
+                            if(confirm(`다음 마커는 '${nextMap}' 지역에 있습니다. 이동하시겠습니까?`)) {
+                                const currentPathKey = localStorage.getItem('activePathKey') || '';
+                                window.location.href = `?id=${nextMap}&marker=${nextId}&path=${currentPathKey}`;
+                            }
+                        }, 500);
+                    }
+                }
+            }
         };
 
         window.shareMarker = function(id) {

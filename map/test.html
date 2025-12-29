@@ -1569,22 +1569,22 @@
                 const pinColor = colorMapping[item.type] || "#555";
 
       // 기존 pinIcon 정의 부분을 아래 코드로 교체하세요.
+// createMarkers 함수 내부의 pinIcon 정의를 이걸로 덮어쓰세요.
 
 const pinIcon = L.divIcon({
     className: isCompleted ? 'marker-completed' : '',
-    // 회전(transform)이나 복잡한 구조 없이 단순하게 변경
-    html: `<div class="pin-marker">
-               <div class="pin-inner-circle" style="background-color: ${pinColor};">
+    
+    // ★ 핵심 변경: 부모 div에 CSS 변수(--marker-color)로 색상을 전달합니다.
+    html: `<div class="pin-marker" style="--marker-color: ${pinColor};">
+               <div class="pin-inner-circle">
                    <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                </div>
            </div>`,
-    
-    // ★ 핵심 변경: 사이즈는 유지하되, 앵커(중심점)를 정중앙으로 변경
+           
     iconSize: pinSize, 
-    iconAnchor: [pinSize[0] / 2, pinSize[1] / 2], // 가로/2, 세로/2 -> 정중앙
-    popupAnchor: [0, -(pinSize[1] / 2 + 5)]       // 팝업은 원의 위쪽 끝에 뜨도록
+    iconAnchor: [pinSize[0] / 2, pinSize[1] / 2], // 정중앙
+    popupAnchor: [0, -(pinSize[1] / 2 + 5)]
 });
-
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 
                 // Dev Mode 클릭 이벤트 (녹화)

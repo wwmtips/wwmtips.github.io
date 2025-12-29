@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v34 - Gateway Visual)</title>
+    <title>연운 한국어 맵 (Final v35 - Start Focus)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -65,8 +65,8 @@
             transform: rotate(45deg); opacity: 1; filter: none;
         }
         .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
-        .marker-completed .pin-inner-circle { background: #777 !important; }
-        .marker-completed .pin-marker { opacity: 0.6; filter: grayscale(100%); }
+        .marker-completed .pin-inner-circle { background: #555 !important; }
+        .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
 
         .simple-cluster-marker {
             width: 100%; height: 100%; border-radius: 50%; 
@@ -103,14 +103,13 @@
             border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* ★ [New] 지역 이동(Gateway) 마커 스타일 */
+        /* 게이트웨이(지역이동) 마커 */
         .gateway-marker .path-marker-box {
-            border-color: #00e5ff !important; /* 청록색 테두리 */
+            border-color: #00e5ff !important;
             box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
         }
         .gateway-marker .path-order-badge {
-            background-color: #00e5ff !important; /* 청록색 뱃지 */
-            color: #000 !important;
+            background-color: #00e5ff !important; color: #000 !important;
         }
 
         /* 완료된 경로 마커 */
@@ -426,7 +425,7 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
-        // ★ [안전 모드] 샘플 데이터 (파일 로드 실패 시 사용)
+        // ★ [안전 모드] 샘플 데이터
         const sampleData = [
             { id: 101, name: "청하 상자 1", type: "상자", x: 2000, y: 3000, desc: "나무 아래" },
             { id: 102, name: "장군 사당 입구", type: "경계석", x: 2500, y: 3200, desc: "워프 포인트" },
@@ -437,7 +436,10 @@
             "sample_route": {
                 "title": "예시 경로 (샘플)",
                 "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
-                "markers": [101, 102, 103]
+                "markers": [
+                    { "id": 101, "map": "qinghe" },
+                    { "id": 102, "map": "qinghe" }
+                ]
             }
         };
 
@@ -668,8 +670,9 @@
             currentPathLayer.addTo(map);
             document.getElementById('path-toggle-btn').classList.add('path-active');
 
+            // ★ [수정] 경로 시작 시 첫 번째 마커로 이동 (Start Focus)
             if (latlngs.length > 0) {
-                map.fitBounds(currentPathLayer.getBounds(), { padding: [80, 80] });
+                map.flyTo(latlngs[0], 0, { animate: true, duration: 1.5 });
             }
             
             localStorage.setItem('activePathKey', pathKey);
@@ -943,10 +946,9 @@
                             }, 500);
                         }
                     } 
-                    // 2. 다음 마커가 다른 맵인 경우 -> 페이지 자동 이동
+                    // 2. 다음 마커가 다른 맵인 경우 -> 페이지 자동 이동 (팝업 없이)
                     else {
                         setTimeout(() => {
-                            // 팝업 없이 바로 이동 (Toast 메시지 추가 가능)
                             const currentPathKey = localStorage.getItem('activePathKey') || '';
                             window.location.href = `?id=${nextMap}&marker=${nextId}&path=${currentPathKey}`;
                         }, 500);

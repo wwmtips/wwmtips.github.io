@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v17 - Dark Map & Jewel Markers)</title>
+    <title>연운 한국어 맵 (Final v18 - Performance)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -27,33 +27,37 @@
            기본 설정
            ========================================= */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
-        
-        /* 배경을 지도와 비슷한 어두운 색으로 설정 */
         body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
         #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
-        /* =========================================
-           ★ [New] 지도 이미지 다크 필터 (분위기 조정)
-           ========================================= */
+        /* 지도 다크 모드 필터 */
         .leaflet-image-layer {
-            /* 밝기를 낮추고(0.6), 대비를 높여(1.2) 선명한 다크 모드 연출 */
             filter: brightness(0.6) contrast(1.2) saturate(0.85);
             transition: filter 0.5s ease;
         }
 
         /* =========================================
-           1. 핀 & 클러스터 (초기 물방울 스타일)
+           ★ [성능 최적화] GPU 가속 적용
+           ========================================= */
+        .leaflet-marker-icon, 
+        .leaflet-marker-shadow, 
+        .leaflet-zoom-animated {
+            will-change: transform; /* 브라우저에게 변형이 일어날 것임을 알려 GPU 사용 유도 */
+            transform-style: preserve-3d;
+        }
+
+        /* =========================================
+           1. 핀 & 클러스터
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            /* 물방울 모양 */
             border-radius: 50% 50% 50% 0; 
             transform: rotate(-45deg);
-            background: #ffffff; /* 흰색 배경이 다크 맵에서 잘 보임 */
-            box-shadow: 1px 1px 5px rgba(0,0,0,0.7); /* 그림자 진하게 */
+            background: #ffffff; 
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s, z-index 0.2s;
+            transition: transform 0.1s, z-index 0.1s; /* 애니메이션 시간 단축 (성능) */
             cursor: pointer; pointer-events: auto;
         }
         
@@ -67,32 +71,31 @@
         .pin-inner-circle img {
             width: 70%; height: 70%; 
             object-fit: contain; 
-            transform: rotate(45deg); /* 아이콘 정방향 */
-            opacity: 1; filter: none; /* 필터 없음 (원래 색상) */
+            transform: rotate(45deg); 
+            opacity: 1; filter: none;
         }
 
         .pin-marker:hover {
-            transform: rotate(-45deg) scale(1.2); /* 호버 시 커짐 */
+            transform: rotate(-45deg) scale(1.2);
             z-index: 9999;
         }
 
-        /* 완료된 마커 스타일 */
         .marker-completed .pin-inner-circle { background: #777 !important; }
         .marker-completed .pin-marker { opacity: 0.6; }
 
-        /* 클러스터 (모아보기) */
+        /* 클러스터 */
         .simple-cluster-marker {
             width: 100%; height: 100%; border-radius: 50%; 
             border: 2px solid #ffffff; 
             display: flex; align-items: center; justify-content: center;
             font-size: 13px; font-weight: 800; color: #fff;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-            cursor: pointer; transition: transform 0.2s;
+            cursor: pointer; transition: transform 0.1s;
         }
         .simple-cluster-marker:hover { transform: scale(1.15); z-index: 5000; }
 
         /* =========================================
-           2. UI 컨트롤 (Glass & Dark Style)
+           2. UI 컨트롤
            ========================================= */
         .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
         .top-right-controls { position: fixed; top: 20px; right: 20px; z-index: 2000; transition: opacity 0.3s; }
@@ -157,7 +160,7 @@
         .nav-item.active { color: #a08040; }
 
         /* =========================================
-           3. 패널 스타일 (검색 & 필터)
+           4. 패널 스타일
            ========================================= */
         .search-panel {
             position: fixed; top: 0; left: 0; width: 100%;
@@ -360,6 +363,15 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
+        // ★ [성능 최적화] Canvas 모드 활성화 (맵 초기화 시점)
+        const map = L.map('map', {
+            crs: L.CRS.Simple, 
+            minZoom: -5, maxZoom: 2, 
+            zoomControl: false, attributionControl: false,
+            preferCanvas: true, // Canvas 렌더러 우선 사용
+            wheelDebounceTime: 150 // 휠 줌 딜레이 줄임
+        });
+
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => { console.log(err); });
@@ -446,17 +458,17 @@
             "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
-        // ★ [New] 다크 맵에 어울리는 쥬얼 톤 마커 색상
+        // ★ [복구] 초기 버전 쥬얼 톤 컬러
         const colorMapping = {
-            "상자": "#00bfa5", // Teal Accent (선명한 청록)
-            "보스": "#d50000", // Red Accent (진한 빨강)
-            "고양이": "#263238", // Blue Grey Dark (진한 회색 - 흰 핀에서 잘 보임)
-            "묘물": "#2e7d32", // Green (진한 초록)
-            "만사록": "#ff6d00", // Orange (진한 주황)
-            "경계석": "#455a64", // Slate Grey
-            "기연": "#6a1b9a", // Purple (진한 보라)
-            "묘묘냥": "#c2185b", // Pink (진한 분홍)
-            "천지록": "#1565c0"  // Blue (진한 파랑)
+            "상자": "#00bfa5", 
+            "보스": "#d50000", 
+            "고양이": "#263238", 
+            "묘물": "#2e7d32", 
+            "만사록": "#ff6d00", 
+            "경계석": "#455a64", 
+            "기연": "#6a1b9a", 
+            "묘묘냥": "#c2185b", 
+            "천지록": "#1565c0"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -476,11 +488,6 @@
         let allMarkers = []; 
         let cachedData = null; 
         let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; 
-
-        const map = L.map('map', {
-            crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, 
-            zoomControl: false, attributionControl: false 
-        });
 
         if (isDevMode) document.getElementById('map').classList.add('dev-mode-cursor');
 
@@ -556,8 +563,10 @@
                     const typeColor = colorMapping[type] || "#555";
                     if (!layerGroups[type]) {
                         layerGroups[type] = L.markerClusterGroup({
+                            // ★ [성능 최적화] 클러스터 옵션
                             disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
-                            chunkedLoading: true, chunkInterval: 200,   
+                            chunkedLoading: true, chunkInterval: 100, // 렌더링 쪼개기
+                            removeOutsideVisibleBounds: true, // 화면 밖 요소 제거 (핵심)
                             animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
                             iconCreateFunction: function(cluster) {
                                 const count = cluster.getChildCount();
@@ -632,10 +641,10 @@
                     const jumpZoom = Math.min(map.getZoom() + 3, 1); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     
-                    // ★ 검색 결과 클릭 시 팝업 강제 열기 (수정됨)
-                    setTimeout(() => {
+                    // ★ 클릭 시 팝업 열기 (확실하게)
+                    map.once('moveend', function() {
                         item.marker.openPopup();
-                    }, 1600); // 애니메이션 시간보다 조금 길게 잡음
+                    });
 
                     if (window.innerWidth <= 480) closeAllPanels();
                 };

@@ -741,102 +741,6 @@
     }
 }
 /* =========================================
-   3. 핀 & 클러스터 (New Dark Style)
-   ==============================/* =========================================
-   3. 핀 & 클러스터 (Tone Down 통합 스타일)
-   ========================================= */
-
-/* --- [1] 개별 핀 스타일 --- */
-.pin-marker {
-    position: relative; width: 100%; height: 100%;
-    border-radius: 8px; /* 클러스터와 동일한 둥근 사각형 */
-    transform: none !important;
-
-    /* 배경: 아주 짙은 회색 */
-    background-color: rgba(20, 20, 20, 0.95);
-    
-    /* 테두리: 1px로 얇게, JS에서 받은 색상 적용 */
-    border: 1px solid var(--pin-color, #a08040);
-    
-    /* ★ 핵심: 채도를 60%로 낮춰서 형광기를 뺌 */
-    filter: saturate(0.6) brightness(1.1);
-
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.pin-inner-circle {
-    width: 100%; height: 100%;
-    background: transparent !important;
-    display: flex; align-items: center; justify-content: center;
-}
-
-/* 아이콘 마스킹 (흰색으로 통일) */
-.pin-inner-circle img {
-    width: 65%; height: 65%;
-    object-fit: contain; transform: none !important;
-
-    /* ★ 핵심: 아이콘 색상을 컬러가 아닌 '은은한 흰색'으로 통일 */
-    background-color: #e0e0e0 !important;
-    
-    /* 마스크 적용 */
-    -webkit-mask-image: var(--bg-image); mask-image: var(--bg-image);
-    -webkit-mask-size: contain; mask-size: contain;
-    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-    -webkit-mask-position: center; mask-position: center;
-    color: transparent;
-}
-
-/* 핀 호버 효과 (색상 복구) */
-.pin-marker:hover {
-    transform: scale(1.15) !important; z-index: 9999;
-    /* 호버 시 채도 복구 및 테두리/글로우 강조 */
-    filter: saturate(1.0);
-    border-width: 2px;
-    box-shadow: 0 0 10px var(--pin-color, #a08040);
-}
-
-/* 완료된 핀 */
-.marker-completed .pin-marker {
-    background-color: #2a2a2a !important;
-    border-color: #444 !important; /* 테두리 회색 처리 */
-    box-shadow: none !important;
-    opacity: 0.7; filter: grayscale(1.0) !important; /* 완전 회색조 */
-}
-.marker-completed .pin-inner-circle img {
-    background-color: #666 !important; /* 아이콘도 더 어둡게 */
-}
-
-
-/* --- [2] 클러스터 스타일 (핀과 스타일 공유) --- */
-.simple-cluster-marker {
-    width: 100%; height: 100%;
-    border-radius: 8px !important;
-    
-    /* 배경, 테두리, 필터 모두 핀과 동일하게 적용 */
-    background-color: rgba(20, 20, 20, 0.95);
-    border: 1px solid var(--cluster-color, #a08040);
-    filter: saturate(0.6) brightness(1.1);
-    
-    /* 글자색: 은은한 흰색으로 통일 */
-    color: #e0e0e0 !important; 
-    
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    transition: all 0.2s ease;
-}
-
-/* 클러스터 호버 효과 */
-.simple-cluster-marker:hover {
-    transform: scale(1.1); z-index: 9999;
-    /* 호버 시 채도 복구 */
-    filter: saturate(1.0);
-    border-width: 2px;
-    box-shadow: 0 0 10px var(--cluster-color);
-}
-/* =========================================
    ★ [PC Optimization] 경로 모드 버튼 크기 확대
    ========================================= */
 @media (min-width: 769px) {
@@ -865,167 +769,66 @@
         height: 24px !important;
     }
 }
-
-
-/* 테스트 */
-/* =========================================
-   3. 핀 & 클러스터 (화이트 도넛 스타일 - 매칭 최적화)
-   ========================================= */
-
-/* --- [1] 개별 핀 스타일 (물방울 모양 유지) --- */
-.pin-marker {
-    position: relative; width: 100%; height: 100%;
-    
-    /* 물방울 모양 */
-    border-radius: 50% 50% 50% 0 !important;
-    transform: rotate(-45deg) !important;
-
-    /* 배경: 흰색 */
-    background-color: #ffffff;
-    border: none !important;
-    
-    /* 그림자: 입체감 */
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.5) !important;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.pin-inner-circle {
-    width: 85%; height: 85%;
-    border-radius: 50%;
-    /* 내부 색상 원 */
-    background-color: var(--pin-color, #555) !important;
-    
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
-}
-
-.pin-inner-circle img {
-    width: 65%; height: 65%;
-    object-fit: contain; 
-    transform: rotate(45deg) !important;
-    
-    background-color: transparent !important;
-    -webkit-mask-image: none !important; mask-image: none !important;
-    
-    opacity: 0.95;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
-}
-
-.pin-marker:hover {
-    transform: rotate(-45deg) scale(1.15) !important; 
-    z-index: 9999;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.6) !important;
-}
-
-.marker-completed .pin-marker {
-    background-color: #eee !important;
-    opacity: 0.6; filter: grayscale(1.0) !important;
-}
-.marker-completed .pin-inner-circle { background-color: #888 !important; }
 /* =========================================
    3. 핀 & 클러스터 (다크 토큰 & 컬러 테두리)
    ========================================= */
 
-/* --- [1] 개별 핀 스타일 --- */
-.pin-marker {
-    position: relative; width: 100%; height: 100%;
-    border-radius: 50% !important; /* 완전 원형 */
-    transform: none !important; /* 회전 제거 */
-    
-    /* 1. 배경: 지도가 비치는 반투명 검정 (유기적인 느낌) */
-    background-color: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(2px); /* 배경 흐림 효과 (고급스러움 추가) */
-    
-    /* 2. 테두리: 카테고리 색상 (두께 2px) */
-    /* JS에서 전달받은 --marker-color 변수 사용 */
-    border: 2px solid var(--marker-color, #fff);
-    
-    /* 테두리가 찌그러지지 않게 */
-    box-sizing: border-box;
-    
-    /* 그림자: 핀이 떠있는 느낌 */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+/* --- [1] 개별 핀 스타일 --- *//* =========================================
+           1. 핀 디자인 (다크 토큰 & 컬러 테두리)
+           ========================================= */
+        .pin-marker {
+            position: relative; width: 100%; height: 100%;
+            
+            /* 1. 완전한 원형으로 변경 */
+            border-radius: 50% !important;
+            transform: none !important; /* 회전 제거 */
+            
+            /* 2. 배경: 지도와 어우러지는 반투명 검정 */
+            background-color: rgba(20, 20, 20, 0.75);
+            backdrop-filter: blur(2px);
+            
+            /* 3. 테두리: 카테고리 색상 적용 (JS에서 받은 변수 사용) */
+            border: 1px solid var(--pin-color, #ffffff);
+            box-sizing: border-box;
+            
+            /* 그림자 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s ease;
+        }
 
-/* 내부 컨테이너 (아이콘 배치용) */
-.pin-inner-circle {
-    width: 100%; height: 100%;
-    border-radius: 50%;
-    
-    /* 배경색 제거 (부모의 반투명 배경 사용) */
-    background-color: transparent !important;
-    background-image: none !important;
-    
-    display: flex; align-items: center; justify-content: center;
-}
+        .pin-inner-circle {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            /* 배경색 제거 (부모 배경 사용) */
+            background: transparent !important;
+            display: flex; align-items: center; justify-content: center;
+        }
 
-/* 아이콘 이미지 */
-.pin-inner-circle img {
-    width: 60%; height: 60%;
-    object-fit: contain; 
-    transform: none !important;
-    
-    /* 아이콘을 흰색으로 변경하지 않고 원본 사용 */
-    /* 만약 아이콘이 검은색이라 안 보이면 아래 filter 주석을 해제하세요 */
-    /* filter: brightness(0) invert(1); */ 
-    
-    opacity: 1;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); /* 아이콘 그림자 */
-}
+        .pin-inner-circle img {
+            width: 65%; height: 65%;
+            object-fit: contain;
+            transform: none !important; /* 회전 제거 */
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.8));
+            opacity: 1;
+        }
 
-/* 핀 호버 효과 */
-.pin-marker:hover {
-    transform: scale(1.2); 
-    z-index: 9999;
-    
-    /* 호버 시: 테두리가 빛나는 효과 (Glow) */
-    box-shadow: 0 0 10px var(--marker-color), 0 2px 5px rgba(0,0,0,0.5);
-    background-color: rgba(0, 0, 0, 0.85); /* 배경 조금 더 진하게 */
-}
+        /* 호버 효과 */
+        .pin-marker:hover {
+            transform: scale(1.2);
+            z-index: 9999; cursor: pointer;
+            /* 빛나는 효과 */
+            box-shadow: 0 0 10px var(--pin-color), 0 4px 8px rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
 
-/* 완료된 핀 */
-.marker-completed .pin-marker {
-    opacity: 0.6; 
-    filter: grayscale(1.0);
-    border-color: #777; /* 완료되면 테두리 회색 */
-}
-
-
-/* --- [2] 클러스터 스타일 (핀과 깔맞춤) --- */
-.simple-cluster-marker {
-    width: 100%; height: 100%;
-    border-radius: 50% !important;
-    
-    /* 핀과 동일한 반투명 검정 배경 */
-    background-color: rgba(0, 0, 0, 0.65) !important;
-    backdrop-filter: blur(2px);
-    
-    /* 테두리: 카테고리 색상 */
-    border: 2px solid var(--cluster-color, #a08040) !important;
-    box-sizing: border-box;
-    
-    /* 글자: 흰색 (잘 보이게) */
-    color: #ffffff !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-    
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 800;
-    
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    transition: transform 0.2s ease;
-}
-
-/* 클러스터 호버 효과 */
-.simple-cluster-marker:hover {
-    transform: scale(1.15); z-index: 9999;
-    /* 호버 시 빛남 */
-    box-shadow: 0 0 10px var(--cluster-color);
-    background-color: rgba(0, 0, 0, 0.85) !important;
-}
+        /* 완료된 마커 */
+        .marker-completed .pin-marker { 
+            opacity: 0.5; 
+            filter: grayscale(1.0);
+            border-color: #555 !important;
+        }
     </style>
 </head>
 <body>
@@ -1571,21 +1374,21 @@
    수정 내용: style 속성을 바깥쪽 div(.pin-marker)로 이동
 */
 
-const pinIcon = L.divIcon({
-    className: isCompleted ? 'marker-completed' : '',
-    
-    // ★ [수정됨] 부모 div에 색상 변수(--pin-color)를 직접 지정합니다.
-    html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
-               <div class="pin-inner-circle">
-                   <img src="${iconPath}" onerror="this.src='../images/stone.png'">
-               </div>
-           </div>`,
-           
-    iconSize: pinSize, 
-    // 중심점을 정중앙으로 설정 (원형 아이콘에 맞춤)
-    iconAnchor: [pinSize[0] / 2, pinSize[1] / 2], 
-    popupAnchor: [0, -(pinSize[1] / 2 + 5)]
-});
+// [수정] 일반 핀 아이콘 정의 (색상 정보를 부모 div로 이동 + 앵커 수정)
+                const pinIcon = L.divIcon({
+                    className: isCompleted ? 'marker-completed' : '',
+                    // ★ 핵심 변경: style="--pin-color..."를 바깥쪽 div(.pin-marker)로 옮겼습니다.
+                    html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
+                               <div class="pin-inner-circle">
+                                   <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                               </div>
+                           </div>`,
+                    
+                    // 모양이 원형으로 바뀌므로 중심점(Anchor)도 정중앙으로 맞춰야 합니다.
+                    iconSize: pinSize, 
+                    iconAnchor: [pinSize[0] / 2, pinSize[1] / 2], 
+                    popupAnchor: [0, -(pinSize[1] / 2 + 5)]
+                });
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 
                 // Dev Mode 클릭 이벤트 (녹화)

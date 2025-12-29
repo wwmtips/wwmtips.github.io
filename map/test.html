@@ -15,420 +15,684 @@
     
     <style>
         /* =========================================
-   1. 기본 설정
-   ========================================= */
-* { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
-body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
-#map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
-.dev-mode-cursor { cursor: crosshair !important; }
+           1. 기본 설정
+           ========================================= */
+        * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
+        body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
+        .dev-mode-cursor { cursor: crosshair !important; }
 
-.leaflet-image-layer {
-    filter: brightness(0.6) contrast(1.2) saturate(0.85);
-    transition: filter 0.5s ease;
-}
+        .leaflet-image-layer {
+            filter: brightness(0.6) contrast(1.2) saturate(0.85);
+            transition: filter 0.5s ease;
+        }
 
-/* UI 컨테이너 */
-.top-left-controls, .top-right-controls, 
-.bottom-left-controls, .bottom-right-controls, .bottom-center-controls,
-.dev-controls {
-    position: fixed; z-index: 90000 !important; 
-    pointer-events: none !important; 
-    display: flex; flex-direction: column; gap: 8px;
-}
+        /* UI 컨테이너 */
+        .top-left-controls, .top-right-controls, 
+        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls,
+        .dev-controls { /* Dev 컨트롤 추가 */
+            position: fixed; z-index: 90000 !important; 
+            pointer-events: none !important; 
+            display: flex; flex-direction: column; gap: 8px;
+        }
 
-.top-left-controls { top: 15px; left: 15px; }
-.top-right-controls { top: 15px; right: 15px; }
-.bottom-left-controls { bottom: 25px; left: 15px; overflow: visible; }
-.bottom-right-controls { bottom: 25px; right: 15px; align-items: flex-end; }
+        .top-left-controls { top: 15px; left: 15px; }
+        .top-right-controls { top: 15px; right: 15px; }
+        .bottom-left-controls { bottom: 25px; left: 15px; overflow: visible; }
+        .bottom-right-controls { bottom: 25px; right: 15px; align-items: flex-end; }
+        
+        .bottom-center-controls {
+            bottom: 25px; left: 70px; right: 70px;
+            justify-content: center; align-items: center;
+        }
 
-.bottom-center-controls {
-    bottom: 25px; left: 70px; right: 70px;
-    justify-content: center; align-items: center;
-}
+        /* ★ [New] 개발자 패널 스타일 */
+        .dev-controls {
+            top: 15px; left: 50%; transform: translateX(-50%);
+            flex-direction: row; display: none; /* 기본 숨김 */
+        }
+        .dev-controls.active { display: flex; }
+        
+        .dev-btn {
+            background: rgba(0, 0, 0, 0.8); border: 1px solid #ff4444; color: #ff4444;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 12px;
+            cursor: pointer; pointer-events: auto !important;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .dev-btn.recording { background: #ff4444; color: white; animation: pulse 1.5s infinite; }
+        .dev-btn:hover { transform: scale(1.05); }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
-/* 개발자 패널 */
-.dev-controls {
-    top: 15px; left: 50%; transform: translateX(-50%);
-    flex-direction: row; display: none;
-}
-.dev-controls.active { display: flex; }
+        /* 공통 클릭 활성화 */
+        .glass-box, .glass-select, .glass-group-btn, .glass-single-btn,
+        .sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
+        .filter-control-btn, .filter-item, .action-btn, 
+        .search-panel, .filter-panel, .path-panel, 
+        .save-load-popup, .popup-item {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
 
-.dev-btn {
-    background: rgba(0, 0, 0, 0.8); border: 1px solid #ff4444; color: #ff4444;
-    padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 12px;
-    cursor: pointer; pointer-events: auto !important;
-    display: flex; align-items: center; gap: 5px;
-}
-.dev-btn.recording { background: #ff4444; color: white; animation: pulse 1.5s infinite; }
-.dev-btn:hover { transform: scale(1.05); }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        /* 패널 Z-index */
+        .search-panel, .filter-panel, .path-panel { z-index: 100001 !important; }
 
-/* 공통 클릭 활성화 */
-.glass-box, .glass-select, .glass-group-btn, .glass-single-btn,
-.sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
-.filter-control-btn, .filter-item, .action-btn, 
-.search-panel, .filter-panel, .path-panel, 
-.save-load-popup, .popup-item {
-    pointer-events: auto !important;
-    cursor: pointer !important;
-}
+        /* =========================================
+           2. UI 디자인 (Glass Style)
+           ========================================= */
+        .glass-select {
+            appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a08040; padding: 8px 28px 8px 12px; border-radius: 10px;
+            font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
+        }
+        .glass-select option { background-color: #1a1a1a; color: white; }
 
-/* 패널 Z-index */
-.search-panel, .filter-panel, .path-panel { z-index: 100001 !important; }
+        .glass-box {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
 
+        #path-toggle-btn {
+            width: 100%; max-width: 400px; height: 42px; padding: 0 20px; 
+            border-radius: 21px; gap: 8px;
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        #path-toggle-btn span { font-size: 13px; font-weight: 700; color: #ccc; letter-spacing: 0.5px; }
+        
+        #path-toggle-btn.path-active {
+            background-color: #a08040 !important; border-color: #fff !important;
+            box-shadow: 0 0 20px rgba(160, 128, 64, 0.6); transform: translateY(-2px);
+        }
+        #path-toggle-btn.path-active span, #path-toggle-btn.path-active svg { color: #fff !important; fill: #fff !important; }
 
-/* =========================================
-   2. UI 디자인 (Glass Style)
-   ========================================= */
-.glass-select {
-    appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
-    backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #a08040; padding: 8px 28px 8px 12px; border-radius: 10px;
-    font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
-}
-.glass-select option { background-color: #1a1a1a; color: white; }
+        .glass-group {
+            display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .glass-group-btn {
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
+        }
+        .glass-group-btn:last-child { border-bottom: none; }
+        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
+        
+        .glass-single-btn {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
+        .icon-svg { width: 20px; height: 20px; fill: currentColor; }
 
-.glass-box {
-    width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
-}
-.glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
+        .save-load-popup {
+            position: absolute; bottom: 50px; left: 0;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px; padding: 5px;
+            display: flex; flex-direction: column; gap: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 140px;
+            opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none !important;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: bottom left;
+        }
+        .save-load-popup.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
 
-#path-toggle-btn {
-    width: 100%; max-width: 400px; height: 42px; padding: 0 20px; 
-    border-radius: 21px; gap: 8px;
-    background-color: rgba(20, 20, 20, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-#path-toggle-btn span { font-size: 13px; font-weight: 700; color: #ccc; letter-spacing: 0.5px; }
+        .popup-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 8px;
+            color: #ccc; font-size: 13px; font-weight: 500;
+            transition: background 0.2s;
+        }
+        .popup-item:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
+        .popup-item svg { width: 18px; height: 18px; fill: #a08040; }
 
-#path-toggle-btn.path-active {
-    background-color: #a08040 !important; border-color: #fff !important;
-    box-shadow: 0 0 20px rgba(160, 128, 64, 0.6); transform: translateY(-2px);
-}
-#path-toggle-btn.path-active span, #path-toggle-btn.path-active svg { color: #fff !important; fill: #fff !important; }
+        /* =========================================
+           3. 핀 & 클러스터
+           ========================================= */
+        .pin-marker {
+            position: relative; width: 100%; height: 100%;
+            border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            background: #ffffff; 
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .pin-inner-circle {
+            width: 88%; height: 88%; border-radius: 50%;
+            background: var(--pin-color, #555);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pin-inner-circle img {
+            width: 70%; height: 70%; object-fit: contain; 
+            transform: rotate(45deg); opacity: 1; filter: none;
+        }
+        .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
+        .marker-completed .pin-inner-circle { background: #555 !important; }
+        .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
 
-.glass-group {
-    display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-.glass-group-btn {
-    width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
-    color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
-}
-.glass-group-btn:last-child { border-bottom: none; }
-.glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
+        /* Dev 모드 선택된 마커 (반짝임) */
+        .dev-selected .pin-marker {
+            background-color: #00e5ff !important;
+            transform: rotate(-45deg) scale(1.1);
+            box-shadow: 0 0 10px #00e5ff;
+        }
 
-.glass-single-btn {
-    width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px; display: flex; align-items: center; justify-content: center;
-    color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
-}
-.glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
-.icon-svg { width: 20px; height: 20px; fill: currentColor; }
+        .simple-cluster-marker {
+            width: 100%; height: 100%; border-radius: 50%; 
+            border: 2px solid #ffffff; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 800;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
 
-/* 저장/불러오기 팝업 메뉴 */
-.save-load-popup {
-    position: absolute; bottom: 50px; left: 0;
-    background-color: rgba(20, 20, 20, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 5px;
-    display: flex; flex-direction: column; gap: 2px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    width: 140px;
-    opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none !important;
-    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-    transform-origin: bottom left;
-}
-.save-load-popup.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
+        /* =========================================
+           4. 경로 마커
+           ========================================= */
+        .path-marker-box {
+            position: relative; width: 100%; height: 100%;
+            background-color: #1c1c1c; border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s, filter 0.2s; 
+        }
+        .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
+        .path-marker-icon {
+            width: 60%; height: 60%; object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
+        }
+        .path-order-badge {
+            position: absolute; bottom: -5px; right: -5px;
+            background-color: #a08040; color: #fff;
+            font-size: 10px; font-weight: 800; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .gateway-marker .path-marker-box { border-color: #00e5ff !important; box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+        .gateway-marker .path-order-badge { background-color: #00e5ff !important; color: #000 !important; }
+        .marker-completed .path-marker-box {
+            background-color: #333 !important; border-color: #555 !important;
+            filter: grayscale(100%) brightness(0.7); opacity: 0.8;
+        }
+        .marker-completed .path-order-badge { background-color: #555 !important; }
 
-.popup-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px; border-radius: 8px;
-    color: #ccc; font-size: 13px; font-weight: 500;
-    transition: background 0.2s;
-}
-.popup-item:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
-.popup-item svg { width: 18px; height: 18px; fill: #a08040; }
+        /* =========================================
+           5. 패널 스타일
+           ========================================= */
+        .search-panel, .filter-panel, .path-panel {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
 
+        .search-panel {
+            padding: 15px 20px 20px 20px; box-sizing: border-box;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transform: translateY(-100%);
+        }
+        .search-panel.active { transform: translateY(0); }
 
-/* =========================================
-   3. 핀 & 클러스터 (물방울 모양 Fix)
-   ========================================= */
-/* =========================================
-   3. 핀 & 클러스터 (Final: 물방울 핀 + 원형 클러스터)
-   ========================================= */
+        .filter-panel, .path-panel {
+            top: auto; bottom: 0; max-height: 60vh;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            padding-bottom: 80px; transform: translateY(100%);
+        }
+        .filter-panel.active, .path-panel.active { transform: translateY(0); }
 
-/* --- [1] 개별 핀 스타일 (물방울 모양 유지) --- */
-.pin-marker {
-    position: relative; width: 100%; height: 100%;
-    
-    /* 물방울 모양 */
-    border-radius: 50% 50% 50% 0 !important;
-    transform: rotate(-45deg) !important;
+        .panel-header {
+            padding: 15px 20px; border-bottom: 1px solid #333;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-title { color: white; font-weight: 700; font-size: 16px; }
+        .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; padding: 5px; }
 
-    background-color: #ffffff;
-    border: none !important;
-    
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.5) !important;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s ease;
-    
-    filter: none !important;
-}
+        .path-list-container { padding: 10px 20px; overflow-y: auto; }
+        .path-item {
+            padding: 15px; background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+            transition: all 0.2s;
+        }
+        .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
+        .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
+        .path-name { color: #fff; font-weight: 700; font-size: 14px; }
+        .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
 
-.pin-inner-circle {
-    width: 85%; height: 85%;
-    border-radius: 50%;
-    /* 배경색은 JS에서 들어옴 */
-    background-color: var(--pin-color, #555) !important;
-    
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
-}
+        .sidebar-search-input {
+            width: 100%; padding: 12px 10px 12px 40px; 
+            background-color: #333333 !important; border: 1px solid #a08040 !important;
+            border-radius: 8px; color: #ffffff !important; font-size: 16px; 
+            -webkit-appearance: none; outline: none;
+        }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
+        .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
+        
+        .search-results-container {
+            max-height: 60vh; overflow-y: auto; margin-top: 10px;
+            background-color: rgba(30, 30, 30, 0.95) !important;
+            border-radius: 8px; display: block !important;
+        }
+        .search-result-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 12px; border-bottom: 1px solid #444; cursor: pointer; gap: 12px;
+        }
+        .search-result-row:hover { background-color: rgba(255,255,255,0.05); }
+        .result-info { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+        .result-name { 
+            color: #a08040; font-weight: 700; font-size: 14px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .result-desc { 
+            color: #888; font-size: 11px; margin-top: 2px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .result-type-icon { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; opacity: 0.8; }
 
-.pin-inner-circle img {
-    width: 65%; height: 65%;
-    object-fit: contain; 
-    transform: rotate(45deg) !important; /* 아이콘 정방향 보정 */
-    
-    background-color: transparent !important;
-    -webkit-mask-image: none !important; mask-image: none !important;
-    
-    opacity: 0.95;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
-}
+        .filter-controls { display: flex; gap: 6px; }
+        .filter-control-btn {
+            padding: 8px 12px; font-size: 11px; font-weight: 500;
+            background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
+        }
+        .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
+        .filter-list-container {
+            padding: 10px 20px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .filter-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 5px; border-bottom: 1px solid #333;
+        }
+        .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
+        .filter-text-name { font-size: 13px; color: #aaa; }
+        .filter-count { color: #666; font-size: 12px; }
+        .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
+        .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+        .filter-item.inactive { opacity: 0.4; }
 
-.pin-marker:hover {
-    transform: rotate(-45deg) scale(1.15) !important; 
-    z-index: 9999;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.6) !important;
-}
+        @media (min-width: 768px) {
+            .search-panel, .filter-panel, .path-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
+            .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
+            .search-panel.active { transform: translateX(-50%) translateY(0); }
+            .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
+            .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
+        }
+     
+     
+        /* =========================================
+           1. 기본 설정 및 클릭 문제 해결
+           ========================================= */
+        * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
+        body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
+        .dev-mode-cursor { cursor: crosshair !important; }
 
-.marker-completed .pin-marker {
-    background-color: #e0e0e0 !important;
-    opacity: 0.6; filter: grayscale(1.0) !important;
-}
-.marker-completed .pin-inner-circle { background-color: #777 !important; }
+        .leaflet-image-layer {
+            filter: brightness(0.6) contrast(1.2) saturate(0.85);
+            transition: filter 0.5s ease;
+        }
 
-.dev-selected .pin-marker {
-    box-shadow: 0 0 0 2px #00e5ff, 1px 1px 5px rgba(0,0,0,0.5) !important;
-}
+        /* UI 컨테이너 (클릭 통과) */
+        .top-left-controls, .top-right-controls, 
+        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls {
+            position: fixed; z-index: 90000 !important; 
+            pointer-events: none !important; 
+            display: flex; flex-direction: column; gap: 8px;
+        }
 
+        .top-left-controls { top: 15px; left: 15px; }
+        .top-right-controls { top: 15px; right: 15px; }
+        .bottom-left-controls { bottom: 25px; left: 15px; overflow: visible; }
+        .bottom-right-controls { bottom: 25px; right: 15px; align-items: flex-end; }
+        
+        .bottom-center-controls {
+            bottom: 25px; left: 70px; right: 70px;
+            justify-content: center; align-items: center;
+        }
+        
+        /* 클릭 활성화 대상 */
+        .glass-box, .glass-select, .glass-group-btn, .glass-single-btn,
+        .sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
+        .filter-control-btn, .filter-item, .action-btn, 
+        .search-panel, .filter-panel, .path-panel, 
+        .save-load-popup, .popup-item {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
 
-/* --- [2] 클러스터 스타일 (원형 & 컬러 복귀) --- */
-.simple-cluster-marker {
-    width: 100%; height: 100%;
-    
-    /* ★ 핵심: 완전한 원형으로 복구 */
-    border-radius: 50% !important;
-    
-    /* 배경: 투명도 없는 꽉 찬 원래 색상 (JS 변수 사용) */
-    background-color: var(--cluster-color, #a08040) !important;
-    
-    /* 테두리:
+        /* 패널 Z-index */
+        .search-panel, .filter-panel, .path-panel {
+            z-index: 100001 !important;
+        }
 
+        /* =========================================
+           2. UI 디자인 (Glass Style)
+           ========================================= */
+        .glass-select {
+            appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a08040; padding: 8px 28px 8px 12px; border-radius: 10px;
+            font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
+        }
+        .glass-select option { background-color: #1a1a1a; color: white; }
 
-/* =========================================
-   4. 경로 마커
-   ========================================= */
-.path-marker-box {
-    position: relative; width: 100%; height: 100%;
-    background-color: #1c1c1c; border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s, filter 0.2s; 
-}
-.path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
-.path-marker-icon {
-    width: 60%; height: 60%; object-fit: contain;
-    filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
-}
-.path-order-badge {
-    position: absolute; bottom: -5px; right: -5px;
-    background-color: #a08040; color: #fff;
-    font-size: 10px; font-weight: 800; width: 18px; height: 18px;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
-.gateway-marker .path-marker-box { border-color: #00e5ff !important; box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
-.gateway-marker .path-order-badge { background-color: #00e5ff !important; color: #000 !important; }
-.marker-completed .path-marker-box {
-    background-color: #333 !important; border-color: #555 !important;
-    filter: grayscale(100%) brightness(0.7); opacity: 0.8;
-}
-.marker-completed .path-order-badge { background-color: #555 !important; }
+        .glass-box {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
 
+        #path-toggle-btn {
+            width: 100%; max-width: 400px; height: 42px; padding: 0 20px; 
+            border-radius: 21px; gap: 8px;
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        #path-toggle-btn span { font-size: 13px; font-weight: 700; color: #ccc; letter-spacing: 0.5px; }
+        
+        #path-toggle-btn.path-active {
+            background-color: #a08040 !important; border-color: #fff !important;
+            box-shadow: 0 0 20px rgba(160, 128, 64, 0.6); transform: translateY(-2px);
+        }
+        #path-toggle-btn.path-active span, #path-toggle-btn.path-active svg { color: #fff !important; fill: #fff !important; }
 
-/* =========================================
-   5. 패널 스타일
-   ========================================= */
-.search-panel, .filter-panel, .path-panel {
-    position: fixed; top: 0; left: 0; width: 100%;
-    background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-    display: flex; flex-direction: column;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
+        .glass-group {
+            display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .glass-group-btn {
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
+        }
+        .glass-group-btn:last-child { border-bottom: none; }
+        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
+        
+        .glass-single-btn {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
+        .icon-svg { width: 20px; height: 20px; fill: currentColor; }
 
-.search-panel {
-    padding: 15px 20px 20px 20px; box-sizing: border-box;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    transform: translateY(-100%);
-}
-.search-panel.active { transform: translateY(0); }
+        /* 저장/불러오기 팝업 메뉴 */
+        .save-load-popup {
+            position: absolute; bottom: 50px; left: 0;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 5px;
+            display: flex; flex-direction: column; gap: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 140px;
+            opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none !important;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: bottom left;
+        }
+        .save-load-popup.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
 
-.filter-panel, .path-panel {
-    top: auto; bottom: 0; max-height: 60vh;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    border-top-left-radius: 20px; border-top-right-radius: 20px;
-    padding-bottom: 80px; transform: translateY(100%);
-}
-.filter-panel.active, .path-panel.active { transform: translateY(0); }
+        .popup-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 8px;
+            color: #ccc; font-size: 13px; font-weight: 500;
+            transition: background 0.2s;
+        }
+        .popup-item:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
+        .popup-item svg { width: 18px; height: 18px; fill: #a08040; }
 
-.panel-header {
-    padding: 15px 20px; border-bottom: 1px solid #333;
-    display: flex; align-items: center; justify-content: space-between;
-}
-.panel-title { color: white; font-weight: 700; font-size: 16px; }
-.panel-close-btn { color: #888; font-size: 24px; cursor: pointer; padding: 5px; }
+        /* =========================================
+           3. 핀 & 클러스터
+           ========================================= */
+        .pin-marker {
+            position: relative; width: 100%; height: 100%;
+            border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            background: #ffffff; 
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .pin-inner-circle {
+            width: 88%; height: 88%; border-radius: 50%;
+            background: var(--pin-color, #555);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pin-inner-circle img {
+            width: 70%; height: 70%; object-fit: contain; 
+            transform: rotate(45deg); opacity: 1; filter: none;
+        }
+        .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
+        .marker-completed .pin-inner-circle { background: #555 !important; }
+        .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
 
-.path-list-container { padding: 10px 20px; overflow-y: auto; }
-.path-item {
-    padding: 15px; background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
-    transition: all 0.2s;
-}
-.path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
-.path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
-.path-name { color: #fff; font-weight: 700; font-size: 14px; }
-.path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
+        .simple-cluster-marker {
+            width: 100%; height: 100%; border-radius: 50%; 
+            border: 2px solid #ffffff; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 800;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
 
-.sidebar-search-input {
-    width: 100%; padding: 12px 10px 12px 40px; 
-    background-color: #333333 !important; border: 1px solid #a08040 !important;
-    border-radius: 8px; color: #ffffff !important; font-size: 16px; 
-    -webkit-appearance: none; outline: none;
-}
-.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
-.search-wrapper { position: relative; width: 100%; margin-top: 15px; }
+        /* =========================================
+           4. 경로 마커
+           ========================================= */
+        .path-marker-box {
+            position: relative; width: 100%; height: 100%;
+            background-color: #1c1c1c; border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s, filter 0.2s; 
+        }
+        .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
+        .path-marker-icon {
+            width: 60%; height: 60%; object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
+        }
+        .path-order-badge {
+            position: absolute; bottom: -5px; right: -5px;
+            background-color: #a08040; color: #fff;
+            font-size: 10px; font-weight: 800; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .gateway-marker .path-marker-box { border-color: #00e5ff !important; box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+        .gateway-marker .path-order-badge { background-color: #00e5ff !important; color: #000 !important; }
+        .marker-completed .path-marker-box {
+            background-color: #333 !important; border-color: #555 !important;
+            filter: grayscale(100%) brightness(0.7); opacity: 0.8;
+        }
+        .marker-completed .path-order-badge { background-color: #555 !important; }
 
-.search-results-container {
-    max-height: 60vh; overflow-y: auto; margin-top: 10px;
-    background-color: rgba(30, 30, 30, 0.95) !important;
-    border-radius: 8px; display: block !important;
-}
-.search-result-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 10px; border-bottom: 1px solid #444; cursor: pointer;
-}
-.result-name { color: #a08040; font-weight: 700; font-size: 14px; }
-.result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
+        /* =========================================
+           5. 패널 스타일
+           ========================================= */
+        .search-panel, .filter-panel, .path-panel {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
 
-.filter-controls { display: flex; gap: 6px; }
-.filter-control-btn {
-    padding: 8px 12px; font-size: 11px; font-weight: 500;
-    background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
-}
-.filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
-.filter-list-container {
-    padding: 10px 20px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-}
-.filter-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 5px; border-bottom: 1px solid #333;
-}
-.filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
-.filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
-.filter-text-name { font-size: 13px; color: #aaa; }
-.filter-count { color: #666; font-size: 12px; }
-.filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
-.filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
-.filter-item.inactive { opacity: 0.4; }
+        .search-panel {
+            padding: 15px 20px 20px 20px; box-sizing: border-box;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transform: translateY(-100%);
+        }
+        .search-panel.active { transform: translateY(0); }
 
-/* 팝업 */
-.leaflet-popup-content-wrapper { 
-    background: #ffffff !important; color: #333 !important; 
-    border-radius: 12px !important; padding: 0 !important;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important; overflow: hidden;
-}
-.leaflet-popup-content { margin: 0 !important; width: 280px !important; text-align: center; line-height: 1.5; }
-.leaflet-popup-tip { background: #ffffff !important; }
-.leaflet-container a.leaflet-popup-close-button {
-    top: 8px !important; right: 8px !important; color: #666 !important; font-size: 20px !important; z-index: 10;
-}
-.popup-inner { padding: 20px 15px 15px 15px; }
-.popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 5px; display: block; }
-.popup-type-badge { 
-    display: inline-block; font-size: 11px; color: #fff; background-color: #a08040;
-    font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 12px;
-}
-.popup-desc { 
-    font-size: 14px; color: #444; background: #f5f5f7; 
-    padding: 12px; border-radius: 8px; margin: 0 0 12px 0; 
-    text-align: left; word-break: keep-all; line-height: 1.4;
-}
-.popup-img { 
-    width: 100%; height: auto; max-height: 200px; object-fit: cover;
-    border-radius: 8px; margin-bottom: 10px; display: block; border: 1px solid #eee;
-}
-.popup-youtube-container {
-    position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
-    margin-bottom: 10px; border-radius: 8px; background: #000;
-}
-.popup-youtube-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.btn-container { display: flex; gap: 8px; margin-top: 5px; }
-.action-btn { 
-    flex: 1; padding: 10px 0; border-radius: 8px; font-size: 13px; font-weight: 700; 
-    border: none; color: white; text-align: center; text-decoration: none; 
-    display: flex; align-items: center; justify-content: center; gap: 4px;
-}
-.btn-wiki { background-color: #4a90e2; }
-.btn-complete { background-color: #2e7d32; }
-.btn-undo { background-color: #757575; }
+        .filter-panel, .path-panel {
+            top: auto; bottom: 0; max-height: 60vh;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            padding-bottom: 80px; transform: translateY(100%);
+        }
+        .filter-panel.active, .path-panel.active { transform: translateY(0); }
 
-@media (min-width: 768px) {
-    .search-panel, .filter-panel, .path-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
-    .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
-    .search-panel.active { transform: translateX(-50%) translateY(0); }
-    .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
-    .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
-}
+        .panel-header {
+            padding: 15px 20px; border-bottom: 1px solid #333;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-title { color: white; font-weight: 700; font-size: 16px; }
+        .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; padding: 5px; }
 
+        .path-list-container { padding: 10px 20px; overflow-y: auto; }
+        .path-item {
+            padding: 15px; background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+            transition: all 0.2s;
+        }
+        .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
+        .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
+        .path-name { color: #fff; font-weight: 700; font-size: 14px; }
+        .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
 
-/* ★ 경로 요약 정보 바 */
+        .sidebar-search-input {
+            width: 100%; padding: 12px 10px 12px 40px; 
+            background-color: #333333 !important; border: 1px solid #a08040 !important;
+            border-radius: 8px; color: #ffffff !important; font-size: 16px; 
+            -webkit-appearance: none; outline: none;
+        }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
+        .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
+        
+        .search-results-container {
+            max-height: 60vh; overflow-y: auto; margin-top: 10px;
+            background-color: rgba(30, 30, 30, 0.95) !important;
+            border-radius: 8px; display: block !important;
+        }
+        .search-result-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 10px; border-bottom: 1px solid #444; cursor: pointer;
+        }
+        .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
+        .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
+
+        .filter-controls { display: flex; gap: 6px; }
+        .filter-control-btn {
+            padding: 8px 12px; font-size: 11px; font-weight: 500;
+            background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
+        }
+        .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
+        .filter-list-container {
+            padding: 10px 20px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .filter-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 5px; border-bottom: 1px solid #333;
+        }
+        .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
+        .filter-text-name { font-size: 13px; color: #aaa; }
+        .filter-count { color: #666; font-size: 12px; }
+        .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
+        .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+        .filter-item.inactive { opacity: 0.4; }
+
+        /* 팝업 */
+        .leaflet-popup-content-wrapper { 
+            background: #ffffff !important; color: #333 !important; 
+            border-radius: 12px !important; padding: 0 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important; overflow: hidden;
+        }
+        .leaflet-popup-content { margin: 0 !important; width: 280px !important; text-align: center; line-height: 1.5; }
+        .leaflet-popup-tip { background: #ffffff !important; }
+        .leaflet-container a.leaflet-popup-close-button {
+            top: 8px !important; right: 8px !important; color: #666 !important; font-size: 20px !important; z-index: 10;
+        }
+        .popup-inner { padding: 20px 15px 15px 15px; }
+        .popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 5px; display: block; }
+        .popup-type-badge { 
+            display: inline-block; font-size: 11px; color: #fff; background-color: #a08040;
+            font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 12px;
+        }
+        .popup-desc { 
+            font-size: 14px; color: #444; background: #f5f5f7; 
+            padding: 12px; border-radius: 8px; margin: 0 0 12px 0; 
+            text-align: left; word-break: keep-all; line-height: 1.4;
+        }
+        .popup-img { 
+            width: 100%; height: auto; max-height: 200px; object-fit: cover;
+            border-radius: 8px; margin-bottom: 10px; display: block; border: 1px solid #eee;
+        }
+        .popup-youtube-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            margin-bottom: 10px; border-radius: 8px; background: #000;
+        }
+        .popup-youtube-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .btn-container { display: flex; gap: 8px; margin-top: 5px; }
+        .action-btn { 
+            flex: 1; padding: 10px 0; border-radius: 8px; font-size: 13px; font-weight: 700; 
+            border: none; color: white; text-align: center; text-decoration: none; 
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+        }
+        .btn-wiki { background-color: #4a90e2; }
+        .btn-complete { background-color: #2e7d32; }
+        .btn-undo { background-color: #757575; }
+
+        @media (min-width: 768px) {
+            .search-panel, .filter-panel, .path-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
+            .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
+            .search-panel.active { transform: translateX(-50%) translateY(0); }
+            .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
+            .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
+        }
+
+/* ★ [수정] 경로 요약 정보 바 - 화면 좌우 꽉 채우기 */
 #path-summary-bar {
-    display: none; 
-    position: fixed; 
+    display: none; /* 기본 숨김 */
+    position: fixed; /* 위치 고정 */
+    
+    /* 위치: 하단 컨트롤들(저장, 경로버튼, 전체화면) 바로 위에 배치 */
     bottom: 80px; 
+    
+    /* 가로 너비: 저장 버튼 좌측(15px) ~ 전체화면 우측(15px) */
     left: 15px; 
     right: 15px;
+    
+    /* 레이아웃 */
     flex-direction: row; 
-    justify-content: center; 
+    justify-content: center; /* 내용 중앙 정렬 (원하시면 space-between 가능) */
     align-items: center;
     flex-wrap: wrap;
     gap: 15px;
+    
+    /* 디자인 */
     background-color: rgba(20, 20, 20, 0.95); 
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2); 
     padding: 12px 20px; 
     border-radius: 16px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    z-index: 90001; 
+    
+    z-index: 90001; /* 다른 버튼보다 위에 */
     pointer-events: auto !important;
 }
 
+/* 요약 텍스트 스타일 */
 .summary-chunk { 
     font-size: 14px; 
     font-weight: 500; 
@@ -442,34 +706,164 @@ body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
     font-size: 15px;
 }
 
-/* ★ Mobile Optimization */
+/* =========================================
+   ★ [Mobile Optimization] 경로 요약 바 모바일 최적화
+   ========================================= */
 @media (max-width: 768px) {
     #path-summary-bar {
+        /* 1. 패널 크기 및 여백 축소 */
         padding: 6px 12px !important; 
-        gap: 2px 10px !important; 
+        gap: 2px 10px !important; /* 아이템 간 간격 좁힘 */
+        
+        /* 2. 배경 투명도 조절 (0.95 -> 0.75) */
         background-color: rgba(20, 20, 20, 0.75) !important; 
-        backdrop-filter: blur(5px) !important; 
+        backdrop-filter: blur(5px) !important; /* 흐림 효과는 유지하되 약간 줄임 */
+        
+        /* 3. 테두리 및 둥글기 조절 */
         border-radius: 12px !important;
         border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        
+        /* 4. 위치 미세 조정 (하단 버튼과 간격 확보) */
         bottom: 75px !important;
         left: 15px !important;
         right: 15px !important;
     }
-    .summary-chunk { font-size: 11px !important; line-height: 1.4 !important; }
-    .summary-chunk b { font-size: 12px !important; margin-left: 3px !important; }
+
+    /* 5. 폰트 사이즈 대폭 축소 */
+    .summary-chunk { 
+        font-size: 11px !important; 
+        line-height: 1.4 !important;
+    }
+    
+    .summary-chunk b { 
+        font-size: 12px !important; 
+        margin-left: 3px !important;
+    }
+}
+/* =========================================
+   3. 핀 & 클러스터 (New Dark Style)
+   ==============================/* =========================================
+   3. 핀 & 클러스터 (Tone Down 통합 스타일)
+   ========================================= */
+
+/* --- [1] 개별 핀 스타일 --- */
+.pin-marker {
+    position: relative; width: 100%; height: 100%;
+    border-radius: 8px; /* 클러스터와 동일한 둥근 사각형 */
+    transform: none !important;
+
+    /* 배경: 아주 짙은 회색 */
+    background-color: rgba(20, 20, 20, 0.95);
+    
+    /* 테두리: 1px로 얇게, JS에서 받은 색상 적용 */
+    border: 1px solid var(--pin-color, #a08040);
+    
+    /* ★ 핵심: 채도를 60%로 낮춰서 형광기를 뺌 */
+    filter: saturate(0.6) brightness(1.1);
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease;
 }
 
-/* ★ PC Optimization - 경로 모드 버튼 확대 */
+.pin-inner-circle {
+    width: 100%; height: 100%;
+    background: transparent !important;
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* 아이콘 마스킹 (흰색으로 통일) */
+.pin-inner-circle img {
+    width: 65%; height: 65%;
+    object-fit: contain; transform: none !important;
+
+    /* ★ 핵심: 아이콘 색상을 컬러가 아닌 '은은한 흰색'으로 통일 */
+    background-color: #e0e0e0 !important;
+    
+    /* 마스크 적용 */
+    -webkit-mask-image: var(--bg-image); mask-image: var(--bg-image);
+    -webkit-mask-size: contain; mask-size: contain;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center; mask-position: center;
+    color: transparent;
+}
+
+/* 핀 호버 효과 (색상 복구) */
+.pin-marker:hover {
+    transform: scale(1.15) !important; z-index: 9999;
+    /* 호버 시 채도 복구 및 테두리/글로우 강조 */
+    filter: saturate(1.0);
+    border-width: 2px;
+    box-shadow: 0 0 10px var(--pin-color, #a08040);
+}
+
+/* 완료된 핀 */
+.marker-completed .pin-marker {
+    background-color: #2a2a2a !important;
+    border-color: #444 !important; /* 테두리 회색 처리 */
+    box-shadow: none !important;
+    opacity: 0.7; filter: grayscale(1.0) !important; /* 완전 회색조 */
+}
+.marker-completed .pin-inner-circle img {
+    background-color: #666 !important; /* 아이콘도 더 어둡게 */
+}
+
+
+/* --- [2] 클러스터 스타일 (핀과 스타일 공유) --- */
+.simple-cluster-marker {
+    width: 100%; height: 100%;
+    border-radius: 8px !important;
+    
+    /* 배경, 테두리, 필터 모두 핀과 동일하게 적용 */
+    background-color: rgba(20, 20, 20, 0.95);
+    border: 1px solid var(--cluster-color, #a08040);
+    filter: saturate(0.6) brightness(1.1);
+    
+    /* 글자색: 은은한 흰색으로 통일 */
+    color: #e0e0e0 !important; 
+    
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+}
+
+/* 클러스터 호버 효과 */
+.simple-cluster-marker:hover {
+    transform: scale(1.1); z-index: 9999;
+    /* 호버 시 채도 복구 */
+    filter: saturate(1.0);
+    border-width: 2px;
+    box-shadow: 0 0 10px var(--cluster-color);
+}
+/* =========================================
+   ★ [PC Optimization] 경로 모드 버튼 크기 확대
+   ========================================= */
 @media (min-width: 769px) {
-    #path-toggle-btn { 
-        max-width: 100% !important;   
-        border-radius: 28px !important;
+    #path-toggle-btn {
+     
+        max-width: 100% !important;   /* 너비: 400px -> 500px */
+        border-radius: 28px !important; /* 둥근 모서리도 비율에 맞게 조정 */
+        
+        /* 2. 여백 및 간격 조정 */
         padding: 0 30px !important;
         gap: 12px !important;
+        
+        /* 3. 살짝 위로 띄우기 (시각적 균형) */
         bottom: 35px !important; 
     }
-    #path-toggle-btn span { font-size: 16px !important; letter-spacing: 1px !important; }
-    #path-toggle-btn .icon-svg { width: 24px !important; height: 24px !important; }
+    
+    /* 4. 글자 크기 시원하게 */
+    #path-toggle-btn span {
+        font-size: 16px !important;    /* 글자: 13px -> 16px */
+        letter-spacing: 1px !important;
+    }
+    
+    /* 5. 아이콘 크기 확대 */
+    #path-toggle-btn .icon-svg {
+        width: 24px !important;        /* 아이콘: 20px -> 24px */
+        height: 24px !important;
+    }
 }
     </style>
 </head>

@@ -948,11 +948,19 @@
         "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp"
     };
 
-    const colorMapping = {
-        "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
-        "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
-        "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad","사건":"#3076ad"
+       const colorMapping = {
+        "상자": "#4CAF50", // 밝은 초록
+        "보스": "#F44336", // 밝은 빨강
+        "고양이": "#607D8B", // 파란 회색 (검정은 너무 어두워서 변경)
+        "묘물": "#009688", // 밝은 청록
+        "만사록": "#FF9800", // 주황
+        "경계석": "#9C27B0", // 밝은 보라
+        "기연": "#E91E63", // 진한 분홍
+        "묘묘냥": "#673AB7", // 짙은 보라
+        "천지록": "#2196F3", // 밝은 파랑
+        "사건": "#3F51B5"  // 진한 파랑
     };
+
 
     // URL 파라미터 처리
     const urlParams = new URLSearchParams(window.location.search);
@@ -973,7 +981,7 @@
     });
 
     const isMobile = window.innerWidth <= 768;
-    const pinSize = isMobile ? [26, 26] : [32, 32];
+    const pinSize = isMobile ? [20, 20] : [32, 32];
 
     if (isDevMode) {
         document.getElementById('map').classList.add('dev-mode-cursor');

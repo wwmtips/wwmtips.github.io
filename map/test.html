@@ -1403,19 +1403,20 @@
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || "#555";
 
-/* 약 900줄 근처에 있는 pinIcon 정의 부분을 이걸로 덮어쓰세요 */
-
+             /* createMarkers 함수 내부 */
                 const pinIcon = L.divIcon({
                     className: isCompleted ? 'marker-completed' : '',
-                    // ★ HTML 구조 변경: 바깥은 흰색 핀, 안쪽 원에 배경색(pinColor) 적용
-                    html: `<div class="pin-marker">
-                            <div class="pin-inner-circle" style="background-color: ${pinColor};">
-                                <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                    /* HTML은 그대로 둬도 됩니다 */
+                    html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
+                            <div class="pin-inner-circle">
+                                <img src="${iconPath}" style="--bg-image: url('${iconPath}');" onerror="this.src='../images/stone.png'; this.style.setProperty('--bg-image', 'url(../images/stone.png)');">
                             </div>
                         </div>`,
-                    iconSize: pinSize,
-                    // ★ 앵커 포인트 조정: 물방울의 뾰족한 끝부분(하단 중앙)이 지도 좌표에 오도록 설정
-                    iconAnchor: [pinSize[0] / 2, pinSize[1] * 0.9],
+                    
+                    iconSize: pinSize, 
+                    
+                    /* ★ 여기를 수정하세요! (물방울 핀의 끝부분을 좌표로 설정) */
+                    iconAnchor: [pinSize[0] / 2, pinSize[1] * 0.9], 
                     popupAnchor: [0, -(pinSize[1] * 0.8)]
                 });
 

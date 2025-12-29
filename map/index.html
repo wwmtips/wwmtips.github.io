@@ -2,16 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v20 - External JSON)</title>
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5SMVDZTDST');
-    </script>
-    
+    <title>연운 한국어 맵 (Final v32 - Path Complete Fix)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -24,54 +15,65 @@
     
     <style>
         /* =========================================
-           기본 설정
+           1. 기본 설정 및 클릭 문제 해결
            ========================================= */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
         body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
         #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
-        /* 지도 다크 모드 필터 */
+        /* 지도 다크 필터 */
         .leaflet-image-layer {
             filter: brightness(0.6) contrast(1.2) saturate(0.85);
             transition: filter 0.5s ease;
         }
 
+        /* UI 클릭 통과 설정 */
+        .top-left-controls, .top-right-controls, .bottom-ui-container {
+            z-index: 90000 !important; 
+            pointer-events: none !important; 
+        }
+        
+        /* 버튼 등 실제 UI 클릭 활성화 */
+        .glass-box, .glass-select, .nav-item, .glass-group-btn, 
+        .glass-single-btn, .sidebar-search-input, .panel-close-btn, 
+        .path-item, .search-result-row, .filter-control-btn, .filter-item,
+        .action-btn, .search-panel, .filter-panel, .path-panel {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        /* 패널 Z-index 최상위 */
+        .search-panel, .filter-panel, .path-panel {
+            z-index: 100001 !important;
+        }
+
         /* =========================================
-           1. 핀 & 클러스터
+           2. 핀 & 클러스터
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            border-radius: 50% 50% 50% 0; /* 물방울 모양 */
+            border-radius: 50% 50% 50% 0; 
             transform: rotate(-45deg);
             background: #ffffff; 
             box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s, z-index 0.2s;
-            cursor: pointer; pointer-events: auto;
+            transition: transform 0.2s; pointer-events: auto !important;
         }
-        
         .pin-inner-circle {
-            width: 88%; height: 88%; 
-            border-radius: 50%;
+            width: 88%; height: 88%; border-radius: 50%;
             background: var(--pin-color, #555);
             display: flex; align-items: center; justify-content: center;
         }
-        
         .pin-inner-circle img {
-            width: 70%; height: 70%; 
-            object-fit: contain; 
-            transform: rotate(45deg); /* 아이콘 정방향 */
-            opacity: 1; filter: none;
+            width: 70%; height: 70%; object-fit: contain; 
+            transform: rotate(45deg); opacity: 1; filter: none;
         }
-
-        .pin-marker:hover {
-            transform: rotate(-45deg) scale(1.2);
-            z-index: 9999;
-        }
-
-        .marker-completed .pin-inner-circle { background: #777 !important; }
-        .marker-completed .pin-marker { opacity: 0.6; }
+        .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
+        
+        /* 일반 마커 완료 스타일 */
+        .marker-completed .pin-inner-circle { background: #555 !important; }
+        .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
 
         .simple-cluster-marker {
             width: 100%; height: 100%; border-radius: 50%; 
@@ -79,26 +81,60 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 13px; font-weight: 800;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-            cursor: pointer; transition: transform 0.2s;
+            cursor: pointer; pointer-events: auto !important;
         }
-        .simple-cluster-marker:hover { transform: scale(1.15); z-index: 5000; }
 
         /* =========================================
-           2. UI 컨트롤 (Glass & Dark Style)
+           3. 경로 마커 (카드형) & ★ 완료 스타일 추가
            ========================================= */
-        .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
-        .top-right-controls { 
-            position: fixed; top: 20px; right: 20px; z-index: 2000; 
-            display: flex; flex-direction: column; gap: 10px; 
-            transition: opacity 0.3s; 
+        .path-marker-box {
+            position: relative; width: 100%; height: 100%;
+            background-color: #1c1c1c; border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s, filter 0.2s; 
+            pointer-events: auto !important;
         }
-        body.controls-hidden .top-left-controls, body.controls-hidden .top-right-controls { opacity: 0; pointer-events: none; }
+        .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
+        
+        .path-marker-icon {
+            width: 60%; height: 60%; object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
+        }
+        .path-order-badge {
+            position: absolute; bottom: -5px; right: -5px;
+            background-color: #a08040; color: #fff;
+            font-size: 10px; font-weight: 800; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
 
+        /* ★ [New] 경로 마커 완료 시 흑백 처리 */
+        .marker-completed .path-marker-box {
+            background-color: #333 !important; /* 배경 더 어둡게 */
+            border-color: #555 !important;     /* 테두리 회색 */
+            filter: grayscale(100%) brightness(0.7); /* 흑백 + 어둡게 */
+            opacity: 0.8;
+        }
+        .marker-completed .path-order-badge {
+            background-color: #555 !important; /* 뱃지도 회색 */
+        }
+
+        /* =========================================
+           4. UI 컨트롤 디자인
+           ========================================= */
+        .top-left-controls { position: fixed; top: 20px; left: 20px; }
+        .top-right-controls { 
+            position: fixed; top: 20px; right: 20px; 
+            display: flex; flex-direction: column; gap: 10px; 
+        }
+        
         .glass-select {
             appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
             backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
             color: #a08040; padding: 10px 35px 10px 15px; border-radius: 12px;
-            font-weight: 700; font-size: 14px; cursor: pointer;
+            font-weight: 700; font-size: 14px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat; background-position: right 12px top 50%; background-size: 10px auto;
@@ -109,15 +145,17 @@
             width: 44px; height: 44px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            color: #a08040; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
         }
         .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
+        .glass-box.path-active {
+            background-color: #a08040 !important; color: #fff !important; border-color: #fff !important;
+            box-shadow: 0 0 15px rgba(160, 128, 64, 0.6);
+        }
 
         .bottom-ui-container {
-            position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000;
-            display: flex; flex-direction: column; align-items: center; pointer-events: none;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            display: flex; flex-direction: column; align-items: center;
         }
         .floating-actions { width: 100%; display: flex; justify-content: flex-end; padding: 0 20px 15px 20px; }
         .fab-column { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; pointer-events: auto; }
@@ -129,38 +167,41 @@
         }
         .glass-group-btn {
             width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
         }
         .glass-group-btn:last-child { border-bottom: none; }
+        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
         
         .glass-single-btn {
             width: 40px; height: 40px; background-color: rgba(20, 20, 20, 0.85);
             backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            color: #a08040; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
         }
+        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
         .icon-svg { width: 24px; height: 24px; fill: currentColor; }
 
         .bottom-nav-bar {
-            width: 100%; height: 60px; background-color: rgba(10, 10, 10, 0.85);
+            width: 100%; height: 60px; background-color: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; justify-content: space-around; align-items: center;
-            pointer-events: auto; padding-bottom: env(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 4px; color: #888; font-size: 10px; cursor: pointer; width: 60px; height: 100%;
+            gap: 4px; color: #888; font-size: 10px; width: 60px; height: 100%; transition: color 0.2s;
         }
+        .nav-item:hover { color: #ccc; }
         .nav-item.active { color: #a08040; }
 
         /* =========================================
-           4. 패널 스타일 (검색, 필터, 경로)
+           5. 패널 스타일
            ========================================= */
         .search-panel, .filter-panel, .path-panel {
             position: fixed; top: 0; left: 0; width: 100%;
             background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
-            z-index: 3000; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; flex-direction: column;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
@@ -176,8 +217,7 @@
             top: auto; bottom: 0; max-height: 60vh;
             border-top: 1px solid rgba(255,255,255,0.1);
             border-top-left-radius: 20px; border-top-right-radius: 20px;
-            padding-bottom: 80px; 
-            transform: translateY(100%);
+            padding-bottom: 80px; transform: translateY(100%);
         }
         .filter-panel.active, .path-panel.active { transform: translateY(0); }
 
@@ -186,25 +226,21 @@
             display: flex; align-items: center; justify-content: space-between;
         }
         .panel-title { color: white; font-weight: 700; font-size: 16px; }
-        .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; }
+        .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; padding: 5px; }
 
-        /* 경로 리스트 */
-        .path-list-container {
-            padding: 10px 20px; overflow-y: auto;
-        }
+        .path-list-container { padding: 10px 20px; overflow-y: auto; }
         .path-item {
             padding: 15px; background-color: rgba(255, 255, 255, 0.05);
             border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 10px; cursor: pointer;
-            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
             transition: all 0.2s;
         }
         .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
-        .path-icon { width: 20px; height: 20px; fill: #a08040; }
+        
+        .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
         .path-name { color: #fff; font-weight: 700; font-size: 14px; }
         .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
 
-        /* 검색 입력창 */
         .sidebar-search-input {
             width: 100%; padding: 12px 10px 12px 40px; 
             background-color: #333333 !important; border: 1px solid #a08040 !important;
@@ -226,10 +262,9 @@
         .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
         .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
 
-        /* 필터 */
         .filter-controls { display: flex; gap: 6px; }
         .filter-control-btn {
-            padding: 8px 12px; font-size: 11px; font-weight: 500; cursor: pointer;
+            padding: 8px 12px; font-size: 11px; font-weight: 500;
             background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
         }
         .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
@@ -238,7 +273,7 @@
         }
         .filter-item {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 5px; cursor: pointer; border-bottom: 1px solid #333;
+            padding: 10px 5px; border-bottom: 1px solid #333;
         }
         .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
         .filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
@@ -281,10 +316,9 @@
         .popup-youtube-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .btn-container { display: flex; gap: 8px; margin-top: 5px; }
         .action-btn { 
-            flex: 1; padding: 10px 0; border-radius: 8px; cursor: pointer; 
-            font-size: 13px; font-weight: 700; border: none; color: white;
-            text-align: center; text-decoration: none; display: flex;
-            align-items: center; justify-content: center; gap: 4px;
+            flex: 1; padding: 10px 0; border-radius: 8px; font-size: 13px; font-weight: 700; 
+            border: none; color: white; text-align: center; text-decoration: none; 
+            display: flex; align-items: center; justify-content: center; gap: 4px;
         }
         .btn-wiki { background-color: #4a90e2; }
         .btn-complete { background-color: #2e7d32; }
@@ -311,9 +345,9 @@
                 <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
             </svg>
         </div>
-        <div class="glass-box" onclick="togglePanel('path')" title="추천 경로">
+        <div id="path-toggle-btn" class="glass-box" onclick="handlePathButtonClick()" title="추천 경로">
             <svg class="icon-svg" viewBox="0 0 24 24">
-                <path d="M20.2 5.9l.8-.8C21.6 4.5 22 3.7 22 2.8s-.4-1.7-1-2.3c-.6-.6-1.4-1-2.3-1-.9 0-1.7.4-2.3 1l-.8.8c-1.6 1.6-4.2 1.6-5.8 0l-.8-.8C8.4-.1 7.6-.5 6.7-.5c-.9 0-1.7.4-2.3 1-.6.6-1 1.4-1 2.3 0 .9.4 1.7 1 2.3l.8.8c.4.4.9.6 1.4.7l-3 7c-.2.5-.1 1.1.2 1.5.3.4.8.7 1.4.7h13.4c.6 0 1.1-.3 1.4-.7.3-.4.4-1 .2-1.5l-3-7c.5-.1 1-.3 1.4-.7z"/>
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
             </svg>
         </div>
     </div>
@@ -389,13 +423,36 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
+        // ★ [안전 모드] 샘플 데이터 (파일 로드 실패 시 사용)
+        const sampleData = [
+            { id: 101, name: "청하 상자 1", type: "상자", x: 2000, y: 3000, desc: "나무 아래" },
+            { id: 102, name: "장군 사당 입구", type: "경계석", x: 2500, y: 3200, desc: "워프 포인트" },
+            { id: 103, name: "숨겨진 보스", type: "보스", x: 3000, y: 1500, desc: "강력함" }
+        ];
+        
+        const samplePathData = {
+            "sample_route": {
+                "title": "예시 경로 (샘플)",
+                "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
+                "markers": [101, 102, 103]
+            }
+        };
+
         const map = L.map('map', {
-            crs: L.CRS.Simple, 
-            minZoom: -5, maxZoom: 2, 
+            crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, 
             zoomControl: false, attributionControl: false,
-            preferCanvas: true,
-            wheelDebounceTime: 150 
+            preferCanvas: true, wheelDebounceTime: 150 
         });
+
+        // 전역 변수 초기화
+        let pathData = {};
+        let currentPathLayer = null;
+        let layerGroups = {}; 
+        let allMarkers = []; 
+        let cachedData = null; 
+        let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; 
+        let currentPathIds = []; 
+        let activePathMarkersMap = {}; 
 
         const mapsDB = {
             "qinghe": { name: "청하", img: "../map/images/qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
@@ -430,15 +487,6 @@
         const isMobile = window.innerWidth <= 768;
         const pinSize = isMobile ? [26, 26] : [32, 32];
 
-        let layerGroups = {}; 
-        let allMarkers = []; 
-        let cachedData = null; 
-        let isClusterOn = localStorage.getItem('clusterMode') !== 'false';
-        
-        // ★ 경로 데이터 변수
-        let pathData = {};
-        let currentPathLayer = null;
-
         if (isDevMode) document.getElementById('map').classList.add('dev-mode-cursor');
 
         const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
@@ -460,74 +508,141 @@
             window.location.search = `?id=${nextId}`;
         };
 
-        // 데이터 로드
-        fetch(currentConfig.json)
-            .then(res => res.json())
-            .then(data => {
-                cachedData = data;
-                createMarkers(data);
-                generateSidebar(data);
-                loadPathData(); // ★ 경로 데이터 로드 호출
-            })
-            .catch(err => { console.error(err); });
-
-        // ★ [New] path.json 로드 및 목록 생성
-        function loadPathData() {
-            fetch('../json/path.json')
-                .then(res => res.json())
-                .then(data => {
-                    pathData = data; // 전역 변수에 저장
-                    const container = document.getElementById('path-list-dynamic');
-                    container.innerHTML = '';
-                    
-                    for (const [key, info] of Object.entries(pathData)) {
-                        const div = document.createElement('div');
-                        div.className = 'path-item';
-                        div.onclick = () => activatePath(key);
-                        div.innerHTML = `
-                            <svg class="path-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                            <div class="path-info">
-                                <div class="path-name">${info.title}</div>
-                                <div class="path-desc">${info.desc}</div>
-                            </div>`;
-                        container.appendChild(div);
-                    }
+        // ★ [안전한 데이터 로드 시작점]
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch(currentConfig.json)
+                .then(res => {
+                    if (!res.ok) throw new Error("JSON load failed");
+                    return res.json();
                 })
-                .catch(err => console.log('Path data not found or error:', err));
+                .then(data => {
+                    cachedData = data;
+                    createMarkers(data);
+                    generateSidebar(data);
+                    loadPathData();
+                })
+                .catch(err => { 
+                    console.warn("Map data failed, using sample data:", err);
+                    // 실패 시 샘플 데이터로 복구하여 기능 활성화
+                    cachedData = sampleData;
+                    createMarkers(sampleData);
+                    generateSidebar(sampleData);
+                    loadPathData(true); // 샘플 경로 로드
+                });
+        });
+
+        function loadPathData(useSample = false) {
+            if (useSample) {
+                renderPathList(samplePathData);
+                return;
+            }
+            fetch('../json/path.json')
+                .then(res => {
+                    if (!res.ok) throw new Error("Path file not found");
+                    return res.json();
+                })
+                .then(data => renderPathList(data))
+                .catch(err => {
+                    console.log("Path load failed, using sample:", err);
+                    renderPathList(samplePathData); // 실패 시 샘플 경로 로드
+                });
         }
+
+        function renderPathList(data) {
+            pathData = data;
+            const container = document.getElementById('path-list-dynamic');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            for (const [key, info] of Object.entries(pathData)) {
+                const div = document.createElement('div');
+                div.className = 'path-item';
+                div.onclick = () => activatePath(key);
+                div.innerHTML = `
+                    <svg class="path-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <div class="path-info">
+                        <div class="path-name">${info.title}</div>
+                        <div class="path-desc">${info.desc}</div>
+                    </div>`;
+                container.appendChild(div);
+            }
+        }
+
+        // ★ [New] 경로 버튼 클릭 핸들러 (토글)
+        window.handlePathButtonClick = function() {
+            if (currentPathLayer) {
+                clearPath();
+            } else {
+                const pathPanel = document.getElementById('path-panel');
+                if (pathPanel.classList.contains('active')) {
+                    closeAllPanels();
+                } else {
+                    togglePanel('path');
+                }
+            }
+        };
 
         function activatePath(pathKey) {
             clearPath();
             const routeData = pathData[pathKey];
             if (!routeData || !routeData.markers) return;
+            
             const routeIds = routeData.markers;
+            currentPathIds = routeIds; 
+            activePathMarkersMap = {}; 
+
+            // 완료 상태 확인
+            const storageKey = `completed_${currentMapId}`;
+            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
             for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
 
             currentPathLayer = L.featureGroup();
             const latlngs = [];
 
-            routeIds.forEach(id => {
-                const item = allMarkers.find(m => m.id === id);
+            routeIds.forEach((id, index) => {
+                const item = allMarkers.find(m => m.id == id);
                 if (item) {
                     const latlng = item.marker.getLatLng();
                     latlngs.push(latlng);
-                    const markerClone = L.marker(latlng, { icon: item.marker.options.icon })
+                    
+                    const itemIconPath = `../images/${typeMapping[item.type] || 'stone'}.png`;
+                    
+                    // ★ 완료된 마커면 처음부터 클래스 추가
+                    const isCompleted = completedList.includes(item.id);
+                    const completedClass = isCompleted ? 'marker-completed' : '';
+
+                    const pathIcon = L.divIcon({
+                        className: `custom-div-icon ${completedClass}`,
+                        html: `<div class="path-marker-box">
+                                   <img src="${itemIconPath}" class="path-marker-icon" onerror="this.src='../images/stone.png'">
+                                   <div class="path-order-badge">${index + 1}</div>
+                               </div>`,
+                        iconSize: [34, 34], 
+                        iconAnchor: [17, 17],
+                        popupAnchor: [0, -20]
+                    });
+
+                    const markerClone = L.marker(latlng, { icon: pathIcon })
                         .bindPopup(item.marker.getPopup().getContent());
+                    
                     currentPathLayer.addLayer(markerClone);
+                    activePathMarkersMap[id] = markerClone; 
                 }
             });
 
             if (latlngs.length > 1) {
                 const polyline = L.polyline(latlngs, {
-                    color: '#ffd700', weight: 4, opacity: 0.8, dashArray: '10, 10', lineJoin: 'round'
+                    color: '#a08040', weight: 4, opacity: 0.9, dashArray: '5, 10', lineJoin: 'round'
                 });
                 currentPathLayer.addLayer(polyline);
             }
 
             currentPathLayer.addTo(map);
+            document.getElementById('path-toggle-btn').classList.add('path-active');
+
             if (latlngs.length > 0) {
-                map.fitBounds(currentPathLayer.getBounds(), { padding: [50, 50] });
+                map.fitBounds(currentPathLayer.getBounds(), { padding: [80, 80] });
             }
             closeAllPanels();
         }
@@ -536,7 +651,11 @@
             if (currentPathLayer) {
                 map.removeLayer(currentPathLayer);
                 currentPathLayer = null;
+                currentPathIds = [];
+                activePathMarkersMap = {};
             }
+            document.getElementById('path-toggle-btn').classList.remove('path-active');
+
             const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
             for (const key in layerGroups) {
                 const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
@@ -544,84 +663,157 @@
             }
         }
 
-        window.toggleClusterMode = function() {
-            isClusterOn = !isClusterOn;
-            localStorage.setItem('clusterMode', isClusterOn);
-            for (const key in layerGroups) map.removeLayer(layerGroups[key]);
-            layerGroups = {}; allMarkers = [];
-            if (cachedData) { createMarkers(cachedData); generateSidebar(cachedData); }
-        };
+        function togglePanel(type) {
+            const searchPanel = document.getElementById('search-panel');
+            const filterPanel = document.getElementById('filter-panel');
+            const pathPanel = document.getElementById('path-panel');
+            
+            searchPanel.classList.remove('active');
+            filterPanel.classList.remove('active');
+            pathPanel.classList.remove('active');
+            
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            if (type === 'path') {
+                pathPanel.classList.add('active');
+            } else if (type === 'search') {
+                searchPanel.classList.add('active');
+                document.getElementById('nav-search').classList.add('active');
+                setTimeout(() => document.getElementById('marker-search').focus(), 300);
+            } else if (type === 'filter') {
+                filterPanel.classList.add('active');
+                document.getElementById('nav-filter').classList.add('active');
+            }
+        }
+
+        function closeAllPanels() {
+            document.getElementById('search-panel').classList.remove('active');
+            document.getElementById('filter-panel').classList.remove('active');
+            document.getElementById('path-panel').classList.remove('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-home').classList.add('active');
+        }
 
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const markersByType = {}; 
+            allMarkers = []; layerGroups = {}; const markersByType = {}; 
 
-            data.forEach(item => {
-                if (!markersByType[item.type]) { markersByType[item.type] = []; }
-                const isCompleted = completedList.includes(item.id);
-                const imgName = typeMapping[item.type] || "stone"; 
-                const iconPath = `../images/${imgName}.png`;
-                const pinColor = colorMapping[item.type] || "#555";
+            try {
+                data.forEach(item => {
+                    if (!markersByType[item.type]) { markersByType[item.type] = []; }
+                    const isCompleted = completedList.includes(item.id);
+                    const imgName = typeMapping[item.type] || "stone"; 
+                    const iconPath = `../images/${imgName}.png`;
+                    const pinColor = colorMapping[item.type] || "#555";
 
-                const pinIcon = L.divIcon({
-                    className: isCompleted ? 'marker-completed' : '',
-                    html: `<div class="pin-marker">
-                               <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
-                                   <img src="${iconPath}" onerror="this.src='../images/stone.png'">
-                               </div>
-                           </div>`,
-                    iconSize: pinSize, 
-                    iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9],
-                    popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    const pinIcon = L.divIcon({
+                        className: isCompleted ? 'marker-completed' : '',
+                        html: `<div class="pin-marker">
+                                <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
+                                    <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                                </div>
+                            </div>`,
+                        iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    });
+
+                    const marker = L.marker([item.y, item.x], { icon: pinIcon });
+                    marker.bindPopup(() => generatePopupContent(item, storageKey));
+                    markersByType[item.type].push(marker);
+                    allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
                 });
 
-                const marker = L.marker([item.y, item.x], { icon: pinIcon });
-                marker.bindPopup(() => generatePopupContent(item, storageKey));
-                markersByType[item.type].push(marker);
-                allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
-            });
-
-            for (const type in markersByType) {
-                const markersArray = markersByType[type];
-                if (isClusterOn) {
-                    const typeColor = colorMapping[type] || "#555";
-                    if (!layerGroups[type]) {
-                        layerGroups[type] = L.markerClusterGroup({
-                            disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
-                            chunkedLoading: true, chunkInterval: 200,   
-                            animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
-                            iconCreateFunction: function(cluster) {
-                                const count = cluster.getChildCount();
-                                const countText = count > 99 ? '99+' : count;
-                                const html = `
-                                    <div class="simple-cluster-marker" style="background-color: ${typeColor};">
-                                        ${countText}
-                                    </div>`;
-                                return L.divIcon({
-                                    html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
-                                });
-                            }
-                        });
+                for (const type in markersByType) {
+                    const markersArray = markersByType[type];
+                    if (isClusterOn) {
+                        const typeColor = colorMapping[type] || "#555";
+                        if (!layerGroups[type]) {
+                            layerGroups[type] = L.markerClusterGroup({
+                                disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
+                                chunkedLoading: true, chunkInterval: 200,   
+                                animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
+                                iconCreateFunction: function(cluster) {
+                                    const count = cluster.getChildCount();
+                                    const countText = count > 99 ? '99+' : count;
+                                    const html = `
+                                        <div class="simple-cluster-marker" style="background-color: ${typeColor};">
+                                            ${countText}
+                                        </div>`;
+                                    return L.divIcon({
+                                        html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
+                                    });
+                                }
+                            });
+                        }
+                        layerGroups[type].addLayers(markersArray);
+                    } else {
+                        if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
+                        markersArray.forEach(m => layerGroups[type].addLayer(m));
                     }
-                    layerGroups[type].addLayers(markersArray);
-                } else {
-                    if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
-                    markersArray.forEach(m => layerGroups[type].addLayer(m));
                 }
-            }
 
-            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-            for (const key in layerGroups) {
-                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-                if (shouldShow) { layerGroups[key].addTo(map); }
-            }
+                const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+                for (const key in layerGroups) {
+                    const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
+                    if (shouldShow) { layerGroups[key].addTo(map); }
+                }
+            } catch (e) { console.error("Marker creation error:", e); }
         }
 
-        function saveFilterState() {
-            const status = {};
-            for (const key in layerGroups) { status[key] = map.hasLayer(layerGroups[key]); }
-            localStorage.setItem('map_filter_settings', JSON.stringify(status));
+        function generateSidebar(data) {
+            const filterList = document.getElementById('filter-list');
+            if(!filterList) return;
+            filterList.innerHTML = '';
+            
+            try {
+                const counts = {};
+                data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
+
+                for (const [type, count] of Object.entries(counts)) {
+                    const div = document.createElement('div');
+                    const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
+                    div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
+                    const imgName = typeMapping[type] || "stone";
+                    div.innerHTML = `
+                        <div class="filter-left-group">
+                            <img src="../images/${imgName}.png" class="filter-icon-img" onerror="this.style.display='none'">
+                            <span class="filter-text-name">${type}</span>
+                        </div>
+                        <span class="filter-count">${count}</span>`;
+                    div.onclick = function() {
+                        const isNowActive = div.classList.contains('active');
+                        if (isNowActive) {
+                            div.classList.remove('active'); div.classList.add('inactive');
+                            toggleLayer(type, false);
+                        } else {
+                            div.classList.remove('inactive'); div.classList.add('active');
+                            toggleLayer(type, true);
+                        }
+                        saveFilterState();
+                    };
+                    filterList.appendChild(div);
+                }
+            } catch (e) { console.error("Sidebar generation error:", e); }
+        }
+
+        function toggleLayer(type, isChecked) {
+            if (isChecked) { if (layerGroups[type]) map.addLayer(layerGroups[type]); } 
+            else { if (layerGroups[type]) map.removeLayer(layerGroups[type]); }
+        }
+
+        function setAllFilters(status) {
+            const items = document.querySelectorAll('.filter-item');
+            items.forEach(div => {
+                const typeName = div.querySelector('.filter-text-name').innerText;
+                if (status) {
+                    div.classList.remove('inactive'); div.classList.add('active');
+                    toggleLayer(typeName, true);
+                } else {
+                    div.classList.remove('active'); div.classList.add('inactive');
+                    toggleLayer(typeName, false);
+                }
+            });
+            saveFilterState();
         }
 
         const searchInput = document.getElementById('marker-search');
@@ -649,11 +841,7 @@
                     const jumpZoom = Math.min(map.getZoom() + 3, 1); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     
-                    // ★ 검색 후 이동 완료 시 팝업 열기
-                    map.once('moveend', function() {
-                        item.marker.openPopup();
-                    });
-
+                    map.once('moveend', function() { item.marker.openPopup(); });
                     if (window.innerWidth <= 480) closeAllPanels();
                 };
                 searchResultList.appendChild(row);
@@ -688,11 +876,38 @@
             let list = JSON.parse(localStorage.getItem(storageKey)) || [];
             const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
             if (!target) return;
-            const marker = target.marker;
-            if (index > -1) { list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); } 
-            else { list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); }
+            
+            // 상태 업데이트
+            const isNowComplete = (index === -1);
+            if (isNowComplete) { list.push(id); } else { list.splice(index, 1); }
             localStorage.setItem(storageKey, JSON.stringify(list)); 
+            
+            // 지도상 마커 스타일 갱신
+            // 경로 모드일 땐 activePathMarkersMap에서 찾고, 아닐 땐 layerGroups에서 찾음
+            let marker = target.marker;
+            if (currentPathLayer && activePathMarkersMap[id]) {
+                marker = activePathMarkersMap[id];
+            }
+
+            if (isNowComplete) { L.DomUtil.addClass(marker._icon, 'marker-completed'); }
+            else { L.DomUtil.removeClass(marker._icon, 'marker-completed'); }
+            
             marker.closePopup(); marker.openPopup();
+
+            // ★ 자동 이동 로직 (경로 활성화 && 완료 시 && 다음 마커 존재 시)
+            if (isNowComplete && currentPathIds.length > 0) {
+                const pathIndex = currentPathIds.indexOf(id);
+                if (pathIndex !== -1 && pathIndex < currentPathIds.length - 1) {
+                    const nextId = currentPathIds[pathIndex + 1];
+                    const nextMarker = activePathMarkersMap[nextId];
+                    if (nextMarker) {
+                        setTimeout(() => {
+                            map.flyTo(nextMarker.getLatLng(), 0, { animate: true, duration: 1.0 });
+                            map.once('moveend', () => nextMarker.openPopup());
+                        }, 500);
+                    }
+                }
+            }
         };
 
         window.shareMarker = function(id) {
@@ -712,6 +927,14 @@
             if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => { console.log(err); }); } 
             else { if (document.exitFullscreen) { document.exitFullscreen(); } }
         }
+
+        window.toggleClusterMode = function() {
+            isClusterOn = !isClusterOn;
+            localStorage.setItem('clusterMode', isClusterOn);
+            for (const key in layerGroups) map.removeLayer(layerGroups[key]);
+            layerGroups = {}; allMarkers = [];
+            if (cachedData) { createMarkers(cachedData); generateSidebar(cachedData); }
+        };
 
         window.copyToClipboard = function(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).catch(() => fallbackCopy(text)); }

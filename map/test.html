@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v35 - Cross Map Navigation)</title>
+    <title>연운 한국어 맵 (Final v36 - Map Jump Fix)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -103,7 +103,7 @@
             border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* 게이트웨이(지역이동) 마커 */
+        /* 게이트웨이(지역이동) 마커 - 청록색 강조 */
         .gateway-marker .path-marker-box {
             border-color: #00e5ff !important;
             box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
@@ -112,7 +112,7 @@
             background-color: #00e5ff !important; color: #000 !important;
         }
 
-        /* 완료된 경로 마커 */
+        /* 완료된 경로 마커 - 흑백 */
         .marker-completed .path-marker-box {
             background-color: #333 !important;
             border-color: #555 !important;
@@ -425,7 +425,7 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
-        // ★ [안전 모드] 샘플 데이터 (파일 로드 실패 시 사용)
+        // ★ [안전 모드] 샘플 데이터
         const sampleData = [
             { id: 101, name: "청하 상자 1", type: "상자", x: 2000, y: 3000, desc: "나무 아래" },
             { id: 102, name: "장군 사당 입구", type: "경계석", x: 2500, y: 3200, desc: "워프 포인트" },
@@ -446,7 +446,7 @@
             preferCanvas: true, wheelDebounceTime: 150 
         });
 
-        // 전역 변수 초기화
+        // 전역 변수
         let pathData = {};
         let currentPathLayer = null;
         let layerGroups = {}; 
@@ -498,7 +498,6 @@
         const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
         map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
 
-        // 맵 선택 드롭다운 채우기
         const mapSelect = document.getElementById('main-map-select');
         for (const [key, val] of Object.entries(mapsDB)) {
             const option = document.createElement('option');
@@ -511,7 +510,7 @@
             window.location.search = `?id=${nextId}`;
         };
 
-        // ★ [안전한 데이터 로드 시작점]
+        // 데이터 로드
         document.addEventListener('DOMContentLoaded', () => {
             const targetPath = urlParams.get('path');
 
@@ -590,7 +589,7 @@
             }
         };
 
-        // ★ [핵심] 경로 활성화 및 맵 이동 체크
+        // ★ [경로 활성화 로직 - 맵 이동 체크 포함]
         function activatePath(pathKey) {
             clearPath();
             const routeData = pathData[pathKey];
@@ -600,14 +599,13 @@
             currentPathIds = routeIds; 
             activePathMarkersMap = {}; 
 
-            // 1. 경로의 첫 번째 마커가 다른 맵인지 확인
+            // 첫 번째 마커가 다른 맵이면 즉시 이동
             if (routeIds.length > 0) {
                 const firstEntry = routeIds[0];
                 const firstMap = (typeof firstEntry === 'object') ? firstEntry.map : currentMapId;
                 const firstId = (typeof firstEntry === 'object') ? firstEntry.id : firstEntry;
 
                 if (firstMap && firstMap !== currentMapId) {
-                    // ★ 시작점이 다른 맵이면 즉시 이동
                     localStorage.setItem('activePathKey', pathKey);
                     window.location.href = `?id=${firstMap}&marker=${firstId}&path=${pathKey}`;
                     return;
@@ -626,6 +624,7 @@
                 const markerId = (typeof entry === 'object') ? entry.id : entry;
                 const markerMap = (typeof entry === 'object') ? entry.map : currentMapId;
 
+                // 다음 맵 게이트웨이 체크
                 let isGateway = false;
                 if (index < routeIds.length - 1) {
                     const nextEntry = routeIds[index + 1];
@@ -648,7 +647,6 @@
                     const gatewayClass = isGateway ? 'gateway-marker' : '';
 
                     let badgeContent = index + 1;
-                    // 문 아이콘 SVG
                     if (isGateway) {
                         badgeContent = `<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:black;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>`;
                     }
@@ -682,7 +680,6 @@
             currentPathLayer.addTo(map);
             document.getElementById('path-toggle-btn').classList.add('path-active');
 
-            // 첫 번째 마커로 포커스
             if (latlngs.length > 0) {
                 map.flyTo(latlngs[0], 0, { animate: true, duration: 1.5 });
             }
@@ -938,7 +935,7 @@
             
             marker.closePopup(); marker.openPopup();
 
-            // ★ 자동 이동 로직 (경로 모드)
+            // ★ [New] 자동 이동 및 맵 이동 기능 (경로 모드)
             if (isNowComplete && currentPathIds.length > 0) {
                 const currentEntry = currentPathIds.find(entry => (typeof entry === 'object' ? entry.id : entry) == id);
                 const pathIndex = currentPathIds.indexOf(currentEntry);

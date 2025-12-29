@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Classic Marker)</title>
+    <title>연운 한국어 맵 (Final v14)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -23,76 +23,124 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
     
     <style>
-        /* 기본 설정 */
+        /* =========================================
+           기본 설정
+           ========================================= */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
         body { margin: 0; padding: 0; background-color: #1a1a1a; overflow: hidden; }
         #map { width: 100vw; height: 100vh; background: #1a1a1a; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
         /* =========================================
-           ★ 1. 핀 & 클러스터 (초기 버전 스타일 복구)
+           ★ 1. 팝업 디테일 스타일 (map_style.css에서 이식 및 수정)
+           ========================================= */
+        .leaflet-popup-content-wrapper { 
+            background: #ffffff !important; 
+            color: #333 !important; 
+            border-radius: 8px !important; 
+            padding: 0 !important;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.4) !important;
+            overflow: hidden;
+        }
+        .leaflet-popup-content { 
+            margin: 15px !important; 
+            width: 260px !important; /* 너비 고정 */
+            text-align: center;
+            line-height: 1.4;
+        }
+        .leaflet-popup-tip { background: #ffffff !important; }
+        .leaflet-container a.leaflet-popup-close-button {
+            top: 5px !important; right: 5px !important;
+            color: #999 !important; font-size: 18px !important;
+        }
+
+        /* 팝업 내부 요소 */
+        .popup-title { 
+            font-size: 16px; font-weight: 700; color: #000; 
+            margin-bottom: 5px; padding-bottom: 5px;
+            border-bottom: 2px solid #a08040; display: inline-block;
+        }
+        .popup-type { 
+            font-size: 12px; color: #a08040; font-weight: bold; margin-bottom: 8px; 
+        }
+        .popup-desc { 
+            font-size: 13px; color: #555; background: #f8f8f8; 
+            padding: 10px; border-radius: 4px; margin: 8px 0; 
+            text-align: left; border: 1px solid #eee;
+            word-break: break-word;
+        }
+        
+        /* ★ [중요] 이미지/유튜브 깨짐 방지 */
+        .popup-img { 
+            width: 100%; height: auto; border-radius: 4px; 
+            margin-top: 8px; border: 1px solid #ddd; display: block;
+        }
+        .popup-youtube-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            margin-top: 8px; border-radius: 4px; border: 1px solid #ddd;
+        }
+        .popup-youtube-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        /* 버튼 컨테이너 */
+        .btn-container { display: flex; gap: 6px; margin-top: 10px; }
+        .action-btn { 
+            flex: 1; padding: 8px 0; border-radius: 4px; cursor: pointer; 
+            font-size: 13px; font-weight: bold; border: none; color: white;
+            text-align: center; text-decoration: none; display: inline-block;
+        }
+        /* 버튼 색상 (스크린샷 참조) */
+        .btn-wiki { background-color: #4a90e2; } /* 파란색 (공유/위키) */
+        .btn-wiki:hover { background-color: #357abd; }
+        
+        .btn-complete { background-color: #2e7d32; } /* 초록색 (완료) */
+        .btn-complete:hover { background-color: #1b5e20; }
+        
+        .btn-undo { background-color: #757575; } /* 회색 (취소) */
+        .btn-undo:hover { background-color: #616161; }
+
+
+        /* =========================================
+           2. 핀 & 클러스터 (초기 버전)
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            /* 물방울 모양 (초기 버전) */
-            border-radius: 50% 50% 50% 0; 
-            transform: rotate(-45deg);
-            background: #ffffff; /* 흰색 배경 복구 */
+            border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            background: #ffffff;
             box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
             display: flex; align-items: center; justify-content: center;
             transition: transform 0.2s, z-index 0.2s;
-            border: none; /* 테두리 제거 */
         }
-        
         .pin-inner-circle {
-            width: 88%; height: 88%; 
-            border-radius: 50%;
-            background: var(--pin-color, #555); /* 내부 색상 */
+            width: 88%; height: 88%; border-radius: 50%;
+            background: var(--pin-color, #555);
             display: flex; align-items: center; justify-content: center;
         }
-        
         .pin-inner-circle img {
-            width: 70%; height: 70%; 
-            object-fit: contain; 
-            /* 이미지 회전 (핀이 돌아가 있으므로) */
-            transform: rotate(45deg); 
-            opacity: 1;
-            filter: none; /* 필터 제거 (원래 색상) */
+            width: 70%; height: 70%; object-fit: contain; transform: rotate(45deg);
+            opacity: 1; filter: none;
         }
+        .pin-marker:hover { transform: rotate(-45deg) scale(1.15); z-index: 9999; cursor: pointer; }
+        .marker-completed .pin-inner-circle { background: #999 !important; }
+        .marker-completed .pin-marker { opacity: 0.8; }
 
-        .pin-marker:hover {
-            transform: rotate(-45deg) scale(1.15);
-            z-index: 9999; cursor: pointer;
-        }
-
-        /* 완료된 마커 */
-        .marker-completed .pin-inner-circle { 
-            background: #999 !important; 
-        }
-        .marker-completed .pin-marker {
-            opacity: 0.8;
-        }
-
-        /* 심플 클러스터 (초기 스타일 유사) */
         .simple-cluster-marker {
             width: 100%; height: 100%; border-radius: 50%; 
-            border: 2px solid #ffffff;
+            border: 2px solid #ffffff; color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-size: 12px; font-weight: 700;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
             transition: transform 0.2s ease;
-            color: #fff; /* 글자색 */
         }
         .simple-cluster-marker:hover { transform: scale(1.15); cursor: pointer; z-index: 5000; }
 
         /* =========================================
-           2. 상단 컨트롤 (UI 유지)
+           3. UI 컨트롤 스타일 (Glass & Dark)
            ========================================= */
         .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
         .top-right-controls { position: fixed; top: 20px; right: 20px; z-index: 2000; transition: opacity 0.3s; }
-
-        body.controls-hidden .top-left-controls,
-        body.controls-hidden .top-right-controls { opacity: 0; pointer-events: none; }
+        body.controls-hidden .top-left-controls, body.controls-hidden .top-right-controls { opacity: 0; pointer-events: none; }
 
         .glass-select {
             appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
@@ -113,9 +161,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        /* =========================================
-           3. 하단 UI
-           ========================================= */
         .bottom-ui-container {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000;
             display: flex; flex-direction: column; align-items: center; pointer-events: none;
@@ -155,13 +200,10 @@
         }
         .nav-item.active { color: #a08040; }
 
-        /* =========================================
-           4. 패널 스타일
-           ========================================= */
+        /* 검색 패널 */
         .search-panel {
             position: fixed; top: 0; left: 0; width: 100%;
-            background-color: rgba(20, 20, 20, 0.98);
-            backdrop-filter: blur(10px);
+            background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 15px 20px 20px 20px; box-sizing: border-box;
             z-index: 3000; transform: translateY(-100%);
@@ -174,22 +216,20 @@
         
         .sidebar-search-input {
             width: 100%; padding: 12px 10px 12px 40px; 
-            background-color: #333333 !important;
-            border: 1px solid #a08040 !important;
-            border-radius: 8px; 
-            color: #ffffff !important;
-            font-size: 16px; 
+            background-color: #333333 !important; border: 1px solid #a08040 !important;
+            border-radius: 8px; color: #ffffff !important; font-size: 16px; 
             -webkit-appearance: none; outline: none;
         }
         .sidebar-search-input::placeholder { color: #aaaaaa !important; }
+        input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #333333 inset !important; -webkit-text-fill-color: white !important; }
+
         .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
         .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
 
         .search-results-container {
             max-height: 60vh; overflow-y: auto; margin-top: 10px;
             background-color: rgba(30, 30, 30, 0.95) !important;
-            border-radius: 8px;
-            display: block !important; /* 강제 표시 */
+            border-radius: 8px; display: block !important;
         }
         .search-result-row {
             display: flex; align-items: center; justify-content: space-between;
@@ -199,6 +239,7 @@
         .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
         .result-type-icon { width: 24px; height: 24px; opacity: 0.9; }
 
+        /* 필터 패널 */
         .filter-panel {
             position: fixed; bottom: 0; left: 0; width: 100%; max-height: 60vh;
             background-color: rgba(20, 20, 20, 0.99); backdrop-filter: blur(10px);
@@ -236,20 +277,7 @@
         .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
         .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
         .filter-item.inactive { opacity: 0.4; }
-
-        /* 팝업 스타일 재정의 */
-        .leaflet-popup-content-wrapper { background: #fff; color: #333; border-radius: 8px; box-shadow: 0 3px 14px rgba(0,0,0,0.4); }
-        .leaflet-popup-tip { background: #fff; }
-        .popup-title { color: #000; border-bottom: 2px solid #a08040; padding-bottom: 5px; margin-bottom: 5px; font-weight: bold; font-size: 1.2em;}
-        .popup-desc { color: #555; font-size: 13px; background: #f5f5f5; padding: 10px; border-radius: 4px; }
-        .action-btn { 
-            display: block; width: 100%; padding: 8px 0; margin-top: 5px; 
-            text-align: center; border-radius: 4px; cursor: pointer; border: none; color: white;
-        }
-        .btn-wiki { background-color: #fff; color: #a08040; border: 1px solid #a08040; }
-        .btn-complete { background: #2e7d32; }
-        .btn-undo { background: #757575; }
-
+        
         @media (min-width: 768px) {
             .search-panel, .filter-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
             .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
@@ -416,17 +444,10 @@
             "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
-        // ★ [복구] 초기 버전 컬러 (진한 원색)
         const colorMapping = {
-            "상자": "#2e7d32", // 진한 녹색
-            "보스": "#b71c1c", // 진한 빨강
-            "고양이": "#000000", // 검정
-            "묘물": "#35945f", 
-            "만사록": "#a08040", // 금색
-            "경계석": "#4b3947", 
-            "기연": "#f086ab", 
-            "묘묘냥": "#635e85", 
-            "천지록": "#4076ad"
+            "상자": "#2e7d32", "보스": "#b71c1c", "고양이": "#000000",
+            "묘물": "#35945f", "만사록": "#a08040", "경계석": "#4b3947", 
+            "기연": "#f086ab", "묘묘냥": "#635e85", "천지록": "#4076ad"
         };
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -502,7 +523,6 @@
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || "#555";
 
-                // ★ [복구] 초기 버전 물방울 마커 HTML
                 const pinIcon = L.divIcon({
                     className: isCompleted ? 'marker-completed' : '',
                     html: `<div class="pin-marker">
@@ -510,9 +530,7 @@
                                    <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                                </div>
                            </div>`,
-                    iconSize: pinSize, 
-                    iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], // 꼬리가 아래로 가도록
-                    popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], popupAnchor: [0, -(pinSize[1] * 0.8)]
                 });
 
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
@@ -533,7 +551,6 @@
                             iconCreateFunction: function(cluster) {
                                 const count = cluster.getChildCount();
                                 const countText = count > 99 ? '99+' : count;
-                                // ★ [복구] 초기 버전 클러스터 스타일
                                 const html = `
                                     <div class="simple-cluster-marker" style="background-color: ${typeColor};">
                                         ${countText}
@@ -598,14 +615,13 @@
                 const imgName = typeMapping[item.type] || "stone";
                 row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
                 
-                // 검색 결과 클릭 이벤트
                 row.onclick = () => {
                     if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
                     
                     const jumpZoom = Math.min(map.getZoom() + 3, 1); 
                     map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
                     
-                    // ★ [유지] 이동 후 팝업 자동 열기
+                    // ★ 클릭 시 팝업 열기 (확실하게)
                     map.once('moveend', function() {
                         item.marker.openPopup();
                     });
@@ -672,26 +688,31 @@
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const isCompleted = completedList.includes(item.id);
             let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
-            if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
-            if (item.link) {
-                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki" style="display:block; width:100%; box-sizing:border-box; text-align:center; margin-bottom:8px;">📖 공략 보기</a>`;
-            }
-            html += `<div class="btn-container" style="display:flex; gap:5px; margin-bottom:0;">`;
-            html += `<button onclick="shareMarker(${item.id})" class="action-btn" style="flex:1; background:#4a90e2; color:white;">🔗 공유</button>`;
-            const btnText = isCompleted ? "취소" : "완료";
-            const btnClass = isCompleted ? "btn-undo" : "btn-complete";
-            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}" style="flex:1;">${btnText}</button>`;
-            html += `</div>`;
+            
+            // ★ [수정] 이미지 있으면 표시 (반응형 적용)
             if (item.image) {
                 const ytId = getYouTubeId(item.image);
                 if (ytId) {
-                    html += `<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top:10px; border-radius:4px;">
-                                <iframe src="https://www.youtube.com/embed/${ytId}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
+                    html += `<div class="popup-youtube-container">
+                                <iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe>
                              </div>`;
                 } else {
-                    html += `<img src="${item.image}" class="popup-img" style="margin-top:10px;">`;
+                    html += `<img src="${item.image}" class="popup-img" alt="${item.name}">`;
                 }
             }
+
+            if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
+            
+            html += `<div class="btn-container">`;
+            html += `<button onclick="shareMarker(${item.id})" class="action-btn btn-wiki">🔗 공유</button>`;
+            if (item.link) {
+                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki" style="display:block; text-decoration:none; line-height:32px;">📖 공략</a>`;
+            }
+            
+            const btnText = isCompleted ? "취소" : "완료";
+            const btnClass = isCompleted ? "btn-undo" : "btn-complete";
+            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}">${btnText}</button>`;
+            html += `</div>`;
             html += `</div>`;
             return html;
         }

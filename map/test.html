@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v12)</title>
+    <title>연운 한국어 맵 (Final v13 - Minimalist)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -24,50 +24,72 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
     
     <style>
-        /* 기본 폰트 설정 */
+        /* 기본 폰트 및 리셋 */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
         body { margin: 0; padding: 0; background-color: #1a1a1a; overflow: hidden; }
         #map { width: 100vw; height: 100vh; background: #1a1a1a; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
         /* =========================================
-           1. 핀 & 클러스터
+           ★ 1. 핀 & 클러스터 (미니멀 디자인 적용)
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
-            background: #ffffff;
-            box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            border-radius: 50%; /* 완전한 원형 */
+            background: #222222; /* 어두운 배경 (흰색 제거) */
+            border: 2px solid var(--pin-color, #888); /* 컬러 테두리 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5); /* 부드러운 그림자 */
             display: flex; align-items: center; justify-content: center;
-            will-change: transform; transition: transform 0.2s;
+            transition: transform 0.2s, z-index 0.2s, border-color 0.2s;
         }
         .pin-inner-circle {
-            width: 88%; height: 88%; border-radius: 50%;
-            background: var(--pin-color, #555);
+            width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
+            /* 기존 배경색 제거 */
         }
         .pin-inner-circle img {
-            width: 70%; height: 70%; object-fit: contain; transform: rotate(45deg);
+            width: 60%; height: 60%; 
+            object-fit: contain;
+            /* 아이콘을 흰색으로 만들어 어두운 배경에서 잘 보이게 함 */
+            filter: brightness(0) invert(1); 
+            opacity: 0.9;
         }
-        .pin-marker:hover { transform: rotate(-45deg) scale(1.15); z-index: 9999; cursor: pointer; }
-        .marker-completed .pin-inner-circle { background: #999 !important; }
 
+        /* 호버 효과 */
+        .pin-marker:hover { 
+            transform: scale(1.15); /* 회전 제거, 확대만 */
+            z-index: 9999; cursor: pointer; 
+            box-shadow: 0 0 8px var(--pin-color, #888); /* 호버 시 테두리 색으로 빛남 */
+        }
+
+        /* 완료된 마커 스타일 */
+        .marker-completed .pin-marker {
+            border-color: #555 !important; /* 회색 테두리 */
+            background: #333 !important;
+            box-shadow: none;
+        }
+        .marker-completed .pin-inner-circle img {
+            opacity: 0.4; /* 아이콘 흐리게 */
+        }
+
+        /* 심플 클러스터 (모아보기) 마커 */
         .simple-cluster-marker {
-            width: 100%; height: 100%; border-radius: 50%; border: 2px solid #ffffff;
+            width: 100%; height: 100%; border-radius: 50%;
+            background-color: #222222; /* 어두운 배경 */
+            /* 테두리와 글자색은 JS에서 주입됨 */
+            border: 2px solid #888; color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-size: 12px; font-weight: 700;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
             transition: transform 0.2s ease;
         }
         .simple-cluster-marker:hover { transform: scale(1.15); cursor: pointer; z-index: 5000; }
 
         /* =========================================
-           2. 상단 컨트롤
+           2. 상단 컨트롤 UI
            ========================================= */
         .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
         .top-right-controls { position: fixed; top: 20px; right: 20px; z-index: 2000; transition: opacity 0.3s; }
-
-        /* 검색 시 상단 버튼 숨김 */
         body.controls-hidden .top-left-controls,
         body.controls-hidden .top-right-controls { opacity: 0; pointer-events: none; }
 
@@ -134,11 +156,11 @@
         .nav-item.active { color: #a08040; }
 
         /* =========================================
-           4. 패널 스타일 (검색창 문제 수정됨)
+           4. 패널 스타일
            ========================================= */
         .search-panel {
             position: fixed; top: 0; left: 0; width: 100%;
-            background-color: rgba(20, 20, 20, 0.98); /* 배경 진하게 */
+            background-color: rgba(20, 20, 20, 0.98);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 15px 20px 20px 20px; box-sizing: border-box;
@@ -150,33 +172,29 @@
         .search-panel.active { transform: translateY(0); }
         .panel-close-btn { position: absolute; top: 10px; right: 15px; color: #888; font-size: 24px; cursor: pointer; }
         
-        /* ★ [핵심 수정] 검색 입력창 스타일 강제 적용 */
         .sidebar-search-input {
             width: 100%; padding: 12px 10px 12px 40px; 
-            background-color: #333333 !important; /* 배경색 강제 지정 */
-            border: 1px solid #a08040 !important; /* 금색 테두리 */
+            background-color: #333333 !important;
+            border: 1px solid #a08040 !important;
             border-radius: 8px; 
-            color: #ffffff !important; /* 글자색 흰색 강제 */
+            color: #ffffff !important;
             font-size: 16px; 
-            -webkit-appearance: none;
-            outline: none;
+            -webkit-appearance: none; outline: none;
         }
         .sidebar-search-input::placeholder { color: #aaaaaa !important; }
         .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
         .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
 
-        /* ★ [핵심 수정] 검색 결과 리스트 스타일 */
         .search-results-container {
             max-height: 50vh; overflow-y: auto; margin-top: 10px;
-            background-color: rgba(20, 20, 20, 0.5); /* 결과창 배경 */
-            border-radius: 8px;
+            background-color: rgba(20, 20, 20, 0.5); border-radius: 8px;
         }
         .search-result-row {
             display: flex; align-items: center; justify-content: space-between;
             padding: 12px 10px; border-bottom: 1px solid #444; cursor: pointer;
         }
         .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
-        .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; } /* 설명 글씨 밝게 */
+        .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
         .result-type-icon { width: 24px; height: 24px; opacity: 0.9; }
 
         .filter-panel {
@@ -353,7 +371,7 @@
             if (type === 'search') {
                 searchPanel.classList.add('active');
                 filterPanel.classList.remove('active');
-                document.body.classList.add('controls-hidden'); // 상단 숨김
+                document.body.classList.add('controls-hidden');
                 setTimeout(() => document.getElementById('marker-search').focus(), 300);
             } else if (type === 'filter') {
                 filterPanel.classList.add('active');
@@ -384,7 +402,7 @@
             "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
-        // ★ 다크 UI용 마커 색상 (형광/파스텔)
+        // 다크 UI용 마커 색상 (형광/파스텔)
         const colorMapping = {
             "상자": "#26a69a", // 밝은 청록
             "보스": "#ef5350", // 밝은 레드
@@ -408,7 +426,7 @@
         document.title = `${currentConfig.name} - 연운 지도`;
 
         const isMobile = window.innerWidth <= 768;
-        const pinSize = isMobile ? [24, 24] : [30, 30];
+        const pinSize = isMobile ? [26, 26] : [32, 32]; // 마커 크기 약간 조정
 
         let layerGroups = {}; 
         let allMarkers = []; 
@@ -461,7 +479,6 @@
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const lightTypes = [""]; 
             const markersByType = {}; 
 
             data.forEach(item => {
@@ -469,16 +486,19 @@
                 const isCompleted = completedList.includes(item.id);
                 const imgName = typeMapping[item.type] || "stone"; 
                 const iconPath = `../images/${imgName}.png`;
-                const pinColor = colorMapping[item.type] || colorMapping["기타"] || "#555";
+                const pinColor = colorMapping[item.type] || colorMapping["기타"] || "#888";
 
+                // ★ 미니멀 원형 마커 HTML 생성
                 const pinIcon = L.divIcon({
                     className: isCompleted ? 'marker-completed' : '',
-                    html: `<div class="pin-marker">
-                               <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
+                    html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
+                               <div class="pin-inner-circle">
                                    <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                                </div>
                            </div>`,
-                    iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    iconSize: pinSize, 
+                    iconAnchor: [pinSize[0]/2, pinSize[1]/2], // 중심점 중앙으로
+                    popupAnchor: [0, -(pinSize[1]/2 + 5)]    // 팝업 위치 조정
                 });
 
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
@@ -490,11 +510,8 @@
             for (const type in markersByType) {
                 const markersArray = markersByType[type];
                 if (isClusterOn) {
-                    const typeColor = colorMapping[type] || "#555";
-                    const isLight = lightTypes.includes(type);
-                    const badgeTextColor = isLight ? "#000000" : "#ffffff";
-                    const textShadowStyle = isLight ? "none" : "0 0 2px rgba(0,0,0,0.5)";
-
+                    const typeColor = colorMapping[type] || "#888";
+                    // ★ 미니멀 클러스터 아이콘 생성
                     if (!layerGroups[type]) {
                         layerGroups[type] = L.markerClusterGroup({
                             disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
@@ -503,12 +520,13 @@
                             iconCreateFunction: function(cluster) {
                                 const count = cluster.getChildCount();
                                 const countText = count > 99 ? '99+' : count;
+                                // 테두리와 글자색을 타입 색상으로 지정
                                 const html = `
-                                    <div class="simple-cluster-marker" style="background-color: ${typeColor}; color: ${badgeTextColor}; text-shadow: ${textShadowStyle};">
+                                    <div class="simple-cluster-marker" style="border-color: ${typeColor}; color: ${typeColor};">
                                         ${countText}
                                     </div>`;
                                 return L.divIcon({
-                                    html: html, className: '', iconSize: [28, 28], iconAnchor: [14, 14]
+                                    html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
                                 });
                             }
                         });

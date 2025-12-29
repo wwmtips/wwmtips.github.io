@@ -660,37 +660,52 @@
             .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
             .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
         }
-/* 경로 진행도 요약 바 스타일 */
+
+/* ★ [수정] 경로 요약 정보 바 - 화면 좌우 꽉 채우기 */
 #path-summary-bar {
-    display: none; /* 기본적으로는 숨김 */
-    flex-direction: row;
+    display: none; /* 기본 숨김 */
+    position: fixed; /* 위치 고정 */
+    
+    /* 위치: 하단 컨트롤들(저장, 경로버튼, 전체화면) 바로 위에 배치 */
+    bottom: 80px; 
+    
+    /* 가로 너비: 저장 버튼 좌측(15px) ~ 전체화면 우측(15px) */
+    left: 15px; 
+    right: 15px;
+    
+    /* 레이아웃 */
+    flex-direction: row; 
+    justify-content: center; /* 내용 중앙 정렬 (원하시면 space-between 가능) */
+    align-items: center;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
+    gap: 15px;
     
-    background-color: rgba(20, 20, 20, 0.9);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 8px 16px;
-    border-radius: 20px;
-    margin-bottom: 8px; /* 경로 버튼과의 간격 */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    /* 디자인 */
+    background-color: rgba(20, 20, 20, 0.95); 
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    padding: 12px 20px; 
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     
+    z-index: 90001; /* 다른 버튼보다 위에 */
     pointer-events: auto !important;
-    z-index: 90001;
 }
 
-.summary-chunk {
-    font-size: 12px;
-    font-weight: 700;
-    color: #ccc;
-    letter-spacing: 0.5px;
+/* 요약 텍스트 스타일 */
+.summary-chunk { 
+    font-size: 14px; 
+    font-weight: 500; 
+    color: #ccc; 
+    display: flex;
+    align-items: center;
+}
+.summary-chunk b { 
+    color: #a08040; 
+    margin-left: 5px; 
+    font-size: 15px;
 }
 
-.summary-chunk b {
-    color: #a08040; /* 강조색 (금색) */
-    margin-left: 2px;
-}
 
     </style>
 </head>
@@ -1028,6 +1043,11 @@
 
             for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
 
+const filterGroup = document.querySelector('.bottom-right-controls .glass-group');
+ if(filterGroup) filterGroup.style.display = 'none';
+    // ▲▲▲ 추가 끝 ▲▲▲
+    if(filterGroup) filterGroup.style.display = 'flexconst filterGroup = document.querySel';
+
             currentPathLayer = L.featureGroup();
             const latlngs = [];
 
@@ -1109,6 +1129,8 @@
             }
             document.getElementById('path-toggle-btn').classList.remove('path-active');
 document.getElementById('path-summary-bar').style.display = 'none';
+const filterGroup = document.querySelector('.bottom-right-controls .glass-g""roup');
+    if(filterGroup) filterGroup.style.display = 'flex';
             const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
             for (const key in layerGroups) {
                 const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;

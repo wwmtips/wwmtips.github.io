@@ -994,7 +994,8 @@
     const typeMapping = { 
         "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
         "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
-        "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp"
+        "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp",
+        "낚시대결":"ic_fish","투호대결":"ic_two"
     };
 
        const colorMapping = {
@@ -1007,7 +1008,9 @@
         "기연": "#E91E63", // 진한 분홍
         "묘묘냥": "#673AB7", // 짙은 보라
         "천지록": "#2196F3", // 밝은 파랑
-        "사건": "#3F51B5"  // 진한 파랑
+        "사건": "#3F51B5",
+        "낚시대결":"#3F51B5",
+        "투호대결":"#3F51B5"  
     };
 
 
@@ -1030,7 +1033,7 @@
     });
 
     const isMobile = window.innerWidth <= 768;
-    const pinSize = isMobile ? [20, 20] : [32, 32];
+    const pinSize = isMobile ? [20, 20] : [28, 28];
 
     if (isDevMode) {
         document.getElementById('map').classList.add('dev-mode-cursor');

@@ -740,6 +740,81 @@
         margin-left: 3px !important;
     }
 }
+/* =========================================
+   3. 핀 & 클러스터 (New Dark Style)
+   ========================================= */
+/* 1. 메인 컨테이너 스타일 (물방울 모양 -> 어두운 사각형) */
+.pin-marker {
+    position: relative; width: 100%; height: 100%;
+    border-radius: 10px; /* 둥근 사각형 */
+    transform: none !important; /* 기존 회전 제거 */
+
+    /* 다크 테마 배경 및 테두리 적용 */
+    background-color: #1c1c1c;
+    /* JS에서 전달받은 색상 변수로 테두리 색 지정 */
+    border: 2px solid var(--pin-color, #a08040);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease;
+}
+
+/* 2. 내부 원형 배경 제거 및 정리 */
+.pin-inner-circle {
+    width: 100%; height: 100%;
+    background: transparent !important; /* 배경색 제거 */
+    border-radius: 0;
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* 3. 아이콘 컬러링 마법 (Mask 기법 사용) */
+.pin-inner-circle img {
+    width: 65%; height: 65%;
+    object-fit: contain;
+    transform: none !important;
+
+    /* 🌟 핵심: 검은색 아이콘을 카테고리 색상으로 변경 */
+    /* 1) 배경색을 카테고리 색으로 지정 */
+    background-color: var(--pin-color, #a08040);
+    /* 2) 이미지를 마스크로 사용하여 배경색만 남기고 잘라냄 */
+    -webkit-mask-image: var(--bg-image);
+    mask-image: var(--bg-image);
+    -webkit-mask-size: contain; mask-size: contain;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center; mask-position: center;
+    /* 원래 이미지는 숨김 (마스크된 배경색만 보이게) */
+    color: transparent;
+}
+
+/* 4. 호버 효과 - 경로 마커처럼 빛나게 */
+.pin-marker:hover {
+    transform: scale(1.15) !important; /* 약간 확대 */
+    z-index: 9999;
+    /* 테두리 색상으로 빛나는 글로우 효과 */
+    box-shadow: 0 0 15px var(--pin-color, #a08040);
+    border-width: 2px;
+}
+
+/* 5. 완료된 마커 상태 (회색조로, 빛남 제거) */
+.marker-completed .pin-marker {
+    background-color: #2a2a2a !important;
+    border-color: #555 !important;
+    box-shadow: none !important;
+    opacity: 0.8; filter: grayscale(0.8);
+}
+.marker-completed .pin-inner-circle img {
+    background-color: #777 !important; /* 아이콘 색도 회색으로 */
+}
+
+/* Dev 모드 선택된 마커 (파란색 빛남) */
+.dev-selected .pin-marker {
+    border-color: #00e5ff !important;
+    box-shadow: 0 0 15px #00e5ff !important;
+    transform: scale(1.1);
+}
+.dev-selected .pin-inner-circle img {
+    background-color: #00e5ff !important;
+}
 
     </style>
 </head>
@@ -1266,15 +1341,17 @@
                 const iconPath = `../images/${imgName}.png`;
                 const pinColor = colorMapping[item.type] || "#555";
 
-                const pinIcon = L.divIcon({
+                                const pinIcon = L.divIcon({
                     className: isCompleted ? 'marker-completed' : '',
-                    html: `<div class="pin-marker">
-                            <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
-                                <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                    html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
+                            <div class="pin-inner-circle">
+                                <img src="${iconPath}" style="--bg-image: url('${iconPath}');" onerror="this.src='../images/stone.png'; this.style.setProperty('--bg-image', 'url(../images/stone.png)');">
                             </div>
                         </div>`,
-                    iconSize: pinSize, iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], popupAnchor: [0, -(pinSize[1] * 0.8)]
+                    // 아이콘 크기와 앵커 포인트도 사각형에 맞게 중앙으로 조정
+                    iconSize: [34, 34], iconAnchor: [17, 17], popupAnchor: [0, -20]
                 });
+
 
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 

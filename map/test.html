@@ -742,110 +742,99 @@
 }
 /* =========================================
    3. 핀 & 클러스터 (New Dark Style)
+   ==============================/* =========================================
+   3. 핀 & 클러스터 (Tone Down 통합 스타일)
    ========================================= */
-/* 1. 메인 컨테이너 스타일 (물방울 모양 -> 어두운 사각형) */
+
+/* --- [1] 개별 핀 스타일 --- */
 .pin-marker {
     position: relative; width: 100%; height: 100%;
-    border-radius: 10px; /* 둥근 사각형 */
-    transform: none !important; /* 기존 회전 제거 */
+    border-radius: 8px; /* 클러스터와 동일한 둥근 사각형 */
+    transform: none !important;
 
-    /* 다크 테마 배경 및 테두리 적용 */
-    background-color: #1c1c1c;
-    /* JS에서 전달받은 색상 변수로 테두리 색 지정 */
-    border: 2px solid var(--pin-color, #a08040);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    /* 배경: 아주 짙은 회색 */
+    background-color: rgba(20, 20, 20, 0.95);
+    
+    /* 테두리: 1px로 얇게, JS에서 받은 색상 적용 */
+    border: 1px solid var(--pin-color, #a08040);
+    
+    /* ★ 핵심: 채도를 60%로 낮춰서 형광기를 뺌 */
+    filter: saturate(0.6) brightness(1.1);
 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     display: flex; align-items: center; justify-content: center;
     transition: all 0.2s ease;
 }
 
-/* 2. 내부 원형 배경 제거 및 정리 */
 .pin-inner-circle {
     width: 100%; height: 100%;
-    background: transparent !important; /* 배경색 제거 */
-    border-radius: 0;
+    background: transparent !important;
     display: flex; align-items: center; justify-content: center;
 }
 
-/* 3. 아이콘 컬러링 마법 (Mask 기법 사용) */
+/* 아이콘 마스킹 (흰색으로 통일) */
 .pin-inner-circle img {
     width: 65%; height: 65%;
-    object-fit: contain;
-    transform: none !important;
+    object-fit: contain; transform: none !important;
 
-    /* 🌟 핵심: 검은색 아이콘을 카테고리 색상으로 변경 */
-    /* 1) 배경색을 카테고리 색으로 지정 */
-    background-color: var(--pin-color, #a08040);
-    /* 2) 이미지를 마스크로 사용하여 배경색만 남기고 잘라냄 */
-    -webkit-mask-image: var(--bg-image);
-    mask-image: var(--bg-image);
+    /* ★ 핵심: 아이콘 색상을 컬러가 아닌 '은은한 흰색'으로 통일 */
+    background-color: #e0e0e0 !important;
+    
+    /* 마스크 적용 */
+    -webkit-mask-image: var(--bg-image); mask-image: var(--bg-image);
     -webkit-mask-size: contain; mask-size: contain;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
     -webkit-mask-position: center; mask-position: center;
-    /* 원래 이미지는 숨김 (마스크된 배경색만 보이게) */
     color: transparent;
 }
 
-/* 4. 호버 효과 - 경로 마커처럼 빛나게 */
+/* 핀 호버 효과 (색상 복구) */
 .pin-marker:hover {
-    transform: scale(1.15) !important; /* 약간 확대 */
-    z-index: 9999;
-    /* 테두리 색상으로 빛나는 글로우 효과 */
-    box-shadow: 0 0 15px var(--pin-color, #a08040);
+    transform: scale(1.15) !important; z-index: 9999;
+    /* 호버 시 채도 복구 및 테두리/글로우 강조 */
+    filter: saturate(1.0);
     border-width: 2px;
+    box-shadow: 0 0 10px var(--pin-color, #a08040);
 }
 
-/* 5. 완료된 마커 상태 (회색조로, 빛남 제거) */
+/* 완료된 핀 */
 .marker-completed .pin-marker {
     background-color: #2a2a2a !important;
-    border-color: #555 !important;
+    border-color: #444 !important; /* 테두리 회색 처리 */
     box-shadow: none !important;
-    opacity: 0.8; filter: grayscale(0.8);
+    opacity: 0.7; filter: grayscale(1.0) !important; /* 완전 회색조 */
 }
 .marker-completed .pin-inner-circle img {
-    background-color: #777 !important; /* 아이콘 색도 회색으로 */
+    background-color: #666 !important; /* 아이콘도 더 어둡게 */
 }
 
-/* Dev 모드 선택된 마커 (파란색 빛남) */
-.dev-selected .pin-marker {
-    border-color: #00e5ff !important;
-    box-shadow: 0 0 15px #00e5ff !important;
-    transform: scale(1.1);
-}
-.dev-selected .pin-inner-circle img {
-    background-color: #00e5ff !important;
-}
-        /* =========================================
-   3. 핀 & 클러스터 (CSS Only 수정)
-   ========================================= */
 
+/* --- [2] 클러스터 스타일 (핀과 스타일 공유) --- */
 .simple-cluster-marker {
     width: 100%; height: 100%;
-    
-    /* ★ 핵심: 50%는 원형, 8px~10px는 둥근 사각형입니다. */
     border-radius: 8px !important;
     
-    /* 디자인: 핀과 동일한 다크 테마 + 컬러 테두리 */
-    background-color: #1c1c1c; 
-    border: 2px solid var(--cluster-color, #a08040); /* JS에서 넘겨준 색상 사용 */
-    color: var(--cluster-color, #fff); /* 글자색도 깔맞춤 */
+    /* 배경, 테두리, 필터 모두 핀과 동일하게 적용 */
+    background-color: rgba(20, 20, 20, 0.95);
+    border: 1px solid var(--cluster-color, #a08040);
+    filter: saturate(0.6) brightness(1.1);
     
-    /* 정렬 및 폰트 */
+    /* 글자색: 은은한 흰색으로 통일 */
+    color: #e0e0e0 !important; 
+    
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 800;
-    
-    /* 그림자 효과로 입체감 주기 */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
-    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    font-size: 13px; font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
 }
 
-/* 마우스 올렸을 때 효과 */
+/* 클러스터 호버 효과 */
 .simple-cluster-marker:hover {
-    transform: scale(1.15); /* 약간 커짐 */
-    z-index: 9999;
-    
-    /* 테두리 색상으로 은은하게 빛나는 효과 */
-    box-shadow: 0 0 15px var(--cluster-color);
+    transform: scale(1.1); z-index: 9999;
+    /* 호버 시 채도 복구 */
+    filter: saturate(1.0);
+    border-width: 2px;
+    box-shadow: 0 0 10px var(--cluster-color);
 }
 
     </style>

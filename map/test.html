@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v10)</title>
+    <title>연운 한국어 맵 (Final v11)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -24,15 +24,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
     
     <style>
-        /* ★ [수정] 폰트 강제 적용 (명조체 완전 제거) */
-        * {
-            font-family: 'Noto Sans KR', sans-serif !important;
-        }
-
-        body { 
-            margin: 0; padding: 0; background-color: #1a1a1a; overflow: hidden; 
-        }
-
+        /* 폰트 강제 적용 및 기본 설정 */
+        * { font-family: 'Noto Sans KR', sans-serif !important; }
+        body { margin: 0; padding: 0; background-color: #1a1a1a; overflow: hidden; }
         #map { width: 100vw; height: 100vh; background: #1a1a1a; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
@@ -68,11 +62,24 @@
         .simple-cluster-marker:hover { transform: scale(1.15); cursor: pointer; z-index: 5000; }
 
         /* =========================================
-           2. 좌측 상단 지역 선택
+           2. 상단 컨트롤 (지역 선택 & M 버튼)
            ========================================= */
         .top-left-controls {
             position: fixed; top: 20px; left: 20px; z-index: 2000;
+            transition: opacity 0.3s ease; /* 숨김 효과용 */
         }
+        .top-right-controls {
+            position: fixed; top: 20px; right: 20px; z-index: 2000;
+            transition: opacity 0.3s ease; /* 숨김 효과용 */
+        }
+
+        /* ★ 검색 시 상단 버튼 숨기기 위한 클래스 */
+        body.controls-hidden .top-left-controls,
+        body.controls-hidden .top-right-controls {
+            opacity: 0;
+            pointer-events: none;
+        }
+
         .glass-select {
             appearance: none; -webkit-appearance: none; -moz-appearance: none;
             background-color: rgba(20, 20, 20, 0.9);
@@ -86,24 +93,14 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: all 0.2s;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px top 50%;
-            background-size: 10px auto;
+            background-repeat: no-repeat; background-position: right 12px top 50%; background-size: 10px auto;
         }
         .glass-select option { background-color: #1a1a1a; color: white; }
 
-        /* =========================================
-           3. 우측 상단 M 버튼
-           ========================================= */
-        .top-right-controls {
-            position: fixed; top: 20px; right: 20px; z-index: 2000;
-        }
         .glass-box {
             width: 40px; height: 40px; 
-            background-color: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             color: #a08040; font-weight: 700; font-size: 16px;
             cursor: pointer;
@@ -113,7 +110,7 @@
         .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
 
         /* =========================================
-           4. 하단 UI & 버튼 그룹
+           3. 하단 UI & 버튼 그룹
            ========================================= */
         .bottom-ui-container {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000;
@@ -121,61 +118,51 @@
             pointer-events: none;
         }
         .floating-actions {
-            width: 100%; display: flex; 
-            justify-content: flex-end; 
+            width: 100%; display: flex; justify-content: flex-end; 
             padding: 0 20px 15px 20px; box-sizing: border-box;
         }
-        
         .fab-column {
             display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
             pointer-events: auto;
         }
 
+        /* 저장/로드 그룹 */
         .glass-group {
             display: flex; flex-direction: column;
-            background-color: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px; 
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; 
+            overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        
         .glass-group-btn {
             width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            color: #a08040; 
-            transition: all 0.2s;
+            cursor: pointer; color: #a08040; transition: all 0.2s;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .glass-group-btn:last-child { border-bottom: none; }
         .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
 
+        /* 전체 보기 버튼 */
         .glass-single-btn {
             width: 40px; height: 40px; 
-            background-color: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            color: #a08040; 
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s;
+            color: #a08040; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
         }
         .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
 
         .icon-svg { width: 22px; height: 22px; fill: currentColor; }
 
+        /* 하단 네비게이션 */
         .bottom-nav-bar {
             width: 100%; height: 60px;
-            background-color: rgba(10, 10, 10, 0.8);
+            background-color: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; justify-content: space-around; align-items: center;
-            pointer-events: auto;
-            padding-bottom: env(safe-area-inset-bottom);
+            pointer-events: auto; padding-bottom: env(safe-area-inset-bottom);
         }
         .nav-item {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -187,15 +174,15 @@
         .nav-item .icon-svg { width: 22px; height: 22px; }
 
         /* =========================================
-           ★ 5. 패널 스타일 (입력창 수정됨)
+           4. 패널 스타일 (검색창 문제 해결)
            ========================================= */
         .search-panel {
             position: fixed; top: 0; left: 0; width: 100%;
-            background-color: rgba(20, 20, 20, 0.99); 
+            background-color: rgba(20, 20, 20, 0.99); /* 뒤가 비치지 않게 */
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 15px 20px 20px 20px; box-sizing: border-box;
-            z-index: 3000; 
+            z-index: 3000; /* 드롭다운(2000)보다 위에 */
             transform: translateY(-100%);
             transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; flex-direction: column; gap: 10px;
@@ -204,19 +191,19 @@
         .search-panel.active { transform: translateY(0); }
         .panel-close-btn { position: absolute; top: 10px; right: 15px; color: #888; font-size: 24px; cursor: pointer; }
         
-        /* ★ [수정] 검색 입력창 디자인 개선 (글씨 보이게) */
+        /* ★ [수정] 검색 입력창 디자인 (글씨 안보임 해결) */
         .sidebar-search-input {
             width: 100%; padding: 12px 10px 12px 40px; box-sizing: border-box;
-            background-color: #2a2a2a !important; /* 배경색 진하게 강제 */
-            border: 1px solid #a08040 !important; /* 금색 테두리 */
+            background-color: #2a2a2a !important; /* 배경색 진하게 */
+            border: 1px solid #a08040 !important; /* 테두리 금색 */
             border-radius: 8px; 
-            color: #ffffff !important; /* 흰색 글씨 강제 */
-            font-size: 16px;
+            color: #ffffff !important; /* 글자색 흰색 */
+            font-size: 16px; 
             -webkit-appearance: none;
         }
         .sidebar-search-input::placeholder { color: #aaa; }
         
-        /* 자동완성 시 배경색 흰색 변하는 문제 해결 */
+        /* 자동완성 시 흰색 배경 방지 */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
@@ -255,17 +242,16 @@
         }
         .filter-title { color: white; font-weight: 700; font-size: 16px; }
         
-        /* ★ [수정] 필터 버튼 폰트 및 사이즈 최적화 */
+        /* ★ [수정] 필터 버튼 (글자 넘침 해결) */
         .filter-controls { display: flex; gap: 6px; margin-top: 0; }
         .filter-control-btn {
-            padding: 8px 12px; 
-            font-size: 11px; /* 글씨 작게 */
+            padding: 8px 14px; 
+            font-size: 12px; font-weight: 500;
             cursor: pointer;
             background-color: #333; border: 1px solid #555; color: #ccc; 
-            border-radius: 15px;
+            border-radius: 20px;
             transition: all 0.2s;
-            white-space: nowrap; /* 줄바꿈 방지 */
-            letter-spacing: -0.5px; /* 자간 좁힘 */
+            white-space: nowrap;
         }
         .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
         
@@ -280,611 +266,4 @@
         }
         .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
         .filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
-        .filter-text-name { font-size: 14px; color: #aaa; }
-        .filter-count { color: #666; font-size: 12px; }
-        .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
-        .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
-        .filter-item.inactive { opacity: 0.4; }
-        .filter-item.inactive .filter-text-name { text-decoration: line-through; color: #555; }
-        .filter-item.inactive .filter-icon-img { filter: grayscale(100%); }
-        
-        @media (min-width: 768px) {
-            .search-panel { max-width: 400px; left: 50%; transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
-            .search-panel.active { transform: translateX(-50%) translateY(0); }
-            .filter-panel { max-width: 400px; left: 50%; transform: translateX(-50%) translateY(100%); }
-            .filter-panel.active { transform: translateX(-50%) translateY(0); }
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="top-left-controls">
-        <select id="main-map-select" class="glass-select"></select>
-    </div>
-
-    <div class="top-right-controls">
-        <div class="glass-box" onclick="toggleClusterMode()" title="모아보기 토글">M</div>
-    </div>
-
-    <div class="bottom-ui-container">
-        
-        <div class="floating-actions">
-            
-            <div class="fab-column">
-                
-                <div class="glass-group">
-                    <div class="glass-group-btn" onclick="exportCompletedPins()" title="저장">
-                        <svg class="icon-svg" viewBox="0 0 24 24">
-                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                        </svg>
-                    </div>
-                    <div class="glass-group-btn" onclick="document.getElementById('import-file').click()" title="불러오기">
-                        <svg class="icon-svg" viewBox="0 0 24 24">
-                            <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>
-                        </svg>
-                    </div>
-                </div>
-                <input type="file" id="import-file" style="display:none" accept=".json" onchange="importCompletedPins(this)">
-
-                <div class="glass-single-btn" onclick="toggleFullscreen()" title="전체 화면">
-                    <svg class="icon-svg" viewBox="0 0 24 24">
-                        <path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z"/>
-                    </svg>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="bottom-nav-bar">
-            <div class="nav-item active" id="nav-home" onclick="location.reload()">
-                <svg class="icon-svg" viewBox="0 0 24 24">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
-                <span>홈</span>
-            </div>
-            
-            <div class="nav-item" id="nav-search" onclick="togglePanel('search')">
-                <svg class="icon-svg" viewBox="0 0 24 24">
-                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
-                <span>검색</span>
-            </div>
-            
-            <div class="nav-item" id="nav-filter" onclick="togglePanel('filter')">
-                <svg class="icon-svg" viewBox="0 0 24 24">
-                    <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
-                </svg>
-                <span>필터</span>
-            </div>
-        </div>
-    </div>
-
-    <div id="search-panel" class="search-panel">
-        <div class="panel-close-btn" onclick="closeAllPanels()">✕</div>
-        <div class="search-wrapper">
-            <input type="text" id="marker-search" class="sidebar-search-input" placeholder="마커 이름 검색...">
-            <span class="search-icon">🔍</span>
-        </div>
-        <div id="search-result-list" class="search-results-container"></div>
-    </div>
-
-    <div id="filter-panel" class="filter-panel">
-        <div class="filter-header">
-            <span class="filter-title">필터 설정</span>
-            <div class="filter-controls">
-                <button class="filter-control-btn" onclick="setAllFilters(true)">모두 표시</button>
-                <button class="filter-control-btn" onclick="setAllFilters(false)">모두 숨기기</button>
-            </div>
-            <div style="color:#888; font-size:20px; cursor:pointer;" onclick="closeAllPanels()">✕</div>
-        </div>
-        <div id="filter-list" class="filter-list-container"></div>
-    </div>
-
-    <div id="map"></div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-
-    <script>
-        // ★ [New] 브라우저 전체 화면 함수
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        }
-
-        // 지도 꽉 채우기 (기존 기능 - 혹시 필요할 때를 대비해 남겨둠)
-        function fitMapToBounds() {
-            if (currentConfig && currentConfig.w && currentConfig.h) {
-                map.fitBounds([[0, 0], [currentConfig.h, currentConfig.w]], { padding: [20, 20] });
-            }
-        }
-
-        function exportCompletedPins() {
-            const storageKey = `completed_${currentMapId}`;
-            const data = localStorage.getItem(storageKey);
-            if (!data || data === "[]") {
-                alert("저장할 완료 기록이 없습니다.");
-                return;
-            }
-            const blob = new Blob([data], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `completed_markers_${currentMapId}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function importCompletedPins(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const json = JSON.parse(e.target.result);
-                    if (!Array.isArray(json)) throw new Error("Invalid format");
-                    
-                    if (confirm(`불러온 기록으로 현재 완료 상태를 덮어쓰시겠습니까? (${json.length}개)`)) {
-                        const storageKey = `completed_${currentMapId}`;
-                        localStorage.setItem(storageKey, JSON.stringify(json));
-                        location.reload();
-                    }
-                } catch (err) {
-                    alert("파일 형식이 올바르지 않습니다.");
-                }
-                input.value = ""; 
-            };
-            reader.readAsText(file);
-        }
-
-        function togglePanel(type) {
-            const searchPanel = document.getElementById('search-panel');
-            const filterPanel = document.getElementById('filter-panel');
-            
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-' + type).classList.add('active');
-
-            if (type === 'search') {
-                searchPanel.classList.add('active');
-                filterPanel.classList.remove('active'); 
-                setTimeout(() => document.getElementById('marker-search').focus(), 300);
-            } else if (type === 'filter') {
-                filterPanel.classList.add('active');
-                searchPanel.classList.remove('active'); 
-            }
-        }
-
-        function closeAllPanels() {
-            document.getElementById('search-panel').classList.remove('active');
-            document.getElementById('filter-panel').classList.remove('active');
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-home').classList.add('active');
-        }
-
-        const mapsDB = {
-            "qinghe": { name: "청하", img: "../map/images/qinghe.jpg", json: "../json/qinghe.json", w: 7306, h: 4732 },
-            "gesh": { name: "장군 사당", img: "../map/images/gesh.jpg", json: "../json/gesh.json", w: 1662, h: 1787 },
-            "drs": { name: "꿈속의 불선선", img: "../map/images/dream.jpg", json: "../json/drs.json", w: 4545, h: 2743 },
-            "kaifeng": { name: "개봉", img: "../map/images/kaifeng.jpg", json: "../json/kaifeng.json", w: 5159, h: 7000 },
-            "gm": { name: "귀문시장", img: "../map/images/gm.jpg", json: "../json/gm.json", w: 5482, h: 3534 }
-        };
-
-        const typeMapping = { 
-            "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
-            "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
-            "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
-        };
-
-        // ★ [New] 파스텔 & 골드 테마 마커 색상
-        const colorMapping = {
-            "상자": "#4db6ac", // 옥색
-            "보스": "#ff5252", // 밝은 빨강
-            "고양이": "#ffffff", // 흰색
-            "묘물": "#a08040", // 금색 (테마색)
-            "만사록": "#ffd700", // 밝은 노랑
-            "경계석": "#90a4ae", // 회색
-            "기연": "#ce93d8", // 연보라
-            "묘묘냥": "#f06292", // 핑크
-            "천지록": "#64b5f6"  // 하늘색
-        };
-
-        const urlParams = new URLSearchParams(window.location.search);
-        let rawId = urlParams.get('id') || "qinghe";
-        const isDevMode = rawId.endsWith('_dev');
-        let currentMapId = isDevMode ? rawId.replace('_dev', '') : rawId;
-
-        if (!mapsDB[currentMapId]) currentMapId = "qinghe";
-        const currentConfig = mapsDB[currentMapId];
-        
-        document.title = `${currentConfig.name} - 연운 지도`;
-
-        const isMobile = window.innerWidth <= 768;
-        const pinSize = isMobile ? [24, 24] : [30, 30];
-
-        let layerGroups = {}; 
-        let allMarkers = []; 
-        let cachedData = null; 
-        let isClusterOn = localStorage.getItem('clusterMode') !== 'false'; 
-
-        const map = L.map('map', {
-            crs: L.CRS.Simple, minZoom: -5, maxZoom: 2, 
-            zoomControl: false, attributionControl: false 
-        });
-
-        if (isDevMode) document.getElementById('map').classList.add('dev-mode-cursor');
-
-        const bounds = [[0, 0], [currentConfig.h, currentConfig.w]];
-        L.imageOverlay(currentConfig.img, bounds).addTo(map);
-
-        const zoomSettings = { pc: -1.5, mobile: -2.5 };
-        const targetZoom = isMobile ? zoomSettings.mobile : zoomSettings.pc;
-        map.setView([currentConfig.h / 2, currentConfig.w / 2], targetZoom);
-
-        const mapSelect = document.getElementById('main-map-select');
-        for (const [key, val] of Object.entries(mapsDB)) {
-            const option = document.createElement('option');
-            option.value = key; option.innerText = val.name;
-            if (key === currentMapId) option.selected = true;
-            mapSelect.appendChild(option);
-        }
-        mapSelect.onchange = function() {
-            const nextId = this.value + (isDevMode ? '_dev' : '');
-            window.location.search = `?id=${nextId}`;
-        };
-
-        fetch(currentConfig.json)
-            .then(res => res.json())
-            .then(data => {
-                cachedData = data;
-                createMarkers(data);
-                generateSidebar(data);
-            })
-            .catch(err => { console.error(err); });
-
-        window.toggleClusterMode = function() {
-            isClusterOn = !isClusterOn;
-            localStorage.setItem('clusterMode', isClusterOn);
-            
-            for (const key in layerGroups) map.removeLayer(layerGroups[key]);
-            layerGroups = {};
-            allMarkers = [];
-
-            if (cachedData) {
-                createMarkers(cachedData);
-                generateSidebar(cachedData); 
-            }
-        };
-
-        function createMarkers(data) {
-            const storageKey = `completed_${currentMapId}`;
-            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const lightTypes = [""]; 
-            const markersByType = {}; 
-
-            data.forEach(item => {
-                if (!markersByType[item.type]) { markersByType[item.type] = []; }
-
-                const isCompleted = completedList.includes(item.id);
-                const imgName = typeMapping[item.type] || "stone"; 
-                const iconPath = `../images/${imgName}.png`;
-                const pinColor = colorMapping[item.type] || colorMapping["기타"] || "#555";
-
-                const pinIcon = L.divIcon({
-                    className: isCompleted ? 'marker-completed' : '',
-                    html: `<div class="pin-marker">
-                               <div class="pin-inner-circle" style="--pin-color: ${pinColor};">
-                                   <img src="${iconPath}" onerror="this.src='../images/stone.png'">
-                               </div>
-                           </div>`,
-                    iconSize: pinSize, 
-                    iconAnchor: [pinSize[0]/2, pinSize[1] * 0.9], 
-                    popupAnchor: [0, -(pinSize[1] * 0.8)]
-                });
-
-                const marker = L.marker([item.y, item.x], { icon: pinIcon });
-                marker.bindPopup(() => generatePopupContent(item, storageKey));
-                markersByType[item.type].push(marker);
-                allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
-            });
-
-            for (const type in markersByType) {
-                const markersArray = markersByType[type];
-
-                if (isClusterOn) {
-                    const typeColor = colorMapping[type] || "#555";
-                    const isLight = lightTypes.includes(type);
-                    const badgeTextColor = isLight ? "#000000" : "#ffffff";
-                    const textShadowStyle = isLight ? "none" : "0 0 2px rgba(0,0,0,0.5)";
-
-                    if (!layerGroups[type]) {
-                        layerGroups[type] = L.markerClusterGroup({
-                            disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false, 
-                            chunkedLoading: true, 
-                            chunkInterval: 200,   
-                            animate: false, animateAddingMarkers: false, maxClusterRadius: 80,      
-                            iconCreateFunction: function(cluster) {
-                                const count = cluster.getChildCount();
-                                const countText = count > 99 ? '99+' : count;
-                                const html = `
-                                    <div class="simple-cluster-marker" style="background-color: ${typeColor}; color: ${badgeTextColor}; text-shadow: ${textShadowStyle};">
-                                        ${countText}
-                                    </div>`;
-                                return L.divIcon({
-                                    html: html, className: '', iconSize: [28, 28], iconAnchor: [14, 14]
-                                });
-                            }
-                        });
-                    }
-                    layerGroups[type].addLayers(markersArray);
-                } else {
-                    if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
-                    markersArray.forEach(m => layerGroups[type].addLayer(m));
-                }
-            }
-
-            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-            for (const key in layerGroups) {
-                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-                if (shouldShow) { layerGroups[key].addTo(map); }
-            }
-
-            const targetId = urlParams.get('marker');
-            if (targetId) {
-                const target = allMarkers.find(m => m.id == targetId);
-                if (target) {
-                    if (!map.hasLayer(layerGroups[target.type])) map.addLayer(layerGroups[target.type]);
-                    if (isClusterOn && layerGroups[target.type].zoomToShowLayer) {
-                        layerGroups[target.type].zoomToShowLayer(target.marker, function() { target.marker.openPopup(); });
-                    } else {
-                        map.setView(target.marker.getLatLng(), 0);
-                        setTimeout(() => target.marker.openPopup(), 500);
-                    }
-                }
-            }
-        }
-
-        function saveFilterState() {
-            const status = {};
-            for (const key in layerGroups) { status[key] = map.hasLayer(layerGroups[key]); }
-            localStorage.setItem('map_filter_settings', JSON.stringify(status));
-        }
-
-        const searchInput = document.getElementById('marker-search');
-        const searchResultList = document.getElementById('search-result-list');
-
-        searchInput.addEventListener('input', function(e) {
-            const keyword = e.target.value.trim().toLowerCase();
-            searchResultList.innerHTML = '';
-            
-            if (keyword === "") {
-                searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색어를 입력하세요.</div>';
-                return;
-            }
-            
-            const results = allMarkers.filter(item => item.name.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword));
-            
-            if (results.length === 0) { 
-                searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>'; 
-                return; 
-            }
-            
-            results.forEach(item => {
-                const row = document.createElement('div'); row.className = 'search-result-row';
-                const imgName = typeMapping[item.type] || "stone";
-                row.innerHTML = `<div class="result-info"><div class="result-name">${item.name}</div><div class="result-desc">${item.desc}</div></div><img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">`;
-                row.onclick = () => {
-                    if (!map.hasLayer(layerGroups[item.type])) map.addLayer(layerGroups[item.type]);
-                    const jumpZoom = Math.min(map.getZoom() + 3, 1); 
-                    map.flyTo(item.marker.getLatLng(), jumpZoom, { animate: true, duration: 1.5 });
-                    setTimeout(() => { item.marker.openPopup(); }, 1000);
-                    if (window.innerWidth <= 480) closeAllPanels();
-                };
-                searchResultList.appendChild(row);
-            });
-        });
-
-        const filterList = document.getElementById('filter-list');
-        function generateSidebar(data) {
-            filterList.innerHTML = '';
-            const counts = {};
-            data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
-
-            for (const [type, count] of Object.entries(counts)) {
-                const div = document.createElement('div');
-                const isActive = layerGroups[type] && map.hasLayer(layerGroups[type]);
-                div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
-                const imgName = typeMapping[type] || "stone";
-                div.innerHTML = `
-                    <div class="filter-left-group">
-                        <img src="../images/${imgName}.png" class="filter-icon-img" onerror="this.style.display='none'">
-                        <span class="filter-text-name">${type}</span>
-                    </div>
-                    <span class="filter-count">${count}</span>`;
-                div.onclick = function() {
-                    const isNowActive = div.classList.contains('active');
-                    if (isNowActive) {
-                        div.classList.remove('active'); div.classList.add('inactive');
-                        toggleLayer(type, false);
-                    } else {
-                        div.classList.remove('inactive'); div.classList.add('active');
-                        toggleLayer(type, true);
-                    }
-                    saveFilterState();
-                };
-                filterList.appendChild(div);
-            }
-        }
-
-        function toggleLayer(type, isChecked) {
-            if (isChecked) { if (layerGroups[type]) map.addLayer(layerGroups[type]); } 
-            else { if (layerGroups[type]) map.removeLayer(layerGroups[type]); }
-        }
-
-        function setAllFilters(status) {
-            const items = document.querySelectorAll('.filter-item');
-            items.forEach(div => {
-                const typeName = div.querySelector('.filter-text-name').innerText;
-                if (status) {
-                    div.classList.remove('inactive'); div.classList.add('active');
-                    toggleLayer(typeName, true);
-                } else {
-                    div.classList.remove('active'); div.classList.add('inactive');
-                    toggleLayer(typeName, false);
-                }
-            });
-            saveFilterState();
-        }
-
-        function generatePopupContent(item, storageKey) {
-            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const isCompleted = completedList.includes(item.id);
-            let html = `<div class="popup-container"><div class="popup-title">${item.name}</div><div class="popup-type">◈ ${item.type} ◈</div>`;
-            if (item.desc) html += `<div class="popup-desc">${item.desc}</div>`;
-            if (item.link) {
-                html += `<a href="${item.link}" target="_blank" class="action-btn btn-wiki" style="display:block; width:100%; box-sizing:border-box; text-align:center; margin-bottom:8px;">📖 공략 보기</a>`;
-            }
-            html += `<div class="btn-container" style="display:flex; gap:5px; margin-bottom:0;">`;
-            html += `<button onclick="shareMarker(${item.id})" class="action-btn" style="flex:1; background:#4a90e2; color:white;">🔗 공유</button>`;
-            const btnText = isCompleted ? "취소" : "완료";
-            const btnClass = isCompleted ? "btn-undo" : "btn-complete";
-            html += `<button onclick="toggleComplete(${item.id}, '${storageKey}')" class="action-btn ${btnClass}" style="flex:1;">${btnText}</button>`;
-            html += `</div>`;
-            if (item.image) {
-                const ytId = getYouTubeId(item.image);
-                if (ytId) {
-                    html += `<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top:10px; border-radius:4px;">
-                                <iframe src="https://www.youtube.com/embed/${ytId}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
-                             </div>`;
-                } else {
-                    html += `<img src="${item.image}" class="popup-img" style="margin-top:10px;">`;
-                }
-            }
-            html += `</div>`;
-            return html;
-        }
-
-        window.toggleComplete = function(id, storageKey) {
-            let list = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const index = list.indexOf(id); const target = allMarkers.find(m => m.id === id); 
-            if (!target) return;
-            const marker = target.marker;
-            if (index > -1) { 
-                list.splice(index, 1); L.DomUtil.removeClass(marker._icon, 'marker-completed'); 
-            } else { 
-                list.push(id); L.DomUtil.addClass(marker._icon, 'marker-completed'); 
-            }
-            localStorage.setItem(storageKey, JSON.stringify(list)); 
-            marker.closePopup(); marker.openPopup();
-        };
-
-        window.shareMarker = function(id) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('marker', id);
-            copyToClipboard(url.toString());
-        };
-
-        if (isDevMode) {
-            map.on('click', function(e) {
-                const y = Math.round(e.latlng.lat);
-                const x = Math.round(e.latlng.lng);
-                const content = `
-                    <div class="input-group">
-                        <h4 style="margin:0 0 10px 0; text-align:center; color:#a08040; border-bottom:1px solid #ddd; padding-bottom:5px;">새 위치 기록</h4>
-                        <label>이름</label> <input type="text" id="input_name">
-                        <label>종류</label> 
-                        <select id="input_type" onchange="autoFillDesc(this)">                        
-                            <option value="상자">상자</option>
-                            <option value="경계석">경계석</option> 
-                            <option value="묘묘냥">묘묘냥</option> 
-                            <option value="묘물">묘물</option>                           
-                            <option value="고양이">고양이</option> 
-                            <option value="만사록">만사록</option>
-                        </select>
-                        <label>설명</label> <textarea id="input_desc" style="height:40px;"></textarea>
-                        <label>링크</label> <input type="text" id="input_link">
-                        <label>사진</label> <input type="text" id="input_image">
-                        <button class="copy-btn" onclick="copyMarkerJson(${y}, ${x})">JSON 복사</button>
-                    </div>`;
-                L.popup().setLatLng(e.latlng).setContent(content).openOn(map);
-                setTimeout(() => document.getElementById('input_name')?.focus(), 100);
-            });
-        }
-
-        window.autoFillDesc = function(selectElement) {
-            const descInput = document.getElementById('input_desc');
-            const titleInput = document.getElementById('input_name');
-            if (selectElement.value === '고양이') {
-                descInput.value = '귀여운 고양이다';
-            } else if (selectElement.value === '묘묘냥') {
-                descInput.value = '박식 스탯을 위해 필수 진행';
-                titleInput.value ='묘묘냥';
-            } else if (descInput.value === '귀여운 고양이다') {
-                descInput.value = '';
-            }else if (selectElement.value === '상자') {
-                titleInput.value ='상자';
-            }
-        };
-
-        function getYouTubeId(url) {
-            if (!url) return null;
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        window.copyMarkerJson = function(y, x) {
-            const name = document.getElementById('input_name').value || "이름 없음";
-            const type = document.getElementById('input_type').value;
-            const desc = document.getElementById('input_desc').value || "";
-            const link = document.getElementById('input_link').value || "";
-            const image = document.getElementById('input_image').value || "";
-            const uniqueId = Date.now(); 
-            const jsonString = `
-  {
-    "id": ${uniqueId},
-    "name": "${name}",
-    "type": "${type}",
-    "y": ${y},
-    "x": ${x},
-    "desc": "${desc}",
-    "link": "${link}",
-    "image": "${image}"
-  },`;
-            copyToClipboard(jsonString);
-            const tempMarker = L.circleMarker([y, x], {
-                color: '#ff00ff', fillColor: '#ff00ff', fillOpacity: 1, radius: 6
-            }).addTo(map);
-            tempMarker.bindTooltip(name, { 
-                permanent: true, direction: 'top', className: 'dev-temp-label'
-            });
-            map.closePopup();
-        };
-
-        window.copyToClipboard = function(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-               navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-            }
-        };
-
-        function fallbackCopy(text) {
-            const ta = document.createElement("textarea");
-            ta.value = text;
-            ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
-            document.body.appendChild(ta); ta.focus(); ta.select();
-            try { document.execCommand('copy'); } 
-            catch (err) { console.error(err); }
-            document.body.removeChild(ta);
-        }
-    </script>
-</body>
-</html>
+        .filter-text-name { font-size

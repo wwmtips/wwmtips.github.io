@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v16 - Fixed)</title>
+    <title>연운 한국어 맵 (Final v17 - Dark Map & Jewel Markers)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -27,127 +27,72 @@
            기본 설정
            ========================================= */
         * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
-        body { margin: 0; padding: 0; background-color: #1a1a1a; overflow: hidden; }
-        #map { width: 100vw; height: 100vh; background: #1a1a1a; z-index: 1; }
+        
+        /* 배경을 지도와 비슷한 어두운 색으로 설정 */
+        body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
 
         /* =========================================
-           ★ 1. 팝업 디테일 스타일 (완벽 복구 & 리디자인)
+           ★ [New] 지도 이미지 다크 필터 (분위기 조정)
            ========================================= */
-        /* 팝업 컨테이너 (말풍선) */
-        .leaflet-popup-content-wrapper { 
-            background: #ffffff !important; 
-            color: #333 !important; 
-            border-radius: 12px !important; 
-            padding: 0 !important;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important;
-            overflow: hidden;
+        .leaflet-image-layer {
+            /* 밝기를 낮추고(0.6), 대비를 높여(1.2) 선명한 다크 모드 연출 */
+            filter: brightness(0.6) contrast(1.2) saturate(0.85);
+            transition: filter 0.5s ease;
         }
-        .leaflet-popup-content { 
-            margin: 0 !important; 
-            width: 280px !important; /* 너비 확보 */
-            text-align: center;
-            line-height: 1.5;
-        }
-        .leaflet-popup-tip { background: #ffffff !important; }
-        .leaflet-container a.leaflet-popup-close-button {
-            top: 8px !important; right: 8px !important;
-            color: #666 !important; font-size: 20px !important;
-            z-index: 10;
-        }
-
-        /* 팝업 내부 콘텐츠 */
-        .popup-inner { padding: 20px 15px 15px 15px; }
-
-        .popup-title { 
-            font-size: 18px; font-weight: 800; color: #111; 
-            margin-bottom: 5px; display: block;
-            letter-spacing: -0.5px;
-        }
-        
-        /* 타입 뱃지 */
-        .popup-type-badge { 
-            display: inline-block;
-            font-size: 11px; color: #fff; background-color: #a08040;
-            font-weight: 700; padding: 2px 8px; border-radius: 10px;
-            margin-bottom: 12px;
-        }
-        
-        /* 설명 박스 */
-        .popup-desc { 
-            font-size: 14px; color: #444; background: #f5f5f7; 
-            padding: 12px; border-radius: 8px; margin: 0 0 12px 0; 
-            text-align: left; word-break: keep-all; line-height: 1.4;
-        }
-        
-        /* 이미지 스타일 (깨짐 방지) */
-        .popup-img { 
-            width: 100%; height: auto; max-height: 200px; object-fit: cover;
-            border-radius: 8px; margin-bottom: 10px; display: block;
-            border: 1px solid #eee;
-        }
-        .popup-youtube-container {
-            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
-            margin-bottom: 10px; border-radius: 8px; background: #000;
-        }
-        .popup-youtube-container iframe {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        }
-
-        /* 버튼 그룹 */
-        .btn-container { display: flex; gap: 8px; margin-top: 5px; }
-        .action-btn { 
-            flex: 1; padding: 10px 0; border-radius: 8px; cursor: pointer; 
-            font-size: 13px; font-weight: 700; border: none; color: white;
-            text-align: center; text-decoration: none; display: flex;
-            align-items: center; justify-content: center; gap: 4px;
-            transition: opacity 0.2s;
-        }
-        .action-btn:hover { opacity: 0.9; }
-        
-        .btn-wiki { background-color: #4a90e2; } /* 파랑 */
-        .btn-complete { background-color: #2e7d32; } /* 초록 */
-        .btn-undo { background-color: #757575; } /* 회색 */
 
         /* =========================================
-           2. 핀 & 클러스터 (초기 물방울 스타일)
+           1. 핀 & 클러스터 (초기 물방울 스타일)
            ========================================= */
         .pin-marker {
             position: relative; width: 100%; height: 100%;
-            border-radius: 50% 50% 50% 0; /* 물방울 */
+            /* 물방울 모양 */
+            border-radius: 50% 50% 50% 0; 
             transform: rotate(-45deg);
-            background: #ffffff;
-            box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            background: #ffffff; /* 흰색 배경이 다크 맵에서 잘 보임 */
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.7); /* 그림자 진하게 */
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s;
-            cursor: pointer; pointer-events: auto; /* 클릭 필수 */
+            transition: transform 0.2s, z-index 0.2s;
+            cursor: pointer; pointer-events: auto;
         }
+        
         .pin-inner-circle {
-            width: 88%; height: 88%; border-radius: 50%;
+            width: 88%; height: 88%; 
+            border-radius: 50%;
             background: var(--pin-color, #555);
             display: flex; align-items: center; justify-content: center;
         }
-        .pin-inner-circle img {
-            width: 70%; height: 70%; object-fit: contain; 
-            transform: rotate(45deg); /* 아이콘 정방향 보정 */
-            opacity: 1; filter: none;
-        }
-        .pin-marker:hover { transform: rotate(-45deg) scale(1.15); z-index: 9999; }
         
-        .marker-completed .pin-inner-circle { background: #999 !important; }
-        .marker-completed .pin-marker { opacity: 0.7; }
+        .pin-inner-circle img {
+            width: 70%; height: 70%; 
+            object-fit: contain; 
+            transform: rotate(45deg); /* 아이콘 정방향 */
+            opacity: 1; filter: none; /* 필터 없음 (원래 색상) */
+        }
 
+        .pin-marker:hover {
+            transform: rotate(-45deg) scale(1.2); /* 호버 시 커짐 */
+            z-index: 9999;
+        }
+
+        /* 완료된 마커 스타일 */
+        .marker-completed .pin-inner-circle { background: #777 !important; }
+        .marker-completed .pin-marker { opacity: 0.6; }
+
+        /* 클러스터 (모아보기) */
         .simple-cluster-marker {
             width: 100%; height: 100%; border-radius: 50%; 
             border: 2px solid #ffffff; 
             display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 700; color: #fff;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-            cursor: pointer;
+            font-size: 13px; font-weight: 800; color: #fff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            cursor: pointer; transition: transform 0.2s;
         }
+        .simple-cluster-marker:hover { transform: scale(1.15); z-index: 5000; }
 
         /* =========================================
-           3. UI 컨트롤 (Glass Dark)
+           2. UI 컨트롤 (Glass & Dark Style)
            ========================================= */
         .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
         .top-right-controls { position: fixed; top: 20px; right: 20px; z-index: 2000; transition: opacity 0.3s; }
@@ -212,7 +157,7 @@
         .nav-item.active { color: #a08040; }
 
         /* =========================================
-           4. 패널 스타일
+           3. 패널 스타일 (검색 & 필터)
            ========================================= */
         .search-panel {
             position: fixed; top: 0; left: 0; width: 100%;
@@ -289,7 +234,52 @@
         .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
         .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
         .filter-item.inactive { opacity: 0.4; }
-        
+
+        /* 팝업 스타일 */
+        .leaflet-popup-content-wrapper { 
+            background: #ffffff !important; color: #333 !important; 
+            border-radius: 12px !important; padding: 0 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important; overflow: hidden;
+        }
+        .leaflet-popup-content { margin: 0 !important; width: 280px !important; text-align: center; line-height: 1.5; }
+        .leaflet-popup-tip { background: #ffffff !important; }
+        .leaflet-container a.leaflet-popup-close-button {
+            top: 8px !important; right: 8px !important; color: #666 !important; font-size: 20px !important; z-index: 10;
+        }
+        .popup-inner { padding: 20px 15px 15px 15px; }
+        .popup-title { 
+            font-size: 18px; font-weight: 800; color: #111; margin-bottom: 5px; display: block; letter-spacing: -0.5px;
+        }
+        .popup-type-badge { 
+            display: inline-block; font-size: 11px; color: #fff; background-color: #a08040;
+            font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 12px;
+        }
+        .popup-desc { 
+            font-size: 14px; color: #444; background: #f5f5f7; 
+            padding: 12px; border-radius: 8px; margin: 0 0 12px 0; 
+            text-align: left; word-break: keep-all; line-height: 1.4;
+        }
+        .popup-img { 
+            width: 100%; height: auto; max-height: 200px; object-fit: cover;
+            border-radius: 8px; margin-bottom: 10px; display: block; border: 1px solid #eee;
+        }
+        .popup-youtube-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            margin-bottom: 10px; border-radius: 8px; background: #000;
+        }
+        .popup-youtube-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .btn-container { display: flex; gap: 8px; margin-top: 5px; }
+        .action-btn { 
+            flex: 1; padding: 10px 0; border-radius: 8px; cursor: pointer; 
+            font-size: 13px; font-weight: 700; border: none; color: white;
+            text-align: center; text-decoration: none; display: flex;
+            align-items: center; justify-content: center; gap: 4px; transition: opacity 0.2s;
+        }
+        .action-btn:hover { opacity: 0.9; }
+        .btn-wiki { background-color: #4a90e2; }
+        .btn-complete { background-color: #2e7d32; }
+        .btn-undo { background-color: #757575; }
+
         @media (min-width: 768px) {
             .search-panel, .filter-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
             .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
@@ -456,17 +446,17 @@
             "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj"
         };
 
-        // 초기 원색 컬러
+        // ★ [New] 다크 맵에 어울리는 쥬얼 톤 마커 색상
         const colorMapping = {
-            "상자": "#2e7d32", 
-            "보스": "#b71c1c", 
-            "고양이": "#000000", 
-            "묘물": "#35945f", 
-            "만사록": "#a08040", 
-            "경계석": "#4b3947", 
-            "기연": "#f086ab", 
-            "묘묘냥": "#635e85", 
-            "천지록": "#4076ad"
+            "상자": "#00bfa5", // Teal Accent (선명한 청록)
+            "보스": "#d50000", // Red Accent (진한 빨강)
+            "고양이": "#263238", // Blue Grey Dark (진한 회색 - 흰 핀에서 잘 보임)
+            "묘물": "#2e7d32", // Green (진한 초록)
+            "만사록": "#ff6d00", // Orange (진한 주황)
+            "경계석": "#455a64", // Slate Grey
+            "기연": "#6a1b9a", // Purple (진한 보라)
+            "묘묘냥": "#c2185b", // Pink (진한 분홍)
+            "천지록": "#1565c0"  // Blue (진한 파랑)
         };
 
         const urlParams = new URLSearchParams(window.location.search);

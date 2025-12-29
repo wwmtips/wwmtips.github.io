@@ -819,7 +819,7 @@
         "sample_route": {
             "title": "예시 경로 (샘플)",
             "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
-            "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "qinghe" } ]
+            "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "gesh" } ]
         }
     };
 
@@ -1405,10 +1405,22 @@
     });
 
     // 팝업 내용 생성
+        // 팝업 내용 생성 (Dev 모드 ID 복사 버튼 추가됨)
     function generatePopupContent(item, storageKey) {
         const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
         const isCompleted = completedList.includes(item.id);
-        let html = `<div class="popup-inner"><span class="popup-title">${item.name}</span><div class="popup-type-badge">${item.type}</div>`;
+        
+        let html = `<div class="popup-inner">`;
+        
+        // ★ [Dev 모드 전용] ID 복사 버튼 추가
+        if (typeof isDevMode !== 'undefined' && isDevMode) {
+            html += `<div onclick="copyToClipboard('${item.id}'); alert('ID ${item.id} 복사 완료!');" 
+                          style="cursor:pointer; margin-bottom:10px; padding:6px; background:rgba(0, 229, 255, 0.1); border:1px solid #00e5ff; color:#00e5ff; border-radius:6px; font-size:12px; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:5px;">
+                          🛠 ID 복사: ${item.id}
+                     </div>`;
+        }
+
+        html += `<span class="popup-title">${item.name}</span><div class="popup-type-badge">${item.type}</div>`;
         
         if (item.image) {
             const ytId = getYouTubeId(item.image);

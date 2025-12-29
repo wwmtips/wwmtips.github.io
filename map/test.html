@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>연운 한국어 맵 (Final v11)</title>
+    <title>연운 한국어 맵 (Final v12)</title>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
@@ -24,8 +24,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
     
     <style>
-        /* 폰트 강제 적용 및 기본 설정 */
-        * { font-family: 'Noto Sans KR', sans-serif !important; }
+        /* 기본 폰트 설정 */
+        * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
         body { margin: 0; padding: 0; background-color: #1a1a1a; overflow: hidden; }
         #map { width: 100vw; height: 100vh; background: #1a1a1a; z-index: 1; }
         .dev-mode-cursor { cursor: crosshair !important; }
@@ -62,103 +62,66 @@
         .simple-cluster-marker:hover { transform: scale(1.15); cursor: pointer; z-index: 5000; }
 
         /* =========================================
-           2. 상단 컨트롤 (지역 선택 & M 버튼)
+           2. 상단 컨트롤
            ========================================= */
-        .top-left-controls {
-            position: fixed; top: 20px; left: 20px; z-index: 2000;
-            transition: opacity 0.3s ease; /* 숨김 효과용 */
-        }
-        .top-right-controls {
-            position: fixed; top: 20px; right: 20px; z-index: 2000;
-            transition: opacity 0.3s ease; /* 숨김 효과용 */
-        }
+        .top-left-controls { position: fixed; top: 20px; left: 20px; z-index: 2000; transition: opacity 0.3s; }
+        .top-right-controls { position: fixed; top: 20px; right: 20px; z-index: 2000; transition: opacity 0.3s; }
 
-        /* ★ 검색 시 상단 버튼 숨기기 위한 클래스 */
+        /* 검색 시 상단 버튼 숨김 */
         body.controls-hidden .top-left-controls,
-        body.controls-hidden .top-right-controls {
-            opacity: 0;
-            pointer-events: none;
-        }
+        body.controls-hidden .top-right-controls { opacity: 0; pointer-events: none; }
 
         .glass-select {
-            appearance: none; -webkit-appearance: none; -moz-appearance: none;
-            background-color: rgba(20, 20, 20, 0.9);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #a08040;
-            padding: 10px 35px 10px 15px;
-            border-radius: 12px;
-            font-weight: 700; font-size: 14px;
-            cursor: pointer;
+            appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a08040; padding: 10px 35px 10px 15px; border-radius: 12px;
+            font-weight: 700; font-size: 14px; cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat; background-position: right 12px top 50%; background-size: 10px auto;
         }
         .glass-select option { background-color: #1a1a1a; color: white; }
 
         .glass-box {
-            width: 40px; height: 40px; 
-            background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            width: 40px; height: 40px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            color: #a08040; font-weight: 700; font-size: 16px;
-            cursor: pointer;
+            color: #a08040; font-weight: 700; font-size: 16px; cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: all 0.2s;
         }
-        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
 
         /* =========================================
-           3. 하단 UI & 버튼 그룹
+           3. 하단 UI
            ========================================= */
         .bottom-ui-container {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000;
-            display: flex; flex-direction: column; align-items: center;
-            pointer-events: none;
+            display: flex; flex-direction: column; align-items: center; pointer-events: none;
         }
         .floating-actions {
-            width: 100%; display: flex; justify-content: flex-end; 
-            padding: 0 20px 15px 20px; box-sizing: border-box;
+            width: 100%; display: flex; justify-content: flex-end; padding: 0 20px 15px 20px;
         }
-        .fab-column {
-            display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
-            pointer-events: auto;
-        }
+        .fab-column { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; pointer-events: auto; }
 
-        /* 저장/로드 그룹 */
         .glass-group {
-            display: flex; flex-direction: column;
-            background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; 
-            overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .glass-group-btn {
-            width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: #a08040; transition: all 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .glass-group-btn:last-child { border-bottom: none; }
-        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
-
-        /* 전체 보기 버튼 */
         .glass-single-btn {
-            width: 40px; height: 40px; 
-            background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            color: #a08040; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+            width: 40px; height: 40px; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
-
         .icon-svg { width: 22px; height: 22px; fill: currentColor; }
 
-        /* 하단 네비게이션 */
         .bottom-nav-bar {
-            width: 100%; height: 60px;
-            background-color: rgba(10, 10, 10, 0.85);
+            width: 100%; height: 60px; background-color: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; justify-content: space-around; align-items: center;
@@ -167,23 +130,19 @@
         .nav-item {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             gap: 4px; color: #888; font-size: 10px; cursor: pointer; width: 60px; height: 100%;
-            transition: color 0.2s;
         }
-        .nav-item:hover { color: #ccc; }
         .nav-item.active { color: #a08040; }
-        .nav-item .icon-svg { width: 22px; height: 22px; }
 
         /* =========================================
-           4. 패널 스타일 (검색창 문제 해결)
+           4. 패널 스타일 (검색창 문제 수정됨)
            ========================================= */
         .search-panel {
             position: fixed; top: 0; left: 0; width: 100%;
-            background-color: rgba(20, 20, 20, 0.99); /* 뒤가 비치지 않게 */
+            background-color: rgba(20, 20, 20, 0.98); /* 배경 진하게 */
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 15px 20px 20px 20px; box-sizing: border-box;
-            z-index: 3000; /* 드롭다운(2000)보다 위에 */
-            transform: translateY(-100%);
+            z-index: 3000; transform: translateY(-100%);
             transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; flex-direction: column; gap: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -191,46 +150,41 @@
         .search-panel.active { transform: translateY(0); }
         .panel-close-btn { position: absolute; top: 10px; right: 15px; color: #888; font-size: 24px; cursor: pointer; }
         
-        /* ★ [수정] 검색 입력창 디자인 (글씨 안보임 해결) */
+        /* ★ [핵심 수정] 검색 입력창 스타일 강제 적용 */
         .sidebar-search-input {
-            width: 100%; padding: 12px 10px 12px 40px; box-sizing: border-box;
-            background-color: #2a2a2a !important; /* 배경색 진하게 */
-            border: 1px solid #a08040 !important; /* 테두리 금색 */
+            width: 100%; padding: 12px 10px 12px 40px; 
+            background-color: #333333 !important; /* 배경색 강제 지정 */
+            border: 1px solid #a08040 !important; /* 금색 테두리 */
             border-radius: 8px; 
-            color: #ffffff !important; /* 글자색 흰색 */
+            color: #ffffff !important; /* 글자색 흰색 강제 */
             font-size: 16px; 
             -webkit-appearance: none;
+            outline: none;
         }
-        .sidebar-search-input::placeholder { color: #aaa; }
-        
-        /* 자동완성 시 흰색 배경 방지 */
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 30px #2a2a2a inset !important;
-            -webkit-text-fill-color: white !important;
-        }
-
+        .sidebar-search-input::placeholder { color: #aaaaaa !important; }
         .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
         .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
 
-        .search-results-container { max-height: 50vh; overflow-y: auto; margin-top: 10px; }
+        /* ★ [핵심 수정] 검색 결과 리스트 스타일 */
+        .search-results-container {
+            max-height: 50vh; overflow-y: auto; margin-top: 10px;
+            background-color: rgba(20, 20, 20, 0.5); /* 결과창 배경 */
+            border-radius: 8px;
+        }
         .search-result-row {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 5px; border-bottom: 1px solid #333; cursor: pointer;
+            padding: 12px 10px; border-bottom: 1px solid #444; cursor: pointer;
         }
         .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
-        .result-desc { color: #888; font-size: 12px; margin-top: 2px; }
-        .result-type-icon { width: 24px; height: 24px; opacity: 0.8; }
+        .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; } /* 설명 글씨 밝게 */
+        .result-type-icon { width: 24px; height: 24px; opacity: 0.9; }
 
         .filter-panel {
             position: fixed; bottom: 0; left: 0; width: 100%; max-height: 60vh;
             background-color: rgba(20, 20, 20, 0.99); backdrop-filter: blur(10px);
             border-top-left-radius: 20px; border-top-right-radius: 20px;
             border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 3000; 
-            transform: translateY(100%);
+            z-index: 3000; transform: translateY(100%);
             transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; flex-direction: column; padding-bottom: 80px; 
             box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
@@ -241,46 +195,35 @@
             display: flex; align-items: center; justify-content: space-between;
         }
         .filter-title { color: white; font-weight: 700; font-size: 16px; }
-        
-        /* ★ [수정] 필터 버튼 (글자 넘침 해결) */
         .filter-controls { display: flex; gap: 6px; margin-top: 0; }
         .filter-control-btn {
-            padding: 8px 14px; 
-            font-size: 12px; font-weight: 500;
-            cursor: pointer;
-            background-color: #333; border: 1px solid #555; color: #ccc; 
-            border-radius: 20px;
-            transition: all 0.2s;
-            white-space: nowrap;
+            padding: 8px 12px; font-size: 11px; font-weight: 500; cursor: pointer;
+            background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
+            white-space: nowrap; letter-spacing: -0.5px;
         }
         .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
-        
         .filter-list-container {
-            padding: 10px 20px; overflow-y: auto;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+            padding: 10px 20px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
         }
         .filter-item {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 5px; cursor: pointer; transition: all 0.2s; user-select: none;
-            border-bottom: 1px solid #333;
+            padding: 10px 5px; cursor: pointer; border-bottom: 1px solid #333;
         }
         .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
         .filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
-        .filter-text-name { font-size: 14px; color: #aaa; }
+        .filter-text-name { font-size: 13px; color: #aaa; }
         .filter-count { color: #666; font-size: 12px; }
         .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
         .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
         .filter-item.inactive { opacity: 0.4; }
-        .filter-item.inactive .filter-text-name { text-decoration: line-through; color: #555; }
-        .filter-item.inactive .filter-icon-img { filter: grayscale(100%); }
         
         @media (min-width: 768px) {
-            .search-panel { max-width: 400px; left: 50%; transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
+            .search-panel, .filter-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
+            .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
             .search-panel.active { transform: translateX(-50%) translateY(0); }
-            .filter-panel { max-width: 400px; left: 50%; transform: translateX(-50%) translateY(100%); }
+            .filter-panel { transform: translateX(-50%) translateY(100%); }
             .filter-panel.active { transform: translateX(-50%) translateY(0); }
         }
-
     </style>
 </head>
 <body>
@@ -305,7 +248,6 @@
                     </div>
                 </div>
                 <input type="file" id="import-file" style="display:none" accept=".json" onchange="importCompletedPins(this)">
-
                 <div class="glass-single-btn" onclick="toggleFullscreen()" title="전체 화면">
                     <svg class="icon-svg" viewBox="0 0 24 24"><path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6z"/></svg>
                 </div>
@@ -331,10 +273,11 @@
     <div id="search-panel" class="search-panel">
         <div class="panel-close-btn" onclick="closeAllPanels()">✕</div>
         <div class="search-wrapper">
-            <input type="text" id="marker-search" class="sidebar-search-input" placeholder="마커 이름 검색..." autocomplete="off">
+            <input type="text" id="marker-search" class="sidebar-search-input" placeholder="이름 또는 설명 검색..." autocomplete="off">
             <span class="search-icon">🔍</span>
         </div>
-        <div id="search-result-list" class="search-results-container"></div>
+        <div id="search-result-list" class="search-results-container">
+            </div>
     </div>
 
     <div id="filter-panel" class="filter-panel">
@@ -355,7 +298,6 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
     <script>
-        // ★ 브라우저 전체 화면 함수
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(err => { console.log(err); });
@@ -401,7 +343,6 @@
             reader.readAsText(file);
         }
 
-        // ★ 패널 토글 시 상단 버튼 숨김 처리
         function togglePanel(type) {
             const searchPanel = document.getElementById('search-panel');
             const filterPanel = document.getElementById('filter-panel');
@@ -412,12 +353,12 @@
             if (type === 'search') {
                 searchPanel.classList.add('active');
                 filterPanel.classList.remove('active');
-                document.body.classList.add('controls-hidden'); // 상단 버튼 숨김
+                document.body.classList.add('controls-hidden'); // 상단 숨김
                 setTimeout(() => document.getElementById('marker-search').focus(), 300);
             } else if (type === 'filter') {
                 filterPanel.classList.add('active');
                 searchPanel.classList.remove('active');
-                document.body.classList.remove('controls-hidden'); // 필터는 안 가려도 됨
+                document.body.classList.remove('controls-hidden');
             }
         }
 
@@ -426,7 +367,7 @@
             document.getElementById('filter-panel').classList.remove('active');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-home').classList.add('active');
-            document.body.classList.remove('controls-hidden'); // 상단 버튼 보임
+            document.body.classList.remove('controls-hidden');
         }
 
         const mapsDB = {
@@ -447,7 +388,7 @@
         const colorMapping = {
             "상자": "#26a69a", // 밝은 청록
             "보스": "#ef5350", // 밝은 레드
-            "고양이": "#ffffff", // 흰색 (검은 배경 대비)
+            "고양이": "#ffffff", // 흰색
             "묘물": "#a08040", // 테마 골드
             "만사록": "#ffca28", // 앰버
             "경계석": "#b0bec5", // 밝은 회색

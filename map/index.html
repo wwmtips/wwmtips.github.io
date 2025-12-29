@@ -39,6 +39,7 @@
             box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
             display: flex; align-items: center; justify-content: center;
             box-sizing: border-box;
+            will-change: transform; 
             transition: transform 0.2s, z-index 0.2s;
         }
         .pin-inner-circle {
@@ -375,47 +376,22 @@
         };
 
         // 마커 생성 함수
+                // 마커 생성 함수 (최적화 적용됨)
         function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const lightTypes = [""]; // 밝은 배경 타입
+            const lightTypes = [""]; 
+
+            // 1. 임시 저장소 생성 (타입별로 마커를 모아두기 위함)
+            const markersByType = {}; 
 
             data.forEach(item => {
-                if (!layerGroups[item.type]) {
-                    if (isClusterOn) {
-                        // === 클러스터 모드 ===
-                        const typeColor = colorMapping[item.type] || "#555";
-                        const isLight = lightTypes.includes(item.type);
-                        const badgeTextColor = isLight ? "#000000" : "#ffffff";
-                        const textShadowStyle = isLight ? "none" : "0 0 2px rgba(0,0,0,0.5)";
-
-                        layerGroups[item.type] = L.markerClusterGroup({
-                            disableClusteringAtZoom: 0,
-                            spiderfyOnMaxZoom: true,
-                            showCoverageOnHover: false, 
-                            chunkedLoading: true,
-                            // 심플한 원형 디자인
-                            iconCreateFunction: function(cluster) {
-                                const count = cluster.getChildCount();
-                                const countText = count > 99 ? '99+' : count;
-                                const html = `
-                                    <div class="simple-cluster-marker" style="background-color: ${typeColor}; color: ${badgeTextColor}; text-shadow: ${textShadowStyle};">
-                                        ${countText}
-                                    </div>`;
-                                return L.divIcon({
-                                    html: html, className: '',
-                                    iconSize: [28, 28], // 크기 줄임
-                                    iconAnchor: [14, 14] // 중심점
-                                });
-                            }
-                        });
-                    } else {
-                        // === 일반 모드 ===
-                        layerGroups[item.type] = L.layerGroup();
-                    }
+                // 타입별 배열 초기화
+                if (!markersByType[item.type]) {
+                    markersByType[item.type] = [];
                 }
 
-                // 개별 마커 생성
+                // 개별 마커 아이콘 생성
                 const isCompleted = completedList.includes(item.id);
                 const imgName = typeMapping[item.type] || "stone"; 
                 const iconPath = `../images/${imgName}.png`;
@@ -436,28 +412,77 @@
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 
-                layerGroups[item.type].addLayer(marker);
+                // 2. 바로 지도에 넣지 않고, 배열에 push (중요!)
+                markersByType[item.type].push(marker);
+
+                // 검색 등을 위한 전체 리스트에는 그대로 저장
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
             });
 
- // [수정됨] 초기 로딩 시 저장된 필터 설정 확인 후 레이어 추가
+            // 3. 모아둔 마커를 그룹별로 한 번에 처리
+            for (const type in markersByType) {
+                const markersArray = markersByType[type];
+
+                if (isClusterOn) {
+                    // === 클러스터 모드 ===
+                    const typeColor = colorMapping[type] || "#555";
+                    const isLight = lightTypes.includes(type);
+                    const badgeTextColor = isLight ? "#000000" : "#ffffff";
+                    const textShadowStyle = isLight ? "none" : "0 0 2px rgba(0,0,0,0.5)";
+
+                    // 그룹이 없으면 생성
+                    if (!layerGroups[type]) {
+                        layerGroups[type] = L.markerClusterGroup({
+                            disableClusteringAtZoom: 0,
+                            spiderfyOnMaxZoom: true,
+                            showCoverageOnHover: false, 
+                            chunkedLoading: true,      // 비동기 로딩 유지
+                            animate: false,            // ★ [최적화] 애니메이션 끄기 (성능 향상 큼)
+                            animateAddingMarkers: false, // ★ [최적화] 추가 애니메이션 끄기
+                            maxClusterRadius: 80,      // ★ [최적화] 뭉치는 반경 (기본 80, 렉 걸리면 100으로 늘려보세요)
+                            iconCreateFunction: function(cluster) {
+                                const count = cluster.getChildCount();
+                                const countText = count > 99 ? '99+' : count;
+                                const html = `
+                                    <div class="simple-cluster-marker" style="background-color: ${typeColor}; color: ${badgeTextColor}; text-shadow: ${textShadowStyle};">
+                                        ${countText}
+                                    </div>`;
+                                return L.divIcon({
+                                    html: html, className: '',
+                                    iconSize: [28, 28],
+                                    iconAnchor: [14, 14]
+                                });
+                            }
+                        });
+                    }
+                    // ★ [핵심] 배열 통째로 추가 (addLayer -> addLayers)
+                    layerGroups[type].addLayers(markersArray);
+
+                } else {
+                    // === 일반 모드 ===
+                    // 일반 모드도 LayerGroup에 배열로 한 번에 넣는 것이 좋음
+                    if (!layerGroups[type]) {
+                        layerGroups[type] = L.layerGroup(); 
+                    }
+                    markersArray.forEach(m => layerGroups[type].addLayer(m));
+                }
+            }
+
+            // 4. 저장된 필터 설정 확인 후 레이어 추가 (기존 로직 유지)
             const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-            
             for (const key in layerGroups) {
-                // 저장된 값이 없으면(undefined) 기본값 true(보임), 있으면 그 값 따름
                 const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-                
                 if (shouldShow) {
                     layerGroups[key].addTo(map);
                 }
             }
-            // URL 파라미터 이동
+
+            // URL 파라미터 이동 로직 (기존 로직 유지)
             const targetId = urlParams.get('marker');
             if (targetId) {
                 const target = allMarkers.find(m => m.id == targetId);
                 if (target) {
                     if (!map.hasLayer(layerGroups[target.type])) map.addLayer(layerGroups[target.type]);
-                    
                     if (isClusterOn && layerGroups[target.type].zoomToShowLayer) {
                         layerGroups[target.type].zoomToShowLayer(target.marker, function() {
                             target.marker.openPopup();
@@ -469,6 +494,7 @@
                 }
             }
         }
+
 // [추가됨] 현재 필터 상태를 로컬 스토리지에 저장하는 함수
         function saveFilterState() {
             const status = {};

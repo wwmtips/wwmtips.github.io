@@ -1255,7 +1255,7 @@
         }
     };
 
-   // [수정] 경로 활성화 함수 (맵 자동 이동 기능 강화)
+   // [수정] 경로 활성화 함수 (맵 자동 이동 로직 강화)
     function activatePath(pathKey) {
         clearPath();
         const routeData = pathData[pathKey];
@@ -1267,20 +1267,20 @@
 
         // ★★★ [핵심 수정] 시작점이 다른 맵이면 해당 맵으로 이동 ★★★
         if (routeIds.length > 0) {
-            // 현재 맵에 표시할 마커가 하나라도 있는지 확인
+            // 1. 현재 맵에 표시할 마커가 하나라도 있는지 확인 (Strict Check)
             const hasMarkersForCurrentMap = routeIds.some(entry => {
                 let mapId;
                 if (typeof entry === 'object') {
                     mapId = entry.map;
                 } else {
-                    // ID만 있는 경우, 전역 캐시(globalMarkerCache)에서 실제 맵 정보를 조회
                     const cached = globalMarkerCache[entry];
-                    mapId = cached ? cached.map : currentMapId; 
+                    // [중요] 캐시에 없으면 null 반환 (기본값 currentMapId 사용 금지)
+                    mapId = cached ? cached.map : null; 
                 }
                 return mapId === currentMapId;
             });
 
-            // 현재 맵에 표시할 게 없다면 -> 첫 번째 마커가 있는 맵으로 이동
+            // 2. 현재 맵에 표시할 게 없다면 -> 이동 대상 맵 찾기
             if (!hasMarkersForCurrentMap) {
                 const firstEntry = routeIds[0];
                 let firstMap, firstId;
@@ -1291,14 +1291,19 @@
                 } else {
                     firstId = firstEntry;
                     const cached = globalMarkerCache[firstId];
-                    // 캐시에도 없으면 기본값 유지, 있으면 해당 맵 사용
-                    firstMap = cached ? cached.map : currentMapId;
+                    firstMap = cached ? cached.map : null;
+                }
+
+                // [추가 안전장치] 첫 번째 마커의 맵 정보를 못 찾았을 때
+                // 만약 경로 이름(pathKey)이 맵 ID(mapsDB 키)와 같다면 거기로 이동
+                if (!firstMap && mapsDB[pathKey]) {
+                    firstMap = pathKey;
                 }
 
                 localStorage.setItem('activePathKey', pathKey);
                 
-                // 무한 리로딩 방지: 이동할 맵이 현재 맵과 다를 때만 이동
-                if (firstMap !== currentMapId) {
+                // 이동할 맵이 존재하고, 현재 맵과 다르면 페이지 이동
+                if (firstMap && firstMap !== currentMapId) {
                     window.location.href = `?id=${firstMap}&marker=${firstId}&path=${pathKey}`;
                     return; 
                 }
@@ -1320,35 +1325,20 @@
         routeIds.forEach((entry, index) => {
             let markerId, markerMap;
             
-            // [수정] 반복문 내부에서도 맵 정보 조회 로직 통일
+            // [수정] 반복문 내부 매핑 로직 통일
             if (typeof entry === 'object') {
                 markerId = entry.id;
                 markerMap = entry.map;
             } else {
                 markerId = entry;
                 const cached = globalMarkerCache[markerId];
-                markerMap = cached ? cached.map : currentMapId;
+                // 여기서는 렌더링 단계이므로 없으면 현재 맵으로 가정해도 무방하나, 
+                // 정확성을 위해 캐시가 없으면 렌더링 제외
+                markerMap = cached ? cached.map : null; 
             }
 
-            // Gateway(맵 이동 지점) 체크
-            let isGateway = false;
-            if (index < routeIds.length - 1) {
-                const nextEntry = routeIds[index + 1];
-                let nextMap;
-                if (typeof nextEntry === 'object') {
-                    nextMap = nextEntry.map;
-                } else {
-                    const nextCached = globalMarkerCache[nextEntry];
-                    nextMap = nextCached ? nextCached.map : currentMapId;
-                }
-                
-                if (markerMap === currentMapId && nextMap !== currentMapId) {
-                    isGateway = true;
-                }
-            }
-
-            // 현재 맵에 있는 마커만 표시
-            if (markerMap !== currentMapId) return;
+            // 마커의 맵 정보가 없거나, 다른 맵의 마커라면 건너뜀
+            if (!markerMap || markerMap !== currentMapId) return;
 
             const item = allMarkers.find(m => m.id == markerId);
             if (item) {
@@ -1358,10 +1348,11 @@
                 const itemIconPath = `../images/${typeMapping[item.type] || 'stone'}.png`;
                 const isCompleted = completedList.includes(item.id);
                 const completedClass = isCompleted ? 'marker-completed' : '';
-                const gatewayClass = isGateway ? 'gateway-marker' : '';
+                const gatewayClass = isGateway(index, routeIds) ? 'gateway-marker' : '';
 
                 let badgeContent = index + 1;
-                if (isGateway) {
+                // 게이트웨이(맵 이동) 아이콘 처리
+                if (gatewayClass) {
                     badgeContent = `<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:black;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>`;
                 }
 
@@ -1394,7 +1385,7 @@
         currentPathLayer.addTo(map);
         document.getElementById('path-toggle-btn').classList.add('path-active');
 
-        // ★★★ [수정됨] 시작점 이동 로직 (지정된 마커가 있으면 거기로, 없으면 시작점으로) ★★★
+        // ★★★ [수정] 시작점 이동 로직 (마커 지정 시 해당 위치로, 아니면 첫 번째로) ★★★
         const targetMarkerId = new URLSearchParams(window.location.search).get('marker');
         let jumpTarget = latlngs.length > 0 ? latlngs[0] : null;
         let targetMarkerObj = null;
@@ -1415,6 +1406,21 @@
         localStorage.setItem('activePathKey', pathKey);
         updatePathSummaryUI(); 
         closeAllPanels();
+    }
+
+    // [보조 함수] 게이트웨이 여부 판단
+    function isGateway(index, routeIds) {
+        if (index >= routeIds.length - 1) return false;
+        const currentEntry = routeIds[index];
+        const nextEntry = routeIds[index + 1];
+        
+        // 현재 마커의 맵
+        let currentMap = (typeof currentEntry === 'object') ? currentEntry.map : (globalMarkerCache[currentEntry]?.map || currentMapId);
+        
+        // 다음 마커의 맵
+        let nextMap = (typeof nextEntry === 'object') ? nextEntry.map : (globalMarkerCache[nextEntry]?.map || currentMapId);
+
+        return currentMap === currentMapId && nextMap !== currentMapId;
     }
 
     // 경로 종료 및 UI 복원

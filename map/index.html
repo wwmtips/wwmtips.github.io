@@ -1752,10 +1752,25 @@
 
         // 기존 필터 상태 복원
         const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-        for (const key in layerGroups) {
-            const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-            if (shouldShow) { layerGroups[key].addTo(map); }
-        }
+      // [수정] 필터 상태 반영 (초기 진입 시 '경계석', '만사록'만 표시)
+            const defaultVisible = ["경계석", "만사록"]; // ★ 여기에 처음 보여줄 것들만 적으세요
+
+            for (const key in layerGroups) {
+                let shouldShow;
+                
+                // 1. 사용자가 이전에 저장한 필터 설정이 있으면 그걸 따름
+                if (savedFilters[key] !== undefined) {
+                    shouldShow = savedFilters[key];
+                } 
+                // 2. 저장된 설정이 없으면(첫 진입) 위에서 정한 목록만 보여줌
+                else {
+                    shouldShow = defaultVisible.includes(key);
+                }
+
+                if (shouldShow) { 
+                    layerGroups[key].addTo(map); 
+                }
+            }
     }
 
     function togglePanel(type) {

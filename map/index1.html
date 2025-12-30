@@ -258,14 +258,14 @@
             
         };
 
- // 타입 및 색상 매핑
+// 타입 및 색상 매핑
     const typeMapping = { 
         "경계석": "ic_pin", "묘묘냥": "ic_mew", "고양이": "ic_cat",
         "만사록": "ic_mansa", "묘물": "ic_uni", "상자": "ic_chest", 
         "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp",
         "낚시대결":"ic_fish","투호대결":"ic_two","영지":"ic_camp","강호의벗":"ic_pic","유물":"ic_tr",
         "탐방":"logo","만물의울림":"ic_man","곡경심유":"ic_gk","궁술대결":"logo","기타":"logo","야외제사":"logo",
-        "무술로맺은인연":"logo", "풍류의선률":"logo", "의술치유":"logo"
+        "무술로맺은인연":"logo", "풍류의선률":"logo", "의술치유":"logo", "채집":"ic_fw"
     };
 
        const colorMapping = {
@@ -286,7 +286,7 @@
         "유물":"#003458",
         "탐방":"#fbceb1",
         "만물의울림":"#fbceb1","곡경심유":"#fbceb1","궁술대결":"#fbceb1","기타":"#fbceb1","야외제사":"#fbceb1",
-        "무술로맺은인연":"#fbceb1", "화술논쟁":"#fbceb1", "풍류의선률":"#fbceb1", "의술치유":"logo"
+        "무술로맺은인연":"#fbceb1", "화술논쟁":"#fbceb1", "풍류의선률":"#fbceb1", "의술치유":"#fbceb1", "채집":"#b1fbba"
         
     };
 
@@ -686,8 +686,9 @@
                         <label>이름</label> <input type="text" id="input_name">
                         <label>종류</label> 
                         <select id="input_type" onchange="autoFillDesc(this)">                        
-                            <option value="상자">상자</option>
-                            <option value="경계석">경계석</option> 
+                            <option value="채집">채집</option>
+                           <option value="상자">상자</option>
+                           <option value="경계석">경계석</option> 
                             <option value="묘묘냥">묘묘냥</option> 
                             <option value="묘물">묘물</option>                           
                             <option value="고양이">고양이</option> 
@@ -715,6 +716,8 @@
                 descInput.value = '';
             }else if (selectElement.value === '상자') {
                 titleInput.value ='상자';
+            }else if (selectElement.value === '채집') {
+                descInput.value ='각문리 닭복음을 먹고 채집하세요. 닭볶음: 15%확률로 채집 대성공 (20분 지속).';
             }
         };
 

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     
     <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="57x57" href="../fav/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="../fav/apple-icon-60x60.png">
 <link rel="apple-touch-icon" sizes="72x72" href="../fav/apple-icon-72x72.png">
@@ -992,6 +993,57 @@
             overflow: hidden; 
             text-overflow: ellipsis;
         }
+        /* [수정] 메인 컨테이너 (그리드 제거, 스크롤만 담당) */
+        .path-list-container { 
+            padding: 10px 15px; 
+            overflow-y: auto; 
+            display: block; /* 그리드 제거 -> 블록 요소로 변경 */
+        }
+
+        /* [신규] 카테고리 헤더 스타일 */
+        .path-category-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: #a08040; /* 금색 포인트 */
+            margin: 15px 0 8px 2px; /* 위아래 여백 */
+            display: flex;
+            align-items: center;
+        }
+        /* 첫 번째 헤더는 위쪽 여백 줄임 */
+        .path-category-header:first-child { margin-top: 5px; }
+
+        /* [신규] 카테고리별 그리드 그룹 (여기에 2열 그리드 적용) */
+        .path-category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 1:1 비율 2열 */
+            gap: 8px;
+        }
+
+        /* [유지] 경로 아이템 (얇은 스타일 그대로 유지) */
+        .path-item {
+            padding: 10px 12px; 
+            min-height: 0;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; 
+            flex-direction: row; 
+            align-items: center; 
+            justify-content: flex-start;
+            gap: 10px;
+            text-align: left; 
+            transition: all 0.2s;
+        }
+        .path-item:hover { 
+            background-color: rgba(160, 128, 64, 0.2); 
+            border-color: #a08040; 
+            transform: translateY(-1px);
+        }
+        .path-icon { width: 16px; height: 16px; fill: #a08040; flex-shrink: 0; }
+        .path-name { 
+            color: #e0e0e0; font-weight: 500; font-size: 13px; line-height: 1.2;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
 
 </style>
 </head>
@@ -1109,6 +1161,11 @@
             "title": "예시 경로 (샘플)",
             "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
             "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "gesh" } ]
+        }, "sample_route2": {
+            "title": "예시 경로 (샘플)",
+            "category":"채집",
+            "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
+            "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "gesh" } ]
         }
     };
 
@@ -1152,6 +1209,7 @@
         "무술로맺은인연":"#fbceb1", "화술논쟁":"#fbceb1", "풍류의선률":"#fbceb1", "의술치유":"#fbceb1", "채집":"#b1fbba"
         
     };
+
 
 
     // URL 파라미터 처리
@@ -1350,23 +1408,55 @@
             });
     }
 
-    function renderPathList(data) {
+        function renderPathList(data) {
         pathData = data;
         const container = document.getElementById('path-list-dynamic');
         if(!container) return;
         container.innerHTML = '';
         
+        // 1. 데이터 그룹화 (카테고리별로 묶기)
+        const groups = {};
+        
         for (const [key, info] of Object.entries(pathData)) {
-            const div = document.createElement('div');
-            div.className = 'path-item';
-            div.onclick = () => activatePath(key);
-            div.innerHTML = `
-                <svg class="path-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <div class="path-info">
-                    <div class="path-name">${info.title}</div>
-                  
-                </div>`;
-            container.appendChild(div);
+            // category 필드가 있으면 사용, 없으면 '지역탐험'으로 분류
+            const catName = info.category ? info.category : '지역탐험';
+            
+            if (!groups[catName]) {
+                groups[catName] = [];
+            }
+            groups[catName].push({ key, ...info });
+        }
+
+        // 2. 그룹별로 렌더링
+        // (원하는 순서가 있다면 여기서 keys를 정렬하면 됩니다. 지금은 발견된 순서대로)
+        for (const [category, items] of Object.entries(groups)) {
+            
+            // (1) 카테고리 헤더 생성
+            const header = document.createElement('div');
+            header.className = 'path-category-header';
+            header.innerText = category;
+            container.appendChild(header);
+
+            // (2) 해당 카테고리의 그리드 컨테이너 생성
+            const gridDiv = document.createElement('div');
+            gridDiv.className = 'path-category-grid';
+
+            // (3) 아이템들 추가
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'path-item';
+                itemDiv.onclick = () => activatePath(item.key);
+                
+                itemDiv.innerHTML = `
+                    <svg class="path-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    <div class="path-name">${item.title}</div>
+                `;
+                gridDiv.appendChild(itemDiv);
+            });
+
+            container.appendChild(gridDiv);
         }
     }
 

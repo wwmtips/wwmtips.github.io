@@ -52,20 +52,32 @@
             position: fixed; z-index: 90000 !important; 
             pointer-events: none !important; 
             display: flex; flex-direction: column; gap: 8px;
-        }
-/* [New] 개발자 모드 상태 표시기 */
+        }/* [수정] 개발자 모드 상태 표시기 (리스트형) */
         .dev-status-box {
             background: rgba(0, 0, 0, 0.85); 
-            border: 1px solid #a08040; /* 금색 테두리로 강조 */
-            color: #fff;
+            border: 1px solid #a08040;
+            color: #ddd;
             padding: 8px 15px; 
             border-radius: 20px; 
             font-size: 12px; 
-            font-weight: 700;
-            display: none; /* 기본 숨김, 선택 시 표시 */
+            font-weight: 500;
+            display: none; /* 기본 숨김 */
             align-items: center; 
-            gap: 8px;
-            white-space: nowrap;
+            white-space: nowrap; /* 줄바꿈 방지 */
+            max-width: 60vw; /* 화면 너무 차지하지 않게 */
+            overflow-x: auto; /* 내용 넘치면 스크롤 */
+            gap: 10px;
+        }
+        /* 스크롤바 숨김 (깔끔하게) */
+        .dev-status-box::-webkit-scrollbar { display: none; }
+        
+        .dev-type-tag {
+            color: #fff;
+            font-weight: 700;
+        }
+        .dev-type-count {
+            color: #a08040;
+            margin-left: 2px;
         }
         .dev-highlight { color: #a08040; font-weight: 800; }
         .top-left-controls { top: 15px; left: 15px; }
@@ -1067,15 +1079,11 @@
         <select id="main-map-select" class="glass-select"></select>
     </div>
 
-  <div id="dev-panel" class="dev-controls">
+<div id="dev-panel" class="dev-controls">
         <div class="dev-btn" id="dev-record-btn" onclick="toggleDevRecording()">⚫ REC</div>
         <div class="dev-btn" onclick="copyDevPath()">📋 JSON (<span id="dev-count">0</span>)</div>
         
-        <div id="dev-status" class="dev-status-box">
-            <span id="dev-last-type">타입: -</span>
-            <span style="color: #555;">|</span>
-            <span id="dev-type-count" class="dev-highlight">0개</span>
-        </div>
+        <div id="dev-status" class="dev-status-box"></div>
     </div>
 
     <div class="top-right-controls">
@@ -1770,11 +1778,12 @@
                 const marker = L.marker([item.y, item.x], { icon: pinIcon });
                 
                // Dev Mode 클릭 이벤트 (녹화 및 상태 표시)
+                // Dev Mode 클릭 이벤트 (타입별 전체 집계 기능)
                 marker.on('click', () => {
                     if (devRecording) {
                         const existingIndex = devPathList.findIndex(entry => entry.id === item.id && entry.map === currentMapId);
                         
-                        // 1. 리스트 추가/제거 로직
+                        // 1. 리스트 추가/제거
                         if (existingIndex > -1) {
                             devPathList.splice(existingIndex, 1);
                             L.DomUtil.removeClass(marker._icon, 'dev-selected');
@@ -1786,40 +1795,43 @@
                         // 2. 전체 개수 업데이트
                         document.getElementById('dev-count').innerText = devPathList.length;
 
-                        // ★ 3. [신규] 선택된 타입 및 해당 타입 개수 계산 로직
-                        const statusBox = document.getElementById('dev-status');
-                        const typeLabel = document.getElementById('dev-last-type');
-                        const countLabel = document.getElementById('dev-type-count');
+                        // ★ 3. [핵심] 현재 담긴 모든 마커의 타입별 개수 계산
+                        const typeCounts = {};
                         
-                        // 현재 선택한 마커의 타입
-                        const currentType = item.type;
-                        
-                        // 현재 리스트에 담긴 것 중, 이 타입이 몇 개인지 카운트
-                        // (주의: 다른 맵의 마커는 allMarkers에 없으므로, 현재 맵 마커 기준으로 계산하거나
-                        // 정확도를 위해 전역 캐시 globalMarkerCache를 사용합니다)
-                        let typeCount = 0;
                         devPathList.forEach(entry => {
-                            // 전역 캐시가 있으면 쓰고, 없으면 현재 맵 리스트(allMarkers)에서 찾음
-                            let targetItem = globalMarkerCache[entry.id]; 
-                            
-                            // 만약 캐시에 없다면 현재 로드된 마커 리스트에서 찾기 (fallback)
-                            if (!targetItem) {
-                                targetItem = allMarkers.find(m => m.id == entry.id);
+                            // 마커 정보 찾기 (전역 캐시 우선, 없으면 현재 맵 리스트)
+                            let targetInfo = globalMarkerCache[entry.id];
+                            if (!targetInfo) {
+                                targetInfo = allMarkers.find(m => m.id == entry.id);
                             }
                             
-                            if (targetItem && targetItem.type === currentType) {
-                                typeCount++;
+                            // 타입 카운팅
+                            if (targetInfo && targetInfo.type) {
+                                typeCounts[targetInfo.type] = (typeCounts[targetInfo.type] || 0) + 1;
                             }
                         });
 
-                        // 4. 화면 표시
-                        if (statusBox) statusBox.style.display = 'flex';
-                        if (typeLabel) typeLabel.innerText = `${currentType}`;
-                        if (countLabel) countLabel.innerText = `${typeCount}개`;
+                        // 4. 화면에 요약해서 보여주기
+                        const statusBox = document.getElementById('dev-status');
+                        if (statusBox) {
+                            // "타입 갯수" 문자열 생성 (예: 상자 2 | 보스 1)
+                            const summaryHtml = Object.entries(typeCounts)
+                                .map(([type, count]) => 
+                                    `<span><span class="dev-type-tag">${type}</span> <span class="dev-type-count">${count}</span></span>`
+                                )
+                                .join('<span style="color:#555; margin:0 6px;">|</span>'); // 구분자
+
+                            if (summaryHtml) {
+                                statusBox.innerHTML = summaryHtml;
+                                statusBox.style.display = 'flex';
+                            } else {
+                                statusBox.style.display = 'none';
+                            }
+                        }
                     } 
-                    // 일반 모드에서는 팝업 열림 (기존 동작 유지)
+                    // 일반 모드 팝업
                 });
-                
+
                 marker.bindPopup(() => generatePopupContent(item, storageKey));
                 markersByType[item.type].push(marker);
                 allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });

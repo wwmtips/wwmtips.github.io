@@ -2,6 +2,10 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "나무", "answer": "딱따구리", "user": "안녕로봇" },
+{ "hint": "식칼", "answer": "도마", "user": "설현아" },
+{ "hint": "뒤뚱뒤뚱", "answer": "펭귄", "user": "설현아" },
+{ "hint": "붉은빛 과실", "answer": "자두", "user": "" },
     { "hint": "새", "answer": "파랑새", "user": "꽂" },
 { "hint": "시계", "answer": "뻐꾸기", "user": "환환고" },
 { "hint": "바다", "answer": "낚시", "user": "다함" },

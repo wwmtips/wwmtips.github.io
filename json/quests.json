@@ -1,4 +1,13 @@
 [ 
+    {
+   "id": "q189",
+   "type": "탐색",
+   "location": "춘추별관",
+   "name": "춘추별관 탐색 공략(작성 중)",
+   "bgimg": "q189_8.jpg",
+   "iconpath": "images/guide.jpg",
+   "filepath": "/quests/q189.html"
+ },
   {
    "id": "q188",
    "type": "탐색",

@@ -1511,6 +1511,7 @@
 
    // [수정] 경로 활성화 함수 (맵 자동 이동 로직 강화)
     // [수정] 경로 활성화 함수 (맵 자동 이동 및 렌더링 로직 강화)
+    // [수정] 경로 활성화 함수 (자동 정렬 기능 포함)
     function activatePath(pathKey) {
         clearPath();
         const routeData = pathData[pathKey];
@@ -1520,14 +1521,13 @@
         currentPathIds = routeIds; 
         activePathMarkersMap = {}; 
 
-        // 1. 현재 맵에 표시할 마커가 있는지 확인 (allMarkers 기준, 타입 무관 비교)
+        // 1. 현재 맵에 표시할 마커가 있는지 확인
         const hasMarkersForCurrentMap = routeIds.some(entry => {
             const id = (typeof entry === 'object') ? entry.id : entry;
-            // allMarkers는 현재 로드된 맵의 마커들이므로 여기서 찾으면 확실함
             return allMarkers.some(m => m.id == id);
         });
 
-        // 2. 현재 맵에 표시할 게 없다면 -> 다른 맵으로 이동해야 함
+        // 2. 현재 맵에 표시할 게 없다면 -> 다른 맵으로 이동
         if (!hasMarkersForCurrentMap) {
             let targetMap = null;
             let targetMarkerId = null;
@@ -1537,25 +1537,19 @@
                 const firstId = (typeof firstEntry === 'object') ? firstEntry.id : firstEntry;
                 targetMarkerId = firstId;
 
-                // A. 데이터 자체에 map 속성이 있는지 확인
                 if (typeof firstEntry === 'object' && firstEntry.map) {
                     targetMap = firstEntry.map;
-                } 
-                // B. 전역 캐시에서 검색 (숫자/문자 모두 시도)
-                else {
+                } else {
                     let cached = globalMarkerCache[firstId];
                     if (!cached) cached = globalMarkerCache[Number(firstId)] || globalMarkerCache[String(firstId)];
-                    
                     if (cached) targetMap = cached.map;
                 }
             }
 
-            // C. 그래도 못 찾았다면, 경로 키(pathKey)를 맵 ID로 가정 (예: path=gesh -> map=gesh)
             if (!targetMap && mapsDB[pathKey]) {
                 targetMap = pathKey;
             }
 
-            // 이동 실행 (현재 맵과 다를 경우에만)
             if (targetMap && targetMap !== currentMapId) {
                 localStorage.setItem('activePathKey', pathKey);
                 window.location.href = `?id=${targetMap}&marker=${targetMarkerId}&path=${pathKey}`;
@@ -1563,76 +1557,104 @@
             }
         }
 
-        // 3. 경로 그리기 (현재 맵에 있는 마커들만)
+        // 3. 경로 그리기 (현재 맵에 있는 마커들만 + ★거리순 정렬★)
         const storageKey = `completed_${currentMapId}`;
         const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
 
-        // 기존 레이어 초기화
         for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
         const filterGroup = document.querySelector('.bottom-right-controls .glass-group');
         if (filterGroup) filterGroup.style.display = 'none';
 
         currentPathLayer = L.featureGroup();
-        const latlngs = [];
-
-        routeIds.forEach((entry, index) => {
+        
+        // --- [정렬 로직 시작] ---
+        
+        // A. 현재 맵에 있는 마커 객체만 추출
+        let currentMapItems = [];
+        routeIds.forEach((entry) => {
             const markerId = (typeof entry === 'object') ? entry.id : entry;
-            
-            // ★ [핵심] allMarkers에서 ID로 마커 찾기 (== 비교로 타입 불일치 해결)
             const item = allMarkers.find(m => m.id == markerId);
-            
             if (item) {
-                const latlng = item.marker.getLatLng();
-                latlngs.push(latlng);
-                
-                const itemIconPath = `../images/${typeMapping[item.type] || 'logo'}.png`;
-                const isCompleted = completedList.includes(item.id);
-                const completedClass = isCompleted ? 'marker-completed' : '';
-                
-                // 게이트웨이(맵 이동 지점) 체크
-                let isGateway = false;
-                if (index < routeIds.length - 1) {
-                    const nextEntry = routeIds[index + 1];
-                    let nextMap = null;
-                    
-                    if (typeof nextEntry === 'object') {
-                        nextMap = nextEntry.map;
-                    } else {
-                        // 다음 마커의 맵 정보 확인
-                        const nextId = nextEntry;
-                        let cached = globalMarkerCache[nextId];
-                        if (!cached) cached = globalMarkerCache[Number(nextId)] || globalMarkerCache[String(nextId)];
-                        if (cached) nextMap = cached.map;
-                    }
-                    
-                    if (nextMap && nextMap !== currentMapId) {
-                        isGateway = true;
-                    }
-                }
-                const gatewayClass = isGateway ? 'gateway-marker' : '';
+                currentMapItems.push(item);
+            }
+        });
 
-                let badgeContent = index + 1;
-                if (isGateway) {
-                    badgeContent = `<svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:black;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>`;
-                }
+        // B. 거리순 정렬 함수 (가까운 점 찾기 알고리즘)
+        function sortItemsByDistance(items) {
+            if (items.length < 2) return items;
+            
+            // 첫 번째 마커를 시작점으로 고정
+            const sorted = [items[0]];
+            const remaining = items.slice(1);
 
-                const pathIcon = L.divIcon({
-                    className: `custom-div-icon ${completedClass} ${gatewayClass}`,
-                    html: `<div class="path-marker-box">
-                               <img src="${itemIconPath}" class="path-marker-icon" onerror="this.src='../images/stone.png'">
-                               <div class="path-order-badge">${badgeContent}</div>
-                           </div>`,
-                    iconSize: [34, 34], 
-                    iconAnchor: [17, 17],
-                    popupAnchor: [0, -20]
+            while (remaining.length > 0) {
+                const current = sorted[sorted.length - 1];
+                const currentLatLng = current.marker.getLatLng();
+
+                let nearestIndex = -1;
+                let minDist = Infinity;
+
+                // 남은 것들 중 가장 가까운 점 찾기
+                remaining.forEach((item, index) => {
+                    const latlng = item.marker.getLatLng();
+                    const dist = currentLatLng.distanceTo(latlng);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        nearestIndex = index;
+                    }
                 });
 
-                const markerClone = L.marker(latlng, { icon: pathIcon })
-                    .bindPopup(item.marker.getPopup().getContent());
-                
-                currentPathLayer.addLayer(markerClone);
-                activePathMarkersMap[markerId] = markerClone; 
+                if (nearestIndex !== -1) {
+                    sorted.push(remaining[nearestIndex]);
+                    remaining.splice(nearestIndex, 1);
+                } else {
+                    sorted.push(...remaining);
+                    break;
+                }
             }
+            return sorted;
+        }
+
+        // C. 정렬 실행
+        if (currentMapItems.length > 0) {
+            currentMapItems = sortItemsByDistance(currentMapItems);
+        }
+        
+        // --- [정렬 로직 끝] ---
+
+        const latlngs = [];
+
+        // 정렬된 아이템으로 마커 생성 및 선 그리기
+        currentMapItems.forEach((item, index) => {
+            const latlng = item.marker.getLatLng();
+            latlngs.push(latlng);
+            
+            const itemIconPath = `../images/${typeMapping[item.type] || 'logo'}.png`;
+            const isCompleted = completedList.includes(item.id);
+            const completedClass = isCompleted ? 'marker-completed' : '';
+            
+            // 정렬된 순서대로 1, 2, 3... 번호 부여
+            let badgeContent = index + 1;
+            
+            // (정렬 후에는 게이트웨이 로직이 복잡해지므로 단순화: 마지막 아이템 등 필요시 추가 가능)
+            const gatewayClass = ''; 
+
+            const pathIcon = L.divIcon({
+                className: `custom-div-icon ${completedClass} ${gatewayClass}`,
+                html: `<div class="path-marker-box">
+                           <img src="${itemIconPath}" class="path-marker-icon" onerror="this.src='../images/stone.png'">
+                           <div class="path-order-badge">${badgeContent}</div>
+                       </div>`,
+                iconSize: [34, 34], 
+                iconAnchor: [17, 17],
+                popupAnchor: [0, -20]
+            });
+
+            const markerClone = L.marker(latlng, { icon: pathIcon })
+                .bindPopup(item.marker.getPopup().getContent());
+            
+            currentPathLayer.addLayer(markerClone);
+            activePathMarkersMap[item.id] = markerClone; 
         });
 
         if (latlngs.length > 1) {
@@ -1645,12 +1667,11 @@
         currentPathLayer.addTo(map);
         document.getElementById('path-toggle-btn').classList.add('path-active');
 
-        // ★★★ 시작점/지정점 이동 로직 ★★★
+        // 시작점 이동
         const targetMarkerId = new URLSearchParams(window.location.search).get('marker');
         let jumpTarget = latlngs.length > 0 ? latlngs[0] : null;
         let targetMarkerObj = null;
 
-        // URL에 marker 파라미터가 있고, 현재 그려진 경로에 그 마커가 있다면 우선시함
         if (targetMarkerId && activePathMarkersMap[targetMarkerId]) {
             targetMarkerObj = activePathMarkersMap[targetMarkerId];
             jumpTarget = targetMarkerObj.getLatLng();

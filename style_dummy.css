@@ -4893,22 +4893,67 @@ body.dark-mode .timer-row:hover {
     display: block;
     background-color: #fff;
 }
+/* =========================================
+   [업적] PC 10열 배치 및 규격 고정
+   ========================================= */
+@media (min-width: 768px) {
+    #achievement-list {
+        display: grid !important;
+        /* PC에서 한 줄에 10개 배치 */
+        grid-template-columns: repeat(10, 1fr) !important; 
+        gap: 8px !important;
+        align-items: start !important; /* 아래로 늘어남 방지 */
+    }
+}
+
+@media (max-width: 767px) {
+    #achievement-list {
+        /* 모바일에서 한 줄에 3개 배치 */
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 6px !important;
+    }
+}
+
+/* 업적 카드 개별 스타일 */
+.achievement-card {
+    width: 100% !important;
+    height: 95px !important; /* 업적은 이미지 때문에 높이가 있어야 함 */
+    background-color: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+
+/* 업적 아이콘 영역 */
+.ach-icon {
+    height: 60px !important;
+    background-color: #ffffff !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+/* 업적 텍스트 영역 (중앙 정렬) */
+.ach-content {
+    flex-grow: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 2px !important;
+}
 
 /* =========================================
-   [긴급 복구] 만사록 버튼 36px 절대 규격 고정
+   [만사록] 슬림 버튼 36px 절대 고정
    ========================================= */
-
-/* 1. 컨테이너: 자식 요소(버튼)가 아래로 늘어나는 것을 원천 차단 */
 #mansarok-list {
     display: grid !important;
-    /* PC: 최소 140px, 모바일: 3열 */
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important; 
+    /* PC: 자동 배치, 모바일: 3열 */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
     gap: 8px !important;
-    width: 100% !important;
-    margin: 15px 0 !important;
-    
-    /* [핵심] 자식 요소가 부모 높이에 맞춰 늘어나지 않게 함 */
-    align-items: flex-start !important; 
+    align-items: start !important;
 }
 
 @media (max-width: 768px) {
@@ -4917,42 +4962,24 @@ body.dark-mode .timer-row:hover {
     }
 }
 
-/* 2. 버튼 본체: 36px 박스를 강제로 생성 */
+/* 만사록 전용 슬림 버튼 */
 .mansarok-btn {
-    /* [핵심] 높이 삼중 잠금 */
-    height: 36px !important; 
+    height: 36px !important; /* 36px 절대 고정 */
     min-height: 36px !important;
     max-height: 36px !important;
-    
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important; /* 가로 중앙 */
-    align-items: center !important;     /* 세로 중앙 */
-    
     background-color: #f8f8f8 !important;
     border: 1px solid #ddd !important;
     border-radius: 4px !important;
-    text-decoration: none !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important; 
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: hidden !important;
 }
 
-/* 3. 텍스트: 36px 공간 내에서 정확히 중앙 정렬 */
 .mansarok-btn span {
     font-size: 11px !important;
-    font-weight: 500 !important;
-    color: #333 !important;
-    text-align: center !important;
-    
-    /* [핵심] 마진과 줄높이를 조절하여 텍스트 위치를 세로 정중앙에 고정 */
-    margin: 0 !important;
-    padding: 0 4px !important;
-    line-height: 34px !important; /* 버튼 높이(36px)보다 약간 작게 설정하여 중앙 배치 */
-    
-    /* 한 줄 강제 및 말줄임 */
+    line-height: 34px !important; /* 세로 중앙 보정 */
     white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    display: block !important;
-    width: 100% !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

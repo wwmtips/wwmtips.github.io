@@ -4361,7 +4361,7 @@ body.dark-mode .timer-row:hover {
     align-items: center !important; /* 내부 요소 수직 중앙 정렬 */
     margin: 0 !important;           /* h3 기본 마진 제거 */
     padding: 0 !important;
-    font-size: 1.0em;
+    font-size: 0.95em;
     font-weight: bold;
     color: #1a1a1a;
     line-height: 1 !important;      /* 줄 높이를 글자 크기에 맞춤 */

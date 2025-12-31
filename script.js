@@ -207,7 +207,9 @@ function loadData() {
         fetch('json/chunji.json').then(res => res.json()).catch(err => ({ chunji: [] })),
         fetch('json/builder_data.json').then(res => res.json()).catch(err => null),
         // ★ [추가] 보스 데이터 불러오기
-        fetch('json/boss.json').then(res => res.json()).catch(err => [])
+        fetch('json/boss.json').then(res => res.json()).catch(err => []),
+        fetch('json/archive.json').then(res => res.json()).catch(err => [])
+    ])
     ])
     .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult, bossDataResult]) => {
         console.log("기본 데이터 로드 완료");
@@ -250,7 +252,7 @@ function loadData() {
         updateQuizCounter();
         renderFullNews(globalData.news);  
         renderComboSlots(); 
-
+        renderAchievements(archiveData);
         // ★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
         if (document.getElementById('bossGrid')) {
             renderBossList('bossGrid', 'all'); 
@@ -3489,4 +3491,38 @@ function setLikeButtonActive(container, forceActive) {
         const heartText = container.querySelector('span');
         if (heartText) heartText.style.color = "#b71c1c";
     }
+}
+
+// [신규] 업적 리스트 렌더링 함수
+function renderAchievements(data) {
+    const container = document.getElementById('achievement-list');
+    if (!container) return;
+    
+    // 데이터가 비었거나, archive 키로 감싸져 있는 경우 처리
+    const list = Array.isArray(data) ? data : (data.archive || []);
+
+    if (list.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#999; padding:10px; font-size:0.9em;">아직 달성된 업적이 없습니다.</div>';
+        return;
+    }
+    
+    container.innerHTML = ''; // 로딩 문구 제거
+
+    list.forEach(item => {
+        // 아이콘이 없으면 기본 로고 사용
+        const iconSrc = item.icon ? item.icon : 'images/logo.png';
+        
+        const div = document.createElement('div');
+        div.className = 'achievement-card';
+        div.innerHTML = `
+            <div class="ach-icon">
+                <img src="${iconSrc}" alt="아이콘" onerror="this.src='images/logo.png'">
+            </div>
+            <div class="ach-content">
+                <div class="ach-title">${item.displayName}</div>
+                <div class="ach-desc">${item.description}</div>
+            </div>
+        `;
+        container.appendChild(div);
+    });
 }

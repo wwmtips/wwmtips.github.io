@@ -3892,35 +3892,145 @@ body.dark-mode .timer-row:hover {
 }
 
 /* =========================================
-   [최종] 1. 인물 정보: 4x2 그리드 가로 스크롤
+   [통합 수정] 지역(Map) & 인물(Char) 리스트 스타일
    ========================================= */
-#home-char-list {
-    /* [핵심] Flex 대신 Grid 사용 */
-    display: grid !important;
+
+/* -----------------------------------------
+   1. 지역 정보 (Map) : 1줄, 4개 딱 맞춤 (스크롤 X)
+   ----------------------------------------- */
+#home-map-list {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
     
-    /* 2줄(행)로 고정, 높이는 1fr(균등) */
-    grid-template-rows: repeat(2, 1fr) !important;
+    /* 4개일 때 꽉 차게 계산 (간격 고려) */
+    gap: 2%;                  
     
-    /* 데이터가 많으면 오른쪽(Column)으로 계속 쌓임 -> 가로 스크롤 됨 */
-    grid-auto-flow: column;
-    
-    gap: 10px;                /* 카드 사이 간격 */
-    
-    /* [핵심] 컨테이너 높이를 (카드높이 x 2 + 간격) 만큼 확보 */
-    height: 290px !important; /* 135px * 2 + 여유분 */
-    
-    overflow-x: auto;         /* 가로 스크롤 허용 */
+    height: 155px !important; /* 컨테이너 높이 */
+    overflow-x: auto;         /* 5개 이상이면 스크롤 됨 */
+    overflow-y: hidden;
     padding: 0 5px;
     
-    /* 기존 스타일 초기화 */
+    /* 기본 스타일 초기화 */
     background: transparent !important;
     border: none !important;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
+#home-map-list::-webkit-scrollbar { display: none; }
 
+/* 지역 카드 (화면 너비에 맞춰 4등분) */
+.map-card-horizontal {
+    flex: 0 0 auto;           /* 크기 자동 조절 방지 */
+    
+    /* [핵심] 4개가 딱 들어가도록 너비 설정 (23.5% * 4 + 간격 ≈ 100%) */
+    width: 23.5% !important;  
+    height: 140px !important;
+    
+    position: relative;       /* 오버레이 기준점 */
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    background-color: #333;
+    border: none;
+}
+
+/* -----------------------------------------
+   2. 인물 정보 (Char) : 2줄(4x2), 가로 스크롤
+   ----------------------------------------- */
+#home-char-list {
+    /* Grid 레이아웃 사용 */
+    display: grid !important;
+    
+    /* 2줄(행) 고정 */
+    grid-template-rows: repeat(2, 1fr) !important;
+    
+    /* 데이터가 쌓이면 오른쪽으로 흐름 */
+    grid-auto-flow: column;
+    
+    /* 높이: 카드높이(135) * 2 + 간격 */
+    height: 290px !important; 
+    
+    gap: 10px;                /* 상하좌우 간격 */
+    overflow-x: auto;         /* 가로 스크롤 허용 */
+    padding: 0 5px;
+    
+    background: transparent !important;
+    border: none !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
 #home-char-list::-webkit-scrollbar { display: none; }
 
-/* 인물 카드 스타일 (기존 유지) */
+/* 인물 카드 (고정 크기) */
 .char-card-horizontal {
-    width: 8
+    /* 그리드 셀 크기에 맞춤, 혹은 고정값 사용 */
+    width: 85px;              /* 너비 고정 (스크롤 시 자연스럽게) */
+    height: 135px;            /* 높이 고정 */
+    
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #333;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* -----------------------------------------
+   3. 공통 스타일 (이미지 & 오버레이 & 텍스트)
+   ----------------------------------------- */
+
+/* 이미지 (배경으로 꽉 채움) */
+.map-h-img, .char-h-img {
+    width: 100%;
+    height: 100% !important;
+    position: absolute;
+    top: 0; left: 0;
+    object-fit: cover;
+    z-index: 1;
+    margin: 0;
+    border: none;
+}
+
+/* 오버레이 박스 (하단 검은색 그라데이션) */
+.map-overlay-box, .char-overlay-box {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%;
+    
+    /* 투명 -> 검정 그라데이션 */
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    
+    padding: 20px 8px 8px 8px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* 아래로 정렬 */
+    box-sizing: border-box;    /* 패딩 포함 크기 계산 */
+}
+
+/* 텍스트 (흰색) */
+.map-h-title, .char-h-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    font-family: 'Noto Serif KR', serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    margin: 0;
+}
+
+/* 인물 소속 (작은 글씨) */
+.char-h-affil {
+    font-size: 10px;
+    color: #ccc;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -4470,7 +4470,7 @@ body.dark-mode .timer-row:hover {
     /* [핵심] 1fr을 4개 써서 공간을 정확히 4등분 합니다 */
     grid-template-columns: repeat(4, 1fr) !important; 
     gap: 10px !important;    /* 카드 사이 간격 */
-    padding: 0 5px !important;
+    padding: 0 0px !important;
     margin-top: 10px !important;
     width: 100% !important;
     box-sizing: border-box !important;

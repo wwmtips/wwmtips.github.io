@@ -5626,7 +5626,7 @@ body.dark-mode .timer-row:hover {
 }
 
 .mansarok-btn span {
-    font-size: 11px !important;
+    font-size: 0.8em !important;
     line-height: 34px !important;
     /* 세로 중앙 보정 */
     white-space: nowrap !important;

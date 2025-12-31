@@ -3890,70 +3890,87 @@ body.dark-mode .timer-row:hover {
     flex-direction: column;
     overflow: hidden; 
 }
+
 /* =========================================
-   [수정] 지역 정보 가로 스크롤 (모바일 4개 보장형)
+   [최종 수정] 지역 정보 가로 스크롤 (크기 완전 고정)
    ========================================= */
 
-/* 1. 컨테이너: 가로 스크롤 & 간격 축소 */
+/* 1. 컨테이너: 높이 고정 및 가로 스크롤 */
 #home-map-list {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 8px;                /* [수정] 간격을 12px -> 8px로 좁힘 */
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 8px;
+    
+    /* [핵심] 컨테이너 높이를 카드보다 약간 크게 고정하여 레이아웃 흔들림 방지 */
+    height: 155px !important; 
+    
     overflow-x: auto;
-    padding-bottom: 10px;
+    overflow-y: hidden; /* 세로 스크롤 방지 */
+    padding: 0 5px;     /* 좌우 여백 */
+    align-items: center; /* 세로 중앙 정렬 */
+    
+    /* 기존 스타일 초기화 */
+    grid-template-columns: none !important;
+    background: transparent !important;
+    border: none !important;
     
     /* 스크롤바 숨기기 */
     scrollbar-width: none;
     -ms-overflow-style: none;
-    
-    /* 기존 속성 초기화 */
-    grid-template-columns: none !important;
-    border: none !important;
-    background: transparent !important;
 }
 
 #home-map-list::-webkit-scrollbar { display: none; }
 
-/* 2. 카드 디자인 (초소형) */
+/* 2. 카드 디자인: 가로/세로 크기 강제 고정 */
 .map-card-horizontal {
-    flex: 0 0 auto;          /* 크기 고정 */
+    flex: 0 0 auto;          /* 크기 자동 조절 방지 */
     
-    /* ★ [핵심] 너비를 88px로 설정 (모바일에서 4개 보임) */
-    width: 88px;             
+    /* [핵심] 가로 85px, 세로 140px로 고정 (내용이 넘쳐도 커지지 않음) */
+    width: 85px !important;  
+    height: 140px !important; 
     
     display: flex;
     flex-direction: column;
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     border-radius: 6px;
-    overflow: hidden;
+    overflow: hidden;        /* 넘치는 내용 자름 */
     background-color: #fff;
     cursor: pointer;
-    transition: transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* 3. 이미지 영역 (비율에 맞춰 높이 조정) */
+/* 3. 이미지 영역: 높이 고정 */
 .map-h-img {
     width: 100%;
     
-    /* ★ [핵심] 너비가 줄었으므로 높이도 120px 정도로 조정 */
-    height: 120px;           
+    /* [핵심] 이미지 높이 110px 고정 */
+    height: 110px !important; 
+    min-height: 110px !important;
     
     object-fit: cover;
-    background-color: #eee;
-    border-bottom: 1px solid #eee;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #f0f0f0;
+    margin: 0;
+    display: block;
 }
 
-/* 4. 텍스트 영역 (폰트 축소) */
+/* 4. 텍스트 영역: 한 줄만 표시 */
 .map-h-title {
-    padding: 6px 2px;        /* 패딩 축소 */
-    text-align: center;
+    /* 남은 공간(30px)을 텍스트가 차지 */
+    height: 30px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
-    /* ★ [핵심] 폰트 사이즈를 0.8em으로 줄여서 줄바꿈 방지 */
-    font-size: 0.8em;        
-    
+    padding: 0 4px;
+    font-size: 11px;         /* 글자 작게 */
     font-weight: bold;
     color: #333;
     font-family: 'Noto Serif KR', serif;
+    background-color: #fff;
+    
+    /* 말줄임표 처리 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

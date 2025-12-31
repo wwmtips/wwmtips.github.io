@@ -177,7 +177,39 @@
                 <div id="slider-indicators" class="slider-indicators"></div>
             </div>
    <!-- 이벤트 -->
-         
+ 
+<section class="timer-section">
+    <div class="section-header-clickable" onclick=openGuideDirect('npc.html');>
+        <h3><span class="deco-bar" ></span>강호령</h3>
+        <span style="font-size:0.8em; color:#999; margin-right:5px;">전체보기 ></span>
+    </div>
+    <div id="gangho-timer-list" class="map-grid">
+        </div>
+</section>
+
+<div id="timer-sheet-modal" class="bottom-sheet-modal" onclick="closeTimerSheet(event)">
+    <div class="sheet-container">
+        <button type="button" class="sheet-close-btn" onclick="closeTimerSheet()">&times;</button>
+        <div class="sheet-body-content" style="padding-top: 20px;">
+            <div id="timer-detail-content">
+                </div>
+        </div>
+    </div>
+</div>   
+            
+<section class="section-header-clickable">
+    <h3><span class="deco-bar"></span>인물 정보</h3>
+</section>
+<div id="home-char-list">
+    </div>
+
+<section class="section-header-clickable">
+    <h3><span class="deco-bar"></span>지역 정보</h3>
+</section>
+<div id="home-map-list">
+    </div>
+
+     
  <section class="achievement-section">
     <div class="section-header-clickable" onclick="switchTab('archive')">
         <h3><span class="deco-bar"></span>업적</h3>
@@ -196,38 +228,6 @@
                 <div id="home-recent-news" class="quest-grid"></div>
             </section>
         
-            
-<section class="section-header-clickable">
-    <h3><span class="deco-bar"></span>인물 정보</h3>
-</section>
-<div id="home-char-list">
-    </div>
-
-<section class="section-header-clickable">
-    <h3><span class="deco-bar"></span>지역 정보</h3>
-</section>
-<div id="home-map-list">
-    </div>
-
-<section class="timer-section">
-    <div class="section-header-clickable" onclick=openGuideDirect('npc.html');>
-        <h3><span class="deco-bar" ></span>강호령</h3>
-        <span style="font-size:0.8em; color:#999; margin-right:5px;">전체보기 ></span>
-    </div>
-    <div id="gangho-timer-list" class="map-grid">
-        </div>
-</section>
-
-<div id="timer-sheet-modal" class="bottom-sheet-modal" onclick="closeTimerSheet(event)">
-    <div class="sheet-container">
-        <button type="button" class="sheet-close-btn" onclick="closeTimerSheet()">&times;</button>
-        <div class="sheet-body-content" style="padding-top: 20px;">
-            <div id="timer-detail-content">
-                </div>
-        </div>
-    </div>
-</div>
-
             
 <script src="timer.js"></script>
 <!--

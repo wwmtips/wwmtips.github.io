@@ -3172,102 +3172,121 @@ h3 {
         object-fit: cover !important;
     }
 }
-
 /* =========================================
-   강호 시시각각 (타이머) - 리스트형 스타일
+   [수정] 강호 시시각각 (타이머) - 2열 그리드 & 소형화
    ========================================= */
+
+/* 1. 컨테이너: 리스트(Flex) -> 그리드(Grid)로 변경 */
 #gangho-timer-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0; /* 간격을 없애 리스트처럼 붙임 */
-    border: 1px solid #eee;
-    border-radius: 4px;
-    background-color: #fff;
-    overflow: hidden;
+    display: grid !important;
+    /* [핵심] 모바일에서 기본 2열 배치 */
+    grid-template-columns: repeat(2, 1fr) !important; 
+    gap: 8px !important;        /* 카드 사이 간격 */
+    padding: 0 5px !important;  /* 전체 좌우 여백 */
+    
+    background: none !important;
+    border: none !important;    /* 외곽 테두리 제거 */
     margin-top: 10px;
 }
 
+/* PC 화면에서는 4열로 확장 */
+@media (min-width: 768px) {
+    #gangho-timer-list {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+/* 2. 개별 아이템 (박스 형태) */
 .timer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* 수직 중앙 정렬 */
-    padding: 12px 15px;  /* 높이 축소 (최근 소식과 비슷하게) */
-    border-bottom: 1px solid #eee;
+    display: flex !important;
+    flex-direction: column !important; /* [핵심] 내용을 세로(위아래)로 정렬 */
+    align-items: center !important;    /* 중앙 정렬 */
+    justify-content: center !important;
+    
+    padding: 8px 5px !important;       /* 패딩 축소 */
+    background-color: #fff;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;     /* 둥근 모서리 */
+    
+    height: auto !important;
+    min-height: 60px;                  /* 최소 높이 설정 */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    
     cursor: pointer;
-    transition: background-color 0.2s;
-    position: relative;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
-.timer-row:last-child {
-    border-bottom: none;
-}
-
+/* 마우스 올렸을 때 효과 */
 .timer-row:hover {
-    background-color: #fffcf5; /* 마우스 올리면 미색 배경 */
+    transform: translateY(-2px);
+    border-color: var(--wuxia-accent-gold) !important;
+    background-color: #fffcf5;
 }
 
-/* 좌측 정보 영역 (제목 + 상태) */
+/* 3. 좌측 정보 영역 (제목) */
 .timer-left {
+    width: 100%;
+    margin-right: 0 !important;
+    margin-bottom: 4px; /* 시간과의 간격 */
+    
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    flex: 1; /* 남은 공간 차지 */
-    min-width: 0; /* 말줄임표 작동을 위해 필수 */
-    margin-right: 15px;
+    align-items: center; /* 가운데 정렬 */
+    text-align: center;
 }
 
+/* 제목 텍스트 (작게) */
 .timer-title {
-    font-size: 0.9em;
+    font-size: 0.85em !important; /* 글자 크기 축소 */
     font-weight: bold;
     color: #333;
+    
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; /* 말줄임표 (...) */
+    text-align: center;
 }
 
+/* 상태 텍스트 (진행중 등) - 필요 없으면 display: none 처리 가능 */
 .timer-status-row {
-    font-size: 0.75em;
+    font-size: 0.7em !important;
     color: #888;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    justify-content: center;
+    margin-top: 2px;
 }
 
-/* 우측 시간 영역 (타이머) */
+/* 4. 우측 정보 영역 (시간) */
 .timer-right {
-    text-align: right;
-    flex-shrink: 0;
+    width: 100%;
+    text-align: center !important;
+    
+    /* 시간 강조를 위한 옅은 배경박스 (선택사항) */
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    padding: 2px 0;
 }
 
 .timer-clock {
-    font-family: 'Noto Serif KR', serif; /* 숫자 폰트 */
-    font-size: 0.8em; /* 시간은 조금 크게 */
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.9em !important; /* 시간 글자 크기 */
     font-weight: bold;
-    color: #333;
-    font-variant-numeric: tabular-nums; /* 숫자 간격 일정하게 */
+    color: var(--wuxia-accent-red); /* 붉은색 강조 */
 }
 
-/* 상태별 색상 포인트 */
-.status-badge {
-    font-weight: bold;
+/* 완료된 항목 스타일 (흐리게) */
+.row-completed {
+    opacity: 0.6;
+    background-color: #f0f0f0 !important;
+    border-color: #eee !important;
 }
-.status-ing { color: var(--wuxia-accent-gold); } /* 진행중 */
-.status-urgent { color: var(--wuxia-accent-red); animation: blink 1.5s infinite; } /* 마감 임박 */
-.status-end { color: #aaa; text-decoration: line-through; } /* 종료 */
-
-@keyframes blink { 50% { opacity: 0.5; } }
-/* 타이머 행 스타일 (작은 사이즈 유지) */
-.timer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 15px; /* 컴팩트한 패딩 */
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    background: #fff;
-    transition: background 0.2s;
+.row-completed .timer-title {
+    text-decoration: line-through;
+    color: #aaa;
 }
-.timer-row:hover { background-color: #fffcf5; }
+.row-completed .timer-clock {
+    color: #aaa;
+}
 
 /* 바텀시트 내부 리스트 스타일 */
 .task-list-wrapper {

@@ -20,6 +20,27 @@
         "affiliation": "개봉 상단",
         "biography": "개봉의 경제를 움직이는 거상입니다."
     },
+        {
+        "id": "p1",
+        "name": "주인공",
+        "photo": "images/char1.jpg",
+        "affiliation": "무소속",
+        "biography": "강호를 유람하며 인연을 맺는 신비로운 인물입니다."
+    },
+    {
+        "id": "p2",
+        "name": "연화",
+        "photo": "images/char2.jpg",
+        "affiliation": "청하 문파",
+        "biography": "청하에서 자라난 뛰어난 검술의 소유자입니다."
+    },
+    {
+        "id": "p3",
+        "name": "백리",
+        "photo": "images/char3.jpg",
+        "affiliation": "개봉 상단",
+        "biography": "개봉의 경제를 움직이는 거상입니다."
+    },
     {
         "id": "p4",
         "name": "운무",

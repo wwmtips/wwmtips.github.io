@@ -581,7 +581,8 @@ function loadHomeMaps() {
 
 function switchTab(tabName, updateHistory = true) {
     // 1. 화면 전환 (기존 로직)
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji', 'view-archive'];
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 
+        'view-map-detail', 'view-chunji', 'view-archive', 'view-homework'];
     views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
@@ -595,6 +596,23 @@ function switchTab(tabName, updateHistory = true) {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
     } 
+ if (tabName === 'homework') {
+        const hwView = document.getElementById('view-homework');
+        if (hwView) {
+            hwView.style.display = 'block';
+            
+            // [중요] hw.js에 정의된 정확한 함수 이름을 호출해야 합니다!
+            if (typeof initHomeworkChecklist === 'function') {
+                initHomeworkChecklist(); // <-- 여기를 수정했습니다
+            } else {
+                console.error("hw.js가 로드되지 않았습니다.");
+            }
+        }
+        
+        // 메뉴 버튼 활성화 (비급 탭에 불 들어오게)
+        const navCode = document.getElementById('nav-code');
+        if (navCode) navCode.classList.add('active');
+    }
     else if (tabName === 'chunji') {
         document.getElementById('view-chunji').style.display = 'block';
         document.getElementById('nav-chunji').classList.add('active');

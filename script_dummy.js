@@ -338,8 +338,8 @@ function loadData() {
 
             // ★ 보스 데이터 전역 변수에 저장
             globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
-            characterData = personResult;
-   
+           characterData = personResult;
+
             
             if (quests.length > 0) {
                 quests.sort((a, b) => {
@@ -3757,6 +3757,7 @@ function renderHomeCharacters() {
         const name = char.name || '이름 없음';
         const affil = char.affiliation || '';
         const photo = char.photo || 'images/logo.png';
+        const alink = char.link || '';
 
         // 1. 링크 유무 확인
         const hasLink = char.link && char.link.trim() !== "";
@@ -3783,7 +3784,7 @@ function renderHomeCharacters() {
             if (typeof openPersonDetail === 'function') {
                 openPersonDetail({
                     name: name, role: '인물', desc: char.biography || '',
-                    faction: affil, img: photo
+                    faction: affil, img: photo, link: alink
                 });
             }
         };
@@ -3805,34 +3806,38 @@ function renderHomeCharacters() {
 } 
 
 
-// 바텀시트 열기 함수
-function openPersonDetail(data) {
-    const sheet = document.getElementById('person-bottom-sheet');
-    const body = document.getElementById('person-detail-body');
+function openPersonDetail(char) {
+    const modal = document.getElementById('person-bottom-sheet');
+    const contentArea = document.querySelector('#person-bottom-sheet .bottom-sheet-content');
 
-    // 이미지 스타일(image_c5fa08.png)에 맞춘 레이아웃 생성
-    body.innerHTML = `
-        <div style="font-size: 0.8em; color: #999; margin-bottom: 10px;">| 기본 정보</div>
-        <img src="${data.img}" class="person-img-large" onerror="this.src='images/logo.png'">
-        
-        <div class="person-name-title">${data.name}</div>
-        
-        <div class="person-attr-row">
-            <span class="person-attr-label">소속</span>
-            <span>${data.faction || '알 수 없음'}</span>
-        </div>
-        <div class="person-attr-row">
-            <span class="person-attr-label">링크</span>
-            <span>ㅇㅇ</span> </div>
+    if (!modal || !contentArea) return;
 
-        <div class="person-bio-box">
-            <div style="font-weight:bold; margin-bottom:5px;">주요 대사</div>
-            <p>${data.desc || 'biography'}</p>
+    // 타이머 상세 보기와 동일한 리스트 구조 생성
+    contentArea.innerHTML = `
+        <div class="sheet-handle-bar"></div>
+        <div class="person-img-container" style="text-align:center; padding:15px;">
+            <img src="${char.img}" class="person-img-large" style="width:100px; height:100px; border-radius:50%; border:2px solid #a08040; object-fit:cover;">
         </div>
+        <h3 class="person-sheet-header" style="text-align:center; margin-bottom:20px;">${char.name}</h3>
+
+        <div class="task-list-wrapper"> <div class="person-info-row">
+                <span class="person-label">소속</span>
+                <span class="task-title">${char.faction || '알 수 없음'}</span>
+            </div>
+            <div class="person-info-row">
+                <span class="person-label">생일</span>
+                <span class="task-title">${char.link}</span>
+            </div>
+            <div class="person-bio-item">
+                <div style="font-weight:bold; color:#b71c1c; margin-bottom:5px;">주요 대사</div>
+                ${char.desc || '정보 없음'}
+            </div>
+        </div>
+        <button class="browse-button" onclick="closePersonDetail()" style="margin-top:20px;">닫기</button>
     `;
 
-    sheet.classList.add('active');
-    document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
 
 // 바텀시트 닫기 함수

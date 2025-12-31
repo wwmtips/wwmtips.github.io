@@ -2352,11 +2352,7 @@ h3 {
 
 /* 3. 핸들바 */
 .sheet-handle-bar {
-    width: 40px;
-    height: 5px;
     background: #e0e0e0;
-    border-radius: 5px;
-    margin: 10px auto 20px auto;
 }
 
 /* 4. [핵심] 탭 네비게이션 스타일 */
@@ -5737,45 +5733,107 @@ body.dark-mode .timer-row:hover {
     justify-content: center !important;
 }
 
+/* =========================================
+   [최종] 인물 상세 - 타이머 스타일 동기화
+   ========================================= */
+/* =========================================
+   [복구] 타이머 스타일 동기화 바텀시트
+   ========================================= */
 
-/* 바텀시트 기본 애니메이션 및 스타일 */
-.bottom-sheet {
+/* 1. 배경 레이어 */
+#person-bottom-sheet.bottom-sheet-modal {
+    display: none !important; /* 기본 숨김 */
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    visibility: hidden; z-index: 1000;
+    background: rgba(0, 0, 0, 0.5); z-index: 10000;
+    align-items: flex-end; justify-content: center;
 }
-.bottom-sheet.active { visibility: visible; }
-.bottom-sheet-overlay {
-    position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5);
-    opacity: 0; transition: opacity 0.3s;
-}
-.bottom-sheet.active .bottom-sheet-overlay { opacity: 1; }
 
-.bottom-sheet-content {
-    position: absolute; bottom: -100%; left: 0; width: 100%;
-    background: #f8f9fa; border-radius: 20px 20px 0 0;
-    transition: bottom 0.3s ease-out; padding: 20px; box-sizing: border-box;
+/* 활성화 시 보이게 설정 */
+#person-bottom-sheet.active {
+    display: flex !important;
 }
-.bottom-sheet.active .bottom-sheet-content { bottom: 0; }
 
-/* [핵심] 이미지 스타일 반영 (이미지 번호: image_c5fa08.png) */
-.person-card-detail {
-    background: #fff; border-radius: 12px; padding: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;
+/* 2. 시트 본체 (타이머와 동일한 너비 및 애니메이션) */
+#person-bottom-sheet .bottom-sheet-content {
+    width: 100%;
+    max-width: 600px; /* 타이머 바텀시트 규격 */
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    
+    /* 아래에서 위로 올라오는 효과 */
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
-.person-img-large {
-    width: 100%; max-width: 300px; height: auto;
-    border-radius: 12px; margin-bottom: 20px;
-}
-.person-name-title { font-size: 1.5em; font-weight: bold; margin: 10px 0; color: #333; }
 
-/* 속성 테이블 스타일 */
-.person-attr-row {
-    display: flex; justify-content: space-between;
-    padding: 10px; border-radius: 8px; background: #f1f3f5; margin-bottom: 5px;
+#person-bottom-sheet.active .bottom-sheet-content {
+    transform: translateY(0);
+}
+
+/* 3. 타이머 전용 내부 아이템 스타일 복사 */
+.person-info-row {
+    background-color: #f9f9f9 !important;
+    padding: 12px !important;
+    border-radius: 4px !important;
+    border: 1px solid #eee !important;
+    margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+
+.person-bio-item {
+    background-color: #f9f9f9 !important;
+    padding: 15px !important;
+    border-radius: 4px !important;
+    border: 1px solid #eee !important;
+    text-align: left;
+    line-height: 1.6;
     font-size: 0.9em;
 }
-.person-attr-label { font-weight: bold; color: #555; }
-.person-bio-box {
-    text-align: left; margin-top: 15px; padding: 10px;
-    border-top: 1px solid #eee; line-height: 1.6; color: #666;
+
+/* =========================================
+   [신규] 인물 상세 바텀시트 전용 제목 스타일
+   ========================================= */
+
+/* 1. 제목 컨테이너: 중앙 정렬 및 여백 확보 */
+.person-sheet-header {
+    text-align: center !important;
+    margin-bottom: 15px !important;
+    border-left:  0px;
+    font-size: 1.0em !important;
+    padding-left: 0px;
+}
+
+/* 2. 인물 이름 (h3): 카드 디자인(image_c5fa08.png) 반영 */
+.person-sheet-header h3 {
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+    font-family: 'Noto Serif KR', serif !important;
+    padding-left: 0 !important;
+    /* 하단에 금색 강조선 추가 */
+    display: inline-block !important;
+    padding-bottom: 5px !important;
+    /* 기존 h3 스타일(왼쪽 막대) 강제 제거 */
+    border-left: none !important;
+    margin: 0 !important;
+}
+
+/* 3. 인물 소속/역할 (소제목) */
+.person-sheet-sub {
+    font-size: 0.85em !important;
+    color: #888 !important;
+    margin-top: 5px !important;
+    letter-spacing: 1px;
+}
+.person-label {
+    color: var(--wuxia-accent-gold, #a08040) !important;
+    font-weight: bold !important;
+    font-size: 0.85em !important;
+}
+.task-title {
+    color: #333;
+    font-weight: bold !important;
+    font-size: 0.85em !important;
 }

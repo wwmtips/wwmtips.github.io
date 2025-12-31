@@ -3859,3 +3859,35 @@ body.dark-mode .timer-row:hover {
     
     margin: 0; /* 기본 여백 제거 */
 }
+
+
+
+
+
+/* =========================================
+   7. 족보 페이지 (Answer) 스타일 [수정됨]
+   ========================================= */
+#answer-container {
+    /* [핵심] 부모 여백을 무시하고 화면 전체 너비로 강제 확장 */
+    width: 100vw; 
+    margin-left: calc(-50vw + 50%);
+    
+    /* 높이 설정 (헤더 높이 등을 고려하여 화면에 맞춤) */
+    height: calc(100vh - 110px); 
+    margin-top: 0; /* 상단 여백 제거 */
+    
+    /* 디자인: 카드 느낌(그림자/둥근모서리)을 제거하고 평평하게 */
+    background-color: var(--wuxia-bg-panel);
+    border-top: 1px solid var(--wuxia-border);
+    border-bottom: 1px solid var(--wuxia-border);
+    border-left: none;  /* 좌우 테두리 제거 */
+    border-right: none;
+    border-radius: 0;   /* 둥근 모서리 제거 */
+    box-shadow: none;   /* 그림자 제거 */
+    
+    /* 내부 레이아웃 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+}
+

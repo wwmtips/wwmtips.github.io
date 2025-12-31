@@ -74,6 +74,54 @@ const dummyMapData = [
         key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
        image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
    }
 ];
 
@@ -221,8 +269,29 @@ function loadData() {
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
         let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
-        characterData = personResult;
-       
+       // characterData = personResult;
+       characterData = [
+        { name: "주인공", photo: "images/ch1.jpg", affiliation: "무소속", biography: "강호를 유람하는 자",link:"d" },
+        { name: "연화", photo: "images/ch1.jpg", affiliation: "청하 문파", biography: "검술의 달인" },
+        { name: "백리", photo: "images/ch1.jpg", affiliation: "개봉 상단", biography: "거상" },
+        { name: "운무", photo: "images/ch1.jpg", affiliation: "귀문", biography: "암살자" },
+        { name: "강무랑", photo: "images/ch1.png", affiliation: "강호", biography: "테스트 인물 1" },
+        { name: "한향심", photo: "images/logo.png", affiliation: "의원", biography: "테스트 인물 2" },
+        { name: "왕청", photo: "images/logo.png", affiliation: "관군", biography: "테스트 인물 3" },
+        { name: "저청천", photo: "images/logo.png", affiliation: "학자", biography: "테스트 인물 4" },
+        { name: "엄기인", photo: "images/logo.png", affiliation: "상인", biography: "테스트 인물 5" },
+        { name: "애제", photo: "images/logo.png", affiliation: "황실", biography: "테스트 인물 6" },
+        { name: "천야", photo: "images/logo.png", affiliation: "무희", biography: "테스트 인물 7" },
+        { name: "전영", photo: "images/logo.png", affiliation: "장군", biography: "테스트 인물 8" },
+        { name: "엽만산", photo: "images/logo.png", affiliation: "산적", biography: "테스트 인물 9" },
+        { name: "소십칠", photo: "images/logo.png", affiliation: "거지", biography: "테스트 인물 10" },
+        { name: "여래", photo: "images/logo.png", affiliation: "승려", biography: "테스트 인물 11" },
+        { name: "이도", photo: "images/logo.png", affiliation: "도망자", biography: "테스트 인물 12" },
+        { name: "혜약", photo: "images/logo.png", affiliation: "약초꾼", biography: "테스트 인물 13" },
+        { name: "고락", photo: "images/logo.png", affiliation: "악사", biography: "테스트 인물 14" },
+        { name: "무상황", photo: "images/logo.png", affiliation: "은둔자", biography: "테스트 인물 15" },
+        { name: "구월해", photo: "images/logo.png", affiliation: "해적", biography: "테스트 인물 16" }
+    ];
         // ★ 보스 데이터 전역 변수에 저장
         globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
 
@@ -3594,82 +3663,66 @@ function renderFullAchievementList() {
         container.appendChild(card);
     });
 }
-// [최종 수정] 인물 정보 렌더링 (10개 단위 페이징)
+/* =========================================/* =========================================
+   [JS 초기화] 링크 없으면 흑백 + 클릭/호버 방지
+   ========================================= */ 
 function renderHomeCharacters() {
-    const track = document.getElementById('home-char-track');
-    const indicatorsContainer = document.getElementById('char-indicators');
-    if (!track || !indicatorsContainer) return;
-    
-    track.innerHTML = '';
-    indicatorsContainer.innerHTML = '';
+    const container = document.getElementById('home-char-list');
 
-    if (!characterData || characterData.length === 0) return;
-
-    // ★ [핵심] 페이지당 10개 (5열 x 2행)
-    const ITEMS_PER_PAGE = 10; 
-    
-    const totalPages = Math.ceil(characterData.length / ITEMS_PER_PAGE);
-    const indicators = [];
-
-    // 1. 페이지 생성 루프
-    for (let i = 0; i < totalPages; i++) {
-        const pageGrid = document.createElement('div');
-        pageGrid.className = 'char-page-grid'; // CSS에서 5열로 설정됨
-        
-        // 데이터 잘라서 넣기
-        const pageData = characterData.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE);
-        
-        pageData.forEach(char => {
-            const card = document.createElement('div');
-            card.className = 'char-card-horizontal';
-            
-            // 클릭 시 상세 정보 열기
-            card.onclick = () => {
-                if (typeof openPersonDetail === 'function') {
-                    openPersonDetail({ 
-                        name: char.name, 
-                        role: '인물', 
-                        desc: char.biography, 
-                        location: '-', 
-                        gift: '-', 
-                        faction: char.affiliation, 
-                        img: char.photo 
-                    });
-                }
-            };
-            
-            card.innerHTML = `
-                <img src="${char.photo}" class="char-h-img" onerror="this.src='images/logo.png'">
-                <div class="char-overlay-box">
-                    <div class="char-h-name">${char.name}</div>
-                    <div class="char-h-affil">${char.affiliation}</div>
-                </div>
-            `;
-            pageGrid.appendChild(card);
-        });
-        
-        track.appendChild(pageGrid);
-
-        // 인디케이터 생성
-        const dot = document.createElement('div');
-        dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => {
-            pageGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-        };
-        indicatorsContainer.appendChild(dot);
-        indicators.push(dot);
+    if (!container || !Array.isArray(characterData) || characterData.length === 0) {
+        return;
     }
 
-    // 2. 스크롤 옵저버 (인디케이터 자동 업데이트)
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const index = Array.from(track.children).indexOf(entry.target);
-                indicators.forEach(dot => dot.classList.remove('active'));
-                if (indicators[index]) indicators[index].classList.add('active');
-            }
-        });
-    }, { root: track, threshold: 0.5 });
+    container.innerHTML = '';
+    const fragment = document.createDocumentFragment();
 
-    Array.from(track.children).forEach(page => observer.observe(page));
+    characterData.forEach(char => {
+        const name = char.name || '이름 없음';
+        const affil = char.affiliation || '';
+        const photo = char.photo || 'images/logo.png';
+
+        // 1. 링크 유무 확인
+        const hasLink = char.link && char.link.trim() !== "";
+
+        const div = document.createElement('div');
+        div.className = 'char-card-horizontal';
+
+        // 2. [핵심] 링크 유무에 따른 스타일 분기
+        if (hasLink) {
+            // 링크 있음: 손가락 커서 표시
+            div.style.cursor = 'pointer';
+        } else {
+            // 링크 없음: 
+            // - pointer-events: none -> 마우스 반응 차단 (클릭X, 호버X, 커서X)
+            // - filter: grayscale -> 흑백 처리
+            div.style.pointerEvents = 'none'; 
+        }
+
+        // 3. 이미지 스타일 (링크 없으면 흑백 + 약간 투명하게)
+        const imgStyle = hasLink ? "" : "filter: grayscale(100%); opacity: 0.6;";
+
+        div.onclick = () => {
+            // pointer-events: none 덕분에 링크가 없으면 이 함수는 실행되지 않습니다.
+            if (typeof openPersonDetail === 'function') {
+                openPersonDetail({ 
+                    name: name, role: '인물', desc: char.biography || '', 
+                    faction: affil, img: photo 
+                });
+            }
+        };
+
+        div.innerHTML = `
+            <img src="${photo}" class="char-h-img" alt="${name}" 
+                 style="${imgStyle}" 
+                 onerror="this.onerror=null; this.src='images/logo.png';">
+            <div class="char-overlay-box">
+                <div class="char-h-name">${name}</div>
+                <div class="char-h-affil">${affil}</div>
+            </div>
+        `;
+
+        fragment.appendChild(div);
+    });
+
+    container.appendChild(fragment);
 }

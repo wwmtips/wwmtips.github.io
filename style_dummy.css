@@ -267,8 +267,8 @@ h2, h3, p, button, input {
 }
 
 h3 {
-    font-size: 1.1em;
-    border-left: 4px solid var(--wuxia-accent-red);
+    font-size: 1.0em;
+    border-left: 4px solid var(--wuxia-accent-gold);
     padding-left: 10px;
     margin-bottom: 15px;
     margin-top: 10px;
@@ -3862,8 +3862,6 @@ body.dark-mode .timer-row:hover {
 
 
 
-
-
 /* =========================================
    7. 족보 페이지 (Answer) 스타일 [수정됨]
    ========================================= */
@@ -3891,160 +3889,350 @@ body.dark-mode .timer-row:hover {
     overflow: hidden; 
 }
 
-/* =========================================
-   [최종] 인물 정보 스와이프 & 지역 정보
-   ========================================= */
 
-/* -----------------------------------------
-   1. 인물 정보 (Char) : 스와이프 및 인디케이터
-   ----------------------------------------- */
-/* 외부 래퍼 (인디케이터 위치 기준) */
-.char-swipe-wrapper {
-    position: relative;
-    margin: 10px 0 20px 0;
-    padding-bottom: 25px; /* 인디케이터 공간 확보 */
+/* ==========================================================================
+   [최종 수정] 미니 카드 스타일 (70px x 120px)
+   - 인물/지역 정보 크기 대폭 축소
+   ========================================================================== */
+
+/* 1. 리스트 컨테이너 (공통) */
+#home-char-list, 
+#home-map-list {
+    display: grid !important;
+    gap: 6px !important;        /* 간격도 좁게 (10px -> 6px) */
+    padding: 0 5px !important;
+    margin: 10px 0 0px 0 !important;
+    
+    background: none !important;
+    border: none !important;
+    
+    overflow-y: hidden !important;
+    height: auto !important;
+    
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+#home-char-list::-webkit-scrollbar,
+#home-map-list::-webkit-scrollbar { display: none; }
+
+
+/* -----------------------------------------------------------
+   [모바일] 가로 스와이프 (Swipe) - 사이즈 고정
+   ----------------------------------------------------------- */
+@media (max-width: 767px) {
+    #home-char-list,
+    #home-map-list {
+        grid-auto-flow: column !important;
+        
+        /* [핵심] 너비를 70px로 고정 (화면 비율 아님) */
+        grid-auto-columns: 72px !important; 
+        
+        overflow-x: auto !important;
+        align-items: start;
+    }
+
+    /* 인물: 2줄 */
+    #home-char-list {
+        grid-template-rows: repeat(2, max-content) !important;
+    }
+
+    /* 지역: 1줄 */
+    #home-map-list {
+        grid-template-rows: max-content !important;
+    }
 }
 
-/* 스크롤 트랙 (Flex로 페이지 가로 배치 & 스크롤 스냅) */
-#home-char-track {
+
+/* -----------------------------------------------------------
+   [PC] 바둑판 그리드 (Grid)
+   ----------------------------------------------------------- */
+@media (min-width: 768px) {
+    #home-char-list,
+    #home-map-list {
+        overflow: visible !important;
+        grid-auto-flow: row !important;
+        
+        /* [핵심] 최소 70px, 최대 90px 정도로 작게 유지 */
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
+        
+        gap: 10px !important;
+    }
+}
+
+
+/* -----------------------------------------------------------
+   [카드 디자인] 70x120 비율 (미니 사이즈)
+   ----------------------------------------------------------- */
+.char-card-horizontal,
+.map-card-horizontal {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    
+    /* [핵심] 요청하신 70:120 비율 적용 (약 1:1.7) */
+    aspect-ratio: 60 / 90 !important;
+    
+    background-color: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 4px !important; /* 모서리 둥글기 축소 */
+    
+    min-width: 0 !important; 
+    min-height: 0 !important;
+    
+    overflow: hidden;
+    cursor: pointer;
+    margin: 0 !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+/* PC 호버 효과 */
+@media (min-width: 768px) {
+    .char-card-horizontal:hover,
+    .map-card-horizontal:hover {
+        transform: translateY(-2px);
+        border-color: #999 !important;
+    }
+}
+
+
+/* -----------------------------------------------------------
+   [내부 요소] 이미지 & 텍스트 (글자 크기 축소)
+   ----------------------------------------------------------- */
+
+/* 이미지 (상단 65% - 텍스트 공간 확보 위해 조정) */
+
+.char-h-img,
+.map-h-img {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: 65% !important; /* 이미지 비율 조정 */
+    
+    object-fit: cover !important;
+    
+    margin: 0 !important;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #f5f5f5;
+}
+
+/* 텍스트 박스 (하단 35%) */
+.char-overlay-box,
+.map-overlay-box {
+    position: relative !important;
+    display: flex !important;
+    width: 100% !important;
+    height: 35% !important;
+    background: #fff !important;
+    
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    
+    gap: 2px !important; /* 간격 최소화 */
+    padding: 0 2px !important;
+    
+    top: auto !important; left: auto !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* 텍스트 폰트 (아주 작게) */
+.char-h-name, .map-h-title {
+    font-size: 10px !important; /* 이름 10px */
+    font-weight: 700 !important;
+    color: #222 !important;
+    text-align: center !important;
+    margin: 0 !important;
+    width: 100%;
+    line-height: 1.2 !important;
+    letter-spacing: -0.5px !important; /* 자간 좁힘 */
+    
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-shadow: none !important;
+}
+
+.char-h-affil {
+    font-size: 9px !important; /* 소속 9px */
+    color: #999 !important;
+    text-align: center !important;
+    margin: 0 !important;
+    width: 100%;
+    line-height: 1 !important;
+    letter-spacing: -0.5px !important;
+    
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    text-shadow: none !important;
+}
+/* ==========================================================================
+   [최종 수정] 초미니 카드 (50x80) + 모바일 10개 페이징 + PC 그리드
+   ========================================================================== */
+
+/* 1. 메인 컨테이너 */
+#home-char-list, 
+#home-map-list {
+    position: relative;
+    width: 100%;
+    margin: 10px 0 0px 0;
+    padding-bottom: 25px; /* 인디케이터 공간 */
+    background: none; border: none;
+}
+
+/* 2. 스크롤 트랙 */
+.swipe-track {
     display: flex;
     overflow-x: auto;
-    scroll-snap-type: x mandatory; /* 페이지 단위로 딱딱 멈추게 함 */
+    scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
-#home-char-track::-webkit-scrollbar { display: none; }
+.swipe-track::-webkit-scrollbar { display: none; }
 
-/* =========================================
-   [수정] 인물 정보 페이지 그리드 (5열 x 2행)
-   ========================================= */
-.char-page-grid {
-    flex: 0 0 100%;          /* 페이지 하나가 화면 꽉 채움 */
+/* 3. 페이지 그룹 (모바일 10개씩) */
+.swipe-page {
+    flex: 0 0 100%;
+    width: 100%;
     scroll-snap-align: start;
     
     display: grid;
+    /* 5열 유지 (카드가 작아져서 여백이 조금 더 생길 수 있음) */
+    grid-template-columns: repeat(5, 1fr); 
+    grid-template-rows: repeat(2, auto);
     
-    /* ★ [핵심] 한 줄에 5개씩 배치 */
-    grid-template-columns: repeat(5, 1fr) !important; 
-    
-    grid-template-rows: repeat(2, auto);   /* 2줄 */
-    gap: 6px; /* [권장] 5개라 좁으므로 간격을 살짝 줄임 (8px->6px) */
-    
-    padding: 0 5px; /* 좌우 여백 살짝 */
-    margin: 0;
-    box-sizing: border-box; /* 패딩 포함 너비 계산 */
+    gap: 4px; /* 카드가 작으므로 간격도 좁힘 (6px -> 4px) */
+    padding: 0 5px;
+    box-sizing: border-box;
 }
-/* 인디케이터 컨테이너 */
+
+/* 4. 인디케이터 */
 .swipe-indicators {
     position: absolute;
-    bottom: 0;
-    left: 0; width: 100%;
+    bottom: 0; left: 0; width: 100%;
     display: flex;
     justify-content: center;
-    gap: 8px;
-    padding: 5px 0;
+    gap: 6px;
+    height: 15px;
 }
-
-/* 인디케이터 점 (기본) */
 .indicator-dot {
-    width: 8px; height: 8px;
+    width: 6px; height: 6px;
     border-radius: 50%;
-    background: #ddd; /* 비활성 색상 */
-    transition: all 0.3s ease;
+    background: #e0e0e0;
+    transition: all 0.3s;
 }
-
-/* 인디케이터 점 (활성) */
 .indicator-dot.active {
-    background: #333; /* 활성 색상 (진하게) */
-    width: 20px;      /* 활성 시 길어지는 효과 (선택사항) */
-    border-radius: 4px;
+    background: #333;
+    width: 12px; border-radius: 3px;
 }
-/* =========================================
-   [PC 전용 설정] 슬라이드 해제 및 전체 그리드 보기
-   ========================================= */
+
+
+/* ==========================================================================
+   [PC 전용] 그리드 설정 (50px 기준)
+   ========================================================================== */
 @media (min-width: 768px) {
-    
-    /* 1. 슬라이드 트랙 -> 일반 그리드로 변경 */
-    #home-char-track {
-        display: grid !important;
-        /* PC에서는 카드 최소 크기 110px 유지하며 꽉 채우기 */
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
-        gap: 15px !important;
-        
-        /* 스크롤/스냅 기능 해제 */
-        overflow: visible !important;
-        scroll-snap-type: none !important;
+    #home-char-list, #home-map-list {
+        padding-bottom: 0;
+    }
+    .swipe-indicators { display: none !important; }
+
+    .swipe-track {
+        display: grid;
+        /* [수정] 최소 너비를 50px로 축소 */
+        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); 
+        gap: 8px;
+        overflow: visible;
+        scroll-snap-type: none;
+        padding: 0 5px;
     }
 
-    /* 2. [핵심] 10개씩 묶은 페이지(div)의 껍데기를 벗김 */
-    /* display: contents를 쓰면 이 div는 사라진 셈 치고, 내부 카드들이 트랙의 직계 자식처럼 배치됨 */
-    .char-page-grid {
-        display: contents !important;
-    }
-
-    /* 3. 인디케이터(점) 숨기기 (PC는 스크롤로 보니까 필요 없음) */
-    .swipe-indicators {
-        display: none !important;
-    }
-    
-    /* 4. 카드 크기 재조정 (늘어짐 방지) */
-    .char-card-horizontal {
-        width: 100% !important;
-        aspect-ratio: 3 / 4.2 !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    
-    /* 5. 래퍼 여백 조정 */
-    .char-swipe-wrapper {
-        padding-bottom: 0 !important; /* 인디케이터 공간 제거 */
+    .swipe-page {
+        display: contents; 
     }
 }
 
-/* -----------------------------------------
-   2. 지역 정보 (Map) : 4개 1줄 (기존 유지)
-   ----------------------------------------- */
-#home-map-list {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 8px !important;
-    padding: 0 !important;
-    margin: 10px 0 20px 0 !important;
-    background: none; border: none; overflow: visible; height: auto;
+
+/* ==========================================================================
+   [카드 디자인] 50px x 80px 초미니 스타일
+   ========================================================================== */
+.mini-card {
+    position: relative;
+    width: 100%;
+    
+    /* [수정] 요청하신 50:80 비율 적용 */
+    aspect-ratio: 50 / 80; 
+    
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px; /* 둥글기 살짝 축소 */
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: transform 0.2s, border-color 0.2s;
 }
+
 @media (min-width: 768px) {
-    #home-map-list {
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
-        gap: 15px !important;
+    .mini-card:hover {
+        transform: translateY(-2px);
+        border-color: #999;
     }
 }
 
+/* 이미지 (상단 60%) - 텍스트 공간 확보를 위해 조금 줄임 */
+.mini-card-img {
+    width: 100%;
+    height: 60%;
+    object-fit: cover;
+    border-bottom: 1px solid #f0f0f0;
+    background: #f5f5f5;
+    display: block;
+}
 
-/* -----------------------------------------
-   3. 카드 및 내부 공통 스타일 (기존과 동일)
-   ----------------------------------------- */
-.char-card-horizontal, .map-card-horizontal {
-    position: relative; width: 100%;
-    aspect-ratio: 3 / 4.2;
-    border-radius: 6px; overflow: hidden; background: #333; 
-    border: none; margin: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+/* 텍스트 박스 (하단 40%) */
+.mini-card-txt {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #fff;
+    padding: 1px; /* 패딩 최소화 */
 }
-.char-h-img, .map-h-img {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    object-fit: cover; z-index: 1; margin: 0;
-}
-.char-overlay-box, .map-overlay-box {
-    position: absolute; bottom: 0; left: 0; width: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-    display: flex; flex-direction: column; justify-content: flex-end;
-    align-items: flex-start; text-align: left;
-    padding: 30px 6px 8px 8px; z-index: 2;
-}
-.char-h-name, .map-h-title {
-    font-size: 11px; font-weight: bold; color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8); width: 100%;
+
+/* 폰트 스타일 (폭 50px에 맞게 축소) */
+.mini-name {
+    /* [수정] 10px -> 9px 로 축소 */
+    font-size: 9px; 
+    font-weight: 700;
+    color: #222;
+    line-height: 1.2;
+    width: 100%;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    margin: 0; line-height: 1.2;
+    letter-spacing: -0.5px;
 }
-.char-h-affil {
-    font-size: 10px; color: #ddd; margin-top: 2px;
+.mini-sub {
+    /* [수정] 9px -> 8px 로 축소 */
+    font-size: 8px; 
+    color: #999;
+    line-height: 1;
+    width: 100%;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-top: 1px;
+    letter-spacing: -0.5px;
 }
+/* ==========================================================================
+   [추가] 흑백 처리 유틸리티
+   - 링크(link)가 없는 항목을 흑백으로 표시하기 위함
+   ========================================================================== */
+.grayscale {
+    filter: grayscale(100%) !important;
+    opacity: 0.3 !important; /* 약간 흐리게 해서 '비활성' 느낌 강조 (선택사항) */
+    transition: filter 0.3s;
+}
+
+/* (옵션) 흑백이어도 마우스 올리면 컬러로 보여주고 싶다면 아래 주석 해제 */
+/* .mini-card:hover .grayscale {
+    filter: grayscale(0%) !important;
+    opacity: 1 !important;
+} 
+*/

@@ -3755,7 +3755,7 @@ function renderHomeCharacters() {
 
     characterData.forEach(char => {
         const name = char.name || '이름 없음';
-        const faction = char.affiliation || '';
+        const affil = char.affiliation || '';
         const photo = char.photo || 'images/logo.png';
 
         const hasLink = char.link && char.link.trim() !== "";
@@ -3824,7 +3824,7 @@ function openPersonDetail(char) {
         <div class="task-list-wrapper">
             <div class="person-info-row">
                 <span class="person-label">소속</span>
-                <span class="task-title">${char.faction || '알 수 없음'}</span>
+                <span class="task-title">${char.affil || '알 수 없음'}</span>
             </div>
  
             

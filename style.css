@@ -3795,3 +3795,60 @@ body.dark-mode .timer-row:hover {
     line-height: 1.5;
     word-break: keep-all;
 }
+
+
+/* --- [최종 수정] 사이드바 하단 제보 배너 --- */
+.sidebar-footer-report {
+    flex-shrink: 0;
+    padding: 12px 20px; /* 좌우 여백 살짝 넓힘 */
+    border-top: 1px solid #eee;
+    background-color: #f9f9f9;
+    
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 12px;           /* 이미지와 텍스트 그룹 사이 간격 */
+    
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sidebar-footer-report:hover {
+    background-color: #f0f0f0;
+}
+
+/* 프로필 이미지 */
+.mini-profile-img img {
+    width: 38px;  /* 크기 살짝 키움 */
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    display: block;
+    background-color: #fff;
+}
+
+/* [핵심] 텍스트 그룹 (세로 정렬 & 여백 제거) */
+.footer-text-group {
+    display: flex;
+    flex-direction: column; /* 위아래로 쌓기 */
+    justify-content: center;
+    gap: 2px; /* 두 텍스트 사이 간격 (여기서 조절하세요) */
+}
+
+/* 상단 텍스트 (인게임 제보하기) */
+.footer-main-text {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Noto Serif KR', serif;
+    line-height: 1.2; /* 줄 간격 좁힘 */
+    margin: 0;        /* 기본 여백 제거 (붕 뜨는 원인 해결) */
+}
+
+/* 하단 텍스트 (닉네임 - 윤쫑) */
+.footer-sub-text {
+    font-size: 0.75em;
+    color: #888;
+    line-height: 1.2;
+    margin: 0;        /* 기본 여백 제거 */
+}

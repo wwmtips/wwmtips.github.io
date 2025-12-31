@@ -3825,7 +3825,7 @@ function openPersonDetail(char) {
             <div class="person-info-row">
                 <span class="person-label">소속</span>
                 <span class="task-title">${char.affiliation || '알 수 없음'}</span>
-            </div>
+               </div>
  
             
             <div class="person-bio-item" style="margin-top:10px;">

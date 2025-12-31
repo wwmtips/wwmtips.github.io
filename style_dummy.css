@@ -3928,7 +3928,7 @@ body.dark-mode .timer-row:hover {
     
     /* [핵심] 가로 85px, 세로 140px로 고정 (내용이 넘쳐도 커지지 않음) */
     width: 85px !important;  
-    height:100px !important; 
+    height:120px !important; 
     
     display: flex;
     flex-direction: column;
@@ -3945,8 +3945,8 @@ body.dark-mode .timer-row:hover {
     width: 100%;
     
     /* [핵심] 이미지 높이 110px 고정 */
-    height: 110px !important; 
-    min-height: 110px !important;
+    height: 90px !important; 
+    min-height: 90px !important;
     
     object-fit: cover;
     background-color: #f5f5f5;

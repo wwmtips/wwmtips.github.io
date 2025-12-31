@@ -52,35 +52,40 @@ const KEY_MAP = {
 const dummyMapData = [
     {
         title: "대나무숲 옛집",
-        key: "bs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/map2.jpeg" // (썸네일 이미지가 있다면 유지)
+        key: "bamboo", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/bm.jpg" // (썸네일 이미지가 있다면 유지)
     },
     {
         title: "신선나루",
         key: "sn", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "강호로 한 발 다가간 주인공은 개봉에서 수많은 강호인들과 인연을 쌓습니다.",
-        image: "images/map1.jpeg" // (썸네일 이미지가 있다면 유지)
+        image: "images/maps/sn.jpg" // (썸네일 이미지가 있다면 유지)
     },
     {
         title: "장군사당",
         key: "gesh", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "삼경에 귀신이 등불을 밝히니, 새벽닭 울음 소리가 보배롭다.",
-        image: "images/map3.png" // (썸네일 이미지가 있다면 유지)
+        image: "images/maps/gs.jpg" // (썸네일 이미지가 있다면 유지)
     },
     {
         title: "완석포",
         key: "stw", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+        image: "images/maps/sp.jpg" // (썸네일 이미지가 있다면 유지)
     },
     {
         title: "칠벌고개",
         key: "sg", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+        image: "images/maps/sg.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "불선선",
+        key: "bs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/bs.jpg" // (썸네일 이미지가 있다면 유지)
     },
     {
         title: "망천평원",
         key: "mang", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+        image: "images/maps/mang.jpg" // (썸네일 이미지가 있다면 유지)
     }
 ];
 
@@ -232,8 +237,8 @@ function loadData() {
 
             // ★ 보스 데이터 전역 변수에 저장
             globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
-            //characterData = personResult;
-             characterData = [
+            characterData = personResult;
+            /* characterData = [
         { name: "주인공", photo: "images/ch1.jpg", affiliation: "무소속", biography: "강호를 유람하는 자",link:"d" },
         { name: "연화", photo: "images/ch1.jpg", affiliation: "청하 문파", biography: "검술의 달인" },
         { name: "백리", photo: "images/ch1.jpg", affiliation: "개봉 상단", biography: "거상" },
@@ -254,7 +259,7 @@ function loadData() {
         { name: "고락", photo: "images/logo.png", affiliation: "악사", biography: "테스트 인물 14" },
         { name: "무상황", photo: "images/logo.png", affiliation: "은둔자", biography: "테스트 인물 15" },
         { name: "구월해", photo: "images/logo.png", affiliation: "해적", biography: "테스트 인물 16" }
-    ];
+    ];*/
             
             if (quests.length > 0) {
                 quests.sort((a, b) => {

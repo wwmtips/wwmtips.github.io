@@ -113,7 +113,7 @@ async function loadMansarokMenu() {
         // 1. 만사록 타입 필터링 후 최대 9개만 자르기
         const mansarokList = data
             .slice(0, 6); // [핵심] 0번부터 8번 인덱스까지만 선택
-        
+                   // .filter(item => item.type === '만사록')
         const container = document.getElementById('mansarok-list');
         if (!container) return;
         

@@ -3654,8 +3654,7 @@ function setLikeButtonActive(container, forceActive) {
         if (heartText) heartText.style.color = "#b71c1c";
     }
 }
-
-// [수정] 업적 리스트 렌더링 함수 (최대 2개만 표시)
+// [수정] 업적 리스트 렌더링 함수
 function renderAchievements(data) {
     const container = document.getElementById('achievement-list');
     if (!container) return;
@@ -3668,18 +3667,18 @@ function renderAchievements(data) {
         return;
     }
 
-    container.innerHTML = ''; // "로딩 중..." 문구 제거
+    container.innerHTML = ''; 
 
-    // ★ 핵심: 메인 화면용으로 상위 2개만 자르기 ★
-    const limitedList = fullList.slice(0, 10);
+    // ★ 핵심: 모바일(768px 이하)일 때는 4개, PC일 때는 10개로 제한 ★
+    const isMobile = window.innerWidth <= 768;
+    const displayLimit = isMobile ? 4 : 10;
+    const limitedList = fullList.slice(0, displayLimit);
 
     limitedList.forEach(item => {
-        // 아이콘이 없으면 기본 로고 사용
         const iconSrc = item.icon ? item.icon : 'images/logo.png';
 
         const div = document.createElement('div');
         div.className = 'achievement-card';
-        // HTML 구조는 동일하게 유지 (CSS로 디자인 변경됨)
         div.innerHTML = `
             <div class="ach-icon">
                 <img src="${iconSrc}" alt="아이콘" onerror="this.src='images/logo.png'">

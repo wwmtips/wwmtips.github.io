@@ -3910,7 +3910,7 @@ body.dark-mode .timer-row:hover {
     height: auto !important;
 
     /* ★ [핵심 1] 모바일(기본): 꽉 찬 4열 유지 */
-    grid-template-columns: repeat(4, 1fr) !important;
+    grid-template-columns: repeat(5, 1fr) !important;
 }
 
 /* ★ [핵심 2] PC 화면(768px 이상)일 때 설정 덮어쓰기 */

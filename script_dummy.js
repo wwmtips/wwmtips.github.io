@@ -3851,3 +3851,47 @@ function closePersonDetail() {
     document.getElementById('person-bottom-sheet').classList.remove('active');
     document.body.style.overflow = '';
 }
+
+let deferredPrompt; // 설치 이벤트를 보관할 변수
+const installContainer = document.getElementById('install-container');
+const installBtn = document.getElementById('btn-install-app');
+
+// 1. 브라우저가 설치 가능함을 감지했을 때 (A2HS 조건 충족 시)
+window.addEventListener('beforeinstallprompt', (e) => {
+    // 기본 브라우저 배너가 뜨지 않도록 막음
+    e.preventDefault();
+    // 이벤트를 변수에 저장
+    deferredPrompt = e;
+    // 숨겨져 있던 설치 버튼 컨테이너를 보여줌
+    if (installContainer) {
+        installContainer.style.display = 'block';
+    }
+});
+
+// 2. 설치 버튼 클릭 시 실행
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+            alert('설치 환경이 아니거나 이미 설치되어 있습니다.');
+            return;
+        }
+        
+        // 브라우저 설치 프롬프트 띄우기
+        deferredPrompt.prompt();
+        
+        // 사용자가 설치/취소 중 무엇을 눌렀는지 확인
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`사용자 선택: ${outcome}`);
+        
+        // 한 번 사용한 프롬프트는 재사용 불가하므로 초기화
+        deferredPrompt = null;
+        // 버튼 다시 숨기기
+        installContainer.style.display = 'none';
+    });
+}
+
+// 3. 앱이 성공적으로 설치되었을 때 실행
+window.addEventListener('appinstalled', (evt) => {
+    console.log('앱이 성공적으로 설치되었습니다.');
+    if (installContainer) installContainer.style.display = 'none';
+});

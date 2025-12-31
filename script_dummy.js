@@ -254,6 +254,7 @@ function loadData() {
         updateQuizCounter();
         renderFullNews(globalData.news);  
         renderComboSlots(); 
+       renderHomeCharacters();
   if (typeof renderAchievements === 'function') {
             renderAchievements(archiveData);
   }
@@ -3589,4 +3590,46 @@ function renderFullAchievementList() {
     });
 }
 
+
+// [신규] 인물 정보 렌더링 함수
+function renderHomeCharacters() {
+    const container = document.getElementById('home-char-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    characterData.forEach(char => {
+        const div = document.createElement('div');
+        div.className = 'char-card-horizontal';
+        
+        // 클릭 시 상세 정보 열기 (이전 턴에 만든 openPersonDetail 재사용)
+        // 데이터 필드명 매핑 (JSON -> 함수 파라미터)
+        div.onclick = () => {
+            if (typeof openPersonDetail === 'function') {
+                openPersonDetail({
+                    name: char.name,
+                    role: '인물',
+                    desc: char.biography,
+                    location: '강호',  // JSON에 없으면 기본값
+                    gift: '-',         // JSON에 없으면 기본값
+                    faction: char.affiliation,
+                    img: char.photo
+                });
+            }
+        };
+
+        div.innerHTML = `
+            <img src="${char.photo}" class="char-h-img" onerror="this.src='images/logo.png'" alt="${char.name}">
+            <div class="char-overlay-box">
+                <div class="char-h-name">${char.name}</div>
+                <div class="char-h-affil">${char.affiliation}</div>
+            </div>
+        `;
+        
+        container.appendChild(div);
+    });
+}
+
+// [실행] 페이지 로드 시 또는 loadData 안에서 호출 필요
+// 예: loadData() 함수 맨 마지막에 아래 줄 추가
+// renderHomeCharacters();
 

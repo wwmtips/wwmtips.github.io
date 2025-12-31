@@ -51,7 +51,7 @@ const KEY_MAP = {
 // [지도 더미 데이터]
 const dummyMapData = [
     {
-        title: "대나무숲 옛집",
+        title: "옛집",
         key: "bamboo", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         image: "images/maps/bm.jpg" // (썸네일 이미지가 있다면 유지)
     },

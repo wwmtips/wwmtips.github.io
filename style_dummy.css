@@ -5069,3 +5069,15 @@ body.dark-mode .timer-row:hover {
         color: #333 !important;
     }
 }
+
+/* 1. 기본 상태 및 모든 상태 통합 제어 */
+#mansarok-list a.mansarok-btn,
+#mansarok-list a.mansarok-btn:link,
+#mansarok-list a.mansarok-btn:visited,
+#mansarok-list a.mansarok-btn:hover,
+#mansarok-list a.mansarok-btn:active {
+    text-decoration: none !important; /* 밑줄 절대 금지 */
+    color: #333 !important;           /* 파란색/보라색 절대 금지 */
+    outline: none !important;         /* 클릭 시 점선 제거 */
+    box-shadow: none !important;      /* 그림자 효과 제거 */
+}

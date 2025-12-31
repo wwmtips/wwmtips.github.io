@@ -3975,3 +3975,80 @@ body.dark-mode .timer-row:hover {
     
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+/* =========================================
+   [신규] 인물 정보 리스트 (지역 정보와 동일 스타일)
+   ========================================= */
+
+/* 1. 컨테이너: 가로 스크롤 설정 */
+#home-char-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;                 /* 카드 간격 */
+    height: 150px;            /* 컨테이너 높이 */
+    overflow-x: auto;         /* 가로 스크롤 */
+    overflow-y: hidden;
+    padding: 0 5px;
+    align-items: center;
+    
+    /* 스크롤바 숨기기 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+#home-char-list::-webkit-scrollbar { display: none; }
+
+/* 2. 카드 디자인 (크기 고정) */
+.char-card-horizontal {
+    flex: 0 0 auto;
+    width: 90px;              /* 가로 90px */
+    height: 135px;            /* 세로 135px */
+    position: relative;       /* 오버레이 배치를 위한 기준 */
+    border-radius: 1px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #333;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* 3. 인물 사진 (배경으로 꽉 채움) */
+.char-h-img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    object-fit: cover;
+    z-index: 1;
+    border: none;
+    margin: 0;
+}
+
+/* 4. 오버레이 박스 (검은색 그라데이션) */
+.char-overlay-box {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    padding: 20px 8px 8px 8px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;   /* 이름, 소속 세로 정렬 */
+    justify-content: flex-end;
+}
+
+/* 5. 텍스트 스타일 */
+.char-h-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    font-family: 'Noto Serif KR', serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    line-height: 1.2;
+}
+
+.char-h-affil {
+    font-size: 10px;
+    color: #ccc;              /* 소속은 약간 흐리게 */
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

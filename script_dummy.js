@@ -3839,7 +3839,7 @@ function openPersonDetail(char) {
         </div>
 
         <button class="browse-button" onclick="closePersonDetail()" style="margin-top:25px;">
-            정보창 닫기
+            닫기
         </button>
     `;
 

@@ -3704,36 +3704,31 @@ body.dark-mode .timer-row:hover {
     object-fit: cover;
     border: 1px solid #eee;
 }
-
-/* 텍스트 영역 */
+/* 업적 콘텐츠 영역: 자식의 너비 제한을 위해 필요 */
 .ach-content {
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2px; /* 제목과 설명 사이 간격 좁게 */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important; /* [핵심] 자식의 ellipsis 작동을 위한 설정 */
+    padding: 2px 4px !important;
+    box-sizing: border-box !important;
 }
-/* 업적 제목 말줄임표 및 한 줄 고정 */
+
+/* 업적 제목: 한 줄 고정 및 말줄임표 */
 .ach-title {
-    /* [핵심] 한 줄 말줄임표 설정 */
+    display: block !important;
+    width: 100% !important;
     white-space: nowrap !important;       /* 줄바꿈 금지 */
     overflow: hidden !important;          /* 넘치는 부분 숨김 */
     text-overflow: ellipsis !important;   /* 넘치면 ... 표시 */
     
-    display: block !important;            /* 블록 요소로 변경하여 너비 인식 */
-    width: 100% !important;               /* 부모 너비에 맞춤 */
-    
-    font-size: 0.7em !important;
+    font-size: 9px !important;
     font-weight: bold !important;
-    color: #333 !important;
     text-align: center !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
-    padding: 0 4px !important;            /* 좌우 여백 살짝 부여 */
-    box-sizing: border-box !important;
+    color: #333 !important;
+    text-decoration: none !important;     /* alink 방지 */
 }
-
 /* 업적 카드 전체 높이 사수 */
 .achievement-card {
     height: 95px !important;              /* 세로로 길어지는 것 방지 */

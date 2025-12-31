@@ -3660,9 +3660,9 @@ body.dark-mode .timer-row:hover {
     display: flex;
     flex-direction: column; /* 세로 나열 */
     gap: 0;                 /* 아이템 사이 간격 없음 (선으로 구분) */
-    border: 1px solid #eee; /* 외곽 테두리 */
+    
     border-radius: 4px;
-    background-color: #fff; /* 배경 흰색 */
+    
     overflow: hidden;
     padding: 0;             /* 내부 패딩 제거 */
 }
@@ -4470,7 +4470,7 @@ body.dark-mode .timer-row:hover {
     /* [핵심] 1fr을 4개 써서 공간을 정확히 4등분 합니다 */
     grid-template-columns: repeat(4, 1fr) !important; 
     gap: 10px !important;    /* 카드 사이 간격 */
-    padding: 0 0px !important;
+    padding: 0 5px !important;
     margin-top: 10px !important;
     width: 100% !important;
     box-sizing: border-box !important;

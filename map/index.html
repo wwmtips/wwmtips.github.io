@@ -1156,69 +1156,8 @@
         return html;
     }
 
-    // 완료 처리 토글
-    window.toggleComplete = function(id, storageKey) {
-        let list = JSON.parse(localStorage.getItem(storageKey)) || [];
-        const index = list.indexOf(id); 
-        
-        // 지도상의 마커 찾기 (일반 마커 혹은 경로 모드 마커)
-        let targetMarkerObj = allMarkers.find(m => m.id === id);
-        let marker = targetMarkerObj ? targetMarkerObj.marker : null;
-        
-        if (currentPathLayer && activePathMarkersMap[id]) {
-            marker = activePathMarkersMap[id];
-        }
-
-        const isNowComplete = (index === -1);
-        if (isNowComplete) { list.push(id); } else { list.splice(index, 1); }
-        localStorage.setItem(storageKey, JSON.stringify(list)); 
-        
-        // UI 업데이트
-        updatePathSummaryUI();
-        
-        if (marker) {
-            if (isNowComplete) { L.DomUtil.addClass(marker._icon, 'marker-completed'); }
-            else { L.DomUtil.removeClass(marker._icon, 'marker-completed'); }
-            
-            // 팝업 갱신 (완료/취소 버튼 텍스트 변경을 위해)
-            marker.closePopup(); 
-            marker.openPopup();
-        }
-
-        // 경로 모드일 때 자동 이동
-        if (isNowComplete && currentPathIds.length > 0) {
-            const currentEntry = currentPathIds.find(entry => (typeof entry === 'object' ? entry.id : entry) == id);
-            const pathIndex = currentPathIds.indexOf(currentEntry);
-            
-            if (pathIndex !== -1 && pathIndex < currentPathIds.length - 1) {
-                const nextEntry = currentPathIds[pathIndex + 1];
-                const nextId = (typeof nextEntry === 'object') ? nextEntry.id : nextEntry;
-                const nextMap = (typeof nextEntry === 'object') ? nextEntry.map : currentMapId;
-                
-                if (nextMap === currentMapId) {
-                    const nextMarker = activePathMarkersMap[nextId];
-                    if (nextMarker) {
-                        setTimeout(() => {
-                            map.flyTo(nextMarker.getLatLng(), 0, { animate: true, duration: 1.0 });
-                            map.once('moveend', () => nextMarker.openPopup());
-                        }, 500);
-                    }
-                } else {
-                    setTimeout(() => {
-                        const currentPathKey = localStorage.getItem('activePathKey') || '';
-                        window.location.href = `?id=${nextMap}&marker=${nextId}&path=${currentPathKey}`;
-                    }, 500);
-                }
-            }
-        }
-    };
-
-    window.shareMarker = function(id) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('marker', id);
-        url.searchParams.delete('path'); 
-        copyToClipboard(url.toString());
-    };
+  
+    
       // [수정] 마커 완료 상태 토글 함수 (팝업 닫기 추가)
     // [수정] 마커 완료 상태 토글 함수 (팝업 닫기 + ★다음 마커 자동 이동★)
     function toggleComplete(id) {

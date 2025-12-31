@@ -23,6 +23,8 @@ let builderData = null;
 let chunjiData = []; // 천지록 데이터 전역 변수
 let currentChunjiData = [];
 let globalBossData = []; // 데이터를 담아둘 전역 변수
+// [수정] 인물 데이터 변수 (처음엔 비워둠)
+let characterData = [];
 
 let currentSlot = { type: '', index: 0 };
 // [수정] 빌드 상태 관리 객체 (combo 배열 추가)
@@ -208,10 +210,10 @@ function loadData() {
         fetch('json/builder_data.json').then(res => res.json()).catch(err => null),
         // ★ [추가] 보스 데이터 불러오기
         fetch('json/boss.json').then(res => res.json()).catch(err => []),
-       fetch('json/archive.json').then(res => res.json()).catch(err => [])
-
-    ])
-    .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult, bossDataResult, archiveData]) => {
+       fetch('json/archive.json').then(res => res.json()).catch(err => []),
+       fetch('json/person.json').then(res => res.json()).catch(err => [])
+   ])
+    .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult, bossDataResult, archiveData,personResult]) => {
         console.log("기본 데이터 로드 완료");
 
         // 데이터 정제
@@ -219,7 +221,8 @@ function loadData() {
         let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
         let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
         let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
-        
+        characterData = personResult;
+       
         // ★ 보스 데이터 전역 변수에 저장
         globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
 
@@ -254,7 +257,9 @@ function loadData() {
         updateQuizCounter();
         renderFullNews(globalData.news);  
         renderComboSlots(); 
-       renderHomeCharacters();
+       if (typeof renderHomeCharacters === 'function') {
+            renderHomeCharacters();
+       }
   if (typeof renderAchievements === 'function') {
             renderAchievements(archiveData);
   }
@@ -3632,4 +3637,5 @@ function renderHomeCharacters() {
 // [실행] 페이지 로드 시 또는 loadData 안에서 호출 필요
 // 예: loadData() 함수 맨 마지막에 아래 줄 추가
 // renderHomeCharacters();
+
 

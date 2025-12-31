@@ -3596,46 +3596,33 @@ function renderFullAchievementList() {
 }
 
 
-// [신규] 인물 정보 렌더링 함수
+// [신규] 인물 정보 리스트 그리기 함수
 function renderHomeCharacters() {
     const container = document.getElementById('home-char-list');
     if (!container) return;
+    
+    // 기존 내용 비우기
     container.innerHTML = '';
+
+    // 데이터가 없으면 중단
+    if (!characterData || characterData.length === 0) return;
 
     characterData.forEach(char => {
         const div = document.createElement('div');
-        div.className = 'char-card-horizontal';
+        div.className = 'char-card-horizontal'; // CSS에서 정의한 스타일 클래스
         
-        // 클릭 시 상세 정보 열기 (이전 턴에 만든 openPersonDetail 재사용)
-        // 데이터 필드명 매핑 (JSON -> 함수 파라미터)
+        // ★ 클릭 시 상세 정보 팝업 열기
+        // JSON 데이터 키(key)를 openPersonDetail 함수가 원하는 이름으로 매핑해서 넘겨줍니다.
         div.onclick = () => {
             if (typeof openPersonDetail === 'function') {
                 openPersonDetail({
                     name: char.name,
-                    role: '인물',
-                    desc: char.biography,
-                    location: '강호',  // JSON에 없으면 기본값
-                    gift: '-',         // JSON에 없으면 기본값
-                    faction: char.affiliation,
-                    img: char.photo
+                    role: '인물',              // 고정값 또는 JSON에 있으면 char.role
+                    desc: char.biography,      // JSON의 biography -> 상세창의 desc
+                    location: '강호',          // JSON에 없으므로 기본값
+                    gift: '-',                 
+                    faction: char.affiliation, // JSON의 affiliation -> 상세창의 faction
+                    img: char.photo            // JSON의 photo -> 상세창의 img
                 });
             }
         };
-
-        div.innerHTML = `
-            <img src="${char.photo}" class="char-h-img" onerror="this.src='images/logo.png'" alt="${char.name}">
-            <div class="char-overlay-box">
-                <div class="char-h-name">${char.name}</div>
-                <div class="char-h-affil">${char.affiliation}</div>
-            </div>
-        `;
-        
-        container.appendChild(div);
-    });
-}
-
-// [실행] 페이지 로드 시 또는 loadData 안에서 호출 필요
-// 예: loadData() 함수 맨 마지막에 아래 줄 추가
-// renderHomeCharacters();
-
-

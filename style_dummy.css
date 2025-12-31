@@ -4983,3 +4983,68 @@ body.dark-mode .timer-row:hover {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* =========================================
+   [모바일 최종] 만사록 버튼 36px 고정 및 링크 스타일 제거
+   ========================================= */
+
+@media (max-width: 768px) {
+    /* 1. 컨테이너: 버튼이 세로로 늘어나는 것(stretch)을 강제 차단 */
+    #mansarok-list {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        /* 자식 요소들이 각자의 고정 높이만 가지게 설정 */
+        align-items: flex-start !important; 
+    }
+
+    /* 2. 버튼: a 태그의 기본 링크 스타일(alink) 및 높이 문제 해결 */
+    .mansarok-btn {
+        /* 높이 삼중 잠금 */
+        height: 36px !important;
+        min-height: 36px !important;
+        max-height: 36px !important;
+        
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        
+        /* [핵심] a 태그 특유의 파란색/밑줄 스타일 제거 */
+        text-decoration: none !important; 
+        color: inherit !important;
+        
+        background-color: #f8f8f8 !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    /* 3. 내부 텍스트: 밑줄 방지 및 수직 중앙 정렬 */
+    .mansarok-btn span {
+        /* [핵심] 텍스트 밑줄 제거 및 검정색 고정 */
+        text-decoration: none !important;
+        color: #333 !important;
+        
+        font-size: 10px !important;
+        font-weight: 600 !important;
+        
+        /* 박스 높이에 맞춰 수직 정중앙 고정 */
+        line-height: 34px !important; 
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    
+    /* 클릭 중이거나 방문한 후에도 밑줄/파란색 방지 */
+    .mansarok-btn:active, 
+    .mansarok-btn:visited, 
+    .mansarok-btn:hover {
+        text-decoration: none !important;
+        color: #333 !important;
+    }
+}

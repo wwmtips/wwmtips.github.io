@@ -581,7 +581,7 @@ function loadHomeMaps() {
 
 function switchTab(tabName, updateHistory = true) {
     // 1. 화면 전환 (기존 로직)
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji',, 'view-archive'];
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji', 'view-archive'];
     views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
@@ -2838,37 +2838,24 @@ function applyChunjiFilter() {
 /* =========================================
    [SPA 핵심] 외부 HTML 파일 동적 로드 함수
    ========================================= */
-
-/* [수정] SPA 직접 로드 함수 (guide.html 로딩 간섭 제거) */
+// [추가] 드롭다운 메뉴 클릭 시 해당 비급 파일 바로 열기
 function openGuideDirect(filename) {
-    console.log("SPA 로드 요청:", filename);
-
-    // 1. 모든 뷰 숨기기 (switchTab 기능 수동 구현)
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji', 'view-archive'];
-    views.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.style.display = 'none';
-    });
-
-    // 2. 가이드 뷰만 강제로 보이기
-    const guideView = document.getElementById('view-guide');
-    if (guideView) {
-        guideView.style.display = 'block';
-    }
-
-    // 3. 네비게이션 탭 활성화 (선택 사항: '비급' 메뉴에 불 들어오게 하기)
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
-    navs.forEach(id => { 
-        const el = document.getElementById(id); 
-        if(el) el.classList.remove('active'); 
-    });
+    // 1. 해당 파일에 매칭되는 ID 찾기 (예: 'boss.html' -> 'boss')
+    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
     
-    // 비급/코드 탭 하이라이트 (사이드바 메뉴이므로 nav-code 활용)
-    const navCode = document.getElementById('nav-code');
-    if(navCode) navCode.classList.add('active');
-
-    // 4. 실제 콘텐츠 로드 (기존 loadGuideContent 함수 사용)
-    loadContent(filename);
+    // 2. 가이드 데이터가 아직 안 불려와졌을 때 (새로고침 직후 등)
+    if (!isGuideLoaded) {
+        // URL에 ID를 미리 박아두고 switchTab을 부르면, loadGuideView가 알아서 처리함
+        if (foundId) updateUrlQuery('guide', foundId);
+        switchTab('guide', false); 
+    } 
+    // 3. 이미 로드되어 있을 때
+    else {
+        // 탭 전환 후 강제로 콘텐츠 교체
+        switchTab('guide', false);
+        if (foundId) updateUrlQuery('guide', foundId);
+        loadGuideContent(filename, null);
+    }
 }
 
 // 2. 실제 HTML 파일을 가져와서 화면에 뿌려주는 함수
@@ -3050,42 +3037,42 @@ function shareBuildToCloud() {
     });
 }
 
-// ▼▼▼ script.js 맨 아래에 추가하세요 ▼▼▼
-// [필수] 콘텐츠 로더 함수
+// [추가] SPA 콘텐츠 로드 함수 (보스 상세 페이지 이동용)
 function loadContent(url) {
-    // 콘텐츠를 넣을 영역 찾기 (#guide-content-loader가 우선)
-    const container = document.getElementById('guide-content-loader') || 
-                      document.getElementById('guide-dynamic-content');
+    // 1. 콘텐츠를 넣을 컨테이너 찾기
+    // (우선순위: 가이드 내용 영역 -> 보스 전용 영역 -> 메인 콘텐츠 영역)
+    const container = document.getElementById('guide-dynamic-content') || 
+                      document.getElementById('view-boss') || 
+                      document.querySelector('.boss-page-container')?.parentElement;
     
     if (!container) {
-        console.error("콘텐츠를 표시할 영역(#guide-content-loader)이 없습니다.");
+        console.error("콘텐츠를 표시할 영역을 찾을 수 없습니다.");
         return;
     }
 
     // 로딩 표시
-    container.innerHTML = '<div style="text-align:center; padding:50px; color:#999;">문서를 펼치는 중...</div>';
+    container.style.opacity = '0.5';
 
-    // HTML 파일 불러오기
+    // 2. HTML 파일 불러오기
     fetch(url)
         .then(response => {
-            if (!response.ok) throw new Error('파일을 찾을 수 없습니다.');
+            if (!response.ok) throw new Error('페이지를 찾을 수 없습니다.');
             return response.text();
         })
         .then(html => {
+            // 내용 교체
             container.innerHTML = html;
-            window.scrollTo(0, 0); // 스크롤 맨 위로
+            container.style.opacity = '1';
             
-            // 만약 불러온 페이지가 할일 목록(npc.html)이라면 체크리스트 기능 초기화 실행
-            if (url.includes('npc.html') && typeof initHomeworkChecklist === 'function') {
-                initHomeworkChecklist();
-            }
+            // 화면 맨 위로 스크롤
+            window.scrollTo(0, 0);
         })
         .catch(error => {
             console.error('로딩 실패:', error);
             container.innerHTML = `<div style="text-align:center; padding:50px;">페이지를 불러올 수 없습니다.<br>(${url})</div>`;
+            container.style.opacity = '1';
         });
 }
-
 // [추가] 보스 상세 페이지 탭 전환 기능
 function openBossTab(tabName, btnElement) {
     // 1. 현재 페이지 내의 모든 탭 내용 숨기기
@@ -3783,4 +3770,4 @@ function renderHomeCharacters() {
     });
 
     container.appendChild(fragment);
-}
+} 

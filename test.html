@@ -717,6 +717,17 @@
                     80% { pointer-events: none; }
                     100% { pointer-events: auto; opacity: 1; }
                 }
+                /* 1. 상단 고정 바의 높이를 내용물(헤더)에 맞게 자동 조정 */
+#fixed-top-bar {
+    height: auto !important; /* 기존 높이(예: 100px) 무시 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 그림자 추가 (선택사항) */
+}
+
+/* 2. 본문 상단 여백을 줄임 (헤더 높이 60px에 맞춤) */
+#main-content {
+    padding-top: 60px !important; /* 기존(약 100px~110px) 값을 60px로 변경 */
+}
+
             </style>
 
             <div id="build-detail-overlay" class="bottom-sheet-overlay" onclick="if(event.target === this) closeBuildDetailSheet(event)"></div>

@@ -3893,163 +3893,146 @@ body.dark-mode .timer-row:hover {
 
 
 /* =========================================
-   [통합 수정] 지역(Map) & 인물(Char) 리스트 스타일
+   [최종 수정] 인물 & 지역 스타일 (화이트 카드 테마)
    ========================================= */
 
 /* -----------------------------------------
-   1. 컨테이너 설정
+   1. 인물 정보 (Char) : 반응형 그리드
    ----------------------------------------- */
-
-/* 지역 정보 (Map) : 1줄, 4개 딱 맞춤 */
-#home-map-list {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: center;
-    
-    /* 4개가 딱 맞게 들어가도록 간격 미세 조정 */
-    gap: 2%;                  
-    
-    height: 160px !important; /* 컨테이너 높이 확보 */
-    overflow-x: auto;         
-    overflow-y: hidden;
-    padding: 0 5px;
-    
-    /* 기본 스타일 초기화 */
-    background: transparent !important;
-    border: none !important;
-    grid-template-columns: none !important; /* 혹시 모를 그리드 해제 */
-}
-
-/* 인물 정보 (Char) : 2줄(4x2), 가로 스크롤 */
 #home-char-list {
     display: grid !important;
     
-    /* 2줄(행) 고정 */
-    grid-template-rows: repeat(2, 1fr) !important;
-    
-    /* 데이터가 쌓이면 오른쪽으로 흐름 */
-    grid-auto-flow: column !important;
-    
-    /* 높이: 카드높이(135) * 2 + 간격(10) + 여유분 */
-    height: 290px !important; 
+    /* [모바일] 한 줄에 5개 정도 들어가게 크기 축소 (참고 이미지 반영) */
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)) !important;
+    grid-template-rows: auto !important; /* 높이 자동 */
+    grid-auto-flow: row !important;      /* 줄바꿈 허용 */
     
     gap: 10px;
-    overflow-x: auto;
-    padding: 0 5px;
-    
-    background: transparent !important;
-    border: none !important;
+    height: auto !important;             /* 전체 높이 자동 */
+    overflow: visible !important;        /* 스크롤 제거 */
+    padding: 10px 5px;
 }
 
-/* 스크롤바 숨기기 (공통) */
-#home-map-list::-webkit-scrollbar, 
-#home-char-list::-webkit-scrollbar { 
-    display: none; 
+/* [PC 환경] 조금 더 크게 표시 */
+@media (min-width: 768px) {
+    #home-char-list {
+        /* PC에서는 최소 100px 너비로 넉넉하게 */
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+        gap: 15px;
+    }
 }
 
-
-/* -----------------------------------------
-   2. 카드(아이템) 디자인
-   ----------------------------------------- */
-
-/* 지역 카드 (화면 너비 4등분) */
-.map-card-horizontal {
-    flex: 0 0 auto;           /* 크기 자동 조절 방지 */
-    
-    /* [핵심] 4개가 딱 들어가도록 너비 설정 (23.5% * 4 + 간격 ≈ 100%) */
-    width: 23.5% !important;  
-    height: 140px !important;
-    
-    position: relative !important; /* 오버레이 기준점 */
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    background-color: #333;
-    border: none !important;
-}
-
-/* 인물 카드 (고정 크기) */
+/* 인물 카드 스타일 */
 .char-card-horizontal {
-    /* 그리드 셀 안에서도 크기 유지 */
-    width: 85px !important;
-    height: 135px !important;
-    
-    position: relative !important; /* 오버레이 기준점 */
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    background-color: #333;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    border: none !important;
-    
-    /* Flex/Grid 간섭 방지 */
-    flex: none;
-    margin: 0;
-}
-
-
-/* -----------------------------------------
-   3. 내부 요소 (이미지 & 오버레이) 공통 스타일
-   ----------------------------------------- */
-
-/* 이미지 (무조건 꽉 채우기) */
-.map-h-img, .char-h-img {
-    width: 100% !important;
-    height: 100% !important;
-    
-    /* ★ [핵심] 텍스트 뒤로 보내기 위해 절대 위치 사용 */
-    position: absolute !important;
-    top: 0; left: 0;
-    
-    object-fit: cover;
-    z-index: 1; /* 제일 뒤 */
-    margin: 0;
-    border: none;
-    background-color: #333;
-}
-
-/* 오버레이 박스 (검은색 그라데이션) */
-.map-overlay-box, .char-overlay-box {
-    /* ★ [핵심] 카드 하단에 고정 */
-    position: absolute !important;
-    bottom: 0; left: 0; width: 100%;
-    
-    /* 투명 -> 검정 그라데이션 */
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
-    
-    padding: 30px 5px 8px 5px; /* 상단 패딩으로 그라데이션 영역 확보 */
-    z-index: 2; /* 이미지 위 */
+    width: auto !important;   /* 그리드에 맞춤 */
+    height: auto !important;  /* 높이 자동 */
     
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* 텍스트 아래 정렬 */
-    box-sizing: border-box;
-}
-
-/* 텍스트 (흰색) */
-.map-h-title, .char-h-name {
-    font-size: 11px;
-    font-weight: bold;
-    color: #fff;
-    font-family: 'Noto Serif KR', serif;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    line-height: 1.2;
     
-    white-space: nowrap;
+    /* [스타일 변경] 흰색 카드 스타일 */
+    background-color: #fff;
+    border: 1px solid #eee;
+    box-shadow: none;         /* 그림자 제거 (깔끔하게) */
+    border-radius: 4px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left;
-    margin: 0;
 }
 
-/* 인물 소속 (작은 글씨) */
-.char-h-affil {
-    font-size: 10px;
-    color: #ccc;
-    margin-top: 2px;
+/* -----------------------------------------
+   2. 지역 정보 (Map) : 4개 정렬 (기존 유지하되 스타일 변경)
+   ----------------------------------------- */
+#home-map-list {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 2%;
+    height: auto !important;  /* 높이 자동 */
+    overflow-x: auto;
+    padding: 10px 5px;
+    
+    align-items: stretch;     /* 높이 통일 */
+}
+
+.map-card-horizontal {
+    flex: 0 0 auto;
+    width: 23.5% !important;  /* 4개 등분 */
+    height: auto !important;
+    
+    display: flex;
+    flex-direction: column;
+    
+    /* [스타일 변경] 흰색 카드 */
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* -----------------------------------------
+   3. 공통 내용 스타일 (이미지 & 텍스트)
+   ----------------------------------------- */
+
+/* 이미지 (상단 배치) */
+.map-h-img, .char-h-img {
+    width: 100% !important;
+    
+    /* [모바일] 인물 사진 높이 축소 (정사각형에 가깝게) */
+    aspect-ratio: 1 / 1; 
+    height: auto !important; 
+    
+    position: relative !important; /* 절대 위치 제거 */
+    object-fit: cover;
+    margin: 0;
+    z-index: 0;
+    
+    /* 배경색 제거 */
+    background-color: #f9f9f9;
+}
+
+/* 텍스트 박스 (하단 배치, 오버레이 제거) */
+.map-overlay-box, .char-overlay-box {
+    position: relative !important; /* 오버레이 해제 -> 아래로 내림 */
+    width: 100%;
+    bottom: auto; left: auto;
+    
+    /* [핵심] 검은색 그라데이션 제거 -> 흰색 배경 */
+    background: #fff !important;
+    
+    padding: 8px 4px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center; /* 가운데 정렬 */
+    text-align: center;
+    
+    /* 높이 확보 */
+    flex: 1;
+}
+
+/* 텍스트 색상 변경 (흰색 -> 검은색) */
+.map-h-title, .char-h-name {
+    font-size: 0.8em;          /* 글자 크기 조정 */
+    color: #333 !important;    /* [핵심] 검은색 글자 */
+    text-shadow: none !important; /* 그림자 제거 */
+    font-weight: bold;
+    margin-bottom: 2px;
+    
+    /* 줄바꿈 허용 여부 (인물 이름은 한 줄) */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
+}
+
+/* 인물 소속 / 지역 설명 (보조 텍스트) */
+.char-h-affil {
+    font-size: 0.7em;
+    color: #888 !important;    /* 회색 */
+    margin-top: 0;
+    text-shadow: none !important;
+}
+
+/* 지역 카드 이미지는 직사각형 유지 */
+.map-h-img {
+    aspect-ratio: 3 / 4; /* 세로로 긴 비율 */
 }

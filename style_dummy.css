@@ -3714,16 +3714,32 @@ body.dark-mode .timer-row:hover {
     justify-content: center;
     gap: 2px; /* 제목과 설명 사이 간격 좁게 */
 }
-
-/* 4. 제목 (0.9em, 강호령 스타일) */
+/* 업적 제목 말줄임표 및 한 줄 고정 */
 .ach-title {
-    font-size: 0.9em;  /* [요청] 0.9em */
-    font-weight: bold;
-    color: #333;       /* 강호령 타이틀 색상 (진한 회색) */
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* [핵심] 한 줄 말줄임표 설정 */
+    white-space: nowrap !important;       /* 줄바꿈 금지 */
+    overflow: hidden !important;          /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis !important;   /* 넘치면 ... 표시 */
+    
+    display: block !important;            /* 블록 요소로 변경하여 너비 인식 */
+    width: 100% !important;               /* 부모 너비에 맞춤 */
+    
+    font-size: 0.7em !important;
+    font-weight: bold !important;
+    color: #333 !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    padding: 0 4px !important;            /* 좌우 여백 살짝 부여 */
+    box-sizing: border-box !important;
+}
+
+/* 업적 카드 전체 높이 사수 */
+.achievement-card {
+    height: 95px !important;              /* 세로로 길어지는 것 방지 */
+    min-height: 95px !important;
+    max-height: 95px !important;
+    overflow: hidden !important;          /* 내부 요소가 삐져나오지 못하게 함 */
 }
 
 /* 5. 설명 (0.75em, 서브텍스트 스타일) */
@@ -4612,7 +4628,7 @@ body.dark-mode .timer-row:hover {
 
 /* 6. 제목 폰트 (10개 배치 시 글자가 겹치지 않게 크기 축소) */
 .ach-title {
-    font-size: 8.5px !important; /* 9px에서 약간 더 축소 */
+    font-size: 0.75em !important; /* 9px에서 약간 더 축소 */
     font-weight: 600 !important;
     color: #333 !important;
     text-align: center !important;
@@ -4946,26 +4962,12 @@ body.dark-mode .timer-row:hover {
         align-items: center !important;
         padding: 2px !important;
     }
-
-    .ach-title {
-        font-size: 9px !important;
-        font-weight: bold !important;
-        text-align: center !important;
-        line-height: 1.2 !important;
-        margin: 0 !important;
-        
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2 !important; /* 최대 2줄 */
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
+}
 
     /* 설명글은 공간 부족으로 모바일에서 숨김 */
     .ach-desc {
         display: none !important;
     }
-}
 /* =========================================
    [만사록] 슬림 버튼 36px 절대 고정
    ========================================= */

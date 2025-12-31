@@ -5845,7 +5845,7 @@ body.dark-mode .timer-row:hover {
 @media (max-width: 768px) {
     /* 1. 바텀시트 전체 높이 제한 (기존 85vh -> 70vh) */
     .bottom-sheet-content {
-        max-height: 70vh !important; /* 화면의 70%만 차지하도록 하향 조정 */
+        max-height: 85vh !important; /* 화면의 70%만 차지하도록 하향 조정 */
         height: auto !important;
         display: flex !important;
         flex-direction: column !important;

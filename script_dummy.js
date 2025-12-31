@@ -3594,50 +3594,82 @@ function renderFullAchievementList() {
         container.appendChild(card);
     });
 }
-
-
-// [신규] 인물 정보 렌더링 함수
-// [신규] 인물 정보 리스트 그리기 함수
+// [최종 수정] 인물 정보 렌더링 (10개 단위 페이징)
 function renderHomeCharacters() {
-    const container = document.getElementById('home-char-list');
-    if (!container) return;
+    const track = document.getElementById('home-char-track');
+    const indicatorsContainer = document.getElementById('char-indicators');
+    if (!track || !indicatorsContainer) return;
     
-    // 기존 내용 비우기
-    container.innerHTML = '';
+    track.innerHTML = '';
+    indicatorsContainer.innerHTML = '';
 
-    // 데이터가 없으면 중단
     if (!characterData || characterData.length === 0) return;
 
-    characterData.forEach(char => {
-        const div = document.createElement('div');
-        div.className = 'char-card-horizontal'; // CSS에서 정의한 스타일 클래스
-        
-        // ★ 클릭 시 상세 정보 팝업 열기
-        // JSON 데이터 키(key)를 openPersonDetail 함수가 원하는 이름으로 매핑해서 넘겨줍니다.
-        div.onclick = () => {
-            if (typeof openPersonDetail === 'function') {
-                openPersonDetail({
-                    name: char.name,
-                    role: '인물',              // 고정값 또는 JSON에 있으면 char.role
-                    desc: char.biography,      // JSON의 biography -> 상세창의 desc
-                    location: '강호',          // JSON에 없으므로 기본값
-                    gift: '-',                 
-                    faction: char.affiliation, // JSON의 affiliation -> 상세창의 faction
-                    img: char.photo            // JSON의 photo -> 상세창의 img
-                });
-            }
-        };
+    // ★ [핵심] 페이지당 10개 (5열 x 2행)
+    const ITEMS_PER_PAGE = 10; 
+    
+    const totalPages = Math.ceil(characterData.length / ITEMS_PER_PAGE);
+    const indicators = [];
 
-        // ★ 카드 내부 HTML (이미지 꽉 채움 + 하단 검은색 오버레이)
-        div.innerHTML = `
-            <img src="${char.photo}" class="char-h-img" onerror="this.src='images/logo.png'" alt="${char.name}">
-            
-            <div class="char-overlay-box">
-                <div class="char-h-name">${char.name}</div>
-                <div class="char-h-affil">${char.affiliation}</div>
-            </div>
-        `;
+    // 1. 페이지 생성 루프
+    for (let i = 0; i < totalPages; i++) {
+        const pageGrid = document.createElement('div');
+        pageGrid.className = 'char-page-grid'; // CSS에서 5열로 설정됨
         
-        container.appendChild(div);
-    });
+        // 데이터 잘라서 넣기
+        const pageData = characterData.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE);
+        
+        pageData.forEach(char => {
+            const card = document.createElement('div');
+            card.className = 'char-card-horizontal';
+            
+            // 클릭 시 상세 정보 열기
+            card.onclick = () => {
+                if (typeof openPersonDetail === 'function') {
+                    openPersonDetail({ 
+                        name: char.name, 
+                        role: '인물', 
+                        desc: char.biography, 
+                        location: '-', 
+                        gift: '-', 
+                        faction: char.affiliation, 
+                        img: char.photo 
+                    });
+                }
+            };
+            
+            card.innerHTML = `
+                <img src="${char.photo}" class="char-h-img" onerror="this.src='images/logo.png'">
+                <div class="char-overlay-box">
+                    <div class="char-h-name">${char.name}</div>
+                    <div class="char-h-affil">${char.affiliation}</div>
+                </div>
+            `;
+            pageGrid.appendChild(card);
+        });
+        
+        track.appendChild(pageGrid);
+
+        // 인디케이터 생성
+        const dot = document.createElement('div');
+        dot.className = 'indicator-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => {
+            pageGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        };
+        indicatorsContainer.appendChild(dot);
+        indicators.push(dot);
+    }
+
+    // 2. 스크롤 옵저버 (인디케이터 자동 업데이트)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const index = Array.from(track.children).indexOf(entry.target);
+                indicators.forEach(dot => dot.classList.remove('active'));
+                if (indicators[index]) indicators[index].classList.add('active');
+            }
+        });
+    }, { root: track, threshold: 0.5 });
+
+    Array.from(track.children).forEach(page => observer.observe(page));
 }

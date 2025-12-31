@@ -3891,106 +3891,160 @@ body.dark-mode .timer-row:hover {
     overflow: hidden; 
 }
 
-
 /* =========================================
-   [최종] 인물 & 지역 리스트 (반응형 그리드)
+   [최종] 인물 정보 스와이프 & 지역 정보
    ========================================= */
 
-/* 1. 컨테이너 설정 */
-#home-char-list, 
-#home-map-list {
-    display: grid !important;
-    gap: 8px !important;
-    padding: 0 !important; /* 왼쪽 정렬 맞춤 */
-    margin: 10px 0 20px 0 !important;
-    
-    background: none !important;
-    border: none !important;
-    overflow: visible !important;
-    height: auto !important;
-
-    /* ★ [핵심 1] 모바일(기본): 꽉 찬 4열 유지 */
-    grid-template-columns: repeat(5, 1fr) !important;
+/* -----------------------------------------
+   1. 인물 정보 (Char) : 스와이프 및 인디케이터
+   ----------------------------------------- */
+/* 외부 래퍼 (인디케이터 위치 기준) */
+.char-swipe-wrapper {
+    position: relative;
+    margin: 10px 0 20px 0;
+    padding-bottom: 25px; /* 인디케이터 공간 확보 */
 }
 
-/* ★ [핵심 2] PC 화면(768px 이상)일 때 설정 덮어쓰기 */
+/* 스크롤 트랙 (Flex로 페이지 가로 배치 & 스크롤 스냅) */
+#home-char-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory; /* 페이지 단위로 딱딱 멈추게 함 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+#home-char-track::-webkit-scrollbar { display: none; }
+
+/* =========================================
+   [수정] 인물 정보 페이지 그리드 (5열 x 2행)
+   ========================================= */
+.char-page-grid {
+    flex: 0 0 100%;          /* 페이지 하나가 화면 꽉 채움 */
+    scroll-snap-align: start;
+    
+    display: grid;
+    
+    /* ★ [핵심] 한 줄에 5개씩 배치 */
+    grid-template-columns: repeat(5, 1fr) !important; 
+    
+    grid-template-rows: repeat(2, auto);   /* 2줄 */
+    gap: 6px; /* [권장] 5개라 좁으므로 간격을 살짝 줄임 (8px->6px) */
+    
+    padding: 0 5px; /* 좌우 여백 살짝 */
+    margin: 0;
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
+}
+/* 인디케이터 컨테이너 */
+.swipe-indicators {
+    position: absolute;
+    bottom: 0;
+    left: 0; width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 5px 0;
+}
+
+/* 인디케이터 점 (기본) */
+.indicator-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ddd; /* 비활성 색상 */
+    transition: all 0.3s ease;
+}
+
+/* 인디케이터 점 (활성) */
+.indicator-dot.active {
+    background: #333; /* 활성 색상 (진하게) */
+    width: 20px;      /* 활성 시 길어지는 효과 (선택사항) */
+    border-radius: 4px;
+}
+/* =========================================
+   [PC 전용 설정] 슬라이드 해제 및 전체 그리드 보기
+   ========================================= */
 @media (min-width: 768px) {
-    #home-char-list, 
-    #home-map-list {
-        /* 화면이 넓어지면 카드가 커지는 게 아니라, '개수'가 늘어남 */
-        /* 카드 최소 너비를 110px로 고정하고, 남는 공간에 최대한 채워넣음 */
+    
+    /* 1. 슬라이드 트랙 -> 일반 그리드로 변경 */
+    #home-char-track {
+        display: grid !important;
+        /* PC에서는 카드 최소 크기 110px 유지하며 꽉 채우기 */
         grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
-        gap: 15px !important; /* PC는 간격 좀 더 넓게 */
+        gap: 15px !important;
+        
+        /* 스크롤/스냅 기능 해제 */
+        overflow: visible !important;
+        scroll-snap-type: none !important;
+    }
+
+    /* 2. [핵심] 10개씩 묶은 페이지(div)의 껍데기를 벗김 */
+    /* display: contents를 쓰면 이 div는 사라진 셈 치고, 내부 카드들이 트랙의 직계 자식처럼 배치됨 */
+    .char-page-grid {
+        display: contents !important;
+    }
+
+    /* 3. 인디케이터(점) 숨기기 (PC는 스크롤로 보니까 필요 없음) */
+    .swipe-indicators {
+        display: none !important;
+    }
+    
+    /* 4. 카드 크기 재조정 (늘어짐 방지) */
+    .char-card-horizontal {
+        width: 100% !important;
+        aspect-ratio: 3 / 4.2 !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* 5. 래퍼 여백 조정 */
+    .char-swipe-wrapper {
+        padding-bottom: 0 !important; /* 인디케이터 공간 제거 */
     }
 }
 
-/* 2. 카드 스타일 (비율 고정) */
-.char-card-horizontal,
-.map-card-horizontal {
-    position: relative !important;
-    width: 100% !important;
-    
-    /* 세로로 긴 직사각형 비율 고정 */
-    aspect-ratio: 3 / 4.2 !important; 
-    
-    border-radius: 6px;
-    overflow: hidden;
-    background: #333; 
-    border: none !important;
-    margin: 0 !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+/* -----------------------------------------
+   2. 지역 정보 (Map) : 4개 1줄 (기존 유지)
+   ----------------------------------------- */
+#home-map-list {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    margin: 10px 0 20px 0 !important;
+    background: none; border: none; overflow: visible; height: auto;
+}
+@media (min-width: 768px) {
+    #home-map-list {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+        gap: 15px !important;
+    }
 }
 
-/* 3. 이미지 (풀 채움) */
-.char-h-img,
-.map-h-img {
-    position: absolute !important;
-    top: 0; left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover;
-    z-index: 1;
-    margin: 0 !important;
-}
 
-/* 4. 텍스트 박스 (하단 그라데이션 + 왼쪽 정렬) */
-.char-overlay-box,
-.map-overlay-box {
-    position: absolute !important;
-    bottom: 0; left: 0; width: 100%;
-    
-    /* 투명 -> 검정 그라데이션 */
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%) !important;
-    
-    /* 왼쪽 정렬 */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start !important; 
-    text-align: left !important;        
-    
-    padding: 30px 6px 8px 8px !important;
-    z-index: 2;
+/* -----------------------------------------
+   3. 카드 및 내부 공통 스타일 (기존과 동일)
+   ----------------------------------------- */
+.char-card-horizontal, .map-card-horizontal {
+    position: relative; width: 100%;
+    aspect-ratio: 3 / 4.2;
+    border-radius: 6px; overflow: hidden; background: #333; 
+    border: none; margin: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
-
-/* 5. 텍스트 폰트 설정 */
-.char-h-name,
-.map-h-title {
-    font-size: 11px !important;
-    font-weight: bold;
-    color: #fff !important;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0 !important;
-    line-height: 1.2;
+.char-h-img, .map-h-img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 1; margin: 0;
 }
-
+.char-overlay-box, .map-overlay-box {
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    align-items: flex-start; text-align: left;
+    padding: 30px 6px 8px 8px; z-index: 2;
+}
+.char-h-name, .map-h-title {
+    font-size: 11px; font-weight: bold; color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8); width: 100%;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin: 0; line-height: 1.2;
+}
 .char-h-affil {
-    font-size: 10px !important;
-    color: #ddd !important;
-    margin-top: 2px;
+    font-size: 10px; color: #ddd; margin-top: 2px;
 }

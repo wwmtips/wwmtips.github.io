@@ -1353,3 +1353,68 @@
             font-size: 16px !important;
             pointer-events: none;
         }
+      
+        /* [신규] 숨겨진 요소 클릭 방지 (안전 장치) */
+        /* 투명도가 0이거나 화면에서 사라진 요소는 절대 클릭되지 않게 함 */
+        [style*="opacity: 0"], 
+        .hidden {
+            pointer-events: none !important;
+        }
+        /* [수정] 경로 모드일 때 상단 UI 강력하게 숨기기 */
+        
+        /* 1. 상단바 전체를 감싸는 컨테이너가 있다면 그것을 숨김 */
+        body.viewing-path header,
+        body.viewing-path .header-container,
+        body.viewing-path .top-bar {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        /* 2. 좌측 상단 드롭다운 (가능성 있는 모든 클래스명 나열) */
+        body.viewing-path .map-select-container,
+        body.viewing-path .map-selector,
+        body.viewing-path .dropdown-wrapper,
+        body.viewing-path #map-select,       /* ID로 직접 타겟팅 */
+        body.viewing-path select {           /* 모든 select 태그 타겟팅 */
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: opacity 0.3s;
+        }
+
+        /* 3. 우측 상단 컨트롤 */
+        body.viewing-path .top-right-controls,
+        body.viewing-path .search-btn-wrapper,
+        body.viewing-path .user-profile {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+        /* [수정] 저장/불러오기 팝업 스타일 (숨겨져 있을 때 클릭 방지) */
+        .save-load-popup {
+            position: absolute;
+            bottom: 60px; /* 위치는 기존값 유지 */
+            left: 0px;   /* 위치는 기존값 유지 */
+            background-color: rgba(30, 30, 30, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 2000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            
+            /* ★ 핵심 수정: 평소에는 클릭도 안 되고, 보이지도 않게 설정 */
+            opacity: 0;
+            pointer-events: none; /* 투명할 때 클릭 방지 */
+            visibility: hidden;   /* 화면 렌더링에서 제외 */
+            transform: translateY(10px);
+            transition: all 0.2s ease;
+        }
+
+        /* 팝업이 켜졌을 때 (JS에서 .active 클래스를 붙인다고 가정) */
+        .save-load-popup.active {
+            opacity: 1;
+            pointer-events: auto; /* 다시 클릭 가능하게 */
+            visibility: visible;  /* 다시 보이게 */
+            transform: translateY(0);
+        }

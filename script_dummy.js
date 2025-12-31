@@ -102,18 +102,40 @@ function updateItemsPerPage() {
 // =========================================
 // 4. 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', loadMansarokMenu);
-// 1. 만사록 데이터를 서버에서 불러오는 함수
+// 만사록 데이터를 불러와 상단에 배치하는 함수 (최종 수정본)
 async function loadMansarokMenu() {
     try {
-        // 실제 데이터 파일 경로 (환경에 맞게 수정하세요)
-        const response = await fetch('json/quests.json'); 
-        if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
+        const response = await fetch('data/quests.json'); 
+        if (!response.ok) throw new Error('데이터 로드 실패');
         
         const data = await response.json();
         
-        // 2. 렌더링 함수 실행
-        renderMansarok(data);
+        // 1. 만사록 타입 필터링 후 최대 9개만 자르기
+        const mansarokList = data
+            .filter(item => item.type === '만사록')
+            .slice(0, 9); // [핵심] 0번부터 8번 인덱스까지만 선택
         
+        const container = document.getElementById('mansarok-list');
+        if (!container) return;
+        
+        container.innerHTML = ''; 
+
+        mansarokList.forEach(item => {
+            const btn = document.createElement('a');
+            btn.className = 'mansarok-btn';
+            btn.href = "javascript:void(0);";
+            
+            // 내부 함수 호출 방식 유지
+            btn.onclick = () => { 
+                if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
+                    switchTab('quest'); 
+                    loadQuestDetail(item.filepath, item.id); 
+                }
+            };
+            
+            btn.innerHTML = `<span>${item.name}</span>`;
+            container.appendChild(btn);
+        });
     } catch (error) {
         console.error('만사록 로드 에러:', error);
     }

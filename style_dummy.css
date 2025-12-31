@@ -4517,36 +4517,56 @@ body.dark-mode .timer-row:hover {
 .ach-desc {
     display: none !important;
 }
+/* =========================================
+   [최종 해결] 업적 제목 수직/수평 완전 중앙 정렬
+   ========================================= */
 
-/* 1. 텍스트 박스: 글자가 2줄이 되어도 중앙을 유지하도록 높이 재설정 */
+/* 1. 텍스트 컨테이너: 높이를 명확히 하고 내부 여백을 완전히 제거 */
 .ach-content {
-    flex-grow: 1 !important;
+    height: 40px !important;      /* 하단 텍스트 영역 높이 고정 */
+    width: 100% !important;
+    
     display: flex !important;
-    justify-content: center !important; 
-    align-items: center !important;     
-    background-color: #fff !important;
-    padding: 2px 4px !important; /* 위아래 여백 살짝 추가 */
+    flex-direction: column !important;
+    justify-content: center !important; /* [핵심] 수직 중앙 */
+    align-items: center !important;     /* [핵심] 수평 중앙 */
+    
+    padding: 0 !important;        /* 안쪽 여백 0 */
+    margin: 0 !important;         /* 바깥 여백 0 */
+    background: #fff !important;
     overflow: hidden !important;
 }
 
-/* 2. 제목 스타일: 2줄까지 보여주고 넘치면 ... 처리 */
+/* 2. 제목: 글자 자체의 마진이 정렬을 방해하지 않도록 설정 */
 .ach-title {
+    /* [가장 중요] 브라우저 기본 마진이 아래로 쏠리게 할 수 있으므로 0으로 강제 */
+    margin: 0 !important;         
+    padding: 0 !important;
+    
     font-size: 9px !important;
     font-weight: bold !important;
     color: #333 !important;
     text-align: center !important;
-    line-height: 1.1 !important; /* 줄 간격 좁게 */
-    margin: 0 !important;
-    width: 100% !important;
     
-    /* [핵심] 2줄 제한 및 말줄임 처리 */
+    /* 줄높이를 1 또는 글자 크기와 비슷하게 맞춰야 중앙에 딱 맞습니다 */
+    line-height: 1.1 !important; 
+    
+    width: 95% !important;       /* 좌우 꽉 차지 않게 살짝 여유 */
+    
+    /* 2줄 및 말줄임 처리 유지 */
     display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important; /* ★ 최대 2줄까지 표시 */
+    -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
-    white-space: normal !important;   /* 줄바꿈 허용 */
+    white-space: normal !important;
     overflow: hidden !important;
-    text-overflow: ellipsis !important; /* 2줄 넘어가면 ... 표시 */
-    
-    /* 단어 단위 끊김 방지 */
-    word-break: keep-all !important; 
+    text-overflow: ellipsis !important;
+    word-break: keep-all !important;
+}
+
+/* 3. 상단 이미지 영역과 겹치지 않게 확인 */
+.ach-icon {
+    height: 70px !important;
+    flex-shrink: 0 !important;    /* 텍스트가 길어져도 이미지가 눌리지 않게 함 */
+    margin: 0 !important;
+    padding: 0 !important;
 }

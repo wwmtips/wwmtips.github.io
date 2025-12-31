@@ -265,7 +265,7 @@
         "보스": "ic_boss", "기연": "ic_ki", "천지록": "ic_cj","사건":"ic_pvp",
         "낚시대결":"ic_fish","투호대결":"ic_two","영지":"ic_camp","강호의벗":"ic_pic","유물":"ic_tr",
         "탐방":"logo","만물의울림":"ic_man","곡경심유":"ic_gk","궁술대결":"logo","기타":"logo","야외제사":"logo",
-        "무술로맺은인연":"logo", "풍류의선률":"logo", "의술치유":"logo", "채집":"logo"
+        "무술로맺은인연":"logo", "풍류의선률":"logo", "의술치유":"logo", "채집":"logo","화장실":"ic_tl"
     };
 
        const colorMapping = {
@@ -686,6 +686,8 @@
                         <label>이름</label> <input type="text" id="input_name">
                         <label>종류</label> 
                         <select id="input_type" onchange="autoFillDesc(this)">                        
+                           <option value="화장실">화장실</option>
+                        
                             <option value="채집">채집</option>
                            <option value="상자">상자</option>
                             <option value="경계석">경계석</option> 

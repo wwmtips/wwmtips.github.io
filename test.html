@@ -869,16 +869,17 @@ function toggleSidebarSub(element) {
             <div class="sidebar-item" id="nav-home" onclick="closeSidebar(); switchTab('home');">
                 홈
             </div>
-
+ <div class="sidebar-item" id="nav-hw" onclick="closeSidebar(); openGuideDirect('npc.html');">
+                할 일 목록
+            </div>
             <div class="sidebar-group">
                 <div class="sidebar-item has-sub" id="nav-code" onclick="toggleSidebarSub(this)">
-                    <span>비급 (가이드)</span>
+                    <span>도감</span>
                     <span class="arrow"></span>
                 </div>
                 <div class="sidebar-sub-list">
-                    <button onclick="closeSidebar(); openGuideDirect('npc.html');">할 일 (숙제)</button>
-                    <button onclick="closeSidebar(); openGuideDirect('harts.html');">심법 도감</button>
-                    <button onclick="closeSidebar(); openGuideDirect('marts.html');">비결 도감</button>
+                  <button onclick="closeSidebar(); openGuideDirect('harts.html');">심법</button>
+                    <button onclick="closeSidebar(); openGuideDirect('marts.html');">비결</button>
                     <button onclick="closeSidebar(); openGuideDirect('boss.html');">보스 공략</button>
                     <button onclick="closeSidebar(); openGuideDirect('sim.html');">심력 계산기</button>
                     <button onclick="closeSidebar(); openGuideDirect('code.html');">교환 코드</button>

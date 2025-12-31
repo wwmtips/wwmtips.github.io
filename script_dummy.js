@@ -471,6 +471,7 @@ function resetSliderTimer() {
 }
 
 // [수정] 홈 화면 지역 정보 로드 (가로 스크롤 + URL 이동)
+// [수정] 지역 정보 로드 함수 (설명글 제거 & 카드 생성)
 function loadHomeMaps() {
     const mapList = document.getElementById('home-map-list');
     if (!mapList) return;
@@ -479,16 +480,17 @@ function loadHomeMaps() {
     // dummyMapData를 순회하며 카드 생성
     dummyMapData.forEach(map => {
         const div = document.createElement('div');
-        div.className = 'map-card-horizontal'; // 새로 만든 CSS 클래스 적용
+        div.className = 'map-card-horizontal'; // CSS 클래스 적용
         
-        // ★ 클릭 시 해당 지역 URL로 이동
-        // 예: 현재주소/map/?id=qinghe 로 이동합니다.
+        // 클릭 시 이동
         div.onclick = () => {
             window.location.href = `map/?id=${map.key}`;
         };
 
+        // ★ [중요] 설명(desc) 부분을 아예 넣지 않습니다.
+        // 이미지와 제목만 딱 넣어서 카드가 길어지는 것을 막습니다.
         div.innerHTML = `
-            <img src="${map.image}" class="map-h-img" onerror="this.src='images/logo.png'">
+            <img src="${map.image}" class="map-h-img" onerror="this.src='images/logo.png'" alt="${map.title}">
             <div class="map-h-title">${map.title}</div>
         `;
         

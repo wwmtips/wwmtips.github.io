@@ -3807,7 +3807,7 @@ function openPersonDetail(char) {
         .sort() // 순서대로 정렬
         .map(key => `<p style="margin-bottom: 8px;">${char[key]}</p>`) // 각 스토리를 <p>로 감쌈
         .join('');
-
+    const displayAffiliation = char.affiliation || char.affil || '알 수 없음';
     // 2. 전체 레이아웃 구성
     contentArea.innerHTML = `
         <div class="sheet-handle-bar"></div>
@@ -3824,7 +3824,7 @@ function openPersonDetail(char) {
         <div class="task-list-wrapper">
             <div class="person-info-row">
                 <span class="person-label">소속</span>
-                <span class="task-title">${char.affiliation || '알 수 없음'}</span>
+                <span class="task-title">${displayAffiliation || '알 수 없음'}</span>
                </div>
  
             

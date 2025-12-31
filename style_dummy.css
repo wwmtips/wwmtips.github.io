@@ -3891,36 +3891,69 @@ body.dark-mode .timer-row:hover {
     overflow: hidden; 
 }
 
+
 /* =========================================
    [통합 수정] 지역(Map) & 인물(Char) 리스트 스타일
    ========================================= */
 
 /* -----------------------------------------
-   1. 지역 정보 (Map) : 1줄, 4개 딱 맞춤 (스크롤 X)
+   1. 컨테이너 설정
    ----------------------------------------- */
+
+/* 지역 정보 (Map) : 1줄, 4개 딱 맞춤 */
 #home-map-list {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
     align-items: center;
     
-    /* 4개일 때 꽉 차게 계산 (간격 고려) */
+    /* 4개가 딱 맞게 들어가도록 간격 미세 조정 */
     gap: 2%;                  
     
-    height: 155px !important; /* 컨테이너 높이 */
-    overflow-x: auto;         /* 5개 이상이면 스크롤 됨 */
+    height: 160px !important; /* 컨테이너 높이 확보 */
+    overflow-x: auto;         
     overflow-y: hidden;
     padding: 0 5px;
     
     /* 기본 스타일 초기화 */
     background: transparent !important;
     border: none !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    grid-template-columns: none !important; /* 혹시 모를 그리드 해제 */
 }
-#home-map-list::-webkit-scrollbar { display: none; }
 
-/* 지역 카드 (화면 너비에 맞춰 4등분) */
+/* 인물 정보 (Char) : 2줄(4x2), 가로 스크롤 */
+#home-char-list {
+    display: grid !important;
+    
+    /* 2줄(행) 고정 */
+    grid-template-rows: repeat(2, 1fr) !important;
+    
+    /* 데이터가 쌓이면 오른쪽으로 흐름 */
+    grid-auto-flow: column !important;
+    
+    /* 높이: 카드높이(135) * 2 + 간격(10) + 여유분 */
+    height: 290px !important; 
+    
+    gap: 10px;
+    overflow-x: auto;
+    padding: 0 5px;
+    
+    background: transparent !important;
+    border: none !important;
+}
+
+/* 스크롤바 숨기기 (공통) */
+#home-map-list::-webkit-scrollbar, 
+#home-char-list::-webkit-scrollbar { 
+    display: none; 
+}
+
+
+/* -----------------------------------------
+   2. 카드(아이템) 디자인
+   ----------------------------------------- */
+
+/* 지역 카드 (화면 너비 4등분) */
 .map-card-horizontal {
     flex: 0 0 auto;           /* 크기 자동 조절 방지 */
     
@@ -3928,96 +3961,82 @@ body.dark-mode .timer-row:hover {
     width: 23.5% !important;  
     height: 140px !important;
     
-    position: relative;       /* 오버레이 기준점 */
+    position: relative !important; /* 오버레이 기준점 */
     border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     background-color: #333;
-    border: none;
-}
-
-/* -----------------------------------------
-   2. 인물 정보 (Char) : 2줄(4x2), 가로 스크롤
-   ----------------------------------------- */
-#home-char-list {
-    /* Grid 레이아웃 사용 */
-    display: grid !important;
-    
-    /* 2줄(행) 고정 */
-    grid-template-rows: repeat(2, 1fr) !important;
-    
-    /* 데이터가 쌓이면 오른쪽으로 흐름 */
-    grid-auto-flow: column;
-    
-    /* 높이: 카드높이(135) * 2 + 간격 */
-    height: 290px !important; 
-    
-    gap: 10px;                /* 상하좌우 간격 */
-    overflow-x: auto;         /* 가로 스크롤 허용 */
-    padding: 0 5px;
-    
-    background: transparent !important;
     border: none !important;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
 }
-#home-char-list::-webkit-scrollbar { display: none; }
 
 /* 인물 카드 (고정 크기) */
 .char-card-horizontal {
-    /* 그리드 셀 크기에 맞춤, 혹은 고정값 사용 */
-    width: 85px;              /* 너비 고정 (스크롤 시 자연스럽게) */
-    height: 135px;            /* 높이 고정 */
+    /* 그리드 셀 안에서도 크기 유지 */
+    width: 85px !important;
+    height: 135px !important;
     
-    position: relative;
+    position: relative !important; /* 오버레이 기준점 */
     border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
     background-color: #333;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: none !important;
+    
+    /* Flex/Grid 간섭 방지 */
+    flex: none;
+    margin: 0;
 }
+
 
 /* -----------------------------------------
-   3. 공통 스타일 (이미지 & 오버레이 & 텍스트)
+   3. 내부 요소 (이미지 & 오버레이) 공통 스타일
    ----------------------------------------- */
 
-/* 이미지 (배경으로 꽉 채움) */
+/* 이미지 (무조건 꽉 채우기) */
 .map-h-img, .char-h-img {
-    width: 100%;
+    width: 100% !important;
     height: 100% !important;
-    position: absolute;
+    
+    /* ★ [핵심] 텍스트 뒤로 보내기 위해 절대 위치 사용 */
+    position: absolute !important;
     top: 0; left: 0;
+    
     object-fit: cover;
-    z-index: 1;
+    z-index: 1; /* 제일 뒤 */
     margin: 0;
     border: none;
+    background-color: #333;
 }
 
-/* 오버레이 박스 (하단 검은색 그라데이션) */
+/* 오버레이 박스 (검은색 그라데이션) */
 .map-overlay-box, .char-overlay-box {
-    position: absolute;
+    /* ★ [핵심] 카드 하단에 고정 */
+    position: absolute !important;
     bottom: 0; left: 0; width: 100%;
     
     /* 투명 -> 검정 그라데이션 */
     background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
     
-    padding: 20px 8px 8px 8px;
-    z-index: 2;
+    padding: 30px 5px 8px 5px; /* 상단 패딩으로 그라데이션 영역 확보 */
+    z-index: 2; /* 이미지 위 */
+    
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* 아래로 정렬 */
-    box-sizing: border-box;    /* 패딩 포함 크기 계산 */
+    justify-content: flex-end; /* 텍스트 아래 정렬 */
+    box-sizing: border-box;
 }
 
 /* 텍스트 (흰색) */
 .map-h-title, .char-h-name {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
     color: #fff;
     font-family: 'Noto Serif KR', serif;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     line-height: 1.2;
+    
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

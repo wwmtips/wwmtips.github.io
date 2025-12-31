@@ -3928,12 +3928,12 @@ body.dark-mode .timer-row:hover {
     
     /* [핵심] 가로 85px, 세로 140px로 고정 (내용이 넘쳐도 커지지 않음) */
     width: 85px !important;  
-    height: 140px !important; 
+    height:100px !important; 
     
     display: flex;
     flex-direction: column;
     border: 1px solid #eee;
-    border-radius: 6px;
+    border-radius: 0px;
     overflow: hidden;        /* 넘치는 내용 자름 */
     background-color: #fff;
     cursor: pointer;

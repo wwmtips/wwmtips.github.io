@@ -4520,40 +4520,104 @@ body.dark-mode .timer-row:hover {
 /* =========================================
    [최종 해결] 업적 제목 수직/수평 완전 중앙 정렬
    ========================================= */
+/* =========================================
+   [최종] 업적 섹션 PC 10개 배치 (가로 꽉 채움)
+   ========================================= */
 
-/* 1. 텍스트 컨테이너: 높이를 명확히 하고 내부 여백을 완전히 제거 */
-.ach-content {
-    height: 40px !important;      /* 하단 텍스트 영역 높이 고정 */
+/* 1. 컨테이너: PC(768px 이상)에서 무조건 한 줄에 10개 배치 */
+@media (min-width: 768px) {
+    #achievement-list {
+        display: grid !important;
+        /* [핵심] 화면을 10등분 하여 꽉 채웁니다 */
+        grid-template-columns: repeat(10, 1fr) !important; 
+        gap: 8px !important;    /* 칸 사이 간격 살짝 좁힘 */
+        padding: 0 5px !important;
+        margin-top: 15px !important;
+        width: 100% !important;
+    }
+}
+
+/* =========================================
+   [추가] 업적/만사록 모바일 가로 스크롤 설정
+   ========================================= */
+
+@media (max-width: 767px) {
+    #achievement-list, #mansarok-list {
+        /* [핵심] 줄바꿈을 막고 가로로 나열 */
+        display: flex !important; 
+        overflow-x: auto !important; /* 가로 스크롤 허용 */
+        white-space: nowrap !important;
+        gap: 8px !important;
+        padding: 5px 10px 15px 10px !important; /* 하단 스크롤 공간 확보 */
+        
+        /* 스크롤 매끄럽게 */
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #achievement-list .achievement-card, 
+    #mansarok-list .mansarok-btn {
+        /* [핵심] 카드 한 칸의 너비를 고정 (화면의 약 30% 정도) */
+        flex: 0 0 30% !important; 
+        scroll-snap-align: start;
+        height: 95px !important;
+    }
+
+    /* 스크롤바 숨기기 (디자인용) */
+    #achievement-list::-webkit-scrollbar,
+    #mansarok-list::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* 3. 개별 카드 스타일 고정 (PC 10개 배치 시 크기 비례 조정) */
+.achievement-card {
     width: 100% !important;
+    /* 높이를 110px에서 90px 정도로 낮춰야 10개 배치 시 비율이 예쁩니다 */
+    height: 95px !important; 
     
     display: flex !important;
     flex-direction: column !important;
-    justify-content: center !important; /* [핵심] 수직 중앙 */
-    align-items: center !important;     /* [핵심] 수평 중앙 */
-    
-    padding: 0 !important;        /* 안쪽 여백 0 */
-    margin: 0 !important;         /* 바깥 여백 0 */
-    background: #fff !important;
+    background-color: #fff !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 4px !important;
     overflow: hidden !important;
 }
 
-/* 2. 제목: 글자 자체의 마진이 정렬을 방해하지 않도록 설정 */
+/* 4. 이미지(아이콘) 영역 비율 조정 */
+.ach-icon {
+    width: 100% !important;
+    height: 55px !important; /* 이미지 영역 높이 축소 */
+    background-color: #ffffff !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-bottom: 1px solid #f5f5f5 !important;
+}
+
+.ach-icon img {
+    max-width: 85% !important;
+    max-height: 85% !important;
+    object-fit: contain !important;
+}
+
+/* 5. 텍스트 영역 (완전 중앙 정렬) */
+.ach-content {
+    flex-grow: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 2px !important;
+}
+
+/* 6. 제목 폰트 (10개 배치 시 글자가 겹치지 않게 크기 축소) */
 .ach-title {
-    /* [가장 중요] 브라우저 기본 마진이 아래로 쏠리게 할 수 있으므로 0으로 강제 */
-    margin: 0 !important;         
-    padding: 0 !important;
-    
-    font-size: 9px !important;
-    font-weight: bold !important;
+    font-size: 8.5px !important; /* 9px에서 약간 더 축소 */
+    font-weight: 600 !important;
     color: #333 !important;
     text-align: center !important;
+    line-height: 1.1 !important;
     
-    /* 줄높이를 1 또는 글자 크기와 비슷하게 맞춰야 중앙에 딱 맞습니다 */
-    line-height: 1.1 !important; 
-    
-    width: 95% !important;       /* 좌우 꽉 차지 않게 살짝 여유 */
-    
-    /* 2줄 및 말줄임 처리 유지 */
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
@@ -4561,14 +4625,6 @@ body.dark-mode .timer-row:hover {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     word-break: keep-all !important;
-}
-
-/* 3. 상단 이미지 영역과 겹치지 않게 확인 */
-.ach-icon {
-    height: 70px !important;
-    flex-shrink: 0 !important;    /* 텍스트가 길어져도 이미지가 눌리지 않게 함 */
-    margin: 0 !important;
-    padding: 0 !important;
 }
 /* =========================================
    [최종] 만사록 버튼 PC 100% 너비 및 자동 배치

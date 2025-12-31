@@ -3650,7 +3650,7 @@ function renderAchievements(data) {
     container.innerHTML = ''; // "로딩 중..." 문구 제거
 
     // ★ 핵심: 메인 화면용으로 상위 2개만 자르기 ★
-    const limitedList = fullList.slice(0, 4);
+    const limitedList = fullList.slice(0, 10);
 
     limitedList.forEach(item => {
         // 아이콘이 없으면 기본 로고 사용

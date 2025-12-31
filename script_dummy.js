@@ -231,7 +231,9 @@ function loadData() {
             });
         }
         
-        globalData = { items: mainData.items || [], quiz: mainData.quiz || [], quests: quests, news: news, cnews: cnews, chunji: chunji, builds: [] };
+        globalData = { items: mainData.items || [], quiz: mainData.quiz || [], quests: quests, news: news, cnews: cnews, chunji: chunji, builds: [],
+                     archive: Array.isArray(archiveData) ? archiveData : (archiveData.archive || [])
+};
         builderData = builderDataResult; 
         currentQuestData = globalData.quests;
         chunjiData = globalData.chunji;
@@ -548,6 +550,13 @@ function switchTab(tabName, updateHistory = true) {
             renderFullNews(globalData.news);
         }
     } 
+           // [추가] 업적 전체보기 탭 전환
+    else if (tabName === 'archive') {
+        document.getElementById('view-archive').style.display = 'block';
+        // 전체 목록 그리기 함수 호출
+        renderFullAchievementList();
+    }
+
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
         document.getElementById('nav-more').classList.add('active');
@@ -3530,5 +3539,39 @@ function renderAchievements(data) {
             </div>
         `;
         container.appendChild(div);
+    });
+}
+
+// [신규] 업적 전체 목록 그리기 (큰 카드 형태)
+function renderFullAchievementList() {
+    const container = document.getElementById('archive-grid-container');
+    if (!container) return;
+    
+    // 이미 그려져 있으면 다시 그리지 않음 (최적화)
+    if (container.children.length > 0) return;
+
+    const list = globalData.archive || [];
+    container.innerHTML = '';
+
+    if (list.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px; color:#888;">데이터가 없습니다.</div>';
+        return;
+    }
+
+    list.forEach(item => {
+        const iconSrc = item.icon ? item.icon : 'images/logo.png';
+        
+        const card = document.createElement('div');
+        card.className = 'archive-full-card'; // CSS에서 정의한 큰 카드 클래스
+        card.innerHTML = `
+            <div class="af-icon-wrapper">
+                <img src="${iconSrc}" alt="아이콘" onerror="this.src='images/logo.png'">
+            </div>
+            <div class="af-content">
+                <div class="af-title">${item.displayName}</div>
+                <div class="af-desc">${item.description}</div>
+            </div>
+        `;
+        container.appendChild(card);
     });
 }

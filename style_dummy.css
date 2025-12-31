@@ -3255,7 +3255,7 @@ h3 {
 
 .timer-clock {
     font-family: 'Noto Serif KR', serif;
-    font-size: 0.9em !important; /* 시간 글자 크기 */
+    font-size: 0.8em !important; /* 시간 글자 크기 */
     font-weight: bold;
     color: var(--wuxia-accent-red); /* 붉은색 강조 */
 }

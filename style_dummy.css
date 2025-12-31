@@ -4902,47 +4902,70 @@ body.dark-mode .timer-row:hover {
         gap: 8px !important;
         align-items: start !important; /* 아래로 늘어남 방지 */
     }
-}
+}/* =========================================
+   [최종] 업적 섹션 모바일 4열 정렬 및 높이 고정
+   ========================================= */
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
+    /* 1. 컨테이너: 4열 고정 및 자식 요소 늘어남 방지 */
     #achievement-list {
-        /* 모바일에서 한 줄에 3개 배치 */
-        grid-template-columns: repeat(3, 1fr) !important;
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important; /* 무조건 한 줄에 4개 */
         gap: 6px !important;
+        align-items: flex-start !important; /* ★세로로 길게 늘어지는 것 차단★ */
+        padding: 0 5px !important;
+    }
+
+    /* 2. 카드: 높이를 명확하게 고정 */
+    .achievement-card {
+        height: 95px !important; /* 이미지형 카드 적정 높이 */
+        min-height: 95px !important;
+        max-height: 95px !important;
+        background-color: #fff !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 4px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* 3. 아이콘 영역 높이 고정 */
+    .ach-icon {
+        height: 55px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    /* 4. 텍스트 영역: 중앙 정렬 */
+    .ach-content {
+        flex-grow: 1 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 2px !important;
+    }
+
+    .ach-title {
+        font-size: 9px !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important; /* 최대 2줄 */
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    /* 설명글은 공간 부족으로 모바일에서 숨김 */
+    .ach-desc {
+        display: none !important;
     }
 }
-
-/* 업적 카드 개별 스타일 */
-.achievement-card {
-    width: 100% !important;
-    height: 95px !important; /* 업적은 이미지 때문에 높이가 있어야 함 */
-    background-color: #fff !important;
-    border: 1px solid #e0e0e0 !important;
-    border-radius: 4px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    overflow: hidden !important;
-}
-
-/* 업적 아이콘 영역 */
-.ach-icon {
-    height: 60px !important;
-    background-color: #ffffff !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    border-bottom: 1px solid #f0f0f0 !important;
-}
-
-/* 업적 텍스트 영역 (중앙 정렬) */
-.ach-content {
-    flex-grow: 1 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding: 2px !important;
-}
-
 /* =========================================
    [만사록] 슬림 버튼 36px 절대 고정
    ========================================= */
@@ -5011,7 +5034,7 @@ body.dark-mode .timer-row:hover {
         text-decoration: none !important; 
         color: inherit !important;
         
-        background-color: #f8f8f8 !important;
+        background-color: #ffffff !important;
         border: 1px solid #ddd !important;
         border-radius: 4px !important;
         box-sizing: border-box !important;

@@ -4,7 +4,8 @@
         "name": "강무랑",
         "photo": "images/char/1.jpg",
         "affiliation": "알 수 없음",
-        "biography": "강호를 유람하며 인연을 맺는 신비로운 인물입니다."
+        "biography": "강호를 유람하며 인연을 맺는 신비로운 인물입니다.",
+        "link":"dd"
     },
     {
         "id": "p2",
@@ -77,10 +78,10 @@
         "biography": "청하에서 자라난 뛰어난 검술의 소유자입니다."
     },
     {
-        "id": "p3",
-        "name": "백리",
-        "photo": "images/char3.jpg",
-        "affiliation": "개봉 상단",
+        "id": "p12",
+        "name": "시일묵",
+        "photo": "images/char/10.jpg",
+        "affiliation": "광란문",
         "biography": "개봉의 경제를 움직이는 거상입니다."
     },
     {

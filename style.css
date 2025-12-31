@@ -3644,73 +3644,89 @@ body.dark-mode .timer-row:hover {
 
 
 
-
-/* --- [수정] 업적 섹션 스타일 (강호령 스타일 적용) --- */
+/* --- [수정] 업적 섹션 (강호령 리스트 스타일 적용) --- */
 .achievement-section {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 
+/* 1. 리스트 컨테이너 (강호령 박스와 동일한 외관) */
 .achievement-grid {
-    display: grid;
-    /* 모바일에서는 1열, 공간이 넓으면 2열로 자동 배치 */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 15px; /* 아이템 사이 간격 */
-    padding: 5px;
+    display: flex;
+    flex-direction: column; /* 세로 나열 */
+    gap: 0;                 /* 아이템 사이 간격 없음 (선으로 구분) */
+    border: 1px solid #eee; /* 외곽 테두리 */
+    border-radius: 4px;
+    background-color: #fff; /* 배경 흰색 */
+    overflow: hidden;
+    padding: 0;             /* 내부 패딩 제거 */
 }
 
-/* 카드 스타일 제거 -> 심플한 리스트 아이템 스타일로 변경 */
+/* 2. 아이템 (행) 스타일 */
 .achievement-card {
     display: flex;
-    align-items: center;
-    background: none; /* 배경색 제거 */
-    border: none;     /* 테두리 제거 */
-    box-shadow: none; /* 그림자 제거 */
-    padding: 10px;
-    gap: 15px;
-    border-bottom: 1px solid rgba(0,0,0,0.05); /* 리스트 구분선 살짝 추가 */
+    align-items: center;    /* 수직 중앙 정렬 */
+    background-color: #fff; /* [요청] 흰색 배경 */
+    padding: 12px 15px;     /* 강호령과 동일한 패딩 */
+    border-bottom: 1px solid #eee; /* 구분선 */
+    gap: 12px;              /* 아이콘과 텍스트 사이 간격 */
     transition: background-color 0.2s;
+    height: auto;
+    min-height: 32px;
 }
 
-/* 호버 효과 심플하게 */
+/* 마지막 항목은 밑줄 제거 */
+.achievement-card:last-child {
+    border-bottom: none;
+}
+
+/* 마우스 올렸을 때 효과 */
 .achievement-card:hover {
-    transform: none; /* 붕 뜨는 효과 제거 */
-    background-color: rgba(0,0,0,0.02); /* 배경만 살짝 어둡게 */
+    background-color: #fffcf5;
 }
 
-/* 아이콘 스타일 (강호령 느낌) */
+/* 3. 아이콘 (30px로 축소) */
+.ach-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
 .ach-icon img {
-    width: 48px;  /* 크기 약간 키움 */
-    height: 48px;
-    border-radius: 8px;
+    width: 30px;  /* [요청] 이미지 크기 30px */
+    height: 30px;
+    border-radius: 4px;
     object-fit: cover;
-    /* 아이콘 배경을 어둡게 처리하여 강호령 느낌 냄 */
-    background-color: #333;
-    border: 1px solid #444;
+    border: 1px solid #eee;
 }
 
+/* 텍스트 영역 */
 .ach-content {
     flex: 1;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px; /* 제목과 설명 사이 간격 좁게 */
 }
 
-/* 제목 스타일 (골드 컬러 적용) */
+/* 4. 제목 (0.9em, 강호령 스타일) */
 .ach-title {
-    font-size: 1em;
+    font-size: 0.9em;  /* [요청] 0.9em */
     font-weight: bold;
-    color: var(--wuxia-accent-gold, #d4af37); /* 강조색 사용 */
-    margin-bottom: 5px;
+    color: #333;       /* 강호령 타이틀 색상 (진한 회색) */
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* 설명 스타일 */
+/* 5. 설명 (0.75em, 서브텍스트 스타일) */
 .ach-desc {
-    font-size: 0.85em;
-    color: #666;
+    font-size: 0.75em; /* [요청] 0.75em */
+    color: #888;       /* 강호령 서브텍스트 색상 (연한 회색) */
+    margin: 0;
     line-height: 1.3;
-    /* 설명은 한 줄만 표시 (깔끔하게) */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

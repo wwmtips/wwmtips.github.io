@@ -152,6 +152,20 @@
         "id": "p19",
         "name": "주장미",
         "photo": "images/char/19.jpg",
+        "affiliation": "취화음",
+        "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
+    },
+    {
+        "id": "p20",
+        "name": "진약란",
+        "photo": "images/char/20.jpg",
+        "affiliation": "취화음",
+        "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
+    },
+    {
+        "id": "p21",
+        "name": "승문,승무",
+        "photo": "images/char/21.jpg",
         "affiliation": "알 수 없음",
         "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
     }

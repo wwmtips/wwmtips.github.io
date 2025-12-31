@@ -4612,15 +4612,6 @@ body.dark-mode .timer-row:hover {
     object-fit: contain !important;
 }
 
-/* 5. 텍스트 영역 (완전 중앙 정렬) */
-.ach-content {
-    flex-grow: 1 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding: 2px !important;
-}
-
 /* 6. 제목 폰트 (10개 배치 시 글자가 겹치지 않게 크기 축소) */
 .ach-title {
     font-size: 0.75em !important; /* 9px에서 약간 더 축소 */
@@ -4949,14 +4940,16 @@ body.dark-mode .timer-row:hover {
         align-items: center !important;
     }
 
-    /* 4. 텍스트 영역: 중앙 정렬 */
-    .ach-content {
-        flex-grow: 1 !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        padding: 2px !important;
-    }
+/* 업적 콘텐츠 영역: 자식의 너비 제한을 위해 필요 */
+.ach-content {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important; /* [핵심] 자식의 ellipsis 작동을 위한 설정 */
+    padding: 2px 4px !important;
+    box-sizing: border-box !important;
+}
 }
 
     /* 설명글은 공간 부족으로 모바일에서 숨김 */

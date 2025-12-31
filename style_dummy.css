@@ -5199,7 +5199,6 @@ body.dark-mode .timer-row:hover {
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
-    white-space: normal !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     word-break: keep-all !important;

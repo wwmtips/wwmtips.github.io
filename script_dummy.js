@@ -578,19 +578,30 @@ function loadHomeMaps() {
 }
 
 // script.js 파일의 switchTab 함수 교체
-
 function switchTab(tabName, updateHistory = true) {
+    // 0. HTML 파일 요청인지 확인 (.html로 끝나면 true)
+    const isHtmlRequest = typeof tabName === 'string' && tabName.toLowerCase().endsWith('.html');
+
     // 1. 화면 전환 (기존 로직)
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji',, 'view-archive'];
-    views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji', 'view-archive'];
+    views.forEach(id => { 
+        const el = document.getElementById(id); 
+        if(el) el.style.display = 'none'; 
+    });
 
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
-    navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
+    navs.forEach(id => { 
+        const el = document.getElementById(id); 
+        if(el) el.classList.remove('active'); 
+    });
     
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.nav-dropdown-content').forEach(el => { el.classList.remove('show'); });
 
-    // 2. [최적화 핵심] 탭을 눌렀을 때, 내용이 비어있으면 그때 그리기 (Lazy Rendering)
+    // ----------------------------------------------------
+    // 2. 탭별 로직 분기
+    // ----------------------------------------------------
+
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
@@ -598,12 +609,11 @@ function switchTab(tabName, updateHistory = true) {
     else if (tabName === 'chunji') {
         document.getElementById('view-chunji').style.display = 'block';
         document.getElementById('nav-chunji').classList.add('active');
-        // 데이터가 있는데 화면이 비어있으면 렌더링
         const container = document.getElementById('chunji-list-container');
-        if (container && container.children.length === 0 && chunjiData.length > 0) {
+        if (container && container.children.length === 0 && typeof chunjiData !== 'undefined' && chunjiData.length > 0) {
             renderChunjiList();
         }
-        showChunjiList();
+        if(typeof showChunjiList === 'function') showChunjiList();
     }
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
@@ -611,7 +621,6 @@ function switchTab(tabName, updateHistory = true) {
         const quizBtn = document.getElementById('nav-quiz');
         if (quizBtn) quizBtn.classList.add('active');
         
-        // 렌더링 체크
         const tbody = document.getElementById('quiz-table-body');
         if (tbody && tbody.children.length === 0 && globalData.quiz.length > 0) {
             renderQuizTable(globalData.quiz);
@@ -622,47 +631,41 @@ function switchTab(tabName, updateHistory = true) {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
         
-        // 렌더링 체크
         const container = document.getElementById('quest-grid-container');
         if (container && container.children.length === 0 && globalData.quests.length > 0) {
             renderQuestList();
         }
-        showQuestList();
+        if(typeof showQuestList === 'function') showQuestList();
     } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
-        
-        // 렌더링 체크
         const container = document.getElementById('full-news-list');
         if (container && container.children.length === 0 && globalData.news.length > 0) {
             renderFullNews(globalData.news);
         }
     } 
-           // [추가] 업적 전체보기 탭 전환
     else if (tabName === 'archive') {
         document.getElementById('view-archive').style.display = 'block';
-        // 전체 목록 그리기 함수 호출
-        renderFullAchievementList();
+        if(typeof renderFullAchievementList === 'function') renderFullAchievementList();
     }
-
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
         document.getElementById('nav-more').classList.add('active');
         const builderItem = document.getElementById('nav-builder');
         if(builderItem) builderItem.classList.add('active');
 
-        document.getElementById('tools-menu').style.display = 'block';
-        document.getElementById('builder-interface').style.display = 'none';
+        const toolsMenu = document.getElementById('tools-menu');
+        const builderInterface = document.getElementById('builder-interface');
+        if(toolsMenu) toolsMenu.style.display = 'block';
+        if(builderInterface) builderInterface.style.display = 'none';
 
-        // 데이터 체크 및 렌더링
-        if (!builderData) {
+        if (typeof builderData === 'undefined' || !builderData) {
             fetch('json/builder_data.json')
                 .then(res => res.json())
                 .then(data => { builderData = data; renderBuildList('all'); })
                 .catch(err => console.error(err));
         } else {
             const container = document.getElementById('build-list-container');
-            // 로딩 문구만 있거나 비어있으면 렌더링
             if (container && (container.children.length === 0 || container.innerText.includes('불러오는 중'))) {
                 renderBuildList('all');
             }
@@ -673,26 +676,59 @@ function switchTab(tabName, updateHistory = true) {
             loadViewer();
         }
     }
-    else if (tabName === 'guide' || tabName === 'code') {
-        // 가이드는 기존 로직 유지 (이미 동적 로딩임)
+
+    // ----------------------------------------------------
+    // [수정됨] guide 탭이거나, code 탭이거나, .html 파일인 경우
+    // ----------------------------------------------------
+    else if (tabName === 'guide' || tabName === 'code' || isHtmlRequest) {
+        // 1. Guide 뷰 활성화
         const guideView = document.getElementById('view-guide');
         if (guideView) {
             guideView.style.display = 'block';
-            if (!isGuideLoaded) {
-                loadGuideView(); 
+        }
+        
+        // 2. 네비게이션 하이라이트 (Code/Guide 탭 활성화)
+        const navCode = document.getElementById('nav-code');
+        if (navCode) navCode.classList.add('active');
+
+        // 3. 콘텐츠 로드 로직
+        if (!isGuideLoaded) {
+            // (A) 가이드 레이아웃(사이드바 등)이 아직 로드되지 않은 경우
+            // loadGuideView 함수가 초기 파일을 받도록 수정되어 있다면 tabName을 넘김
+            // 그렇지 않다면 기본값 로드 후 콜백 등으로 처리 필요
+            // 여기서는 HTML 요청이면 그걸 로드, 아니면 기본(news.html 등) 로드 가정
+            const initialFile = isHtmlRequest ? tabName : 'news.html'; 
+            loadGuideView(initialFile); 
+        } else {
+            // (B) 가이드 레이아웃이 이미 있는 경우 -> 콘텐츠만 교체
+            if (isHtmlRequest) {
+                // 사이드바 버튼 찾기 (있으면 하이라이트 처리용)
+                // findButtonByFile 함수가 존재한다고 가정 (없으면 null 처리)
+                const targetBtn = (typeof findButtonByFile === 'function') 
+                                  ? findButtonByFile(tabName) 
+                                  : null;
+                
+                // 콘텐츠 로드 함수 호출
+                loadGuideContent(tabName, targetBtn);
             } else {
-                const newsBtn = findButtonByFile('news.html'); 
-                if(newsBtn) loadGuideContent('news.html', newsBtn);
+                // 그냥 'guide'나 'code' 버튼을 눌렀을 때의 기본 동작
+                // (기존에 보고 있던 페이지를 유지하거나 기본 페이지 로드)
+                // 필요하다면 여기에 기본 페이지 로드 로직 추가
             }
         }
-        document.getElementById('nav-code').classList.add('active');
     }
 
     // 3. URL 업데이트
     if (updateHistory) {
-        // 가이드는 내부에서 처리하므로 제외
-        if (tabName !== 'guide' && tabName !== 'code') {
+        // html 파일인 경우, 쿼리 파라미터로 처리할지, 그대로 둬도 될지 결정해야 함
+        // 예: ?tab=guide&file=q1.html 형태 혹은 ?page=q1.html
+        // 여기서는 기존 로직에 따라 tabName을 넘김
+        if (tabName !== 'guide' && tabName !== 'code' && !isHtmlRequest) {
             updateUrlQuery(tabName);
+        } else if (isHtmlRequest) {
+            // HTML 파일인 경우 URL에 반영 (예: ?page=q19.html)
+            // updateUrlQuery 함수가 파일명을 처리할 수 있다고 가정
+             updateUrlQuery(tabName); 
         }
     }
 }
@@ -2834,24 +2870,67 @@ function applyChunjiFilter() {
     currentChunjiPage = 1;
     renderChunjiList();
 }
-// [추가] 드롭다운 메뉴 클릭 시 해당 비급 파일 바로 열기
+
+/* =========================================
+   [SPA 핵심] 외부 HTML 파일 동적 로드 함수
+   ========================================= */
+
+// 1. 메뉴 클릭 시 호출되는 메인 함수
 function openGuideDirect(filename) {
-    // 1. 해당 파일에 매칭되는 ID 찾기 (예: 'boss.html' -> 'boss')
-    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
-    
-    // 2. 가이드 데이터가 아직 안 불려와졌을 때 (새로고침 직후 등)
-    if (!isGuideLoaded) {
-        // URL에 ID를 미리 박아두고 switchTab을 부르면, loadGuideView가 알아서 처리함
-        if (foundId) updateUrlQuery('guide', foundId);
-        switchTab('guide', false); 
-    } 
-    // 3. 이미 로드되어 있을 때
-    else {
-        // 탭 전환 후 강제로 콘텐츠 교체
-        switchTab('guide', false);
-        if (foundId) updateUrlQuery('guide', foundId);
-        loadGuideContent(filename, null);
+    console.log("SPA 로드 요청:", filename);
+
+    // 1-1. 가이드 탭(화면)으로 전환
+    if (typeof switchTab === 'function') {
+        switchTab('guide'); 
     }
+
+    // 1-2. 실제 내용 불러오기 함수 호출
+    loadGuideContent(filename);
+}
+
+// 2. 실제 HTML 파일을 가져와서 화면에 뿌려주는 함수
+function loadGuideContent(filename) {
+    const container = document.getElementById('guide-content-loader');
+    
+    // 예외 처리: 그릇이 없으면 중단
+    if (!container) {
+        console.error("가이드 콘텐츠를 넣을 #guide-content-loader 영역이 없습니다.");
+        return;
+    }
+
+    // 로딩 표시
+    container.innerHTML = '<div style="padding:50px; text-align:center;">불러오는 중...</div>';
+
+    // 파일 경로 설정 (예: harts.html이 같은 폴더에 있다면 그대로, 아니면 'pages/' + filename 등 수정)
+    // 여기서는 최상위 경로에 있다고 가정합니다.
+    const filePath = filename; 
+
+    // ★ [핵심] fetch로 파일 내용 가져오기
+    fetch(filePath)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`파일을 찾을 수 없습니다 (${response.status})`);
+            }
+            return response.text(); // HTML 내용을 텍스트로 변환
+        })
+        .then(html => {
+            // 가져온 HTML을 화면에 주입
+            container.innerHTML = html;
+            
+            // (선택사항) 불러온 HTML 안에 <script>가 있다면 실행되지 않으므로, 
+            // 만약 스크립트 실행이 필요하다면 별도 처리가 필요하지만, 
+            // 단순 정보 보여주기용이라면 이대로 충분합니다.
+        })
+        .catch(error => {
+            console.error("로딩 실패:", error);
+            container.innerHTML = `
+                <div style="padding:50px; text-align:center; color:#d32f2f;">
+                    <h3>페이지 로드 실패</h3>
+                    <p>${error.message}</p>
+                    <button onclick="loadGuideContent('${filename}')">재시도</button>
+                </div>
+            `;
+        });
 }
 
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★// [script.js] shareBuildToCloud 함수 (최종 완성본)

@@ -179,7 +179,7 @@
    <!-- 이벤트 -->
  
 <section class="timer-section">
-    <div class="section-header-clickable" onclick=openGuideDirect('npc.html');>
+    <div class="section-header-clickable" onclick="openGuideDirect('npc.html');">
         <h3><span class="deco-bar" ></span>강호령</h3>
         <span style="font-size:0.8em; color:#999; margin-right:5px;">전체보기 ></span>
     </div>
@@ -386,9 +386,9 @@
             </section>
         </div>
         
-        <div id="view-guide" style="display: none;">
-            <div id="guide-content-loader" style="margin-top: 0px; text-align: center;">로딩 중...</div>
-        </div>
+     <div id="view-guide" style="display: none;">
+    <div id="guide-content-loader" style="margin-top: 0px;"></div>
+</div>
 
      <div id="view-builder" style="display: none;">
             <div id="tools-menu" style="margin-top: 20px; padding: 0 5px;">
@@ -881,11 +881,11 @@ function toggleSidebarSub(element) {
             <div class="sidebar-item" id="nav-home" onclick="closeSidebar(); switchTab('home');">
                 홈
             </div>
- <div class="sidebar-item" id="nav-hw" onclick="closeSidebar(); openGuideDirect('npc.html');">
+ <div class="sidebar-item" id="nav-hw" onclick="closeSidebar(); switchTab('npc.html',this);">
                 할 일 목록
             </div>
             <div class="sidebar-group">
-                <div class="sidebar-item has-sub" id="nav-code" onclick="toggleSidebarSub(this)">
+                <div class="sidebar-item has-sub"  onclick="toggleSidebarSub(this)">
                     <span>도감</span>
                     <span class="arrow"></span>
                 </div>

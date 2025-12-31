@@ -208,7 +208,8 @@ function loadData() {
         fetch('json/builder_data.json').then(res => res.json()).catch(err => null),
         // ★ [추가] 보스 데이터 불러오기
         fetch('json/boss.json').then(res => res.json()).catch(err => []),
-       fetch('json/archive.json')
+       fetch('json/archive.json').then(res => res.json()).catch(err => [])
+
     ])
     .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult, bossDataResult, archiveData]) => {
         console.log("기본 데이터 로드 완료");
@@ -3527,3 +3528,4 @@ function renderAchievements(data) {
         container.appendChild(div);
     });
 }
+

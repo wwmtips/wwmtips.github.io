@@ -3,14 +3,14 @@
         "id": "p1",
         "name": "강무랑",
         "photo": "images/char/1.jpg",
-        "affiliation": "세력 없음",
+        "affiliation": "알 수 없음",
         "biography": "강호를 유람하며 인연을 맺는 신비로운 인물입니다."
     },
     {
         "id": "p2",
         "name": "한향선",
         "photo": "images/char/2.jpg",
-        "affiliation": "세력 없음",
+        "affiliation": "알 수 없음",
         "biography": "청하에서 자라난 뛰어난 검술의 소유자입니다."
     },
     {
@@ -31,7 +31,7 @@
         "id": "p5",
         "name": "엄기인",
         "photo": "images/char/4.jpg",
-        "affiliation": "세력 없음",
+        "affiliation": "알 수 없음",
         "biography": "청하에서 자라난 뛰어난 검술의 소유자입니다."
     },
     {
@@ -73,7 +73,7 @@
         "id": "p11",
         "name": "칠칠이",
         "photo": "images/char/9.jpg",
-        "affiliation": "세력 없음",
+        "affiliation": "알 수 없음",
         "biography": "청하에서 자라난 뛰어난 검술의 소유자입니다."
     },
     {

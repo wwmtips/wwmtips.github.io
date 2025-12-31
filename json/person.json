@@ -28,52 +28,52 @@
         "biography": "강호를 유람하며 인연을 맺는 신비로운 인물입니다."
     },
     {
-        "id": "p2",
-        "name": "연화",
-        "photo": "images/char2.jpg",
-        "affiliation": "청하 문파",
+        "id": "p5",
+        "name": "엄기인",
+        "photo": "images/char/4.jpg",
+        "affiliation": "세력 없음",
         "biography": "청하에서 자라난 뛰어난 검술의 소유자입니다."
     },
     {
-        "id": "p3",
-        "name": "백리",
-        "photo": "images/char3.jpg",
-        "affiliation": "개봉 상단",
+        "id": "p6",
+        "name": "애재",
+        "photo": "images/char/5.jpg",
+        "affiliation": "비공개",
         "biography": "개봉의 경제를 움직이는 거상입니다."
     },
         {
-        "id": "p1",
-        "name": "주인공",
-        "photo": "images/char1.jpg",
-        "affiliation": "무소속",
+        "id": "p7",
+        "name": "천야",
+        "photo": "images/char/6.jpg",
+        "affiliation": "수금루",
         "biography": "강호를 유람하며 인연을 맺는 신비로운 인물입니다."
     },
     {
-        "id": "p2",
-        "name": "연화",
-        "photo": "images/char2.jpg",
-        "affiliation": "청하 문파",
+        "id": "p8",
+        "name": "시영",
+        "photo": "images/char/3.jpg",
+        "affiliation": "현검",
         "biography": "청하에서 자라난 뛰어난 검술의 소유자입니다."
     },
     {
-        "id": "p3",
-        "name": "백리",
-        "photo": "images/char3.jpg",
-        "affiliation": "개봉 상단",
+        "id": "p9",
+        "name": "전영",
+        "photo": "images/char/7.jpg",
+        "affiliation": "현검",
         "biography": "개봉의 경제를 움직이는 거상입니다."
     },
         {
-        "id": "p1",
-        "name": "주인공",
-        "photo": "images/char1.jpg",
-        "affiliation": "무소속",
+        "id": "p10",
+        "name": "엽만산",
+        "photo": "images/char/8.jpg",
+        "affiliation": "연북맹",
         "biography": "강호를 유람하며 인연을 맺는 신비로운 인물입니다."
     },
     {
-        "id": "p2",
-        "name": "연화",
-        "photo": "images/char2.jpg",
-        "affiliation": "청하 문파",
+        "id": "p11",
+        "name": "칠칠이",
+        "photo": "images/char/9.jpg",
+        "affiliation": "세력 없음",
         "biography": "청하에서 자라난 뛰어난 검술의 소유자입니다."
     },
     {

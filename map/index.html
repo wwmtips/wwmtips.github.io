@@ -97,11 +97,11 @@
 
     <div id="search-panel" class="search-panel">
         <div class="panel-close-btn" onclick="closeAllPanels()">✕</div>
-        <div class="search-wrapper">
+      <!--  <div class="search-wrapper">
             <input type="text" id="marker-search" class="sidebar-search-input" placeholder="마커 이름 검색..." autocomplete="off">
             <span class="search-icon">🔍</span>
         </div>
-        <div id="search-result-list" class="search-results-container"></div>
+        <div id="search-result-list" class="search-results-container"></div>-->
     </div>
 
     <div id="filter-panel" class="filter-panel">
@@ -406,19 +406,19 @@
 
         // [수정] 경로 리스트 렌더링 (검색창 + 카테고리 접기/펼치기 기능 추가)
         // [수정] 경로 리스트 렌더링 (첫 번째만 펼치고 나머지 접기)
-        // [수정] 경로 리스트 렌더링 ('청하' 최상단 고정 + 첫 번째만 펼치기)
+       // [수정] 경로 리스트 렌더링 (검색창 복구 + 디자인 적용 + 청하 우선 정렬)
     function renderPathList(data) {
         pathData = data;
         const container = document.getElementById('path-list-dynamic');
         if(!container) return;
         container.innerHTML = '';
 
-        // 1. 검색창
+        // 1. 검색창 생성 (다시 추가됨)
         const searchWrapper = document.createElement('div');
         searchWrapper.className = 'path-search-wrapper';
         searchWrapper.innerHTML = `
             <span class="path-search-icon">🔍</span>
-            <input type="text" class="path-search-input" placeholder="경로 검색 (예: 청하, 상자...)" onkeyup="filterPathList(this.value)">
+            <input type="text" class="path-search-input" placeholder="경로 검색..." onkeyup="filterPathList(this.value)">
         `;
         container.appendChild(searchWrapper);
         
@@ -430,18 +430,18 @@
             groups[catName].push({ key, ...info });
         }
 
-        // ★ 3. 카테고리 정렬 ('청하'를 맨 앞으로)
+        // 3. 카테고리 정렬 ('청하'를 맨 앞으로)
         const sortedCategories = Object.keys(groups).sort((a, b) => {
-            if (a === '청하') return -1; // a가 '청하'면 앞으로
-            if (b === '청하') return 1;  // b가 '청하'면 뒤로
-            return 0; // 나머지는 순서 변경 없음 (원래 순서 유지)
+            if (a === '청하') return -1; 
+            if (b === '청하') return 1;  
+            return 0; 
         });
 
-        // 4. 정렬된 순서대로 렌더링
+        // 4. 리스트 렌더링
         sortedCategories.forEach((category, index) => {
             const items = groups[category];
             
-            // 첫 번째(지금은 무조건 '청하'가 됨)만 펼치고 나머지는 접음
+            // 첫 번째만 펼침
             const isFirst = (index === 0);
             const headerClass = isFirst ? 'path-category-header' : 'path-category-header collapsed';
             const gridClass = isFirst ? 'path-category-grid' : 'path-category-grid hidden';
@@ -473,6 +473,7 @@
             items.forEach(item => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'path-item';
+                // 검색 기능을 위해 데이터 속성 추가
                 itemDiv.setAttribute('data-name', item.title.toLowerCase());
                 
                 itemDiv.onclick = () => activatePath(item.key);
@@ -488,6 +489,42 @@
 
             container.appendChild(header);
             container.appendChild(gridDiv);
+        });
+    }
+
+    // [필수] 검색 필터 함수도 없으면 안되므로 확인 (이미 있다면 패스)
+    function filterPathList(keyword) {
+        const query = keyword.toLowerCase();
+        const container = document.getElementById('path-list-dynamic');
+        const grids = container.querySelectorAll('.path-category-grid');
+        const headers = container.querySelectorAll('.path-category-header');
+
+        grids.forEach((grid, index) => {
+            const items = grid.querySelectorAll('.path-item');
+            let hasVisibleItem = false;
+
+            items.forEach(item => {
+                const name = item.getAttribute('data-name');
+                if (name.includes(query)) {
+                    item.style.display = 'flex';
+                    hasVisibleItem = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            const header = headers[index];
+            if (hasVisibleItem) {
+                grid.style.display = 'grid';
+                header.style.display = 'flex';
+                if (query.length > 0) {
+                    grid.classList.remove('hidden');
+                    header.classList.remove('collapsed');
+                }
+            } else {
+                grid.style.display = 'none';
+                header.style.display = 'none';
+            }
         });
     }
 

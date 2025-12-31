@@ -723,11 +723,31 @@
 .hero-slider-wrapper {
     margin-top: 0 !important;
 }
+/* --- 사이드바 화살표 (얇은 선 스타일) --- */
+.sidebar-item .arrow {
+    display: inline-block;
+    width: 8px;              /* 화살표 너비 */
+    height: 8px;             /* 화살표 높이 */
+    border: solid #999;      /* 선 색상 */
+    border-width: 0 2px 2px 0; /* 오른쪽, 아래쪽만 선을 그림 (ㄱ자 반대 모양) */
+    transform: rotate(45deg); /* -45도 회전시켜서 오른쪽(>)을 보게 함 */
+    transition: transform 0.3s ease; /* 부드러운 회전 */
+    margin-right: 5px;       /* 위치 조정 */
+    margin-bottom: 2px;      /* 높이 미세 조정 */
+}
+
+/* 메뉴가 열렸을 때 (아래로 회전) */
+.sidebar-item.expanded .arrow {
+    transform: rotate(-135deg); /* 45도 회전시켜서 아래쪽(v)을 보게 함 */
+    border-color: var(--wuxia-accent-gold, #d4af37); /* 열리면 색상 강조 (선택사항) */
+}
+
+/* 족보 메뉴 등 화살표 숨길 곳은 유지 */
 
             </style>
 
             <div id="build-detail-overlay" class="bottom-sheet-overlay" onclick="if(event.target === this) closeBuildDetailSheet(event)"></div>
-            <div id="build-detail-sheet" class="bottom-sheet" onclick="event.stopPropagation()">
+            <div id="<build-de></build-de>tail-sheet" class="bottom-sheet" onclick="event.stopPropagation()">
                 <div class="sheet-header">
                     <h3 id="build-sheet-title">빌드 상세 정보</h3>
                     <button onclick="closeBuildDetailSheet(null)" class="close-sheet-btn">✕</button>
@@ -842,7 +862,7 @@ function toggleSidebarSub(element) {
             <div class="sidebar-group">
                 <div class="sidebar-item has-sub" id="nav-code" onclick="toggleSidebarSub(this)">
                     <span>비급 (가이드)</span>
-                    <span class="arrow">▼</span>
+                    <span class="arrow"></span>
                 </div>
                 <div class="sidebar-sub-list">
                     <button onclick="closeSidebar(); openGuideDirect('npc.html');">할 일 (숙제)</button>
@@ -865,7 +885,7 @@ function toggleSidebarSub(element) {
             <div class="sidebar-group">
                 <div class="sidebar-item has-sub" id="nav-more" onclick="toggleSidebarSub(this)">
                     <span>족보 (도구)</span>
-                    <span class="arrow">▼</span>
+                    <span class="arrow"></span>
                 </div>
                 <div class="sidebar-sub-list">
                     <button id="nav-quiz" onclick="closeSidebar(); switchTab('quiz');">스무고개</button>

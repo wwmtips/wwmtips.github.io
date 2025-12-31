@@ -148,8 +148,8 @@
             "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
             "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "gesh" } ]
         }, "sample_route2": {
-            "title": "예시 경로 (샘플)",
-            "category":"채집",
+            "title": "예시청하2로 (샘플)",
+            "category":"청하",
             "desc": "데이터 로드 실패 시 보여지는 경로입니다.",
             "markers": [ { "id": 101, "map": "qinghe" }, { "id": 102, "map": "gesh" } ]
         }
@@ -405,13 +405,15 @@
     }
 
         // [수정] 경로 리스트 렌더링 (검색창 + 카테고리 접기/펼치기 기능 추가)
+        // [수정] 경로 리스트 렌더링 (첫 번째만 펼치고 나머지 접기)
+        // [수정] 경로 리스트 렌더링 ('청하' 최상단 고정 + 첫 번째만 펼치기)
     function renderPathList(data) {
         pathData = data;
         const container = document.getElementById('path-list-dynamic');
         if(!container) return;
         container.innerHTML = '';
 
-        // 1. 검색창 영역 생성
+        // 1. 검색창
         const searchWrapper = document.createElement('div');
         searchWrapper.className = 'path-search-wrapper';
         searchWrapper.innerHTML = `
@@ -428,12 +430,25 @@
             groups[catName].push({ key, ...info });
         }
 
-        // 3. 그룹별 렌더링
-        for (const [category, items] of Object.entries(groups)) {
+        // ★ 3. 카테고리 정렬 ('청하'를 맨 앞으로)
+        const sortedCategories = Object.keys(groups).sort((a, b) => {
+            if (a === '청하') return -1; // a가 '청하'면 앞으로
+            if (b === '청하') return 1;  // b가 '청하'면 뒤로
+            return 0; // 나머지는 순서 변경 없음 (원래 순서 유지)
+        });
+
+        // 4. 정렬된 순서대로 렌더링
+        sortedCategories.forEach((category, index) => {
+            const items = groups[category];
+            
+            // 첫 번째(지금은 무조건 '청하'가 됨)만 펼치고 나머지는 접음
+            const isFirst = (index === 0);
+            const headerClass = isFirst ? 'path-category-header' : 'path-category-header collapsed';
+            const gridClass = isFirst ? 'path-category-grid' : 'path-category-grid hidden';
+
             // (1) 카테고리 헤더
             const header = document.createElement('div');
-            header.className = 'path-category-header'; // 기본은 펼쳐짐
-            // 화살표 아이콘 추가
+            header.className = headerClass; 
             header.innerHTML = `
                 <span>${category} <span style="font-size:11px; color:#666; font-weight:400; margin-left:5px;">(${items.length})</span></span>
                 <svg class="header-arrow" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
@@ -441,9 +456,8 @@
             
             // (2) 그리드 컨테이너
             const gridDiv = document.createElement('div');
-            gridDiv.className = 'path-category-grid'; // 기본 보임
+            gridDiv.className = gridClass;
 
-            // 헤더 클릭 시 접기/펼치기 기능
             header.onclick = () => {
                 const isHidden = gridDiv.classList.contains('hidden');
                 if (isHidden) {
@@ -459,7 +473,6 @@
             items.forEach(item => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'path-item';
-                // 검색을 위한 데이터 속성 추가
                 itemDiv.setAttribute('data-name', item.title.toLowerCase());
                 
                 itemDiv.onclick = () => activatePath(item.key);
@@ -475,8 +488,9 @@
 
             container.appendChild(header);
             container.appendChild(gridDiv);
-        }
+        });
     }
+
 
     // [신규] 경로 검색 필터링 함수
     function filterPathList(keyword) {

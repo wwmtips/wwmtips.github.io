@@ -1418,3 +1418,20 @@
             visibility: visible;  /* 다시 보이게 */
             transform: translateY(0);
         }
+/* [필수] 완료된 마커 스타일 강제 적용 */
+.marker-completed {
+    filter: grayscale(100%) brightness(70%) !important; /* 흑백 처리 + 어둡게 */
+    opacity: 0.9;
+    z-index: 100 !important;
+}
+
+/* 핀 내부 색상도 강제로 회색으로 변경 (인라인 스타일 덮어쓰기) */
+.marker-completed .pin-marker {
+    --pin-color: #555 !important;
+}
+
+/* 경로 모드 순서 번호표도 회색으로 */
+.marker-completed .path-order-badge {
+    background-color: #444 !important;
+    color: #aaa !important;
+}

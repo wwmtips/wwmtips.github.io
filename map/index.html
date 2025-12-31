@@ -1220,14 +1220,14 @@
         copyToClipboard(url.toString());
     };
       // [수정] 마커 완료 상태 토글 함수 (팝업 닫기 추가)
+    // [수정] 마커 완료 상태 토글 함수 (팝업 닫기 + ★다음 마커 자동 이동★)
     function toggleComplete(id) {
-        // 1. 저장소에서 완료 목록 가져오기
+        // 1. 저장소 업데이트
         const storageKey = `completed_${currentMapId}`;
         let completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
         const index = completedList.indexOf(id);
-        const isComplete = index === -1; // 리스트에 없으면 -> 완료 처리해야 함
+        const isComplete = index === -1; 
 
-        // 2. 리스트 업데이트 (추가 또는 삭제)
         if (isComplete) {
             completedList.push(id);
         } else {
@@ -1235,12 +1235,56 @@
         }
         localStorage.setItem(storageKey, JSON.stringify(completedList));
 
-        // 3. 화면 업데이트 (지도상 마커 색상 변경 등)
+        // 2. 시각적 업데이트
         updateMarkerVisuals(id, isComplete);
-
-        // ★ 4. [핵심] 열려있는 팝업 닫기
+        
+        // 3. 현재 팝업 닫기
         map.closePopup();
+
+        // 4. [복구] 경로 모드일 경우 다음 마커로 자동 이동
+        // (완료 처리를 했을 때만 이동, 취소했을 땐 이동 안 함)
+        if (isComplete && currentPathIds && currentPathIds.length > 0) {
+            
+            // 현재 마커가 순서상 몇 번째인지 찾기
+            const currentIndex = currentPathIds.findIndex(item => {
+                const itemId = (typeof item === 'object') ? item.id : item;
+                return itemId == id;
+            });
+
+            // 다음 마커가 존재한다면
+            if (currentIndex !== -1 && currentIndex < currentPathIds.length - 1) {
+                const nextItem = currentPathIds[currentIndex + 1];
+                const nextId = (typeof nextItem === 'object') ? nextItem.id : nextItem;
+                const nextMap = (typeof nextItem === 'object') ? nextItem.map : currentMapId;
+
+                // A. 같은 맵에 있는 경우 -> 지도 이동 후 팝업 열기
+                if (nextMap === currentMapId) {
+                    const nextMarkerObj = activePathMarkersMap[nextId]; // 경로용 마커 객체 가져오기
+                    
+                    if (nextMarkerObj) {
+                        const latlng = nextMarkerObj.getLatLng();
+                        
+                        // 부드럽게 날아가기
+                        map.flyTo(latlng, 0, { animate: true, duration: 1.0 });
+                        
+                        // 도착하면 팝업 열기
+                        map.once('moveend', () => {
+                            nextMarkerObj.openPopup();
+                        });
+                    }
+                } 
+                // B. 다른 맵으로 넘어가야 하는 경우 -> 페이지 이동
+                else {
+                    const currentPathKey = localStorage.getItem('activePathKey');
+                    // 잠시 딜레이 후 이동 (사용자가 완료됨을 인지할 시간 줌)
+                    setTimeout(() => {
+                        window.location.href = `?id=${nextMap}&marker=${nextId}&path=${currentPathKey}`;
+                    }, 500);
+                }
+            }
+        }
     }
+
 
     // [신규] 마커 공유 함수
     function shareMarker(id) {

@@ -1219,6 +1219,79 @@
         url.searchParams.delete('path'); 
         copyToClipboard(url.toString());
     };
+      // [수정] 마커 완료 상태 토글 함수 (팝업 닫기 추가)
+    function toggleComplete(id) {
+        // 1. 저장소에서 완료 목록 가져오기
+        const storageKey = `completed_${currentMapId}`;
+        let completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+        const index = completedList.indexOf(id);
+        const isComplete = index === -1; // 리스트에 없으면 -> 완료 처리해야 함
+
+        // 2. 리스트 업데이트 (추가 또는 삭제)
+        if (isComplete) {
+            completedList.push(id);
+        } else {
+            completedList.splice(index, 1);
+        }
+        localStorage.setItem(storageKey, JSON.stringify(completedList));
+
+        // 3. 화면 업데이트 (지도상 마커 색상 변경 등)
+        updateMarkerVisuals(id, isComplete);
+
+        // ★ 4. [핵심] 열려있는 팝업 닫기
+        map.closePopup();
+    }
+
+    // [신규] 마커 공유 함수
+    function shareMarker(id) {
+        // 현재 URL에 id와 map 파라미터를 붙여서 클립보드에 복사
+        const url = `${window.location.origin}${window.location.pathname}?id=${currentMapId}&marker=${id}`;
+        
+        navigator.clipboard.writeText(url).then(() => {
+            alert("링크가 복사되었습니다!"); // 혹은 토스트 메시지 함수 호출
+        }).catch(err => {
+            console.error('복사 실패', err);
+        });
+    }
+
+    // [신규] 화면 스타일 업데이트 헬퍼 함수
+    function updateMarkerVisuals(id, isComplete) {
+        // A. 원본 마커 스타일 변경
+        const originalItem = allMarkers.find(m => m.id == id);
+        if (originalItem && originalItem.marker) {
+            const el = originalItem.marker.getElement();
+            if (el) {
+                const iconDiv = el.querySelector('.custom-div-icon') || el;
+                isComplete ? iconDiv.classList.add('marker-completed') : iconDiv.classList.remove('marker-completed');
+            }
+        }
+
+        // B. 경로 모드 마커(복제본) 스타일 변경
+        if (window.activePathMarkersMap && window.activePathMarkersMap[id]) {
+            const el = window.activePathMarkersMap[id].getElement();
+            if (el) {
+                const iconDiv = el.querySelector('.custom-div-icon') || el;
+                isComplete ? iconDiv.classList.add('marker-completed') : iconDiv.classList.remove('marker-completed');
+            }
+        }
+
+        // C. 현재 열린 팝업의 버튼 텍스트/색상 변경
+        const popupBtn = document.querySelector(`.popup-btn-complete[data-id="${id}"]`);
+        if (popupBtn) {
+            if (isComplete) {
+                popupBtn.innerText = "완료됨";
+                popupBtn.style.backgroundColor = "#4caf50"; // 초록색
+                popupBtn.style.color = "white";
+            } else {
+                popupBtn.innerText = "완료";
+                popupBtn.style.backgroundColor = ""; // 원래대로
+                popupBtn.style.color = "";
+            }
+        }
+        
+        // D. 경로 패널 UI 갱신 (진행도 바 등)
+        if (typeof updatePathSummaryUI === 'function') updatePathSummaryUI();
+    }
 
     function getYouTubeId(url) {
         if (!url) return null;

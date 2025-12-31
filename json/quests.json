@@ -3,7 +3,7 @@
    "id": "q189",
    "type": "탐색",
    "location": "춘추별관",
-   "name": "춘추별관 탐색 공략",
+   "name": "춘추별관 탐색",
    "bgimg": "q189_8.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q189.html"
@@ -12,7 +12,7 @@
    "id": "q188",
    "type": "탐색",
    "location": "풍화촌",
-   "name": "풍화촌 탐색 공략",
+   "name": "풍화촌 탐색",
    "bgimg": "q188_35.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q188.html"
@@ -21,7 +21,7 @@
    "id": "q187",
    "type": "탐색",
    "location": "망천 평원",
-   "name": "망천 평원 탐색 공략",
+   "name": "망천 평원 탐색",
    "bgimg": "q187_c.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q187.html"
@@ -30,7 +30,7 @@
    "id": "q186",
    "type": "탐색",
    "location": "형연",
-   "name": "형연 탐색 공략",
+   "name": "형연 탐색",
    "bgimg": "q186_1.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q186.html"
@@ -39,7 +39,7 @@
    "id": "q185",
    "type": "탐색",
    "location": "침식의 숲",
-   "name": "침식의 숲 탐색 공략",
+   "name": "침식의 숲 탐색",
    "bgimg": "q185_m.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q185.html"
@@ -48,7 +48,7 @@
    "id": "q184",
    "type": "탐색",
    "location": "약수안",
-   "name": "약수안 탐색 공략",
+   "name": "약수안 탐색",
    "bgimg": "q184_2.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q184.html"
@@ -66,7 +66,7 @@
    "id": "q182",
    "type": "탐색",
    "location": "불선선",
-   "name": "불선선 탐색 공략",
+   "name": "불선선 탐색",
    "bgimg": "q182_8.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q182.html"
@@ -75,7 +75,7 @@
    "id": "q181",
    "type": "탐색",
    "location": "신선나루",
-   "name": "신선나루 탐색 공략",
+   "name": "신선나루 탐색",
    "bgimg": "q181_3.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q181.html"
@@ -84,14 +84,14 @@
    "id": "q180",
    "type": "탐색",
    "location": "완석포",
-   "name": "완석포 탐색 공략",
+   "name": "완석포 탐색",
    "bgimg": "q180_13.jpg",
    "iconpath": "images/guide.jpg",
    "filepath": "/quests/q180.html"
  },
   {
    "id": "q179",
-   "name": "칠벌 고개 탐색 공략",
+   "name": "칠벌 고개 탐색",
    "location": "칠벌 고개",
    "type": "탐색",
    "bgimg": "q179_7.jpg",
@@ -100,7 +100,7 @@
  },
   {
    "id": "q178",
-   "name": "대나무 숲 옛집 탐색 공략",
+   "name": "대나무 숲 옛집 탐색",
    "location": "대나무 숲 옛집",
    "type": "탐색",
    "bgimg": "q178_29.jpg",
@@ -109,7 +109,7 @@
  },
 {
    "id": "q177",
-   "name": "장군사당 탐색 공략",
+   "name": "장군사당 탐색",
    "location": "장군사당",
    "type": "탐색",
    "bgimg": "q177_10.jpg",

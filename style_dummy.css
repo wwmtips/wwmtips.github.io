@@ -5736,3 +5736,46 @@ body.dark-mode .timer-row:hover {
     background-color: #ffffff !important;
     justify-content: center !important;
 }
+
+
+/* 바텀시트 기본 애니메이션 및 스타일 */
+.bottom-sheet {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    visibility: hidden; z-index: 1000;
+}
+.bottom-sheet.active { visibility: visible; }
+.bottom-sheet-overlay {
+    position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+    opacity: 0; transition: opacity 0.3s;
+}
+.bottom-sheet.active .bottom-sheet-overlay { opacity: 1; }
+
+.bottom-sheet-content {
+    position: absolute; bottom: -100%; left: 0; width: 100%;
+    background: #f8f9fa; border-radius: 20px 20px 0 0;
+    transition: bottom 0.3s ease-out; padding: 20px; box-sizing: border-box;
+}
+.bottom-sheet.active .bottom-sheet-content { bottom: 0; }
+
+/* [핵심] 이미지 스타일 반영 (이미지 번호: image_c5fa08.png) */
+.person-card-detail {
+    background: #fff; border-radius: 12px; padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center;
+}
+.person-img-large {
+    width: 100%; max-width: 300px; height: auto;
+    border-radius: 12px; margin-bottom: 20px;
+}
+.person-name-title { font-size: 1.5em; font-weight: bold; margin: 10px 0; color: #333; }
+
+/* 속성 테이블 스타일 */
+.person-attr-row {
+    display: flex; justify-content: space-between;
+    padding: 10px; border-radius: 8px; background: #f1f3f5; margin-bottom: 5px;
+    font-size: 0.9em;
+}
+.person-attr-label { font-weight: bold; color: #555; }
+.person-bio-box {
+    text-align: left; margin-top: 15px; padding: 10px;
+    border-top: 1px solid #eee; line-height: 1.6; color: #666;
+}

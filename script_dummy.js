@@ -339,28 +339,7 @@ function loadData() {
             // ★ 보스 데이터 전역 변수에 저장
             globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
             characterData = personResult;
-            /* characterData = [
-        { name: "주인공", photo: "images/ch1.jpg", affiliation: "무소속", biography: "강호를 유람하는 자",link:"d" },
-        { name: "연화", photo: "images/ch1.jpg", affiliation: "청하 문파", biography: "검술의 달인" },
-        { name: "백리", photo: "images/ch1.jpg", affiliation: "개봉 상단", biography: "거상" },
-        { name: "운무", photo: "images/ch1.jpg", affiliation: "귀문", biography: "암살자" },
-        { name: "강무랑", photo: "images/ch1.png", affiliation: "강호", biography: "테스트 인물 1" },
-        { name: "한향심", photo: "images/logo.png", affiliation: "의원", biography: "테스트 인물 2" },
-        { name: "왕청", photo: "images/logo.png", affiliation: "관군", biography: "테스트 인물 3" },
-        { name: "저청천", photo: "images/logo.png", affiliation: "학자", biography: "테스트 인물 4" },
-        { name: "엄기인", photo: "images/logo.png", affiliation: "상인", biography: "테스트 인물 5" },
-        { name: "애제", photo: "images/logo.png", affiliation: "황실", biography: "테스트 인물 6" },
-        { name: "천야", photo: "images/logo.png", affiliation: "무희", biography: "테스트 인물 7" },
-        { name: "전영", photo: "images/logo.png", affiliation: "장군", biography: "테스트 인물 8" },
-        { name: "엽만산", photo: "images/logo.png", affiliation: "산적", biography: "테스트 인물 9" },
-        { name: "소십칠", photo: "images/logo.png", affiliation: "거지", biography: "테스트 인물 10" },
-        { name: "여래", photo: "images/logo.png", affiliation: "승려", biography: "테스트 인물 11" },
-        { name: "이도", photo: "images/logo.png", affiliation: "도망자", biography: "테스트 인물 12" },
-        { name: "혜약", photo: "images/logo.png", affiliation: "약초꾼", biography: "테스트 인물 13" },
-        { name: "고락", photo: "images/logo.png", affiliation: "악사", biography: "테스트 인물 14" },
-        { name: "무상황", photo: "images/logo.png", affiliation: "은둔자", biography: "테스트 인물 15" },
-        { name: "구월해", photo: "images/logo.png", affiliation: "해적", biography: "테스트 인물 16" }
-    ];*/
+   
             
             if (quests.length > 0) {
                 quests.sort((a, b) => {
@@ -3825,3 +3804,39 @@ function renderHomeCharacters() {
     container.appendChild(fragment);
 } 
 
+
+// 바텀시트 열기 함수
+function openPersonDetail(data) {
+    const sheet = document.getElementById('person-bottom-sheet');
+    const body = document.getElementById('person-detail-body');
+
+    // 이미지 스타일(image_c5fa08.png)에 맞춘 레이아웃 생성
+    body.innerHTML = `
+        <div style="font-size: 0.8em; color: #999; margin-bottom: 10px;">| 기본 정보</div>
+        <img src="${data.img}" class="person-img-large" onerror="this.src='images/logo.png'">
+        
+        <div class="person-name-title">${data.name}</div>
+        
+        <div class="person-attr-row">
+            <span class="person-attr-label">소속</span>
+            <span>${data.faction || '알 수 없음'}</span>
+        </div>
+        <div class="person-attr-row">
+            <span class="person-attr-label">링크</span>
+            <span>ㅇㅇ</span> </div>
+
+        <div class="person-bio-box">
+            <div style="font-weight:bold; margin-bottom:5px;">주요 대사</div>
+            <p>${data.desc || 'biography'}</p>
+        </div>
+    `;
+
+    sheet.classList.add('active');
+    document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+}
+
+// 바텀시트 닫기 함수
+function closePersonDetail() {
+    document.getElementById('person-bottom-sheet').classList.remove('active');
+    document.body.style.overflow = '';
+}

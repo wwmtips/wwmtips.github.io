@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', loadMansarokMenu);
 // 만사록 데이터를 불러와 상단에 배치하는 함수 (최종 수정본)
 async function loadMansarokMenu() {
     try {
-        const response = await fetch('data/quests.json'); 
+        const response = await fetch('json/quests.json'); 
         if (!response.ok) throw new Error('데이터 로드 실패');
         
         const data = await response.json();

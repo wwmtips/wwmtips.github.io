@@ -3755,7 +3755,7 @@ function renderHomeCharacters() {
 
     characterData.forEach(char => {
         const name = char.name || '이름 없음';
-        const affil = char.affiliation || '';
+        const faction = char.affiliation || '';
         const photo = char.photo || 'images/logo.png';
 
         const hasLink = char.link && char.link.trim() !== "";

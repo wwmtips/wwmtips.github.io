@@ -3923,7 +3923,7 @@ body.dark-mode .timer-row:hover {
     height: 135px !important; /* 세로 크기 */
     
     position: relative;       /* ★ [핵심] 내부 요소 배치를 위한 기준점 */
-    border-radius: 8px;       /* 둥근 모서리 */
+    border-radius:0px;       /* 둥근 모서리 */
     overflow: hidden;         /* 이미지가 튀어나가지 않게 자름 */
     cursor: pointer;
     box-shadow: 0 3px 8px rgba(0,0,0,0.15); /* 약간의 그림자 */

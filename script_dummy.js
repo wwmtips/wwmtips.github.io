@@ -3824,7 +3824,7 @@ function openPersonDetail(char) {
         <div class="task-list-wrapper">
             <div class="person-info-row">
                 <span class="person-label">소속</span>
-                <span class="task-title">${char.affil || '알 수 없음'}</span>
+                <span class="task-title">${char.affiliation || '알 수 없음'}</span>
             </div>
  
             

@@ -65,7 +65,7 @@ const dummyMapData = [
         title: "귀문시장",
         key: "gm", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "삼경에 귀신이 등불을 밝히니, 새벽닭 울음 소리가 보배롭다.",
-      image: "https://wwm.tips/quests/images/q9-1.png" // (썸네일 이미지가 있다면 유지)
+      image: "images/map3.png" // (썸네일 이미지가 있다면 유지)
    },
    {
         title: "꿈속의 불선선",
@@ -3575,4 +3575,5 @@ function renderFullAchievementList() {
         container.appendChild(card);
     });
 }
+
 

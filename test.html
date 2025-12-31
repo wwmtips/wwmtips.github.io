@@ -216,11 +216,13 @@
             </section>
             
 <script src="timer.js"></script>
-            <section class="profile-section" style="margin-top: 0; margin-bottom: 0;">
+            
+            
+       <!--     <section class="profile-section" style="margin-top: 0; margin-bottom: 0;">
     <div class="section-header-clickable">
         <h3><span class="deco-bar"></span>인게임 제보</h3>
     </div>
-    <!-- 윤쫑 -->
+    
     <div class="ingame-report-card" onclick="openReportSheet()" style="cursor: pointer;">
         <div class="card-bg-deco"></div>
 
@@ -259,7 +261,7 @@
             </div>
         </div>
      </div>
-</section>
+</section>-->
 
             <!--
 <section class="boss-section">
@@ -753,6 +755,76 @@
     transform: rotate(-135deg); /* 45도 회전시켜서 아래쪽(v)을 보게 함 */
     border-color: var(--wuxia-accent-gold, #d4af37); /* 열리면 색상 강조 (선택사항) */
 }
+/* --- [수정] 사이드바 레이아웃 (Flex 적용으로 하단 고정 구현) --- */
+#main-sidebar {
+    position: fixed;
+    top: 0; right: -260px;
+    width: 260px;
+    height: 100%;
+    background: #fff;
+    z-index: 9999;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+    transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* ▼▼▼ 핵심: Flex Column 설정 ▼▼▼ */
+    display: flex;
+    flex-direction: column; 
+    box-sizing: border-box;
+}
+
+/* --- [수정] 메뉴 리스트 영역 (남은 공간 모두 차지) --- */
+.sidebar-content {
+    flex: 1;           /* 남은 높이를 다 차지해서 하단 요소를 바닥으로 밈 */
+    overflow-y: auto;  /* 메뉴가 길어지면 여기만 스크롤 */
+    padding: 10px;
+}
+
+/* --- [신규] 사이드바 하단 제보 배너 (미니 스타일) --- */
+.sidebar-footer-report {
+    flex-shrink: 0;    /* 크기 줄어들지 않음 */
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sidebar-footer-report:hover {
+    background-color: #f0f0f0;
+}
+
+/* 프로필 이미지 (원형, 작게) */
+.mini-profile-img img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    display: block;
+}
+
+/* 텍스트 영역 */
+.mini-report-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mini-title {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+    font-family: 'Noto Serif KR', serif;
+}
+
+.mini-desc {
+    font-size: 0.75em;
+    color: #888;
+    margin-top: 2px;
+}
 
 /* 족보 메뉴 등 화살표 숨길 곳은 유지 */
 
@@ -913,6 +985,15 @@ function toggleSidebarSub(element) {
                     <button id="nav-builder" onclick="closeSidebar(); switchTab('builder');">빌드 메이커</button>
                     <button id="nav-map" onclick="location.href='map/'">지도</button>
                 </div>
+            </div>
+        </div>
+        <div class="sidebar-footer-report" onclick="closeSidebar(); openReportSheet()">
+            <div class="mini-profile-img">
+                <img src="images/profile.jpg" onerror="this.src='images/logo.png'" alt="윤쫑">
+            </div>
+            <div class="mini-report-text">
+                <span class="mini-title">인게임 제보하기</span>
+                <span class="mini-desc">닉네임 - 윤쫑</span>
             </div>
         </div>
     </aside>

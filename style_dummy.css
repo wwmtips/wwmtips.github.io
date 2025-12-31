@@ -3893,146 +3893,105 @@ body.dark-mode .timer-row:hover {
 
 
 /* =========================================
-   [최종 수정] 인물 & 지역 스타일 (화이트 카드 테마)
+   [최종 긴급 수정] 인물 & 지역 리스트 (풀 이미지 + 정렬 수정)
    ========================================= */
 
-/* -----------------------------------------
-   1. 인물 정보 (Char) : 반응형 그리드
-   ----------------------------------------- */
-#home-char-list {
+/* 1. 컨테이너 공통 설정 (왼쪽 정렬 맞춤) */
+#home-char-list, 
+#home-map-list {
     display: grid !important;
     
-    /* [모바일] 한 줄에 5개 정도 들어가게 크기 축소 (참고 이미지 반영) */
-    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)) !important;
-    grid-template-rows: auto !important; /* 높이 자동 */
-    grid-auto-flow: row !important;      /* 줄바꿈 허용 */
+    /* [핵심] 화면 너비를 정확히 4등분 (여백 없이 꽉 채움) */
+    grid-template-columns: repeat(4, 1fr) !important;
     
-    gap: 10px;
-    height: auto !important;             /* 전체 높이 자동 */
-    overflow: visible !important;        /* 스크롤 제거 */
-    padding: 10px 5px;
-}
-
-/* [PC 환경] 조금 더 크게 표시 */
-@media (min-width: 768px) {
-    #home-char-list {
-        /* PC에서는 최소 100px 너비로 넉넉하게 */
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
-        gap: 15px;
-    }
-}
-
-/* 인물 카드 스타일 */
-.char-card-horizontal {
-    width: auto !important;   /* 그리드에 맞춤 */
-    height: auto !important;  /* 높이 자동 */
+    /* 카드 사이 간격 */
+    gap: 8px !important;
     
-    display: flex;
-    flex-direction: column;
+    /* [핵심] 불필요한 패딩 제거 -> 섹션 제목(빨간줄)과 라인 맞춤 */
+    padding: 0 !important;
+    margin: 10px 0 20px 0 !important;
     
-    /* [스타일 변경] 흰색 카드 스타일 */
-    background-color: #fff;
-    border: 1px solid #eee;
-    box-shadow: none;         /* 그림자 제거 (깔끔하게) */
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-/* -----------------------------------------
-   2. 지역 정보 (Map) : 4개 정렬 (기존 유지하되 스타일 변경)
-   ----------------------------------------- */
-#home-map-list {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 2%;
-    height: auto !important;  /* 높이 자동 */
-    overflow-x: auto;
-    padding: 10px 5px;
-    
-    align-items: stretch;     /* 높이 통일 */
-}
-
-.map-card-horizontal {
-    flex: 0 0 auto;
-    width: 23.5% !important;  /* 4개 등분 */
+    /* 배경 및 테두리 초기화 */
+    background: transparent !important;
+    border: none !important;
     height: auto !important;
-    
-    display: flex;
-    flex-direction: column;
-    
-    /* [스타일 변경] 흰색 카드 */
-    background-color: #fff;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    overflow: visible !important;
 }
 
-/* -----------------------------------------
-   3. 공통 내용 스타일 (이미지 & 텍스트)
-   ----------------------------------------- */
-
-/* 이미지 (상단 배치) */
-.map-h-img, .char-h-img {
+/* 2. 카드 공통 스타일 (이미지 꽉 채우기) */
+.char-card-horizontal,
+.map-card-horizontal {
+    position: relative !important; /* 내부 요소 배치를 위한 기준 */
+    
+    /* [핵심] 너비 100%, 높이는 비율로 자동 설정 (직사각형 유지) */
     width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 3 / 4.2 !important; /* 세로로 긴 직사각형 비율 고정 */
     
-    /* [모바일] 인물 사진 높이 축소 (정사각형에 가깝게) */
-    aspect-ratio: 1 / 1; 
-    height: auto !important; 
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     
-    position: relative !important; /* 절대 위치 제거 */
-    object-fit: cover;
-    margin: 0;
-    z-index: 0;
-    
-    /* 배경색 제거 */
-    background-color: #f9f9f9;
+    /* 배경색 제거 (이미지가 덮으므로) */
+    background: #333; 
+    border: none !important;
+    margin: 0 !important;
+    flex: none !important;
 }
 
-/* 텍스트 박스 (하단 배치, 오버레이 제거) */
-.map-overlay-box, .char-overlay-box {
-    position: relative !important; /* 오버레이 해제 -> 아래로 내림 */
-    width: 100%;
-    bottom: auto; left: auto;
+/* 3. 이미지 스타일 (무조건 꽉 채움) */
+.char-h-img,
+.map-h-img {
+    position: absolute !important;
+    top: 0; left: 0;
+    width: 100% !important;
+    height: 100% !important;
     
-    /* [핵심] 검은색 그라데이션 제거 -> 흰색 배경 */
-    background: #fff !important;
+    object-fit: cover; /* 비율 유지하며 빈틈없이 채움 */
+    z-index: 1;        /* 텍스트 뒤로 */
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* 4. 텍스트 오버레이 (이미지 위에 글자 얹기) */
+.char-overlay-box,
+.map-overlay-box {
+    position: absolute !important;
+    bottom: 0; left: 0; width: 100%;
     
-    padding: 8px 4px !important;
+    /* [핵심] 텍스트 박스 없이, 하단에만 검은 그라데이션 추가하여 글자 잘 보이게 함 */
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%) !important;
+    
+    padding: 20px 4px 6px 4px !important; /* 위쪽 패딩은 그라데이션 영역 */
+    z-index: 2; /* 이미지 위 */
+    
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center; /* 가운데 정렬 */
+    justify-content: flex-end;
+    align-items: center;
     text-align: center;
-    
-    /* 높이 확보 */
-    flex: 1;
 }
 
-/* 텍스트 색상 변경 (흰색 -> 검은색) */
-.map-h-title, .char-h-name {
-    font-size: 0.8em;          /* 글자 크기 조정 */
-    color: #333 !important;    /* [핵심] 검은색 글자 */
-    text-shadow: none !important; /* 그림자 제거 */
+/* 5. 텍스트 스타일 (흰색) */
+.char-h-name,
+.map-h-title {
+    font-size: 11px !important; /* 4열 배치에 맞춰 글자 크기 조정 */
     font-weight: bold;
-    margin-bottom: 2px;
+    color: #fff !important;     /* 흰색 글자 */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8); /* 가독성 그림자 */
+    margin: 0 !important;
+    line-height: 1.2;
     
-    /* 줄바꿈 허용 여부 (인물 이름은 한 줄) */
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 100%;
 }
 
-/* 인물 소속 / 지역 설명 (보조 텍스트) */
+/* 보조 텍스트 (소속 등) */
 .char-h-affil {
-    font-size: 0.7em;
-    color: #888 !important;    /* 회색 */
-    margin-top: 0;
-    text-shadow: none !important;
-}
-
-/* 지역 카드 이미지는 직사각형 유지 */
-.map-h-img {
-    aspect-ratio: 3 / 4; /* 세로로 긴 비율 */
+    font-size: 9px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin-top: 1px;
 }

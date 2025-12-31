@@ -3757,35 +3757,25 @@ function renderHomeCharacters() {
         const name = char.name || '이름 없음';
         const affil = char.affiliation || '';
         const photo = char.photo || 'images/logo.png';
-        const alink = char.link || '';
 
-        // 1. 링크 유무 확인
         const hasLink = char.link && char.link.trim() !== "";
 
         const div = document.createElement('div');
         div.className = 'char-card-horizontal';
 
-        // 2. [핵심] 링크 유무에 따른 스타일 분기
         if (hasLink) {
-            // 링크 있음: 손가락 커서 표시
             div.style.cursor = 'pointer';
         } else {
-            // 링크 없음: 
-            // - pointer-events: none -> 마우스 반응 차단 (클릭X, 호버X, 커서X)
-            // - filter: grayscale -> 흑백 처리
             div.style.pointerEvents = 'none';
         }
 
-        // 3. 이미지 스타일 (링크 없으면 흑백 + 약간 투명하게)
         const imgStyle = hasLink ? "" : "filter: grayscale(100%); opacity: 0.6;";
 
+        // ★ 이 부분을 수정해야 합니다 ★
         div.onclick = () => {
-            // pointer-events: none 덕분에 링크가 없으면 이 함수는 실행되지 않습니다.
             if (typeof openPersonDetail === 'function') {
-                openPersonDetail({
-                    name: name, role: '인물', desc: char.biography || '',
-                    faction: affil, img: photo, link: alink
-                });
+                // 특정 필드만 골라 담지 말고, 원본 char 객체를 통째로 전달합니다.
+                openPersonDetail(char); 
             }
         };
 
@@ -3803,8 +3793,7 @@ function renderHomeCharacters() {
     });
 
     container.appendChild(fragment);
-} 
-
+}
 
 function openPersonDetail(char) {
     const modal = document.getElementById('person-bottom-sheet');
@@ -3812,34 +3801,51 @@ function openPersonDetail(char) {
 
     if (!modal || !contentArea) return;
 
-    // 타이머 상세 보기와 동일한 리스트 구조 생성
+    // 1. 데이터에서 "story"로 시작하는 키들만 골라내어 <p> 태그 생성
+    const storiesHtml = Object.keys(char)
+        .filter(key => key.startsWith('story')) // story1, story2 등 필터링
+        .sort() // 순서대로 정렬
+        .map(key => `<p style="margin-bottom: 8px;">${char[key]}</p>`) // 각 스토리를 <p>로 감쌈
+        .join('');
+
+    // 2. 전체 레이아웃 구성
     contentArea.innerHTML = `
         <div class="sheet-handle-bar"></div>
-        <div class="person-img-container" style="text-align:center; padding:15px;">
-            <img src="${char.img}" class="person-img-large" style="width:100px; height:100px; border-radius:50%; border:2px solid #a08040; object-fit:cover;">
+        
+        <div class="person-sheet-header">
+            <div class="person-img-container" style="margin-bottom:15px;">
+                <img src="${char.img}" class="person-img-large" 
+                     style="width:110px; height:110px; border-radius:12px; border:1px solid #ddd; object-fit:cover;">
+            </div>
+            <h3>${char.name}</h3>
+            <div class="person-sheet-sub">| ${char.link || '무명 협객'} |</div>
         </div>
-        <h3 class="person-sheet-header" style="text-align:center; margin-bottom:20px;">${char.name}</h3>
 
-        <div class="task-list-wrapper"> <div class="person-info-row">
+        <div class="task-list-wrapper">
+            <div class="person-info-row">
                 <span class="person-label">소속</span>
                 <span class="task-title">${char.faction || '알 수 없음'}</span>
             </div>
-            <div class="person-info-row">
-                <span class="person-label">생일</span>
-                <span class="task-title">${char.link}</span>
-            </div>
-            <div class="person-bio-item">
-                <div style="font-weight:bold; color:#b71c1c; margin-bottom:5px;">주요 대사</div>
-                ${char.desc || '정보 없음'}
+ 
+            
+            <div class="person-bio-item" style="margin-top:10px;">
+                <div style="font-weight:bold; color:var(--wuxia-accent-gold); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    전기
+                </div>
+                <div style="line-height:1.7; color:#555; word-break: break-all;">
+                    ${storiesHtml || '<p>기록된 전기가 없습니다.</p>'}
+                </div>
             </div>
         </div>
-        <button class="browse-button" onclick="closePersonDetail()" style="margin-top:20px;">닫기</button>
+
+        <button class="browse-button" onclick="closePersonDetail()" style="margin-top:25px;">
+            정보창 닫기
+        </button>
     `;
 
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
-
 // 바텀시트 닫기 함수
 function closePersonDetail() {
     document.getElementById('person-bottom-sheet').classList.remove('active');

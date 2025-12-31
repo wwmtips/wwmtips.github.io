@@ -216,13 +216,11 @@
             </section>
             
 <script src="timer.js"></script>
-            
-            
-       <!--     <section class="profile-section" style="margin-top: 0; margin-bottom: 0;">
+            <section class="profile-section" style="margin-top: 0; margin-bottom: 0;">
     <div class="section-header-clickable">
         <h3><span class="deco-bar"></span>인게임 제보</h3>
     </div>
-    
+    <!-- 윤쫑 -->
     <div class="ingame-report-card" onclick="openReportSheet()" style="cursor: pointer;">
         <div class="card-bg-deco"></div>
 
@@ -261,7 +259,7 @@
             </div>
         </div>
      </div>
-</section>-->
+</section>
 
             <!--
 <section class="boss-section">
@@ -779,15 +777,17 @@
     padding: 10px;
 }
 
-/* --- [신규] 사이드바 하단 제보 배너 (미니 스타일) --- */
+/* --- [최종 수정] 사이드바 하단 제보 배너 --- */
 .sidebar-footer-report {
-    flex-shrink: 0;    /* 크기 줄어들지 않음 */
-    padding: 15px;
+    flex-shrink: 0;
+    padding: 12px 20px; /* 좌우 여백 살짝 넓힘 */
     border-top: 1px solid #eee;
     background-color: #f9f9f9;
+    
     display: flex;
-    align-items: center;
-    gap: 12px;
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 12px;           /* 이미지와 텍스트 그룹 사이 간격 */
+    
     cursor: pointer;
     transition: background-color 0.2s;
 }
@@ -796,39 +796,46 @@
     background-color: #f0f0f0;
 }
 
-/* 프로필 이미지 (원형, 작게) */
+/* 프로필 이미지 */
 .mini-profile-img img {
-    width: 36px;
-    height: 36px;
+    width: 38px;  /* 크기 살짝 키움 */
+    height: 38px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid #ddd;
     display: block;
+    background-color: #fff;
 }
 
-/* 텍스트 영역 */
-.mini-report-text {
+/* [핵심] 텍스트 그룹 (세로 정렬 & 여백 제거) */
+.footer-text-group {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* 위아래로 쌓기 */
     justify-content: center;
+    gap: 2px; /* 두 텍스트 사이 간격 (여기서 조절하세요) */
 }
 
-.mini-title {
+/* 상단 텍스트 (인게임 제보하기) */
+.footer-main-text {
     font-size: 0.9em;
     font-weight: bold;
     color: #333;
     font-family: 'Noto Serif KR', serif;
+    line-height: 1.2; /* 줄 간격 좁힘 */
+    margin: 0;        /* 기본 여백 제거 (붕 뜨는 원인 해결) */
 }
 
-.mini-desc {
+/* 하단 텍스트 (닉네임 - 윤쫑) */
+.footer-sub-text {
     font-size: 0.75em;
     color: #888;
-    margin-top: 2px;
+    line-height: 1.2;
+    margin: 0;        /* 기본 여백 제거 */
 }
 
 /* 족보 메뉴 등 화살표 숨길 곳은 유지 */
 
-            </style>
+ </style>
 
             <div id="build-detail-overlay" class="bottom-sheet-overlay" onclick="if(event.target === this) closeBuildDetailSheet(event)"></div>
             <div id="<build-de></build-de>tail-sheet" class="bottom-sheet" onclick="event.stopPropagation()">
@@ -987,15 +994,16 @@ function toggleSidebarSub(element) {
                 </div>
             </div>
         </div>
-        <div class="sidebar-footer-report" onclick="closeSidebar(); openReportSheet()">
+               <div class="sidebar-footer-report" onclick="closeSidebar(); openReportSheet()">
             <div class="mini-profile-img">
-                <img src="images/profile.jpg" onerror="this.src='images/logo.png'" alt="윤쫑">
+                <img src="images/profile.jpg" onerror="this.src='images/logo.png'" alt="제보">
             </div>
-            <div class="mini-report-text">
-                <span class="mini-title">인게임 제보하기</span>
-                <span class="mini-desc">닉네임 - 윤쫑</span>
+            <div class="footer-text-group">
+                <span class="footer-main-text">인게임 제보하기</span>
+                <span class="footer-sub-text">닉네임 - 윤쫑</span>
             </div>
         </div>
+
     </aside>
 
         <p style="margin-top: 15px; margin-bottom: 0; font-size: 0.7em; color: #999;">

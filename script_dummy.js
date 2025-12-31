@@ -3495,27 +3495,31 @@ function setLikeButtonActive(container, forceActive) {
     }
 }
 
-// [신규] 업적 리스트 렌더링 함수
+// [수정] 업적 리스트 렌더링 함수 (최대 2개만 표시)
 function renderAchievements(data) {
     const container = document.getElementById('achievement-list');
     if (!container) return;
     
-    // 데이터가 비었거나, archive 키로 감싸져 있는 경우 처리
-    const list = Array.isArray(data) ? data : (data.archive || []);
+    // 원본 전체 리스트 가져오기
+    const fullList = Array.isArray(data) ? data : (data.archive || []);
 
-    if (list.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#999; padding:10px; font-size:0.9em;">아직 달성된 업적이 없습니다.</div>';
+    if (fullList.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#999; padding:15px; font-size:0.9em;">아직 달성된 업적이 없습니다.</div>';
         return;
     }
     
     container.innerHTML = ''; // "로딩 중..." 문구 제거
 
-    list.forEach(item => {
+    // ★ 핵심: 메인 화면용으로 상위 2개만 자르기 ★
+    const limitedList = fullList.slice(0, 2);
+
+    limitedList.forEach(item => {
         // 아이콘이 없으면 기본 로고 사용
         const iconSrc = item.icon ? item.icon : 'images/logo.png';
         
         const div = document.createElement('div');
         div.className = 'achievement-card';
+        // HTML 구조는 동일하게 유지 (CSS로 디자인 변경됨)
         div.innerHTML = `
             <div class="ach-icon">
                 <img src="${iconSrc}" alt="아이콘" onerror="this.src='images/logo.png'">
@@ -3528,4 +3532,3 @@ function renderAchievements(data) {
         container.appendChild(div);
     });
 }
-

@@ -1,0 +1,1232 @@
+
+        /* =========================================
+           1. 기본 설정
+           ========================================= */
+        * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
+        body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
+        .dev-mode-cursor { cursor: crosshair !important; }
+
+        .leaflet-image-layer {
+            filter: brightness(0.6) contrast(1.2) saturate(0.85);
+            transition: filter 0.5s ease;
+        }
+
+        /* UI 컨테이너 */
+        .top-left-controls, .top-right-controls, 
+        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls,
+        .dev-controls { /* Dev 컨트롤 추가 */
+            position: fixed; z-index: 90000 !important; 
+            pointer-events: none !important; 
+            display: flex; flex-direction: column; gap: 8px;
+        }/* [수정] 개발자 모드 상태 표시기 (리스트형) */
+        .dev-status-box {
+            background: rgba(0, 0, 0, 0.85); 
+            border: 1px solid #a08040;
+            color: #ddd;
+            padding: 8px 15px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: 500;
+            display: none; /* 기본 숨김 */
+            align-items: center; 
+            white-space: nowrap; /* 줄바꿈 방지 */
+            max-width: 60vw; /* 화면 너무 차지하지 않게 */
+            overflow-x: auto; /* 내용 넘치면 스크롤 */
+            gap: 10px;
+        }
+        /* 스크롤바 숨김 (깔끔하게) */
+        .dev-status-box::-webkit-scrollbar { display: none; }
+        
+        .dev-type-tag {
+            color: #fff;
+            font-weight: 700;
+        }
+        .dev-type-count {
+            color: #a08040;
+            margin-left: 2px;
+        }
+        .dev-highlight { color: #a08040; font-weight: 800; }
+        .top-left-controls { top: 15px; left: 15px; }
+        .top-right-controls { top: 15px; right: 15px; }
+        .bottom-left-controls { bottom: 25px; left: 15px; overflow: visible; }
+        .bottom-right-controls { bottom: 25px; right: 15px; align-items: flex-end; }
+        
+        .bottom-center-controls {
+            bottom: 25px; left: 70px; right: 70px;
+            justify-content: center; align-items: center;
+        }
+
+        /* ★ [New] 개발자 패널 스타일 */
+        .dev-controls {
+            top: 15px; left: 50%; transform: translateX(-50%);
+            flex-direction: row; display: none; /* 기본 숨김 */
+        }
+        .dev-controls.active { display: flex; }
+        
+        .dev-btn {
+            background: rgba(0, 0, 0, 0.8); border: 1px solid #ff4444; color: #ff4444;
+            padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 12px;
+            cursor: pointer; pointer-events: auto !important;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .dev-btn.recording { background: #ff4444; color: white; animation: pulse 1.5s infinite; }
+        .dev-btn:hover { transform: scale(1.05); }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        /* 공통 클릭 활성화 */
+        .glass-box, .glass-select, .glass-group-btn, .glass-single-btn,
+        .sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
+        .filter-control-btn, .filter-item, .action-btn, 
+        .search-panel, .filter-panel, .path-panel, 
+        .save-load-popup, .popup-item {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        /* 패널 Z-index */
+        .search-panel, .filter-panel, .path-panel { z-index: 100001 !important; }
+
+        /* =========================================
+           2. UI 디자인 (Glass Style)
+           ========================================= */
+        .glass-select {
+            appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a08040; padding: 8px 28px 8px 12px; border-radius: 10px;
+            font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
+        }
+        .glass-select option { background-color: #1a1a1a; color: white; }
+
+        .glass-box {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
+
+        #path-toggle-btn {
+            width: 100%; max-width: 400px; height: 42px; padding: 0 20px; 
+            border-radius: 21px; gap: 8px;
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        #path-toggle-btn span { font-size: 13px; font-weight: 700; color: #ccc; letter-spacing: 0.5px; }
+        
+        #path-toggle-btn.path-active {
+            background-color: #a08040 !important; border-color: #fff !important;
+            box-shadow: 0 0 20px rgba(160, 128, 64, 0.6); transform: translateY(-2px);
+        }
+        #path-toggle-btn.path-active span, #path-toggle-btn.path-active svg { color: #fff !important; fill: #fff !important; }
+
+        .glass-group {
+            display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .glass-group-btn {
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
+        }
+        .glass-group-btn:last-child { border-bottom: none; }
+        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
+        
+        .glass-single-btn {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
+        .icon-svg { width: 20px; height: 20px; fill: currentColor; }
+
+        .save-load-popup {
+            position: absolute; bottom: 50px; left: 0;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px; padding: 5px;
+            display: flex; flex-direction: column; gap: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 140px;
+            opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none !important;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: bottom left;
+        }
+        .save-load-popup.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
+
+        .popup-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 8px;
+            color: #ccc; font-size: 13px; font-weight: 500;
+            transition: background 0.2s;
+        }
+        .popup-item:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
+        .popup-item svg { width: 18px; height: 18px; fill: #a08040; }
+
+        /* =========================================
+           3. 핀 & 클러스터
+           ========================================= */
+        .pin-marker {
+            position: relative; width: 100%; height: 100%;
+            border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            background: #ffffff; 
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .pin-inner-circle {
+            width: 88%; height: 88%; border-radius: 50%;
+            background: var(--pin-color, #555);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pin-inner-circle img {
+            width: 70%; height: 70%; object-fit: contain; 
+            transform: rotate(45deg); opacity: 1; filter: none;
+        }
+        .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
+        .marker-completed .pin-inner-circle { background: #555 !important; }
+        .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
+
+        /* Dev 모드 선택된 마커 (반짝임) */
+        .dev-selected .pin-marker {
+            background-color: #00e5ff !important;
+            transform: rotate(-45deg) scale(1.1);
+            box-shadow: 0 0 10px #00e5ff;
+        }
+
+        .simple-cluster-marker {
+            width: 100%; height: 100%; border-radius: 50%; 
+            border: 2px solid #ffffff; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 800;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* =========================================
+           4. 경로 마커
+           ========================================= */
+        .path-marker-box {
+            position: relative; width: 100%; height: 100%;
+            background-color: #1c1c1c; border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s, filter 0.2s; 
+        }
+        .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
+        .path-marker-icon {
+            width: 60%; height: 60%; object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
+        }
+        .path-order-badge {
+            position: absolute; bottom: -5px; right: -5px;
+            background-color: #a08040; color: #fff;
+            font-size: 10px; font-weight: 800; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .gateway-marker .path-marker-box { border-color: #00e5ff !important; box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+        .gateway-marker .path-order-badge { background-color: #00e5ff !important; color: #000 !important; }
+        .marker-completed .path-marker-box {
+            background-color: #333 !important; border-color: #555 !important;
+            filter: grayscale(100%) brightness(0.7); opacity: 0.8;
+        }
+        .marker-completed .path-order-badge { background-color: #555 !important; }
+
+        /* =========================================
+           5. 패널 스타일
+           ========================================= */
+        .search-panel, .filter-panel, .path-panel {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .search-panel {
+            padding: 15px 20px 20px 20px; box-sizing: border-box;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transform: translateY(-100%);
+        }
+        .search-panel.active { transform: translateY(0); }
+
+        .filter-panel, .path-panel {
+            top: auto; bottom: 0; max-height: 60vh;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            padding-bottom: 20px; transform: translateY(100%);
+        }
+        .filter-panel.active, .path-panel.active { transform: translateY(0); }
+
+        .panel-header {
+            padding: 15px 20px; border-bottom: 1px solid #333;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-title { color: white; font-weight: 700; font-size: 16px; }
+        .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; padding: 5px; }
+
+        .path-list-container { padding: 10px 20px; overflow-y: auto; }
+        .path-item {
+            padding: 15px; background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+            transition: all 0.2s;
+        }
+        .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
+        .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
+        .path-name { color: #fff; font-weight: 700; font-size: 14px; }
+        .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
+
+        .sidebar-search-input {
+            width: 100%; padding: 12px 10px 12px 40px; 
+            background-color: #333333 !important; border: 1px solid #a08040 !important;
+            border-radius: 8px; color: #ffffff !important; font-size: 16px; 
+            -webkit-appearance: none; outline: none;
+        }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
+        .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
+        
+        .search-results-container {
+            max-height: 60vh; overflow-y: auto; margin-top: 10px;
+            background-color: rgba(30, 30, 30, 0.95) !important;
+            border-radius: 8px; display: block !important;
+        }
+        .search-result-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 12px; border-bottom: 1px solid #444; cursor: pointer; gap: 12px;
+        }
+        .search-result-row:hover { background-color: rgba(255,255,255,0.05); }
+        .result-info { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+        .result-name { 
+            color: #a08040; font-weight: 700; font-size: 14px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .result-desc { 
+            color: #888; font-size: 11px; margin-top: 2px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .result-type-icon { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; opacity: 0.8; }
+
+        .filter-controls { display: flex; gap: 6px; }
+        .filter-control-btn {
+            padding: 8px 12px; font-size: 11px; font-weight: 500;
+            background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
+        }
+        .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
+        .filter-list-container {
+            padding: 10px 20px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .filter-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 5px; border-bottom: 1px solid #333;
+        }
+        .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
+        .filter-text-name { font-size: 13px; color: #aaa; }
+        .filter-count { color: #666; font-size: 12px; }
+        .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
+        .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+        .filter-item.inactive { opacity: 0.4; }
+
+        @media (min-width: 768px) {
+            .search-panel, .filter-panel, .path-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
+            .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
+            .search-panel.active { transform: translateX(-50%) translateY(0); }
+            .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
+            .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
+        }
+     
+     
+        /* =========================================
+           1. 기본 설정 및 클릭 문제 해결
+           ========================================= */
+        * { font-family: 'Noto Sans KR', sans-serif !important; box-sizing: border-box; }
+        body { margin: 0; padding: 0; background-color: #0e0e0e; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; background: #0e0e0e; z-index: 1; }
+        .dev-mode-cursor { cursor: crosshair !important; }
+
+        .leaflet-image-layer {
+            filter: brightness(0.6) contrast(1.2) saturate(0.85);
+            transition: filter 0.5s ease;
+        }
+
+        /* UI 컨테이너 (클릭 통과) */
+        .top-left-controls, .top-right-controls, 
+        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls {
+            position: fixed; z-index: 90000 !important; 
+            pointer-events: none !important; 
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .top-left-controls { top: 15px; left: 15px; }
+        .top-right-controls { top: 15px; right: 15px; }
+        .bottom-left-controls { bottom: 25px; left: 15px; overflow: visible; }
+        .bottom-right-controls { bottom: 25px; right: 15px; align-items: flex-end; }
+        
+        .bottom-center-controls {
+            bottom: 25px; left: 70px; right: 70px;
+            justify-content: center; align-items: center;
+        }
+        
+        /* 클릭 활성화 대상 */
+        .glass-box, .glass-select, .glass-group-btn, .glass-single-btn,
+        .sidebar-search-input, .panel-close-btn, .path-item, .search-result-row, 
+        .filter-control-btn, .filter-item, .action-btn, 
+        .search-panel, .filter-panel, .path-panel, 
+        .save-load-popup, .popup-item {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        /* 패널 Z-index */
+        .search-panel, .filter-panel, .path-panel {
+            z-index: 100001 !important;
+        }
+
+        /* =========================================
+           2. UI 디자인 (Glass Style)
+           ========================================= */
+        .glass-select {
+            appearance: none; -webkit-appearance: none; background-color: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a08040; padding: 8px 28px 8px 12px; border-radius: 10px;
+            font-weight: 700; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a08040%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 8px auto;
+        }
+        .glass-select option { background-color: #1a1a1a; color: white; }
+
+        .glass-box {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-box:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; transform: scale(1.05); }
+
+        #path-toggle-btn {
+            width: 100%; max-width: 400px; height: 42px; padding: 0 20px; 
+            border-radius: 21px; gap: 8px;
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        #path-toggle-btn span { font-size: 13px; font-weight: 700; color: #ccc; letter-spacing: 0.5px; }
+        
+        #path-toggle-btn.path-active {
+            background-color: #a08040 !important; border-color: #fff !important;
+            box-shadow: 0 0 20px rgba(160, 128, 64, 0.6); transform: translateY(-2px);
+        }
+        #path-toggle-btn.path-active span, #path-toggle-btn.path-active svg { color: #fff !important; fill: #fff !important; }
+
+        .glass-group {
+            display: flex; flex-direction: column; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .glass-group-btn {
+            width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; border-bottom: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s;
+        }
+        .glass-group-btn:last-child { border-bottom: none; }
+        .glass-group-btn:hover { background-color: rgba(40, 40, 40, 0.95); color: #fff; } 
+        
+        .glass-single-btn {
+            width: 38px; height: 38px; background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #a08040; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s;
+        }
+        .glass-single-btn:hover { background-color: rgba(40, 40, 40, 0.95); border-color: #a08040; color: #fff; transform: scale(1.05); }
+        .icon-svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* 저장/불러오기 팝업 메뉴 */
+        .save-load-popup {
+            position: absolute; bottom: 50px; left: 0;
+            background-color: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 5px;
+            display: flex; flex-direction: column; gap: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 140px;
+            opacity: 0; transform: translateY(10px) scale(0.95); pointer-events: none !important;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: bottom left;
+        }
+        .save-load-popup.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto !important; }
+
+        .popup-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 8px;
+            color: #ccc; font-size: 13px; font-weight: 500;
+            transition: background 0.2s;
+        }
+        .popup-item:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
+        .popup-item svg { width: 18px; height: 18px; fill: #a08040; }
+
+        /* =========================================
+           3. 핀 & 클러스터
+           ========================================= */
+        .pin-marker {
+            position: relative; width: 100%; height: 100%;
+            border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            background: #ffffff; 
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .pin-inner-circle {
+            width: 88%; height: 88%; border-radius: 50%;
+            background: var(--pin-color, #555);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pin-inner-circle img {
+            width: 70%; height: 70%; object-fit: contain; 
+            transform: rotate(45deg); opacity: 1; filter: none;
+        }
+        .pin-marker:hover { transform: rotate(-45deg) scale(1.2); z-index: 9999; }
+        .marker-completed .pin-inner-circle { background: #555 !important; }
+        .marker-completed .pin-marker { opacity: 0.5; filter: grayscale(100%); }
+
+        .simple-cluster-marker {
+            width: 100%; height: 100%; border-radius: 50%; 
+            border: 2px solid #ffffff; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 800;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* =========================================
+           4. 경로 마커
+           ========================================= */
+        .path-marker-box {
+            position: relative; width: 100%; height: 100%;
+            background-color: #1c1c1c; border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s, filter 0.2s; 
+        }
+        .path-marker-box:hover { transform: scale(1.15); border-color: #a08040; z-index: 9999; }
+        .path-marker-icon {
+            width: 60%; height: 60%; object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(56%) sepia(87%) saturate(357%) hue-rotate(6deg) brightness(89%) contrast(89%);
+        }
+        .path-order-badge {
+            position: absolute; bottom: -5px; right: -5px;
+            background-color: #a08040; color: #fff;
+            font-size: 10px; font-weight: 800; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: 2px solid #1c1c1c; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .gateway-marker .path-marker-box { border-color: #00e5ff !important; box-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+        .gateway-marker .path-order-badge { background-color: #00e5ff !important; color: #000 !important; }
+        .marker-completed .path-marker-box {
+            background-color: #333 !important; border-color: #555 !important;
+            filter: grayscale(100%) brightness(0.7); opacity: 0.8;
+        }
+        .marker-completed .path-order-badge { background-color: #555 !important; }
+
+        /* =========================================
+           5. 패널 스타일
+           ========================================= */
+        .search-panel, .filter-panel, .path-panel {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: rgba(20, 20, 20, 0.98); backdrop-filter: blur(10px);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .search-panel {
+            padding: 15px 20px 20px 20px; box-sizing: border-box;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transform: translateY(-100%);
+        }
+        .search-panel.active { transform: translateY(0); }
+
+        .filter-panel, .path-panel {
+            top: auto; bottom: 0; max-height: 60vh;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            padding-bottom: 20px; transform: translateY(100%);
+        }
+        .filter-panel.active, .path-panel.active { transform: translateY(0); }
+
+        .panel-header {
+            padding: 15px 20px; border-bottom: 1px solid #333;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-title { color: white; font-weight: 700; font-size: 16px; }
+        .panel-close-btn { color: #888; font-size: 24px; cursor: pointer; padding: 5px; }
+
+        .path-list-container { padding: 10px 20px; overflow-y: auto; }
+        .path-item {
+            padding: 15px; background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+            transition: all 0.2s;
+        }
+        .path-item:hover { background-color: rgba(160, 128, 64, 0.2); border-color: #a08040; }
+        .path-icon { width: 24px; height: 24px; fill: #a08040; flex-shrink: 0; }
+        .path-name { color: #fff; font-weight: 700; font-size: 14px; }
+        .path-desc { color: #aaa; font-size: 12px; margin-top: 2px; }
+
+        .sidebar-search-input {
+            width: 100%; padding: 12px 10px 12px 40px; 
+            background-color: #333333 !important; border: 1px solid #a08040 !important;
+            border-radius: 8px; color: #ffffff !important; font-size: 16px; 
+            -webkit-appearance: none; outline: none;
+        }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a08040; font-size: 16px; }
+        .search-wrapper { position: relative; width: 100%; margin-top: 15px; }
+        
+        .search-results-container {
+            max-height: 60vh; overflow-y: auto; margin-top: 10px;
+            background-color: rgba(30, 30, 30, 0.95) !important;
+            border-radius: 8px; display: block !important;
+        }
+        .search-result-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 10px; border-bottom: 1px solid #444; cursor: pointer;
+        }
+        .result-name { color: #a08040; font-weight: 700; font-size: 14px; }
+        .result-desc { color: #ccc; font-size: 12px; margin-top: 2px; }
+
+        .filter-controls { display: flex; gap: 6px; }
+        .filter-control-btn {
+            padding: 8px 12px; font-size: 11px; font-weight: 500;
+            background-color: #333; border: 1px solid #555; color: #ccc; border-radius: 20px;
+        }
+        .filter-control-btn:hover { border-color: #a08040; color: #a08040; background-color: #252525; }
+        .filter-list-container {
+            padding: 10px 20px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .filter-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 5px; border-bottom: 1px solid #333;
+        }
+        .filter-left-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .filter-icon-img { width: 24px; height: 24px; object-fit: contain; }
+        .filter-text-name { font-size: 13px; color: #aaa; }
+        .filter-count { color: #666; font-size: 12px; }
+        .filter-item.active .filter-text-name { color: #fff; font-weight: 700; }
+        .filter-item.active .filter-icon-img { opacity: 1; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+        .filter-item.inactive { opacity: 0.4; }
+
+        /* 팝업 */
+        .leaflet-popup-content-wrapper { 
+            background: #ffffff !important; color: #333 !important; 
+            border-radius: 12px !important; padding: 0 !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5) !important; overflow: hidden;
+        }
+        .leaflet-popup-content { margin: 0 !important; width: 280px !important; text-align: center; line-height: 1.5; }
+        .leaflet-popup-tip { background: #ffffff !important; }
+        .leaflet-container a.leaflet-popup-close-button {
+            top: 8px !important; right: 8px !important; color: #666 !important; font-size: 20px !important; z-index: 10;
+        }
+        .popup-inner { padding: 20px 15px 15px 15px; }
+        .popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 5px; display: block; }
+        .popup-type-badge { 
+            display: inline-block; font-size: 11px; color: #fff; background-color: #a08040;
+            font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 12px;
+        }
+        .popup-desc { 
+            font-size: 14px; color: #444; background: #f5f5f7; 
+            padding: 12px; border-radius: 8px; margin: 0 0 12px 0; 
+            text-align: left; word-break: keep-all; line-height: 1.4;
+        }
+        .popup-img { 
+            width: 100%; height: auto; max-height: 200px; object-fit: cover;
+            border-radius: 8px; margin-bottom: 10px; display: block; border: 1px solid #eee;
+        }
+        .popup-youtube-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            margin-bottom: 10px; border-radius: 8px; background: #000;
+        }
+        .popup-youtube-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .btn-container { display: flex; gap: 8px; margin-top: 5px; }
+        .action-btn { 
+            flex: 1; padding: 10px 0; border-radius: 8px; font-size: 13px; font-weight: 700; 
+            border: none; color: white; text-align: center; text-decoration: none; 
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+        }
+        .btn-wiki { background-color: #4a90e2; }
+        .btn-complete { background-color: #2e7d32; }
+        .btn-undo { background-color: #757575; }
+
+        @media (min-width: 768px) {
+            .search-panel, .filter-panel, .path-panel { max-width: 400px; left: 50%; transform: translateX(-50%); }
+            .search-panel { transform: translateX(-50%) translateY(-100%); border-radius: 0 0 20px 20px; }
+            .search-panel.active { transform: translateX(-50%) translateY(0); }
+            .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
+            .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
+        }
+
+/* ★ [수정] 경로 요약 정보 바 - 화면 좌우 꽉 채우기 */
+#path-summary-bar {
+    display: none; /* 기본 숨김 */
+    position: fixed; /* 위치 고정 */
+    
+    /* 위치: 하단 컨트롤들(저장, 경로버튼, 전체화면) 바로 위에 배치 */
+    bottom: 80px; 
+    
+    /* 가로 너비: 저장 버튼 좌측(15px) ~ 전체화면 우측(15px) */
+    left: 15px; 
+    right: 15px;
+    
+    /* 레이아웃 */
+    flex-direction: row; 
+    justify-content: center; /* 내용 중앙 정렬 (원하시면 space-between 가능) */
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    
+    /* 디자인 */
+    background-color: rgba(20, 20, 20, 0.95); 
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    padding: 12px 20px; 
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    
+    z-index: 90001; /* 다른 버튼보다 위에 */
+    pointer-events: auto !important;
+}
+
+/* 요약 텍스트 스타일 */
+.summary-chunk { 
+    font-size: 14px; 
+    font-weight: 500; 
+    color: #ccc; 
+    display: flex;
+    align-items: center;
+}
+.summary-chunk b { 
+    color: #a08040; 
+    margin-left: 5px; 
+    font-size: 15px;
+}
+
+/* =========================================
+   ★ [Mobile Optimization] 경로 요약 바 모바일 최적화
+   ========================================= */
+@media (max-width: 768px) {
+    #path-summary-bar {
+        /* 1. 패널 크기 및 여백 축소 */
+        padding: 6px 12px !important; 
+        gap: 2px 10px !important; /* 아이템 간 간격 좁힘 */
+        
+        /* 2. 배경 투명도 조절 (0.95 -> 0.75) */
+        background-color: rgba(20, 20, 20, 0.75) !important; 
+        backdrop-filter: blur(5px) !important; /* 흐림 효과는 유지하되 약간 줄임 */
+        
+        /* 3. 테두리 및 둥글기 조절 */
+        border-radius: 12px !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        
+        /* 4. 위치 미세 조정 (하단 버튼과 간격 확보) */
+        bottom: 75px !important;
+        left: 15px !important;
+        right: 15px !important;
+    }
+
+    /* 5. 폰트 사이즈 대폭 축소 */
+    .summary-chunk { 
+        font-size: 11px !important; 
+        line-height: 1.4 !important;
+    }
+    
+    .summary-chunk b { 
+        font-size: 12px !important; 
+        margin-left: 3px !important;
+    }
+}
+/* =========================================
+   ★ [PC Optimization] 경로 모드 버튼 크기 확대
+   ========================================= */
+@media (min-width: 769px) {
+    #path-toggle-btn {
+     
+        max-width: 80% !important;   /* 너비: 400px -> 500px */
+        border-radius: 28px !important; /* 둥근 모서리도 비율에 맞게 조정 */
+        
+        /* 2. 여백 및 간격 조정 */
+        padding: 0 30px !important;
+        gap: 12px !important;
+        
+        /* 3. 살짝 위로 띄우기 (시각적 균형) */
+        bottom: 35px !important; 
+    }
+    
+    /* 4. 글자 크기 시원하게 */
+    #path-toggle-btn span {
+        font-size: 16px !important;    /* 글자: 13px -> 16px */
+        letter-spacing: 1px !important;
+    }
+    
+    /* 5. 아이콘 크기 확대 */
+    #path-toggle-btn .icon-svg {
+        width: 24px !important;        /* 아이콘: 20px -> 24px */
+        height: 24px !important;
+    }
+}
+/* =========================================
+   3. 핀 & 클러스터 (다크 토큰 & 컬러 테두리)
+   ========================================= */
+
+/* --- [1] 개별 핀 스타일 --- *//* =========================================
+           1. 핀 디자인 (다크 토큰 & 컬러 테두리)
+           ========================================= */
+        .pin-marker {
+            position: relative; width: 100%; height: 100%;
+            
+            /* 1. 완전한 원형으로 변경 */
+            border-radius: 50% !important;
+            transform: none !important; /* 회전 제거 */
+            
+            /* 2. 배경: 지도와 어우러지는 반투명 검정 */
+            background-color: rgba(20, 20, 20, 0.75);
+            backdrop-filter: blur(2px);
+            
+            /* 3. 테두리: 카테고리 색상 적용 (JS에서 받은 변수 사용) */
+            border: 2px solid var(--pin-color, #ffffff);
+            box-sizing: border-box;
+            
+            /* 그림자 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .pin-inner-circle {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            /* 배경색 제거 (부모 배경 사용) */
+            background: transparent !important;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .pin-inner-circle img {
+            width: 65%; height: 65%;
+            object-fit: contain;
+            transform: none !important; /* 회전 제거 */
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.8));
+            opacity: 1;
+        }
+
+        /* 호버 효과 */
+        .pin-marker:hover {
+            transform: scale(1.2);
+            z-index: 9999; cursor: pointer;
+            /* 빛나는 효과 */
+            box-shadow: 0 0 10px var(--pin-color), 0 4px 8px rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        /* 완료된 마커 */
+        .marker-completed .pin-marker { 
+            opacity: 0.5; 
+            filter: grayscale(1.0);
+            border-color: #555 !important;
+        }
+        /* --- [2] 클러스터 스타일 (핀과 통일) --- */
+/* =========================================
+   4. 심플 클러스터 (다크 토큰 스타일 - 핀과 통일)
+   ========================================= */
+.simple-cluster-marker {
+    width: 100%; height: 100%;
+    
+    /* 1. 모양: 완전한 원형 */
+    border-radius: 50% !important;
+    
+    /* 2. 배경: 핀과 동일한 반투명 검정 (지도가 비침) */
+    background-color: rgba(20, 20, 20, 0.75) !important;
+    backdrop-filter: blur(2px);
+    
+    /* 3. 테두리: JS에서 받은 카테고리 색상 적용 */
+    /* 변수가 없으면 기본값으로 흰색(#fff) 사용 */
+    border: 2px solid var(--cluster-color, #ffffff00) !important;
+    box-sizing: border-box;
+    
+    /* 4. 글자: 흰색 + 그림자 */
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    font-size: 12px; 
+    font-weight: 800;
+    font-family: 'Noto Sans KR', sans-serif;
+    
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    transition: transform 0.2s ease;
+}
+
+/* 호버 효과 */
+.simple-cluster-marker:hover {
+    transform: scale(1.15); 
+    z-index: 9999;
+    
+    /* 호버 시 배경 진해지고 테두리 빛남 */
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    box-shadow: 0 0 10px var(--cluster-color), 0 2px 5px rgba(0,0,0,0.5);
+}
+/* =========================================
+   6. 커스텀 스크롤바 디자인 (Dark Glass Style)
+   ========================================= */
+
+/* 스크롤바의 전체 너비 설정 */
+.path-list-container::-webkit-scrollbar {
+    width: 6px;  /* 얇고 세련되게 */
+}
+
+/* 스크롤바의 배경 (트랙) - 투명하게 처리 */
+.path-list-container::-webkit-scrollbar-track {
+    background: transparent; 
+    margin: 5px 0; /* 위아래 여백 */
+}
+
+/* 스크롤바 핸들 (움직이는 막대) */
+.path-list-container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15); /* 아주 연한 회색 */
+    border-radius: 3px; /* 둥근 모서리 */
+    transition: background-color 0.2s;
+}
+
+/* 스크롤바에 마우스를 올렸을 때 */
+.path-list-container::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* 좀 더 밝게 강조 */
+}
+
+/* (선택사항) 검색창이나 필터창에도 똑같이 적용하려면 아래 셀렉터를 추가하세요 */
+.search-results-container::-webkit-scrollbar,
+.filter-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+.search-results-container::-webkit-scrollbar-track,
+.filter-list-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.search-results-container::-webkit-scrollbar-thumb,
+.filter-list-container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+.search-results-container::-webkit-scrollbar-thumb:hover,
+.filter-list-container::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+          /* [수정] 경로 리스트 컨테이너 */
+        .path-list-container { 
+            padding: 10px 15px; /* 패딩을 조금 줄임 */
+            overflow-y: auto; 
+            
+            /* 2열 그리드 유지 */
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 8px; /* 간격을 좁게 설정 */
+        }
+
+        /* [수정] 경로 아이템 (얇은 가로형 스타일) */
+        .path-item {
+            /* 1. 크기 및 여백: 얇게 만듦 */
+            padding: 10px 12px; 
+            min-height: 0; /* 고정 높이 제거 */
+            
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            
+            /* 2. 배치: 가로 정렬 [아이콘] - [이름] */
+            display: flex; 
+            flex-direction: row; 
+            align-items: center; 
+            justify-content: flex-start; /* 왼쪽 정렬 */
+            gap: 10px; /* 아이콘과 글자 사이 간격 */
+            
+            margin-bottom: 0;
+            transition: all 0.2s;
+            text-align: left; 
+        }
+        
+        /* 호버 효과 */
+        .path-item:hover { 
+            background-color: rgba(160, 128, 64, 0.2); 
+            border-color: #a08040; 
+            transform: translateY(-1px); /* 살짝만 뜸 */
+        }
+        
+        /* 아이콘 스타일 */
+        .path-icon { 
+            width: 16px; /* 아이콘 크기 축소 */
+            height: 16px; 
+            fill: #a08040; 
+            flex-shrink: 0; 
+            margin-bottom: 0; /* 마진 제거 */
+        }
+        
+        /* 텍스트 스타일 */
+        .path-name { 
+            color: #e0e0e0; 
+            font-weight: 500; 
+            font-size: 13px; 
+            line-height: 1.2;
+            
+            /* 이름이 길 경우 말줄임표(...) 처리 */
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
+        }
+        /* [수정] 메인 컨테이너 (그리드 제거, 스크롤만 담당) */
+        .path-list-container { 
+            padding: 10px 15px; 
+            overflow-y: auto; 
+            display: block; /* 그리드 제거 -> 블록 요소로 변경 */
+        }
+
+        /* [신규] 카테고리 헤더 스타일 */
+        .path-category-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: #a08040; /* 금색 포인트 */
+            margin: 15px 0 8px 2px; /* 위아래 여백 */
+            display: flex;
+            align-items: center;
+        }
+        /* 첫 번째 헤더는 위쪽 여백 줄임 */
+        .path-category-header:first-child { margin-top: 5px; }
+
+        /* [신규] 카테고리별 그리드 그룹 (여기에 2열 그리드 적용) */
+        .path-category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 1:1 비율 2열 */
+            gap: 8px;
+        }
+
+        /* [유지] 경로 아이템 (얇은 스타일 그대로 유지) */
+        .path-item {
+            padding: 10px 12px; 
+            min-height: 0;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; 
+            flex-direction: row; 
+            align-items: center; 
+            justify-content: flex-start;
+            gap: 10px;
+            text-align: left; 
+            transition: all 0.2s;
+        }
+        .path-item:hover { 
+            background-color: rgba(160, 128, 64, 0.2); 
+            border-color: #a08040; 
+            transform: translateY(-1px);
+        }
+        .path-icon { width: 16px; height: 16px; fill: #a08040; flex-shrink: 0; }
+        .path-name { 
+            color: #e0e0e0; font-weight: 500; font-size: 13px; line-height: 1.2;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        
+        
+        
+     
+     
+     
+     
+             /* =========================================
+           5. 패널 스타일 (전체 수정됨: 슬림 타이틀 + 큰 검색창 + 긴 패널)
+           ========================================= */
+        
+        /* 1. 패널 공통 레이아웃 */
+        .search-panel, .filter-panel, .path-panel {
+            position: fixed; left: 0; width: 100%;
+            background-color: rgba(20, 20, 20, 0.98); 
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex; flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 100001 !important;
+        }
+
+        /* 2. 검색 패널 (위 -> 아래) */
+        .search-panel {
+            top: 0;
+            padding: 15px 20px 20px 20px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0 0 20px 20px;
+            transform: translateY(-100%);
+        }
+        .search-panel.active { transform: translateY(0); }
+
+        /* 3. 필터 & 경로 패널 (아래 -> 위) */
+        .filter-panel, .path-panel {
+            top: auto; bottom: 0; 
+            max-height: 85vh; /* ★ 패널 높이 85%로 확대 */
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top-left-radius: 20px; 
+            border-top-right-radius: 20px;
+            padding-bottom: 30px; /* 하단 여백 확보 */
+            transform: translateY(100%);
+        }
+        .filter-panel.active, .path-panel.active { transform: translateY(0); }
+
+        /* 4. 헤더 (타이틀) 스타일 - 슬림형 */
+        .panel-header {
+            padding: 6px 20px !important;  /* 위아래 여백 최소화 */
+            min-height: 36px !important;   /* 높이 줄임 */
+            border-bottom: none !important; /* ★ 구분선 제거 (심플하게) */
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0; /* 스크롤 시 줄어들지 않게 고정 */
+        }
+        .panel-title { 
+            color: white; font-weight: 700; 
+            font-size: 15px !important; /* 글자 크기 적당히 유지 */
+        }
+        .panel-close-btn { 
+            color: #888; font-size: 20px; cursor: pointer; padding: 5px; 
+            line-height: 1;
+        }
+
+        /* 5. 경로 검색창 영역 (타이틀 바로 아래) */
+        .path-search-wrapper {
+            position: sticky; top: 0; z-index: 10;
+            background-color: transparent; /* 패널 배경 그대로 사용 */
+            padding: 5px 20px 15px 20px !important; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); /* ★ 여기에 구분선 추가 */
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+        .path-search-input {
+            width: 100%;
+            height: 42px !important;       /* ★ 높이 복구 (누르기 편함) */
+            padding: 0 15px 0 38px !important;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px !important;
+            color: white;
+            font-size: 14px !important;    /* 글자 크기 복구 */
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .path-search-input:focus {
+            border-color: #a08040;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        .path-search-icon {
+            position: absolute;
+            left: 32px !important;         /* 아이콘 위치 조정 */
+            top: 50% !important; 
+            transform: translateY(-50%) !important;
+            color: #888;
+            font-size: 16px !important;    /* 아이콘 크기 복구 */
+            pointer-events: none;
+        }
+
+        /* 6. 내용 리스트 컨테이너 */
+        .path-list-container, .filter-list-container { 
+            padding: 10px 20px; 
+            overflow-y: auto; 
+            flex-grow: 1; /* 남은 공간 꽉 채우기 */
+        }
+
+        /* 7. PC 화면 중앙 정렬 */
+        @media (min-width: 768px) {
+            .search-panel, .filter-panel, .path-panel { 
+                max-width: 400px; 
+                left: 50%; 
+                /* transform 초기값 설정 (중요) */
+            }
+            .search-panel { transform: translateX(-50%) translateY(-100%); }
+            .filter-panel, .path-panel { transform: translateX(-50%) translateY(100%); }
+
+            .search-panel.active { transform: translateX(-50%) translateY(0); }
+            .filter-panel.active, .path-panel.active { transform: translateX(-50%) translateY(0); }
+        }
+
+
+        /* =========================================
+           6. 경로 리스트 및 카테고리 헤더 (복구 및 수정)
+           ========================================= */
+
+        /* 카테고리 헤더: 가로 정렬(양쪽 끝) */
+        .path-category-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important; /* 글자는 왼쪽, 화살표는 오른쪽 */
+            
+            font-size: 13px;
+            font-weight: 700;
+            color: #a08040; /* 금색 */
+            margin: 15px 0 8px 0;
+            padding: 5px 2px;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s;
+        }
+        .path-category-header:hover { color: #fff; }
+
+        /* 화살표 아이콘: 크기 고정 및 색상 지정 */
+        .header-arrow {
+            width: 18px !important;    /* 크기 작게 고정 */
+            height: 18px !important;
+            fill: #a08040 !important;  /* 금색으로 변경 */
+            transition: transform 0.3s ease;
+            min-width: 18px; /* 찌그러짐 방지 */
+        }
+
+        /* 접혔을 때 화살표 회전 */
+        .path-category-header.collapsed .header-arrow {
+            transform: rotate(-90deg);
+        }
+
+        /* 리스트 그리드 애니메이션 */
+        .path-category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            max-height: 2000px; /* 펼쳐졌을 때 최대 높이 */
+            opacity: 1;
+        }
+        
+        /* 숨김 상태 */
+        .path-category-grid.hidden {
+            max-height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+            pointer-events: none;
+        }
+
+        /* 경로 아이템 카드 스타일 */
+        .path-item {
+            padding: 10px 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .path-item:hover {
+            background-color: rgba(160, 128, 64, 0.2);
+            border-color: #a08040;
+        }
+        .path-icon { width: 16px; height: 16px; fill: #a08040; }
+        .path-name { 
+            font-size: 13px; color: #e0e0e0; font-weight: 500;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }

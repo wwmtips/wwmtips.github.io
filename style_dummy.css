@@ -5837,3 +5837,38 @@ body.dark-mode .timer-row:hover {
     font-weight: bold !important;
     font-size: 0.85em !important;
 }
+
+/* =========================================
+   [모바일 전용] 바텀시트 최대 높이 축소
+   ========================================= */
+
+@media (max-width: 768px) {
+    /* 1. 바텀시트 전체 높이 제한 (기존 85vh -> 70vh) */
+    .bottom-sheet-content {
+        max-height: 70vh !important; /* 화면의 70%만 차지하도록 하향 조정 */
+        height: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        
+        /* 바닥에 딱 붙이거나 약간 띄우는 정도는 취향껏 조정 (여기선 0으로 밀착) */
+        bottom: -100% !important;
+    }
+
+    /* 활성화 시 위치 */
+    .bottom-sheet-modal.active .bottom-sheet-content {
+        bottom: 0 !important; /* 모바일은 바닥에 밀착되는 것이 안정적입니다 */
+    }
+
+    /* 2. 본문 스크롤 영역 강제 지정 */
+    #person-detail-body {
+        flex: 1 !important;
+        overflow-y: auto !important; /* 내용이 많으면 시트 안에서만 스크롤 */
+        -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+        padding-bottom: 20px !important;
+    }
+
+    /* 3. 상단 핸들 바 간격 조정 */
+    .sheet-handle-bar {
+        margin: 10px auto 15px auto !important;
+    }
+}

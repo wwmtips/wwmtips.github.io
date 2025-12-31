@@ -3815,7 +3815,7 @@ function openPersonDetail(char) {
         <div class="person-sheet-header">
             <div class="person-img-container" style="margin-bottom:15px;">
                 <img src="${char.photo}" class="person-img-large" 
-                     style="width:110px; height:110px; border-radius:12px; border:1px solid #ddd; object-fit:cover;">
+                     style="width:90px; height:90px; border-radius:12px; border:1px solid #ddd; object-fit:cover;">
             </div>
             <h3>${char.name}</h3>
             <div class="person-sheet-sub">| ${char.link || '무명 협객'} |</div>

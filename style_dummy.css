@@ -3892,86 +3892,86 @@ body.dark-mode .timer-row:hover {
 }
 
 /* =========================================
-   [최종 수정] 지역 정보 가로 스크롤 (크기 완전 고정)
+   [최종 수정] 지역 정보 - 인게임 스타일 (풀 이미지 + 오버레이)
    ========================================= */
 
-/* 1. 컨테이너: 높이 고정 및 가로 스크롤 */
+/* 1. 컨테이너 (가로 스크롤 유지) - 기존과 동일 */
 #home-map-list {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
     gap: 8px;
-    
-    /* [핵심] 컨테이너 높이를 카드보다 약간 크게 고정하여 레이아웃 흔들림 방지 */
-    height: 155px !important; 
-    
+    height: 150px !important; /* 컨테이너 높이 */
     overflow-x: auto;
-    overflow-y: hidden; /* 세로 스크롤 방지 */
-    padding: 0 5px;     /* 좌우 여백 */
-    align-items: center; /* 세로 중앙 정렬 */
+    overflow-y: hidden;
+    padding: 0 5px;
+    align-items: center;
     
-    /* 기존 스타일 초기화 */
     grid-template-columns: none !important;
     background: transparent !important;
     border: none !important;
-    
-    /* 스크롤바 숨기기 */
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
-
 #home-map-list::-webkit-scrollbar { display: none; }
 
-/* 2. 카드 디자인: 가로/세로 크기 강제 고정 */
+
+/* 2. 카드 디자인 (크기 고정 및 위치 기준점 설정) */
 .map-card-horizontal {
-    flex: 0 0 auto;          /* 크기 자동 조절 방지 */
+    flex: 0 0 auto;
+    width: 90px !important;   /* 가로 크기 (4개 보기 위함) */
+    height: 135px !important; /* 세로 크기 */
     
-    /* [핵심] 가로 85px, 세로 140px로 고정 (내용이 넘쳐도 커지지 않음) */
-    width: 85px !important;  
-    height:120px !important; 
-    
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #eee;
-    border-radius: 0px;
-    overflow: hidden;        /* 넘치는 내용 자름 */
-    background-color: #fff;
+    position: relative;       /* ★ [핵심] 내부 요소 배치를 위한 기준점 */
+    border-radius: 8px;       /* 둥근 모서리 */
+    overflow: hidden;         /* 이미지가 튀어나가지 않게 자름 */
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15); /* 약간의 그림자 */
+    border: none;             /* 테두리 제거 (이미지로 꽉 채움) */
+    background-color: #333;   /* 이미지 로딩 전 배경색 */
 }
 
-/* 3. 이미지 영역: 높이 고정 */
+/* 3. 이미지 영역 (배경으로 꽉 채우기) */
 .map-h-img {
     width: 100%;
+    height: 100% !important;  /* 높이 100%로 카드에 꽉 채움 */
     
-    /* [핵심] 이미지 높이 110px 고정 */
-    height: 90px !important; 
-    min-height: 90px !important;
+    position: absolute;       /* ★ [핵심] 절대 위치로 배치 */
+    top: 0; left: 0;
+    z-index: 1;               /* 제일 뒤로 보냄 */
     
-    object-fit: cover;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #f0f0f0;
-    margin: 0;
-    display: block;
+    object-fit: cover;        /* 비율 유지하며 꽉 채우기 */
+    margin: 0; border: none;
 }
 
-/* 4. 텍스트 영역: 한 줄만 표시 */
-.map-h-title {
-    /* 남은 공간(30px)을 텍스트가 차지 */
-    height: 30px; 
+/* 4. [신규] 검은색 레터박스 오버레이 (텍스트 배경) */
+.map-overlay-box {
+    position: absolute;       /* 절대 위치 */
+    bottom: 0; left: 0; width: 100%; /* 하단에 고정 */
+    
+    /* ★ [핵심] 투명 -> 검정 그라데이션 효과 (자연스러운 레터박스) */
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    
+    padding: 20px 8px 8px 8px; /* 텍스트 주변 여백 (상단은 그라데이션 영역) */
+    z-index: 2;                /* 이미지 위에 배치 */
+    
     display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    padding: 0 4px;
-    font-size: 11px;         /* 글자 작게 */
+    align-items: flex-end;     /* 텍스트를 아래로 정렬 */
+}
+
+/* 5. 텍스트 영역 (흰색으로 변경) */
+.map-h-title {
+    width: 100%;
+    font-size: 12px;           /* 글자 크기 */
     font-weight: bold;
-    color: #333;
+    color: #fff;               /* ★ [핵심] 흰색 텍스트 */
     font-family: 'Noto Serif KR', serif;
-    background-color: #fff;
+    text-align: left;          /* 왼쪽 정렬 */
     
-    /* 말줄임표 처리 */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* 가독성을 위한 그림자 */
+    
+    /* 기존 스타일 초기화 */
+    height: auto; background: none; padding: 0; display: block;
+    
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }

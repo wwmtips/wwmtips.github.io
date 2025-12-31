@@ -5872,3 +5872,176 @@ body.dark-mode .timer-row:hover {
         margin: 10px auto 15px auto !important;
     }
 }
+
+/* =========================================
+   [PWA] 앱 설치 버튼 전용 스타일
+   ========================================= */
+
+.pwa-install-btn {
+    /* 기본 레이아웃: 인게임 제보 카드(.ingame-report-card) 스타일 복제 */
+    display: flex !important;
+    align-items: center;
+    width: 100%;
+    padding: 0 !important; /* 내부 여백 제거 (이미지 영역을 벽에 붙이기 위함) */
+    background-color: var(--wuxia-bg-panel, #ffffff) !important;
+    border: 1px solid var(--wuxia-border, #eee) !important;
+    border-left: 4px solid var(--wuxia-accent-gold, #a08040) !important; /* 금색 포인트 라인 */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.pwa-install-btn:hover {
+    background-color: #fffcf5 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 좌측 아이콘 박스 (인물 초상화 박스 .char-portrait-box 규격) */
+.pwa-icon-box {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    background-color: #f9f9f9;
+    border-right: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--wuxia-accent-gold, #a08040);
+}
+
+/* 텍스트 컨테이너 (인물 정보 박스 .char-info-box 규격) */
+.pwa-text-box {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    padding: 0 15px;
+}
+
+.pwa-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.95em;
+    font-weight: bold;
+    color: var(--wuxia-text-main, #333);
+    margin-bottom: 3px;
+}
+
+.pwa-desc {
+    font-size: 0.75em;
+    color: #888;
+    line-height: 1.4;
+}
+
+/* 우측 화살표 아이콘 */
+.pwa-arrow {
+    padding-right: 15px;
+    color: #ccc;
+    font-size: 0.8em;
+}
+
+/* 다크 모드 대응 */
+body.dark-mode .pwa-install-btn {
+    background-color: #1e1e1e !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .pwa-icon-box {
+    background-color: #2a2a2a;
+    border-right-color: #444;
+}
+
+body.dark-mode .pwa-title {
+    color: #e0e0e0;
+}
+
+/* =========================================
+   [PWA] 설치 카드 (마진 10% 및 로고 적용)
+   ========================================= */
+
+.pwa-install-card {
+    /* [핵심] 좌우 10% 마진 적용 */
+ width: 90% !important; 
+    margin: 12px 5% !important;
+    
+    display: flex !important;
+    align-items: center;
+    padding: 12px 15px !important;
+    
+    background-color: var(--wuxia-bg-panel, #ffffff) !important;
+    border: 1px solid var(--wuxia-border, #dcdcdc) !important;
+    border-radius: 12px !important; /* 조금 더 부드러운 곡선 */
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.pwa-install-card:hover {
+    transform: translateY(-2px);
+    background-color: #fffcf5 !important;
+    border-color: var(--wuxia-accent-gold, #a08040) !important;
+}
+
+/* 1. 로고 영역 (Favicon 사이즈) */
+.pwa-logo-section {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pwa-logo-section img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+/* 2. 텍스트 정보 영역 */
+.pwa-info-section {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.pwa-install-title {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    color: var(--wuxia-text-main, #1a1a1a);
+    margin-bottom: 2px;
+}
+
+.pwa-install-desc {
+    font-size: 11px !important;
+    color: var(--wuxia-text-sub, #666);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 3. 우측 액션 아이콘 */
+.pwa-action-section {
+    color: var(--wuxia-accent-gold, #a08040);
+    font-size: 1.1em;
+    padding-left: 10px;
+    opacity: 0.7;
+}
+
+/* 다크 모드 대응 */
+body.dark-mode .pwa-install-card {
+    background-color: #1e1e1e !important;
+    border-color: #444 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .pwa-install-title { color: #e0e0e0; }
+body.dark-mode .pwa-install-desc { color: #888; }

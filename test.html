@@ -845,11 +845,28 @@
                     </div>
                 </div>
             </div>
-            <div id="install-container" style="display: none; margin-bottom: 10px;">
+<div id="install-container" style="display: block;">
+    <button id="btn-install-app" class="pwa-install-card">
+        <div class="pwa-logo-section">
+            <img src="fav/android-icon-192x192.png" alt="Logo" onerror="this.src='images/logo.png'">
+        </div>
+        
+        <div class="pwa-info-section">
+            <div class="pwa-install-title">연운 위키 앱 설치</div>
+            <div class="pwa-install-desc">홈에 추가해 빠르게 이용하세요!</div>
+        </div>
+
+        <div class="pwa-action-section">
+            <i class="fas fa-plus-square"></i>
+        </div>
+    </button>
+</div>
+            <!--
+<div id="install-container" style="display: none; margin-bottom: 10px;">
     <button id="btn-install-app" class="btn-primary" style="width: 100%; background-color: #28a745; border-color: #28a745;">
         <i class="fas fa-download"></i> 앱으로 설치하기
     </button>
-</div>
+</div>-->
             <div class="sidebar-footer-report" onclick="closeSidebar(); openReportSheet()">
                 <div class="mini-profile-img">
                     <img src="images/profile.jpg" onerror="this.src='images/logo.png'" alt="제보">

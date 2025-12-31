@@ -51,27 +51,35 @@ const KEY_MAP = {
 // [지도 더미 데이터]
 const dummyMapData = [
     {
-        title: "청하",
-        key: "qinghe", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        desc: "어린 주인공이 많은 가족들과 함께 생활하던 지역으로 이야기의 시작지입니다.",
+        title: "대나무숲 옛집",
+        key: "bs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         image: "images/map2.jpeg" // (썸네일 이미지가 있다면 유지)
     },
     {
-        title: "개봉",
-        key: "kaifeng", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        title: "신선나루",
+        key: "sn", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "강호로 한 발 다가간 주인공은 개봉에서 수많은 강호인들과 인연을 쌓습니다.",
         image: "images/map1.jpeg" // (썸네일 이미지가 있다면 유지)
     },
     {
-        title: "귀문시장",
-        key: "gm", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        title: "장군사당",
+        key: "gesh", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "삼경에 귀신이 등불을 밝히니, 새벽닭 울음 소리가 보배롭다.",
         image: "images/map3.png" // (썸네일 이미지가 있다면 유지)
     },
     {
-        title: "꿈속의 불선선",
-        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+        title: "완석포",
+        key: "stw", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "칠벌고개",
+        key: "sg", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "망천평원",
+        key: "mang", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
     }
 ];
@@ -513,7 +521,7 @@ function loadHomeMaps() {
         // ★ 클릭 시 해당 지역 URL로 이동
         // 예: 현재주소/map/?id=qinghe 로 이동합니다.
         div.onclick = () => {
-            window.location.href = `map/?id=${map.key}`;
+            window.location.href = `map/?path=${map.key}`;
         };
 
         div.innerHTML = `

@@ -493,7 +493,7 @@ function loadHomeMaps() {
 
 function switchTab(tabName, updateHistory = true) {
     // 1. 화면 전환 (기존 로직)
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji',, 'view-archive'];
     views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
@@ -3575,3 +3575,4 @@ function renderFullAchievementList() {
         container.appendChild(card);
     });
 }
+

@@ -472,26 +472,30 @@ function resetSliderTimer() {
 
 // [수정] 홈 화면 지역 정보 로드 (가로 스크롤 + URL 이동)
 // [수정] 지역 정보 로드 함수 (설명글 제거 & 카드 생성)
+// [수정] 지역 정보 로드 함수 (인게임 스타일 구조 적용)
 function loadHomeMaps() {
     const mapList = document.getElementById('home-map-list');
     if (!mapList) return;
     mapList.innerHTML = '';
 
-    // dummyMapData를 순회하며 카드 생성
     dummyMapData.forEach(map => {
         const div = document.createElement('div');
-        div.className = 'map-card-horizontal'; // CSS 클래스 적용
+        div.className = 'map-card-horizontal'; // 카드 컨테이너
         
-        // 클릭 시 이동
         div.onclick = () => {
             window.location.href = `map/?id=${map.key}`;
         };
 
-        // ★ [중요] 설명(desc) 부분을 아예 넣지 않습니다.
-        // 이미지와 제목만 딱 넣어서 카드가 길어지는 것을 막습니다.
+        // ★ [핵심 HTML 구조 변경]
+        // 1. 이미지를 배경처럼 배치 (map-h-img)
+        // 2. 그 위에 검은색 그라데이션 박스(map-overlay-box)를 얹음
+        // 3. 박스 안에 텍스트(map-h-title)를 넣음
         div.innerHTML = `
             <img src="${map.image}" class="map-h-img" onerror="this.src='images/logo.png'" alt="${map.title}">
-            <div class="map-h-title">${map.title}</div>
+            
+            <div class="map-overlay-box">
+                <div class="map-h-title">${map.title}</div>
+            </div>
         `;
         
         mapList.appendChild(div);

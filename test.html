@@ -708,6 +708,21 @@
     color: var(--wuxia-accent-gold, #d4af37); /* 호버 시 강조색 */
     background-color: #fafafa;
 }
+/* 상단 헤더 높이와 본문 여백을 강제로 맞춤 */
+#fixed-top-bar {
+    height: 60px !important;       /* 헤더 높이 고정 */
+    overflow: visible !important;  /* 내용물이 잘리지 않도록 */
+}
+
+#main-content {
+    padding-top: 60px !important;  /* 본문을 헤더 바로 밑(60px)에서 시작하게 당김 */
+    margin-top: 0 !important;      /* 혹시 모를 외부 여백 제거 */
+}
+
+/* (혹시 슬라이더 자체에 여백이 있다면 제거) */
+.hero-slider-wrapper {
+    margin-top: 0 !important;
+}
 
             </style>
 

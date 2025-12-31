@@ -3893,105 +3893,104 @@ body.dark-mode .timer-row:hover {
 
 
 /* =========================================
-   [최종 긴급 수정] 인물 & 지역 리스트 (풀 이미지 + 정렬 수정)
+   [최종] 인물 & 지역 리스트 (반응형 그리드)
    ========================================= */
 
-/* 1. 컨테이너 공통 설정 (왼쪽 정렬 맞춤) */
+/* 1. 컨테이너 설정 */
 #home-char-list, 
 #home-map-list {
     display: grid !important;
-    
-    /* [핵심] 화면 너비를 정확히 4등분 (여백 없이 꽉 채움) */
-    grid-template-columns: repeat(4, 1fr) !important;
-    
-    /* 카드 사이 간격 */
     gap: 8px !important;
-    
-    /* [핵심] 불필요한 패딩 제거 -> 섹션 제목(빨간줄)과 라인 맞춤 */
-    padding: 0 !important;
+    padding: 0 !important; /* 왼쪽 정렬 맞춤 */
     margin: 10px 0 20px 0 !important;
     
-    /* 배경 및 테두리 초기화 */
-    background: transparent !important;
+    background: none !important;
     border: none !important;
-    height: auto !important;
     overflow: visible !important;
+    height: auto !important;
+
+    /* ★ [핵심 1] 모바일(기본): 꽉 찬 4열 유지 */
+    grid-template-columns: repeat(4, 1fr) !important;
 }
 
-/* 2. 카드 공통 스타일 (이미지 꽉 채우기) */
+/* ★ [핵심 2] PC 화면(768px 이상)일 때 설정 덮어쓰기 */
+@media (min-width: 768px) {
+    #home-char-list, 
+    #home-map-list {
+        /* 화면이 넓어지면 카드가 커지는 게 아니라, '개수'가 늘어남 */
+        /* 카드 최소 너비를 110px로 고정하고, 남는 공간에 최대한 채워넣음 */
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+        gap: 15px !important; /* PC는 간격 좀 더 넓게 */
+    }
+}
+
+/* 2. 카드 스타일 (비율 고정) */
 .char-card-horizontal,
 .map-card-horizontal {
-    position: relative !important; /* 내부 요소 배치를 위한 기준 */
-    
-    /* [핵심] 너비 100%, 높이는 비율로 자동 설정 (직사각형 유지) */
+    position: relative !important;
     width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 3 / 4.2 !important; /* 세로로 긴 직사각형 비율 고정 */
+    
+    /* 세로로 긴 직사각형 비율 고정 */
+    aspect-ratio: 3 / 4.2 !important; 
     
     border-radius: 6px;
     overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    
-    /* 배경색 제거 (이미지가 덮으므로) */
     background: #333; 
     border: none !important;
     margin: 0 !important;
-    flex: none !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
-/* 3. 이미지 스타일 (무조건 꽉 채움) */
+/* 3. 이미지 (풀 채움) */
 .char-h-img,
 .map-h-img {
     position: absolute !important;
     top: 0; left: 0;
     width: 100% !important;
     height: 100% !important;
-    
-    object-fit: cover; /* 비율 유지하며 빈틈없이 채움 */
-    z-index: 1;        /* 텍스트 뒤로 */
+    object-fit: cover;
+    z-index: 1;
     margin: 0 !important;
-    border-radius: 0 !important;
 }
 
-/* 4. 텍스트 오버레이 (이미지 위에 글자 얹기) */
+/* 4. 텍스트 박스 (하단 그라데이션 + 왼쪽 정렬) */
 .char-overlay-box,
 .map-overlay-box {
     position: absolute !important;
     bottom: 0; left: 0; width: 100%;
     
-    /* [핵심] 텍스트 박스 없이, 하단에만 검은 그라데이션 추가하여 글자 잘 보이게 함 */
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%) !important;
+    /* 투명 -> 검정 그라데이션 */
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%) !important;
     
-    padding: 20px 4px 6px 4px !important; /* 위쪽 패딩은 그라데이션 영역 */
-    z-index: 2; /* 이미지 위 */
-    
+    /* 왼쪽 정렬 */
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start !important; 
+    text-align: left !important;        
+    
+    padding: 30px 6px 8px 8px !important;
+    z-index: 2;
 }
 
-/* 5. 텍스트 스타일 (흰색) */
+/* 5. 텍스트 폰트 설정 */
 .char-h-name,
 .map-h-title {
-    font-size: 11px !important; /* 4열 배치에 맞춰 글자 크기 조정 */
+    font-size: 11px !important;
     font-weight: bold;
-    color: #fff !important;     /* 흰색 글자 */
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8); /* 가독성 그림자 */
-    margin: 0 !important;
-    line-height: 1.2;
+    color: #fff !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0 !important;
+    line-height: 1.2;
 }
 
-/* 보조 텍스트 (소속 등) */
 .char-h-affil {
-    font-size: 9px !important;
-    color: rgba(255, 255, 255, 0.8) !important;
-    margin-top: 1px;
+    font-size: 10px !important;
+    color: #ddd !important;
+    margin-top: 2px;
 }

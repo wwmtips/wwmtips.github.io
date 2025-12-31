@@ -934,7 +934,7 @@ function toggleSidebarSub(element) {
                     <button onclick="closeSidebar(); openGuideDirect('marts.html');">비결</button>
                            <button onclick="closeSidebar(); switchTab('archive');">업적</button>
                     <button onclick="closeSidebar(); openGuideDirect('boss.html');">보스 공략</button>
-                    <button onclick="closeSidebar(); openGuideDirect('sim.html');">심력 계산기</button>
+            
                     <button onclick="closeSidebar(); openGuideDirect('code.html');">교환 코드</button>
                 </div>
             </div>
@@ -952,17 +952,21 @@ function toggleSidebarSub(element) {
                 천지록</button>
  </div>
             </div>
-
-
+ <div class="sidebar-item" id="nav-quiz" onclick="closeSidebar(); switchTab('quiz');">
+                스무고개 족보
+            </div>
+<div class="sidebar-item" id="nav-quiz" onclick="location.href='map/'">
+            지도
+            </div>
             <div class="sidebar-group">
                 <div class="sidebar-item has-sub" id="nav-tool" onclick="toggleSidebarSub(this)">
-                    <span>족보 (도구)</span>
+                    <span>도구</span>
                     <span class="arrow"></span>
                 </div>
                 <div class="sidebar-sub-list">
-                    <button id="nav-quiz" onclick="closeSidebar(); switchTab('quiz');">스무고개</button>
-                    <button id="nav-builder" onclick="closeSidebar(); switchTab('builder');">빌드 메이커</button>
-                    <button id="nav-map" onclick="location.href='map/'">지도</button>
+        
+                    <button id="nav-builder" onclick="closeSidebar(); switchTab('builder');">빌드 제작</button>
+                            <button onclick="closeSidebar(); openGuideDirect('sim.html');">심력 계산기</button>
                 </div>
             </div>
         </div>

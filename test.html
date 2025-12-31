@@ -880,19 +880,27 @@ function toggleSidebarSub(element) {
                 <div class="sidebar-sub-list">
                   <button onclick="closeSidebar(); openGuideDirect('harts.html');">심법</button>
                     <button onclick="closeSidebar(); openGuideDirect('marts.html');">비결</button>
+                           <button onclick="closeSidebar(); switchTab('archive');">업적</button>
                     <button onclick="closeSidebar(); openGuideDirect('boss.html');">보스 공략</button>
                     <button onclick="closeSidebar(); openGuideDirect('sim.html');">심력 계산기</button>
                     <button onclick="closeSidebar(); openGuideDirect('code.html');">교환 코드</button>
                 </div>
             </div>
-
-            <div class="sidebar-item" id="nav-quest" onclick="closeSidebar(); switchTab('quest');">
-                무림록
+            
+            <div class="sidebar-group">
+                <div class="sidebar-item has-sub" id="nav-guide" onclick="toggleSidebarSub(this)">
+                    <span>공략</span>
+                    <span class="arrow"></span>
+                </div>
+                <div class="sidebar-sub-list" id="nav-quest">
+                  <button onclick="closeSidebar(); switchTab('quest');">
+                무림록</button>
+                
+                    <button id="nav-chunji"  onclick="closeSidebar(); switchTab('chunji');">
+                천지록</button>
+ </div>
             </div>
 
-            <div class="sidebar-item" id="nav-chunji" onclick="closeSidebar(); switchTab('chunji');">
-                천지록
-            </div>
 
             <div class="sidebar-group">
                 <div class="sidebar-item has-sub" id="nav-tool" onclick="toggleSidebarSub(this)">

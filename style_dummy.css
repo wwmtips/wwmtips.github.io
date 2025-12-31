@@ -4465,77 +4465,77 @@ body.dark-mode .timer-row:hover {
 /* =========================================
    [최종] 업적 섹션 그리드화 및 정중앙 정렬
    ========================================= */
+/* =========================================
+   [통합] 업적 카드 규격화 (지역 정보와 100% 일치)
+   ========================================= */
 
-/* 1. 업적 컨테이너를 지역 정보와 동일한 그리드로 변경 */
-#achievement-list {
-    display: grid !important;
-    /* 지역 정보와 동일하게 PC 4열, 모바일 2열(또는 자동) 배치 */
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
-    gap: 8px !important;
-    padding: 0 5px !important;
-    margin-top: 10px !important;
-}
-
-/* 2. 개별 카드 규격 고정 (지역 정보 카드와 100% 동일화) */
+/* 1. 업적 카드 본체 규격 고정 */
 .achievement-card {
-    height: 110px !important;       /* 전체 높이 고정 */
+    width: 100% !important;
+    /* 지역 정보 카드와 동일한 높이 비율 설정 */
+    height: 110px !important; 
+    
     display: flex !important;
     flex-direction: column !important;
-    padding: 0 !important;          /* 기존 패딩 제거 */
+    background-color: #fff !important; /* 전체 카드 배경 흰색 */
+    
     border: 1px solid #e0e0e0 !important;
     border-radius: 4px !important;
     overflow: hidden !important;
-    background-color: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
-    gap: 0 !important;              /* 내부 간격 제거 */
 }
 
-/* 3. 아이콘 영역 (상단 70px 고정) */
+/* 2. 이미지 영역 (상단 65%) 및 배경색 수정 */
 .ach-icon {
     width: 100% !important;
-    height: 70px !important;        /* 지역 정보 이미지와 동일 높이 */
-    margin: 0 !important;
+    height: 65% !important; /* 지역 정보 이미지 비율과 맞춤 */
+    background-color: #ffffff !important; /* [요청] 이미지 배경 흰색 */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-bottom: 1px solid #f0f0f0 !important;
     flex-shrink: 0 !important;
 }
 
 .ach-icon img {
+    /* 이미지가 배경에 꽉 차게 하거나 비율에 맞게 조정 */
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
-    border-radius: 0 !important;
-    border: none !important;
-    border-bottom: 1px solid #f0f0f0 !important;
+    object-fit: contain !important; /* 아이콘 형태를 유지하려면 contain, 꽉 채우려면 cover */
+    background-color: #ffffff !important;
 }
 
-/* 4. 텍스트 영역 (하단 40px 및 정중앙 정렬) */
+/* 3. 텍스트 영역 (하단 35%) 중앙 정렬 */
 .ach-content {
-    height: 40px !important;        /* 텍스트 박스 높이 고정 */
     width: 100% !important;
+    height: 35% !important;
     display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important; /* [핵심] 수직 중앙 */
-    align-items: center !important;     /* [핵심] 수평 중앙 */
-    padding: 0 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: #ffffff !important;
+    padding: 0 2px !important;
     margin: 0 !important;
-    overflow: hidden !important;
 }
 
-/* 5. 제목 텍스트 여백 제거 */
+/* 4. 제목 스타일 (글자 크기 및 정렬) */
 .ach-title {
-    font-size: 10px !important;     /* 지역 정보와 동일 크기 */
-    font-weight: bold !important;
-    color: #333 !important;
-    margin: 0 !important;           /* 위아래 마진 제거하여 치우침 방지 */
-    padding: 0 2px !important;
-    line-height: 1.2 !important;
+    font-size: 10px !important; /* 지역 정보와 폰트 크기 통일 */
+    font-weight: 700 !important;
+    color: #222 !important;
     text-align: center !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    
+    /* 긴 제목 말줄임 처리 */
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    width: 100% !important;
+    width: 90% !important;
 }
 
-/* 6. 설명글 숨김 (공간 부족 및 디자인 통일) */
+/* 5. 기타 요소 제거 */
 .ach-desc {
     display: none !important;
 }

@@ -4513,33 +4513,40 @@ body.dark-mode .timer-row:hover {
     object-fit: contain !important;
 }
 
-/* 4. 텍스트 영역: 하단 남은 공간 정중앙 정렬 */
-.ach-content {
-    flex-grow: 1 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    background-color: #fff !important;
-    padding: 0 4px !important; /* 좌우 여백 살짝 */
-}
-
-/* 5. 제목 텍스트: 작게 조절 (4개 배치 시 글자가 겹치지 않게) */
-.ach-title {
-    font-size: 9px !important; /* 한 줄 4개일 때 적당한 크기 */
-    font-weight: bold !important;
-    color: #333 !important;
-    text-align: center !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
-    
-    /* 길면 말줄임표 처리 */
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    width: 100% !important;
-}
-
 /* 설명글은 무조건 숨김 */
 .ach-desc {
     display: none !important;
+}
+
+/* 1. 텍스트 박스: 글자가 2줄이 되어도 중앙을 유지하도록 높이 재설정 */
+.ach-content {
+    flex-grow: 1 !important;
+    display: flex !important;
+    justify-content: center !important; 
+    align-items: center !important;     
+    background-color: #fff !important;
+    padding: 2px 4px !important; /* 위아래 여백 살짝 추가 */
+    overflow: hidden !important;
+}
+
+/* 2. 제목 스타일: 2줄까지 보여주고 넘치면 ... 처리 */
+.ach-title {
+    font-size: 9px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+    text-align: center !important;
+    line-height: 1.1 !important; /* 줄 간격 좁게 */
+    margin: 0 !important;
+    width: 100% !important;
+    
+    /* [핵심] 2줄 제한 및 말줄임 처리 */
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important; /* ★ 최대 2줄까지 표시 */
+    -webkit-box-orient: vertical !important;
+    white-space: normal !important;   /* 줄바꿈 허용 */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important; /* 2줄 넘어가면 ... 표시 */
+    
+    /* 단어 단위 끊김 방지 */
+    word-break: keep-all !important; 
 }

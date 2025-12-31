@@ -470,25 +470,32 @@ function resetSliderTimer() {
     startSlider();
 }
 
+// [수정] 홈 화면 지역 정보 로드 (가로 스크롤 + URL 이동)
 function loadHomeMaps() {
     const mapList = document.getElementById('home-map-list');
     if (!mapList) return;
     mapList.innerHTML = '';
+
+    // dummyMapData를 순회하며 카드 생성
     dummyMapData.forEach(map => {
-        const card = document.createElement('div');
-        card.className = 'map-card';
-        card.style.cursor = 'pointer';
-        card.onclick = () => { openMapDetail(map.title, map.key); };
-        card.innerHTML = `
-            <div class="map-hero-bg" style="background-image: url('${map.image}');"></div>
-            <div class="map-content">
-                <div class="map-title">${map.title}</div>
-                <p class="map-desc">${map.desc}</p>
-            </div>
+        const div = document.createElement('div');
+        div.className = 'map-card-horizontal'; // 새로 만든 CSS 클래스 적용
+        
+        // ★ 클릭 시 해당 지역 URL로 이동
+        // 예: 현재주소/map/?id=qinghe 로 이동합니다.
+        div.onclick = () => {
+            window.location.href = `map/?id=${map.key}`;
+        };
+
+        div.innerHTML = `
+            <img src="${map.image}" class="map-h-img" onerror="this.src='images/logo.png'">
+            <div class="map-h-title">${map.title}</div>
         `;
-        mapList.appendChild(card);
+        
+        mapList.appendChild(div);
     });
-}// [수정] updateHistory 매개변수 추가 (기본값 true)
+}
+
 // script.js 파일의 switchTab 함수 교체
 
 function switchTab(tabName, updateHistory = true) {

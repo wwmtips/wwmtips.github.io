@@ -756,6 +756,47 @@
                     document.getElementById('builder-interface').style.display = 'block';
                 }
             });
+            // 사이드바 열기/닫기 토글
+function toggleSidebar() {
+    const sidebar = document.getElementById('main-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    // 클래스 토글로 CSS 애니메이션 작동
+    if (sidebar.classList.contains('active')) {
+        closeSidebar();
+    } else {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        // 스크롤 방지 (선택사항)
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// 사이드바 닫기
+function closeSidebar() {
+    const sidebar = document.getElementById('main-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// 사이드바 내부 서브메뉴 토글 (아코디언 효과)
+function toggleSidebarSub(element) {
+    // 클릭된 요소의 다음 형제 요소(리스트)를 찾음
+    const subList = element.nextElementSibling;
+    
+    // 표시 상태 토글
+    if (subList.style.display === 'block') {
+        subList.style.display = 'none';
+        element.classList.remove('expanded');
+    } else {
+        subList.style.display = 'block';
+        element.classList.add('expanded');
+    }
+}
+
         </script>
 
     </main>

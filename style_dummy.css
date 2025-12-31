@@ -4570,3 +4570,69 @@ body.dark-mode .timer-row:hover {
     margin: 0 !important;
     padding: 0 !important;
 }
+/* =========================================
+   [최종] 만사록 버튼 PC 100% 너비 및 자동 배치
+   ========================================= */
+
+/* 1. 컨테이너: PC에서 너비를 100% 사용하며 자동으로 칸을 채움 */
+#mansarok-list {
+    display: grid !important;
+    /* [핵심] 최소 140px를 유지하되, 남는 공간은 똑같이 나눠가짐(1fr) */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    padding: 0 5px !important;
+    margin-top: 15px !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. 모바일 전용 (화면 폭 768px 이하) */
+@media (max-width: 768px) {
+    #mansarok-list {
+        /* 모바일에서는 요청하신 대로 한 줄에 3개 고정 */
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+    }
+}
+
+/* 3. 버튼 디자인: 고정 너비를 제거하고 부모 칸에 맞춤 */
+.mansarok-btn {
+    width: 100% !important;   /* 고정 140px 제거, 그리드 칸에 맞춤 */
+    height: 36px !important;  /* 높이는 36px 유지 */
+    
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    
+    background-color: #fff !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+}
+
+.mansarok-btn:hover {
+    background-color: #eeeeee !important;
+    border-color: #ccc !important;
+    transform: translateY(-1px);
+}
+
+/* 4. 텍스트 스타일: 중앙 정렬 및 2줄/말줄임 처리 */
+.mansarok-btn span {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    color: #333 !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
+    
+    /* 긴 텍스트 처리 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

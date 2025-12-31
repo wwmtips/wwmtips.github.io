@@ -100,10 +100,57 @@ function updateItemsPerPage() {
 // =========================================
 // 2. 초기화 (DOMContentLoaded)
 // =========================================
-// =========================================
-// 2. 초기화 (DOMContentLoaded)
-// =========================================
+// 4. 페이지 로드 시 실행
+document.addEventListener('DOMContentLoaded', loadMansarokMenu);
+// 1. 만사록 데이터를 서버에서 불러오는 함수
+async function loadMansarokMenu() {
+    try {
+        // 실제 데이터 파일 경로 (환경에 맞게 수정하세요)
+        const response = await fetch('json/quests.json'); 
+        if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
+        
+        const data = await response.json();
+        
+        // 2. 렌더링 함수 실행
+        renderMansarok(data);
+        
+    } catch (error) {
+        console.error('만사록 로드 에러:', error);
+    }
+}
+
+// 3. 만사록 렌더링 함수 (내부 함수 호출 방식 유지)
+function renderMansarok(data) {
+    const listContainer = document.getElementById('mansarok-list');
+    if (!listContainer) return;
+    listContainer.innerHTML = ''; 
+
+    // 만사록 타입만 필터링
+    const filtered = data.filter(item => item.type === "만사록");
+
+    filtered.forEach(item => {
+        const numericId = item.id.replace(/[^0-9]/g, "");
+        
+        const btn = document.createElement('a');
+        btn.className = 'mansarok-btn';
+        btn.href = "javascript:void(0);"; // 주소 이동 방지
+        
+        // [핵심] 내부 상세 보기 함수 호출
+        btn.onclick = () => { 
+            if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
+                switchTab('quest'); 
+                loadQuestDetail(item.filepath, item.id); 
+            } else {
+                console.warn('탭 전환 또는 상세 로드 함수가 없습니다.');
+            }
+        };
+
+        btn.innerHTML = `<span>${item.name}</span>`;
+        listContainer.appendChild(btn);
+    });
+}
 document.addEventListener("DOMContentLoaded", () => {
+
     // A. 데이터 로드
     loadData();
     loadHomeMaps();
@@ -128,6 +175,39 @@ document.addEventListener("DOMContentLoaded", () => {
             renderChunjiList();
         }
     }
+
+    const listContainer = document.getElementById('mansarok-list');
+
+    function renderMansarok(data) {
+    const listContainer = document.getElementById('mansarok-list');
+    if (!listContainer) return;
+    listContainer.innerHTML = ''; 
+
+    // 1. 만사록 타입만 필터링
+    const filtered = data.filter(item => item.type === "만사록");
+
+    filtered.forEach(item => {
+        // 버튼 엘리먼트 생성 (a 태그 대신 div나 button 권장, a 사용 시 href="javascript:void(0)" 처리)
+        const btn = document.createElement('a');
+        btn.className = 'mansarok-btn';
+        btn.href = "javascript:void(0);"; // 페이지 이동 방지
+        
+        // 2. [핵심] 클릭 시 내부 함수 호출 설정
+        // 기존에 정의된 switchTab과 loadQuestDetail 함수를 사용합니다.
+        btn.onclick = () => { 
+            switchTab('quest'); 
+            loadQuestDetail(item.filepath, item.id); 
+        };
+
+        // 버튼 내용 삽입
+        btn.innerHTML = `<span>${item.name}</span>`;
+        
+        listContainer.appendChild(btn);
+    });
+}
+
+    // 로컬 더미 데이터로 실행
+    renderMansarok(dummyQuests);
     handleHistoryChange();
 });
 
@@ -3724,3 +3804,4 @@ function renderHomeCharacters() {
 
     container.appendChild(fragment);
 } 
+

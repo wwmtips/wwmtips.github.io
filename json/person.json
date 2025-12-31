@@ -16,6 +16,13 @@
         "link":"dd"
     }, 
     {
+        "id": "p14",
+        "name": "최도",
+        "photo": "images/char/12.jpg",
+        "affiliation": "알 수 없음",
+        "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
+    },
+    {
         "id": "p2",
         "name": "한향선",
         "photo": "images/char/2.jpg",
@@ -94,50 +101,57 @@
     },
     {
         "id": "p13",
-        "name": "여진경",
-        "photo": "images/char/11.jpg",
+        "name": "백랑주",
+        "photo": "images/char/17.jpg",
         "affiliation": "알 수 없음",
         "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
     },
     {
         "id": "p14",
-        "name": "최도",
-        "photo": "images/char/12.jpg",
-        "affiliation": "알 수 없음",
-        "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
-    },
-    {
-        "id": "p13",
-        "name": "여진경",
-        "photo": "images/char/11.jpg",
-        "affiliation": "알 수 없음",
-        "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
-    },
-    {
-        "id": "p13",
-        "name": "여진경",
-        "photo": "images/char/11.jpg",
-        "affiliation": "알 수 없음",
+        "name": "도주",
+        "photo": "images/char/18.jpg",
+        "affiliation": "구류문",
         "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
     },
     {
         "id": "p15",
+        "name": "여진경",
+        "photo": "images/char/11.jpg",
+        "affiliation": "알 수 없음",
+        "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
+    },
+    {
+        "id": "p16",
         "name": "조대협",
         "photo": "images/char/14.jpg",
         "affiliation": "알 수 없음",
         "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
     },
     {
-        "id": "p16",
+        "id": "p17",
         "name": "홍연",
         "photo": "images/char/15.jpg",
         "affiliation": "알 수 없음",
         "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
     },
     {
-        "id": "p16",
+        "id": "p18",
         "name": "유청의",
         "photo": "images/char/16.jpg",
+        "affiliation": "알 수 없음",
+        "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
+    },
+    {
+        "id": "p19",
+        "name": "주장미",
+        "photo": "images/char/19.jpg",
+        "affiliation": "알 수 없음",
+        "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
+    },
+    {
+        "id": "p19",
+        "name": "주장미",
+        "photo": "images/char/19.jpg",
         "affiliation": "알 수 없음",
         "biography": "그림자 속에 숨어 강호를 지켜보는 자입니다."
     }

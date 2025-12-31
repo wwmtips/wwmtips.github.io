@@ -5100,5 +5100,6 @@ body.dark-mode .timer-row:hover {
     box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
+        background-color: #ffffff !important;
     justify-content: center !important;
 }

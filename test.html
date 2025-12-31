@@ -231,49 +231,60 @@
                 <div id="home-recent-news" class="quest-grid"></div>
             </section>
 
+            <div id="view-homework" style="display: none;">
+                <div class="quest-detail-container" style="margin-top: 20px;">
 
-           <div style="display:none;">
-        <input type="text" id="header-search-input">
-        <button id="search-clear-btn"></button>
-        <div id="global-search-results"></div>
+                    <div
+                        style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 20px;">
+                        <span
+                            style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">비급</span>
+                        <h2
+                            style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                            할 일 (숙제)</h2>
+                        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 2px;">일일/주간/월간 초기화 시간을
+                            확인하고 체크하세요.</p>
+                    </div>
 
-        <button id="nav-home"></button>
-        <button id="nav-code"></button>
-        <button id="nav-quest"></button>
-        <button id="nav-chunji"></button>
-        <button id="nav-quiz"></button>
-        <button id="nav-builder"></button>
-        <button id="nav-map"></button>
-        <button id="nav-more"></button>
+                    <div class="reset-dashboard">
+                        <div class="reset-item">
+                            <span class="reset-label">일일 초기화</span>
+                            <span class="reset-time" id="timer-daily">계산 중...</span>
+                        </div>
+                        <div class="reset-item">
+                            <span class="reset-label">주간 초기화</span>
+                            <span class="reset-time" id="timer-weekly">계산 중...</span>
+                        </div>
+                        <div class="reset-item">
+                            <span class="reset-label">월간 초기화</span>
+                            <span class="reset-time" id="timer-monthly">계산 중...</span>
+                        </div>
+                    </div>
 
-        <div id="hero-slider-track"></div>
-        <div id="slider-indicators"></div>
-        <div id="luckyBanner"></div>
-        <div id="luckyTitle"></div>
-        <div id="luckyDesc"></div>
+                    <div class="hw-section-header">
+                        <span class="hw-title">일일 </span>
+                        <span class="hw-progress-text" id="prog-daily">0/0</span>
+                    </div>
+                    <div id="list-daily" class="quest-grid"></div>
 
-        <div id="view-home"></div>
-        <div id="view-quiz"></div>
-        <div id="view-quest"></div>
-        <div id="view-news"></div>
-        <div id="view-builder"></div>
-        <div id="view-map-detail"></div>
-        <div id="view-chunji"></div>
-        <div id="view-archive"></div>
-    </div>
+                    <div class="hw-section-header">
+                        <span class="hw-title">주간 </span>
+                        <span class="hw-progress-text" id="prog-weekly">0/0</span>
+                    </div>
+                    <div id="list-weekly" class="quest-grid"></div>
 
-    <div id="view-guide" style="display: none;">
-        <div id="guide-content-loader" style="text-align: center; margin-top: 50px; font-size: 20px; font-weight: bold;">
-            🎉 드디어 나왔다! (로딩 중...)
-        </div>
-    </div>
+                    <div class="hw-section-header">
+                        <span class="hw-title">월간 </span>
+                        <span class="hw-progress-text" id="prog-monthly">0/0</span>
+                    </div>
+                    <div id="list-monthly" class="quest-grid"></div>
 
-            <div id="view-guide" style="display: none;">
-                <div id="guide-content-loader" style="text-align: center; margin-top: 50px;">
-                    열심히 로딩 중... (이 글자가 보이면 성공)
+                    <div style="margin-top: 50px; text-align: center; color: #ccc; font-size: 0.75em;">
+                        데이터는 브라우저에 자동 저장됩니다.
+                    </div>
                 </div>
             </div>
 
+            
             <div id="view-quiz" style="display: none;">
                 <section id="answer-container">
                     <div class="status-bar" id="quiz-counter-area">데이터 로딩 중...</div>
@@ -479,12 +490,14 @@
                                     <div class="slot-group">
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('weapons', 0)">
-                                                <span>+</span><img id="slot-weapons-0" style="display:none;"></div>
+                                                <span>+</span><img id="slot-weapons-0" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-weapons-0"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('weapons', 1)">
-                                                <span>+</span><img id="slot-weapons-1" style="display:none;"></div>
+                                                <span>+</span><img id="slot-weapons-1" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-weapons-1"></div>
                                         </div>
                                     </div>
@@ -493,22 +506,26 @@
                                     <div class="slot-group">
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('hearts', 0)">
-                                                <span>+</span><img id="slot-hearts-0" style="display:none;"></div>
+                                                <span>+</span><img id="slot-hearts-0" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-hearts-0"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('hearts', 1)">
-                                                <span>+</span><img id="slot-hearts-1" style="display:none;"></div>
+                                                <span>+</span><img id="slot-hearts-1" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-hearts-1"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('hearts', 2)">
-                                                <span>+</span><img id="slot-hearts-2" style="display:none;"></div>
+                                                <span>+</span><img id="slot-hearts-2" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-hearts-2"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('hearts', 3)">
-                                                <span>+</span><img id="slot-hearts-3" style="display:none;"></div>
+                                                <span>+</span><img id="slot-hearts-3" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-hearts-3"></div>
                                         </div>
                                     </div>
@@ -520,42 +537,50 @@
                                     <div class="slot-group">
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('marts', 0)">
-                                                <span>+</span><img id="slot-marts-0" style="display:none;"></div>
+                                                <span>+</span><img id="slot-marts-0" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-marts-0"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('marts', 1)">
-                                                <span>+</span><img id="slot-marts-1" style="display:none;"></div>
+                                                <span>+</span><img id="slot-marts-1" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-marts-1"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('marts', 2)">
-                                                <span>+</span><img id="slot-marts-2" style="display:none;"></div>
+                                                <span>+</span><img id="slot-marts-2" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-marts-2"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('marts', 3)">
-                                                <span>+</span><img id="slot-marts-3" style="display:none;"></div>
+                                                <span>+</span><img id="slot-marts-3" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-marts-3"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('marts', 4)">
-                                                <span>+</span><img id="slot-marts-4" style="display:none;"></div>
+                                                <span>+</span><img id="slot-marts-4" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-marts-4"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('marts', 5)">
-                                                <span>+</span><img id="slot-marts-5" style="display:none;"></div>
+                                                <span>+</span><img id="slot-marts-5" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-marts-5"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('marts', 6)">
-                                                <span>+</span><img id="slot-marts-6" style="display:none;"></div>
+                                                <span>+</span><img id="slot-marts-6" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-marts-6"></div>
                                         </div>
                                         <div class="slot-wrapper">
                                             <div class="item-slot" onclick="openBuilderModal('marts', 7)">
-                                                <span>+</span><img id="slot-marts-7" style="display:none;"></div>
+                                                <span>+</span><img id="slot-marts-7" style="display:none;">
+                                            </div>
                                             <div class="slot-name" id="name-marts-7"></div>
                                         </div>
                                     </div>

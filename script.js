@@ -4076,7 +4076,7 @@ function initPlayer() {
             <span class="track-name">${track.title}</span>
         </li>
     `).join('');
-    
+    refreshPlayerUI(); // 초기 상태 (1 / 20) 반영
     loadTrack(currentIdx);
     updateStatusText(); // 초기화 시 실행
     updateUI();
@@ -4151,3 +4151,53 @@ audio.addEventListener('ended', () => selectTrack((currentIdx + 1) % playlist.le
 
 // 페이지 로드 시 초기화 실행
 document.addEventListener('DOMContentLoaded', initPlayer);
+
+// 상태 업데이트 통합 함수
+function refreshPlayerUI() {
+    const statusText = document.getElementById('playlist-status');
+    const audioTitle = document.getElementById('player-title');
+    
+    // 1. 상단 상태 텍스트 갱신 (예: 악보 목록 3 / 20)
+    if (statusText) {
+        statusText.innerText = `${currentIdx + 1} / ${playlist.length}`;
+    }
+
+    // 2. 플레이어 바 제목 갱신 및 흐름 제어
+    if (audioTitle) {
+        audioTitle.textContent = playlist[currentIdx].title;
+        // 재생 중일 때만 흐르게 함
+        if (!audio.paused) {
+            audioTitle.classList.add('running');
+        }
+    }
+
+    // 3. 리스트 내 'active' 클래스 이동 (하이라이트)
+    document.querySelectorAll('.playlist-item-li').forEach((li, idx) => {
+        if (idx === currentIdx) {
+            li.classList.add('active');
+        } else {
+            li.classList.remove('active');
+        }
+    });
+}
+
+// 곡 선택 함수
+function selectTrack(i) {
+    currentIdx = i; // 인덱스 변경
+    loadTrack(currentIdx);
+    
+    // 리스트 닫기 및 재생
+    if (dropdown) dropdown.classList.remove('show');
+    
+    audio.play().then(() => {
+        refreshPlayerUI(); // 재생 성공 시 UI 전체 갱신
+    }).catch(() => {
+        refreshPlayerUI(); // 차단되어도 UI는 갱신
+    });
+}
+
+// 다음 곡 자동 재생 시에도 인덱스 갱신
+audio.addEventListener('ended', () => {
+    currentIdx = (currentIdx + 1) % playlist.length;
+    selectTrack(currentIdx);
+});

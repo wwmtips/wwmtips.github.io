@@ -6237,7 +6237,7 @@ body.dark-mode .pwa-install-desc { color: #888; }
 }
 
 .chunji-card-title {
-    font-size: 0.7em !important;
+    font-size: 0.75em !important;
     font-weight: bold !important;
     color: #333 !important;
     line-height: 1.1 !important;
@@ -6249,7 +6249,7 @@ body.dark-mode .pwa-install-desc { color: #888; }
 
 .chunji-card-type {
     display: block !important;
-    font-size: 0.6em !important;
+    font-size: 0.65em !important;
     color: #a0a0a0 !important;
     line-height: 1 !important;
     margin-top: 1px !important;

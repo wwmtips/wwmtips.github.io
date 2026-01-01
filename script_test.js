@@ -373,6 +373,8 @@ function loadData() {
             updateQuizCounter();
             renderFullNews(globalData.news);
             renderComboSlots();
+            renderHomeChunji(); // ★ 메인 화면용 리스트 추가 호출 ★
+            
             if (typeof renderHomeCharacters === 'function') {
                 renderHomeCharacters();
             }

@@ -6129,3 +6129,16 @@ body.dark-mode .pwa-install-desc { color: #888; }
         gap: 6px !important;
     }
 }
+
+/* 1. onclick 속성이 없는 mini-card를 자동으로 흑백+반투명 처리 */
+.mini-card:not([onclick]) {
+    filter: grayscale(100%) !important; /* 흑백 처리 */
+    opacity: 0.5 !important;            /* 비활성화 느낌을 위해 투명도 조절 */
+    cursor: default !important;         /* 커서를 기본형으로 변경 */
+    pointer-events: none;               /* 클릭 이벤트 자체를 차단 */
+}
+
+/* 2. (선택 사항) 이미지에만 흑백을 강하게 걸고 싶을 때 */
+.mini-card:not([onclick]) .mini-card-img {
+    filter: grayscale(100%) brightness(0.8);
+}

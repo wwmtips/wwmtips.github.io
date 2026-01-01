@@ -3919,7 +3919,7 @@ function renderHomeChunji() {
 
         // 제목 아래에 서브텍스트(type)를 배치
         div.innerHTML = `
-            <div class="chunji-card-title">${item.title}</div>
+            <div class="chunji-card-title">${item.type || '기록'} - ${item.title}</div>
         `;
         container.appendChild(div);
     });

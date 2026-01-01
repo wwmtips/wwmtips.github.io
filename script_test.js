@@ -3896,18 +3896,32 @@ window.addEventListener('appinstalled', (evt) => {
 });
 
 
+// 천지록(chunjiData)을 메인 화면에 퀘스트 카드 스타일로 렌더링
 function renderHomeChunji() {
     const container = document.getElementById('home-chunji-list');
-    if (!container || !Array.isArray(chunjiData)) return;
+    
+    // 데이터 존재 여부 확인 (chunji_data.js에서 가져옴)
+    if (!container || typeof chunjiData === 'undefined' || chunjiData.length === 0) {
+        return;
+    }
 
     container.innerHTML = '';
-    // 메인에는 최근 3~6개만 표시
-    const displayList = chunjiData.slice(0, 6); 
+    const fragment = document.createDocumentFragment();
+
+    // 메인에는 최근 6개만 표시
+    const displayList = chunjiData.slice(0, 6);
 
     displayList.forEach(item => {
         const div = document.createElement('div');
-        div.className = 'chunji-item-card'; // 위에서 정의한 새 클래스
-        div.onclick = () => showChunjiDetail(item.id); // 상세 보기 연결
+        div.className = 'chunji-item-card'; // style_dummy.css에서 정의할 클래스
+        
+        // 클릭 시 상세 보기 페이지 이동 (기존 로직 활용)
+        div.onclick = () => {
+            if (typeof switchTab === 'function' && typeof loadChunjiDetail === 'function') {
+                switchTab('chunji');
+                loadChunjiDetail(item);
+            }
+        };
 
         div.innerHTML = `
             <div class="chunji-card-info">
@@ -3916,6 +3930,11 @@ function renderHomeChunji() {
             </div>
             <div class="arrow-icon">❯</div>
         `;
-        container.appendChild(div);
+        fragment.appendChild(div);
     });
+
+    container.appendChild(fragment);
 }
+
+// 초기화 시 호출 추가
+document.addEventListener('DOMContentLoaded', renderHomeChunji);

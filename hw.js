@@ -31,8 +31,8 @@
             { id: 'd_2', freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령' },
             { id: 'd_4', freq: 'daily', type: '활동', loc: '꿈속의 불선선', title: '엽비휴의 도박 상기판' },
             { id: 'd_5', freq: 'daily', type: '활동', loc: '각 지역', title: '비결 재료 채집'},
-    { id: 'd_6', freq: 'daily', type: '활동', loc: '필드', title: '야생마 포획' },
-    { id: 'd_7', freq: 'daily', type: '활동', loc: '공덕사', title: '동전 던지고 소원 빌기' },
+    { id: 'd_6', freq: 'daily', type: '활동', loc: '순마장', title: '야생마 포획' },
+    { id: 'd_7', freq: 'daily', type: '활동', loc: '공덕지', title: '동전 던지고 소원 빌기' },
             { id: 'd_3', freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령' }
         ];
 

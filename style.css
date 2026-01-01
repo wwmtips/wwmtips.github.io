@@ -7,24 +7,32 @@
 
 :root {
     /* [레어도 색상] */
-    --rarity-common: #555555;    
-    --rarity-uncommon: #2e7d32;  
-    --rarity-rare: #1565c0;      
-    --rarity-epic: #7b1fa2;      
-    --rarity-legendary: #e65100; 
-    
+    --rarity-common: #555555;
+    --rarity-uncommon: #2e7d32;
+    --rarity-rare: #1565c0;
+    --rarity-epic: #7b1fa2;
+    --rarity-legendary: #e65100;
+
     /* [수묵화(한지) 라이트 테마 팔레트] */
-    --wuxia-bg-deep: #f4f4f2;     /* 배경: 미색 */
-    --wuxia-bg-panel: #ffffff;    /* 패널: 순백색 */
-    --wuxia-bg-input: #e0e0e0;    /* 입력창 */
-    
-    --wuxia-border: #dcdcdc;      /* 경계선 */
-    
-    --wuxia-accent-gold: #a08040; /* 강조: 금색 */
-    --wuxia-accent-red: #b71c1c;  /* 강조: 인주색 */
-    
-    --wuxia-text-main: #1a1a1a;   /* 텍스트: 진한 검정 */
-    --wuxia-text-sub: #555555;    /* 보조 텍스트: 진한 회색 */
+    --wuxia-bg-deep: #f4f4f2;
+    /* 배경: 미색 */
+    --wuxia-bg-panel: #ffffff;
+    /* 패널: 순백색 */
+    --wuxia-bg-input: #e0e0e0;
+    /* 입력창 */
+
+    --wuxia-border: #dcdcdc;
+    /* 경계선 */
+
+    --wuxia-accent-gold: #a08040;
+    /* 강조: 금색 */
+    --wuxia-accent-red: #b71c1c;
+    /* 강조: 인주색 */
+
+    --wuxia-text-main: #1a1a1a;
+    /* 텍스트: 진한 검정 */
+    --wuxia-text-sub: #555555;
+    /* 보조 텍스트: 진한 회색 */
 }
 
 
@@ -37,10 +45,15 @@ body {
     font-family: 'Noto Serif KR', serif;
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* 가로 스크롤 방지 */
+    overflow-x: hidden;
+    /* 가로 스크롤 방지 */
 }
 
-h2, h3, p, button, input {
+h2,
+h3,
+p,
+button,
+input {
     font-family: inherit;
 }
 
@@ -54,7 +67,7 @@ h2, h3, p, button, input {
     z-index: 1000;
     background-color: rgba(255, 255, 255, 0.95);
     border-bottom: 1px solid var(--wuxia-border);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(5px);
 }
 
@@ -66,7 +79,7 @@ h2, h3, p, button, input {
 }
 
 .logo-icon img {
-    padding-top: 6px; 
+    padding-top: 6px;
     vertical-align: middle;
 }
 
@@ -117,7 +130,10 @@ h2, h3, p, button, input {
     z-index: 10;
     font-family: Arial, Helvetica, sans-serif;
 }
-.search-clear-btn:hover { color: var(--wuxia-accent-red); }
+
+.search-clear-btn:hover {
+    color: var(--wuxia-accent-red);
+}
 
 /* 통합 검색 드롭다운 */
 .search-dropdown {
@@ -127,10 +143,10 @@ h2, h3, p, button, input {
     left: 0;
     width: 100%;
     background-color: #ffffff;
-    border: 1px solid var(--wuxia-accent-gold); 
+    border: 1px solid var(--wuxia-accent-gold);
     border-top: none;
     border-radius: 0 0 4px 4px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     z-index: 2000;
     max-height: 400px;
     overflow-y: auto;
@@ -169,9 +185,19 @@ h2, h3, p, button, input {
     color: #fff;
     white-space: nowrap;
 }
-.badge.quiz { background-color: var(--wuxia-accent-red); }
-.badge.item { background-color: var(--wuxia-accent-gold); color: #fff; }
-.badge.info { background-color: #2e7d32; }
+
+.badge.quiz {
+    background-color: var(--wuxia-accent-red);
+}
+
+.badge.item {
+    background-color: var(--wuxia-accent-gold);
+    color: #fff;
+}
+
+.badge.info {
+    background-color: #2e7d32;
+}
 
 
 /* =========================================
@@ -220,13 +246,23 @@ h2, h3, p, button, input {
 }
 
 /* 화면 전환 애니메이션 */
-#view-home, #view-quiz, #view-quest, #view-builder {
+#view-home,
+#view-quiz,
+#view-quest,
+#view-builder {
     animation: fadeIn 0.3s ease-in-out;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* =========================================
@@ -244,7 +280,7 @@ h2, h3, p, button, input {
     transition: all 0.2s;
     width: 100%;
     display: block;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .browse-button:hover {
@@ -267,8 +303,8 @@ h2, h3, p, button, input {
 }
 
 h3 {
-    font-size: 1.1em;
-    border-left: 4px solid var(--wuxia-accent-red);
+    font-size: 1.0em;
+    border-left: 4px solid var(--wuxia-accent-gold);
     padding-left: 10px;
     margin-bottom: 15px;
     margin-top: 10px;
@@ -280,6 +316,7 @@ h3 {
     margin-bottom: 0 !important;
     margin-top: 10px !important;
 }
+
 #view-home .section-header-clickable {
     border-bottom: none !important;
 }
@@ -300,14 +337,14 @@ h3 {
     padding: 15px;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .news-item:hover {
     border-color: var(--wuxia-accent-gold);
     background-color: #fffcf5;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .news-header {
@@ -340,8 +377,13 @@ h3 {
     display: none;
 }
 
-.news-item.active .news-content { display: block; }
-.news-item.active .news-title { color: var(--wuxia-accent-red); }
+.news-item.active .news-content {
+    display: block;
+}
+
+.news-item.active .news-title {
+    color: var(--wuxia-accent-red);
+}
 
 .news-link-btn {
     display: inline-block;
@@ -353,20 +395,28 @@ h3 {
     font-size: 0.8em;
     border-radius: 2px;
 }
-.news-link-btn:hover { background-color: #ddd; }
+
+.news-link-btn:hover {
+    background-color: #ddd;
+}
+
 /* =========================================
    [통합 스타일] 홈 리스트 컨테이너 (최근 소식 & 커뮤니티 공통)
    ========================================= */
-#home-recent-news, 
+#home-recent-news,
 #home-community-news {
     display: flex;
     flex-direction: column;
-    gap: 0 !important;       /* 간격 제거 */
-    border: 1px solid #eee;  /* 전체 테두리 */
-    border-radius: 4px;      /* 둥근 모서리 */
+    gap: 0 !important;
+    /* 간격 제거 */
+    border: 1px solid #eee;
+    /* 전체 테두리 */
+    border-radius: 4px;
+    /* 둥근 모서리 */
     overflow: hidden;
     background-color: #fff;
-    margin-top: 10px;        /* 상단 여백 */
+    margin-top: 10px;
+    /* 상단 여백 */
 }
 
 /* =========================================
@@ -376,13 +426,16 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 12px;           /* [핵심] 진행도 바와 동일한 패딩 */
+    padding: 6px 12px;
+    /* [핵심] 진행도 바와 동일한 패딩 */
     border-bottom: 1px solid #eee;
     background-color: #fff;
-    cursor: pointer;             /* 뉴스는 클릭 가능하므로 포인터 유지 */
+    cursor: pointer;
+    /* 뉴스는 클릭 가능하므로 포인터 유지 */
     transition: background-color 0.2s;
     height: auto;
-    min-height: 32px;            /* 최소 높이 통일 */
+    min-height: 32px;
+    /* 최소 높이 통일 */
 }
 
 /* 마지막 항목은 구분선 제거 */
@@ -397,9 +450,11 @@ h3 {
 
 /* 뉴스 제목 텍스트 (진행도 제목과 스타일 통일) */
 .news-title-text {
-    font-size: 0.85em;           /* [핵심] 폰트 크기 축소 (16px -> 0.85em) */
+    font-size: 0.85em;
+    /* [핵심] 폰트 크기 축소 (16px -> 0.85em) */
     color: var(--wuxia-text-main);
-    font-weight: bold;           /* 굵게 */
+    font-weight: bold;
+    /* 굵게 */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -410,16 +465,20 @@ h3 {
 
 /* 뉴스 날짜 텍스트 */
 .news-date-text {
-    font-size: 0.8em;            /* 날짜 크기 조정 */
+    font-size: 0.8em;
+    /* 날짜 크기 조정 */
     color: #999;
     min-width: 70px;
     text-align: right;
     white-space: nowrap;
-    font-family: 'Noto Serif KR', serif; /* 숫자 폰트 통일 */
+    font-family: 'Noto Serif KR', serif;
+    /* 숫자 폰트 통일 */
 }
 
 /* 홈 섹션 간격 */
-.recent-updates-section, .community-updates-section, .map-section {
+.recent-updates-section,
+.community-updates-section,
+.map-section {
     margin-top: 10px !important;
     padding-top: 0 !important;
 }
@@ -429,25 +488,25 @@ h3 {
    7. 족보 페이지 (Answer) 스타일
    ========================================= */
 #answer-container {
-    width: calc(100% + 30px); 
+    width: calc(100% + 30px);
     margin-left: -15px;
     margin-right: -15px;
-    margin-top: 10px; 
+    margin-top: 10px;
     border-top: 1px solid var(--wuxia-border);
     border-bottom: 1px solid var(--wuxia-border);
-    height: 75vh; 
+    height: 75vh;
     background-color: var(--wuxia-bg-panel);
     display: flex;
     flex-direction: column;
-    overflow: hidden; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .status-bar {
     background-color: #f9f9f9;
     color: var(--wuxia-text-main);
     transition: all 0.3s ease-in-out;
-    max-height: 100px; 
+    max-height: 100px;
     opacity: 1;
     overflow: hidden;
     padding: 15px 20px;
@@ -484,6 +543,7 @@ h3 {
     box-sizing: border-box;
     font-family: inherit;
 }
+
 .inner-search-box:focus {
     background-color: #fff;
     border-color: var(--wuxia-accent-gold);
@@ -546,7 +606,12 @@ h3 {
     font-weight: bold;
     animation: shine 2s linear infinite;
 }
-@keyframes shine { to { background-position: 200% center; } }
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
 
 
 /* =========================================
@@ -554,17 +619,17 @@ h3 {
    ========================================= */
 .guide-grid-menu {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 8px; 
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
     margin-bottom: 0px;
-    margin-top: 20px; 
+    margin-top: 20px;
 }
 
 .guide-item-btn {
     background-color: #ffffff;
     color: #333;
     border: 1px solid #ddd;
-    height: auto; 
+    height: auto;
     min-height: auto;
     padding: 12px 5px;
     display: flex;
@@ -574,11 +639,11 @@ h3 {
     text-align: center;
     border-radius: 4px;
     font-weight: bold;
-    font-size: 0.9em; 
+    font-size: 0.9em;
     cursor: pointer;
     transition: all 0.2s;
     font-family: 'Noto Serif KR', serif;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .guide-item-btn:hover {
@@ -586,7 +651,7 @@ h3 {
     border-color: var(--wuxia-accent-gold);
     color: #8a6d3b;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .guide-item-btn.active {
@@ -627,11 +692,11 @@ h3 {
     border-radius: 4px;
 
     /* 천지록과 동일한 패딩 적용 */
-    padding: 10px; 
+    padding: 10px;
 
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
 
     /* ▼▼▼ [핵심] 왼쪽에 포인트 라인 추가 ▼▼▼ */
     /* 퀘스트 테마에 맞춰 '붉은색'으로 설정했습니다. */
@@ -644,7 +709,7 @@ h3 {
     border-color: var(--wuxia-accent-gold);
     background-color: #fffcf5;
     transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -652,7 +717,7 @@ h3 {
     border-color: var(--wuxia-accent-gold);
     background-color: #fffcf5;
     transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
 }
 
 .quest-icon-wrapper {
@@ -665,7 +730,12 @@ h3 {
     flex-shrink: 0;
     background-color: #f0f0f0;
 }
-.quest-icon-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+.quest-icon-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
 .quest-info {
     flex-grow: 1;
@@ -679,14 +749,20 @@ h3 {
     font-weight: bold;
     font-size: 0.95em;
     margin-bottom: 4px;
-    
+
     /* 아래 내용 추가 */
-    white-space: nowrap;      /* 줄바꿈 금지 */
-    overflow: hidden;         /* 넘치는 텍스트 숨김 */
-    text-overflow: ellipsis;  /* 넘치는 부분 ... 처리 */
-    max-width: 150px;         /* (선택사항) 말줄임표가 시작될 최대 너비 지정 */
-    display: block;           /* 블록 요소로 동작하게 함 */
+    white-space: nowrap;
+    /* 줄바꿈 금지 */
+    overflow: hidden;
+    /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis;
+    /* 넘치는 부분 ... 처리 */
+    max-width: 150px;
+    /* (선택사항) 말줄임표가 시작될 최대 너비 지정 */
+    display: block;
+    /* 블록 요소로 동작하게 함 */
 }
+
 .quest-type {
     color: #777;
     font-size: 0.8em;
@@ -714,7 +790,11 @@ h3 {
     padding: 10px 0;
     font-family: inherit;
 }
-.back-button:hover { color: var(--wuxia-accent-red); text-decoration: underline; }
+
+.back-button:hover {
+    color: var(--wuxia-accent-red);
+    text-decoration: underline;
+}
 
 .detail-content-box {
     background-color: #ffffff;
@@ -724,7 +804,7 @@ h3 {
     min-height: 400px;
     color: #333;
     line-height: 1.6;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .pagination-controls {
@@ -759,7 +839,11 @@ h3 {
     border-color: var(--wuxia-accent-gold);
     color: #fff;
 }
-.pagination-btn:disabled { opacity: 0.5; cursor: default; }
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
 
 
 /* =========================================
@@ -787,7 +871,10 @@ h3 {
     margin-bottom: 20px;
 }
 
-.guide-page-container { padding-bottom:30px; }
+.guide-page-container {
+    padding-bottom: 30px;
+}
+
 #guide-dynamic-content {
     margin-top: 20px;
     padding-top: 20px;
@@ -798,18 +885,18 @@ h3 {
 .map-card {
     display: flex;
     flex-direction: column;
-    background-color: #1a1a1a; 
-    border: 1px solid #333;    
-    overflow: hidden;          
-    text-decoration: none;     
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    overflow: hidden;
+    text-decoration: none;
     transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .map-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     border-color: var(--wuxia-accent-gold);
 }
 
@@ -824,7 +911,10 @@ h3 {
     opacity: 0.7;
     transition: opacity 0.3s;
 }
-.map-card:hover .map-title::after { opacity: 1; }
+
+.map-card:hover .map-title::after {
+    opacity: 1;
+}
 
 /* =========================================
    [수정] 지도 섹션 카드 스타일 (소형화)
@@ -834,8 +924,8 @@ h3 {
 .map-grid {
     display: grid;
     /* [핵심] 300px -> 220px로 축소 (화면이 좁아도 여러 개 들어감) */
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-    gap: 15px;       
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
     margin-top: 15px;
     margin-bottom: 10px;
 }
@@ -846,8 +936,8 @@ h3 {
 .map-hero-bg {
     width: 100%;
     /* [핵심] 기존 180px -> 110px로 변경 (세로 길이 줄이기) */
-    height: 110px; 
-    background-size: cover;    
+    height: 110px;
+    background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     border-bottom: 1px solid #333;
@@ -858,7 +948,7 @@ h3 {
 .map-content {
     /* [핵심] 기존 20px -> 12px 15px로 변경 (위아래 여백 줄임) */
     padding: 12px 15px;
-    background-color: #1a1a1a; 
+    background-color: #1a1a1a;
     position: relative;
     z-index: 1;
 }
@@ -869,7 +959,8 @@ h3 {
     /* [핵심] 1.2em -> 1.05em (살짝 줄임) */
     font-size: 1.05em;
     font-weight: bold;
-    margin-bottom: 5px; /* 간격 줄임 */
+    margin-bottom: 5px;
+    /* 간격 줄임 */
     font-family: 'Noto Serif KR', serif;
     display: flex;
     justify-content: space-between;
@@ -878,28 +969,38 @@ h3 {
 
 /* 5. 설명글 줄 수 제한 (3줄 -> 2줄) */
 .map-desc {
-    color: #aaa;      
-    font-size: 0.85em; /* 0.9em -> 0.85em */
+    color: #aaa;
+    font-size: 0.85em;
+    /* 0.9em -> 0.85em */
     line-height: 1.4;
     margin: 0;
     display: -webkit-box;
     /* [핵심] 설명이 길면 2줄까지만 보여주고 ... 처리 */
-    -webkit-line-clamp: 2; 
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 @media (min-width: 768px) {
-    #recent-list.item-list-container, .quest-grid {
+
+    #recent-list.item-list-container,
+    .quest-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 15px;
     }
 }
+
 @media (max-width: 768px) {
-    .quest-grid { grid-template-columns: 1fr; }
-    .guide-item-btn { font-size: 0.85em; padding: 10px 2px; }
+    .quest-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .guide-item-btn {
+        font-size: 0.85em;
+        padding: 10px 2px;
+    }
 }
 
 
@@ -954,8 +1055,11 @@ h3 {
 
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -971,7 +1075,7 @@ h3 {
     padding: 20px;
     border-radius: 8px;
     overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     border: 1px solid var(--wuxia-accent-gold);
 }
 
@@ -989,15 +1093,18 @@ h3 {
     border-radius: 4px;
     background: #f9f9f9;
 }
+
 .select-item:hover {
     border-color: var(--wuxia-accent-gold);
     background: #fffcf5;
 }
+
 .select-item img {
     width: 48px;
     height: 48px;
     object-fit: cover;
 }
+
 .select-item p {
     font-size: 0.7em;
     margin: 5px 0 0 0;
@@ -1010,7 +1117,7 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 64px; 
+    width: 64px;
 }
 
 .slot-name {
@@ -1019,48 +1126,48 @@ h3 {
     text-align: center;
     margin-top: 5px;
     line-height: 1.2;
-    word-break: keep-all; 
+    word-break: keep-all;
     min-height: 2.4em;
 }
 
 .builder-footer {
     margin-top: 30px;
-    padding-bottom: 50px; 
+    padding-bottom: 50px;
 }
 
 #result-url {
-    box-sizing: border-box; 
-    width: 100%;            
-    max-width: 100%;        
-    margin-top: 10px; 
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 10px;
     padding: 12px;
     border: 1px solid var(--wuxia-accent-gold);
     background-color: #f9f9f9;
     color: #555;
     font-size: 0.9em;
     border-radius: 4px;
-    display: none; 
-    outline: none; 
+    display: none;
+    outline: none;
 }
 
 #result-url:focus {
-    border-color: var(--wuxia-accent-red); 
+    border-color: var(--wuxia-accent-red);
     background-color: #fff;
 }
 
 .select-item.disabled {
-    opacity: 0.4;              
-    cursor: not-allowed;       
-    background-color: #e0e0e0; 
-    border-color: #ccc;        
-    pointer-events: none;      
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    pointer-events: none;
 }
 
 .select-item.disabled::after {
     content: "사용 중";
     display: block;
     font-size: 0.7em;
-    color: #d32f2f; 
+    color: #d32f2f;
     font-weight: bold;
     margin-top: 2px;
 }
@@ -1076,35 +1183,41 @@ h3 {
     background-color: #fff;
     border: 1px solid #e0e0e0;
     margin-bottom: 12px;
-    padding: 12px; /* 패딩 약간 축소 */
+    padding: 12px;
+    /* 패딩 약간 축소 */
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    align-items: center; /* 수직 중앙 정렬 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    align-items: center;
+    /* 수직 중앙 정렬 */
 }
 
 .build-row-card:hover {
     transform: translateY(-2px);
     border-color: var(--wuxia-accent-gold);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* 아이콘 영역 (세로 배치로 변경) */
 .build-icons-area {
     display: flex;
-    flex-direction: column; /* [핵심] 세로 정렬 */
-    gap: 4px; /* 아이콘 간 간격 좁힘 */
-    margin-right: 15px; /* 텍스트와의 간격 */
+    flex-direction: column;
+    /* [핵심] 세로 정렬 */
+    gap: 4px;
+    /* 아이콘 간 간격 좁힘 */
+    margin-right: 15px;
+    /* 텍스트와의 간격 */
     flex-shrink: 0;
     align-items: center;
 }
 
 /* 아이콘 박스 (사이즈 축소) */
 .build-icon-box {
-    width: 36px; /* [핵심] 48px -> 36px로 축소 */
+    width: 36px;
+    /* [핵심] 48px -> 36px로 축소 */
     height: 36px;
     background-color: #f5f5f5;
     border: 1px solid #ddd;
@@ -1127,13 +1240,15 @@ h3 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-width: 0; /* 텍스트 말줄임표 작동을 위한 필수 속성 */
+    min-width: 0;
+    /* 텍스트 말줄임표 작동을 위한 필수 속성 */
 }
 
 .build-header-row {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* 뱃지와 제목 높이 맞춤 */
+    align-items: center;
+    /* 뱃지와 제목 높이 맞춤 */
     margin-bottom: 4px;
 }
 
@@ -1144,10 +1259,14 @@ h3 {
     font-weight: bold;
     line-height: 1.3;
     margin-right: 8px;
-    white-space: nowrap;      /* [추가] 한 줄 표시 */
-    overflow: hidden;         /* [추가] 넘침 숨김 */
-    text-overflow: ellipsis;  /* [추가] 말줄임표 (...) */
-    flex: 1;                  /* [추가] 남은 공간 차지 */
+    white-space: nowrap;
+    /* [추가] 한 줄 표시 */
+    overflow: hidden;
+    /* [추가] 넘침 숨김 */
+    text-overflow: ellipsis;
+    /* [추가] 말줄임표 (...) */
+    flex: 1;
+    /* [추가] 남은 공간 차지 */
 }
 
 /* 설명 텍스트 */
@@ -1156,7 +1275,8 @@ h3 {
     font-size: 0.9em;
     line-height: 1.4;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 최대 2줄 */
+    -webkit-line-clamp: 2;
+    /* 최대 2줄 */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1171,7 +1291,8 @@ h3 {
     font-weight: bold;
     white-space: nowrap;
     border: 1px solid;
-    flex-shrink: 0; /* 뱃지 크기 유지 */
+    flex-shrink: 0;
+    /* 뱃지 크기 유지 */
 }
 
 .type-pve {
@@ -1200,12 +1321,12 @@ h3 {
     justify-content: space-between;
     align-items: center;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .create-build-banner:hover {
     border-color: var(--wuxia-accent-gold);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
 }
 
@@ -1214,7 +1335,8 @@ h3 {
     color: #333;
     font-size: 1.1em;
     font-weight: bold;
-    border-left: none !important; /* 내부 붉은 선 제거 */
+    border-left: none !important;
+    /* 내부 붉은 선 제거 */
     padding-left: 0 !important;
 }
 
@@ -1266,7 +1388,7 @@ h3 {
     border-radius: 8px;
     padding: 10px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s;
 }
 
@@ -1295,8 +1417,11 @@ h3 {
 /* 바텀시트 (Bottom Sheet) */
 .bottom-sheet-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     z-index: 9998;
     display: none;
     opacity: 0;
@@ -1306,12 +1431,13 @@ h3 {
 .bottom-sheet {
     position: fixed;
     bottom: -100%;
-    left: 0; width: 100%;
+    left: 0;
+    width: 100%;
     height: 80vh;
     background: #fff;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
     z-index: 9999;
     transition: bottom 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     display: flex;
@@ -1382,7 +1508,7 @@ h3 {
     overflow: hidden;
     margin-bottom: 20px;
     background-color: #000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .slider-track {
@@ -1403,8 +1529,11 @@ h3 {
 .hero-slide::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
 }
 
 .slide-content {
@@ -1427,7 +1556,7 @@ h3 {
     padding: 2px 8px;
     font-size: 0.8em;
     margin-bottom: 10px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     font-weight: bold;
 }
 
@@ -1435,7 +1564,7 @@ h3 {
     font-size: 2.0em;
     font-weight: bold;
     margin: 0 0 8px 0;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
     font-family: 'Noto Serif KR', serif;
     color: #fff;
 }
@@ -1477,17 +1606,25 @@ h3 {
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255, 255, 255, 0.5);
     font-size: 3em;
     padding: 20px;
     cursor: pointer;
     z-index: 10;
     transition: color 0.3s;
 }
-.slider-btn:hover { color: #fff; }
 
-.prev { left: max(20px, calc(50vw - 580px)); } 
-.next { right: max(20px, calc(50vw - 580px)); }
+.slider-btn:hover {
+    color: #fff;
+}
+
+.prev {
+    left: max(20px, calc(50vw - 580px));
+}
+
+.next {
+    right: max(20px, calc(50vw - 580px));
+}
 
 .slider-indicators {
     position: absolute;
@@ -1502,11 +1639,12 @@ h3 {
 .indicator {
     width: 8px;
     height: 8px;
-    background-color: rgba(255,255,255,0.3);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s;
 }
+
 .indicator.active {
     background-color: var(--wuxia-accent-gold);
     width: 20px;
@@ -1514,20 +1652,37 @@ h3 {
 }
 
 @media (max-width: 768px) {
-    .hero-slider-wrapper { height: 250px; }
-    .slide-title { font-size: 1.5em; }
-    .slide-desc { 
+    .hero-slider-wrapper {
+        height: 250px;
+    }
+
+    .slide-title {
+        font-size: 1.5em;
+    }
+
+    .slide-desc {
         display: block;
         font-size: 0.85em;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         margin-top: 5px;
-    } 
-    .slide-link-btn { display: none; }
-    .slide-content { padding: 0 20px 30px 20px; }
-    .prev, .next { display: none; }
+    }
+
+    .slide-link-btn {
+        display: none;
+    }
+
+    .slide-content {
+        padding: 0 20px 30px 20px;
+    }
+
+    .prev,
+    .next {
+        display: none;
+    }
 }
+
 /* =========================================
    [최종 수정] 커뮤니티 진행도 (초소형 리스트 스타일)
    ========================================= */
@@ -1536,10 +1691,13 @@ h3 {
 #home-community-news {
     display: flex;
     flex-direction: column;
-    gap: 0 !important; /* [핵심] 간격 제거 */
-    border: 1px solid #eee; /* 전체 테두리 감싸기 */
+    gap: 0 !important;
+    /* [핵심] 간격 제거 */
+    border: 1px solid #eee;
+    /* 전체 테두리 감싸기 */
     border-radius: 4px;
-    overflow: hidden; /* 모서리 둥글게 유지 */
+    overflow: hidden;
+    /* 모서리 둥글게 유지 */
     background-color: #fff;
 }
 
@@ -1547,12 +1705,16 @@ h3 {
 .progress-update-item {
     display: flex;
     align-items: center;
-    padding: 6px 12px;       /* [핵심] 위아래 패딩 6px로 축소 */
-    border-bottom: 1px solid #eee; /* 항목 사이 구분선 */
+    padding: 6px 12px;
+    /* [핵심] 위아래 패딩 6px로 축소 */
+    border-bottom: 1px solid #eee;
+    /* 항목 사이 구분선 */
     background-color: #fff;
     cursor: default;
-    height: auto;            /* 높이 자동 조절 */
-    min-height: 32px;        /* 최소 높이 설정 */
+    height: auto;
+    /* 높이 자동 조절 */
+    min-height: 32px;
+    /* 최소 높이 설정 */
 }
 
 /* 마지막 항목은 구분선 제거 */
@@ -1562,7 +1724,8 @@ h3 {
 
 /* 3. 제목: 글자 크기 조정 및 여백 */
 .progress-title {
-    font-size: 0.85em;       /* 글자 크기 약간 축소 */
+    font-size: 0.85em;
+    /* 글자 크기 약간 축소 */
     font-weight: bold;
     color: var(--wuxia-text-main);
     flex: 1;
@@ -1574,8 +1737,10 @@ h3 {
 
 /* 4. 프로그레스 바 트랙 */
 .progress-bar-track {
-    width: 60px;             /* 바 길이 약간 축소 (공간 확보) */
-    height: 5px;             /* 두께 얇게 조정 */
+    width: 60px;
+    /* 바 길이 약간 축소 (공간 확보) */
+    height: 5px;
+    /* 두께 얇게 조정 */
     background-color: #f0f0f0;
     border-radius: 3px;
     overflow: hidden;
@@ -1606,6 +1771,7 @@ h3 {
 .progress-update-item.completed .progress-percent-text {
     color: var(--rarity-uncommon);
 }
+
 .progress-update-item.completed .progress-bar-fill {
     background-color: var(--rarity-uncommon);
 }
@@ -1617,23 +1783,32 @@ h3 {
 
 /* 1. 검색창 컨테이너 (드롭다운의 기준점 역할) */
 .search-container {
-    position: relative; /* 필수: 이게 있어야 드롭다운이 검색창에 딱 붙습니다 */
+    position: relative;
+    /* 필수: 이게 있어야 드롭다운이 검색창에 딱 붙습니다 */
     /* 기존 스타일이 있다면 유지 */
 }
 
 /* 2. 드롭다운 박스 (숨겨져 있다가 JS가 display:block으로 바꿔줌) */
 .search-dropdown {
-    display: none;          /* 기본적으로 숨김 */
-    position: absolute;     /* 공중에 띄움 */
-    top: 100%;              /* 검색창 바로 아래에 위치 */
+    display: none;
+    /* 기본적으로 숨김 */
+    position: absolute;
+    /* 공중에 띄움 */
+    top: 100%;
+    /* 검색창 바로 아래에 위치 */
     left: 0;
-    width: 100%;            /* 검색창 너비와 동일하게 */
-    background-color: #fff; /* 배경 흰색 (없으면 투명해서 글자가 겹침) */
+    width: 100%;
+    /* 검색창 너비와 동일하게 */
+    background-color: #fff;
+    /* 배경 흰색 (없으면 투명해서 글자가 겹침) */
     border: 1px solid #ddd;
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* 그림자 효과 */
-    z-index: 10000;         /* 다른 모든 요소보다 위에 오도록 높은 숫자 */
-    max-height: 300px;      /* 너무 길어지면 스크롤 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    /* 그림자 효과 */
+    z-index: 10000;
+    /* 다른 모든 요소보다 위에 오도록 높은 숫자 */
+    max-height: 300px;
+    /* 너무 길어지면 스크롤 */
     overflow-y: auto;
     margin-top: 5px;
 }
@@ -1651,7 +1826,8 @@ h3 {
 }
 
 .search-result-item:hover {
-    background-color: #f5f5f5; /* 마우스 올렸을 때 회색 배경 */
+    background-color: #f5f5f5;
+    /* 마우스 올렸을 때 회색 배경 */
 }
 
 .search-result-item:last-child {
@@ -1670,9 +1846,21 @@ h3 {
 }
 
 /* 뱃지 색상 */
-.badge.info { background-color: #2196F3; } /* 파란색 */
-.badge.quiz { background-color: #FF9800; } /* 주황색 */
-.badge.item { background-color: #4CAF50; } /* 초록색 */
+.badge.info {
+    background-color: #2196F3;
+}
+
+/* 파란색 */
+.badge.quiz {
+    background-color: #FF9800;
+}
+
+/* 주황색 */
+.badge.item {
+    background-color: #4CAF50;
+}
+
+/* 초록색 */
 
 /* 결과 텍스트 말줄임 처리 */
 .result-text {
@@ -1680,9 +1868,8 @@ h3 {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 크기 적당히 조절 */
-
-
 /* =========================================
    [추가] 네비게이션 더보기 화살표 디자인 개선
    ========================================= */
@@ -1698,24 +1885,31 @@ h3 {
 #nav-more::after {
     content: '';
     display: inline-block;
-    width: 6px;  /* 화살표 너비 */
-    height: 6px; /* 화살표 높이 */
-    margin-left: 8px; /* 글자와의 간격 */
-    
+    width: 6px;
+    /* 화살표 너비 */
+    height: 6px;
+    /* 화살표 높이 */
+    margin-left: 8px;
+    /* 글자와의 간격 */
+
     /* 얇은 선으로 V자 만들기 */
-    border-right: 2px solid #888; /* 평소 색상 (회색) */
+    border-right: 2px solid #888;
+    /* 평소 색상 (회색) */
     border-bottom: 2px solid #888;
-    
+
     /* 45도 회전시켜서 아래 방향 화살표로 만듦 */
-    transform: rotate(45deg); 
-    margin-bottom: 3px; /* 위치 미세 조정 */
-    transition: all 0.2s ease; /* 부드러운 색상 변경 애니메이션 */
+    transform: rotate(45deg);
+    margin-bottom: 3px;
+    /* 위치 미세 조정 */
+    transition: all 0.2s ease;
+    /* 부드러운 색상 변경 애니메이션 */
 }
 
 /* 3. 활성화되었을 때 (눌렀을 때 또는 하위 메뉴 선택 시) 화살표 색상 변경 */
 #nav-more.active::after,
 .nav-dropdown-wrapper:hover #nav-more::after {
-    border-color: var(--wuxia-accent-red); /* 활성화 색상 (붉은색) */
+    border-color: var(--wuxia-accent-red);
+    /* 활성화 색상 (붉은색) */
     /* 만약 메뉴가 열릴 때 화살표를 돌리고 싶다면 아래 주석 해제 */
     /* transform: rotate(225deg) translate(-2px, -2px); */
 }
@@ -1737,8 +1931,9 @@ h3 {
     display: grid;
     /* [핵심] 화면 너비에 따라 자동 조절 (최소 300px 너비 확보) */
     /* PC에서는 3~4개씩, 모바일에서는 1개씩 자동 배치됩니다 */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 15px; /* 카드 사이 간격 */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    /* 카드 사이 간격 */
     width: 100%;
     margin-top: 10px;
 }
@@ -1788,9 +1983,9 @@ h3 {
     border-bottom: 1px dashed #ccc;
     padding-bottom: 10px;
     font-family: 'Noto Serif KR', serif;
-   border-left: 4px solid var(--wuxia-accent-red); 
-    padding-left: 10px; 
-    
+    border-left: 4px solid var(--wuxia-accent-red);
+    padding-left: 10px;
+
     font-weight: bold;
     font-family: 'Noto Serif KR', serif;
 }
@@ -1807,15 +2002,17 @@ h3 {
 }
 
 .brush-stroke {
-    display: none !important; /* JS에 남아있는 태그를 CSS로 강제 숨김 */
+    display: none !important;
+    /* JS에 남아있는 태그를 CSS로 강제 숨김 */
 }
+
 /* -----------------------------------------
    3. 이미지 그리드 & 카드 스타일 (퀘스트 스타일 이식)
    ----------------------------------------- */
 .chunji-img-grid {
     display: grid;
     /* 화면 크기에 따라 열 개수 자동 조절 */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 15px;
     margin-top: 15px;
 }
@@ -1823,24 +2020,27 @@ h3 {
 /* 이미지 래퍼 (액자 역할) */
 .detail-img-wrapper {
     width: 100%;
-    aspect-ratio: 16 / 9; /* 16:9 비율 고정 */
-    
+    aspect-ratio: 16 / 9;
+    /* 16:9 비율 고정 */
+
     border: 1px solid #ddd;
     border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     background-color: #f4f4f2;
-    position: relative; /* 내부 장식 배치를 위해 필수 */
+    position: relative;
+    /* 내부 장식 배치를 위해 필수 */
 }
 
 /* 실제 이미지 (필터 효과 적용) */
 .detail-img-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 빈 공간 없이 꽉 채움 */
+    object-fit: cover;
+    /* 빈 공간 없이 꽉 채움 */
     object-position: center;
     display: block;
-    
+
     /* 수묵화 느낌 필터 */
     filter: sepia(0.05) contrast(1.02);
     transition: transform 0.5s ease, filter 0.5s ease;
@@ -1849,7 +2049,7 @@ h3 {
 
 /* 마우스 올렸을 때 (확대 + 선명함) */
 .detail-img-wrapper:hover img {
-    transform: scale(1.03); 
+    transform: scale(1.03);
     filter: sepia(0) contrast(1.05);
 }
 
@@ -1857,10 +2057,15 @@ h3 {
 .detail-img-wrapper::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    border: 1px solid rgba(176, 141, 85, 0.15); /* 은은한 금색 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(176, 141, 85, 0.15);
+    /* 은은한 금색 */
     box-sizing: border-box;
-    pointer-events: none; /* 마우스 클릭 통과 */
+    pointer-events: none;
+    /* 마우스 클릭 통과 */
     z-index: 1;
 }
 
@@ -1874,7 +2079,7 @@ h3 {
     color: #888;
     font-weight: normal;
     font-family: 'Noto Serif KR', serif;
-    
+
     /* [핵심] 여백 초기화 */
     margin: 0;
 }
@@ -1889,44 +2094,45 @@ h3 {
     display: flex !important;
     justify-content: space-between;
     align-items: center;
-    
+
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
-    
+
     /* [수정] 퀘스트 카드와 동일한 패딩 (12px 15px -> 10px) */
-    padding: 10px; 
-    
+    padding: 10px;
+
     /* [수정] 강제 높이 제거 (내용물에 맞게 자동 조절) */
-    min-height: auto; 
-    
+    min-height: auto;
+
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-    
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+
     /* 퀘스트와 구분되는 회색 포인트 라인 */
-    border-left: 4px solid #aaa; 
+    border-left: 4px solid #aaa;
 }
 
 .chunji-item:hover {
     border-color: var(--wuxia-accent-gold);
     background-color: #fffcf5;
     transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* 2. 텍스트 그룹 (제목 + 타입) */
 .chunji-text-group {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start; /* 왼쪽 정렬 */
-    
+    align-items: flex-start;
+    /* 왼쪽 정렬 */
+
     /* [수정] 간격 미세 조정 */
-    gap: 2px; 
-    
+    gap: 2px;
+
     overflow: hidden;
-    margin-left: 5px; 
+    margin-left: 5px;
 }
 
 /* 3. 제목 스타일 */
@@ -1938,7 +2144,7 @@ h3 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    
+
     margin: 0;
     padding: 0;
     line-height: 1.2;
@@ -1948,10 +2154,12 @@ h3 {
 .arrow-icon {
     font-size: 1.2em;
     color: #ccc;
-    font-weight: bold; /* 굵게 */
+    font-weight: bold;
+    /* 굵게 */
     line-height: 1;
     flex-shrink: 0;
-    margin-right: 5px; /* 오른쪽 여백 확보 */
+    margin-right: 5px;
+    /* 오른쪽 여백 확보 */
 }
 
 
@@ -1962,33 +2170,37 @@ h3 {
 /* 1. 카드 컨테이너 */
 .ingame-report-card {
     display: flex;
-    align-items: stretch; /* 높이 꽉 채우기 */
-    
+    align-items: stretch;
+    /* 높이 꽉 채우기 */
+
     /* [유지] 박스 내부 여백 0 -> 이미지가 벽에 붙음 */
-    padding: 0; 
-    
+    padding: 0;
+
     background-color: #fff;
-    border: 1px solid #eee; 
-    border-radius: 0; /* 직각 모서리 (최근 소식과 통일) */
-    
+    border: 1px solid #eee;
+    border-radius: 0;
+    /* 직각 모서리 (최근 소식과 통일) */
+
     /* [수정] 하단 여백 축소 (20px -> 10px) */
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
 /* 2. 배경 장식 제거 */
-.card-bg-deco { display: none; }
+.card-bg-deco {
+    display: none;
+}
 
 /* 3. 프로필 사진 영역 (왼쪽 벽 역할 - 사이즈 확대) */
 .char-portrait-box {
     position: relative;
-    
+
     /* [수정] 이미지 크기 확대 (60px -> 85px) */
     /* 너비를 키우면 카드 전체 높이도 자동으로 커져서 답답함이 사라집니다. */
-    width: 70px; 
-    min-height: 70px; 
+    width: 70px;
+    min-height: 70px;
     flex-shrink: 0;
-    
-    border-right: 1px solid #eee; 
+
+    border-right: 1px solid #eee;
 }
 
 .char-portrait-box img {
@@ -2005,14 +2217,14 @@ h3 {
     bottom: 0;
     left: 0;
     width: 100%;
-    
-    background: rgba(0, 0, 0, 0.7); 
+
+    background: rgba(0, 0, 0, 0.7);
     padding: 2px 0;
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 2; 
+    z-index: 2;
 }
 
 .lvl-num {
@@ -2029,9 +2241,9 @@ h3 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
+
     /* [수정] 텍스트 좌우 여백 약간 확보 (답답하지 않게) */
-    padding: 0 15px; 
+    padding: 0 15px;
 }
 
 .char-header {
@@ -2042,7 +2254,7 @@ h3 {
 .char-name {
     font-family: 'Noto Serif KR', serif;
     /* [수정] 폰트 사이즈 축소 (0.95em -> 0.9em) */
-    font-size: 0.9em; 
+    font-size: 0.9em;
     font-weight: bold;
     color: #333;
     line-height: 1.3;
@@ -2051,13 +2263,13 @@ h3 {
 /* 설명 텍스트 (폰트 축소) */
 .char-id-row .label {
     /* [수정] 폰트 사이즈 축소 (0.8em -> 0.75em) */
-    font-size: 0.75em; 
+    font-size: 0.75em;
     color: #888;
     line-height: 1.4;
     display: block;
-    
+
     /* 긴 텍스트 줄바꿈 자연스럽게 */
-    word-break: keep-all; 
+    word-break: keep-all;
 }
 
 /* =========================================
@@ -2066,12 +2278,17 @@ h3 {
 
 /* 1. 모달 배경 (어둡게) */
 .bottom-sheet-modal {
-    display: none; /* 평소엔 숨김 */
+    display: none;
+    /* 평소엔 숨김 */
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 9999;
-    align-items: flex-end; /* 바닥 정렬 */
+    align-items: flex-end;
+    /* 바닥 정렬 */
     justify-content: center;
 }
 
@@ -2087,11 +2304,11 @@ h3 {
     width: 100%;
     max-width: 600px;
     border-radius: 20px 20px 0 0;
-    
+
     /* [수정] 위쪽 패딩을 25px -> 50px로 대폭 늘림 */
     /* 이렇게 하면 탭 메뉴가 아래로 내려가서 X 버튼과 겹치지 않습니다. */
     padding: 50px 20px 40px 20px;
-    
+
     max-height: 80vh;
     overflow-y: auto;
     position: relative;
@@ -2102,23 +2319,25 @@ h3 {
 /* 2. 닫기 버튼 (위치 및 크기 조정) */
 .sheet-close-btn {
     position: absolute;
-    
+
     /* [수정] 위쪽과 오른쪽에서 적당히 띄움 */
-    top: 15px; 
+    top: 15px;
     right: 20px;
-    
+
     background: none;
     border: none;
-    color: #888; /* 너무 진하지 않게 */
-    
+    color: #888;
+    /* 너무 진하지 않게 */
+
     /* [수정] 크기를 키워서 누르기 쉽게 함 */
-    font-size: 26px; 
-    
+    font-size: 26px;
+
     line-height: 1;
     cursor: pointer;
-    padding: 5px; /* 터치 영역 확보 */
+    padding: 5px;
+    /* 터치 영역 확보 */
     z-index: 10;
-    
+
     transition: color 0.2s;
 }
 
@@ -2133,11 +2352,7 @@ h3 {
 
 /* 3. 핸들바 */
 .sheet-handle-bar {
-    width: 40px;
-    height: 5px;
     background: #e0e0e0;
-    border-radius: 5px;
-    margin: 10px auto 20px auto;
 }
 
 /* 4. [핵심] 탭 네비게이션 스타일 */
@@ -2148,7 +2363,8 @@ h3 {
 }
 
 .sheet-tab-btn {
-    flex: 1; /* 반반 차지 */
+    flex: 1;
+    /* 반반 차지 */
     padding: 12px 0;
     background: none;
     border: none;
@@ -2169,11 +2385,13 @@ h3 {
 .sheet-tab-btn.active::after {
     content: '';
     position: absolute;
-    bottom: -2px; /* 줄 위치 */
+    bottom: -2px;
+    /* 줄 위치 */
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: var(--wuxia-accent-red); /* 테마색 */
+    background-color: var(--wuxia-accent-red);
+    /* 테마색 */
 }
 
 /* 5. 탭 내용 숨김/보임 처리 */
@@ -2182,42 +2400,52 @@ h3 {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
+
 /* =========================================
    [최종 완결] 무림록 & 천지록 리스트 정렬 통일
    ========================================= */
 
 /* 1. 카드 박스 내부 패딩 (상하좌우 여백) 통일 */
-.quest-card, .chunji-item {
+.quest-card,
+.chunji-item {
     /* [중요] 두 카드의 패딩을 100% 동일하게 강제 설정 */
-    padding: 12px 15px !important; 
-    
+    padding: 12px 15px !important;
+
     /* 배치 설정 */
     display: flex !important;
     align-items: center;
     justify-content: space-between;
-    
+
     /* 혹시 모를 외부 마진 제거 (그리드 gap으로만 간격 조절) */
     margin: 0 !important;
 }
 
 /* 2. 텍스트 뭉치 (제목+설명) 위치 정렬 */
-.quest-text-group, .chunji-text-group {
+.quest-text-group,
+.chunji-text-group {
     /* [핵심 수정] 왼쪽 마진 제거 -> 텍스트 밀림 현상 해결 */
-    margin-left: 0 !important; 
-    
+    margin-left: 0 !important;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    gap: 3px; /* 제목과 설명 사이 간격 */
+    gap: 3px;
+    /* 제목과 설명 사이 간격 */
     overflow: hidden;
 }
 
 /* 3. 제목 폰트 라인 높이 보정 */
-.quest-name, .chunji-title {
+.quest-name,
+.chunji-title {
     margin: 0 !important;
     padding: 0 !important;
     line-height: 1.2;
@@ -2227,25 +2455,31 @@ h3 {
    [추가] PC 화면(768px 이상)에서 인게임 제보 2열 배치
    ========================================= */
 @media (min-width: 768px) {
-    
+
     /* 프로필 섹션을 그리드 레이아웃으로 변경 */
     .profile-section {
         display: grid;
-        grid-template-columns: 1fr 1fr; /* 1:1 비율로 2칸 나눔 */
-        gap: 15px; /* 카드 사이 간격 */
-        align-items: stretch; /* 카드 높이 동일하게 맞춤 */
+        grid-template-columns: 1fr 1fr;
+        /* 1:1 비율로 2칸 나눔 */
+        gap: 15px;
+        /* 카드 사이 간격 */
+        align-items: stretch;
+        /* 카드 높이 동일하게 맞춤 */
     }
 
     /* 섹션 제목("인게임 제보")은 한 줄 전체를 차지하게 함 */
     .profile-section .section-header-clickable {
-        grid-column: 1 / -1; /* 첫 번째 라인부터 끝 라인까지 확장 */
-        margin-bottom: 5px; /* 제목과 카드 사이 간격 */
+        grid-column: 1 / -1;
+        /* 첫 번째 라인부터 끝 라인까지 확장 */
+        margin-bottom: 5px;
+        /* 제목과 카드 사이 간격 */
     }
 
     /* PC에서는 카드 자체의 하단 여백 제거 (그리드 gap으로 대체) */
     .profile-section .ingame-report-card {
         margin-bottom: 0;
-        height: auto; /* 높이 자동 조절 */
+        height: auto;
+        /* 높이 자동 조절 */
     }
 }
 
@@ -2256,38 +2490,44 @@ h3 {
 /* 1. 필터 바 래퍼 */
 .filter-bar-wrapper {
     display: flex;
-    gap: 10px;             /* 드롭다운 사이 간격 */
-    flex-wrap: wrap;       /* 화면 좁으면 줄바꿈 */
+    gap: 10px;
+    /* 드롭다운 사이 간격 */
+    flex-wrap: wrap;
+    /* 화면 좁으면 줄바꿈 */
     margin-top: 20px;
     margin-bottom: 20px;
-    padding: 0 5px;        /* 좌우 살짝 여백 */
+    padding: 0 5px;
+    /* 좌우 살짝 여백 */
 }
 
 /* 2. 커스텀 셀렉트 박스 디자인 */
 .custom-select {
     /* 브라우저 기본 스타일 제거 (화살표 직접 커스텀하기 위해) */
-    appearance: none; 
-    -webkit-appearance: none; 
+    appearance: none;
+    -webkit-appearance: none;
     -moz-appearance: none;
 
     /* 배경 및 테두리 */
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
-    
+
     /* 폰트 설정 (사이트 통일) */
     font-family: 'Noto Serif KR', serif;
     font-size: 0.95em;
     color: #333;
-    font-weight: bold; /* 가독성을 위해 약간 굵게 */
+    font-weight: bold;
+    /* 가독성을 위해 약간 굵게 */
 
     /* 크기 및 간격 */
-    padding: 10px 35px 10px 15px; /* 오른쪽 패딩은 화살표 공간 */
-    min-width: 130px; /* 너무 작아지지 않게 */
+    padding: 10px 35px 10px 15px;
+    /* 오른쪽 패딩은 화살표 공간 */
+    min-width: 130px;
+    /* 너무 작아지지 않게 */
     cursor: pointer;
-    
+
     /* 그림자 및 전환 효과 */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
     transition: all 0.2s ease;
 
     /* ▼ 커스텀 화살표 아이콘 (SVG 데이터 URI 사용) */
@@ -2299,18 +2539,22 @@ h3 {
 
 /* 3. 마우스 올렸을 때 (Hover) */
 .custom-select:hover {
-    border-color: var(--wuxia-accent-gold); /* 테마 금색 */
-    background-color: #fffcf5; /* 살짝 따뜻한 배경색 */
+    border-color: var(--wuxia-accent-gold);
+    /* 테마 금색 */
+    background-color: #fffcf5;
+    /* 살짝 따뜻한 배경색 */
     color: #000;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* 4. 클릭/포커스 상태 (Focus) */
 .custom-select:focus {
     outline: none;
-    border-color: var(--wuxia-accent-red); /* 테마 적색 포인트 */
+    border-color: var(--wuxia-accent-red);
+    /* 테마 적색 포인트 */
     background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(183, 28, 28, 0.1); /* 적색 글로우 효과 */
+    box-shadow: 0 0 0 3px rgba(183, 28, 28, 0.1);
+    /* 적색 글로우 효과 */
 }
 
 /* (선택사항) 모바일 환경 최적화 */
@@ -2318,8 +2562,10 @@ h3 {
     .filter-bar-wrapper {
         gap: 8px;
     }
+
     .custom-select {
-        flex: 1; /* 모바일에서는 꽉 차게 */
+        flex: 1;
+        /* 모바일에서는 꽉 차게 */
         min-width: auto;
         font-size: 0.9em;
     }
@@ -2328,44 +2574,48 @@ h3 {
 /* 1. '족보' 버튼을 감싸는 부모 태그 */
 .nav-dropdown-wrapper {
     /* ▼▼▼ [핵심] 자식(드롭다운)의 기준점이 되도록 설정 ▼▼▼ */
-    position: relative !important; 
-    
-    display: inline-flex; /* 혹은 flex */
+    position: relative !important;
+
+    display: inline-flex;
+    /* 혹은 flex */
     align-items: center;
-    height: 100%; /* 네비게이션 높이 맞춤 */
+    height: 100%;
+    /* 네비게이션 높이 맞춤 */
 }
 
 /* 2. 드롭다운 메뉴 박스 */
 .nav-dropdown-content {
     /* 부모(.nav-dropdown-wrapper) 기준으로 배치 */
-    position: absolute; 
-    
+    position: absolute;
+
     /* 부모의 바로 아래(100%)에 위치 */
-    top: 100%; 
-    
+    top: 100%;
+
     /* 부모의 가운데 정렬 (원하시면 left: 0 으로 해도 됩니다) */
     left: 0%;
     transform: translateX(-50%);
-    
+
     /* 우측 끝으로 가는 현상 방지 */
-    right: auto; 
-    
+    right: auto;
+
     /* 디자인 요소 (기존 유지) */
     min-width: 100px;
     background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     padding: 5px 0;
     z-index: 2000;
-    display: none; /* 평소엔 숨김 */
-    
+    display: none;
+    /* 평소엔 숨김 */
+
     /* 텍스트 줄바꿈 방지 */
     white-space: nowrap;
 }
 
 /* 3. 메뉴가 활성화되었을 때 */
 .nav-dropdown-content.show {
-    display: block; /* 보이기 */
+    display: block;
+    /* 보이기 */
 }
 
 /* 4. 드롭다운 내부 버튼 스타일 (참고용) */
@@ -2380,9 +2630,11 @@ h3 {
     font-size: 0.95rem;
     color: #333;
 }
+
 .nav-dropdown-content .dropdown-item:hover {
     background-color: #f5f5f5;
-    color: var(--wuxia-accent-gold); /* 기존 테마색 */
+    color: var(--wuxia-accent-gold);
+    /* 기존 테마색 */
 }
 
 /* =========================================
@@ -2393,16 +2645,17 @@ h3 {
     background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
     border: 1px solid #e57373;
     border-radius: 8px;
-    
+
     /* 배치 및 여백 */
-    margin: 20px 0; /* 위아래 간격 */
+    margin: 20px 0;
+    /* 위아래 간격 */
     padding: 15px 20px;
-    
+
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    
+
     /* 그림자 및 전환 효과 */
     box-shadow: 0 4px 10px rgba(183, 28, 28, 0.2);
     position: relative;
@@ -2421,8 +2674,10 @@ h3 {
 .lucky-event-banner::before {
     content: '';
     position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
     background: linear-gradient(to bottom, #f9d675, #e0aa3e);
 }
 
@@ -2443,16 +2698,18 @@ h3 {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .lucky-seal-icon span {
     font-family: 'Noto Serif KR', serif;
     font-weight: bold;
-    color: #c41e28; /* 글자는 빨간색 */
+    color: #c41e28;
+    /* 글자는 빨간색 */
     font-size: 1.2em;
     line-height: 1;
-    margin-top: 2px; /* 시각적 중앙 보정 */
+    margin-top: 2px;
+    /* 시각적 중앙 보정 */
 }
 
 /* 마우스 올리면 씰이 흔들림 */
@@ -2461,8 +2718,13 @@ h3 {
 }
 
 @keyframes luckyShake {
-    0% { transform: rotate(-10deg); }
-    100% { transform: rotate(10deg); }
+    0% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(10deg);
+    }
 }
 
 /* 텍스트 그룹 */
@@ -2477,11 +2739,12 @@ h3 {
     font-size: 1.1em;
     font-weight: bold;
     margin-bottom: 3px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .lucky-desc {
-    color: #ffcdd2; /* 연한 분홍색 */
+    color: #ffcdd2;
+    /* 연한 분홍색 */
     font-size: 0.9em;
 }
 
@@ -2505,10 +2768,21 @@ h3 {
 
 /* 모바일 대응 */
 @media (max-width: 480px) {
-    .lucky-desc { font-size: 0.8em; }
-    .lucky-title { font-size: 1.0em; }
-    .lucky-action-btn { display: none; } /* 화면 좁으면 버튼 숨김 */
+    .lucky-desc {
+        font-size: 0.8em;
+    }
+
+    .lucky-title {
+        font-size: 1.0em;
+    }
+
+    .lucky-action-btn {
+        display: none;
+    }
+
+    /* 화면 좁으면 버튼 숨김 */
 }
+
 /* =========================================
    [추가] 행운 봉투 이벤트 배너 스타일
    ========================================= */
@@ -2517,16 +2791,17 @@ h3 {
     background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
     border: 1px solid #e57373;
     border-radius: 8px;
-    
+
     /* 배치 및 여백 */
-    margin: 20px 0; /* 위아래 간격 */
+    margin: 20px 0;
+    /* 위아래 간격 */
     padding: 15px 20px;
-    
+
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    
+
     /* 그림자 및 전환 효과 */
     box-shadow: 0 4px 10px rgba(183, 28, 28, 0.2);
     position: relative;
@@ -2545,8 +2820,10 @@ h3 {
 .lucky-event-banner::before {
     content: '';
     position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
     background: linear-gradient(to bottom, #f9d675, #e0aa3e);
 }
 
@@ -2567,16 +2844,18 @@ h3 {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .lucky-seal-icon span {
     font-family: 'Noto Serif KR', serif;
     font-weight: bold;
-    color: #c41e28; /* 글자는 빨간색 */
+    color: #c41e28;
+    /* 글자는 빨간색 */
     font-size: 1.2em;
     line-height: 1;
-    margin-top: 2px; /* 시각적 중앙 보정 */
+    margin-top: 2px;
+    /* 시각적 중앙 보정 */
 }
 
 /* 마우스 올리면 씰이 흔들림 */
@@ -2585,8 +2864,13 @@ h3 {
 }
 
 @keyframes luckyShake {
-    0% { transform: rotate(-10deg); }
-    100% { transform: rotate(10deg); }
+    0% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(10deg);
+    }
 }
 
 /* 텍스트 그룹 */
@@ -2601,11 +2885,12 @@ h3 {
     font-size: 1.1em;
     font-weight: bold;
     margin-bottom: 3px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .lucky-desc {
-    color: #ffcdd2; /* 연한 분홍색 */
+    color: #ffcdd2;
+    /* 연한 분홍색 */
     font-size: 0.9em;
 }
 
@@ -2629,9 +2914,19 @@ h3 {
 
 /* 모바일 대응 */
 @media (max-width: 480px) {
-    .lucky-desc { font-size: 0.8em; }
-    .lucky-title { font-size: 1.0em; }
-    .lucky-action-btn { display: none; } /* 화면 좁으면 버튼 숨김 */
+    .lucky-desc {
+        font-size: 0.8em;
+    }
+
+    .lucky-title {
+        font-size: 1.0em;
+    }
+
+    .lucky-action-btn {
+        display: none;
+    }
+
+    /* 화면 좁으면 버튼 숨김 */
 }
 
 /* =========================================
@@ -2668,81 +2963,91 @@ h3 {
 }
 
 .lucky-event-banner.ended .lucky-action-btn {
-    display: none; /* 버튼 숨김 */
+    display: none;
+    /* 버튼 숨김 */
 }
+
 /* [공통] 상세 정보 모달 스타일 */
 .info-modal-overlay {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
     display: none;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
-    
+
     /* ▼▼▼ [중요] 바텀 시트(보통 2000~3000)보다 훨씬 높게 설정 ▼▼▼ */
-    z-index: 10000; 
-    
+    z-index: 10000;
+
     animation: fadeIn 0.2s ease-out;
 }
 
 .info-modal-card {
     background-color: #fff;
-    width: 85%; 
+    width: 85%;
     max-width: 320px;
     border-radius: 12px;
     padding: 25px 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     text-align: center;
     position: relative;
     border: 1px solid #ddd;
 }
 
 .close-modal-btn {
-    position: absolute; 
-    top: 10px; 
+    position: absolute;
+    top: 10px;
     right: 10px;
-    background: none; 
-    border: none; 
-    font-size: 1.5em; 
-    color: #999; 
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #999;
     cursor: pointer;
-    line-height: 1; 
+    line-height: 1;
     padding: 5px;
 }
 
 .info-header img {
-    width: 70px; 
+    width: 70px;
     height: 70px;
-    border-radius: 50%; 
+    border-radius: 50%;
     border: 1px solid #ddd;
     margin-bottom: 15px;
     object-fit: cover;
 }
 
 .info-header h3 {
-    margin: 0 0 15px 0; 
-    color: #1a1a1a; 
-    font-size: 1.3em; 
+    margin: 0 0 15px 0;
+    color: #1a1a1a;
+    font-size: 1.3em;
     font-weight: bold;
 }
 
 .info-body p {
-    color: #555; 
-    font-size: 0.95em; 
-    line-height: 1.6; 
+    color: #555;
+    font-size: 0.95em;
+    line-height: 1.6;
     margin: 0;
-    word-break: keep-all; 
-    background-color: #f9f9f9; 
-    padding: 15px; 
+    word-break: keep-all;
+    background-color: #f9f9f9;
+    padding: 15px;
     border-radius: 8px;
-    text-align: left; 
+    text-align: left;
     border: 1px solid #eee;
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
 
 /* [추가] 콤보(Combo) 섹션 스타일 */
 .combo-container {
@@ -2751,7 +3056,8 @@ h3 {
     gap: 8px;
     align-items: center;
     padding: 15px 10px;
-    background: #222; /* 어두운 배경 (참고 이미지 느낌) */
+    background: #222;
+    /* 어두운 배경 (참고 이미지 느낌) */
     border-radius: 12px;
     margin-bottom: 20px;
 }
@@ -2782,7 +3088,7 @@ h3 {
     font-weight: bold;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 1.1em;
-    box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
     position: relative;
     user-select: none;
 }
@@ -2809,13 +3115,41 @@ h3 {
 }
 
 /* 색상 테마 (이미지 참고) */
-.key-blue { background-color: #42a5f5; }   /* ~ (특수) */
-.key-gray { background-color: #90a4ae; }   /* SCR, LMB */
-.key-orange { background-color: #ffb74d; } /* R (강공) */
-.key-red { background-color: #ef5350; }    /* Q (스킬) */
-.key-teal { background-color: #26c6da; }   /* TAB */
-.key-purple { background-color: #ab47bc; } /* E (반격) */
-.key-yellow { background-color: #f1df39; } /* E (반격) */
+.key-blue {
+    background-color: #42a5f5;
+}
+
+/* ~ (특수) */
+.key-gray {
+    background-color: #90a4ae;
+}
+
+/* SCR, LMB */
+.key-orange {
+    background-color: #ffb74d;
+}
+
+/* R (강공) */
+.key-red {
+    background-color: #ef5350;
+}
+
+/* Q (스킬) */
+.key-teal {
+    background-color: #26c6da;
+}
+
+/* TAB */
+.key-purple {
+    background-color: #ab47bc;
+}
+
+/* E (반격) */
+.key-yellow {
+    background-color: #f1df39;
+}
+
+/* E (반격) */
 
 /* 비결 아이콘 (콤보 내) */
 .combo-mart-icon {
@@ -2826,6 +3160,7 @@ h3 {
     background: #000;
     object-fit: cover;
 }
+
 /* [추가] 콤보 슬롯 추가(+) 버튼 스타일 */
 .combo-add-btn {
     width: 100%;
@@ -2840,6 +3175,7 @@ h3 {
     cursor: pointer;
     transition: background 0.2s;
 }
+
 .combo-add-btn:hover {
     background-color: #eee;
     color: #333;
@@ -2861,7 +3197,7 @@ h3 {
     justify-content: center;
     cursor: pointer;
     z-index: 10;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* =========================================
@@ -2877,11 +3213,12 @@ h3 {
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
     padding: 20px;
-    background-color: #1a1a1a; /* 전체 배경은 어둡게 유지 */
+    background-color: #1a1a1a;
+    /* 전체 배경은 어둡게 유지 */
     border: 1px solid #333;
     border-radius: 12px;
     margin-top: 15px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 /* 2. 아이템 박스 (기본 배경: 검은색) */
@@ -2891,7 +3228,8 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #000000; /* ★ 핵심: 이미지는 여기서 검은 배경 */
+    background-color: #000000;
+    /* ★ 핵심: 이미지는 여기서 검은 배경 */
     border: 1px solid #333;
     border-radius: 8px;
     position: relative;
@@ -2905,11 +3243,13 @@ h3 {
     left: 7px;
     font-size: 0.8em;
     font-weight: 700;
-    color: #fff; /* 흰색 */
+    color: #fff;
+    /* 흰색 */
     font-family: sans-serif;
     z-index: 20;
     pointer-events: none;
-    text-shadow: none !important; /* ★ 그림자 뺐음 */
+    text-shadow: none !important;
+    /* ★ 그림자 뺐음 */
     opacity: 0.9;
 }
 
@@ -2921,45 +3261,63 @@ h3 {
     align-items: center;
     justify-content: center;
     font-family: sans-serif;
-    font-weight: 800; /* 두껍게 */
+    font-weight: 800;
+    /* 두껍게 */
     font-size: 1.3em;
-    color: #fff !important; /* 글씨 흰색 */
+    color: #fff !important;
+    /* 글씨 흰색 */
     border-radius: 6px;
-    
+
     /* ★ 핵심: 박스 그림자 없고, 글씨에만 그림자 */
     box-shadow: none !important;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important; 
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
 }
 
 /* 5. [컬러] 원래 색상 유지 (Solid Color) */
 /* 키가 들어가면 이 색상이 검은 배경을 덮어씁니다 */
 
 /* Q (빨강) */
-.key-red { background-color: #EF5350 !important; }
+.key-red {
+    background-color: #EF5350 !important;
+}
 
 /* ~ (파랑) */
-.key-blue { background-color: #42A5F5 !important; }
+.key-blue {
+    background-color: #42A5F5 !important;
+}
 
 /* LMB (초록) */
-.key-gray { background-color: #66BB6A !important; }
+.key-gray {
+    background-color: #66BB6A !important;
+}
 
 /* R (주황) */
-.key-orange { background-color: #FFA726 !important; }
+.key-orange {
+    background-color: #FFA726 !important;
+}
 
 /* TAB (청록) */
-.key-teal { background-color: #26C6DA !important; }
+.key-teal {
+    background-color: #26C6DA !important;
+}
 
 /* E (보라-블루그레이) */
-.key-purple { background-color: #78909C !important; }
+.key-purple {
+    background-color: #78909C !important;
+}
 
 /* SCR (회색) */
-.key-gray.scr { background-color: #546E7A !important; }
+.key-gray.scr {
+    background-color: #546E7A !important;
+}
 
 
 /* 6. HOLD (꾹 누르기) */
 .key-cap-viewer.hold {
-    background-color: #AB47BC !important; /* 보라색 */
+    background-color: #AB47BC !important;
+    /* 보라색 */
 }
+
 .key-cap-viewer.hold::after {
     content: 'HOLD';
     position: absolute;
@@ -2968,7 +3326,7 @@ h3 {
     font-weight: bold;
     color: #fff;
     opacity: 0.8;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
 }
 
 /* 7. 비결 이미지 */
@@ -2978,6 +3336,7 @@ h3 {
     object-fit: cover;
     /* 배경이 검정이므로 이미지만 둥둥 떠있는 느낌 */
 }
+
 /* =========================================
    [반응형] 큰 화면(PC)에서 바텀시트 크기 제한
    ========================================= */
@@ -2985,22 +3344,26 @@ h3 {
 @media (min-width: 768px) {
     #build-detail-sheet {
         /* ★핵심: PC에서는 기본적으로 숨김 (JS가 열어줄 때만 보이게) */
-        display: none; 
-        
+        display: none;
+
         /* 카드 형태 디자인 */
         max-width: 520px;
         width: 100%;
-        position: fixed; /* 위치 고정 */
+        position: fixed;
+        /* 위치 고정 */
         left: 50%;
-        transform: translateX(-50%); /* 좌우 중앙 정렬 */
-        bottom: 30px; /* 바닥에서 띄움 */
-        
+        transform: translateX(-50%);
+        /* 좌우 중앙 정렬 */
+        bottom: 30px;
+        /* 바닥에서 띄움 */
+
         border-radius: 20px !important;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         max-height: 85vh;
         overflow-y: auto;
         scrollbar-width: thin;
-        z-index: 9999; /* 제일 위에 표시 */
+        z-index: 9999;
+        /* 제일 위에 표시 */
     }
 
     /* 닫기 버튼 영역 */
@@ -3016,17 +3379,19 @@ h3 {
    ========================================= */
 
 /* 1. 그리드 (지도와 동일하게: 모바일 2개 / PC 4개) */
-#home-boss-list, 
+#home-boss-list,
 .boss-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 12px; /* 간격도 지도와 비슷하게 */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    /* 간격도 지도와 비슷하게 */
     width: 100%;
     box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
-    #home-boss-list, 
+
+    #home-boss-list,
     .boss-grid {
         grid-template-columns: repeat(4, 1fr);
     }
@@ -3041,7 +3406,7 @@ h3 {
     border-radius: 8px;
     overflow: hidden;
     text-decoration: none !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
     transition: transform 0.2s ease;
     cursor: pointer;
     height: 100%;
@@ -3049,13 +3414,14 @@ h3 {
 
 .boss-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* 3. 상단 이미지 (★핵심: 지도처럼 높이 고정) */
 .boss-hero-bg {
     width: 100%;
-    height: 100px; /* 지도가 100~120px 정도입니다 */
+    height: 100px;
+    /* 지도가 100~120px 정도입니다 */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -3106,61 +3472,61 @@ h3 {
     border-radius: 3px;
     z-index: 2;
 }
-.boss-badge.red { background-color: rgba(211, 47, 47, 0.9); }
-.boss-badge.gray { background-color: rgba(117, 117, 117, 0.9); }
+
+.boss-badge.red {
+    background-color: rgba(211, 47, 47, 0.9);
+}
+
+.boss-badge.gray {
+    background-color: rgba(117, 117, 117, 0.9);
+}
 
 /* =========================================
    [모바일 반응형] 가로 스크롤 (Horizontal Scroll)
    ========================================= */
-
-/* =========================================
-   [모바일 강력 패치] 무조건 한 줄 가로 스크롤
-   ========================================= */
-/* =========================================
-   [모바일 최종] 강제 가로 스크롤 (Priority Fix)
-   ========================================= */
-/* =========================================
-   [모바일 최종] 4열 격자 정렬 (Grid Fix)
-   ========================================= */
-/* =========================================
-   [모바일 최종] 4열 자동 리사이징 (Fix)
-   ========================================= */
-
 @media screen and (max-width: 900px) {
-    
+
     /* 1. 그리드: 화면 폭을 4등분해서 박스를 집어넣음 */
     #build-detail-sheet .combo-viewer-grid,
     .combo-viewer-grid {
         display: grid !important;
         /* 1fr 4개는 화면을 정확히 4등분하라는 뜻입니다 */
-        grid-template-columns: repeat(4, 1fr) !important; 
-        gap: 8px !important;                 /* 박스 사이 간격 좁힘 */
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 8px !important;
+        /* 박스 사이 간격 좁힘 */
         padding: 15px 10px !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        overflow-x: hidden !important;        /* 옆으로 삐져나오지 않게 함 */
+        overflow-x: hidden !important;
+        /* 옆으로 삐져나오지 않게 함 */
     }
 
     /* 2. 아이템 박스: 너비를 고정하지 않고 부모(그리드) 칸에 맞춤 */
     #build-detail-sheet .combo-item-box,
     .combo-item-box {
         display: flex !important;
-        width: 100% !important;               /* 부모 칸 너비 100% 사용 */
+        width: 100% !important;
+        /* 부모 칸 너비 100% 사용 */
         height: auto !important;
-        aspect-ratio: 1 / 1 !important;       /* 가로세로 1:1 유지 */
-        min-width: 0 !important;              /* 중요: 너비 강제 고정 해제 */
-        flex: unset !important;               /* flex 고정 해제 */
+        aspect-ratio: 1 / 1 !important;
+        /* 가로세로 1:1 유지 */
+        min-width: 0 !important;
+        /* 중요: 너비 강제 고정 해제 */
+        flex: unset !important;
+        /* flex 고정 해제 */
     }
-    
+
     /* 3. 글씨 및 숫자 크기: 박스가 작아지므로 함께 축소 */
     #build-detail-sheet .key-cap-viewer,
     .key-cap-viewer {
-        font-size: 0.95em !important;         /* 텍스트가 박스를 넘지 않게 조절 */
+        font-size: 0.95em !important;
+        /* 텍스트가 박스를 넘지 않게 조절 */
         line-height: 1 !important;
     }
 
     .combo-step-num {
-        font-size: 0.65em !important;         /* 숫자 크기 축소 */
+        font-size: 0.65em !important;
+        /* 숫자 크기 축소 */
         top: 2px !important;
         left: 4px !important;
     }
@@ -3174,100 +3540,136 @@ h3 {
 }
 
 /* =========================================
-   강호 시시각각 (타이머) - 리스트형 스타일
+   [수정] 강호 시시각각 (타이머) - 2열 그리드 & 소형화
    ========================================= */
+
+/* 1. 컨테이너: 리스트(Flex) -> 그리드(Grid)로 변경 */
 #gangho-timer-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0; /* 간격을 없애 리스트처럼 붙임 */
-    border: 1px solid #eee;
-    border-radius: 4px;
-    background-color: #fff;
-    overflow: hidden;
+    display: grid !important;
+    /* [핵심] 모바일에서 기본 2열 배치 */
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    /* 카드 사이 간격 */
+    padding: 0 0 px !important;
+    /* 전체 좌우 여백 */
+
+    background: none !important;
+    border: none !important;
+    /* 외곽 테두리 제거 */
     margin-top: 10px;
 }
 
+/* PC 화면에서는 4열로 확장 */
+@media (min-width: 768px) {
+    #gangho-timer-list {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+/* 2. 개별 아이템 (박스 형태) */
 .timer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center; /* 수직 중앙 정렬 */
-    padding: 12px 15px;  /* 높이 축소 (최근 소식과 비슷하게) */
-    border-bottom: 1px solid #eee;
+    display: flex !important;
+    flex-direction: column !important;
+    /* [핵심] 내용을 세로(위아래)로 정렬 */
+    align-items: center !important;
+    /* 중앙 정렬 */
+    justify-content: center !important;
+
+    padding: 8px 5px !important;
+    /* 패딩 축소 */
+    background-color: #fff;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    /* 둥근 모서리 */
+
+    height: auto !important;
+    min-height: 60px;
+    /* 최소 높이 설정 */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
     cursor: pointer;
-    transition: background-color 0.2s;
-    position: relative;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
-.timer-row:last-child {
-    border-bottom: none;
-}
-
+/* 마우스 올렸을 때 효과 */
 .timer-row:hover {
-    background-color: #fffcf5; /* 마우스 올리면 미색 배경 */
+    transform: translateY(-2px);
+    border-color: var(--wuxia-accent-gold) !important;
+    background-color: #fffcf5;
 }
 
-/* 좌측 정보 영역 (제목 + 상태) */
+/* 3. 좌측 정보 영역 (제목) */
 .timer-left {
+    width: 100%;
+    margin-right: 0 !important;
+    margin-bottom: 4px;
+    /* 시간과의 간격 */
+
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    flex: 1; /* 남은 공간 차지 */
-    min-width: 0; /* 말줄임표 작동을 위해 필수 */
-    margin-right: 15px;
+    align-items: center;
+    /* 가운데 정렬 */
+    text-align: center;
 }
 
+/* 제목 텍스트 (작게) */
 .timer-title {
-    font-size: 0.9em;
+    font-size: 0.8em !important;
+    /* 글자 크기 축소 */
     font-weight: bold;
     color: #333;
+
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    /* 말줄임표 (...) */
+    text-align: center;
 }
 
+/* 상태 텍스트 (진행중 등) - 필요 없으면 display: none 처리 가능 */
 .timer-status-row {
-    font-size: 0.75em;
+    font-size: 0.7em !important;
     color: #888;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    justify-content: center;
+    margin-top: 2px;
 }
 
-/* 우측 시간 영역 (타이머) */
+/* 4. 우측 정보 영역 (시간) */
 .timer-right {
-    text-align: right;
-    flex-shrink: 0;
+    width: 100%;
+    text-align: center !important;
+
+    /* 시간 강조를 위한 옅은 배경박스 (선택사항) */
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    padding: 2px 0;
 }
 
 .timer-clock {
-    font-family: 'Noto Serif KR', serif; /* 숫자 폰트 */
-    font-size: 0.8em; /* 시간은 조금 크게 */
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.8em !important;
+    /* 시간 글자 크기 */
     font-weight: bold;
-    color: #333;
-    font-variant-numeric: tabular-nums; /* 숫자 간격 일정하게 */
+    color: var(--wuxia-accent-red);
+    /* 붉은색 강조 */
 }
 
-/* 상태별 색상 포인트 */
-.status-badge {
-    font-weight: bold;
+/* 완료된 항목 스타일 (흐리게) */
+.row-completed {
+    opacity: 0.6;
+    background-color: #f0f0f0 !important;
+    border-color: #eee !important;
 }
-.status-ing { color: var(--wuxia-accent-gold); } /* 진행중 */
-.status-urgent { color: var(--wuxia-accent-red); animation: blink 1.5s infinite; } /* 마감 임박 */
-.status-end { color: #aaa; text-decoration: line-through; } /* 종료 */
 
-@keyframes blink { 50% { opacity: 0.5; } }
-/* 타이머 행 스타일 (작은 사이즈 유지) */
-.timer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 15px; /* 컴팩트한 패딩 */
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    background: #fff;
-    transition: background 0.2s;
+.row-completed .timer-title {
+    text-decoration: line-through;
+    color: #aaa;
 }
-.timer-row:hover { background-color: #fffcf5; }
+
+.row-completed .timer-clock {
+    color: #aaa;
+}
 
 /* 바텀시트 내부 리스트 스타일 */
 .task-list-wrapper {
@@ -3276,7 +3678,8 @@ h3 {
     gap: 8px;
     max-height: 50vh;
     overflow-y: auto;
-    text-align: left; /* 리스트는 왼쪽 정렬 */
+    text-align: left;
+    /* 리스트는 왼쪽 정렬 */
 }
 
 .task-item {
@@ -3295,24 +3698,28 @@ h3 {
     margin-right: 8px;
     font-size: 0.85em;
     white-space: nowrap;
-   }
+}
+
 /* =========================================
    [동기화] 바텀시트 체크리스트 스타일
    ========================================= */
 
 /* 완료된 항목 스타일 */
 .task-item.completed {
-    background-color: #f0f0f0; /* 배경 회색 */
+    background-color: #f0f0f0;
+    /* 배경 회색 */
     border-color: #e0e0e0;
 }
 
 .task-item.completed .task-title {
-    text-decoration: line-through; /* 취소선 */
+    text-decoration: line-through;
+    /* 취소선 */
     color: #bbb;
 }
 
 .task-item.completed .task-loc {
-    color: #bbb; /* 지역 태그도 흐리게 */
+    color: #bbb;
+    /* 지역 태그도 흐리게 */
 }
 
 /* 체크 아이콘 (우측) */
@@ -3328,9 +3735,12 @@ h3 {
 .row-completed {
     background-color: #fdfdfd;
 }
+
 .row-completed .timer-clock {
-    opacity: 0.5; /* 시간 흐리게 */
+    opacity: 0.5;
+    /* 시간 흐리게 */
 }
+
 /* =========================================
    [동기화 & 완료 표시] 업데이트된 스타일
    ========================================= */
@@ -3342,7 +3752,8 @@ h3 {
 }
 
 .task-item.completed .task-title {
-    text-decoration: line-through; /* 취소선 */
+    text-decoration: line-through;
+    /* 취소선 */
     color: #bbb;
 }
 
@@ -3373,6 +3784,7 @@ h3 {
 .row-completed .timer-clock {
     opacity: 0.5;
 }
+
 /* =========================================
    [추가] 다크 모드 시스템 & 버튼 스타일
    ========================================= */
@@ -3384,7 +3796,8 @@ h3 {
     font-size: 1.4em;
     cursor: pointer;
     padding: 5px;
-    margin-left: 12px; /* 검색창과의 간격 */
+    margin-left: 12px;
+    /* 검색창과의 간격 */
     transition: transform 0.2s ease, opacity 0.2s;
     line-height: 1;
 }
@@ -3397,33 +3810,43 @@ h3 {
 /* 2. 다크 모드 색상 팔레트 (변수 재정의) */
 body.dark-mode {
     /* [배경색 반전] */
-    --wuxia-bg-deep: #121212;      /* 전체 배경: 아주 어두운 검정 */
-    --wuxia-bg-panel: #1e1e1e;     /* 패널/카드: 어두운 회색 */
-    --wuxia-bg-light: #252525;     /* 인용구 박스 등: 조금 더 밝은 회색 */
-    --wuxia-bg-input: #333333;     /* 입력창 배경 */
-    
+    --wuxia-bg-deep: #121212;
+    /* 전체 배경: 아주 어두운 검정 */
+    --wuxia-bg-panel: #1e1e1e;
+    /* 패널/카드: 어두운 회색 */
+    --wuxia-bg-light: #252525;
+    /* 인용구 박스 등: 조금 더 밝은 회색 */
+    --wuxia-bg-input: #333333;
+    /* 입력창 배경 */
+
     /* [텍스트 반전] */
-    --wuxia-text-main: #e0e0e0;    /* 메인 텍스트: 밝은 회색 */
-    --wuxia-text-sub: #aaaaaa;     /* 보조 텍스트 */
-    
+    --wuxia-text-main: #e0e0e0;
+    /* 메인 텍스트: 밝은 회색 */
+    --wuxia-text-sub: #aaaaaa;
+    /* 보조 텍스트 */
+
     /* [테두리] */
-    --wuxia-border: #444444;       /* 어두운 테두리 */
+    --wuxia-border: #444444;
+    /* 어두운 테두리 */
 }
 
 /* 3. 다크 모드 세부 요소 강제 조정 (변수로 해결 안 되는 부분들) */
 body.dark-mode #fixed-top-bar,
 body.dark-mode #category-nav {
-    background-color: rgba(30, 30, 30, 0.95); /* 헤더 배경 어둡게 */
+    background-color: rgba(30, 30, 30, 0.95);
+    /* 헤더 배경 어둡게 */
     border-bottom-color: #444;
 }
 
 body.dark-mode .search-container {
-    background-color: #333; /* 검색창 배경 */
+    background-color: #333;
+    /* 검색창 배경 */
     border-color: #555;
 }
 
 body.dark-mode .search-container input {
-    color: #fff; /* 검색어 흰색 */
+    color: #fff;
+    /* 검색어 흰색 */
 }
 
 body.dark-mode .search-dropdown {
@@ -3436,7 +3859,8 @@ body.dark-mode .quest-card:hover,
 body.dark-mode .chunji-item:hover,
 body.dark-mode .news-item:hover,
 body.dark-mode .nav-dropdown-content .dropdown-item:hover {
-    background-color: #333 !important; /* 호버 시 색상 */
+    background-color: #333 !important;
+    /* 호버 시 색상 */
 }
 
 /* 퀘스트/아이템 카드 등 흰색 배경 요소들 */
@@ -3475,9 +3899,12 @@ body.dark-mode .timer-row {
     background-color: #1e1e1e;
     border-color: #444;
 }
+
 body.dark-mode .timer-row:hover {
     background-color: #2a2a2a;
-}/* =========================================
+}
+
+/* =========================================
    [최종 수정] 유튜브 뉴스 그리드 (간격 20px, 지도 스타일)
    ========================================= */
 
@@ -3485,8 +3912,9 @@ body.dark-mode .timer-row:hover {
 .video-grid {
     display: grid;
     /* [핵심] 화면이 좁으면 1개, 넓으면 4개가 자동으로 배치됨 */
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-    gap: 20px; /* [수정] 카드가 붙지 않게 간격을 20px로 넓힘 */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    /* [수정] 카드가 붙지 않게 간격을 20px로 넓힘 */
     margin-top: 15px;
     width: 100%;
     box-sizing: border-box;
@@ -3503,23 +3931,24 @@ body.dark-mode .timer-row:hover {
     cursor: pointer;
     text-decoration: none;
     height: 100%;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
     transition: transform 0.2s, box-shadow 0.2s;
-    
+
     /* [안전장치] 그리드가 안 먹힐 경우를 대비해 마진 추가 */
-    margin-bottom: 0; 
+    margin-bottom: 0;
 }
 
 .video-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     border-color: var(--wuxia-accent-gold);
 }
 
 /* 3. 썸네일 영역 (높이 110px 고정) */
 .video-hero-bg {
     width: 100%;
-    height: 110px !important; /* [중요] 높이 강제 고정 (이미지가 커지는 것 방지) */
+    height: 110px !important;
+    /* [중요] 높이 강제 고정 (이미지가 커지는 것 방지) */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -3531,17 +3960,23 @@ body.dark-mode .timer-row:hover {
 /* 재생 아이콘 */
 .video-play-overlay {
     position: absolute;
-    top: 50%; left: 50%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    width: 32px; height: 32px;
-    background: rgba(0,0,0,0.6);
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 50%;
     display: flex;
-    align-items: center; justify-content: center;
+    align-items: center;
+    justify-content: center;
     z-index: 2;
 }
+
 .video-play-overlay span {
-    color: #fff; font-size: 0.9em; margin-left: 2px;
+    color: #fff;
+    font-size: 0.9em;
+    margin-left: 2px;
 }
 
 /* 4. 텍스트 정보 영역 */
@@ -3575,6 +4010,7 @@ body.dark-mode .timer-row:hover {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 /* =========================================
    홈 화면 뉴스 리스트 (말줄임표 적용)
    ========================================= */
@@ -3598,12 +4034,15 @@ body.dark-mode .timer-row:hover {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    
+
     /* ★ 핵심: Flex 아이템 내부에서 말줄임표가 작동하려면 이게 필수입니다 ★ */
-    flex: 1;        /* 남은 공간 차지 */
-    min-width: 0;   /* 자식 요소가 넘칠 때 줄어들도록 허용 */
+    flex: 1;
+    /* 남은 공간 차지 */
+    min-width: 0;
+    /* 자식 요소가 넘칠 때 줄어들도록 허용 */
     padding-left: 10px;
-    padding-right: 15px; /* 오른쪽 날짜와 간격 */
+    padding-right: 15px;
+    /* 오른쪽 날짜와 간격 */
 }
 
 /* 제목 스타일 */
@@ -3612,7 +4051,7 @@ body.dark-mode .timer-row:hover {
     font-weight: 600;
     color: #333;
     line-height: 1.3;
-    
+
     /* 제목도 길어지면 ... 처리를 원하시면 아래 3줄 주석 해제하세요 */
     /* white-space: nowrap; */
     /* overflow: hidden; */
@@ -3623,22 +4062,29 @@ body.dark-mode .timer-row:hover {
 .news-row-desc {
     font-size: 0.8rem;
     color: #999;
-    
+
     /* ★ 말줄임표(...) 설정 ★ */
-    white-space: nowrap;      /* 줄바꿈 금지 (한 줄로 강제) */
-    overflow: hidden;         /* 넘치는 텍스트 숨김 */
-    text-overflow: ellipsis;  /* 넘치는 부분 ... 표시 */
-    
-    display: block;           /* 블록 요소로 동작 */
+    white-space: nowrap;
+    /* 줄바꿈 금지 (한 줄로 강제) */
+    overflow: hidden;
+    /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis;
+    /* 넘치는 부분 ... 표시 */
+
+    display: block;
+    /* 블록 요소로 동작 */
 }
 
 /* 3. 오른쪽 영역 (날짜) - 줄바꿈 안 되게 고정 */
 .news-right-col {
-    font-size:0.75em;
-    color: #999; /* 붉은색 타이머 느낌 */
+    font-size: 0.75em;
+    color: #999;
+    /* 붉은색 타이머 느낌 */
     font-weight: 500;
-    white-space: nowrap; /* 날짜가 좁아져도 줄바꿈 안 됨 */
-    flex-shrink: 0;      /* 너비가 줄어들지 않음 */
+    white-space: nowrap;
+    /* 날짜가 좁아져도 줄바꿈 안 됨 */
+    flex-shrink: 0;
+    /* 너비가 줄어들지 않음 */
     text-align: right;
 }
 
@@ -3653,23 +4099,31 @@ body.dark-mode .timer-row:hover {
 /* 1. 리스트 컨테이너 (강호령 박스와 동일한 외관) */
 .achievement-grid {
     display: flex;
-    flex-direction: column; /* 세로 나열 */
-    gap: 0;                 /* 아이템 사이 간격 없음 (선으로 구분) */
-    border: 1px solid #eee; /* 외곽 테두리 */
+    flex-direction: column;
+    /* 세로 나열 */
+    gap: 0;
+    /* 아이템 사이 간격 없음 (선으로 구분) */
+
     border-radius: 4px;
-    background-color: #fff; /* 배경 흰색 */
+
     overflow: hidden;
-    padding: 0;             /* 내부 패딩 제거 */
+    padding: 0;
+    /* 내부 패딩 제거 */
 }
 
 /* 2. 아이템 (행) 스타일 */
 .achievement-card {
     display: flex;
-    align-items: center;    /* 수직 중앙 정렬 */
-    background-color: #fff; /* [요청] 흰색 배경 */
-    padding: 12px 15px;     /* 강호령과 동일한 패딩 */
-    border-bottom: 1px solid #eee; /* 구분선 */
-    gap: 12px;              /* 아이콘과 텍스트 사이 간격 */
+    align-items: center;
+    /* 수직 중앙 정렬 */
+    background-color: #fff;
+    /* [요청] 흰색 배경 */
+    padding: 12px 15px;
+    /* 강호령과 동일한 패딩 */
+    border-bottom: 1px solid #eee;
+    /* 구분선 */
+    gap: 6px;
+    /* 아이콘과 텍스트 사이 간격 */
     transition: background-color 0.2s;
     height: auto;
     min-height: 32px;
@@ -3693,38 +4147,61 @@ body.dark-mode .timer-row:hover {
 }
 
 .ach-icon img {
-    width: 30px;  /* [요청] 이미지 크기 30px */
+    width: 30px;
+    /* [요청] 이미지 크기 30px */
     height: 30px;
     border-radius: 4px;
     object-fit: cover;
     border: 1px solid #eee;
 }
 
-/* 텍스트 영역 */
+/* 업적 콘텐츠 영역: 자식의 너비 제한을 위해 필요 */
 .ach-content {
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2px; /* 제목과 설명 사이 간격 좁게 */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    /* [핵심] 자식의 ellipsis 작동을 위한 설정 */
+    padding: 2px 4px !important;
+    box-sizing: border-box !important;
 }
 
-/* 4. 제목 (0.9em, 강호령 스타일) */
+/* 업적 제목: 한 줄 고정 및 말줄임표 */
 .ach-title {
-    font-size: 0.9em;  /* [요청] 0.9em */
-    font-weight: bold;
-    color: #333;       /* 강호령 타이틀 색상 (진한 회색) */
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: block !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+    /* 줄바꿈 금지 */
+    overflow: hidden !important;
+    /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis !important;
+    /* 넘치면 ... 표시 */
+
+    font-size: 9px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    color: #333 !important;
+    text-decoration: none !important;
+    /* alink 방지 */
+}
+
+/* 업적 카드 전체 높이 사수 */
+.achievement-card {
+    height: 95px !important;
+    /* 세로로 길어지는 것 방지 */
+    min-height: 95px !important;
+    max-height: 95px !important;
+    overflow: hidden !important;
+    /* 내부 요소가 삐져나오지 못하게 함 */
 }
 
 /* 5. 설명 (0.75em, 서브텍스트 스타일) */
 .ach-desc {
-    font-size: 0.75em; /* [요청] 0.75em */
-    color: #888;       /* 강호령 서브텍스트 색상 (연한 회색) */
+    font-size: 0.75em;
+    /* [요청] 0.75em */
+    color: #888;
+    /* 강호령 서브텍스트 색상 (연한 회색) */
     margin: 0;
     line-height: 1.3;
     white-space: nowrap;
@@ -3746,13 +4223,13 @@ body.dark-mode .timer-row:hover {
 /* 큰 카드 디자인 */
 .archive-full-card {
     background-color: #fff;
-    border: 1px solid #ddd;
     border-radius: 8px;
     padding: 20px;
     display: flex;
-    align-items: flex-start; /* 위쪽 정렬 */
+    align-items: flex-start;
+    /* 위쪽 정렬 */
     gap: 15px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s, border-color 0.2s;
 }
 
@@ -3760,7 +4237,7 @@ body.dark-mode .timer-row:hover {
 .archive-full-card:hover {
     transform: translateY(-3px);
     border-color: var(--wuxia-accent-gold);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* 큰 아이콘 (50px) */
@@ -3780,17 +4257,17 @@ body.dark-mode .timer-row:hover {
 
 /* 제목 (크게) */
 .af-title {
-    font-size: 1.1em;
+    font-size: 1.0em;
     font-weight: bold;
     color: #333;
-    margin-bottom: 8px;
+    margin-bottom: 3px;
     line-height: 1.3;
     word-break: keep-all;
 }
 
 /* 설명 (자세히) */
 .af-desc {
-    font-size: 0.9em;
+    font-size: 0.7em;
     color: #666;
     line-height: 1.5;
     word-break: keep-all;
@@ -3800,14 +4277,17 @@ body.dark-mode .timer-row:hover {
 /* --- [최종 수정] 사이드바 하단 제보 배너 --- */
 .sidebar-footer-report {
     flex-shrink: 0;
-    padding: 12px 20px; /* 좌우 여백 살짝 넓힘 */
+    padding: 12px 20px;
+    /* 좌우 여백 살짝 넓힘 */
     border-top: 1px solid #eee;
     background-color: #f9f9f9;
-    
+
     display: flex;
-    align-items: center; /* 수직 중앙 정렬 */
-    gap: 12px;           /* 이미지와 텍스트 그룹 사이 간격 */
-    
+    align-items: center;
+    /* 수직 중앙 정렬 */
+    gap: 12px;
+    /* 이미지와 텍스트 그룹 사이 간격 */
+
     cursor: pointer;
     transition: background-color 0.2s;
 }
@@ -3818,7 +4298,8 @@ body.dark-mode .timer-row:hover {
 
 /* 프로필 이미지 */
 .mini-profile-img img {
-    width: 38px;  /* 크기 살짝 키움 */
+    width: 38px;
+    /* 크기 살짝 키움 */
     height: 38px;
     border-radius: 50%;
     object-fit: cover;
@@ -3830,9 +4311,11 @@ body.dark-mode .timer-row:hover {
 /* --- [수정] 텍스트 그룹 (간격 완전 제거) --- */
 .footer-text-group {
     display: flex;
-    flex-direction: column; /* 세로 정렬 */
+    flex-direction: column;
+    /* 세로 정렬 */
     justify-content: center;
-    gap: 0; /* [수정] 두 줄 사이 간격 0으로 변경 (딱 붙임) */
+    gap: 0;
+    /* [수정] 두 줄 사이 간격 0으로 변경 (딱 붙임) */
 }
 
 /* 상단 텍스트 */
@@ -3841,26 +4324,27 @@ body.dark-mode .timer-row:hover {
     font-weight: bold;
     color: #333;
     font-family: 'Noto Serif KR', serif;
-    
+
     /* [수정] 줄 높이를 글자 크기에 가깝게 1.1로 조임 */
-    line-height: 1.1; 
-    
-    margin: 0; /* 기본 여백 제거 */
-    margin-bottom: 2px; /* [옵션] 아주 살짝만 띄우고 싶다면 추가 (없애도 됨) */
+    line-height: 1.1;
+
+    margin: 0;
+    /* 기본 여백 제거 */
+    margin-bottom: 2px;
+    /* [옵션] 아주 살짝만 띄우고 싶다면 추가 (없애도 됨) */
 }
 
 /* 하단 텍스트 */
 .footer-sub-text {
     font-size: 0.75em;
     color: #888;
-    
+
     /* [수정] 줄 높이 조임 */
-    line-height: 1.1; 
-    
-    margin: 0; /* 기본 여백 제거 */
+    line-height: 1.1;
+
+    margin: 0;
+    /* 기본 여백 제거 */
 }
-
-
 
 
 
@@ -3869,25 +4353,1792 @@ body.dark-mode .timer-row:hover {
    ========================================= */
 #answer-container {
     /* [핵심] 부모 여백을 무시하고 화면 전체 너비로 강제 확장 */
-    width: 100vw; 
+    width: 100vw;
     margin-left: calc(-50vw + 50%);
-    
+
     /* 높이 설정 (헤더 높이 등을 고려하여 화면에 맞춤) */
-    height: calc(100vh - 110px); 
-    margin-top: 0; /* 상단 여백 제거 */
-    
+    height: calc(100vh - 110px);
+    margin-top: 0;
+    /* 상단 여백 제거 */
+
     /* 디자인: 카드 느낌(그림자/둥근모서리)을 제거하고 평평하게 */
     background-color: var(--wuxia-bg-panel);
     border-top: 1px solid var(--wuxia-border);
     border-bottom: 1px solid var(--wuxia-border);
-    border-left: none;  /* 좌우 테두리 제거 */
+    border-left: none;
+    /* 좌우 테두리 제거 */
     border-right: none;
-    border-radius: 0;   /* 둥근 모서리 제거 */
-    box-shadow: none;   /* 그림자 제거 */
-    
+    border-radius: 0;
+    /* 둥근 모서리 제거 */
+    box-shadow: none;
+    /* 그림자 제거 */
+
     /* 내부 레이아웃 */
     display: flex;
     flex-direction: column;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
+
+/* ==========================================================================
+   [최종 수정] 미니 카드 스타일 (70px x 120px)
+   - 인물/지역 정보 크기 대폭 축소
+   ========================================================================== */
+
+/* 1. 리스트 컨테이너 (공통) */
+#home-char-list,
+#home-map-list {
+    display: grid !important;
+    gap: 6px !important;
+    /* 간격도 좁게 (10px -> 6px) */
+    padding: 0 5px !important;
+    margin: 10px 0 10px 0 !important;
+
+    background: none !important;
+    border: none !important;
+
+    overflow-y: hidden !important;
+    height: auto !important;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#home-char-list::-webkit-scrollbar,
+#home-map-list::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* -----------------------------------------------------------
+   [모바일] 가로 스와이프 (Swipe) - 사이즈 고정
+   ----------------------------------------------------------- */
+@media (max-width: 767px) {
+
+    #home-char-list,
+    #home-map-list {
+        grid-auto-flow: column !important;
+
+        /* [핵심] 너비를 70px로 고정 (화면 비율 아님) */
+        grid-auto-columns: 72px !important;
+
+        overflow-x: auto !important;
+        align-items: start;
+    }
+
+    /* 인물: 2줄 */
+    #home-char-list {
+        grid-template-rows: repeat(2, max-content) !important;
+    }
+
+    /* 지역: 1줄 */
+    #home-map-list {
+        grid-template-rows: max-content !important;
+    }
+}
+
+
+/* -----------------------------------------------------------
+   [PC] 바둑판 그리드 (Grid)
+   ----------------------------------------------------------- */
+@media (min-width: 768px) {
+
+    #home-char-list,
+    #home-map-list {
+        overflow: visible !important;
+        grid-auto-flow: row !important;
+
+        /* [핵심] 최소 70px, 최대 90px 정도로 작게 유지 */
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
+
+        gap: 10px !important;
+    }
+}
+
+
+/* -----------------------------------------------------------
+   [카드 디자인] 70x120 비율 (미니 사이즈)
+   ----------------------------------------------------------- */
+.char-card-horizontal,
+.map-card-horizontal {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+
+    /* [핵심] 요청하신 70:120 비율 적용 (약 1:1.7) */
+    aspect-ratio: 60 / 90 !important;
+
+    background-color: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 4px !important;
+    /* 모서리 둥글기 축소 */
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    overflow: hidden;
+    cursor: pointer;
+    margin: 0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+/* PC 호버 효과 */
+@media (min-width: 768px) {
+
+    .char-card-horizontal:hover,
+    .map-card-horizontal:hover {
+        transform: translateY(-2px);
+        border-color: #999 !important;
+    }
+}
+
+
+/* -----------------------------------------------------------
+   [내부 요소] 이미지 & 텍스트 (글자 크기 축소)
+   ----------------------------------------------------------- */
+
+/* 이미지 (상단 65% - 텍스트 공간 확보 위해 조정) */
+
+.char-h-img,
+.map-h-img {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: 65% !important;
+    /* 이미지 비율 조정 */
+
+    object-fit: cover !important;
+
+    margin: 0 !important;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #f5f5f5;
+}
+
+/* 텍스트 박스 (하단 35%) */
+.char-overlay-box,
+.map-overlay-box {
+    position: relative !important;
+    display: flex !important;
+    width: 100% !important;
+    height: 35% !important;
+    background: #fff !important;
+
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    gap: 2px !important;
+    /* 간격 최소화 */
+    padding: 0 2px !important;
+
+    top: auto !important;
+    left: auto !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* 텍스트 폰트 (아주 작게) */
+.char-h-name,
+.map-h-title {
+    font-size: 10px !important;
+    /* 이름 10px */
+    font-weight: 700 !important;
+    color: #222 !important;
+    text-align: center !important;
+    margin: 0 !important;
+    width: 100%;
+    line-height: 1.2 !important;
+    letter-spacing: -0.5px !important;
+    /* 자간 좁힘 */
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: none !important;
+}
+
+.char-h-affil {
+    font-size: 9px !important;
+    /* 소속 9px */
+    color: #999 !important;
+    text-align: center !important;
+    margin: 0 !important;
+    width: 100%;
+    line-height: 1 !important;
+    letter-spacing: -0.5px !important;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: none !important;
+}
+
+/* ==========================================================================
+   [최종 수정] 초미니 카드 (50x80) + 모바일 10개 페이징 + PC 그리드
+   ========================================================================== */
+
+/* 1. 메인 컨테이너 */
+#home-char-list,
+#home-map-list {
+    position: relative;
+    width: 100%;
+    margin: 10px 0 0px 0;
+    padding-bottom: 25px;
+    /* 인디케이터 공간 */
+    background: none;
+    border: none;
+}
+
+/* 2. 스크롤 트랙 */
+.swipe-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.swipe-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* 3. 페이지 그룹 (모바일 10개씩) */
+.swipe-page {
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: start;
+
+    display: grid;
+    /* 5열 유지 (카드가 작아져서 여백이 조금 더 생길 수 있음) */
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, auto);
+
+    gap: 4px;
+    /* 카드가 작으므로 간격도 좁힘 (6px -> 4px) */
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+
+/* 4. 인디케이터 */
+.swipe-indicators {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    height: 15px;
+}
+
+.indicator-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    transition: all 0.3s;
+}
+
+.indicator-dot.active {
+    background: #333;
+    width: 12px;
+    border-radius: 3px;
+}
+
+
+/* ==========================================================================
+   [PC 전용] 그리드 설정 (50px 기준)
+   ========================================================================== */
+@media (min-width: 768px) {
+
+    #home-char-list,
+    #home-map-list {
+        padding-bottom: 0;
+    }
+
+    .swipe-indicators {
+        display: none !important;
+    }
+
+    .swipe-track {
+        display: grid;
+        /* [수정] 최소 너비를 50px로 축소 */
+        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+        gap: 8px;
+        overflow: visible;
+        scroll-snap-type: none;
+        padding: 0 5px;
+    }
+
+    .swipe-page {
+        display: contents;
+    }
+}
+
+
+/* ==========================================================================
+   [카드 디자인] 50px x 80px 초미니 스타일
+   ========================================================================== */
+.mini-card {
+    position: relative;
+    width: 100%;
+
+    /* [수정] 요청하신 50:80 비율 적용 */
+    aspect-ratio: 50 / 80;
+
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    /* 둥글기 살짝 축소 */
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+@media (min-width: 768px) {
+    .mini-card:hover {
+        transform: translateY(-2px);
+        border-color: #999;
+    }
+}
+
+/* 이미지 (상단 60%) - 텍스트 공간 확보를 위해 조금 줄임 */
+.mini-card-img {
+    width: 100%;
+    height: 60%;
+    object-fit: cover;
+    border-bottom: 1px solid #f0f0f0;
+    background: #f5f5f5;
+    display: block;
+}
+
+/* 텍스트 박스 (하단 40%) */
+.mini-card-txt {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #fff;
+    padding: 1px;
+    /* 패딩 최소화 */
+}
+
+/* 폰트 스타일 (폭 50px에 맞게 축소) */
+.mini-name {
+    /* [수정] 10px -> 9px 로 축소 */
+    font-size: 0.7em;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.2;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.5px;
+}
+
+.mini-sub {
+    /* [수정] 9px -> 8px 로 축소 */
+    font-size: 0.6em;
+    color: #999;
+    line-height: 1;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+    letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   [추가] 흑백 처리 유틸리티
+   - 링크(link)가 없는 항목을 흑백으로 표시하기 위함
+   ========================================================================== */
+.grayscale {
+    filter: grayscale(100%) !important;
+    opacity: 0.3 !important;
+    /* 약간 흐리게 해서 '비활성' 느낌 강조 (선택사항) */
+    transition: filter 0.3s;
+}
+
+/* (옵션) 흑백이어도 마우스 올리면 컬러로 보여주고 싶다면 아래 주석 해제 */
+/* .mini-card:hover .grayscale {
+    filter: grayscale(0%) !important;
+    opacity: 1 !important;
+} 
+*/
+
+/* =========================================
+   [수정] 미니 카드 텍스트 박스 정렬 보정
+   ========================================= */
+
+/* 1. 텍스트 박스 컨테이너 (하단 35%) */
+.char-overlay-box,
+.map-overlay-box {
+    position: relative !important;
+
+    /* [핵심 1] Flexbox로 완전한 중앙 정렬 */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    /* 수직 중앙 */
+    align-items: center !important;
+    /* 수평 중앙 (아이템 기준) */
+
+    width: 100% !important;
+    height: 35% !important;
+    background: #fff !important;
+
+    /* [핵심 2] 모든 내부/외부 여백 제거 (치우침 원인 제거) */
+    padding: 0 !important;
+    margin: 0 !important;
+
+    /* [핵심 3] 텍스트 자체 정렬 강제 */
+    text-align: center !important;
+
+    /* 기존 스타일 충돌 방지 */
+    top: auto !important;
+    left: auto !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+
+    /* 혹시 모를 들여쓰기 제거 */
+    text-indent: 0 !important;
+}
+
+/* 2. 내부 텍스트 (이름, 소속, 지역명) */
+.char-h-name,
+.char-h-affil,
+.map-h-title {
+    /* [핵심 4] 블록 요소로 만들고 너비 100% 채움 */
+    display: block !important;
+    width: 100% !important;
+
+    /* 텍스트 중앙 정렬 */
+    text-align: center !important;
+
+    /* [핵심 5] 불필요한 마진/패딩 완벽 제거 */
+    margin: 0 !important;
+    padding: 0 !important;
+
+    /* 폰트 설정 (기존 유지) */
+    color: #222 !important;
+
+    /* 수직 정렬 미세 조정을 위한 줄높이 설정 */
+    line-height: 1.2 !important;
+
+    /* 말줄임표 처리 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.5px !important;
+}
+
+.char-h-name,
+.map-h-title {
+    font-size: 0.75em !important;
+    font-weight: 700 !important;
+}
+
+.char-h-affil {
+    font-size: 0.6em !important;
+    color: #999 !important;
+    margin-top: 1px !important;
+    /* 이름과 아주 살짝 간격 */
+}
+
+
+/* 1. 헤더 컨테이너: 수직 중앙 정렬 강화 */
+.section-header-clickable {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* [핵심] 수직 중앙 정렬 */
+
+    padding: 10px 15px 10px 5px;
+    /* 상하 패딩 균형 맞춤 */
+    border-bottom: 1px solid var(--wuxia-border);
+    margin-bottom: 5px !important;
+    cursor: pointer;
+}
+
+/* 2. 제목(h3) 초기화 및 정렬 */
+.section-header-clickable h3 {
+    margin: 0 !important;
+    /* [핵심] 불필요한 마진 제거 */
+    padding: 0 !important;
+    /* 패딩 초기화 */
+
+    display: flex;
+    /* 내부 요소(데코바, 텍스트) 정렬 */
+    align-items: center;
+    /* 수직 중앙 정렬 */
+
+    font-size: 1.0em;
+    font-weight: bold;
+    color: var(--wuxia-text-main);
+    line-height: 1;
+    /* 줄 높이를 글자 크기에 딱 맞춤 */
+    border: none !important;
+    /* 기존 border-left 방식 제거 (span 사용 시 충돌 방지) */
+}
+
+/* 헤더 전체 컨테이너: 수직 중앙 정렬 */
+.section-header-clickable {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    /* 수직 중앙 정렬 핵심 */
+    border-bottom: 1px solid #dcdcdc !important;
+    margin-bottom: 10px !important;
+    cursor: pointer;
+    height: auto !important;
+}
+
+/* 제목(h3) 컨테이너: 마진 제거 및 플렉스 적용 */
+.section-header-clickable h3 {
+    display: flex !important;
+    /* 내부 요소(데코바+글자) 가로 정렬 */
+    align-items: center !important;
+    /* 내부 요소 수직 중앙 정렬 */
+    margin: 0 !important;
+    /* h3 기본 마진 제거 */
+    padding: 0 !important;
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #1a1a1a;
+    line-height: 1 !important;
+    /* 줄 높이를 글자 크기에 맞춤 */
+    border: none !important;
+    /* 기존 border 방식 제거 */
+}
+
+/* [핵심] 데코바(금색 막대) 강제 복구 */
+.deco-bar {
+    display: block !important;
+    /* 인라인 블록 대신 블록으로 설정 */
+    width: 4px !important;
+    /* 너비 강제 */
+    height: 16px !important;
+    /* 높이 강제 (글자 크기와 매칭) */
+
+    /* 배경색: 변수 실패 시 대비하여 하드코딩 색상도 추가 */
+    background-color: #a08040 !important;
+    background-color: var(--wuxia-accent-gold) !important;
+
+    margin-right: 8px !important;
+    /* 글자와의 간격 */
+    border-radius: 2px !important;
+
+    flex-shrink: 0 !important;
+    /* [중요] 플렉스 안에서 찌그러짐 방지 */
+}
+
+/* 전체보기(오른쪽 텍스트) 수직 정렬 */
+.section-header-clickable span:last-child {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-top: 2px;
+    /* 시각적 보정 */
+}
+
+/* =========================================
+   [최종 해결] 지역 정보 카드 강제 규격화
+   ========================================= */
+
+/* 1. 지역 리스트 안의 모든 카드(박스) 크기 고정 */
+#home-map-list>div,
+#home-map-list .map-card,
+#home-map-list .mini-card {
+    height: 110px !important;
+    /* 카드 전체 높이 고정 */
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    /* 삐져나가는 것 제거 */
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    /* 내부 패딩 제거 */
+    border: 1px solid #e0e0e0 !important;
+    background-color: #fff !important;
+}
+
+/* 2. 이미지 높이 (상단 70px 고정) */
+#home-map-list img,
+#home-map-list .map-hero-bg,
+#home-map-list .mini-card-img {
+    height: 70px !important;
+    /* 이미지 높이 고정 */
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    /* 절대 줄어들지 않게 함 */
+    object-fit: cover !important;
+    margin: 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+/* 3. 텍스트 박스 높이 (하단 40px 고정) 및 중앙 정렬 */
+#home-map-list .map-content,
+#home-map-list .mini-card-txt,
+/* 혹시 모를 다른 이름의 텍스트 박스도 타겟팅 (마지막 자식 요소) */
+#home-map-list>div>div:last-child {
+    height: 40px !important;
+    /* 텍스트 공간 높이 고정 */
+    width: 100% !important;
+
+    display: flex !important;
+    /* 플렉스 박스 선언 */
+    justify-content: center !important;
+    /* 좌우 중앙 */
+    align-items: center !important;
+    /* [핵심] 상하 중앙 */
+
+    background-color: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 4. 텍스트 자체의 여백 제거 및 폰트 설정 */
+#home-map-list .map-title,
+#home-map-list h3,
+#home-map-list h4,
+#home-map-list span,
+#home-map-list p {
+    margin: 0 !important;
+    /* 위아래 여백 강제 제거 */
+    padding: 0 !important;
+    line-height: 1 !important;
+    /* 줄 간격 초기화 */
+
+    font-size: 10px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+    text-align: center !important;
+
+    white-space: nowrap !important;
+    /* 줄바꿈 방지 */
+}
+
+/* 5. 불필요한 설명글 숨김 (공간 확보) */
+#home-map-list .map-desc {
+    display: none !important;
+}
+
+/* =========================================
+   [최종] 업적 섹션 한 줄 4개 배치 (지역 정보와 완벽 동기화)
+   ========================================= */
+
+/* 1. 컨테이너: 무조건 한 줄에 4개씩 배치 */
+#achievement-list {
+    display: grid !important;
+    /* [핵심] 1fr을 4개 써서 공간을 정확히 4등분 합니다 */
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 10px !important;
+    /* 카드 사이 간격 */
+    padding: 0 5px !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. 개별 카드: 너비를 고정하지 않고 부모(그리드) 칸에 맞춤 */
+.achievement-card {
+    width: 100% !important;
+    /* 부모 4등분 칸을 꽉 채움 */
+    height: 110px !important;
+    /* 지역 정보와 높이 통일 */
+
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background-color: #fff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 3. 아이콘 영역: 배경 흰색 및 이미지 정중앙 */
+.ach-icon {
+    width: 100% !important;
+    height: 65px !important;
+    /* 이미지 영역 높이 고정 */
+    background-color: #ffffff !important;
+    /* 배경 흰색 */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.ach-icon img {
+    /* 이미지가 너무 커서 박스를 뚫고 나가지 않게 조절 */
+    max-width: 90% !important;
+    max-height: 90% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+}
+
+/* 설명글은 무조건 숨김 */
+.ach-desc {
+    display: none !important;
+}
+
+/* =========================================
+   [최종 해결] 업적 제목 수직/수평 완전 중앙 정렬
+   ========================================= */
+/* =========================================
+   [최종] 업적 섹션 PC 10개 배치 (가로 꽉 채움)
+   ========================================= */
+
+/* 1. 컨테이너: PC(768px 이상)에서 무조건 한 줄에 10개 배치 */
+@media (min-width: 768px) {
+    #achievement-list {
+        display: grid !important;
+        /* [핵심] 화면을 10등분 하여 꽉 채웁니다 */
+        grid-template-columns: repeat(10, 1fr) !important;
+        gap: 8px !important;
+        /* 칸 사이 간격 살짝 좁힘 */
+        padding: 0 5px !important;
+        margin-top: 15px !important;
+        width: 100% !important;
+    }
+}
+
+/* =========================================
+   [추가] 업적/만사록 모바일 가로 스크롤 설정
+   ========================================= */
+
+@media (max-width: 767px) {
+
+    #achievement-list,
+    #mansarok-list {
+        /* [핵심] 줄바꿈을 막고 가로로 나열 */
+        display: flex !important;
+        overflow-x: auto !important;
+        /* 가로 스크롤 허용 */
+        white-space: nowrap !important;
+        gap: 8px !important;
+        padding: 5px 10px 15px 10px !important;
+        /* 하단 스크롤 공간 확보 */
+
+        /* 스크롤 매끄럽게 */
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #achievement-list .achievement-card,
+    #mansarok-list .mansarok-btn {
+        /* [핵심] 카드 한 칸의 너비를 고정 (화면의 약 30% 정도) */
+        flex: 0 0 30% !important;
+        scroll-snap-align: start;
+        height: 95px !important;
+    }
+
+    /* 스크롤바 숨기기 (디자인용) */
+    #achievement-list::-webkit-scrollbar,
+    #mansarok-list::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* 3. 개별 카드 스타일 고정 (PC 10개 배치 시 크기 비례 조정) */
+.achievement-card {
+    width: 100% !important;
+    /* 높이를 110px에서 90px 정도로 낮춰야 10개 배치 시 비율이 예쁩니다 */
+    height: 95px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: #fff !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+}
+
+/* 4. 이미지(아이콘) 영역 비율 조정 */
+.ach-icon {
+    width: 100% !important;
+    height: 55px !important;
+    /* 이미지 영역 높이 축소 */
+    background-color: #ffffff !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-bottom: 1px solid #f5f5f5 !important;
+}
+
+.ach-icon img {
+    max-width: 85% !important;
+    max-height: 85% !important;
+    object-fit: contain !important;
+}
+
+/* 6. 제목 폰트 (10개 배치 시 글자가 겹치지 않게 크기 축소) */
+.ach-title {
+    font-size: 0.75em !important;
+    /* 9px에서 약간 더 축소 */
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-align: center !important;
+    line-height: 1.1 !important;
+
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    word-break: keep-all !important;
+}
+
+/* =========================================
+   [최종] 만사록 버튼 PC 100% 너비 및 자동 배치
+   ========================================= */
+
+/* 1. 컨테이너: PC에서 너비를 100% 사용하며 자동으로 칸을 채움 */
+#mansarok-list {
+    display: grid !important;
+    /* [핵심] 최소 140px를 유지하되, 남는 공간은 똑같이 나눠가짐(1fr) */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    padding: 0 5px !important;
+    margin-top: 15px !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. 모바일 전용 (화면 폭 768px 이하) */
+@media (max-width: 768px) {
+    #mansarok-list {
+        /* 모바일에서는 요청하신 대로 한 줄에 3개 고정 */
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+    }
+}
+
+
+.mansarok-btn:hover {
+    background-color: #eeeeee !important;
+    border-color: #ccc !important;
+    transform: translateY(-1px);
+}
+
+
+/* --- 헤더 레이아웃 수정 --- */
+#main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    height: 60px;
+    /* 높이 고정 */
+    box-sizing: border-box;
+    background: #fff;
+    /* 배경색 */
+    border-bottom: 1px solid #eee;
+}
+
+/* 검색바가 남은 공간을 차지하도록 */
+.search-container {
+    flex: 1;
+    margin: 0 15px;
+    /* 양옆 간격 */
+    position: relative;
+}
+
+/* 메뉴 버튼 스타일 */
+#menu-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- 사이드바 (심플 디자인) --- */
+#sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    /* 배경 어둡기 조절 */
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+#sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#main-sidebar {
+    position: fixed;
+    top: 0;
+    right: -260px;
+    /* 너비 260px */
+    width: 260px;
+    height: 100%;
+    background: #fff;
+    z-index: 9999;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+    /* 그림자 은은하게 */
+    transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    box-sizing: border-box;
+}
+
+#main-sidebar.active {
+    right: 0;
+}
+
+/* 헤더: 아주 심플하게 */
+.sidebar-header {
+    padding: 10px 25px 20px 25px;
+    /* 여백 조정 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #333;
+}
+
+.close-sidebar-btn {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: #333;
+    padding: 0;
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 10px;
+    /* 좌우 여백 약간 */
+}
+
+/* 메뉴 아이템: 아이콘 제거, 텍스트 위주 */
+.sidebar-item {
+    padding: 10px 15px;
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    /* 화살표 정렬용 */
+    align-items: center;
+    border-radius: 8px;
+    /* 둥근 모서리 */
+    transition: background 0.2s, color 0.2s;
+    margin-bottom: 2px;
+}
+
+.sidebar-item:hover {
+    background-color: #f7f7f7;
+    color: #000;
+}
+
+/* 화살표: 작고 심플하게 */
+.sidebar-item .arrow {
+    font-size: 0.7em;
+    color: #999;
+    transition: transform 0.3s;
+}
+
+.sidebar-item.expanded .arrow {
+    transform: rotate(180deg);
+}
+
+.sidebar-item.expanded {
+    font-weight: 700;
+    /* 열렸을 때 강조 */
+}
+
+/* 서브메뉴: 배경색 없이 들여쓰기만 */
+.sidebar-sub-list {
+    display: none;
+    padding: 5px 0 10px 0;
+}
+
+.sidebar-sub-list button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px 10px 35px;
+    /* 들여쓰기 */
+    background: none;
+    border: none;
+    font-size: 0.95em;
+    color: #666;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: color 0.2s;
+}
+
+.sidebar-sub-list button:hover {
+    color: var(--wuxia-accent-gold, #d4af37);
+    /* 호버 시 강조색 */
+    background-color: #fafafa;
+}
+
+/* 상단 헤더 높이와 본문 여백을 강제로 맞춤 */
+#fixed-top-bar {
+    height: 60px !important;
+    /* 헤더 높이 고정 */
+    overflow: visible !important;
+    /* 내용물이 잘리지 않도록 */
+}
+
+#main-content {
+    padding-top: 60px !important;
+    /* 본문을 헤더 바로 밑(60px)에서 시작하게 당김 */
+    margin-top: 0 !important;
+    /* 혹시 모를 외부 여백 제거 */
+}
+
+/* (혹시 슬라이더 자체에 여백이 있다면 제거) */
+.hero-slider-wrapper {
+    margin-top: 0 !important;
+}
+
+/* --- 사이드바 화살표 (얇은 선 스타일) --- */
+.sidebar-item .arrow {
+    display: inline-block;
+    width: 8px;
+    /* 화살표 너비 */
+    height: 8px;
+    /* 화살표 높이 */
+    border: solid #999;
+    /* 선 색상 */
+    border-width: 0 2px 2px 0;
+    /* 오른쪽, 아래쪽만 선을 그림 (ㄱ자 반대 모양) */
+    transform: rotate(45deg);
+    /* -45도 회전시켜서 오른쪽(>)을 보게 함 */
+    transition: transform 0.3s ease;
+    /* 부드러운 회전 */
+    margin-right: 5px;
+    /* 위치 조정 */
+    margin-bottom: 2px;
+    /* 높이 미세 조정 */
+}
+
+/* 메뉴가 열렸을 때 (아래로 회전) */
+.sidebar-item.expanded .arrow {
+    transform: rotate(-135deg);
+    /* 45도 회전시켜서 아래쪽(v)을 보게 함 */
+    border-color: var(--wuxia-accent-gold, #d4af37);
+    /* 열리면 색상 강조 (선택사항) */
+}
+
+/* --- [수정] 사이드바 레이아웃 (Flex 적용으로 하단 고정 구현) --- */
+#main-sidebar {
+    position: fixed;
+    top: 0;
+    right: -260px;
+    width: 260px;
+    height: 100%;
+    background: #fff;
+    z-index: 9999;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+    transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    /* ▼▼▼ 핵심: Flex Column 설정 ▼▼▼ */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* --- [수정] 메뉴 리스트 영역 (남은 공간 모두 차지) --- */
+.sidebar-content {
+    flex: 1;
+    /* 남은 높이를 다 차지해서 하단 요소를 바닥으로 밈 */
+    overflow-y: auto;
+    /* 메뉴가 길어지면 여기만 스크롤 */
+    padding: 10px;
+}
+
+/* --- [최종 수정] 사이드바 하단 제보 배너 --- */
+.sidebar-footer-report {
+    flex-shrink: 0;
+    padding: 12px 20px;
+    /* 좌우 여백 살짝 넓힘 */
+    border-top: 1px solid #eee;
+    background-color: #f9f9f9;
+
+    display: flex;
+    align-items: center;
+    /* 수직 중앙 정렬 */
+    gap: 12px;
+    /* 이미지와 텍스트 그룹 사이 간격 */
+
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sidebar-footer-report:hover {
+    background-color: #f0f0f0;
+}
+
+/* 프로필 이미지 */
+.mini-profile-img img {
+    width: 38px;
+    /* 크기 살짝 키움 */
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    display: block;
+    background-color: #fff;
+}
+
+/* =========================================
+   [업적] PC 10열 배치 및 규격 고정
+   ========================================= */
+@media (min-width: 768px) {
+    #achievement-list {
+        display: grid !important;
+        /* PC에서 한 줄에 10개 배치 */
+        grid-template-columns: repeat(10, 1fr) !important;
+        gap: 8px !important;
+        align-items: start !important;
+        /* 아래로 늘어남 방지 */
+    }
+}
+
+/* =========================================
+   [최종] 업적 섹션 모바일 4열 정렬 및 높이 고정
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    /* 1. 컨테이너: 4열 고정 및 자식 요소 늘어남 방지 */
+    #achievement-list {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        /* 무조건 한 줄에 4개 */
+        gap: 6px !important;
+        align-items: flex-start !important;
+        /* ★세로로 길게 늘어지는 것 차단★ */
+        padding: 0 5px !important;
+    }
+
+    /* 2. 카드: 높이를 명확하게 고정 */
+    .achievement-card {
+        height: 95px !important;
+        /* 이미지형 카드 적정 높이 */
+        min-height: 95px !important;
+        max-height: 95px !important;
+        background-color: #fff !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 4px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* 3. 아이콘 영역 높이 고정 */
+    .ach-icon {
+        height: 55px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    /* 업적 콘텐츠 영역: 자식의 너비 제한을 위해 필요 */
+    .ach-content {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        /* [핵심] 자식의 ellipsis 작동을 위한 설정 */
+        padding: 2px 4px !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* 설명글은 공간 부족으로 모바일에서 숨김 */
+.ach-desc {
+    display: none !important;
+}
+
+/* =========================================
+   [만사록] 슬림 버튼 36px 절대 고정
+   ========================================= */
+#mansarok-list {
+    display: grid !important;
+    /* PC: 자동 배치, 모바일: 3열 */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 8px !important;
+    align-items: start !important;
+}
+
+@media (max-width: 768px) {
+    #mansarok-list {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* 만사록 전용 슬림 버튼 */
+.mansarok-btn {
+    height: 36px !important;
+    /* 36px 절대 고정 */
+    min-height: 36px !important;
+    max-height: 36px !important;
+    background-color: #f8f8f8 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: hidden !important;
+}
+
+.mansarok-btn span {
+    font-size: 0.8em !important;
+    line-height: 34px !important;
+    /* 세로 중앙 보정 */
+    white-space: nowrap !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =========================================
+   [모바일 최종] 만사록 버튼 36px 고정 및 링크 스타일 제거
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    /* 1. 컨테이너: 버튼이 세로로 늘어나는 것(stretch)을 강제 차단 */
+    #mansarok-list {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        /* 자식 요소들이 각자의 고정 높이만 가지게 설정 */
+        align-items: flex-start !important;
+    }
+
+    /* 2. 버튼: a 태그의 기본 링크 스타일(alink) 및 높이 문제 해결 */
+    .mansarok-btn {
+        /* 높이 삼중 잠금 */
+        height: 36px !important;
+        min-height: 36px !important;
+        max-height: 36px !important;
+
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+
+        /* [핵심] a 태그 특유의 파란색/밑줄 스타일 제거 */
+        text-decoration: none !important;
+        color: inherit !important;
+
+        background-color: #ffffff !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    /* 3. 내부 텍스트: 밑줄 방지 및 수직 중앙 정렬 */
+    .mansarok-btn span {
+        /* [핵심] 텍스트 밑줄 제거 및 검정색 고정 */
+        text-decoration: none !important;
+        color: #333 !important;
+
+        font-size: 0.75em !important;
+        font-weight: 600 !important;
+
+        /* 박스 높이에 맞춰 수직 정중앙 고정 */
+        line-height: 34px !important;
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    /* 클릭 중이거나 방문한 후에도 밑줄/파란색 방지 */
+    .mansarok-btn:active,
+    .mansarok-btn:visited,
+    .mansarok-btn:hover {
+        text-decoration: none !important;
+        color: #333 !important;
+    }
+}
+
+/* =========================================
+   [전역 적용] 만사록 버튼 링크 스타일 강제 제거
+   ========================================= */
+
+/* 1. 기본 상태 및 모든 상태 통합 제어 */
+#mansarok-list a.mansarok-btn,
+#mansarok-list a.mansarok-btn:link,
+#mansarok-list a.mansarok-btn:visited,
+#mansarok-list a.mansarok-btn:hover,
+#mansarok-list a.mansarok-btn:active {
+    text-decoration: none !important;
+    /* 밑줄 절대 금지 */
+    color: #333 !important;
+    /* 파란색/보라색 절대 금지 */
+    outline: none !important;
+    /* 클릭 시 점선 제거 */
+    box-shadow: none !important;
+    /* 그림자 효과 제거 */
+}
+
+/* 2. 내부 텍스트에도 동일하게 적용 */
+.mansarok-btn span {
+    text-decoration: none !important;
+    color: #333 !important;
+}
+
+/* 3. (참고) 만사록 높이 고정 - PC/모바일 공통 */
+.mansarok-btn {
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    background-color: #ffffff !important;
+    justify-content: center !important;
+}
+
+/* =========================================
+   [최종] 인물 상세 - 타이머 스타일 동기화
+   ========================================= */
+/* =========================================
+   [복구] 타이머 스타일 동기화 바텀시트
+   ========================================= */
+
+/* 1. 배경 레이어 */
+#person-bottom-sheet.bottom-sheet-modal {
+    display: none !important; /* 기본 숨김 */
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); z-index: 10000;
+    align-items: flex-end; justify-content: center;
+}
+
+/* 활성화 시 보이게 설정 */
+#person-bottom-sheet.active {
+    display: flex !important;
+}
+
+/* 2. 시트 본체 (타이머와 동일한 너비 및 애니메이션) */
+#person-bottom-sheet .bottom-sheet-content {
+    width: 100%;
+    max-width: 600px; /* 타이머 바텀시트 규격 */
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+    
+    /* 아래에서 위로 올라오는 효과 */
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#person-bottom-sheet.active .bottom-sheet-content {
+    transform: translateY(0);
+}
+
+/* 3. 타이머 전용 내부 아이템 스타일 복사 */
+.person-info-row {
+    background-color: #f9f9f9 !important;
+    padding: 12px !important;
+    border-radius: 4px !important;
+    border: 1px solid #eee !important;
+    margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+
+.person-bio-item {
+    background-color: #f9f9f9 !important;
+    padding: 15px !important;
+    border-radius: 4px !important;
+    border: 1px solid #eee !important;
+    text-align: left;
+    line-height: 1.6;
+    font-size: 0.9em;
+}
+
+/* =========================================
+   [신규] 인물 상세 바텀시트 전용 제목 스타일
+   ========================================= */
+
+/* 1. 제목 컨테이너: 중앙 정렬 및 여백 확보 */
+.person-sheet-header {
+    text-align: center !important;
+    margin-bottom: 15px !important;
+    border-left:  0px;
+    font-size: 1.0em !important;
+    padding-left: 0px;
+}
+
+/* 2. 인물 이름 (h3): 카드 디자인(image_c5fa08.png) 반영 */
+.person-sheet-header h3 {
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+    font-family: 'Noto Serif KR', serif !important;
+    padding-left: 0 !important;
+    /* 하단에 금색 강조선 추가 */
+    display: inline-block !important;
+    padding-bottom: 5px !important;
+    /* 기존 h3 스타일(왼쪽 막대) 강제 제거 */
+    border-left: none !important;
+    margin: 0 !important;
+}
+
+/* 3. 인물 소속/역할 (소제목) */
+.person-sheet-sub {
+    font-size: 0.85em !important;
+    color: #888 !important;
+    margin-top: 5px !important;
+    letter-spacing: 1px;
+}
+.person-label {
+    color: var(--wuxia-accent-gold, #a08040) !important;
+    font-weight: bold !important;
+    font-size: 0.85em !important;
+}
+.task-title {
+    color: #333;
+    font-weight: bold !important;
+    font-size: 0.85em !important;
+}
+
+/* =========================================
+   [모바일 전용] 바텀시트 최대 높이 축소
+   ========================================= */
+
+@media (max-width: 768px) {
+    /* 1. 바텀시트 전체 높이 제한 (기존 85vh -> 70vh) */
+    .bottom-sheet-content {
+        max-height: 85vh !important; /* 화면의 70%만 차지하도록 하향 조정 */
+        height: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        
+        /* 바닥에 딱 붙이거나 약간 띄우는 정도는 취향껏 조정 (여기선 0으로 밀착) */
+        bottom: -100% !important;
+    }
+
+    /* 활성화 시 위치 */
+    .bottom-sheet-modal.active .bottom-sheet-content {
+        bottom: 0 !important; /* 모바일은 바닥에 밀착되는 것이 안정적입니다 */
+    }
+
+    /* 2. 본문 스크롤 영역 강제 지정 */
+    #person-detail-body {
+        flex: 1 !important;
+        overflow-y: auto !important; /* 내용이 많으면 시트 안에서만 스크롤 */
+        -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+        padding-bottom: 20px !important;
+    }
+
+    /* 3. 상단 핸들 바 간격 조정 */
+    .sheet-handle-bar {
+        margin: 10px auto 15px auto !important;
+    }
+}
+
+/* =========================================
+   [PWA] 앱 설치 버튼 전용 스타일
+   ========================================= */
+
+.pwa-install-btn {
+    /* 기본 레이아웃: 인게임 제보 카드(.ingame-report-card) 스타일 복제 */
+    display: flex !important;
+    align-items: center;
+    width: 100%;
+    padding: 0 !important; /* 내부 여백 제거 (이미지 영역을 벽에 붙이기 위함) */
+    background-color: var(--wuxia-bg-panel, #ffffff) !important;
+    border: 1px solid var(--wuxia-border, #eee) !important;
+    border-left: 4px solid var(--wuxia-accent-gold, #a08040) !important; /* 금색 포인트 라인 */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+}
+
+.pwa-install-btn:hover {
+    background-color: #fffcf5 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 좌측 아이콘 박스 (인물 초상화 박스 .char-portrait-box 규격) */
+.pwa-icon-box {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    background-color: #f9f9f9;
+    border-right: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--wuxia-accent-gold, #a08040);
+}
+
+/* 텍스트 컨테이너 (인물 정보 박스 .char-info-box 규격) */
+.pwa-text-box {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    padding: 0 15px;
+}
+
+.pwa-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.95em;
+    font-weight: bold;
+    color: var(--wuxia-text-main, #333);
+    margin-bottom: 3px;
+}
+
+.pwa-desc {
+    font-size: 0.75em;
+    color: #888;
+    line-height: 1.4;
+}
+
+/* 우측 화살표 아이콘 */
+.pwa-arrow {
+    padding-right: 15px;
+    color: #ccc;
+    font-size: 0.8em;
+}
+
+/* 다크 모드 대응 */
+body.dark-mode .pwa-install-btn {
+    background-color: #1e1e1e !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .pwa-icon-box {
+    background-color: #2a2a2a;
+    border-right-color: #444;
+}
+
+body.dark-mode .pwa-title {
+    color: #e0e0e0;
+}
+
+/* =========================================
+   [PWA] 설치 카드 (마진 10% 및 로고 적용)
+   ========================================= */
+
+.pwa-install-card {
+    /* [핵심] 좌우 10% 마진 적용 */
+ width: 90% !important; 
+    margin: 12px 5% !important;
+    
+    display: flex !important;
+    align-items: center;
+    padding: 12px 15px !important;
+    
+    background-color: var(--wuxia-bg-panel, #ffffff) !important;
+    border: 1px solid var(--wuxia-border, #dcdcdc) !important;
+    border-radius: 12px !important; /* 조금 더 부드러운 곡선 */
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.pwa-install-card:hover {
+    transform: translateY(-2px);
+    background-color: #fffcf5 !important;
+    border-color: var(--wuxia-accent-gold, #a08040) !important;
+}
+
+/* 1. 로고 영역 (Favicon 사이즈) */
+.pwa-logo-section {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pwa-logo-section img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 6px;
+}
+
+/* 2. 텍스트 정보 영역 */
+.pwa-info-section {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.pwa-install-title {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    color: var(--wuxia-text-main, #1a1a1a);
+    margin-bottom: 2px;
+}
+
+.pwa-install-desc {
+    font-size: 11px !important;
+    color: var(--wuxia-text-sub, #666);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 3. 우측 액션 아이콘 */
+.pwa-action-section {
+    color: var(--wuxia-accent-gold, #a08040);
+    font-size: 1.1em;
+    padding-left: 10px;
+    opacity: 0.7;
+}
+
+/* 다크 모드 대응 */
+body.dark-mode .pwa-install-card {
+    background-color: #1e1e1e !important;
+    border-color: #444 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .pwa-install-title { color: #e0e0e0; }
+body.dark-mode .pwa-install-desc { color: #888; }
+
+/* 업적 카드 이미지 영역 (상단) */
+.ach-icon {
+    width: 100% !important;
+    height: 65px !important; /* 고정 높이 유지 */
+    background-color: #000 !important; /* 이미지 배경 검정 (이미지 비율 대비 남는 공간) */
+    display: block !important; /* 플렉스 제거하여 꽉 채움 */
+    overflow: hidden;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.ach-icon img {
+    width: 100% !important;   /* 가로 꽉 채움 */
+    height: 100% !important;  /* 세로 꽉 채움 */
+    max-width: none !important; /* 기존 85% 제한 해제 */
+    max-height: none !important;
+    object-fit: cover !important; /* [핵심] 비율 유지하며 영역 꽉 채우기 */
+    object-position: center;     /* 이미지 중앙 기준 */
+}
+/* =========================================
+   [공통] 슬림 카드 버튼 스타일 (140x36)
+   ========================================= */
+/* =========================================
+   [통합] 가이드 & 무림록 공통 슬림 버튼 스타일
+   ========================================= */
+
+/* 1. 컨테이너: 화면 너비에 맞춰 버튼들을 꽉 채움 */
+.common-slim-grid {
+    display: grid !important;
+    /* [핵심] 최소 100px에서 최대 1fr(균등분할)로 설정하여 화면을 꽉 채움 */
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)) !important;
+    gap: 10px !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. 공통 버튼 본체 (무림록 버튼과 완벽 동기화) */
+.slim-btn {
+    /* [핵심] 높이를 36px로 고정 (이미지 없는 텍스트형) */
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background-color: #ffffff !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    box-sizing: border-box !important;
+    cursor: pointer;
+}
+
+/* 3. 텍스트 정렬 및 스타일 */
+.slim-btn span {
+    font-size: 0.75em !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    text-align: center !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 10px;
+}
+
+/* 호버 시 효과 통일 */
+.slim-btn:hover {
+    background-color: #f8f8f8 !important;
+    border-color: #ccc !important;
+    transform: translateY(-1px);
+}
+
+/* 모바일 대응: 화면이 아주 작을 때 3열 고정 (선택 사항) */
+@media (max-width: 480px) {
+    .common-slim-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 6px !important;
+    }
+}
+
+/* 1. onclick 속성이 없는 mini-card를 자동으로 흑백+반투명 처리 */
+.mini-card:not([onclick]) {
+    filter: grayscale(100%) !important; /* 흑백 처리 */
+    opacity: 0.5 !important;            /* 비활성화 느낌을 위해 투명도 조절 */
+    cursor: default !important;         /* 커서를 기본형으로 변경 */
+    pointer-events: none;               /* 클릭 이벤트 자체를 차단 */
+}
+
+/* 2. (선택 사항) 이미지에만 흑백을 강하게 걸고 싶을 때 */
+.mini-card:not([onclick]) .mini-card-img {
+    filter: grayscale(100%) brightness(0.8);
+}

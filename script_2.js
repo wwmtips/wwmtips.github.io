@@ -19,18 +19,17 @@ let slideInterval;
 
 // 데이터 저장소
 let globalData = { items: [], quiz: [], quests: [], news: [], cnews: [], builds: [] };
-let builderData = null;
+let builderData = null; 
 let chunjiData = []; // 천지록 데이터 전역 변수
 let currentChunjiData = [];
 let globalBossData = []; // 데이터를 담아둘 전역 변수
-let characterData = [];
 
 let currentSlot = { type: '', index: 0 };
 // [수정] 빌드 상태 관리 객체 (combo 배열 추가)
 // [수정] 콤보를 빈 배열([])로 초기화해야 + 버튼으로 늘어납니다.
-let currentBuild = {
-    weapons: [null, null],
-    hearts: [null, null, null, null],
+let currentBuild = { 
+    weapons: [null,null], 
+    hearts: [null,null,null,null], 
     marts: new Array(8).fill(null),
     combo: [] // <--- 여기를 이렇게 빈 배열로 바꿔주세요!
 };
@@ -50,43 +49,30 @@ const KEY_MAP = {
 
 // [지도 더미 데이터]
 const dummyMapData = [
-    {
-        title: "대나무 숲",
-        key: "bamboo", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/maps/bm.jpg" // (썸네일 이미지가 있다면 유지)
+   {
+        title: "청하",
+        key: "qinghe", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "어린 주인공이 많은 가족들과 함께 생활하던 지역으로 이야기의 시작지입니다.",
+        image: "images/map2.jpeg" // (썸네일 이미지가 있다면 유지)
     },
-    {
-        title: "신선나루",
-        key: "sn", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+   {
+        title: "개봉",
+        key: "kaifeng", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "강호로 한 발 다가간 주인공은 개봉에서 수많은 강호인들과 인연을 쌓습니다.",
-        image: "images/maps/sn.jpg" // (썸네일 이미지가 있다면 유지)
-    },
-    {
-        title: "장군사당",
-        key: "gesh", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+      image: "images/map1.jpeg" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "귀문시장",
+        key: "gm", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         desc: "삼경에 귀신이 등불을 밝히니, 새벽닭 울음 소리가 보배롭다.",
-        image: "images/maps/gs.jpg" // (썸네일 이미지가 있다면 유지)
-    },
-    {
-        title: "완석포",
-        key: "stw", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/maps/sp.jpg" // (썸네일 이미지가 있다면 유지)
-    },
-    {
-        title: "칠벌고개",
-        key: "sg", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/maps/sg.jpg" // (썸네일 이미지가 있다면 유지)
-    },
-    {
-        title: "불선선",
-        key: "bs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/maps/bs.jpg" // (썸네일 이미지가 있다면 유지)
-    },
-    {
-        title: "망천평원",
-        key: "mang", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
-        image: "images/maps/mang.jpg" // (썸네일 이미지가 있다면 유지)
-    }
+      image: "https://wwm.tips/quests/images/q9-1.png" // (썸네일 이미지가 있다면 유지)
+   },
+   {
+        title: "꿈속의 불선선",
+        key: "drs", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        desc: "우리가 꾸던 행복은 그리 큰 것이 아니였는데",
+       image: "images/map3.jpg" // (썸네일 이미지가 있다면 유지)
+   }
 ];
 
 // [신규] 화면 크기에 따라 페이지당 아이템 개수 설정
@@ -100,78 +86,10 @@ function updateItemsPerPage() {
 // =========================================
 // 2. 초기화 (DOMContentLoaded)
 // =========================================
-// 4. 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', loadMansarokMenu);
-// 만사록 데이터를 불러와 상단에 배치하는 함수 (최종 수정본)
-async function loadMansarokMenu() {
-    try {
-        const response = await fetch('json/quests.json'); 
-        if (!response.ok) throw new Error('데이터 로드 실패');
-        
-        const data = await response.json();
-        
-        // 1. 만사록 타입 필터링 후 최대 9개만 자르기
-        const mansarokList = data
-            .slice(0, 6); // [핵심] 0번부터 8번 인덱스까지만 선택
-                   // .filter(item => item.type === '만사록')
-        const container = document.getElementById('mansarok-list');
-        if (!container) return;
-        
-        container.innerHTML = ''; 
-
-        mansarokList.forEach(item => {
-            const btn = document.createElement('a');
-            btn.className = 'mansarok-btn';
-            btn.href = "javascript:void(0);";
-            
-            // 내부 함수 호출 방식 유지
-            btn.onclick = () => { 
-                if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
-                    switchTab('quest'); 
-                    loadQuestDetail(item.filepath, item.id); 
-                }
-            };
-            
-            btn.innerHTML = `<span>${item.name}</span>`;
-            container.appendChild(btn);
-        });
-    } catch (error) {
-        console.error('만사록 로드 에러:', error);
-    }
-}
-
-// 3. 만사록 렌더링 함수 (내부 함수 호출 방식 유지)
-function renderMansarok(data) {
-    const listContainer = document.getElementById('mansarok-list');
-    if (!listContainer) return;
-    listContainer.innerHTML = ''; 
-
-    // 만사록 타입만 필터링
-    const filtered = data.filter(item => item.type === "만사록");
-
-    filtered.forEach(item => {
-        const numericId = item.id.replace(/[^0-9]/g, "");
-        
-        const btn = document.createElement('a');
-        btn.className = 'mansarok-btn';
-        btn.href = "javascript:void(0);"; // 주소 이동 방지
-        
-        // [핵심] 내부 상세 보기 함수 호출
-        btn.onclick = () => { 
-            if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
-                switchTab('quest'); 
-                loadQuestDetail(item.filepath, item.id); 
-            } else {
-                console.warn('탭 전환 또는 상세 로드 함수가 없습니다.');
-            }
-        };
-
-        btn.innerHTML = `<span>${item.name}</span>`;
-        listContainer.appendChild(btn);
-    });
-}
+// =========================================
+// 2. 초기화 (DOMContentLoaded)
+// =========================================
 document.addEventListener("DOMContentLoaded", () => {
-
     // A. 데이터 로드
     loadData();
     loadHomeMaps();
@@ -184,9 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // D. URL 파라미터 체크 및 탭 이동
     checkUrlParams();
-    const oldLimit = itemsPerPage;
+   const oldLimit = itemsPerPage;
     updateItemsPerPage();
-
+    
     // 개수가 바뀌었을 때만 리스트를 새로 그림
     if (oldLimit !== itemsPerPage) {
         if (document.getElementById('view-quest').style.display === 'block') {
@@ -196,40 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderChunjiList();
         }
     }
-
-    const listContainer = document.getElementById('mansarok-list');
-
-    function renderMansarok(data) {
-    const listContainer = document.getElementById('mansarok-list');
-    if (!listContainer) return;
-    listContainer.innerHTML = ''; 
-
-    // 1. 만사록 타입만 필터링
-    const filtered = data.filter(item => item.type === "만사록");
-
-    filtered.forEach(item => {
-        // 버튼 엘리먼트 생성 (a 태그 대신 div나 button 권장, a 사용 시 href="javascript:void(0)" 처리)
-        const btn = document.createElement('a');
-        btn.className = 'mansarok-btn';
-        btn.href = "javascript:void(0);"; // 페이지 이동 방지
-        
-        // 2. [핵심] 클릭 시 내부 함수 호출 설정
-        // 기존에 정의된 switchTab과 loadQuestDetail 함수를 사용합니다.
-        btn.onclick = () => { 
-            switchTab('quest'); 
-            loadQuestDetail(item.filepath, item.id); 
-        };
-
-        // 버튼 내용 삽입
-        btn.innerHTML = `<span>${item.name}</span>`;
-        
-        listContainer.appendChild(btn);
-    });
-}
-
-    // 로컬 더미 데이터로 실행
-    renderMansarok(dummyQuests);
-    handleHistoryChange();
+   handleHistoryChange();
 });
 
 /**
@@ -237,9 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
  * HTML 내부에 스크립트를 넣을 필요가 없습니다.
  */
 
-(function () {
+(function() {
     // 1. 데이터 저장 로직 (이벤트 위임)
-    document.addEventListener('change', function (e) {
+    document.addEventListener('change', function(e) {
         if (e.target.classList.contains('item-checkbox')) {
             const wrapper = e.target.closest('.check-wrapper');
             const container = e.target.closest('.quest-detail-container');
@@ -310,147 +195,134 @@ function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const targetTab = urlParams.get('tab');
     const targetId = urlParams.get('id');
-    const shortQuestId = urlParams.get('q');
+    const shortQuestId = urlParams.get('q'); 
     const chunjiId = urlParams.get('c');
 
     // 1단계: 로컬 JSON 데이터 모두 가져오기
     Promise.all([
         fetch('json/datas.json').then(res => res.json()).catch(err => ({})),
-        fetch('json/quests.json').then(res => res.json()).catch(err => []),
+        fetch('json/quests.json').then(res => res.json()).catch(err => []), 
         fetch('json/news.json').then(res => res.json()).catch(err => []),
         fetch('json/cnews.json').then(res => res.json()).catch(err => []),
         fetch('json/chunji.json').then(res => res.json()).catch(err => ({ chunji: [] })),
         fetch('json/builder_data.json').then(res => res.json()).catch(err => null),
         // ★ [추가] 보스 데이터 불러오기
-        fetch('json/boss.json').then(res => res.json()).catch(err => []),
-        fetch('json/archive.json').then(res => res.json()).catch(err => []),
-        fetch('json/person.json').then(res => res.json()).catch(err => [])
-
+        fetch('json/boss.json').then(res => res.json()).catch(err => [])
     ])
-        .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult, bossDataResult, archiveData, personResult]) => {
-            console.log("기본 데이터 로드 완료");
+    .then(([mainData, questData, newsData, cnewsData, chunjiResult, builderDataResult, bossDataResult]) => {
+        console.log("기본 데이터 로드 완료");
 
-            // 데이터 정제
-            let quests = Array.isArray(questData) ? questData : (questData.quests || []);
-            let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
-            let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
-            let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
+        // 데이터 정제
+        let quests = Array.isArray(questData) ? questData : (questData.quests || []);
+        let news = Array.isArray(newsData) ? newsData : (newsData.news || []);
+        let cnews = Array.isArray(cnewsData) ? cnewsData : (cnewsData.cnews || []);
+        let chunji = Array.isArray(chunjiResult) ? chunjiResult : (chunjiResult.chunji || []);
+        
+        // ★ 보스 데이터 전역 변수에 저장
+        globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
 
-            // ★ 보스 데이터 전역 변수에 저장
-            globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
-           characterData = personResult;
+        if (quests.length > 0) {
+            quests.sort((a, b) => {
+                const numA = parseInt((a.id || "").replace('q', '')) || 0;
+                const numB = parseInt((b.id || "").replace('q', '')) || 0;
+                return numB - numA; 
+            });
+        }
+        
+        globalData = { items: mainData.items || [], quiz: mainData.quiz || [], quests: quests, news: news, cnews: cnews, chunji: chunji, builds: [] };
+        builderData = builderDataResult; 
+        currentQuestData = globalData.quests;
+        chunjiData = globalData.chunji;
+        currentChunjiData = globalData.chunji;
+        
+        // 필터 초기화
+        updateLocationOptions(); 
+        updateChunjiSubtypeOptions(); 
+        
+        // 화면 그리기
+        renderHomeSlider(globalData.quests); 
+        renderHomeRecentNews(globalData.news);     
+        renderHomeCommunityNews(globalData.cnews);
+        
+        renderQuestList();        
+        renderChunjiList();       
+        renderQuizTable(globalData.quiz); 
+        updateQuizCounter();
+        renderFullNews(globalData.news);  
+        renderComboSlots(); 
 
-            
-            if (quests.length > 0) {
-                quests.sort((a, b) => {
-                    const numA = parseInt((a.id || "").replace('q', '')) || 0;
-                    const numB = parseInt((b.id || "").replace('q', '')) || 0;
-                    return numB - numA;
-                });
-            }
+        // ★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
+        if (document.getElementById('bossGrid')) {
+            renderBossList('bossGrid', 'all'); 
+        }
+        // 홈 화면에 보스 섹션이 있다면 (예: id="home-boss-list")
+        if (document.getElementById('home-boss-list')) {
+            renderBossList('home-boss-list', 'all', 2);
+        }
 
-            globalData = {
-                items: mainData.items || [], quiz: mainData.quiz || [], quests: quests, news: news, cnews: cnews, chunji: chunji, builds: [],
-                archive: Array.isArray(archiveData) ? archiveData : (archiveData.archive || [])
-            };
-            builderData = builderDataResult;
-            currentQuestData = globalData.quests;
-            chunjiData = globalData.chunji;
-            currentChunjiData = globalData.chunji;
+        // 상세 페이지 진입 처리
+        if (shortQuestId) {
+            const fullId = 'q' + shortQuestId;
+            const foundQuest = globalData.quests.find(q => q.id === fullId);
+            if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); 
+        }
+        else if (chunjiId) {
+            const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
+            if (foundChunji) { switchTab('chunji'); loadChunjiDetail(foundChunji); }
+        }
+        else if (targetTab === 'quest' && targetId) {
+             const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
+             const foundQuest = globalData.quests.find(q => q.id === formattedId);
+             if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
+        }
 
-            // 필터 초기화
-            updateLocationOptions();
-            updateChunjiSubtypeOptions();
-
-            // 화면 그리기
-            renderHomeSlider(globalData.quests);
-            renderHomeRecentNews(globalData.news);
-            renderHomeCommunityNews(globalData.cnews);
-
-            renderQuestList();
-            renderChunjiList();
-            renderQuizTable(globalData.quiz);
-            updateQuizCounter();
-            renderFullNews(globalData.news);
-            renderComboSlots();
-            if (typeof renderHomeCharacters === 'function') {
-                renderHomeCharacters();
-            }
-            if (typeof renderAchievements === 'function') {
-                renderAchievements(archiveData);
-            }
-            // ★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
-            if (document.getElementById('bossGrid')) {
-                renderBossList('bossGrid', 'all');
-            }
-            // 홈 화면에 보스 섹션이 있다면 (예: id="home-boss-list")
-            if (document.getElementById('home-boss-list')) {
-                renderBossList('home-boss-list', 'all', 2);
-            }
-
-            // 상세 페이지 진입 처리
-            if (shortQuestId) {
-                const fullId = 'q' + shortQuestId;
-                const foundQuest = globalData.quests.find(q => q.id === fullId);
-                if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId);
-            }
-            else if (chunjiId) {
-                const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
-                if (foundChunji) { switchTab('chunji'); loadChunjiDetail(foundChunji); }
-            }
-            else if (targetTab === 'quest' && targetId) {
-                const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
-                const foundQuest = globalData.quests.find(q => q.id === formattedId);
-                if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
-            }
-
-            if (typeof checkEventStatus === 'function') checkEventStatus();
-            loadBuildsInBackground(targetTab);
-            initializeLikeSystem();
-        })
-        .catch(error => { console.error("데이터 로드 실패:", error); });
+        if (typeof checkEventStatus === 'function') checkEventStatus();
+        loadBuildsInBackground(targetTab);
+        initializeLikeSystem();
+    })
+    .catch(error => { console.error("데이터 로드 실패:", error); });
 }
 
 // 빌드 데이터 로드 함수 (그대로 유지)
 function loadBuildsInBackground(targetTab) {
-    const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined')
-        ? `${BUILD_API_URL}?action=list`
+    const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined') 
+        ? `${BUILD_API_URL}?action=list` 
         : 'json/builds.json';
 
     fetch(buildFetchUrl)
-        .then(res => res.json())
-        .then(buildsData => {
-            console.log("빌드 데이터 로드 완료");
-            globalData.builds = buildsData.builds || [];
-            // 빌드 목록은 데이터가 늦게 오므로 도착하면 그리기
-            renderBuildList('all');
-        })
-        .catch(err => {
-            globalData.builds = [];
-        });
+    .then(res => res.json())
+    .then(buildsData => {
+        console.log("빌드 데이터 로드 완료");
+        globalData.builds = buildsData.builds || [];
+        // 빌드 목록은 데이터가 늦게 오므로 도착하면 그리기
+        renderBuildList('all');
+    })
+    .catch(err => {
+        globalData.builds = [];
+    });
 }
 
 // [추가된 함수] 빌드 데이터만 따로 불러와서 채워넣는 역할
 function loadBuildsInBackground(targetTab) {
-    const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined')
-        ? `${BUILD_API_URL}?action=list`
+    const buildFetchUrl = (typeof BUILD_API_URL !== 'undefined') 
+        ? `${BUILD_API_URL}?action=list` 
         : 'json/builds.json';
 
     fetch(buildFetchUrl)
-        .then(res => res.json())
-        .then(buildsData => {
-            console.log("2단계: 빌드 데이터 로드 완료");
-            globalData.builds = buildsData.builds || [];
-
-            // 만약 사용자가 이미 '빌드' 탭을 보고 있다면 화면 갱신
-            if (targetTab === 'builder' || document.getElementById('view-builder').style.display === 'block') {
-                renderBuildList('all');
-            }
-        })
-        .catch(err => {
-            console.warn('빌드 데이터 로드 실패', err);
-            globalData.builds = [];
-        });
+    .then(res => res.json())
+    .then(buildsData => {
+        console.log("2단계: 빌드 데이터 로드 완료");
+        globalData.builds = buildsData.builds || [];
+        
+        // 만약 사용자가 이미 '빌드' 탭을 보고 있다면 화면 갱신
+        if (targetTab === 'builder' || document.getElementById('view-builder').style.display === 'block') {
+            renderBuildList('all');
+        }
+    })
+    .catch(err => {
+        console.warn('빌드 데이터 로드 실패', err);
+        globalData.builds = [];
+    });
 }
 
 // =========================================
@@ -459,7 +331,7 @@ function loadBuildsInBackground(targetTab) {
 function renderHomeSlider(quests) {
     const track = document.getElementById('hero-slider-track');
     const indicators = document.getElementById('slider-indicators');
-
+    
     if (!track) return;
 
     track.innerHTML = '';
@@ -475,13 +347,13 @@ function renderHomeSlider(quests) {
     sliderData.forEach((quest, index) => {
         const tag = quest.type || "분류 없음";
         const title = quest.name;
-        const desc = quest.location || "지역 정보 없음";
+        const desc = quest.location || "지역 정보 없음"; 
         const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : 'images/bg.jpg';
-
+        
         const slideDiv = document.createElement('div');
         slideDiv.className = 'hero-slide';
         slideDiv.style.backgroundImage = `url('${bgImage}')`;
-
+        
         slideDiv.innerHTML = `
             <div class="slide-content">
                 <span class="slide-tag">${tag}</span>
@@ -515,14 +387,14 @@ function renderHomeCommunityNews(cnewsList) {
     const container = document.getElementById('home-community-news');
     if (!container) return;
     container.innerHTML = '';
-
+    
     if (!cnewsList || cnewsList.length === 0) {
         container.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:0.9em;">진행 중인 작업이 없습니다.</div>';
         return;
     }
 
     cnewsList.slice(0, 10).forEach((item, index) => {
-        const progress = item.progress || 0;
+        const progress = item.progress || 0; 
         const isComplete = progress >= 100;
         const itemDiv = document.createElement('div');
         itemDiv.className = `progress-update-item ${isComplete ? 'completed' : ''}`;
@@ -543,7 +415,7 @@ function renderHomeCommunityNews(cnewsList) {
 
 function renderNewsListGeneric(dataList, container, type) {
     container.innerHTML = '';
-    const listToRender = dataList.slice(0, 2);
+    const listToRender = dataList.slice(0, 2); 
     if (listToRender.length === 0) {
         container.innerHTML = '<div style="padding:15px; color:#888; text-align:center; font-size:0.9em;">등록된 내용이 없습니다.</div>';
         return;
@@ -551,7 +423,7 @@ function renderNewsListGeneric(dataList, container, type) {
     listToRender.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'recent-news-item';
-        // itemDiv.onclick = () => { if (item.link) window.open(item.link, '_blank'); };
+       // itemDiv.onclick = () => { if (item.link) window.open(item.link, '_blank'); };
         itemDiv.innerHTML = `<div class="news-title-text">${item.title}</div><div class="news-date-text">${item.date}</div>`;
         container.appendChild(itemDiv);
     });
@@ -592,42 +464,35 @@ function resetSliderTimer() {
     startSlider();
 }
 
-// [수정] 홈 화면 지역 정보 로드 (가로 스크롤 + URL 이동)
 function loadHomeMaps() {
     const mapList = document.getElementById('home-map-list');
     if (!mapList) return;
     mapList.innerHTML = '';
-
-    // dummyMapData를 순회하며 카드 생성
     dummyMapData.forEach(map => {
-        const div = document.createElement('div');
-        div.className = 'map-card-horizontal'; // 새로 만든 CSS 클래스 적용
-
-        // ★ 클릭 시 해당 지역 URL로 이동
-        // 예: 현재주소/map/?id=qinghe 로 이동합니다.
-        div.onclick = () => {
-            window.location.href = `map/?path=${map.key}`;
-        };
-
-        div.innerHTML = `
-            <img src="${map.image}" class="map-h-img" onerror="this.src='images/logo.png'">
-            <div class="map-h-title">${map.title}</div>
+        const card = document.createElement('div');
+        card.className = 'map-card';
+        card.style.cursor = 'pointer';
+        card.onclick = () => { openMapDetail(map.title, map.key); };
+        card.innerHTML = `
+            <div class="map-hero-bg" style="background-image: url('${map.image}');"></div>
+            <div class="map-content">
+                <div class="map-title">${map.title}</div>
+                <p class="map-desc">${map.desc}</p>
+            </div>
         `;
-
-        mapList.appendChild(div);
+        mapList.appendChild(card);
     });
-}
-
+}// [수정] updateHistory 매개변수 추가 (기본값 true)
 // script.js 파일의 switchTab 함수 교체
 
 function switchTab(tabName, updateHistory = true) {
     // 1. 화면 전환 (기존 로직)
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji', , 'view-archive'];
-    views.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
+    views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
-    navs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
-
+    navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
+    
     document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.nav-dropdown-content').forEach(el => { el.classList.remove('show'); });
 
@@ -635,7 +500,7 @@ function switchTab(tabName, updateHistory = true) {
     if (tabName === 'home') {
         document.getElementById('view-home').style.display = 'block';
         document.getElementById('nav-home').classList.add('active');
-    }
+    } 
     else if (tabName === 'chunji') {
         document.getElementById('view-chunji').style.display = 'block';
         document.getElementById('nav-chunji').classList.add('active');
@@ -648,49 +513,42 @@ function switchTab(tabName, updateHistory = true) {
     }
     else if (tabName === 'quiz') {
         document.getElementById('view-quiz').style.display = 'block';
-        document.getElementById('nav-more').classList.add('active');
+        document.getElementById('nav-more').classList.add('active'); 
         const quizBtn = document.getElementById('nav-quiz');
         if (quizBtn) quizBtn.classList.add('active');
-
+        
         // 렌더링 체크
         const tbody = document.getElementById('quiz-table-body');
         if (tbody && tbody.children.length === 0 && globalData.quiz.length > 0) {
             renderQuizTable(globalData.quiz);
             updateQuizCounter();
         }
-    }
+    } 
     else if (tabName === 'quest') {
         document.getElementById('view-quest').style.display = 'block';
         document.getElementById('nav-quest').classList.add('active');
-
+        
         // 렌더링 체크
         const container = document.getElementById('quest-grid-container');
         if (container && container.children.length === 0 && globalData.quests.length > 0) {
             renderQuestList();
         }
         showQuestList();
-    }
+    } 
     else if (tabName === 'news') {
         document.getElementById('view-news').style.display = 'block';
-
+        
         // 렌더링 체크
         const container = document.getElementById('full-news-list');
         if (container && container.children.length === 0 && globalData.news.length > 0) {
             renderFullNews(globalData.news);
         }
-    }
-    // [추가] 업적 전체보기 탭 전환
-    else if (tabName === 'archive') {
-        document.getElementById('view-archive').style.display = 'block';
-        // 전체 목록 그리기 함수 호출
-        renderFullAchievementList();
-    }
-
+    } 
     else if (tabName === 'builder') {
         document.getElementById('view-builder').style.display = 'block';
         document.getElementById('nav-more').classList.add('active');
         const builderItem = document.getElementById('nav-builder');
-        if (builderItem) builderItem.classList.add('active');
+        if(builderItem) builderItem.classList.add('active');
 
         document.getElementById('tools-menu').style.display = 'block';
         document.getElementById('builder-interface').style.display = 'none';
@@ -708,7 +566,7 @@ function switchTab(tabName, updateHistory = true) {
                 renderBuildList('all');
             }
         }
-
+        
         if (new URLSearchParams(window.location.search).get('b')) {
             openBuilderInterface();
             loadViewer();
@@ -720,10 +578,10 @@ function switchTab(tabName, updateHistory = true) {
         if (guideView) {
             guideView.style.display = 'block';
             if (!isGuideLoaded) {
-                loadGuideView();
+                loadGuideView(); 
             } else {
-                const newsBtn = findButtonByFile('news.html');
-                if (newsBtn) loadGuideContent('news.html', newsBtn);
+                const newsBtn = findButtonByFile('news.html'); 
+                if(newsBtn) loadGuideContent('news.html', newsBtn);
             }
         }
         document.getElementById('nav-code').classList.add('active');
@@ -747,12 +605,12 @@ function updateUrlQuery(tab, id) {
     url.searchParams.delete('q');
     url.searchParams.delete('g');
     url.searchParams.delete('c');
-    url.searchParams.delete('cp');
+    url.searchParams.delete('cp'); 
     url.searchParams.delete('qp');
-
+    
     // ▼▼▼ [추가] 보스 상세(r), 빌더(b) 파라미터도 초기화 ▼▼▼
-    url.searchParams.delete('r');
-    url.searchParams.delete('b');
+    url.searchParams.delete('r'); 
+    url.searchParams.delete('b'); 
     // ▲▲▲ 추가 끝 ▲▲▲
 
     if (tab === 'quest') {
@@ -764,7 +622,7 @@ function updateUrlQuery(tab, id) {
                 url.searchParams.set('qp', currentPage);
             }
         }
-    }
+    } 
     else if (tab === 'guide' && id) {
         url.searchParams.set('g', id);
         // 여기서 r 파라미터는 설정하지 않습니다. (목록으로 돌아갈 때 r을 지우기 위함)
@@ -783,20 +641,20 @@ function updateUrlQuery(tab, id) {
         if (tab && tab !== 'home') url.searchParams.set('tab', tab);
         if (id) url.searchParams.set('id', id);
     }
-
+    
     if (url.toString() !== window.location.href) history.pushState(null, '', url);
 }
 // [수정] 가이드 콘텐츠 로드 함수 (r 파라미터 보존 로직 추가)
 function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
-    if (!innerContainer) return;
+    if(!innerContainer) return;
 
     // ★ [핵심 1] 주소가 바뀌기 전에 r 파라미터를 미리 가져옵니다!
     const currentParams = new URLSearchParams(window.location.search);
-    const savedRaidId = currentParams.get('r');
+    const savedRaidId = currentParams.get('r'); 
 
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
-
+    
     // 여기서 updateUrlQuery가 실행되면서 주소창의 ?r=... 이 지워집니다.
     if (foundId) updateUrlQuery('guide', foundId);
 
@@ -806,14 +664,14 @@ function loadGuideContent(filename, btnElement) {
     }
 
     const codeView = document.querySelector('.code-page-container');
-    if (codeView) codeView.style.display = 'none';
-
+    if(codeView) codeView.style.display = 'none';
+    
     innerContainer.style.display = 'block';
-
+    
     if (filename !== 'boss.html') {
         innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
     }
-
+    
     fetch(filename)
         .then(res => {
             if (!res.ok) throw new Error("파일을 찾을 수 없습니다.");
@@ -821,22 +679,22 @@ function loadGuideContent(filename, btnElement) {
         })
         .then(html => {
             innerContainer.innerHTML = html;
-
-            if (filename === 'news.html') renderGuideNewsList();
+            
+            if (filename === 'news.html') renderGuideNewsList(); 
             if (filename === 'harts.html') renderHeartLibrary();
-            if (filename === 'marts.html') renderMartLibrary();
-            if (filename === 'npc.html') initHomeworkChecklist();
+            if (filename === 'marts.html') renderMartLibrary(); 
+            if (filename === 'npc.html') initHomeworkChecklist(); 
 
             // ★ [핵심 2] 아까 저장해둔 savedRaidId를 사용합니다.
             if (filename === 'boss.html' && savedRaidId) {
                 // 1) 지워진 주소를 다시 복구 (보기 좋게)
                 const newUrl = '?g=boss&r=' + savedRaidId;
-                window.history.replaceState({ path: newUrl }, '', newUrl);
+                window.history.replaceState({path: newUrl}, '', newUrl);
 
                 // 2) 상세 페이지 로드
                 setTimeout(() => {
                     loadContent('boss/' + savedRaidId + '.html');
-                }, 50);
+                }, 50); 
             }
         })
         .catch(err => {
@@ -847,14 +705,14 @@ function loadGuideContent(filename, btnElement) {
 
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
-
+    
     if (urlParams.get('q')) { switchTab('quest'); return; }
     if (urlParams.get('g')) { switchTab('guide'); return; }
     if (urlParams.get('b')) { switchTab('builder'); return; }
     if (urlParams.get('c')) { switchTab('chunji'); return; }
-
-    const tab = urlParams.get('tab');
-
+    
+    const tab = urlParams.get('tab'); 
+    
     if (tab === 'quest') {
         // [추가] 퀘스트 페이지 번호 복구
         const qPage = urlParams.get('qp');
@@ -868,7 +726,7 @@ function checkUrlParams() {
     }
     else if (tab === 'quiz') switchTab('quiz');
     else if (tab === 'news') switchTab('news');
-    else if (tab === 'guide') switchTab('guide');
+    else if (tab === 'guide') switchTab('guide'); 
     else if (tab === 'builder') switchTab('builder');
     else switchTab('home');
 }
@@ -878,10 +736,10 @@ function checkUrlParams() {
 // 6. 가이드(Guide) 기능
 // =========================================
 const GUIDE_MAP = {
-    'news': 'news.html', 'tierlist': 'guide_tier.html', 'weapon': 'tier_weapon.html',
-    'build': 'build.html', 'map': 'maps.html', 'side': 'beta.html', 'hw': 'npc.html',
+    'news': 'news.html', 'tierlist': 'guide_tier.html', 'weapon': 'tier_weapon.html', 
+    'build': 'build.html', 'map': 'maps.html', 'side': 'beta.html', 'hw': 'npc.html',        
     'boss': 'boss.html', 'marts': 'marts.html', 'harts': 'harts.html', 'skill': 'skils.html',
-    'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html'
+    'majang': 'majang.html', 'code': 'code.html'      
 };
 
 function loadGuideView() {
@@ -896,17 +754,17 @@ function loadGuideView() {
     if (isGuideLoaded) {
         const targetBtn = findButtonByFile(fileToLoad);
         loadGuideContent(fileToLoad, targetBtn);
-        return;
+        return; 
     }
-
-    fetch('guide.html')
+    
+    fetch('guide.html') 
         .then(res => res.text())
         .then(html => {
             container.innerHTML = html;
             container.style.marginTop = '0';
             isGuideLoaded = true;
             const targetBtn = findButtonByFile(fileToLoad);
-            loadGuideContent(fileToLoad, targetBtn);
+            loadGuideContent(fileToLoad, targetBtn); 
         });
 }
 
@@ -927,11 +785,11 @@ function renderGuideNewsList() {
         container.innerHTML = '<div style="padding:20px; color:#888;">최신 뉴스를 불러올 수 없습니다.</div>';
         return;
     }
-    container.innerHTML = '';
+    container.innerHTML = ''; 
     globalData.news.slice(0, 5).forEach(item => {
         const el = createNewsElement(item);
-        el.style.borderBottom = '1px dashed #444';
-        el.style.backgroundColor = 'transparent';
+        el.style.borderBottom = '1px dashed #444'; 
+        el.style.backgroundColor = 'transparent'; 
         container.appendChild(el);
     });
 }
@@ -941,12 +799,12 @@ function renderGuideNewsList() {
 // =========================================
 function setupGlobalSearch() {
     const headerSearch = document.getElementById("header-search-input");
-    const clearBtn = document.getElementById("search-clear-btn");
-    const searchResults = document.getElementById("global-search-results");
+    const clearBtn = document.getElementById("search-clear-btn");       
+    const searchResults = document.getElementById("global-search-results"); 
 
     if (headerSearch) {
         headerSearch.addEventListener("input", (e) => {
-            handleGlobalSearch(e);
+            handleGlobalSearch(e); 
             if (e.target.value.trim() !== '' && clearBtn) {
                 clearBtn.style.display = 'block';
             } else if (clearBtn) {
@@ -957,7 +815,7 @@ function setupGlobalSearch() {
         headerSearch.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
-                headerSearch.blur();
+                headerSearch.blur(); 
             }
         });
 
@@ -971,18 +829,18 @@ function setupGlobalSearch() {
     if (clearBtn) {
         clearBtn.addEventListener("click", () => {
             if (headerSearch) {
-                headerSearch.value = '';
-                headerSearch.focus();
+                headerSearch.value = ''; 
+                headerSearch.focus();    
             }
-            clearBtn.style.display = 'none';
-            if (searchResults) searchResults.style.display = 'none';
+            clearBtn.style.display = 'none'; 
+            if (searchResults) searchResults.style.display = 'none'; 
         });
     }
 }
 
 function setupQuizSearch() {
     const quizLocalSearch = document.getElementById("quiz-local-search");
-    const statusBar = document.getElementById("quiz-counter-area");
+    const statusBar = document.getElementById("quiz-counter-area"); 
 
     if (quizLocalSearch) {
         quizLocalSearch.addEventListener("input", (e) => {
@@ -991,27 +849,27 @@ function setupQuizSearch() {
         quizLocalSearch.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
-                quizLocalSearch.blur();
+                quizLocalSearch.blur(); 
             }
         });
-        quizLocalSearch.addEventListener("focus", () => { if (statusBar) statusBar.classList.add("hidden"); });
-        quizLocalSearch.addEventListener("blur", () => { if (statusBar) statusBar.classList.remove("hidden"); });
+        quizLocalSearch.addEventListener("focus", () => { if(statusBar) statusBar.classList.add("hidden"); });
+        quizLocalSearch.addEventListener("blur", () => { if(statusBar) statusBar.classList.remove("hidden"); });
     }
 }
 
 function handleGlobalSearch(e) {
     const keyword = e.target.value.trim().toLowerCase();
     const resultContainer = document.getElementById("global-search-results");
-
+    
     // 검색창이 없거나 비어있으면 숨김
     if (!resultContainer) return;
-    if (!keyword) {
-        resultContainer.style.display = 'none';
-        return;
+    if (!keyword) { 
+        resultContainer.style.display = 'none'; 
+        return; 
     }
 
     let resultsHTML = '';
-
+    
     // 1. 뉴스 검색
     if (globalData.news && Array.isArray(globalData.news)) {
         globalData.news.filter(n => {
@@ -1019,28 +877,28 @@ function handleGlobalSearch(e) {
             const content = n.content ? n.content.toLowerCase() : "";
             return title.includes(keyword) || content.includes(keyword);
         })
-            .slice(0, 3).forEach(item => {
-                resultsHTML += `
+        .slice(0, 3).forEach(item => {
+            resultsHTML += `
                 <div class="search-result-item" onclick="switchTab('news')">
                     <span class="badge info">정보</span> 
                     <span class="result-text">${item.title}</span>
                 </div>`;
-            });
+        });
     }
     // 4. 천지록 검색 (기존 handleGlobalSearch 함수 안에 이 부분을 추가하세요)
     if (globalData.chunji && Array.isArray(globalData.chunji)) {
         globalData.chunji.filter(c => {
             return c.title.toLowerCase().includes(keyword);
         })
-            .slice(0, 3).forEach((item, index) => { // index는 실제 데이터에서의 인덱스를 찾아야 정확함
-                // 실제 데이터에서의 인덱스를 찾기 위해 indexOf 사용 권장
-                const realIndex = globalData.chunji.indexOf(item);
-                resultsHTML += `
+        .slice(0, 3).forEach((item, index) => { // index는 실제 데이터에서의 인덱스를 찾아야 정확함
+            // 실제 데이터에서의 인덱스를 찾기 위해 indexOf 사용 권장
+            const realIndex = globalData.chunji.indexOf(item);
+            resultsHTML += `
                 <div class="search-result-item" onclick="selectChunjiResult(${realIndex})">
                     <span class="badge item">천지록</span> 
                     <span class="result-text">${item.title}</span>
                 </div>`;
-            });
+        });
     }
     // 2. 족보 검색
     if (globalData.quiz && Array.isArray(globalData.quiz)) {
@@ -1049,16 +907,16 @@ function handleGlobalSearch(e) {
             const answer = q.answer ? q.answer.toLowerCase() : "";
             return hint.includes(keyword) || answer.includes(keyword);
         })
-            .slice(0, 3).forEach(item => {
-                const safeHint = item.hint.replace(/'/g, "\\'");
-                resultsHTML += `
+        .slice(0, 3).forEach(item => {
+            const safeHint = item.hint.replace(/'/g, "\\'");
+            resultsHTML += `
                 <div class="search-result-item" onclick="selectGlobalResult('${safeHint}')">
                     <span class="badge quiz">족보</span>
                     <span class="result-text">${item.hint} - ${item.answer}</span>
                 </div>`;
-            });
+        });
     }
-
+    
     // 3. 퀘스트/무림록 검색
     if (globalData.quests && Array.isArray(globalData.quests)) {
         globalData.quests.filter(q => {
@@ -1066,13 +924,13 @@ function handleGlobalSearch(e) {
             const loc = q.location ? q.location.toLowerCase() : "";
             return name.includes(keyword) || loc.includes(keyword);
         })
-            .slice(0, 3).forEach(quest => {
-                resultsHTML += `
+        .slice(0, 3).forEach(quest => {
+            resultsHTML += `
                 <div class="search-result-item" onclick="selectQuestResult('${quest.filepath}', '${quest.id}')">
                     <span class="badge item">퀘스트</span> 
                     <span class="result-text">${quest.name}</span>
                 </div>`;
-            });
+        });
     }
 
     resultContainer.innerHTML = resultsHTML || `<div class="no-result" style="padding:15px; text-align:center; color:#888;">결과 없음</div>`;
@@ -1082,13 +940,13 @@ function handleGlobalSearch(e) {
 function selectGlobalResult(keyword) {
     switchTab('quiz');
     const localInput = document.getElementById("quiz-local-search");
-    if (localInput) { localInput.value = keyword; renderQuizTable(filterQuizData(keyword), keyword); }
+    if(localInput) { localInput.value = keyword; renderQuizTable(filterQuizData(keyword), keyword); }
     document.getElementById("global-search-results").style.display = 'none';
 }
 
 function selectQuestResult(filepath, id) {
     switchTab('quest');
-    loadQuestDetail(filepath, id);
+    loadQuestDetail(filepath, id); 
     document.getElementById("global-search-results").style.display = 'none';
 }
 
@@ -1119,9 +977,9 @@ function renderQuizTable(data, keyword = '') {
     }
 
     const reportTr = document.createElement('tr');
-    reportTr.className = 'quiz-report-row';
+    reportTr.className = 'quiz-report-row'; 
     reportTr.style.cursor = 'pointer';
-    reportTr.style.backgroundColor = '#fff8e1';
+    reportTr.style.backgroundColor = '#fff8e1'; 
     reportTr.style.fontWeight = 'bold';
     reportTr.style.color = '#d48806';
     reportTr.onclick = () => { window.open('report/', '_blank'); };
@@ -1140,7 +998,7 @@ function updateQuizCounter() {
     const sortedUsers = Object.entries(userCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
     let rankHtml = '';
     if (sortedUsers.length > 0) {
-        const rankParts = sortedUsers.map((u, i) => i === 0 ? `<span class="rainbow-text">${i + 1}위 ${u[0]}(${u[1]})</span>` : `<span style="color: #888;">${i + 1}위 ${u[0]}(${u[1]})</span>`);
+        const rankParts = sortedUsers.map((u, i) => i === 0 ? `<span class="rainbow-text">${i+1}위 ${u[0]}(${u[1]})</span>` : `<span style="color: #888;">${i+1}위 ${u[0]}(${u[1]})</span>`);
         rankHtml = `<br><span style="font-size:0.85em; color:#ffd700; margin-top:5px; display:inline-block;">🏆${rankParts.join(' · ')}</span>`;
     }
     counter.innerHTML = `총 <b>${totalCount}</b>개의 족보가 등록되었습니다.${rankHtml}`;
@@ -1186,27 +1044,27 @@ function loadQuestDetail(filepath, id) {
     const detailView = document.getElementById('quest-detail-view');
     const contentBox = document.getElementById('quest-content-loader');
     if (id) updateUrlQuery('quest', id);
-    if (listView) listView.style.display = 'none';
-    if (detailView) detailView.style.display = 'block';
-    if (contentBox) contentBox.innerHTML = '<div style="text-align:center; padding:50px;">로딩 중...</div>';
+    if(listView) listView.style.display = 'none';
+    if(detailView) detailView.style.display = 'block';
+    if(contentBox) contentBox.innerHTML = '<div style="text-align:center; padding:50px;">로딩 중...</div>';
     fetch(filepath).then(res => res.text()).then(html => {
-        if (contentBox) contentBox.innerHTML = html;
+        if(contentBox) contentBox.innerHTML = html;
         window.scrollTo(0, 0);
 
-
-        fetchLikeStatus(id);
-
+ 
+         fetchLikeStatus(id); 
+        
 
     });
 }
 function showQuestList() {
     const listView = document.getElementById('quest-list-view');
     const detailView = document.getElementById('quest-detail-view');
-
+    
     // 이미 다 그려져 있으므로 보여주기만 하면 됨
-    if (listView && detailView) {
-        listView.style.display = 'block';
-        detailView.style.display = 'none';
+    if(listView && detailView) { 
+        listView.style.display = 'block'; 
+        detailView.style.display = 'none'; 
     }
     updateUrlQuery('quest');
 }
@@ -1216,9 +1074,9 @@ function showChunjiList() {
     const detailView = document.getElementById('chunji-detail-view');
 
     // 이미 다 그려져 있으므로 보여주기만 하면 됨
-    if (listView && detailView) {
-        listView.style.display = 'block';
-        detailView.style.display = 'none';
+    if(listView && detailView) { 
+        listView.style.display = 'block'; 
+        detailView.style.display = 'none'; 
     }
     updateUrlQuery('chunji');
 }
@@ -1238,7 +1096,7 @@ function renderPagination() {
     const container = document.getElementById('pagination-container');
     if (!container) return;
     container.innerHTML = '';
-
+    
     // 전체 페이지 수 계산
     const totalPages = Math.ceil(currentQuestData.length / itemsPerPage);
     if (totalPages <= 1) return;
@@ -1287,10 +1145,10 @@ function renderPagination() {
 function changePage(page) {
     currentPage = page;
     renderQuestList();
-
+    
     // [추가] 페이지 변경 시 URL 업데이트
     updateUrlQuery('quest');
-
+    
     document.getElementById('quest-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -1309,7 +1167,7 @@ function renderFullNews(newsList) {
 function createNewsElement(item) {
     const div = document.createElement('div');
     div.className = 'news-item';
-    div.onclick = function () { this.classList.toggle('active'); };
+    div.onclick = function() { this.classList.toggle('active'); };
     let linkHtml = item.link ? `<a href="${item.link}" target="_blank" class="news-link-btn" onclick="event.stopPropagation()">바로가기 →</a>` : '';
     div.innerHTML = `<div class="news-header"><span class="news-title">${item.title}</span><span class="news-date">${item.date}</span></div><div class="news-content">${item.content}<br>${linkHtml}</div>`;
     return div;
@@ -1322,13 +1180,12 @@ function openBuilderInterface() {
     document.getElementById('tools-menu').style.display = 'none';
     document.getElementById('builder-interface').style.display = 'block';
     if (!builderData) {
-        fetch('json/builder_data.json').then(res => res.json()).then(data => {
-            builderData = data;
-            renderComboSlots();
-
-        });
-    } else {
-        renderComboSlots();
+         fetch('json/builder_data.json').then(res => res.json()).then(data => { builderData = data;
+         renderComboSlots(); 
+             
+         });
+    }else{
+        renderComboSlots(); 
     }
 }
 
@@ -1341,14 +1198,14 @@ function closeBuilderInterface() {
 // [수정] 모달 열기 (비결 리스트 표시 기능 추가)
 function openBuilderModal(type, index) {
     if (!builderData) return alert("데이터를 불러오는 중입니다...");
-    currentSlot = { type, index };
-
+    currentSlot = { type, index }; 
+    
     const modal = document.getElementById('builder-modal');
     const list = document.getElementById('builder-modal-list');
     const title = document.getElementById('builder-modal-title');
-
+    
     list.innerHTML = '';
-
+    
     // 취소 버튼
     const closeDiv = document.createElement('div');
     closeDiv.className = 'select-item';
@@ -1358,14 +1215,14 @@ function openBuilderModal(type, index) {
 
     // ★ 콤보 선택일 때
     if (type === 'combo') {
-        title.innerText = `콤보 ${parseInt(index) + 1}단계 선택`;
-
+        title.innerText = `콤보 ${parseInt(index)+1}단계 선택`;
+        
         // 1) 기본 조작키
         Object.keys(KEY_MAP).forEach(key => {
             const k = KEY_MAP[key];
             const div = document.createElement('div');
             div.className = 'select-item';
-            div.innerHTML = `<div class="key-cap ${k.color} ${k.hold ? 'hold' : ''}" style="margin:0 auto;"><span>${k.text}</span></div><p>${k.desc}</p>`;
+            div.innerHTML = `<div class="key-cap ${k.color} ${k.hold?'hold':''}" style="margin:0 auto;"><span>${k.text}</span></div><p>${k.desc}</p>`;
             div.onclick = () => selectBuilderItem(key, null, k.desc);
             list.appendChild(div);
         });
@@ -1389,10 +1246,10 @@ function openBuilderModal(type, index) {
                 }
             });
         }
-    }
+    } 
     // ★ 일반 아이템 선택일 때 (기존 유지)
     else {
-        title.innerText = `${type === 'weapons' ? '무기' : type === 'hearts' ? '심법' : '비결'} 선택`;
+        title.innerText = `${type==='weapons'?'무기':type==='hearts'?'심법':'비결'} 선택`;
         const currentList = currentBuild[type];
         const usedIds = currentList.filter((id, idx) => id !== null && idx !== parseInt(index));
         if (builderData[type]) {
@@ -1412,7 +1269,7 @@ function openBuilderModal(type, index) {
 // [수정] 아이템 선택 처리 (콤보 배열 push 기능 추가)
 function selectBuilderItem(itemId, imgSrc, itemName) {
     const { type, index } = currentSlot;
-
+    
     // ★ 콤보인 경우
     if (type === 'combo') {
         // 인덱스가 현재 길이와 같으면 '추가' (push)
@@ -1438,17 +1295,17 @@ function selectBuilderItem(itemId, imgSrc, itemName) {
     if (itemId) {
         imgEl.src = imgSrc;
         imgEl.style.display = 'block';
-        if (plusSpan) plusSpan.style.display = 'none';
+        if(plusSpan) plusSpan.style.display = 'none';
         slotEl.style.borderStyle = 'solid';
-        if (nameEl) nameEl.innerText = itemName;
+        if(nameEl) nameEl.innerText = itemName;
     } else {
         imgEl.src = '';
         imgEl.style.display = 'none';
-        if (plusSpan) plusSpan.style.display = 'block';
+        if(plusSpan) plusSpan.style.display = 'block';
         slotEl.style.borderStyle = 'dashed';
-        if (nameEl) nameEl.innerText = '';
+        if(nameEl) nameEl.innerText = '';
     }
-    closeBuilderModal(null);
+    closeBuilderModal(null); 
 }
 
 
@@ -1476,12 +1333,12 @@ function generateBuildUrl() {
     }
 
     // 3. 데이터 객체 생성 (t: 제목 추가)
-    const buildData = {
+   const buildData = { 
         t: title,
         c: creatorName,
-        w: currentBuild.weapons,
-        h: currentBuild.hearts,
-        m: currentBuild.marts,
+        w: currentBuild.weapons, 
+        h: currentBuild.hearts, 
+        m: currentBuild.marts, 
         rw: recWeapons,
         ra: recArmor,
         k: currentBuild.combo // [수정] 콤보 배열 저장
@@ -1490,16 +1347,16 @@ function generateBuildUrl() {
     // 4. 인코딩 및 URL 생성
     const encodedString = btoa(unescape(encodeURIComponent(JSON.stringify(buildData))));
     const origin = window.location.origin;
-    let basePath = window.location.pathname.replace('index.html', '');
+    let basePath = window.location.pathname.replace('index.html', ''); 
     if (!basePath.endsWith('/')) basePath += '/';
-
+    
     const viewerUrl = `${origin}${basePath}viewer.html?b=${encodedString}`;
-
+    
     // 5. 결과창 표시
     const urlInput = document.getElementById('result-url');
     urlInput.value = viewerUrl;
     urlInput.style.display = 'block';
-
+    
     // 알림 (선택 사항)
     // alert("링크가 생성되었습니다. 복사해서 사용하세요!");
 }
@@ -1524,7 +1381,7 @@ function loadViewer() {
             title = parsed.t || "무제"; creator = parsed.c || "익명";
             rw = parsed.rw || ""; ra = parsed.ra || "";
         } catch (e) {
-            try { const parsed = JSON.parse(atob(encodedData)); w = parsed.w || []; h = parsed.h || []; m = parsed.m || []; creator = parsed.c || ""; } catch (e2) { }
+            try { const parsed = JSON.parse(atob(encodedData)); w = parsed.w || []; h = parsed.h || []; m = parsed.m || []; creator = parsed.c || ""; } catch (e2) {}
         }
     }
 
@@ -1539,11 +1396,11 @@ function loadViewer() {
     const raEl = document.getElementById('view-rec-armor');
     const recContainer = document.getElementById('viewer-rec-container');
     if (rw || ra) {
-        if (recContainer) recContainer.style.display = 'flex';
-        if (rwEl) rwEl.innerText = rw || '-';
-        if (raEl) raEl.innerText = ra || '-';
+        if(recContainer) recContainer.style.display = 'flex';
+        if(rwEl) rwEl.innerText = rw || '-';
+        if(raEl) raEl.innerText = ra || '-';
     } else {
-        if (recContainer) recContainer.style.display = 'none';
+        if(recContainer) recContainer.style.display = 'none';
     }
 
     // 아이콘 슬롯 렌더링 + 클릭 이벤트 연결
@@ -1556,10 +1413,10 @@ function loadViewer() {
                 if (slotEl) {
                     const img = slotEl.querySelector('img');
                     if (img) { img.src = itemData.img; img.style.display = 'block'; }
-
+                    
                     // 클릭하면 정보창 열기
                     slotEl.style.cursor = "pointer";
-                    slotEl.onclick = () => openInfoModal(itemData);
+                    slotEl.onclick = () => openInfoModal(itemData); 
                 }
             }
         });
@@ -1589,7 +1446,7 @@ function renderBuildList(filterType) {
     targetBuilds.forEach(build => {
         const w1Id = build.weapons[0];
         const w2Id = build.weapons[1];
-
+        
         // 무기 이미지 가져오는 헬퍼 함수
         const getImg = (id) => {
             if (!builderData || !builderData.weapons) return 'images/logo.png';
@@ -1601,7 +1458,7 @@ function renderBuildList(filterType) {
         row.className = 'build-row-card';
         row.onclick = () => { openBuildDetailSheet(build); };
         const typeClass = build.type.toUpperCase() === 'PVP' ? 'type-pvp' : 'type-pve';
-
+        
         // ▼▼▼ HTML 구조 변경 ▼▼▼
         row.innerHTML = `
             <div class="build-icons-area">
@@ -1627,7 +1484,7 @@ function renderBuildList(filterType) {
 function filterBuilds(type, btn) {
     const buttons = document.querySelectorAll('#tools-menu .guide-item-btn');
     buttons.forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    if(btn) btn.classList.add('active');
     renderBuildList(type);
 }
 
@@ -1709,7 +1566,7 @@ function openHeartDetailSheet(heartId) {
     const contentEl = document.getElementById('heart-sheet-content');
 
     if (titleEl) titleEl.innerText = heart.name;
-
+    
     if (contentEl) {
         const acquireContent = convertYoutubeToEmbed(heart.acquire);
         contentEl.innerHTML = `
@@ -1747,7 +1604,7 @@ function openMartDetailSheet(martId) {
     const contentEl = document.getElementById('mart-sheet-content');
 
     if (titleEl) titleEl.innerText = mart.name;
-
+    
     if (contentEl) {
         const acquireContent = convertYoutubeToEmbed(mart.acquire);
         contentEl.innerHTML = `
@@ -1785,7 +1642,7 @@ function closeMartDetailSheet() {
 function openBuildDetailSheet(build) {
     const sheet = document.getElementById('build-detail-sheet');
     const contentArea = sheet.querySelector('.sheet-content');
-
+    
     // 1. 데이터 디코딩
     let encodedData = null;
     if (build.link && build.link.includes('?b=')) encodedData = build.link.split('?b=')[1];
@@ -1804,13 +1661,13 @@ function openBuildDetailSheet(build) {
     }
 
     // 아이템 정보 찾기 헬퍼
-    const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || { name: '?', img: '' } : { name: '?', img: '' };
+    const getItemDetail = (type, id) => builderData[type] ? builderData[type].find(i => i.id === id) || {name:'?', img:''} : {name:'?', img:''};
 
     // 2. 설명문
     let html = `<div style="border-bottom: 1px dashed #ccc; padding-bottom: 15px; margin-bottom: 20px;">
                     <p style="margin: 0; color: #555; font-size: 0.95em; line-height:1.6; font-family: 'Noto Serif KR', serif;">${build.description || '작성된 설명이 없습니다.'}</p>
                 </div>`;
-
+    
     // 3. 추천 장비
     if (parsedData.rw || parsedData.ra) {
         html += `<div style="background: #fffcf5; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; margin-bottom: 20px;">
@@ -1830,10 +1687,10 @@ function openBuildDetailSheet(build) {
 
     // 4. 무기 & 심법 아이콘 섹션
     html += `<div style="display: flex; justify-content: space-evenly; align-items: center; gap: 10px; padding: 15px 10px; background: #fffcf5; border-radius: 12px; border: 1px solid #e0e0e0; margin-bottom: 15px;">`;
-
+    
     html += `<div style="display: flex; gap: 8px;">`;
     (parsedData.w || [null, null]).forEach(id => {
-        if (!id) return;
+        if(!id) return;
         const item = getItemDetail('weapons', id);
         html += `<div onclick="openInfoModalById('weapons', '${id}')" style="cursor: pointer; width: 55px; height: 55px; background: #fff; border-radius: 50%; border: 2px solid #d32f2f; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                     <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
@@ -1843,17 +1700,17 @@ function openBuildDetailSheet(build) {
 
     html += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">`;
     (parsedData.h || [null, null, null, null]).forEach(id => {
-        if (!id) return;
+        if(!id) return;
         const item = getItemDetail('hearts', id);
         html += `<div onclick="openInfoModalById('hearts', '${id}')" style="cursor: pointer; width: 34px; height: 34px; background: #fff; border-radius: 50%; border: 1.5px solid #1976d2; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                     <img src="${item.img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
                  </div>`;
     });
-    html += `</div></div>`;
+    html += `</div></div>`; 
 
     // 5. 비결 아이콘 섹션
     const validMarts = (parsedData.m || []).filter(id => id);
-    if (validMarts.length > 0) {
+    if(validMarts.length > 0) {
         html += `<div style="padding: 15px 10px; background: #fffcf5; border-radius: 12px; border: 1px solid #e0e0e0; display: flex; justify-content: center; margin-bottom: 15px;">
                     <div style="display: grid; grid-template-columns: repeat(4, auto); gap: 8px;">`;
         validMarts.forEach(id => {
@@ -1866,28 +1723,28 @@ function openBuildDetailSheet(build) {
     }
 
     // 6. ★★★ [콤보 섹션 수정] 정사각형 그리드 + 번호 오버레이 ★★★
-    const comboData = parsedData.k || [];
+    const comboData = parsedData.k || []; 
     if (comboData && comboData.length > 0) {
         html += `<h4 style="margin: 25px 0 10px 0; font-size: 0.95em; color: #444; border-left: 3px solid #d4af37; padding-left: 8px;">🔥 추천 콤보</h4>`;
-
+        
         // 화살표 없이 깔끔한 그리드 컨테이너
         html += `<div class="combo-viewer-grid">`;
-
+        
         comboData.forEach((key, index) => {
             // 박스 시작
             html += `<div class="combo-item-box">`;
-
+            
             // ★ 번호를 박스 안으로 넣음 (Overlay)
             html += `<span class="combo-step-num">${index + 1}</span>`;
 
             if (KEY_MAP[key]) {
                 const k = KEY_MAP[key];
                 // 키캡 (배경색 꽉 채우기)
-                html += `<div class="key-cap-viewer ${k.color} ${k.hold ? 'hold' : ''}"><span>${k.text}</span></div>`;
+                html += `<div class="key-cap-viewer ${k.color} ${k.hold?'hold':''}"><span>${k.text}</span></div>`;
             } else {
                 let item = builderData.marts ? builderData.marts.find(m => m.id === key) : null;
                 if (!item && builderData.weapons) item = builderData.weapons.find(w => w.id === key);
-
+                
                 if (item) {
                     html += `<img src="${item.img}" class="combo-mart-img" onclick="openInfoModalById('marts', '${key}')" onerror="this.src='images/logo.png'">`;
                 } else {
@@ -1922,7 +1779,7 @@ function closeBuildDetailSheet(event) {
     if (event) event.stopPropagation();
     const sheet = document.getElementById('build-detail-sheet');
     const overlay = document.getElementById('build-detail-overlay');
-
+    
     if (sheet) {
         sheet.style.display = 'none'; // 강제로 숨김
         sheet.classList.remove('active'); // 애니메이션 클래스 제거
@@ -1937,27 +1794,27 @@ function closeBuildDetailSheet(event) {
 // 기존 함수가 있다면 덮어씌워지고, 없다면 새로 작동합니다.
 const originalOpenView = typeof openBuildDetailSheetView !== 'undefined' ? openBuildDetailSheetView : null;
 
-openBuildDetailSheetView = function () {
+openBuildDetailSheetView = function() {
     const sheet = document.getElementById('build-detail-sheet');
     const overlay = document.getElementById('build-detail-overlay');
-
+    
     if (sheet) {
         sheet.style.display = 'flex'; // ★ 핵심: PC에서 보이게 강제 설정
         sheet.style.flexDirection = 'column';
-
+        
         // 약간의 딜레이 후 애니메이션 효과 (모바일용)
         setTimeout(() => {
             sheet.classList.add('active');
         }, 10);
     }
-
+    
     if (overlay) {
         overlay.style.display = 'block';
         setTimeout(() => {
             overlay.style.opacity = '1';
         }, 10);
     }
-
+    
     // 원래 있던 로직이 있다면 실행
     if (originalOpenView) originalOpenView();
 };
@@ -1965,20 +1822,20 @@ openBuildDetailSheetView = function () {
 function openMapDetail(mapName, mapKey) {
     // 다른 뷰 숨기기
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
-    views.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+    views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
 
     const mapDiv = document.getElementById('view-map-detail');
-    if (mapDiv) {
+    if(mapDiv) {
         mapDiv.style.display = 'block';
         document.getElementById('map-detail-title').innerText = mapName;
-
+        
         // ★ [핵심 변경] 우리가 만든 map 폴더의 index.html을 불러옵니다.
         // 주소 형식: map/?id=키값 (예: map/?id=qinghe)
-        const targetUrl = `map/?id=${mapKey}`;
-
+        const targetUrl = `map/?id=${mapKey}`; 
+        
         const iframe = document.getElementById('map-iframe');
         // 불필요한 리로딩 방지 (이미 같은 주소면 새로고침 안 함)
-        if (iframe && !iframe.src.includes(targetUrl)) {
+        if(iframe && !iframe.src.includes(targetUrl)) {
             iframe.src = targetUrl;
         }
     }
@@ -1987,10 +1844,10 @@ function openMapDetail(mapName, mapKey) {
 
 function closeMapDetail() {
     const mapDiv = document.getElementById('view-map-detail');
-    if (mapDiv) mapDiv.style.display = 'none';
+    if(mapDiv) mapDiv.style.display = 'none';
     const iframe = document.getElementById('map-iframe');
-    if (iframe) iframe.src = 'about:blank';
-    switchTab('home');
+    if(iframe) iframe.src = 'about:blank';
+    switchTab('home'); 
 }
 
 function openGuideSheet() { document.body.classList.add('sheet-open'); }
@@ -2008,9 +1865,9 @@ function renderMartLibrary() {
     if (!builderData) {
         fetch('json/builder_data.json')
             .then(res => res.json())
-            .then(data => {
-                builderData = data;
-                renderMartLibrary();
+            .then(data => { 
+                builderData = data; 
+                renderMartLibrary(); 
             })
             .catch(err => { container.innerHTML = "데이터를 불러올 수 없습니다."; });
         return;
@@ -2026,10 +1883,10 @@ function renderMartLibrary() {
         const item = document.createElement('div');
         item.className = 'heart-lib-item'; // 스타일은 심법과 공유
         item.onclick = () => openMartDetailSheet(mart.id);
-
+        
         // 이미지가 없으면 기본 로고 사용
         const imgPath = mart.img ? mart.img : 'images/logo.png';
-
+        
         item.innerHTML = `
             <img src="${imgPath}" class="heart-lib-img" onerror="this.src='images/logo.png'">
             <div class="heart-lib-name">${mart.name}</div>
@@ -2047,11 +1904,11 @@ function openMartDetailSheet(martId) {
     const contentEl = document.getElementById('mart-sheet-content');
 
     if (titleEl) titleEl.innerText = mart.name;
-
+    
     if (contentEl) {
         // 유튜브 변환 기능 재사용 (convertYoutubeToEmbed 함수가 이미 존재해야 함)
-        const acquireContent = typeof convertYoutubeToEmbed === 'function'
-            ? convertYoutubeToEmbed(mart.acquire)
+        const acquireContent = typeof convertYoutubeToEmbed === 'function' 
+            ? convertYoutubeToEmbed(mart.acquire) 
             : (mart.acquire || '획득 방법 정보가 없습니다.');
 
         const imgPath = mart.img ? mart.img : 'images/logo.png';
@@ -2086,35 +1943,35 @@ function closeMartDetailSheet() {
 function handleHistoryChange() {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab');
-
+    
     // 파라미터 가져오기
     const qId = urlParams.get('q');
     const gId = urlParams.get('g');
     const bId = urlParams.get('b');
     const cId = urlParams.get('c');
-
+    
     const cpParam = urlParams.get('cp'); // 천지록 페이지
     const qpParam = urlParams.get('qp'); // 퀘스트 페이지
 
     // 1. 상세 보기 처리 (상세 ID가 있으면 해당 화면 로드)
-    if (qId) {
-        switchTab('quest', false);
-        const fullId = 'q' + qId;
-        if (globalData.quests) {
-            const foundQuest = globalData.quests.find(q => q.id === fullId);
-            if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId);
-        }
-        return;
+    if (qId) { 
+        switchTab('quest', false); 
+        const fullId = 'q' + qId; 
+        if (globalData.quests) { 
+            const foundQuest = globalData.quests.find(q => q.id === fullId); 
+            if (foundQuest) loadQuestDetail(foundQuest.filepath, fullId); 
+        } 
+        return; 
     }
     if (gId) { switchTab('guide', false); return; }
     if (bId) { switchTab('builder', false); return; }
-    if (cId) {
-        switchTab('chunji', false);
-        if (globalData.chunji) {
-            const foundChunji = globalData.chunji.find(c => c.id === cId);
-            if (foundChunji) loadChunjiDetail(foundChunji);
-        }
-        return;
+    if (cId) { 
+        switchTab('chunji', false); 
+        if (globalData.chunji) { 
+            const foundChunji = globalData.chunji.find(c => c.id === cId); 
+            if (foundChunji) loadChunjiDetail(foundChunji); 
+        } 
+        return; 
     }
 
     // 2. [수정] 퀘스트 목록 뒤로가기
@@ -2122,11 +1979,11 @@ function handleHistoryChange() {
         // [핵심 1] URL에 있는 페이지 번호(qp)를 currentPage 변수에 먼저 복구합니다.
         // (없으면 1페이지)
         currentPage = qpParam ? parseInt(qpParam) : 1;
-
+        
         // [핵심 2] switchTab을 부를 때 false를 넘겨서 URL을 다시 저장하지 않게 합니다.
         // (이미 브라우저 URL은 ?tab=quest&qp=2 상태이기 때문)
-        switchTab('quest', false);
-
+        switchTab('quest', false); 
+        
         // [핵심 3] 복구된 페이지 번호로 리스트를 다시 그립니다.
         renderQuestList();
         return;
@@ -2142,7 +1999,7 @@ function handleHistoryChange() {
 
     // 4. 나머지 탭
     if (tab) {
-        switchTab(tab, false);
+        switchTab(tab, false); 
     } else {
         switchTab('home', false);
     }
@@ -2156,7 +2013,7 @@ function copyToClipboard(text, btnElement) {
     navigator.clipboard.writeText(text).then(() => {
         // 2. 성공 시 버튼 스타일 변경 (피드백)
         const originalContent = btnElement.innerHTML;
-
+        
         // 버튼 내용을 '완료' 상태로 변경
         btnElement.innerHTML = '<span class="copy-icon">✅</span> 완료';
         btnElement.style.backgroundColor = '#2e7d32'; // 초록색
@@ -2259,7 +2116,7 @@ function toggleNavDropdown(event, menuId) {
 }
 
 // [수정] 화면의 빈 곳을 클릭하면 모든 드롭다운 닫기
-window.addEventListener('click', function (event) {
+window.addEventListener('click', function(event) {
     if (!event.target.closest('.nav-dropdown-wrapper')) {
         const dropdowns = document.querySelectorAll(".nav-dropdown-content");
         dropdowns.forEach(d => d.classList.remove('show'));
@@ -2352,7 +2209,7 @@ function renderChunjiList() {
         const div = document.createElement('div');
         div.className = 'chunji-item';
         div.onclick = () => loadChunjiDetail(item, index);
-
+        
         // ▼▼▼ [수정] 제목과 타입(type)을 감싸는 래퍼 추가 ▼▼▼
         div.innerHTML = `
             <div class="chunji-text-group">
@@ -2361,7 +2218,7 @@ function renderChunjiList() {
             </div>
             <div class="arrow-icon">›</div>
         `;
-
+        
         container.appendChild(div);
     });
 }
@@ -2398,7 +2255,7 @@ function filterChunjiType(type, btnElement) {
 function renderChunjiList() {
     const container = document.getElementById('chunji-list-container');
     const paginationContainer = document.getElementById('chunji-pagination-container');
-
+    
     if (!container) return;
     container.innerHTML = '';
 
@@ -2412,7 +2269,7 @@ function renderChunjiList() {
     // [페이징 계산]
     const startIndex = (currentChunjiPage - 1) * itemsPerPage; // itemsPerPage는 전역변수(12) 사용
     const endIndex = startIndex + itemsPerPage;
-
+    
     // 현재 페이지에 해당하는 데이터만 자르기
     const pageData = currentChunjiData.slice(startIndex, endIndex);
 
@@ -2421,14 +2278,14 @@ function renderChunjiList() {
         const div = document.createElement('div');
         div.className = 'chunji-item';
         div.onclick = () => loadChunjiDetail(item);
-
+        
         div.innerHTML = `
             <div class="chunji-text-group">
                 <div class="chunji-title">${item.title}</div>
                 <div class="chunji-type">${item.type || '기타'}</div>
             </div>
         `;
-
+        
         container.appendChild(div);
     });
 
@@ -2483,10 +2340,10 @@ function renderChunjiPagination() {
 function changeChunjiPage(page) {
     currentChunjiPage = page;
     renderChunjiList();
-
+    
     // [추가] 페이지 변경 시 URL 업데이트 (브라우저 기록에 남김)
     updateUrlQuery('chunji');
-
+    
     document.getElementById('chunji-list-view').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -2534,18 +2391,18 @@ function loadChunjiDetail(item) {
 function showChunjiList() {
     const listView = document.getElementById('chunji-list-view');
     const detailView = document.getElementById('chunji-detail-view');
-
+    
     // ★ [핵심 추가] 천지록 목록도 비어있으면 그리기
     const container = document.getElementById('chunji-list-container');
     if (container && container.children.length === 0) {
         renderChunjiList();
     }
 
-    if (listView && detailView) {
-        listView.style.display = 'block';
-        detailView.style.display = 'none';
+    if(listView && detailView) { 
+        listView.style.display = 'block'; 
+        detailView.style.display = 'none'; 
     }
-
+    
     // URL 정리
     updateUrlQuery('chunji');
 }
@@ -2577,7 +2434,7 @@ function openReportSheet() {
     if (modal) {
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
-
+        
         // [옵션] 열 때마다 무조건 '제보' 탭으로 초기화하고 싶다면 주석 해제
         // const defaultBtn = modal.querySelector('.sheet-tab-btn:nth-child(1)');
         // switchReportTab('report', defaultBtn);
@@ -2608,14 +2465,14 @@ function switchReportTab(tabName, btnElement) {
     // A. 컨텐츠 전환
     const reportTab = document.getElementById('tab-content-report');
     const giftTab = document.getElementById('tab-content-gift');
-
-    if (reportTab) reportTab.style.display = (tabName === 'report') ? 'block' : 'none';
-    if (giftTab) giftTab.style.display = (tabName === 'gift') ? 'block' : 'none';
+    
+    if(reportTab) reportTab.style.display = (tabName === 'report') ? 'block' : 'none';
+    if(giftTab) giftTab.style.display = (tabName === 'gift') ? 'block' : 'none';
 
     // B. 버튼 스타일 변경 ([중요] 이 모달 안의 버튼만 찾도록 범위 한정)
     const buttons = modal.querySelectorAll('.sheet-tab-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
-
+    
     if (btnElement) {
         btnElement.classList.add('active');
     }
@@ -2657,13 +2514,13 @@ function switchProgressTab(tabName, btnElement) {
     const statusTab = document.getElementById('tab-p-status');
     const cheerTab = document.getElementById('tab-p-cheer');
 
-    if (statusTab) statusTab.style.display = (tabName === 'status') ? 'block' : 'none';
-    if (cheerTab) cheerTab.style.display = (tabName === 'cheer') ? 'block' : 'none';
+    if(statusTab) statusTab.style.display = (tabName === 'status') ? 'block' : 'none';
+    if(cheerTab) cheerTab.style.display = (tabName === 'cheer') ? 'block' : 'none';
 
     // B. 버튼 스타일 변경 ([중요] 이 모달 안의 버튼만 찾도록 범위 한정)
     const buttons = modal.querySelectorAll('.sheet-tab-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
-
+    
     if (btnElement) {
         btnElement.classList.add('active');
     }
@@ -2676,8 +2533,8 @@ function switchProgressTab(tabName, btnElement) {
 // 1. 분류(Type) 변경 시 호출되는 함수
 function onQuestTypeChange() {
     // 1단계: 선택된 분류에 맞는 지역 목록만 다시 생성
-    updateLocationOptions();
-
+    updateLocationOptions(); 
+    
     // 2단계: 필터 적용하여 그리드 다시 그리기
     applyQuestFilter();
 }
@@ -2686,7 +2543,7 @@ function onQuestTypeChange() {
 function updateLocationOptions() {
     const typeSelect = document.getElementById('quest-type-select');
     const locationSelect = document.getElementById('quest-location-select');
-
+    
     if (!typeSelect || !locationSelect || !globalData.quests) return;
 
     const selectedType = typeSelect.value; // 현재 선택된 분류 (예: '만사록')
@@ -2710,7 +2567,7 @@ function updateLocationOptions() {
 
     // D. 드롭다운 초기화 및 다시 채우기
     locationSelect.innerHTML = '<option value="all">모든 지역</option>'; // 기본값 복구
-
+    
     sortedLocations.forEach(loc => {
         const option = document.createElement('option');
         option.value = loc;
@@ -2719,14 +2576,14 @@ function updateLocationOptions() {
     });
 
     // E. 분류가 바뀌었으므로 지역 선택은 '모든 지역'으로 리셋
-    locationSelect.value = 'all';
+    locationSelect.value = 'all'; 
 }
 
 // 3. 실제 필터링 적용 및 렌더링 함수 (기존 로직 유지/보완)
 function applyQuestFilter() {
     const typeSelect = document.getElementById('quest-type-select');
     const locationSelect = document.getElementById('quest-location-select');
-
+    
     const selectedType = typeSelect ? typeSelect.value : 'all';
     const selectedLocation = locationSelect ? locationSelect.value : 'all';
 
@@ -2762,7 +2619,7 @@ function loadGuideView() {
     // URL 파라미터 확인 (예: ?g=code)
     const urlParams = new URLSearchParams(window.location.search);
     const targetId = urlParams.get('id') || urlParams.get('g');
-
+    
     // 기본값은 뉴스
     let fileToLoad = 'news.html';
     if (targetId && GUIDE_MAP[targetId]) fileToLoad = GUIDE_MAP[targetId];
@@ -2771,11 +2628,11 @@ function loadGuideView() {
         // 이미 로드된 상태라면 드롭다운 값만 맞추고 콘텐츠 로드
         syncGuideDropdown(fileToLoad);
         loadGuideContent(fileToLoad, null);
-        return;
+        return; 
     }
-
+    
     // HTML 파일 불러오기
-    fetch('guide.html')
+    fetch('guide.html') 
         .then(res => res.text())
         .then(html => {
             container.innerHTML = html;
@@ -2784,8 +2641,8 @@ function loadGuideView() {
 
             // [추가] 로드 직후 드롭다운 상태 동기화
             syncGuideDropdown(fileToLoad);
-
-            loadGuideContent(fileToLoad, null);
+            
+            loadGuideContent(fileToLoad, null); 
         });
 }
 
@@ -2804,8 +2661,8 @@ function syncGuideDropdown(filename) {
 // 1. 메인 분류(Type) 변경 시 호출
 function onChunjiTypeChange() {
     // 1단계: 선택된 분류에 맞는 세부 분류(Subtype) 목록 갱신
-    updateChunjiSubtypeOptions();
-
+    updateChunjiSubtypeOptions(); 
+    
     // 2단계: 필터 적용하여 리스트 다시 그리기
     applyChunjiFilter();
 }
@@ -2814,7 +2671,7 @@ function onChunjiTypeChange() {
 function updateChunjiSubtypeOptions() {
     const typeSelect = document.getElementById('chunji-type-select');
     const subtypeSelect = document.getElementById('chunji-subtype-select');
-
+    
     if (!typeSelect || !subtypeSelect || !globalData.chunji) return;
 
     const selectedType = typeSelect.value; // 현재 선택된 메인 분류
@@ -2839,7 +2696,7 @@ function updateChunjiSubtypeOptions() {
 
     // D. 드롭다운 초기화 및 다시 채우기
     subtypeSelect.innerHTML = '<option value="all">모든 항목</option>'; // 기본값
-
+    
     sortedSubtypes.forEach(sub => {
         const option = document.createElement('option');
         option.value = sub;
@@ -2848,14 +2705,14 @@ function updateChunjiSubtypeOptions() {
     });
 
     // E. 메인 분류가 바뀌었으므로 세부 분류는 '전체'로 리셋
-    subtypeSelect.value = 'all';
+    subtypeSelect.value = 'all'; 
 }
 
 // 3. 필터 적용 및 렌더링 함수
 function applyChunjiFilter() {
     const typeSelect = document.getElementById('chunji-type-select');
     const subtypeSelect = document.getElementById('chunji-subtype-select');
-
+    
     const selectedType = typeSelect ? typeSelect.value : 'all';
     const selectedSubtype = subtypeSelect ? subtypeSelect.value : 'all';
 
@@ -2863,7 +2720,7 @@ function applyChunjiFilter() {
     currentChunjiData = globalData.chunji.filter(item => {
         // 1. 메인 분류 체크
         const typeMatch = (selectedType === 'all') || (item.type === selectedType);
-
+        
         // 2. 세부 분류 체크
         // (데이터에 subtype이 아예 없는 경우도 고려하여 안전하게 처리)
         const itemSubtype = item.subtype || "";
@@ -2880,13 +2737,13 @@ function applyChunjiFilter() {
 function openGuideDirect(filename) {
     // 1. 해당 파일에 매칭되는 ID 찾기 (예: 'boss.html' -> 'boss')
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
-
+    
     // 2. 가이드 데이터가 아직 안 불려와졌을 때 (새로고침 직후 등)
     if (!isGuideLoaded) {
         // URL에 ID를 미리 박아두고 switchTab을 부르면, loadGuideView가 알아서 처리함
         if (foundId) updateUrlQuery('guide', foundId);
-        switchTab('guide', false);
-    }
+        switchTab('guide', false); 
+    } 
     // 3. 이미 로드되어 있을 때
     else {
         // 탭 전환 후 강제로 콘텐츠 교체
@@ -2904,7 +2761,7 @@ function shareBuildToCloud() {
     const recWeapons = document.getElementById('rec-weapons').value.trim();
     const recArmor = document.getElementById('rec-armor').value.trim();
     const desc = document.getElementById('build-desc').value.trim();
-
+    
     const typeRadio = document.querySelector('input[name="buildType"]:checked');
     const type = typeRadio ? typeRadio.value : "PvE";
 
@@ -2935,17 +2792,17 @@ function shareBuildToCloud() {
 
     // 3. 버튼 잠금 (전송 시작)
     // 클릭된 버튼 요소를 안전하게 찾기 (아이콘 클릭 시 부모 버튼 찾기)
-    const btnTarget = event.target;
-    const submitBtn = btnTarget.closest('button') || btnTarget;
+    const btnTarget = event.target; 
+    const submitBtn = btnTarget.closest('button') || btnTarget; 
     const originalText = submitBtn.innerText;
-
+    
     if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerText = "IP 확인 중...";
     }
 
     // 4. 링크 생성
-    generateBuildUrl();
+    generateBuildUrl(); 
     const link = document.getElementById('result-url').value;
 
     if (!link) {
@@ -2962,72 +2819,72 @@ function shareBuildToCloud() {
 
     // 6. ★★★ [핵심] IP 조회 후 서버로 데이터 전송 ★★★
     fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(ipData => {
-            const userIp = ipData.ip;
+    .then(res => res.json())
+    .then(ipData => {
+        const userIp = ipData.ip;
+        
+        if (submitBtn) submitBtn.innerText = "전송 중...";
 
-            if (submitBtn) submitBtn.innerText = "전송 중...";
-
-            // 서버로 보낼 데이터 묶음
-            const params = new URLSearchParams({
-                action: 'submit_build',
-                title: title,
-                creator: creator,
-                type: type,
-                desc: desc,
-                weapons: JSON.stringify(weapons),
-                link: link,
-                rec_weapons: recWeapons,
-                rec_armor: recArmor,
-                ip: userIp // 차단 확인용 IP
-            });
-
-            if (typeof BUILD_API_URL === 'undefined') { throw new Error("서버 주소(BUILD_API_URL)가 설정되지 않았습니다."); }
-
-            // 구글 Apps Script로 전송
-            return fetch(`${BUILD_API_URL}?${params.toString()}`);
-        })
-        .then(res => res.text())
-        .then(data => {
-            data = data.trim();
-
-            // 결과에 따른 처리
-            if (data === "SUCCESS") {
-                alert("✅ 빌드가 성공적으로 공유되었습니다!");
-                // 입력창 초기화
-                document.getElementById('build-title').value = "";
-                document.getElementById('build-creator').value = "";
-                document.getElementById('build-desc').value = "";
-                document.getElementById('rec-weapons').value = "";
-                document.getElementById('rec-armor').value = "";
-            }
-            else if (data === "FAIL:BAD_WORD_BANNED") {
-                alert("🚫 [경고] 금칙어(욕설/비하/정치 등) 사용이 감지되었습니다.\n\n해당 IP는 블랙리스트에 등록되어\n앞으로 빌드 공유 기능을 사용할 수 없습니다.");
-            }
-            else if (data === "FAIL:BLOCKED_USER") {
-                alert("⛔ [차단됨] 귀하의 IP는 운영 정책 위반으로 인해\n빌드 공유 기능이 영구 차단되었습니다.");
-            }
-            else if (data === "FAIL:TOO_LONG") {
-                alert("🚫 입력한 내용이 너무 깁니다. 조금만 줄여주세요.");
-            }
-            else if (data === "FAIL:MISSING_DATA") {
-                alert("⚠️ 필수 데이터가 누락되었습니다.");
-            }
-            else {
-                alert("전송 실패: " + data);
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("서버 통신 중 오류가 발생했습니다.\n(AdBlock 등이 켜져있다면 꺼주세요)");
-        })
-        .finally(() => {
-            // 전송이 끝나면 버튼 원래대로 복구
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerText = originalText;
-            }
+        // 서버로 보낼 데이터 묶음
+        const params = new URLSearchParams({
+            action: 'submit_build',
+            title: title,
+            creator: creator,
+            type: type,
+            desc: desc,
+            weapons: JSON.stringify(weapons),
+            link: link,
+            rec_weapons: recWeapons,
+            rec_armor: recArmor,
+            ip: userIp // 차단 확인용 IP
         });
+
+        if (typeof BUILD_API_URL === 'undefined') { throw new Error("서버 주소(BUILD_API_URL)가 설정되지 않았습니다."); }
+
+        // 구글 Apps Script로 전송
+        return fetch(`${BUILD_API_URL}?${params.toString()}`);
+    })
+    .then(res => res.text())
+    .then(data => {
+        data = data.trim();
+        
+        // 결과에 따른 처리
+        if (data === "SUCCESS") {
+            alert("✅ 빌드가 성공적으로 공유되었습니다!");
+            // 입력창 초기화
+            document.getElementById('build-title').value = "";
+            document.getElementById('build-creator').value = "";
+            document.getElementById('build-desc').value = "";
+            document.getElementById('rec-weapons').value = ""; 
+            document.getElementById('rec-armor').value = "";   
+        } 
+        else if (data === "FAIL:BAD_WORD_BANNED") {
+            alert("🚫 [경고] 금칙어(욕설/비하/정치 등) 사용이 감지되었습니다.\n\n해당 IP는 블랙리스트에 등록되어\n앞으로 빌드 공유 기능을 사용할 수 없습니다.");
+        } 
+        else if (data === "FAIL:BLOCKED_USER") {
+            alert("⛔ [차단됨] 귀하의 IP는 운영 정책 위반으로 인해\n빌드 공유 기능이 영구 차단되었습니다.");
+        }
+        else if (data === "FAIL:TOO_LONG") {
+            alert("🚫 입력한 내용이 너무 깁니다. 조금만 줄여주세요.");
+        } 
+        else if (data === "FAIL:MISSING_DATA") {
+            alert("⚠️ 필수 데이터가 누락되었습니다.");
+        }
+        else {
+            alert("전송 실패: " + data);
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("서버 통신 중 오류가 발생했습니다.\n(AdBlock 등이 켜져있다면 꺼주세요)");
+    })
+    .finally(() => {
+        // 전송이 끝나면 버튼 원래대로 복구
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+        }
+    });
 }
 
 // ▼▼▼ script.js 맨 아래에 추가하세요 ▼▼▼
@@ -3036,10 +2893,10 @@ function shareBuildToCloud() {
 function loadContent(url) {
     // 1. 콘텐츠를 넣을 컨테이너 찾기
     // (우선순위: 가이드 내용 영역 -> 보스 전용 영역 -> 메인 콘텐츠 영역)
-    const container = document.getElementById('guide-dynamic-content') ||
-        document.getElementById('view-boss') ||
-        document.querySelector('.boss-page-container')?.parentElement;
-
+    const container = document.getElementById('guide-dynamic-content') || 
+                      document.getElementById('view-boss') || 
+                      document.querySelector('.boss-page-container')?.parentElement;
+    
     if (!container) {
         console.error("콘텐츠를 표시할 영역을 찾을 수 없습니다.");
         return;
@@ -3058,7 +2915,7 @@ function loadContent(url) {
             // 내용 교체
             container.innerHTML = html;
             container.style.opacity = '1';
-
+            
             // 화면 맨 위로 스크롤
             window.scrollTo(0, 0);
         })
@@ -3075,11 +2932,11 @@ function openBossTab(tabName, btnElement) {
     // 1. 현재 페이지 내의 모든 탭 내용 숨기기
     // (범위를 document 전체가 아닌, 버튼이 있는 컨테이너 주변으로 한정하면 더 안전하지만, 지금은 전체로 해도 무방합니다)
     const container = btnElement.closest('.quest-detail-container') || document;
-
+    
     container.querySelectorAll('.boss-tab-content').forEach(content => {
         content.classList.remove('active');
     });
-
+    
     // 2. 모든 탭 버튼 비활성화
     container.querySelectorAll('.boss-tab-btn').forEach(btn => {
         btn.classList.remove('active');
@@ -3101,17 +2958,17 @@ function filterBoss(selectElement) {
     if (!select) return;
 
     const type = select.value;
-
+    
     // 2. 보스 그리드 찾기
     const grid = document.getElementById('bossGrid');
     if (!grid) return;
 
     const cards = grid.querySelectorAll('.boss-card');
-
+    
     // 3. 필터링 로직 수행
     cards.forEach(card => {
         const cardType = card.getAttribute('data-type');
-
+        
         // 'all'이거나 타입이 일치하면 보여줌
         if (type === 'all' || cardType === type) {
             card.style.display = 'block';
@@ -3130,8 +2987,8 @@ function filterBoss(selectElement) {
 function goBoss(id) {
     // 1. 주소창 URL 변경 (기존 ?g=boss 유지하면서 &r=id 추가)
     const newUrl = '?g=boss&r=' + id;
-    window.history.pushState({ path: newUrl }, '', newUrl);
-
+    window.history.pushState({path: newUrl}, '', newUrl);
+    
     // 2. 내용 로드 (깜빡임 없이)
     loadContent('boss/' + id + '.html');
 }
@@ -3140,8 +2997,8 @@ function goBoss(id) {
 function goBossList() {
     // 1. URL에서 파라미터 제거 (?g=boss 상태로 복귀)
     const newUrl = '?g=boss';
-    window.history.pushState({ path: newUrl }, '', newUrl);
-
+    window.history.pushState({path: newUrl}, '', newUrl);
+    
     // 2. 보스 목록(boss.html) 다시 로드
     // loadContent는 단순히 파일 내용을 innerHTML로 넣는 함수이므로 boss.html을 다시 부르면 됨
     loadContent('boss.html');
@@ -3155,11 +3012,11 @@ function openInfoModal(item) {
     const desc = document.getElementById('modal-desc');
 
     if (modal) {
-        if (img) img.src = item.img || 'images/logo.png';
-        if (name) name.innerText = item.name;
+        if(img) img.src = item.img || 'images/logo.png';
+        if(name) name.innerText = item.name;
         // 설명이 있으면 설명, 없으면 획득처, 둘 다 없으면 기본 메시지
-        if (desc) desc.innerHTML = item.desc || item.acquire || "상세 정보가 없습니다.";
-
+        if(desc) desc.innerHTML = item.desc || item.acquire || "상세 정보가 없습니다.";
+        
         modal.style.display = 'flex';
     }
 }
@@ -3187,13 +3044,13 @@ function openInfoModalById(type, id) {
 function openBuilderModal(type, index) {
     if (!builderData) return alert("데이터를 불러오는 중입니다...");
     currentSlot = { type, index }; // 현재 선택한 슬롯 저장
-
+    
     const modal = document.getElementById('builder-modal');
     const list = document.getElementById('builder-modal-list');
     const title = document.getElementById('builder-modal-title');
-
+    
     list.innerHTML = '';
-
+    
     // [해제] 버튼 추가
     const emptyDiv = document.createElement('div');
     emptyDiv.className = 'select-item';
@@ -3203,8 +3060,8 @@ function openBuilderModal(type, index) {
 
     // ★ 콤보 선택 모달일 경우
     if (type === 'combo') {
-        title.innerText = `콤보 ${parseInt(index) + 1}단계 선택`;
-
+        title.innerText = `콤보 ${parseInt(index)+1}단계 선택`;
+        
         // 1) 기본 조작키 추가
         Object.keys(KEY_MAP).forEach(key => {
             const k = KEY_MAP[key];
@@ -3212,7 +3069,7 @@ function openBuilderModal(type, index) {
             div.className = 'select-item';
             // 키캡 모양 미리보기
             div.innerHTML = `
-                <div class="key-cap ${k.color} ${k.hold ? 'hold' : ''}" style="margin:0 auto;"><span>${k.text}</span></div>
+                <div class="key-cap ${k.color} ${k.hold?'hold':''}" style="margin:0 auto;"><span>${k.text}</span></div>
                 <p>${k.desc}</p>
             `;
             div.onclick = () => selectBuilderItem(key, null, k.desc); // 이미지는 없음
@@ -3239,7 +3096,7 @@ function openBuilderModal(type, index) {
                 }
             });
         }
-    }
+    } 
     // ★ 기존 아이템(무기/심법/비결) 선택 모달일 경우
     else {
         title.innerText = `${type === 'weapons' ? '무기' : type === 'hearts' ? '심법' : '비결'} 선택`;
@@ -3257,14 +3114,14 @@ function openBuilderModal(type, index) {
             });
         }
     }
-
+    
     modal.style.display = 'flex';
 }
 
 // 4. [중요] 아이템 선택 처리 함수 수정 (기존 selectBuilderItem 덮어쓰기)
 function selectBuilderItem(itemId, imgSrc, itemName) {
     const { type, index } = currentSlot;
-
+    
     // 데이터 저장
     currentBuild[type][index] = itemId;
 
@@ -3284,19 +3141,19 @@ function selectBuilderItem(itemId, imgSrc, itemName) {
     if (itemId) {
         imgEl.src = imgSrc;
         imgEl.style.display = 'block';
-        if (plusSpan) plusSpan.style.display = 'none';
+        if(plusSpan) plusSpan.style.display = 'none';
         slotEl.style.borderStyle = 'solid';
-        if (nameEl) nameEl.innerText = itemName;
+        if(nameEl) nameEl.innerText = itemName;
     } else {
         imgEl.src = '';
         imgEl.style.display = 'none';
-        if (plusSpan) plusSpan.style.display = 'block';
+        if(plusSpan) plusSpan.style.display = 'block';
         slotEl.style.borderStyle = 'dashed';
-        if (nameEl) nameEl.innerText = '';
+        if(nameEl) nameEl.innerText = '';
     }
-
-    closeBuilderModal(null);
-}
+    
+    closeBuilderModal(null); 
+        }
 
 
 /* =========================================
@@ -3332,8 +3189,8 @@ function renderComboSlots() {
             // 키(Key)인지 확인
             if (typeof KEY_MAP !== 'undefined' && KEY_MAP[val]) {
                 const k = KEY_MAP[val];
-                contentHtml = `<div class="key-cap ${k.color} ${k.hold ? 'hold' : ''}" style="width:100%; height:100%; border-radius:4px; box-shadow:none; font-size:0.9em;"><span>${k.text}</span></div>`;
-            }
+                contentHtml = `<div class="key-cap ${k.color} ${k.hold?'hold':''}" style="width:100%; height:100%; border-radius:4px; box-shadow:none; font-size:0.9em;"><span>${k.text}</span></div>`;
+            } 
             // 아니면 아이템(비결)으로 간주
             else {
                 let item = null;
@@ -3341,7 +3198,7 @@ function renderComboSlots() {
                     item = builderData.marts ? builderData.marts.find(m => m.id === val) : null;
                     if (!item && builderData.weapons) item = builderData.weapons.find(w => w.id === val);
                 }
-
+                
                 if (item) contentHtml = `<img src="${item.img}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">`;
                 else contentHtml = `<div style="font-size:0.7em; word-break:break-all;">${val}</div>`;
             }
@@ -3392,11 +3249,11 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
     if (!container) return;
 
     if (globalBossData.length === 0) {
-        if (!container.innerHTML.trim()) container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
+        if(!container.innerHTML.trim()) container.innerHTML = '<div style="padding:20px; text-align:center; color:#999;">데이터 로딩 중...</div>';
         return;
     }
 
-    container.innerHTML = '';
+    container.innerHTML = ''; 
 
     // 필터링
     let targets = globalBossData;
@@ -3413,7 +3270,7 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
     let html = '';
     targets.forEach(boss => {
         const badgeName = boss.type === 'heroic' ? '협경' : '일반';
-        const badgeColor = boss.type === 'heroic' ? '#d32f2f' : '#757575';
+        const badgeColor = boss.type === 'heroic' ? '#d32f2f' : '#757575'; 
         const bgImage = boss.img ? boss.img : 'images/logo.png';
 
         // ★ 핵심 변경: 클릭 시 enterBossDetail 함수 실행
@@ -3438,21 +3295,21 @@ function renderBossList(containerId, filterType = 'all', limit = 0) {
 function enterBossDetail(link) {
     // 1. 모든 뷰 숨기고 가이드 뷰만 보이기 (강제 전환)
     const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji'];
-    views.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
-
+    views.forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+    
     const guideView = document.getElementById('view-guide');
-    if (guideView) guideView.style.display = 'block';
-
+    if(guideView) guideView.style.display = 'block';
+    
     // 네비게이션 활성화
     const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
-    navs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
+    navs.forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('active'); });
     const navCode = document.getElementById('nav-code');
-    if (navCode) navCode.classList.add('active');
+    if(navCode) navCode.classList.add('active');
 
     // 2. URL 파라미터 업데이트 (새로고침 대비)
     const parts = link.split('/');
     const id = parts[parts.length - 1].replace('.html', ''); // 'b1'
-
+    
     const url = new URL(window.location);
     url.searchParams.set('tab', 'guide');
     url.searchParams.set('g', 'boss');
@@ -3463,7 +3320,7 @@ function enterBossDetail(link) {
     // 가이드 프레임(guide.html)이 이미 로드되어 있다면 -> 바로 콘텐츠 교체
     if (isGuideLoaded) {
         loadContent(link);
-    }
+    } 
     // 로드 안 되어 있다면 -> loadGuideView 실행 (위에서 설정한 URL 파라미터를 보고 알아서 로드함)
     else {
         loadGuideView();
@@ -3483,7 +3340,7 @@ function getYoutubeId(url) {
 function renderHomeRecentNews(newsList) {
     const container = document.getElementById('home-recent-news');
     if (!container) return;
-
+    
     container.innerHTML = '';
 
     if (!newsList || newsList.length === 0) {
@@ -3492,12 +3349,12 @@ function renderHomeRecentNews(newsList) {
     }
 
     // 5개만 표시
-    const listToRender = newsList.slice(0, 5);
+    const listToRender = newsList.slice(0, 5); 
 
     listToRender.forEach(item => {
         const row = document.createElement('div');
-        row.className = 'news-list-row';
-
+        row.className = 'news-list-row'; 
+        
         // 링크가 없으면 빈 문자열
         const linkText = item.link ? item.link : '';
 
@@ -3511,7 +3368,7 @@ function renderHomeRecentNews(newsList) {
                 ${item.date}
             </div>
         `;
-
+        
         container.appendChild(row);
     });
 }
@@ -3573,7 +3430,7 @@ async function fetchLikeStatus(id) {
             // 서버에 내 IP가 이 ID를 눌렀는지 묻습니다.
             const res = await fetch(`${LIKE_API_URL}?action=get&id=${pureId}&ip=${currentUserIp}`);
             const result = await res.json();
-
+            
             countEl.innerText = result.count;
             if (result.hasLiked) {
                 // 이미 눌렀다면 클릭 차단 및 빨간 버튼 고정
@@ -3611,7 +3468,7 @@ async function handleLikeClick() {
     try {
         const res = await fetch(`${LIKE_API_URL}?action=like&id=${pureId}&ip=${currentUserIp}`);
         const result = await res.json();
-
+        
         // 서버 최종값으로 동기화
         countEl.innerText = result.count;
     } catch (err) {
@@ -3622,7 +3479,7 @@ async function handleLikeClick() {
 // 3. 버튼 활성화 스타일 적용 함수
 function setLikeButtonActive(container, forceActive) {
     if (!container) return;
-
+    
     if (forceActive) {
         container.classList.add('active');
         container.style.pointerEvents = "none"; // 더 못 누르게 함
@@ -3632,265 +3489,6 @@ function setLikeButtonActive(container, forceActive) {
         const heartText = container.querySelector('span');
         if (heartText) heartText.style.color = "#b71c1c";
     }
+                                      
+
 }
-// [수정] 업적 리스트 렌더링 함수
-function renderAchievements(data) {
-    const container = document.getElementById('achievement-list');
-    if (!container) return;
-
-    // 원본 전체 리스트 가져오기
-    const fullList = Array.isArray(data) ? data : (data.archive || []);
-
-    if (fullList.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#999; padding:15px; font-size:0.9em;">아직 달성된 업적이 없습니다.</div>';
-        return;
-    }
-
-    container.innerHTML = ''; 
-
-    // ★ 핵심: 모바일(768px 이하)일 때는 4개, PC일 때는 10개로 제한 ★
-    const isMobile = window.innerWidth <= 768;
-    const displayLimit = isMobile ? 4 : 10;
-    const limitedList = fullList.slice(0, displayLimit);
-
-    limitedList.forEach(item => {
-        const iconSrc = item.icon ? item.icon : 'images/logo.png';
-
-        const div = document.createElement('div');
-        div.className = 'achievement-card';
-        div.innerHTML = `
-            <div class="ach-icon">
-                <img src="${iconSrc}" alt="아이콘" onerror="this.src='images/logo.png'">
-            </div>
-            <div class="ach-content">
-                <div class="ach-title">${item.displayName}</div>
-                <div class="ach-desc">${item.description}</div>
-            </div>
-        `;
-        container.appendChild(div);
-    });
-}
-
-// [신규] 업적 전체 목록 그리기 (큰 카드 형태)
-function renderFullAchievementList() {
-    const container = document.getElementById('archive-grid-container');
-    if (!container) return;
-
-    // 이미 그려져 있으면 다시 그리지 않음 (최적화)
-    if (container.children.length > 0) return;
-
-    const list = globalData.archive || [];
-    container.innerHTML = '';
-
-    if (list.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px; color:#888;">데이터가 없습니다.</div>';
-        return;
-    }
-
-    list.forEach(item => {
-        const iconSrc = item.icon ? item.icon : 'images/logo.png';
-
-        const card = document.createElement('div');
-        card.className = 'archive-full-card'; // CSS에서 정의한 큰 카드 클래스
-        card.innerHTML = `
-            <div class="af-icon-wrapper">
-                <img src="${iconSrc}" alt="아이콘" onerror="this.src='images/logo.png'">
-            </div>
-            <div class="af-content">
-                <div class="af-title">${item.displayName}</div>
-                <div class="af-desc">${item.description}</div>
-            </div>
-        `;
-        container.appendChild(card);
-    });
-}
-
-
-
-// [신규] 업적 전체 목록 그리기 (큰 카드 형태)
-function renderFullAchievementList() {
-    const container = document.getElementById('archive-grid-container');
-    if (!container) return;
-
-    // 이미 그려져 있으면 다시 그리지 않음 (최적화)
-    if (container.children.length > 0) return;
-
-    const list = globalData.archive || [];
-    container.innerHTML = '';
-
-    if (list.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px; color:#888;">데이터가 없습니다.</div>';
-        return;
-    }
-
-    list.forEach(item => {
-        const iconSrc = item.icon ? item.icon : 'images/logo.png';
-
-        const card = document.createElement('div');
-        card.className = 'archive-full-card'; // CSS에서 정의한 큰 카드 클래스
-        card.innerHTML = `
-            <div class="af-icon-wrapper">
-                <img src="${iconSrc}" alt="아이콘" onerror="this.src='images/logo.png'">
-            </div>
-            <div class="af-content">
-                <div class="af-title">${item.displayName}</div>
-                <div class="af-desc">${item.description}</div>
-            </div>
-        `;
-        container.appendChild(card);
-    });
-}
-/* =========================================/* =========================================
-   [JS 초기화] 링크 없으면 흑백 + 클릭/호버 방지
-   ========================================= */
-function renderHomeCharacters() {
-    const container = document.getElementById('home-char-list');
-
-    if (!container || !Array.isArray(characterData) || characterData.length === 0) {
-        return;
-    }
-
-    container.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-
-    characterData.forEach(char => {
-        const name = char.name || '이름 없음';
-        const affil = char.affiliation || '';
-        const photo = char.photo || 'images/logo.png';
-
-        const hasLink = char.link && char.link.trim() !== "";
-
-        const div = document.createElement('div');
-        div.className = 'char-card-horizontal';
-
-        if (hasLink) {
-            div.style.cursor = 'pointer';
-        } else {
-            div.style.pointerEvents = 'none';
-        }
-
-        const imgStyle = hasLink ? "" : "filter: grayscale(100%); opacity: 0.6;";
-
-        // ★ 이 부분을 수정해야 합니다 ★
-        div.onclick = () => {
-            if (typeof openPersonDetail === 'function') {
-                // 특정 필드만 골라 담지 말고, 원본 char 객체를 통째로 전달합니다.
-                openPersonDetail(char); 
-            }
-        };
-
-        div.innerHTML = `
-            <img src="${photo}" class="char-h-img" alt="${name}" 
-                 style="${imgStyle}" 
-                 onerror="this.onerror=null; this.src='images/logo.png';">
-            <div class="char-overlay-box">
-                <div class="char-h-name">${name}</div>
-                <div class="char-h-affil">${affil}</div>
-            </div>
-        `;
-
-        fragment.appendChild(div);
-    });
-
-    container.appendChild(fragment);
-}
-
-function openPersonDetail(char) {
-    const modal = document.getElementById('person-bottom-sheet');
-    const contentArea = document.querySelector('#person-bottom-sheet .bottom-sheet-content');
-
-    if (!modal || !contentArea) return;
-
-    // 1. 데이터에서 "story"로 시작하는 키들만 골라내어 <p> 태그 생성
-    const storiesHtml = Object.keys(char)
-        .filter(key => key.startsWith('story')) // story1, story2 등 필터링
-        .sort() // 순서대로 정렬
-        .map(key => `<p style="margin-bottom: 8px;">${char[key]}</p>`) // 각 스토리를 <p>로 감쌈
-        .join('');
-    const displayAffiliation = char.affiliation || char.affil || '알 수 없음';
-    // 2. 전체 레이아웃 구성
-    contentArea.innerHTML = `
-        <div class="sheet-handle-bar"></div>
-        
-        <div class="person-sheet-header">
-            <div class="person-img-container" style="margin-bottom:15px;">
-                <img src="${char.photo}" class="person-img-large" 
-                     style="width:90px; height:90px; border-radius:12px; border:1px solid #ddd; object-fit:cover;">
-            </div>
-            <h3>${char.name}</h3>
-            <div class="person-sheet-sub">| ${char.link || '무명 협객'} |</div>
-        </div>
-
-        <div class="task-list-wrapper">
-            <div class="person-info-row">
-                <span class="person-label">소속</span>
-                <span class="task-title">${displayAffiliation || '알 수 없음'}</span>
-               </div>
- 
-            
-            <div class="person-bio-item" style="margin-top:10px;">
-                <div style="font-weight:bold; color:var(--wuxia-accent-gold); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:5px;">
-                    전기
-                </div>
-                <div style="line-height:1.7; color:#555; word-break: break-all;">
-                    ${storiesHtml || '<p>기록된 전기가 없습니다.</p>'}
-                </div>
-            </div>
-        </div>
-
-        <button class="browse-button" onclick="closePersonDetail()" style="margin-top:25px;">
-            닫기
-        </button>
-    `;
-
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-// 바텀시트 닫기 함수
-function closePersonDetail() {
-    document.getElementById('person-bottom-sheet').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-let deferredPrompt; // 설치 프롬프트를 저장할 변수
-const installContainer = document.getElementById('install-container');
-const installBtn = document.getElementById('btn-install-app');
-
-// 1. 브라우저가 설치 가능함을 감지했을 때 발생
-window.addEventListener('beforeinstallprompt', (e) => {
-    // 기본 브라우저 설치 안내가 바로 뜨지 않도록 방지
-    e.preventDefault();
-    // 이벤트를 보관해둠
-    deferredPrompt = e;
-    
-    // 숨겨져 있던 버튼 컨테이너를 표시 (이제 설치 가능하니까!)
-    if (installContainer) {
-        installContainer.style.setProperty('display', 'flex', 'important');
-    }
-});
-
-// 2. 버튼 클릭 시 설치 프롬프트 띄우기
-if (installBtn) {
-    installBtn.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
-
-        // 보관해둔 설치창 띄우기
-        deferredPrompt.prompt();
-
-        // 사용자의 선택 결과 기다리기
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`사용자 설치 선택: ${outcome}`);
-
-        // 결과와 상관없이 프롬프트는 1회용이므로 초기화
-        deferredPrompt = null;
-        
-        // 설치창이 닫혔으므로 버튼 다시 숨기기
-        if (installContainer) installContainer.style.display = 'none';
-    });
-}
-
-// 3. 앱이 성공적으로 설치되었을 때
-window.addEventListener('appinstalled', (evt) => {
-    console.log('연운 위키 앱이 설치되었습니다.');
-    if (installContainer) installContainer.style.display = 'none';
-});

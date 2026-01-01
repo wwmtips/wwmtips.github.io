@@ -6101,8 +6101,8 @@ body.dark-mode .pwa-install-desc { color: #888; }
 
 /* 3. 내부 텍스트 스타일 */
 .slim-btn span {
-    font-size: 0.85em !important;
-    font-weight: bold !important;
+    font-size: 0.75em !important;
+    font-weight: 600 !important;
     color: var(--wuxia-text-main, #1a1a1a) !important;
     white-space: nowrap;
     overflow: hidden;

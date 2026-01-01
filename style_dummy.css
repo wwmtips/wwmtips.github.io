@@ -6045,3 +6045,22 @@ body.dark-mode .pwa-install-card {
 
 body.dark-mode .pwa-install-title { color: #e0e0e0; }
 body.dark-mode .pwa-install-desc { color: #888; }
+
+/* 업적 카드 이미지 영역 (상단) */
+.ach-icon {
+    width: 100% !important;
+    height: 65px !important; /* 고정 높이 유지 */
+    background-color: #000 !important; /* 이미지 배경 검정 (이미지 비율 대비 남는 공간) */
+    display: block !important; /* 플렉스 제거하여 꽉 채움 */
+    overflow: hidden;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.ach-icon img {
+    width: 100% !important;   /* 가로 꽉 채움 */
+    height: 100% !important;  /* 세로 꽉 채움 */
+    max-width: none !important; /* 기존 85% 제한 해제 */
+    max-height: none !important;
+    object-fit: cover !important; /* [핵심] 비율 유지하며 영역 꽉 채우기 */
+    object-position: center;     /* 이미지 중앙 기준 */
+}

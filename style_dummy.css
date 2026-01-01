@@ -4122,7 +4122,7 @@ body.dark-mode .timer-row:hover {
     /* 강호령과 동일한 패딩 */
     border-bottom: 1px solid #eee;
     /* 구분선 */
-    gap: 12px;
+    gap: 6px;
     /* 아이콘과 텍스트 사이 간격 */
     transition: background-color 0.2s;
     height: auto;

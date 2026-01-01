@@ -2,6 +2,16 @@
   "items": [],
   "quests": [],
   "quiz": [
+{ "hint": "검은 반점 무늬", "answer": "표범", "user": "" },
+{ "hint": "뿌리채소", "answer": "렌즈콩", "user": "ㅇㅇ" },
+{ "hint": "초원", "answer": "양", "user": "짭짭이" },
+{ "hint": "노란 깃털", "answer": "꾀꼬리", "user": "유환성" },
+{ "hint": "파란색", "answer": "파랑새", "user": "봉팔컴" },
+{ "hint": "긴팔", "answer": "오랑우탄", "user": "라혼" },
+{ "hint": "발굽", "answer": "말", "user": "천마°" },
+{ "hint": "낚싯줄", "answer": "낚시대", "user": "낚시대" },
+
+    
     { "hint": "나무", "answer": "딱따구리", "user": "안녕로봇" },
 { "hint": "식칼", "answer": "도마", "user": "설현아" },
 { "hint": "뒤뚱뒤뚱", "answer": "펭귄", "user": "설현아" },

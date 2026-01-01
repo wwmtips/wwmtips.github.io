@@ -881,7 +881,7 @@ const GUIDE_MAP = {
     'news': 'news.html', 'tierlist': 'guide_tier.html', 'weapon': 'tier_weapon.html',
     'build': 'build.html', 'map': 'maps.html', 'side': 'beta.html', 'hw': 'npc.html',
     'boss': 'boss.html', 'marts': 'marts.html', 'harts': 'harts.html', 'skill': 'skils.html',
-    'majang': 'majang.html', 'code': 'code.html'
+    'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html'
 };
 
 function loadGuideView() {

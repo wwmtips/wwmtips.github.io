@@ -1,15 +1,15 @@
 <div class="quest-detail-container" style="text-align: left;">
     
     <style>
-        /* 수묵화 테마 계승 및 스토리 전용 스타일 */
-        .story-section { margin-bottom: 45px; }
+        /* 기존 world1.html 스타일 계승 및 장문 최적화 */
+        .story-section { margin-bottom: 50px; }
         .story-card {
             background-color: #fffcf5; 
             border: 1px solid var(--wuxia-accent-gold); 
-            padding: 22px; 
+            padding: 30px; 
             border-radius: 4px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            margin-top: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 15px;
             position: relative;
         }
         .story-card::before {
@@ -20,101 +20,129 @@
             opacity: 0.3;
             pointer-events: none;
         }
-        .story-list { color: var(--wuxia-text-sub); line-height: 1.9; padding-left: 20px; margin: 0; }
-        .story-list li { margin-bottom: 12px; }
-        .story-list strong { color: var(--wuxia-text-main); font-size: 1.05em; }
+        .story-text { 
+            color: var(--wuxia-text-sub); 
+            line-height: 2.0; 
+            font-size: 1.0rem;
+            text-align: justify;
+        }
+        .story-text p { margin-bottom: 20px; }
+        .story-text strong { color: var(--wuxia-text-main); border-bottom: 1px solid var(--wuxia-accent-gold); }
         
-        .history-tag {
-            display: inline-block;
-            background-color: var(--wuxia-accent-red);
-            color: #fff;
-            padding: 1px 8px;
-            font-size: 0.8em;
-            border-radius: 2px;
-            margin-bottom: 8px;
+        .accent-quote {
+            background-color: #fdfaf0;
+            border-left: 5px solid var(--wuxia-accent-red);
+            padding: 20px;
+            margin: 25px 0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--wuxia-text-main);
+            font-family: 'Noto Serif KR', serif;
         }
-        .spoiler-alert {
-            background-color: #fff1f0;
-            border: 1px solid #ffa39e;
-            color: #cf1322;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            margin-bottom: 20px;
-            text-align: center;
+
+        .history-emphasis {
+            color: var(--wuxia-accent-red);
+            font-weight: bold;
         }
-        .character-info {
-            background-color: #f6f6f6;
-            padding: 15px;
-            border-left: 4px solid var(--wuxia-accent-gold);
-            margin: 15px 0;
-        }
-        .source-footer {
-            margin-top: 60px;
-            padding-top: 25px;
-            border-top: 1px dashed #ccc;
-            text-align: center;
-            color: #888;
-            font-size: 0.85em;
-        }
-        .source-footer a { color: var(--wuxia-accent-gold); text-decoration: none; font-weight: bold; }
     </style>
 
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 25px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">세계관</span>
-        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">연운: 난세의 서막과 출생의 비밀</h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">오대십국 혼란기, 강호의 의인들이 써 내려가는 방대한 서사시</p>
-    </div>
-
-    <div class="spoiler-alert">
-        ⚠️ <strong>주의:</strong> 본 가이드는 게임의 초기 스토리 및 배경에 대한 <strong>스포일러</strong>를 포함하고 있습니다.
-    </div>
-
-    <div class="story-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">1. 역사적 배경: 오대십국 시대 (907~960)</h3>
-        <div class="story-card">
-            <ul class="story-list">
-                <li><strong>시대적 혼란:</strong> 당나라 멸망 후 송나라 건국 전까지의 시기로, 북쪽의 5개 왕조(오대)와 남서쪽의 10개 지방 왕국(십국)이 난립하던 시기입니다.</li>
-                <li><strong>전략적 요충지, 연운 16주:</strong> 거란(요나라)과 중원 사이의 핵심 방어 기지로, 현재의 북경과 천진을 포함한 역사적 요충지입니다.</li>
-                <li><strong>배신의 역사:</strong> 후진의 석경당은 거란의 도움을 받는 대가로 연운 16주를 할양하고 거란 황제에게 굴욕적인 외교를 펼쳤습니다.</li>
-            </ul>
-        </div>
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 20px; margin-bottom: 30px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 3px 10px; border-radius: 2px; font-weight: bold; font-size: 0.85em; vertical-align: middle;">세계관</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 12px; vertical-align: middle; font-size: 1.8rem;">
+            연운(燕雲): 잃어버린 방패와 400년의 통곡
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 1.0rem; margin-top: 8px;">강호의 협객이 되기 전, 당신이 딛고 선 이 땅의 거대한 비극을 대면하십시오.</p>
     </div>
 
     <div class="story-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">2. 중도교 전투와 비극</h3>
-        <div class="story-card">
-            <ul class="story-list">
-                <li><strong>왕청 장군의 전사:</strong> 거란에 맞선 용맹한 장군 왕청은 상관의 배신으로 지원 없이 싸우다 전사했으며, 이 패배로 후진은 멸망의 길을 걷게 됩니다.</li>
-                <li><strong>주인공의 구출:</strong> 왕청의 양아들 <strong>강염</strong>이 전쟁터의 참화 속에서 갓난아기였던 주인공을 극적으로 구출해 냅니다.</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="story-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">3. 은둔의 땅, 청하</h3>
-        <div class="story-card">
-            <div class="character-info">
-                <strong>강염(강무랑):</strong> '수금루'의 추적을 피해 청하로 숨어들었습니다. '강염'과 '강무랑'은 각각 강이 고요하고 물결이 없다는 의미로, 은둔의 삶을 상징합니다.
-            </div>
-            <ul class="story-list">
-                <li><strong>양아버지의 실종:</strong> 본편 시작 3년 전, 남당의 전염병(몽괴) 해결과 전설적 암살자 <strong>전영</strong>을 구출하라는 서신을 받고 떠난 후 행방불명되었습니다.</li>
-                <li><strong>한 이모의 비밀:</strong> 겉으로는 큰 객잔을 운영하나, 실제로는 거란 침투 스파이를 양성하는 조직의 리더입니다. 안면 개조 수술에 실패한 이들은 지하에 격리되는 비운을 맞기도 합니다.</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="story-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">4. 타오르는 마을, 개봉으로</h3>
-        <div class="story-card">
-            <p style="color: var(--wuxia-text-main); margin-bottom: 15px; line-height: 1.7;">
-                평화롭던 청하 마을은 <strong>천야 세력</strong>의 공격으로 불타버리고, 주인공의 동료인 홍연과 최도가 희생되는 비극이 발생하며 이야기는 더 큰 음모가 기다리는 <strong>개봉</strong>으로 이어집니다.
+        <div class="story-text">
+            <p>
+                만약 당신이 《연운》의 세계에 진정으로 몰입하고 싶다면, 이 강호가 품고 있는 시대적 무게를 먼저 가슴에 새겨야 합니다.
+                연운은 단순히 화려한 무공을 뽐내는 놀이터가 아닙니다.
+                이곳은 <strong>한 제국의 깊은 상실감</strong>과, 그 상처를 회복하기 위해 대를 이어 처절하게 투쟁해온 인간들의 목소리가 층층이 쌓여 있는 역사적 현장입니다.
             </p>
-            <div class="accent-box" style="background-color: #fff9f0; padding: 12px; border: 1px dashed var(--wuxia-accent-gold); font-size: 0.95em;">
-                💡 <strong>팬들의 추측:</strong> 주인공이 전사한 왕청 장군의 친자식일 것이라는 가설이 지배적입니다.
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 5px solid var(--wuxia-accent-red); padding-left: 15px; margin-bottom: 20px; font-weight: bold;">1. 몰락한 황금기와 분열의 서막</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    우리가 여행할 무대는 <strong>오대십국 시대와 송나라 초기</strong>, 즉 서기 10세기에서 11세기에 이르는 혼란의 정점입니다.
+                    이 시대를 이해하기 위해서는 찬란했던 전성기, '당나라'를 먼저 떠올려야 합니다.
+                    당나라는 수 세기 동안 세계 최강의 국가였으며, 시와 예술이 만개하고 막대한 문화적 영향력을 행사했던 인류사의 황금기였습니다.
+                </p>
+                <p>
+                    하지만 영원한 제국은 없습니다. 10세기에 당나라가 멸망하면서 중국 대륙은 걷잡을 수 없는 분열과 전쟁의 소용돌이로 빠져들었습니다.
+                    수많은 왕조가 눈 깜짝할 사이에 생겨나고 사라지기를 반복하던 이 폭력적인 시대를 끝내고 탄생한 것이 바로 송나라입니다.
+                    송의 건국자 태조는 뛰어난 군사 전략과 정적들을 설득해 항복을 받아내는 수완으로 대륙을 통일했으나, 그 평화는 시작부터 <span class="history-emphasis">연운십육주의 상실</span>이라는 거대한 악몽을 품고 있었습니다.
+                </p>
             </div>
         </div>
     </div>
 
+    <div class="story-section">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 5px solid var(--wuxia-accent-red); padding-left: 15px; margin-bottom: 20px; font-weight: bold;">2. 잃어버린 방패: 전투가 아닌 배신의 산물</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    연운(연운 16개 현)은 단순한 영토가 아니었습니다.
+                    그곳은 험준한 산맥과 요새화된 협곡으로 이루어진 <strong>천연의 요새</strong>였으며, 북방 초원의 강력한 기병대에 맞설 수 있는 중원의 유일하고 확실한 방패였습니다.
+                    연운을 잃는다는 것은 마치 알프스 산맥이 사라지거나 거대한 장벽이 무너지는 것과 같은 재앙이었습니다.
+                </p>
+                <div class="accent-quote">
+                    "비극은 정당한 패배가 아닌, 비겁한 배신에서 시작되었습니다."
+                </div>
+                <p>
+                    서기 938년, 혼란기 속의 군벌이었던 <strong>석경당</strong>은 내전의 승리를 위해 북쪽의 거란 제국과 악마의 거래를 했습니다.
+                    그는 자신의 왕좌를 대가로 국가의 심장부인 연운 지역을 거란에 바쳤습니다.
+                    더욱 치욕스러운 것은 그가 거란 황제를 '아버지'라 부르며 스스로를 '아들 황제'로 칭한 것입니다.
+                    이 이기적인 배신은 이후 송나라 300년 내내 지워지지 않을 저주가 되었습니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 5px solid var(--wuxia-accent-red); padding-left: 15px; margin-bottom: 20px; font-weight: bold;">3. 목에 칼이 겨눠진 번영</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    송나라는 경제와 문화의 정점을 찍은 'Renaissance'와 같은 국가였으나, 연운이라는 방패가 없었기에 늘 <strong>전략적 무력감</strong>에 시달렸습니다.
+                    방어할 지형지물이 없던 그들은 생존을 위해 막대한 비용을 들여 거대 상비군을 유지해야 했습니다.
+                    마치 평화로운 학자가 매일 무거운 갑옷을 입고 생활해야 하는 것과 같았으며, 이는 국가의 힘을 서서히 고갈시켰습니다.
+                </p>
+                <p>
+                    송나라는 결국 조공을 통해 평화를 사려 했습니다.
+                    매년 엄청난 양의 비단과 은을 거란에 바칠 때마다 그들은 부유했지만 주권은 없는 치욕을 상기해야 했습니다.
+                    태종을 비롯한 초기 황제들이 대규모 '북벌'을 감행하며 연운 수복을 꿈꿨으나, 방패 없는 평원에서의 전투는 늘 거란 기병에 의한 참혹한 패배로 끝났습니다.
+                    조국 수복의 꿈은 수 세기 동안 잊히지 않는 악몽으로 박제되었습니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.3em; border-left: 5px solid var(--wuxia-accent-red); padding-left: 15px; margin-bottom: 20px; font-weight: bold;">4. 강호의 방랑자: 경계에서 울려 퍼지는 목소리</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    이제 당신은 이 부서진 세상의 아이이자, 강호를 떠도는 방랑자로서 길을 나섭니다.
+                    당신의 이야기는 연운의 비극과 결코 떨어질 수 없습니다.
+                    송나라와 요나라의 접경지에서 두 제국 사이에 끼어 고통받는 백성들의 긴장감과 문화적 충돌을 온몸으로 겪게 될 것입니다.
+                </p>
+                <p>
+                    가장 슬픈 사실은 송나라가 끝내 연운의 꿈을 이루지 못했다는 점입니다.
+                    이 상처는 결국 몽골족에게 길을 열어주어 왕조의 몰락을 초래했으며, 연운이 수복된 것은 그로부터 400년이 지난 명나라 시대에 이르러서였습니다.
+                    게임 제목에 담긴 <strong>'목소리들(Voices)'</strong>은 바로 이 저항의 속삭임과, 다시 온전해질 고향을 향한 수많은 세대의 간절한 염원을 의미합니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <p style="text-align: center; color: #bbb; font-size: 0.9em; margin-top: 50px; font-style: italic;">
+        - 이 기록은 강호의 모든 협객이 짊어져야 할 시대의 기억입니다. -
+    </p>
 
 </div>

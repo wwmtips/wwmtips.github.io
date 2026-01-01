@@ -132,6 +132,9 @@ html, body, #map {
     width: 240px !important; 
     text-align: center;
 }
+.leaflet-container a {
+	color: #ffffff;
+	}
 .leaflet-container a.leaflet-popup-close-button {
     color: var(--wuxia-text-sub) !important;
     font-size: 20px !important;

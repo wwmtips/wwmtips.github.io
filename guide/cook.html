@@ -1,0 +1,122 @@
+<div class="quest-detail-container" style="text-align: left;">
+    
+    <style>
+        /* [수묵화 테마] 요리 도감 그리드 스타일 (이미지 왼쪽) */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 한 줄에 두 개 배치 */
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .recipe-item {
+            background-color: #f4f4f2; /* 문파 가이드 미색 배경 계승 */
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            display: flex;
+            align-items: center; /* 세로 중앙 정렬 */
+            transition: transform 0.2s, border-color 0.2s;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.02);
+        }
+
+        .recipe-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--wuxia-accent-gold); /* 황금색 강조 */
+        }
+
+        /* 왼쪽 이미지 영역 */
+        .recipe-img-box {
+            flex: 0 0 65px; /* 이미지 크기 고정 */
+            height: 65px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            margin-right: 12px; /* 텍스트와의 간격 */
+            filter: drop-shadow(1px 2px 1px rgba(0,0,0,0.1)); /* 마작패 입체감 계승 */
+        }
+
+        .recipe-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 오른쪽 텍스트 영역 */
+        .recipe-info {
+            flex: 1;
+            overflow: hidden; /* 텍스트 넘침 방지 */
+        }
+
+        .recipe-name {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--wuxia-text-main);
+            border-left: 3px solid var(--wuxia-accent-red); /* 붉은색 세로선 */
+          
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recipe-desc {
+            font-size: 0.8em;
+            color: var(--wuxia-text-sub);
+            margin-bottom: 4px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 1; /* 한 줄 제한 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .recipe-ingredients {
+            font-size: 0.75em;
+            color: #666;
+            background: rgba(255,255,255,0.6);
+            padding: 2px 5px;
+            border-radius: 2px;
+            border: 1px solid #eee;
+            display: inline-block;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 650px) {
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <div class="recipe-grid">
+        
+        <div class="recipe-item">
+            <div class="recipe-img-box">
+                <img src="../images/cooking/1.jpg" alt="요리이미지">
+            </div>
+            <div class="recipe-info">
+                <span class="recipe-name">고소한 갈비</span>
+                <div class="recipe-desc">3초 동안 천천히 9,000pt의 기혈을 회복한다.</div>
+                <div class="recipe-ingredients">
+                    재료: 약초, 두툼한 고깃덩어리
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-item">
+            <div class="recipe-img-box">
+                <img src="https://via.placeholder.com/65" alt="요리이미지">
+            </div>
+            <div class="recipe-info">
+                <span class="recipe-name">조개 달걀찜</span>
+                <div class="recipe-desc">3초 동안 천천히 9,000pt의 기혈을 회복한다.</div>
+                <div class="recipe-ingredients">
+                    재료: 알, 다진 고기, 갑각
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

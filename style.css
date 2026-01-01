@@ -6450,3 +6450,25 @@ body.dark-mode .pwa-install-desc { color: #888; }
     cursor: pointer;
     transition: all 0.3s ease;
 }
+/* 적수 리스트 가로 나열 설정 */
+#home-boss-list {
+    display: flex !important;           /* 가로로 배치 */
+    overflow-x: auto !important;         /* 가로 스크롤 허용 */
+    overflow-y: hidden !important;
+    gap: 6px !important;                 /* 카드 사이 간격 */
+    -webkit-overflow-scrolling: touch;   /* 모바일 부드러운 스크롤 */
+    scroll-snap-type: none !important;    /* 페이지 단위가 아닌 자유 스크롤 */
+}
+
+/* 카드 너비 고정 (인물 정보 70px 규격과 동기화) */
+#home-boss-list .mini-card {
+    flex: 0 0 72px !important;           /* 너비 강제 고정 */
+    width: 72px !important;
+    margin: 0 !important;
+}
+
+/* 흑백 처리 (onclick 속성이 없을 때 자동 적용) */
+#home-boss-list .mini-card:not([onclick]) {
+    filter: grayscale(100%) !important;
+    opacity: 0.4 !important;
+}

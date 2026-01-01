@@ -376,7 +376,7 @@ function loadData() {
             renderComboSlots();
             renderHomeChunji(); // ★ 메인 화면용 리스트 추가 호출 ★
             // ★ 생일 체크 호출 추가
-    checkCharacterBirthday();
+         checkCharacterBirthday();
 
             if (typeof renderHomeCharacters === 'function') {
                 renderHomeCharacters();
@@ -384,14 +384,14 @@ function loadData() {
             if (typeof renderAchievements === 'function') {
                 renderAchievements(archiveData);
             }
-            // ★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
+            //★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
             if (document.getElementById('bossGrid')) {
                 renderBossList('bossGrid', 'all');
             }
             // 홈 화면에 보스 섹션이 있다면 (예: id="home-boss-list")
-            if (document.getElementById('home-boss-list')) {
+         /*   if (document.getElementById('home-boss-list')) {
                 renderBossList('home-boss-list', 'all', 2);
-            }
+            }*/
 
             // 상세 페이지 진입 처리
             if (shortQuestId) {
@@ -4032,7 +4032,7 @@ function showBirthdayPopup(char, todayKey) {
 const playlist = [
     { title: "Bladestorm Over Jianghu", src: "music/1 - Bladestorm Over Jianghu.mp3" },
     { title: "White Gale Execution", src: "music/2 - White Gale Execution.mp3" },
-    { title: "Crimson Cliff Last Stand", src: "music/3 - Crimson Cliff Last Stand.mp3.mp3" },
+    { title: "Crimson Cliff Last Stand", src: "music/3 - Crimson Cliff Last Stand.mp3" },
     { title: "Ten Banners, One Field", src: "music/4 - Ten Banners, One Field.mp3" },
     { title: "Lantern Pulse Under Kaifeng", src: "music/5 - Lantern Pulse Under Kaifeng.mp3" },
     { title: "Fuyao Core Ignition", src: "music/6 - Fuyao Core Ignition.mp3" },
@@ -4058,29 +4058,37 @@ const audioTitle = document.getElementById('player-title');
 const audioBtn = document.getElementById('audio-toggle-btn');
 const dropdown = document.getElementById('playlist-dropdown');
 
+function updateStatusText() {
+    const statusText = document.getElementById('playlist-status');
+    if (statusText) {
+        // (현재 인덱스 + 1 / 전체 곡 수) 형식으로 변경
+        statusText.innerText = `${currentIdx + 1} / ${playlist.length}`;
+    }
+}
+
 function initPlayer() {
     const listItems = document.getElementById('playlist-items');
     if(!listItems) return;
 
-    // 1. 리스트 생성
     listItems.innerHTML = playlist.map((track, i) => `
         <li class="playlist-item-li ${i === currentIdx ? 'active' : ''}" onclick="selectTrack(${i})">
-            <span style="margin-right:8px; opacity:0.5;">${i+1}</span>
-            <span>${track.title}</span>
+            <span class="track-num">${i + 1}</span>
+            <span class="track-name">${track.title}</span>
         </li>
     `).join('');
     
-    // 2. 제목 즉시 할당
     loadTrack(currentIdx);
+    updateStatusText(); // 초기화 시 실행
     updateUI();
-
-    // [추가] 렌더링 지연 대비 강제 업데이트
-    setTimeout(() => {
-        loadTrack(currentIdx);
-        updateUI();
-    }, 100);
 }
 
+function selectTrack(i) {
+    currentIdx = i;
+    loadTrack(i);
+    audio.play().then(updateUI);
+    updateStatusText(); // 곡 선택 시 실행
+    if (dropdown) dropdown.classList.remove('show');
+}
 function loadTrack(i) {
     if (!playlist[i]) return;
     audio.src = playlist[i].src;

@@ -4028,3 +4028,118 @@ function showBirthdayPopup(char, todayKey) {
     document.body.insertAdjacentElement('afterbegin', overlay);
     createConfetti();
 }
+
+const playlist = [
+    { title: "Bladestorm Over Jianghu", src: "music/1 - Bladestorm Over Jianghu.mp3" },
+    { title: "White Gale Execution", src: "music/2 - White Gale Execution.mp3" },
+    { title: "Crimson Cliff Last Stand", src: "music/3 - Crimson Cliff Last Stand.mp3.mp3" },
+    { title: "Ten Banners, One Field", src: "music/4 - Ten Banners, One Field.mp3" },
+    { title: "Lantern Pulse Under Kaifeng", src: "music/5 - Lantern Pulse Under Kaifeng.mp3" },
+    { title: "Fuyao Core Ignition", src: "music/6 - Fuyao Core Ignition.mp3" },
+    { title: "He Xi Sandstorm Reckoning", src: "music/7 - He Xi Sandstorm Reckoning.mp3" },
+    { title: "Crimson Spur Relay", src: "music/8 - Crimson Spur Relay.mp3" },
+    { title: "Clockwork Reliquary Collapse", src: "music/9 - Clockwork Reliquary Collapse.mp3" },
+    { title: "Wind Over Broken Roofs", src: "music/10 - Wind Over Broken Roofs.mp3" },
+    { title: "Snowdrift Vanguard", src: "music/11 - Snowdrift Vanguard.mp3" },
+    { title: "Wolfwind Ridge Pursuit", src: "music/12 - Wolfwind Ridge Pursuit.mp3" },
+    { title: "Broken Wall Thunderline", src: "music/13 - Broken Wall Thunderline.mp3" },
+    { title: "Ashen Gears of Huigu", src: "music/14 - Ashen Gears of Huigu.mp3" },
+    { title: "Coffin Wake at Cixin", src: "music/15 - Coffin Wake at Cixin.mp3" },
+    { title: "Heavenbreaker Warlord", src: "music/16 - Heavenbreaker Warlord.mp3" },
+    { title: "Ghostlight Siege Run", src: "music/17 - Ghostlight Siege Run.mp3" },
+    { title: "Riftline Killzone", src: "music/18 - Riftline Killzone.mp3" },
+    { title: "Lotus Ash Cataclysm", src: "music/19 - Lotus Ash Cataclysm.mp3" },
+    { title: "Rift of the Earth-Fiend", src: "music/20 - Rift of the Earth-Fiend.mp3" }
+];
+
+let currentIdx = 0;
+const audio = document.getElementById('main-audio');
+const audioTitle = document.getElementById('player-title');
+const audioBtn = document.getElementById('audio-toggle-btn');
+const dropdown = document.getElementById('playlist-dropdown');
+
+function initPlayer() {
+    const listItems = document.getElementById('playlist-items');
+    if(!listItems) return;
+
+    // 1. 리스트 생성
+    listItems.innerHTML = playlist.map((track, i) => `
+        <li class="playlist-item-li ${i === currentIdx ? 'active' : ''}" onclick="selectTrack(${i})">
+            <span style="margin-right:8px; opacity:0.5;">${i+1}</span>
+            <span>${track.title}</span>
+        </li>
+    `).join('');
+    
+    // 2. 제목 즉시 할당
+    loadTrack(currentIdx);
+    updateUI();
+
+    // [추가] 렌더링 지연 대비 강제 업데이트
+    setTimeout(() => {
+        loadTrack(currentIdx);
+        updateUI();
+    }, 100);
+}
+
+function loadTrack(i) {
+    if (!playlist[i]) return;
+    audio.src = playlist[i].src;
+    // HTML 요소에 직접 텍스트 주입
+    document.getElementById('player-title').textContent = playlist[i].title; 
+}
+
+function updateUI() {
+    // 재생 중일 때만 버튼 아이콘을 변경하고 제목을 흐르게 함
+    if (audio.paused) {
+        audioBtn.innerText = '▶';
+        audioTitle.classList.remove('running');
+    } else {
+        audioBtn.innerText = 'Ⅱ';
+        audioTitle.classList.add('running');
+    }
+    
+    // 리스트 내 활성 곡 강조
+    document.querySelectorAll('.playlist-item-li').forEach((li, idx) => {
+        li.classList.toggle('active', idx === currentIdx);
+    });
+}
+
+function handlePlayPause(e) {
+    e.stopPropagation(); // 드롭다운 토글 방지
+    if (audio.paused) {
+        audio.play().then(updateUI);
+    } else {
+        audio.pause();
+        updateUI();
+    }
+}
+
+function togglePlaylist() {
+    dropdown.classList.toggle('show');
+}
+
+function selectTrack(i) {
+    currentIdx = i;
+    loadTrack(i);
+    audio.play().then(updateUI);
+
+    // [추가] 곡을 선택하면 플레이리스트 드롭다운을 닫음
+    if (dropdown) {
+        dropdown.classList.remove('show');
+    }
+}
+
+// 기존 사이드바 닫기 함수에 리스트 닫기 추가
+function closeSidebar() {
+    const sidebar = document.getElementById('main-sidebar');
+    if (sidebar) sidebar.classList.remove('active');
+    if (dropdown) dropdown.classList.remove('show');
+}
+
+// 오디오 이벤트 리스너
+audio.addEventListener('play', updateUI);
+audio.addEventListener('pause', updateUI);
+audio.addEventListener('ended', () => selectTrack((currentIdx + 1) % playlist.length));
+
+// 페이지 로드 시 초기화 실행
+document.addEventListener('DOMContentLoaded', initPlayer);

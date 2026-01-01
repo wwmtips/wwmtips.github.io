@@ -178,17 +178,17 @@
                 </div>
                 <div id="slider-indicators" class="slider-indicators"></div>
             </div>
-<!--
+            <!--
             <section class="mansarok-section" style="margin-top: 0px; margin-bottom: 10px;">
                 <div class="section-header-clickable">
                     <h3><span class="deco-bar"></span>기본 가이드</h3>
                 </div>
                 <div class="common-slim-grid">
+                     <a class="slim-btn" onclick="openGuideDirect('nb.html')">
+                        <span>강호 입문서</span>
+                    </a>
                     <a class="slim-btn" onclick="openGuideDirect('moon.html')">
                         <span>모든 문파 입문법</span>
-                    </a>
-                    <a class="slim-btn" onclick="openGuideDirect('guide2.html')">
-                        <span>전투 시스템</span>
                     </a>
                     <a href="#" class="slim-btn" onclick="openGuideDirect('guide3.html')">
                         <span>장비 강화</span>
@@ -212,14 +212,14 @@
                 <div id="mansarok-list" class="mansarok-grid">
                 </div>
             </section>
-<section class="chunji-section">
-    <div class="section-header-clickable" onclick="showView('chunji')">
-        <h3><span class="deco-bar"></span>천지록</h3>
+            <section class="chunji-section">
+                <div class="section-header-clickable" onclick="showView('chunji')">
+                    <h3><span class="deco-bar"></span>천지록</h3>
                     <span style="font-size:0.8em; color:#999; margin-right:5px;">전체보기 ></span>
-    </div>
-    <div id="home-chunji-list" class="chunji-list-main">
-        </div>
-</section>
+                </div>
+                <div id="home-chunji-list" class="chunji-list-main">
+                </div>
+            </section>
             <section class="timer-section">
                 <div class="section-header-clickable" onclick="openGuideDirect('npc.html')" ;>
                     <h3><span class="deco-bar"></span>강호령</h3>
@@ -233,14 +233,14 @@
             </section>
             <div id="home-char-list">
             </div>
-            
-<section class="boss-section">
-    <div class="section-header-clickable">
-        <h3><span class="deco-bar"></span>적수</h3>
-    </div>
-    
-    <div id="home-boss-list" class="swipe-track">
-        <div class="mini-card" onclick="openGuideDirect('boss/b2.html')">
+
+            <section class="boss-section">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>적수</h3>
+                </div>
+
+                <div id="home-boss-list" class="swipe-track">
+                    <div class="mini-card" onclick="openGuideDirect('boss/b2.html')">
                         <img src="images/em/2.png" class="mini-card-img" alt="아이템">
                         <div class="mini-card-txt">
                             <span class="mini-name">몽유도인</span>
@@ -297,8 +297,8 @@
                             <span class="mini-sub">진수전</span>
                         </div>
                     </div>
-        </div>
-</section>
+                </div>
+            </section>
 
             <section class="map-section">
                 <div class="section-header-clickable">
@@ -841,6 +841,10 @@
                 sidebar.classList.remove('active');
                 overlay.classList.remove('active');
                 document.body.style.overflow = '';
+                // [추가] 사이드바가 닫힐 때 뮤직 리스트 드롭다운도 함께 제거
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
             }
 
             // 사이드바 내부 서브메뉴 토글 (아코디언 효과)
@@ -883,11 +887,29 @@
                 맨 위로
             </a>
         </div>
-        <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
         <aside id="main-sidebar">
             <div class="sidebar-header">
-                <h3></h3>
-                <button class="close-sidebar-btn" onclick="closeSidebar()">✕</button>
+
+                <div class="sidebar-audio-player-container">
+                    <div class="sidebar-audio-player" onclick="togglePlaylist()">
+                        <div class="audio-info">
+                            <span class="audio-title" id="player-title">곡 목록을 불러오는 중...</span>
+                        </div>
+                        <button id="audio-toggle-btn" class="audio-ctrl-btn" onclick="handlePlayPause(event)">▶</button>
+                    </div>
+
+                    <div id="playlist-dropdown" class="playlist-dropdown">
+                        <div class="playlist-header">
+                            <span id="playlist-status">Playlist (0/0)</span>
+                        </div>
+                        <ul id="playlist-items" class="playlist-ul"></ul>
+                    </div>
+                </div>
+
+                <button class="close-sidebar-btn" onclick="closeSidebar()">×</button>
+
+                <audio id="main-audio" preload="auto"></audio>
             </div>
 
             <div class="sidebar-content">

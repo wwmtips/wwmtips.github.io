@@ -5311,7 +5311,7 @@ body.dark-mode .timer-row:hover {
 
 /* 헤더: 아주 심플하게 */
 .sidebar-header {
-    padding: 10px 25px 20px 25px;
+    margin-left: 10px;
     /* 여백 조정 */
     display: flex;
     justify-content: space-between;
@@ -5326,6 +5326,7 @@ body.dark-mode .timer-row:hover {
 }
 
 .close-sidebar-btn {
+    margin-right: 20px;
     background: none;
     border: none;
     font-size: 1.2em;
@@ -6471,4 +6472,221 @@ body.dark-mode .pwa-install-desc { color: #888; }
 #home-boss-list .mini-card:not([onclick]) {
     filter: grayscale(100%) !important;
     opacity: 0.4 !important;
+}
+
+
+/* 플레이어 컨테이너 */
+.sidebar-audio-player-container {
+    position: relative;
+    margin-right: 10px;
+    z-index: 2001;
+}
+/* --- 플레이어 바 전체: 크기 절대 고정 --- */
+.sidebar-audio-player {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 0 12px;
+    border-radius: 20px;
+    
+    /* 너비를 140px로 완전히 고정 (원하시는 크기로 조정 가능) */
+    width: 170px !important; 
+    min-width: 170px !important;
+    max-width: 170px !important;
+        margin-left: 10px;
+    
+    height: 32px;
+    overflow: hidden; /* 영역 밖으로 나가는 것 차단 */
+    border: 1px solid #eee;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+/* --- 제목 영역: 부모 너비 안에서만 존재하도록 설정 --- */
+.audio-info {
+    flex: 1;
+    width: 0; /* flex 환경에서 자식 요소가 부모를 밀어내지 않게 함 */
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.audio-title {
+    display: inline-block;
+    font-size: 11px;
+    color: #666;
+    white-space: nowrap;
+    animation: marquee 10s linear infinite;
+    animation-play-state: paused; /* 기본적으로 멈춤 상태 */
+}
+
+/* 재생 중일 때만 흐르게 함 */
+.audio-title.running {
+    animation-play-state: running;
+}
+
+/* 재생 버튼: 금색 원형 */
+.audio-ctrl-btn {
+    background: var(--wuxia-accent-gold, #a08040);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 리스트 드롭다운 */
+.playlist-dropdown {
+    display: none;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    width: 180px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    z-index: 2000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 10px;
+}
+
+.playlist-dropdown.show { display: block; }
+
+.playlist-ul { list-style: none; padding: 0; margin: 0; max-height: 160px; overflow-y: auto; }
+
+.playlist-item-li {
+    display: flex;
+    align-items: center;
+    padding: 8px 5px;
+    font-size: 12px;
+    color: #444;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.playlist-item-li.active { color: var(--wuxia-accent-red, #b71c1c); font-weight: bold; }
+
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* 제목 텍스트 강제 가시성 확보 */
+.audio-title {
+    display: inline-block !important;
+    font-size: 11px !important;
+    color: #333333 !important; /* 확실히 보이는 진한 회색으로 변경 */
+    white-space: nowrap !important;
+    
+    /* [수정] 재생 전에는 애니메이션을 아예 끄고 위치를 고정 */
+    animation: marquee 10s linear infinite;
+    animation-play-state: paused; 
+    transform: translateX(0); /* 처음에는 정중앙에 위치하도록 강제 */
+}
+
+/* 재생 중일 때만 애니메이션 시작 */
+.audio-title.running {
+    animation-play-state: running !important;
+}
+
+/* 애니메이션 정의: 오른쪽 끝이 아닌 현재 위치에서 시작하도록 수정 */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+/* --- 플레이리스트 드롭다운 전체 --- */
+.playlist-dropdown {
+    display: none;
+    position: absolute;
+    top: 38px;
+    right: 0;
+    width: 220px; /* 너비를 조금 넓혀 텍스트 잘림 방지 */
+    background-color: rgba(255, 255, 255, 0.98); /* 살짝 투명한 미색 */
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    z-index: 2000;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 12px 0; /* 내부 상하 여백 */
+    animation: slideDown 0.2s ease-out;
+}
+
+/* --- 드롭다운 헤더 (Playlist 0/0) --- */
+.playlist-header {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: #888;
+    text-align: center;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* --- 리스트 영역 --- */
+.playlist-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 240px; /* 최대 높이 고정 */
+    overflow-y: auto;
+}
+
+/* --- 개별 곡 아이템 --- */
+.playlist-item-li {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 12px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left; /* 좌측 정렬로 가독성 확보 */
+}
+
+.playlist-item-li:hover {
+    background-color: #f8f5f0; /* 무협 테마의 연한 베이지색 */
+    color: var(--wuxia-accent-gold, #a08040);
+}
+
+/* --- 현재 재생 중인 곡 강조 --- */
+.playlist-item-li.active {
+    background-color: #fff9f9;
+    color: #b71c1c; /* 강조 레드 */
+    font-weight: bold;
+    border-left: 3px solid #b71c1c; /* 왼쪽에 강조선 추가 */
+}
+
+.playlist-item-li span:first-child {
+    width: 25px; /* 곡 번호 영역 고정 */
+    font-size: 10px;
+    color: #bbb;
+}
+
+/* --- 스크롤바 커스텀 (핵심) --- */
+.playlist-ul::-webkit-scrollbar {
+    width: 4px;
+}
+.playlist-ul::-webkit-scrollbar-track {
+    background: transparent;
+}
+.playlist-ul::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+.playlist-ul::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+}
+
+/* 등장 애니메이션 */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

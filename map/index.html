@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <title>연운 한국어 맵 for Wiki</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
     
     <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
@@ -127,12 +129,6 @@
 
 
     <div id="map"></div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
 <script>
     // ★ [안전 모드] 샘플 데이터
@@ -877,12 +873,18 @@
 
     // 마커 생성 함수
     function createMarkers(data) {
-        const storageKey = `completed_${currentMapId}`;
-        const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-        const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-        
-        allMarkers = []; layerGroups = {}; 
-        const markersByType = {}; 
+ const storageKey = `completed_${currentMapId}`;
+    const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+    
+    // 기존 레이어 그룹이 있다면 맵에서 제거
+    for (const key in layerGroups) {
+        map.removeLayer(layerGroups[key]);
+    }
+
+    allMarkers = []; 
+    layerGroups = {}; // 초기화
+    const markersByType = {};
 
         try {
             data.forEach(item => {
@@ -1300,13 +1302,29 @@
         else { if (document.exitFullscreen) { document.exitFullscreen(); } }
     }
 
-    window.toggleClusterMode = function() {
-        isClusterOn = !isClusterOn;
-        localStorage.setItem('clusterMode', isClusterOn);
-        for (const key in layerGroups) map.removeLayer(layerGroups[key]);
-        layerGroups = {}; allMarkers = [];
-        if (cachedData) { createMarkers(cachedData); generateSidebar(cachedData); }
-    };
+   window.toggleClusterMode = function() {
+    // 1. 상태 반전 및 저장
+    isClusterOn = !isClusterOn;
+    localStorage.setItem('clusterMode', isClusterOn);
+
+    // 2. 경로 모드라면 경로를 먼저 끄는 것이 안전합니다 (선택 사항)
+    if (currentPathLayer) {
+        alert("경로 모드 종료 후 클러스터 설정이 적용됩니다.");
+        clearPath();
+        return;
+    }
+
+    // 3. 기존 모든 레이어 제거
+    for (const key in layerGroups) {
+        map.removeLayer(layerGroups[key]);
+    }
+
+    // 4. 데이터가 있을 때만 재생성 (createMarkers 내부에서 layerGroups 초기화함)
+    if (cachedData) {
+        createMarkers(cachedData); 
+        generateSidebar(cachedData);
+    }
+};
 
     function exportCompletedPins() {
         try {

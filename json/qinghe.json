@@ -1,6 +1,16 @@
 [ 
 
   {
+    "id": 1767308661787,
+    "name": "경계석",
+    "type": "경계석",
+    "y": 4032,
+    "x": 334,
+    "desc": "",
+    "link": "",
+    "image": "https://wwm.tips/quests/images/q184_5.jpg"
+  },
+  {
     "id": 1767308415203,
     "name": "유물",
     "type": "유물",

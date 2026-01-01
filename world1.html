@@ -1,0 +1,120 @@
+<div class="quest-detail-container" style="text-align: left;">
+    
+    <style>
+        /* 수묵화 테마 계승 및 스토리 전용 스타일 */
+        .story-section { margin-bottom: 45px; }
+        .story-card {
+            background-color: #fffcf5; 
+            border: 1px solid var(--wuxia-accent-gold); 
+            padding: 22px; 
+            border-radius: 4px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-top: 12px;
+            position: relative;
+        }
+        .story-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .story-list { color: var(--wuxia-text-sub); line-height: 1.9; padding-left: 20px; margin: 0; }
+        .story-list li { margin-bottom: 12px; }
+        .story-list strong { color: var(--wuxia-text-main); font-size: 1.05em; }
+        
+        .history-tag {
+            display: inline-block;
+            background-color: var(--wuxia-accent-red);
+            color: #fff;
+            padding: 1px 8px;
+            font-size: 0.8em;
+            border-radius: 2px;
+            margin-bottom: 8px;
+        }
+        .spoiler-alert {
+            background-color: #fff1f0;
+            border: 1px solid #ffa39e;
+            color: #cf1322;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .character-info {
+            background-color: #f6f6f6;
+            padding: 15px;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            margin: 15px 0;
+        }
+        .source-footer {
+            margin-top: 60px;
+            padding-top: 25px;
+            border-top: 1px dashed #ccc;
+            text-align: center;
+            color: #888;
+            font-size: 0.85em;
+        }
+        .source-footer a { color: var(--wuxia-accent-gold); text-decoration: none; font-weight: bold; }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 25px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">세계관 개요</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">연운: 난세의 서막과 출생의 비밀</h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">오대십국 혼란기, 강호의 의인들이 써 내려가는 방대한 서사시</p>
+    </div>
+
+    <div class="spoiler-alert">
+        ⚠️ <strong>주의:</strong> 본 가이드는 게임의 초기 스토리 및 배경에 대한 <strong>스포일러</strong>를 포함하고 있습니다.
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">1. 역사적 배경: 오대십국 시대 (907~960)</h3>
+        <div class="story-card">
+            <ul class="story-list">
+                <li><strong>시대적 혼란:</strong> 당나라 멸망 후 송나라 건국 전까지의 시기로, 북쪽의 5개 왕조(오대)와 남서쪽의 10개 지방 왕국(십국)이 난립하던 시기입니다.</li>
+                <li><strong>전략적 요충지, 연운 16주:</strong> 거란(요나라)과 중원 사이의 핵심 방어 기지로, 현재의 북경과 천진을 포함한 역사적 요충지입니다.</li>
+                <li><strong>배신의 역사:</strong> 후진의 석경당은 거란의 도움을 받는 대가로 연운 16주를 할양하고 거란 황제에게 굴욕적인 외교를 펼쳤습니다.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">2. 중도교 전투와 비극</h3>
+        <div class="story-card">
+            <ul class="story-list">
+                <li><strong>왕청 장군의 전사:</strong> 거란에 맞선 용맹한 장군 왕청은 상관의 배신으로 지원 없이 싸우다 전사했으며, 이 패배로 후진은 멸망의 길을 걷게 됩니다.</li>
+                <li><strong>주인공의 구출:</strong> 왕청의 양아들 <strong>강염</strong>이 전쟁터의 참화 속에서 갓난아기였던 주인공을 극적으로 구출해 냅니다.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">3. 은둔의 땅, 청하</h3>
+        <div class="story-card">
+            <div class="character-info">
+                <strong>강염(강무랑):</strong> '수금루'의 추적을 피해 청하로 숨어들었습니다. '강염'과 '강무랑'은 각각 강이 고요하고 물결이 없다는 의미로, 은둔의 삶을 상징합니다.
+            </div>
+            <ul class="story-list">
+                <li><strong>양아버지의 실종:</strong> 본편 시작 3년 전, 남당의 전염병(몽괴) 해결과 전설적 암살자 <strong>전영</strong>을 구출하라는 서신을 받고 떠난 후 행방불명되었습니다.</li>
+                <li><strong>한 이모의 비밀:</strong> 겉으로는 큰 객잔을 운영하나, 실제로는 거란 침투 스파이를 양성하는 조직의 리더입니다. 안면 개조 수술에 실패한 이들은 지하에 격리되는 비운을 맞기도 합니다.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">4. 타오르는 마을, 개봉으로</h3>
+        <div class="story-card">
+            <p style="color: var(--wuxia-text-main); margin-bottom: 15px; line-height: 1.7;">
+                평화롭던 청하 마을은 <strong>천야 세력</strong>의 공격으로 불타버리고, 주인공의 동료인 홍연과 최도가 희생되는 비극이 발생하며 이야기는 더 큰 음모가 기다리는 <strong>개봉</strong>으로 이어집니다.
+            </p>
+            <div class="accent-box" style="background-color: #fff9f0; padding: 12px; border: 1px dashed var(--wuxia-accent-gold); font-size: 0.95em;">
+                💡 <strong>팬들의 추측:</strong> 주인공이 전사한 왕청 장군의 친자식일 것이라는 가설이 지배적입니다.
+            </div>
+        </div>
+    </div>
+
+
+</div>

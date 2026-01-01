@@ -4731,7 +4731,7 @@ body.dark-mode .timer-row:hover {
 /* 폰트 스타일 (폭 50px에 맞게 축소) */
 .mini-name {
     /* [수정] 10px -> 9px 로 축소 */
-    font-size: 9px;
+    font-size: 0.7em;
     font-weight: 700;
     color: #222;
     line-height: 1.2;
@@ -4744,7 +4744,7 @@ body.dark-mode .timer-row:hover {
 
 .mini-sub {
     /* [수정] 9px -> 8px 로 축소 */
-    font-size: 8px;
+    font-size: 0.6em;
     color: #999;
     line-height: 1;
     width: 100%;

@@ -3897,43 +3897,31 @@ window.addEventListener('appinstalled', (evt) => {
     if (installContainer) installContainer.style.display = 'none';
 });
 
-// script.js 하단에 추가 또는 수정
 function renderHomeChunji() {
     const container = document.getElementById('home-chunji-list');
-    if (!container) return;
-
-    // 전역 변수 chunjiData에 데이터가 있는지 확인
-    if (!chunjiData || chunjiData.length === 0) {
-        console.warn("천지록 데이터를 기다리는 중이거나 데이터가 비어있습니다.");
-        return;
-    }
+    if (!container || !chunjiData) return;
 
     container.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-
-    // 메인 화면에는 상위 6개만 표시
-    const displayList = chunjiData.slice(0, 6);
+    
+    // 무림록과 균형을 맞추기 위해 6개 또는 9개 출력
+    const displayList = chunjiData.slice(0, 9); 
 
     displayList.forEach(item => {
         const div = document.createElement('div');
-        div.className = 'chunji-item-card'; // 무림록(quest-card)과 동일 규격의 CSS 적용
+        div.className = 'chunji-item-card';
         
         div.onclick = () => {
             if (typeof switchTab === 'function' && typeof loadChunjiDetail === 'function') {
                 switchTab('chunji');
-                loadChunjiDetail(item); // 상세 페이지 로드
+                loadChunjiDetail(item);
             }
         };
 
+        // 제목 아래에 서브텍스트(type)를 배치
         div.innerHTML = `
-            <div class="chunji-card-info">
-                <div class="chunji-card-title">${item.title || '제목 없음'}</div>
-                <div class="chunji-card-type">${item.type || '기록'}</div>
-            </div>
-            <div class="arrow-icon">❯</div>
+            <div class="chunji-card-title">${item.title}</div>
+            <div class="chunji-card-type">${item.type || '기록'}</div>
         `;
-        fragment.appendChild(div);
+        container.appendChild(div);
     });
-
-    container.appendChild(fragment);
 }

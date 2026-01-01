@@ -6144,54 +6144,55 @@ body.dark-mode .pwa-install-desc { color: #888; }
 }
 
 
-/* 1. 천지록 그리드를 무림록과 동일하게 3열로 고정 */
+/* 1. 천지록 그리드: 가로 3열 유지 */
 .chunji-list-main {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important; /* 가로 3개씩 배치 */
-    gap: 8px !important; /* 무림록과 동일한 간격 */
-    margin-top: 10px;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    margin-top: 15px;
 }
 
-/* 2. 천지록 아이템을 무림록 버튼(mansarok-btn) 스타일로 변경 */
+/* 2. 천지록 아이템: 서브텍스트를 위한 높이 확보 */
 .chunji-item-card {
     display: flex !important;
-    justify-content: center !important; /* 텍스트 중앙 정렬 */
-    align-items: center !important;
+    flex-direction: column !important; /* 세로 정렬 */
+    justify-content: center !important;
+    align-items: flex-start !important; /* 왼쪽 정렬 */
     background-color: #fff !important;
     border: 1px solid #eee !important;
-    border-radius: 4px !important;
-    height: 38px !important; /* 무림록 버튼 높이와 동기화 */
-    padding: 0 5px !important;
+    border-radius: 6px !important;
+    padding: 10px !important; /* 상하좌우 여백 */
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-    border-left: none !important; /* 기존의 회색 바 제거 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04) !important;
+    transition: all 0.2s ease;
+    min-height: 60px !important; /* 서브텍스트 포함 적정 높이 */
 }
 
-/* 3. 내부 텍스트 스타일 (서화 등 부가정보 숨김) */
-.chunji-card-info {
-    width: 100%;
-    text-align: center;
-    overflow: hidden;
+.chunji-item-card:hover {
+    border-color: var(--wuxia-accent-gold) !important;
+    background-color: #fffcf5 !important;
+    transform: translateY(-2px);
 }
 
+/* 3. 텍스트 상세 스타일 */
 .chunji-card-title {
-    font-size: 11px !important; /* 무림록과 비슷한 폰트 크기 */
-    font-weight: 500 !important;
-    color: #555 !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+    margin-bottom: 4px !important;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* 글자가 길면 ... 처리 */
+    text-overflow: ellipsis; /* 긴 제목 처리 */
 }
 
-/* 불필요한 요소 제거 (화살표, 타입 등) */
-.chunji-item-card .arrow-icon, 
 .chunji-card-type {
-    display: none !important;
+    display: block !important; /* 서브텍스트 노출 */
+    font-size: 10px !important;
+    color: #9e9e9e !important; /* 옅은 회색 */
 }
 
-/* 모바일 대응 (화면이 작아지면 2열로) */
-@media (max-width: 480px) {
-    .chunji-list-main {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
+/* 불필요한 화살표 아이콘 숨김 */
+.chunji-item-card .arrow-icon {
+    display: none !important;
 }

@@ -6591,8 +6591,7 @@ body.dark-mode .pwa-install-desc { color: #888; }
     display: flex !important;           /* 가로로 배치 */
     overflow-x: auto !important;         /* 가로 스크롤 허용 */
     overflow-y: hidden !important;
-    gap: 6px !important;                 /* 카드 사이 간격 */
-    padding: 5px 10px 15px 10px !important; /* 하단 여백 확보 */
+    gap: 6px !important;                 /* 카드 사이 간격 */padding: 0px 5px 0px 5px !important;
     -webkit-overflow-scrolling: touch;   /* 모바일 부드러운 스크롤 */
     scroll-snap-type: none !important;    /* 페이지 단위가 아닌 자유 스크롤 */
 }

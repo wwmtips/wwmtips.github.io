@@ -6196,3 +6196,56 @@ body.dark-mode .pwa-install-desc { color: #888; }
 .chunji-item-card .arrow-icon {
     display: none !important;
 }
+
+/* 천지록 메인 그리드 */
+.chunji-list-main {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    margin-top: 10px;
+}
+
+/* 천지록 아이템: 높이 36px 고정 및 압축 디자인 */
+.chunji-item-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    background-color: #fff !important;
+    border: 1px solid #eee !important;
+    border-radius: 4px !important;
+    
+    /* 핵심: 높이 고정 및 여백 최소화 */
+    height: 36px !important; 
+    padding: 0 8px !important; 
+    
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+    transition: all 0.2s ease;
+}
+
+.chunji-item-card:hover {
+    border-color: var(--wuxia-accent-gold) !important;
+    background-color: #fffcf5 !important;
+}
+
+/* 텍스트 크기 대폭 축소 */
+.chunji-card-title {
+    font-size: 0.7em !important; /* 제목 크기 축소 */
+    font-weight: bold !important;
+    color: #333 !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chunji-card-type {
+    display: block !important;
+    font-size: 0.6em !important; /* 서브텍스트 크기 최소화 */
+    color: #a0a0a0 !important;
+    line-height: 1 !important;
+    margin-top: 1px !important;
+}

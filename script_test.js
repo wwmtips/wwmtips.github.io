@@ -374,7 +374,7 @@ function loadData() {
             renderFullNews(globalData.news);
             renderComboSlots();
             renderHomeChunji(); // ★ 메인 화면용 리스트 추가 호출 ★
-            
+
             if (typeof renderHomeCharacters === 'function') {
                 renderHomeCharacters();
             }
@@ -3897,37 +3897,37 @@ window.addEventListener('appinstalled', (evt) => {
     if (installContainer) installContainer.style.display = 'none';
 });
 
-
-// 천지록(chunjiData)을 메인 화면에 퀘스트 카드 스타일로 렌더링
+// script.js 하단에 추가 또는 수정
 function renderHomeChunji() {
     const container = document.getElementById('home-chunji-list');
-    
-    // 데이터 존재 여부 확인 (chunji_data.js에서 가져옴)
-    if (!container || typeof chunjiData === 'undefined' || chunjiData.length === 0) {
+    if (!container) return;
+
+    // 전역 변수 chunjiData에 데이터가 있는지 확인
+    if (!chunjiData || chunjiData.length === 0) {
+        console.warn("천지록 데이터를 기다리는 중이거나 데이터가 비어있습니다.");
         return;
     }
 
     container.innerHTML = '';
     const fragment = document.createDocumentFragment();
 
-    // 메인에는 최근 6개만 표시
+    // 메인 화면에는 상위 6개만 표시
     const displayList = chunjiData.slice(0, 6);
 
     displayList.forEach(item => {
         const div = document.createElement('div');
-        div.className = 'chunji-item-card'; // style_dummy.css에서 정의할 클래스
+        div.className = 'chunji-item-card'; // 무림록(quest-card)과 동일 규격의 CSS 적용
         
-        // 클릭 시 상세 보기 페이지 이동 (기존 로직 활용)
         div.onclick = () => {
             if (typeof switchTab === 'function' && typeof loadChunjiDetail === 'function') {
                 switchTab('chunji');
-                loadChunjiDetail(item);
+                loadChunjiDetail(item); // 상세 페이지 로드
             }
         };
 
         div.innerHTML = `
             <div class="chunji-card-info">
-                <div class="chunji-card-title">${item.title}</div>
+                <div class="chunji-card-title">${item.title || '제목 없음'}</div>
                 <div class="chunji-card-type">${item.type || '기록'}</div>
             </div>
             <div class="arrow-icon">❯</div>
@@ -3937,6 +3937,3 @@ function renderHomeChunji() {
 
     container.appendChild(fragment);
 }
-
-// 초기화 시 호출 추가
-document.addEventListener('DOMContentLoaded', renderHomeChunji);

@@ -1,0 +1,166 @@
+<div class="quest-detail-container" style="text-align: left;">
+    
+    <style>
+        /* 캐릭터 육성 가이드 전용 스타일 */
+        .growth-section { margin-bottom: 40px; }
+        .growth-card {
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+        .growth-title {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--wuxia-text-main);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .growth-content {
+            font-size: 0.95em;
+            color: var(--wuxia-text-sub);
+            line-height: 1.8;
+        }
+
+        /* 이미지 삽입 공간 스타일 */
+        .guide-img-box {
+            margin: 15px 0;
+            text-align: center;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .guide-img-box img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .img-caption {
+            font-size: 0.8em;
+            color: #999;
+            padding: 8px;
+            background: #f1f1f1;
+            border-top: 1px solid #ddd;
+        }
+
+        .tip-box {
+            background-color: #fffcf5;
+            border: 1px dashed var(--wuxia-accent-gold);
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .sub-list { padding-left: 20px; margin-top: 10px; }
+        .sub-list li { margin-bottom: 8px; }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 25px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">성장 가이드</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">캐릭터 육성 가이드</h2>
+    </div>
+
+    <div class="growth-section">
+        <div class="growth-card">
+            <div class="growth-title">첩음 강화 (영구 업그레이드)</div>
+            <div class="growth-content">
+                가장 중요한 점은 기본 "강화"가 캐릭터 전체에 적용된다는 것입니다. 무기나 방어구 슬롯을 강화하면 아이템을 바꿔도 효과가 유지됩니다.
+                <ul class="sub-list">
+                    <li><strong>무기:</strong> 최소 및 최대 공격력이 증가합니다.</li>
+                    <li><strong>방어구:</strong> 최대 HP와 방어력이 증가합니다.</li>
+                </ul>
+                <div class="guide-img-box">
+                    <img src="../guide/up_img/3.jpg" alt="첩음 강화 시스템 이미지">
+                    <div class="img-caption">▲ 첩음 강화 메뉴 화면</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="growth-section">
+        <div class="growth-card">
+            <div class="growth-title">무기고 시스템 (레벨 40 해금)</div>
+            <div class="growth-content">
+                레벨 40에 도달하면 무기고가 열립니다. 오래된 장비를 팔지 말고 보관해야 하는 이유입니다.
+                <div class="guide-img-box">
+                    <img src="../guide/up_img/1.jpg" alt="무기고 장착 화면">
+                    <div class="img-caption">▲ 무기고 장비 장착 및 보너스 확인</div>
+                </div>
+                <ul class="sub-list">
+                    <li><strong>장비 선택:</strong> 각 레벨별 최고 수치 아이템을 장착하여 보너스 능력치를 얻습니다.</li>
+                    <li><strong>속성 선택:</strong> 무기에 맞는 속성(예: 맥도-열석)을 선택하세요. 유파 변경 시 교체 가능합니다.</li>
+                </ul>
+                <div class="guide-img-box">
+                    <img src="../guide/up_img/4.jpg" alt="무기고 속성 선택 화면">
+                    <div class="img-caption">▲ 유파에 따른 속성 선택 화면</div>
+                </div>
+                <div class="tip-box">
+                    📍 <strong>주의:</strong> 아이템 파괴 전, 무기고 등록용으로 점수가 더 높은지 꼭 확인하세요.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="growth-section">
+        <div class="growth-card">
+            <div class="growth-title">유파 시련</div>
+            <div class="growth-content">
+                맵 레벨 상한 상승과 고레벨 장비 파밍을 위해 필수적인 콘텐츠입니다.
+                <div class="guide-img-box">
+                    <img src="../guide/up_img/5.jpg" alt="유파 시련 보상 화면">
+                    <div class="img-caption">▲ 유파 시련을 통한 장비 수급</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="growth-section">
+        <div class="growth-card">
+            <div class="growth-title">심법 강화 (패시브)</div>
+            <div class="growth-content">
+                능력치 향상의 핵심인 심법을 업그레이드하려면 '심득'이 필요합니다.
+                <ul class="sub-list">
+                    <li><strong>결의 노래:</strong> 흔히 '말'이라 불리는 가장 강력한 패시브 스킬입니다.</li>
+                    <li><strong>돌파:</strong> 일정 레벨마다 더 많은 페이지를 소모하여 돌파해야 합니다.</li>
+                </ul>
+                <div class="guide-img-box">
+                    <img src="../guide/up_img/7.jpg" alt="심법 강화 및 돌파 화면">
+                    <div class="img-caption">▲ 심법 돌파 및 강화 메뉴</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="growth-section">
+        <div class="growth-card">
+            <div class="growth-title">묘물 수집 (오음지태평)</div>
+            <div class="growth-content">
+                세계를 탐험하며 묘물을 수집해 추가 스탯을 획득하세요. 가능한 노드를 최대치까지 찍는 것을 추천합니다.
+                <div class="guide-img-box">
+                    <img src="../guide/up_img/6.jpg" alt="묘물 수집 시스템 화면">
+                    <div class="img-caption">▲ 오음지태평 NPC를 통한 스탯 강화</div>
+                </div>
+            </div>
+        </div>
+    </div>
+   <div class="growth-section">
+        <div class="growth-card">
+            <div class="growth-title">장비 강화</div>
+            <div class="growth-content">
+                특정 단계 이상부터는 조율을 통해 장비를 강화하는 것이 좋습니다. 추가 옵션이 랜덤으로 부여되며 이 옵션을 극한으로 끌어올리는 것이 최종 컨텐츠 중 하나입니다.
+                <div class="guide-img-box">
+                    <img src="../guide/up_img/8.jpg" alt="묘물 수집 시스템 화면">
+                    <div class="img-caption">▲ 장비 강화 후 추가된 스탯들</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

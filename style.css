@@ -6261,3 +6261,192 @@ body.dark-mode .pwa-install-desc { color: #888; }
     margin-top: 1px !important;
     width: 100%;
 }
+
+/* 꽃가루 컨테이너 */
+.confetti-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    pointer-events: none; /* 클릭 방해 금지 */
+    border-radius: 20px;
+}
+
+/* 꽃가루 조각 스타일 및 애니메이션 */
+.confetti-piece {
+    position: absolute;
+    width: 8px; height: 8px;
+    top: -10px;
+    opacity: 0.8;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(400px) rotate(720deg); /* 팝업 바닥까지 추락 */
+        opacity: 0;
+    }
+}
+
+/* 팝업 등장 애니메이션 보강 */
+.birthday-card {
+    animation: popupScale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popupScale {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+
+/* 생일 팝업 레이아웃 강제 노출 설정 */
+.birthday-overlay {
+    position: fixed !important; 
+    top: 0 !important; 
+    left: 0 !important; 
+    width: 100vw !important; 
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.85) !important; 
+    display: flex !important; /* hidden 상태를 무시하고 강제로 보여줌 */
+    align-items: center !important; 
+    justify-content: center !important;
+    
+    /* 최상단 레이어 보장 */
+    z-index: 999999 !important; 
+    pointer-events: auto !important;
+}
+
+
+
+/* 이미지: 사각 프레임과 부드러운 그림자 */
+.birthday-img-wrapper img {
+    width: 140px; height: 140px;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* 텍스트 레이아웃: 탄신일 제외 및 명조체 강조 */
+.birthday-text h2 {
+    font-family: 'Noto Serif KR', serif !important;
+    font-size: 19px !important;
+    color: #1a1a1a !important;
+    margin: 0 0 25px 0 !important;
+    line-height: 1.5;
+}
+
+.b-name { color: #b71c1c !important; font-weight: 800; }
+
+/* 한 마디 상자: 면 분할 디자인 */
+.b-quote-box {
+    margin: 20px 0;
+    padding: 20px 15px;
+    background: rgba(183, 28, 28, 0.02);
+    border-top: 1px solid rgba(183, 28, 28, 0.06);
+    border-bottom: 1px solid rgba(183, 28, 28, 0.06);
+}
+
+.b-quote-label {
+    font-size: 0.75em; color: #b71c1c;
+    letter-spacing: 2px; margin-bottom: 10px; font-weight: bold;
+}
+
+.b-desc {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px; color: #333 !important;
+    line-height: 1.7; font-style: italic;
+}
+
+/* 하단 버튼: 강렬한 붉은색 포인트 */
+.b-close-btn {
+    width: 100%;
+    padding: 15px 0 !important;
+    background: #b71c1c !important;
+    color: #fff !important;
+    border: none !important;
+    font-size: 16px; font-weight: bold;
+    letter-spacing: 6px; cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.b-close-btn:hover {
+    background: #8e0000 !important;
+    letter-spacing: 10px;
+}
+/* 스타일은 유지하고 사이즈만 정갈하게 축소 */
+
+.birthday-card {
+    background: #fdfaf5 !important; /* 미색 한지 질감 유지 */
+    background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+    
+    /* [수정] 너비를 300px로 축소 및 패딩 조정 */
+    width: 80%; 
+    max-width: 300px; 
+   padding: 40px 20px 30px !important;
+    border-radius: 2px !important;
+    
+    /* [유지] 이중 테두리: 사이즈에 맞춰 두께 미세 조정 */
+    border: 1px solid #d4af37 !important;
+   
+    outline-offset: -10px; /* 축소된 사이즈에 맞춰 오프셋 조정 */
+    
+    box-shadow: 
+        0 15px 40px rgba(0,0,0,0.5), 
+        inset 0 0 40px rgba(212, 175, 55, 0.08) !important;
+    position: relative;
+    text-align: center;
+}
+
+/* 캐릭터 초상화 사이즈 축소 */
+.birthday-img-wrapper img {
+    width: 120px; height: 120px; /* 기존 140px에서 축소 */
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #2c2c2c !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}
+
+/* 텍스트 크기 미세 조정 */
+.birthday-text h2 {
+    font-family: 'Noto Serif KR', serif !important;
+    font-size: 18px !important; /* 콤팩트한 사이즈에 맞게 축소 */
+    color: #1a1a1a !important;
+    margin: 0 0 20px 0 !important;
+    line-height: 1.4;
+}
+
+.b-name { 
+    color: #b71c1c !important; 
+    font-size: 1.1em;
+}
+
+/* 한 마디 영역 */
+.b-desc {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.85em; /* 텍스트 크기 축소 */
+    color: #555 !important;
+    padding: 12px;
+    margin-top: 5px;
+}
+
+/* 버튼 사이즈 조정 */
+.b-close-btn {
+    margin-top: 25px;
+    padding: 12px 0 !important;
+    width: 100%;
+    background: #2c2c2c !important;
+    color: #d4af37 !important;
+    border: 1px solid #d4af37 !important;
+    font-weight: 600 !important;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}

@@ -338,7 +338,8 @@ function loadData() {
 
             // ★ 보스 데이터 전역 변수에 저장
             globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
-           characterData = personResult;
+            characterData = personResult;
+                // 로컬 테스트용 캐릭터 데이터 배열
 
             
             if (quests.length > 0) {
@@ -374,6 +375,8 @@ function loadData() {
             renderFullNews(globalData.news);
             renderComboSlots();
             renderHomeChunji(); // ★ 메인 화면용 리스트 추가 호출 ★
+            // ★ 생일 체크 호출 추가
+    checkCharacterBirthday();
 
             if (typeof renderHomeCharacters === 'function') {
                 renderHomeCharacters();
@@ -3923,4 +3926,105 @@ function renderHomeChunji() {
         `;
         container.appendChild(div);
     });
+}
+
+// 생일 체크 함수
+function checkCharacterBirthday() {
+    if (!characterData || characterData.length === 0) return;
+
+    // 1. 현재 날짜 가져오기 (예: "10월 12일")
+    const now = new Date();
+    const currentMonthDay = `${now.getMonth() + 1}월 ${now.getDate()}일`;
+
+    // 2. 오늘이 생일인 인물 찾기
+    const birthdayChar = characterData.find(char => char.link === currentMonthDay);
+
+    if (birthdayChar) {
+        showBirthdayPopup(birthdayChar);
+    }
+}// 꽃가루 애니메이션 실행 함수
+function createConfetti() {
+    const container = document.querySelector('.confetti-container');
+    if (!container) return;
+
+    const colors = ['#d4af37', '#b71c1c', '#ffffff', '#ffd700']; 
+    
+    for (let i = 0; i < 60; i++) { // 개수 증가
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.left = Math.random() * 100 + '%';
+        
+        // 딜레이와 지속시간을 조절해 끊기지 않게 함
+        piece.style.animationDelay = Math.random() * 10 + 's'; 
+        piece.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        
+        container.appendChild(piece);
+    }
+}
+// 생일 체크 및 팝업 제어 함수
+function checkCharacterBirthday(testName = null) {
+    if (!characterData || characterData.length === 0) return;
+
+    const now = new Date();
+    const todayKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`; // 오늘 날짜 키 (예: 2026-1-1)
+    const currentMonthDay = `${now.getMonth() + 1}월 ${now.getDate()}일`;
+
+    // 1. [핵심] 오늘 이미 팝업을 확인(축하 완료)했는지 체크
+    if (!testName && localStorage.getItem('birthday_wishes_done') === todayKey) {
+        console.log("오늘의 생일 축하를 이미 완료했습니다.");
+        return; 
+    }
+
+    // 2. 인물 찾기
+    const birthdayChar = testName 
+        ? characterData.find(char => char.name === testName)
+        : characterData.find(char => char.link === currentMonthDay);
+
+    if (birthdayChar) {
+        showBirthdayPopup(birthdayChar, todayKey);
+    }
+}
+
+// 축하 완료 처리 함수
+function completeBirthdayWish(todayKey) {
+    // 로컬 스토리지에 오늘 날짜 저장
+    localStorage.setItem('birthday_wishes_done', todayKey);
+    
+    // 팝업 제거
+    const overlay = document.querySelector('.birthday-overlay');
+    if (overlay) overlay.remove();
+    
+    console.log("생일 축하 완료 기록 저장됨:", todayKey);
+}
+
+function showBirthdayPopup(char, todayKey) {
+    const overlay = document.createElement('div');
+    overlay.className = 'birthday-overlay';
+    
+    overlay.innerHTML = `
+        <div class="birthday-card">
+            <div class="confetti-container"></div>
+            <div style="position: relative; z-index: 10;">
+                <div class="birthday-img-wrapper">
+                    <img src="${char.photo || 'images/logo.png'}" onerror="this.src='images/logo.png'">
+                </div>
+                <div class="birthday-text">
+                    <p class="b-event-tag">🎂 오늘의 특별한 소식 🎂</p>
+                    <h2>오늘은 <span class="b-name">${char.name}</span> 대협의 생일입니다.</h2>
+                    <div class="b-quote-box">
+                        <p class="b-quote-label">대협의 한 마디</p>
+                        <p class="b-desc">"${char.biography}"</p>
+                    </div>
+                </div>
+                <button class="b-close-btn" onclick="completeBirthdayWish('${todayKey}')">
+                    인사 올리기
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentElement('afterbegin', overlay);
+    createConfetti();
 }

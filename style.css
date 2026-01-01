@@ -6608,3 +6608,9 @@ body.dark-mode .pwa-install-desc { color: #888; }
     filter: grayscale(100%) !important;
     opacity: 0.4 !important;
 }
+
+.guide-item {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 글자와 배지 사이 간격 */
+}

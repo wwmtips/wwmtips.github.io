@@ -1,6 +1,26 @@
 [ 
 
   {
+    "id": 1767308415203,
+    "name": "유물",
+    "type": "유물",
+    "y": 2425,
+    "x": 1985,
+    "desc": "활명의관 2층의 모든 상자를 열고, 지하로 내려가 낙신의 수기를 읽으면 됩니다.",
+    "link": "https://wwm.tips/?q=184",
+    "image": "https://wwm.tips/quests/images/q184_2.jpg"
+  },
+  {
+    "id": 1767308380627,
+    "name": "유물",
+    "type": "유물",
+    "y": 2439,
+    "x": 1951,
+    "desc": "활명의관 1층의 상자를 엽니다.",
+    "link": "",
+    "image": "https://wwm.tips/quests/images/q184_1.jpg"
+  },
+  {
     "id": 1767307663467,
     "name": "상자 (지하)",
     "type": "상자",

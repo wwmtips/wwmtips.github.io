@@ -1,0 +1,148 @@
+<div class="quest-detail-container" style="text-align: left;">
+    
+    <style>
+        /* 기존 world1.html 스타일 계승 및 장문 최적화 */
+        .story-section { margin-bottom: 50px; }
+        .story-card {
+            background-color: #fffcf5; 
+            border: 1px solid #d4af37; 
+            padding: 30px; 
+            border-radius: 4px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 15px;
+            position: relative;
+        }
+        .story-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .story-text { 
+            color: #555; 
+            line-height: 2.0; 
+            font-size: 1.0rem;
+            text-align: justify;
+        }
+        .story-text p { margin-bottom: 20px; }
+        .story-text strong { color: #222; border-bottom: 1px solid #d4af37; }
+        
+        .accent-quote {
+            background-color: #fdfaf0;
+            border-left: 5px solid #b22222;
+            padding: 20px;
+            margin: 25px 0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #222;
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .history-emphasis {
+            color: #b22222;
+            font-weight: bold;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid #b22222; padding-bottom: 20px; margin-bottom: 30px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 3px 10px; border-radius: 2px; font-weight: bold; font-size: 0.85em; vertical-align: middle;">세계관</span>
+        <h2 style="color: #d4af37; display: inline-block; margin: 0 0 0 12px; vertical-align: middle; font-size: 1.8rem;">
+            번영의 그림자와 보물단지의 환상
+        </h2>
+        <p style="color: #555; font-size: 1.0rem; margin-top: 8px;">화려한 수도의 불빛 아래 감춰진 민초들의 눈물과 협(俠)의 탄생을 목격하십시오.</p>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: #222; font-size: 1.3em; border-left: 5px solid #b22222; padding-left: 15px; margin-bottom: 20px; font-weight: bold;">1. 개봉으로의 입성: 첫 번째 교훈</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    주인공은 <strong>온무결</strong>의 서신을 품고 청하를 떠나 마침내 송나라의 심장부인 <strong>개봉</strong>에 도착합니다. 하지만 시골에서 온 순진한 협객에게 도시는 결코 친절하지 않았습니다. 소매치기와 사기꾼들의 험난한 신고식 속에서, 고양이 귀 모자를 쓴 신비로운 소녀 <strong>연우</strong>가 나타나 기묘한 속임수로 주인공을 구해냅니다.
+                </p>
+                <div class="accent-quote">
+                    "강호에서 살아남으려면 기억하세요. 사람을 쉽게 믿지 말 것, 그리고 신뢰만이 진정한 이익의 근간이라는 것을."
+                </div>
+                <p>
+                    연우는 식사 대접을 빌미로 주인공의 소중한 물건인 '고별주'를 담보로 챙겨 사라지며, '그림 속의 떡'이 그려진 쪽지만을 남깁니다. 이는 앞으로 마주할 거대한 소동의 서막이자, 강호의 비정한 생존 법칙을 일깨워준 첫 번째 가르침이었습니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: #222; font-size: 1.3em; border-left: 5px solid #b22222; padding-left: 15px; margin-bottom: 20px; font-weight: bold;">2. 개봉의 어두운 이면: 도탄에 빠진 민초</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    개봉의 화려한 겉모습 뒤에는 심각한 경제적 혼란이 도사리고 있었습니다. 남당에서 유입된 저가치 <span class="history-emphasis">철전</span>으로 인해 물가는 치솟았고, 조정은 이를 해결한다는 명목으로 백성들의 동전을 보상 없이 압수하는 강압적인 정책을 펼칩니다.
+                </p>
+                <p>
+                    서 대인의 잔혹한 집행 아래, 하루아침에 전 재산을 잃은 백성들은 자식을 팔거나 길가에서 굶어 죽는 처참한 상황에 내몰립니다. <strong>"대의를 위해 소를 희생한다"</strong>는 차가운 논리 속에 민초들의 비명은 번화가의 소음에 묻히고 있었습니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: #222; font-size: 1.3em; border-left: 5px solid #b22222; padding-left: 15px; margin-bottom: 20px; font-weight: bold;">3. '보물단지' 계획과 연우의 정체</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    사라졌던 소녀 연우의 본명은 <strong>무결</strong>로, 과거 위양의 거상이었던 문씨 가문의 후계자 <strong>'동방의 불꽃'</strong>이었습니다. 그녀는 개봉의 비극을 끝내기 위해 거대한 연극인 <span class="history-emphasis">'보물단지 계획'</span>을 설계합니다.
+                </p>
+                <p>
+                    금 동전을 무한히 만들어낸다는 '남당의 보물단지' 소문을 퍼뜨려 조정의 탐욕을 자극하고, 이를 통해 군비로 묶여있던 구리 비축분을 시장에 풀어 경제를 회생시키려 한 것입니다. 이 위험한 도박에는 <strong>구류문</strong>과 <strong>취화음</strong> 등 강호의 여러 세력이 각자의 목적을 위해 얽혀들기 시작합니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: #222; font-size: 1.3em; border-left: 5px solid #b22222; padding-left: 15px; margin-bottom: 20px; font-weight: bold;">4. 강호 세력들의 암약과 숨겨진 진실</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    사건이 전개되며 숨겨진 진실들이 드러납니다. 무시무시한 괴물들의 집단으로 알려진 <strong>구류문</strong>의 수장은 사실 생존을 위해 이용당하던 세쌍둥이 소녀들이었으며, 그들은 어둠 속에서 백성들을 돕는 의적 활동을 이어가고 있었습니다.
+                </p>
+                <p>
+                    아름다운 기녀들의 처소인 <strong>취화음</strong>은 사실 정교한 정보 조직이었습니다. 그들은 평화를 지키기 위해 남당의 첩자 명단을 제거하는 등, 보이지 않는 곳에서 제국 간의 전쟁을 막기 위한 위험한 줄타기를 지속하고 있었습니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: #222; font-size: 1.3em; border-left: 5px solid #b22222; padding-left: 15px; margin-bottom: 20px; font-weight: bold;">5. 황제의 잠행과 협객의 선택</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    시내에서 '조 대협'이라 불리며 소탈하게 민심을 살피던 남자의 정체는 바로 송의 건국자, <strong>태조 조광윤</strong>이었습니다. 그는 잠행을 통해 자신의 정책이 백성들에게 가한 고통을 직접 목격하며 고뇌합니다.
+                </p>
+                <p>
+                    주인공은 연우와 함께 사건의 흑막인 서 대인이 사실 과거의 원한에 사로잡힌 <strong>남당의 암살 세력</strong>임을 밝혀냅니다. 대의라는 이름 아래 희생되는 평범한 이들을 위해 주인공은 마침내 칼을 뽑고, 진정한 '협(俠)'의 의미를 만천하에 증명합니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="story-section">
+        <h3 style="color: #222; font-size: 1.3em; border-left: 5px solid #b22222; padding-left: 15px; margin-bottom: 20px; font-weight: bold;">6. 결말: 신뢰가 만든 새로운 시대</h3>
+        <div class="story-card">
+            <div class="story-text">
+                <p>
+                    '보물단지'는 결국 환상이었으나, 주인공의 활약과 민심에 응답한 조정은 강압적인 압수 정책을 철회합니다. 이 사건은 훗날 세계 역사상 최초의 지폐인 <strong>'교자(交子)'</strong>가 탄생하는 중요한 발판이 됩니다.
+                </p>
+                <p>
+                    전쟁과 상처로 얼룩진 과거의 동전을 버리고, 보이지 않는 미래와 신뢰를 믿기로 한 백성들의 용기가 개봉을 바꾼 것입니다. 사람들은 이제 이 <strong>'이름 없는 영웅'</strong>의 이야기를 전하며, 작은 정의가 세상을 바꿀 수 있다는 희망을 노래합니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <p style="text-align: center; color: #bbb; font-size: 0.9em; margin-top: 50px; font-style: italic;">
+        - 개봉의 불빛 아래 새겨진 이 기록은, 모든 방랑자가 기억해야 할 신뢰의 역사입니다. -
+    </p>
+
+</div>

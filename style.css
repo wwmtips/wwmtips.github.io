@@ -6196,37 +6196,34 @@ body.dark-mode .pwa-install-desc { color: #888; }
 .chunji-item-card .arrow-icon {
     display: none !important;
 }
-
-/* 천지록 메인 그리드 */
+/* [수정] 천지록 메인 그리드: PC 6열 / 모바일 3열 분기 */
 .chunji-list-main {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
+    /* 기본(모바일/태블릿) 3열 배치 */
+    grid-template-columns: repeat(3, 1fr) !important; 
     gap: 8px !important;
     margin-top: 10px;
 }
 
-/* 천지록 메인 그리드 (3열 유지) */
-.chunji-list-main {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 8px !important;
-    margin-top: 10px;
+/* PC 환경 (가로 해상도 1024px 이상) 설정 */
+@media (min-width: 1024px) {
+    .chunji-list-main {
+        /* PC에서는 한 줄에 6개씩 배치 */
+        grid-template-columns: repeat(6, 1fr) !important; 
+    }
 }
 
-/* 천지록 아이템: 높이 36px 고정 및 중앙 정렬 */
+/* 천지록 아이템: 높이 36px 및 중앙 정렬 유지 */
 .chunji-item-card {
     display: flex !important;
     flex-direction: column !important;
-    justify-content: center !important; /* 세로 중앙 정렬 */
-    align-items: center !important;     /* 가로 중앙 정렬 */
+    justify-content: center !important;
+    align-items: center !important;
     background-color: #fff !important;
-       border: 1px solid #ddd !important;
+    border: 1px solid #eee !important;
     border-radius: 4px !important;
-    
-    /* 높이 36px 고정 및 내부 여백 제거 */
     height: 36px !important; 
     padding: 0 4px !important; 
-    
     cursor: pointer;
     box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
     transition: all 0.2s ease;
@@ -6236,22 +6233,20 @@ body.dark-mode .pwa-install-desc { color: #888; }
 .chunji-item-card:hover {
     border-color: var(--wuxia-accent-gold) !important;
     background-color: #fffcf5 !important;
+    transform: translateY(-2px);
 }
 
-/* 제목 스타일: 중앙 정렬 및 압축 */
 .chunji-card-title {
     font-size: 0.7em !important;
     font-weight: bold !important;
     color: #333 !important;
     line-height: 1.1 !important;
-    margin: 0 !important;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* 서브텍스트 스타일: 중앙 정렬 및 최소화 */
 .chunji-card-type {
     display: block !important;
     font-size: 0.6em !important;

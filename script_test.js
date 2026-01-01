@@ -3904,7 +3904,7 @@ function renderHomeChunji() {
     container.innerHTML = '';
     
     // 무림록과 균형을 맞추기 위해 6개 또는 9개 출력
-    const displayList = chunjiData.slice(0, 9); 
+    const displayList = chunjiData.slice(0, 6); 
 
     displayList.forEach(item => {
         const div = document.createElement('div');

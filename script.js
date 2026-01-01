@@ -373,6 +373,8 @@ function loadData() {
             updateQuizCounter();
             renderFullNews(globalData.news);
             renderComboSlots();
+            renderHomeChunji(); // ★ 메인 화면용 리스트 추가 호출 ★
+
             if (typeof renderHomeCharacters === 'function') {
                 renderHomeCharacters();
             }
@@ -3895,26 +3897,29 @@ window.addEventListener('appinstalled', (evt) => {
     if (installContainer) installContainer.style.display = 'none';
 });
 
-
 function renderHomeChunji() {
     const container = document.getElementById('home-chunji-list');
-    if (!container || !Array.isArray(chunjiData)) return;
+    if (!container || !chunjiData) return;
 
     container.innerHTML = '';
-    // 메인에는 최근 3~6개만 표시
+    
+    // 무림록과 균형을 맞추기 위해 6개 또는 9개 출력
     const displayList = chunjiData.slice(0, 6); 
 
     displayList.forEach(item => {
         const div = document.createElement('div');
-        div.className = 'chunji-item-card'; // 위에서 정의한 새 클래스
-        div.onclick = () => showChunjiDetail(item.id); // 상세 보기 연결
+        div.className = 'chunji-item-card';
+        
+        div.onclick = () => {
+            if (typeof switchTab === 'function' && typeof loadChunjiDetail === 'function') {
+                switchTab('chunji');
+                loadChunjiDetail(item);
+            }
+        };
 
+        // 제목 아래에 서브텍스트(type)를 배치
         div.innerHTML = `
-            <div class="chunji-card-info">
-                <div class="chunji-card-title">${item.title}</div>
-                <div class="chunji-card-type">${item.type || '기록'}</div>
-            </div>
-            <div class="arrow-icon">❯</div>
+            <div class="chunji-card-title">${item.title}</div>
         `;
         container.appendChild(div);
     });

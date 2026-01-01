@@ -6165,7 +6165,6 @@ body.dark-mode .pwa-install-desc { color: #888; }
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.04) !important;
     transition: all 0.2s ease;
-    min-height: 60px !important; /* 서브텍스트 포함 적정 높이 */
 }
 
 .chunji-item-card:hover {

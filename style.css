@@ -6213,20 +6213,26 @@ body.dark-mode .pwa-install-desc { color: #888; }
     }
 }
 
-/* 천지록 아이템: 높이 36px 및 중앙 정렬 유지 */
+/* 천지록 아이템 카드: 36px 강제 고정 및 내부 여백 완전 제어 */
 .chunji-item-card {
     display: flex !important;
     flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
+    justify-content: center !important; /* 세로 중앙 */
+    align-items: center !important;     /* 가로 중앙 */
+    
     background-color: #fff !important;
     border: 1px solid #eee !important;
     border-radius: 4px !important;
+    
+    /* [핵심] 36px 고정 및 넘치는 요소 차단 */
     height: 36px !important; 
-    padding: 0 4px !important; 
+    min-height: 36px !important;
+    max-height: 36px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important; 
+    
+    padding: 0 !important; /* 패딩 제거로 높이 확보 */
     cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
-    transition: all 0.2s ease;
     text-align: center !important;
 }
 

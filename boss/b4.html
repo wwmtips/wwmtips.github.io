@@ -1,0 +1,432 @@
+<link rel="stylesheet" href="../style.css">
+
+<div class="quest-detail-container" style="text-align: left;">
+
+    <style>
+        /* [수묵화 테마] 스타일 정의 */
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+            --wuxia-bg-tab: #f4f4f2;
+        }
+
+        /* 디스클레이머 스타일 */
+        .disclaimer-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+            color: var(--wuxia-text-sub);
+            line-height: 1.6;
+        }
+
+        /* 탭(Tab) 스타일 */
+        .boss-tab-header {
+            display: flex;
+            background-color: var(--wuxia-bg-tab);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            border-bottom: 3px solid var(--wuxia-accent-red);
+            margin-bottom: 20px;
+        }
+
+        .boss-tab-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #888;
+            transition: all 0.3s ease;
+        }
+
+        .boss-tab-btn:hover {
+            background-color: rgba(183, 28, 28, 0.05);
+            color: var(--wuxia-accent-red);
+        }
+
+        .boss-tab-btn.active {
+            background-color: var(--wuxia-accent-red);
+            color: #fff;
+        }
+
+        /* 탭 내용 영역 */
+        .boss-tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .boss-tab-content.active {
+            display: block;
+        }
+
+        /* 공략 테이블 스타일 */
+        .guide-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #fff;
+        }
+
+        .guide-table th {
+            background-color: var(--wuxia-bg-tab);
+            color: var(--wuxia-text-main);
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .guide-table td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+        }
+
+        /* 기술 설명 강조 */
+        .skill-name {
+            color: var(--wuxia-accent-red);
+            font-weight: bold;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* 영상 컨테이너 */
+        .video-container {
+            width: 100%;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background: #000;
+            line-height: 0;
+        }
+
+        .video-container video {
+            width: 100%;
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        b {
+            color: #000;
+        }
+    </style>
+
+    <div style="margin-bottom: 20px;">
+        <button class="back-button" onclick="goBossList()">
+            ← 목록으로 돌아가기
+        </button>
+    </div>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 20px;">
+        <span
+            style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">협경</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            하백
+        </h2>
+    </div>
+
+    <div class="disclaimer-box">
+        하백 진수전의 공략은 <b>game8</b>의 자료를 번역해 제공합니다. 제공자의 요청이 있는 경우 게시글이 삭제될 수 있습니다.<br>
+        <span style="font-size: 0.85em; opacity: 0.8;">This guide features translated content from game8. This post may
+            be removed at the request of the original provider.</span>
+    </div>
+    <p style="margin-bottom: 30px; line-height: 1.7;">
+        하백은 <b>천상래 진수전</b>에서 만날 수 있는 캠페인 보스입니다. 하백의 공략 및 패턴을 아래에서 확인하세요.
+    </p>
+
+    <div class="boss-tab-header">
+        <button class="boss-tab-btn active" onclick="openBossTab('phase1', this)">
+            1페이즈
+        </button>
+        <button class="boss-tab-btn" onclick="openBossTab('phase2', this)">
+            2페이즈
+        </button>
+    </div>
+
+    <div id="tab-phase1" class="boss-tab-content active">
+        <table class="guide-table">
+            <colgroup>
+                <col style="width: 35%;">
+                <col style="width: 65%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>기술</th>
+                    <th>영상</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="skill-name">물줄기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364215/dbc4db9905803cefe56051ffc7a2c6f0.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                            원거리에서 빠른 속도로 물줄기를 발사합니다. 이 기술은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="skill-name">해일</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364217/c9787e798dbd1793ac5df354bb708289.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                            전장에 세 개의 거대한 파도를 일으킵니다. 이 공격은 적절한 타이밍에 점프하여 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="skill-name">강철꼬리</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364219/a2a48ea5b87ec040b562eef314123434.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                            몸을 뒤집어 거대한 꼬리로 당신을 공격합니다. 이 공격은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다 .
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="skill-name">물대포</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364222/f5704e806a57da2b8b985c47b31d4962.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                            주변의 물을 모아 원거리에서 강력한 구체를 발사합니다. 이 기술은 타이밍만 잘 맞추면 패링 이나 회피가 가능합니다.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="skill-name">해일2</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364224/519dcb2b598cdd1021cc06ce01a8dea2.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                            직선 경로에 강력한 물줄기를 뿌립니다. 이 공격은 적절한 타이밍에 점프하여 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="skill-name">몸통박치기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364226/ff30d358d00d2b0a5b5a5e3d6f6d01df.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                            물 밖으로 솟구쳐 올라 전장에 강타한 후 잠시 후 다시 바다로 굴러떨어집니다. 이 공격은 범위 밖으로 벗어나 면 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="skill-name">우박세례</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364230/f2fbd26ffd220a53cdffebabd819de80.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                            물 밖으로 솟구쳐 올라 전장에 강타한 후 잠시 후 다시 바다로 굴러떨어집니다. 이 공격은 범위 밖으로 벗어나 면 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="tab-phase2" class="boss-tab-content">
+        <table class="guide-table">
+            <colgroup>
+                <col style="width: 35%;">
+                <col style="width: 65%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>기술</th>
+                    <th>영상</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="skill-name">검격</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364232/604731b08904bdc7aaea11b0515ed4c6.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                           강력한 근접 검 콤보 공격을 펼칩니다. 이 기술은 타이밍을 잘 맞추면 막 거나 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+
+                 <tr>
+                    <td>
+                        <span class="skill-name">그림자 검기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364233/98ff17058e55780aac8123f8d40c9388.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                          검에서 어둠의 에너지를 발사합니다. 이 기술은 타이밍을 잘 맞추면 막 거나 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+                
+                 <tr>
+                    <td>
+                        <span class="skill-name">회전베기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364241/4b2dd77e445a2b5db9798ad10e635e25.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                          몸을 붉게 빛내며 검을 회전시켜 공격합니다. 이 공격은 타이밍을 잘 맞추면 막 거나 피할 수 있습니다 .
+                        </p>
+                    </td>
+                </tr>
+                 <tr>
+                    <td>
+                        <span class="skill-name">필살베기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364242/11a95da89bdbecca3a22aa5e9d3d717c.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                          노란색으로 빛나며 검을 한 번 휘둘러 강력한 돌진 공격을 가합니다. 이 공격은 타이밍을 잘 맞추면 피할 수 있습니다 .
+                        </p>
+                    </td>
+                </tr>
+                 <tr>
+                    <td>
+                        <span class="skill-name">물 가르기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364244/0f27e6ebb319489c4f9651c78d7a633d.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                         용왕을 소환하여 물줄기를 쏘아 공격합니다. 이 공격은 적절한 타이밍에 점프하면 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <button onclick="loadContent('boss.html')"
+            style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold; transition: all 0.2s;">
+            목록으로 돌아가기
+        </button>
+    </div>
+
+</div>
+
+<script>
+    /* 탭 전환 스크립트 */
+    function openBossTab(tabName, btn) {
+        const contents = document.getElementsByClassName("boss-tab-content");
+        for (let i = 0; i < contents.length; i++) {
+            contents[i].classList.remove("active");
+        }
+        const buttons = document.getElementsByClassName("boss-tab-btn");
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].classList.remove("active");
+        }
+        document.getElementById("tab-" + tabName).classList.add("active");
+        btn.classList.add("active");
+    }
+</script>

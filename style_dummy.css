@@ -6064,3 +6064,65 @@ body.dark-mode .pwa-install-desc { color: #888; }
     object-fit: cover !important; /* [핵심] 비율 유지하며 영역 꽉 채우기 */
     object-position: center;     /* 이미지 중앙 기준 */
 }
+/* =========================================
+   [공통] 슬림 카드 버튼 스타일 (140x36)
+   ========================================= */
+
+/* 1. 그리드 컨테이너: 140px씩 자동 배치 */
+.common-slim-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, 140px) !important;
+    gap: 8px !important;
+    padding: 10px 0 !important;
+    width: 100% !important;
+}
+
+/* 2. 공통 슬림 버튼 본체 */
+.slim-btn {
+    /* [핵심] 140 * 36 규격 강제 고정 */
+    width: 140px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background-color: var(--wuxia-bg-panel, #ffffff) !important;
+    border: 1px solid var(--wuxia-border, #dcdcdc) !important;
+    border-radius: 4px !important;
+    
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    box-sizing: border-box !important;
+    cursor: pointer;
+}
+
+/* 3. 내부 텍스트 스타일 */
+.slim-btn span {
+    font-size: 0.85em !important;
+    font-weight: bold !important;
+    color: var(--wuxia-text-main, #1a1a1a) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 5px;
+}
+
+/* 호버 효과 (무협 테마 금색 포인트) */
+.slim-btn:hover {
+    background-color: #fffcf5 !important;
+    border-color: var(--wuxia-accent-gold, #a08040) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* 다크모드 대응 */
+body.dark-mode .slim-btn {
+    background-color: #1e1e1e !important;
+    border-color: #444 !important;
+}
+body.dark-mode .slim-btn span {
+    color: #e0e0e0 !important;
+}

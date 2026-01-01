@@ -1325,7 +1325,27 @@
         generateSidebar(cachedData);
     }
 };
-
+// 기존 window.toggleClusterMode = function() { ... } 부분을 아래로 교체
+function toggleClusterMode() {
+    isClusterOn = !isClusterOn;
+    localStorage.setItem('clusterMode', isClusterOn);
+    
+    // 기존 레이어 제거
+    for (const key in layerGroups) {
+        if (map.hasLayer(layerGroups[key])) {
+            map.removeLayer(layerGroups[key]);
+        }
+    }
+    
+    // 데이터 초기화 및 재생성
+    layerGroups = {}; 
+    allMarkers = [];
+    
+    if (cachedData) { 
+        createMarkers(cachedData); 
+        generateSidebar(cachedData); 
+    }
+}
     function exportCompletedPins() {
         try {
             if (!currentMapId) { alert("맵 ID를 찾을 수 없습니다."); return; }

@@ -6067,20 +6067,24 @@ body.dark-mode .pwa-install-desc { color: #888; }
 /* =========================================
    [공통] 슬림 카드 버튼 스타일 (140x36)
    ========================================= */
+/* =========================================
+   [통합] 가이드 & 무림록 공통 슬림 버튼 스타일
+   ========================================= */
 
-/* 1. 그리드 컨테이너: 140px씩 자동 배치 */
+/* 1. 컨테이너: 화면 너비에 맞춰 버튼들을 꽉 채움 */
 .common-slim-grid {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, 140px) !important;
-    gap: 8px !important;
+    /* [핵심] 최소 100px에서 최대 1fr(균등분할)로 설정하여 화면을 꽉 채움 */
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)) !important;
+    gap: 10px !important;
     padding: 10px 0 !important;
     width: 100% !important;
+    box-sizing: border-box !important;
 }
 
-/* 2. 공통 슬림 버튼 본체 */
+/* 2. 공통 버튼 본체 (무림록 버튼과 완벽 동기화) */
 .slim-btn {
-    /* [핵심] 140 * 36 규격 강제 고정 */
-    width: 140px !important;
+    /* [핵심] 높이를 36px로 고정 (이미지 없는 텍스트형) */
     height: 36px !important;
     min-height: 36px !important;
     max-height: 36px !important;
@@ -6089,8 +6093,8 @@ body.dark-mode .pwa-install-desc { color: #888; }
     align-items: center !important;
     justify-content: center !important;
 
-    background-color: var(--wuxia-bg-panel, #ffffff) !important;
-    border: 1px solid var(--wuxia-border, #dcdcdc) !important;
+    background-color: #ffffff !important;
+    border: 1px solid #ddd !important;
     border-radius: 4px !important;
     
     text-decoration: none !important;
@@ -6099,30 +6103,29 @@ body.dark-mode .pwa-install-desc { color: #888; }
     cursor: pointer;
 }
 
-/* 3. 내부 텍스트 스타일 */
+/* 3. 텍스트 정렬 및 스타일 */
 .slim-btn span {
     font-size: 0.75em !important;
     font-weight: 600 !important;
-    color: var(--wuxia-text-main, #1a1a1a) !important;
+    color: #333 !important;
+    text-align: center !important;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 0 5px;
+    padding: 0 10px;
 }
 
-/* 호버 효과 (무협 테마 금색 포인트) */
+/* 호버 시 효과 통일 */
 .slim-btn:hover {
-    background-color: #fffcf5 !important;
-    border-color: var(--wuxia-accent-gold, #a08040) !important;
+    background-color: #f8f8f8 !important;
+    border-color: #ccc !important;
     transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* 다크모드 대응 */
-body.dark-mode .slim-btn {
-    background-color: #1e1e1e !important;
-    border-color: #444 !important;
-}
-body.dark-mode .slim-btn span {
-    color: #e0e0e0 !important;
+/* 모바일 대응: 화면이 아주 작을 때 3열 고정 (선택 사항) */
+@media (max-width: 480px) {
+    .common-slim-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 6px !important;
+    }
 }

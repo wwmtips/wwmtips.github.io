@@ -1,6 +1,18 @@
 {
   "chunji": [ 
      {
+     "id": "45",
+       "type": "견문",  
+      "subtype":"견문",
+      "title" :"조련술",
+      "get": "탐색 스킬 영혼의 공명 획득 후 해당장소의 염소를 따라다니며 대화 듣기",
+      "getimg1": "images/chunji/p14.jpg",
+      "getimg2": "images/chunji/p15.jpg",
+      "dsec": "자동 획득",
+      "dsecimg1": "",
+      "dsecimg2": ""
+    },
+     {
      "id": "44",
        "type": "서화",  
       "subtype":"그림",

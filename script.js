@@ -91,6 +91,11 @@ const dummyMapData = [
         title: "소자령",
         key: "sj", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         image: "images/maps/sj.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "약수안",
+        key: "yak", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/yak.jpg" // (썸네일 이미지가 있다면 유지)
     }
 ];
 

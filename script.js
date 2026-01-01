@@ -86,6 +86,11 @@ const dummyMapData = [
         title: "망천평원",
         key: "mang", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         image: "images/maps/mang.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "소자령",
+        key: "sj", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/sj.jpg" // (썸네일 이미지가 있다면 유지)
     }
 ];
 

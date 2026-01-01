@@ -6494,6 +6494,7 @@ body.dark-mode .pwa-install-desc { color: #888; }
     min-width: 170px !important;
     max-width: 170px !important;
         margin-left: 10px;
+        margin-top: 5px;
     
     height: 32px;
     overflow: hidden; /* 영역 밖으로 나가는 것 차단 */

@@ -4254,43 +4254,6 @@ audio.addEventListener('ended', () => {
  * outfit.js: 의상 쇼케이스 전역 관리 스크립트
  */
 
-// SPA에서 콘텐츠가 로드된 후 실행할 초기화 함수
-function initOutfitShowcase() {
-    const container = document.querySelector('.quest-detail-container');
-    if (!container || !window.location.search.includes('g=outfit')) return;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const gParam = urlParams.get('g') || 'outfit1';
-    const outfitNum = gParam.replace(/[^0-9]/g, '') || '1';
-
-    const img = document.getElementById('outfit-img-target');
-    const title = document.getElementById('outfit-title-text');
-    const switcher = document.getElementById('outfit-switcher');
-
-    // 1. 이미지 및 타이틀 업데이트 (루트 기준 경로)
-    if (img) {
-        img.src = `../images/outfit/wwm${outfitNum}.jpg`;
-        if (title) title.innerText = `의상 쇼케이스 #${outfitNum}`;
-
-        img.onerror = function () {
-            this.style.display = 'none';
-            if (title) title.innerText = `이미지(wwm${outfitNum}.jpg)를 찾을 수 없습니다.`;
-        };
-    }
-
-    // 2. 드롭다운 22개 고정 생성 및 현재 값 선택
-    if (switcher) {
-        switcher.innerHTML = ''; // 초기화
-        for (let i = 1; i <= 22; i++) {
-            const opt = document.createElement('option');
-            opt.value = i;
-            opt.innerText = `의상 #${i} 보기`;
-            if (i.toString() === outfitNum) opt.selected = true;
-            switcher.appendChild(opt);
-        }
-    }
-}
-
 // 드롭다운 변경 시 호출되는 함수
 function navigateToOutfit(num) {
     const targetFile = 'outfit/outfit' + num + '.html';
@@ -4318,7 +4281,7 @@ function syncOutfitImage() {
     const selects = document.querySelectorAll('.outfit-nav-select');
 
     if (img && outfitNum) {
-        const targetSrc = `./images/wwm${outfitNum}.jpg`; // 생성된 주소
+        const targetSrc = `../images/outfit/wwm${outfitNum}.jpg`; // 생성된 주소
         
         // 1. 이미지 주소 설정
         img.src = targetSrc; 

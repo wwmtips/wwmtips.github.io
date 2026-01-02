@@ -699,7 +699,7 @@ html, body, #map {
 
 /* 저장/불러오기 팝업 및 요약 바 최상단 고정 */
 .save-load-popup {
-    z-index: 9999 !important; /* 가장 높은 우선순위 */
+    z-index: 10000 !important; /* 가장 높은 우선순위 */
     bottom: 70px; /* 버튼 위로 충분히 띄움 */
 }
 

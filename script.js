@@ -917,13 +917,10 @@ function loadGuideView() {
 
     const urlParams = new URLSearchParams(window.location.search);
     
-    // [수정] g(카테고리)를 먼저 확인합니다. (예: outfit, boss)
-    // g가 없으면 예외적으로 id를 확인합니다.
+    // [수정] g(카테고리)를 id보다 먼저 읽어야 합니다!
     const targetId = urlParams.get('g') || urlParams.get('id'); 
     
     let fileToLoad = 'news.html';
-    
-    // GUIDE_MAP에서 'outfit' 키를 찾아 'outfit.html'을 결정합니다.
     if (targetId && GUIDE_MAP[targetId]) {
         fileToLoad = GUIDE_MAP[targetId];
     }
@@ -2928,7 +2925,9 @@ function openGuideDirect(filename) {
         if (foundId) updateUrlQuery('guide', foundId);
         loadGuideContent(filename, null);
     }
-}/**
+}
+
+/**
  * 의상 쇼케이스 전용 바로가기 기능
  * @param {number} outfitId - 쇼케이스 번호 (1~22)
  */

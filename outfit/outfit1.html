@@ -1,49 +1,27 @@
 <div class="quest-detail-container" style="text-align: left;">
     <style>
-        /* [수묵화 테마] majang.html 스타일 계승 */
+        /* majang.html 수묵화 테마 스타일 계승 */
         .outfit-header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--wuxia-accent-red);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;
         }
         .outfit-nav-select {
-            background-color: #f4f4f2; /* 연한 미색 배경 */
-            border: 1px solid var(--wuxia-accent-gold);
-            color: var(--wuxia-text-main);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            cursor: pointer;
-            outline: none;
+            background-color: #f4f4f2; border: 1px solid var(--wuxia-accent-gold);
+            color: var(--wuxia-text-main); padding: 4px 10px; border-radius: 4px; cursor: pointer;
         }
         .outfit-display-container {
-            background-color: #f4f4f2;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-            text-align: center;
+            background-color: #f4f4f2; border: 1px solid #ddd; border-radius: 4px;
+            padding: 10px; text-align: center;
         }
-        .outfit-img {
-            width: 100%; /* 너비 100% 사이즈 */
-            height: auto;
-            border-radius: 2px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .outfit-img { width: 100%; height: auto; border-radius: 2px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     </style>
 
     <div class="outfit-header-flex">
         <div>
-            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">의상</span>
-            <h2 id="outfit-title-text" style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-                쇼케이스
-            </h2>
+            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em;">의상</span>
+            <h2 id="outfit-title-text" style="color: var(--wuxia-accent-gold); display: inline-block; margin-left: 10px;">쇼케이스</h2>
         </div>
-        
-        <select id="outfit-switcher" class="outfit-nav-select" onchange="navigateToOutfit(this.value)">
-            </select>
+        <select id="outfit-switcher" class="outfit-nav-select" onchange="navigateToOutfit(this.value)"></select>
     </div>
 
     <div class="outfit-display-container">
@@ -51,62 +29,6 @@
     </div>
 
     <div style="text-align: center; margin-top: 30px;">
-        <button onclick="location.href='index.html'" style="background: var(--wuxia-accent-gold); color: white; border: none; padding: 10px 25px; cursor: pointer; border-radius: 4px; font-weight: bold;">
-             목록으로 돌아가기
-        </button>
+        <button onclick="location.href='../'" style="background: var(--wuxia-accent-gold); color: white; border: none; padding: 10px 25px; cursor: pointer; border-radius: 4px; font-weight: bold;">목록으로 돌아가기</button>
     </div>
-
-    <script>
-        /**
-         * SPA 엔진의 openGuideDirect를 호출하여 g 파라미터와 콘텐츠를 교체합니다.
-         */
-        function navigateToOutfit(num) {
-            const targetFile = 'outfit/outfit' + num + '.html';
-            if (typeof openGuideDirect === 'function') {
-                openGuideDirect(targetFile);
-            } else {
-                // SPA 함수를 찾을 수 없는 경우 강제 이동
-                location.href = '?g=outfit' + num;
-            }
-        }
-
-        (function initOutfitUI() {
-            // 1. 주소창의 g 파라미터에서 숫자 추출 (예: ?g=outfit1 -> 1)
-            const urlParams = new URLSearchParams(window.location.search);
-            const gParam = urlParams.get('g') || '';
-            let outfitNum = gParam.replace(/[^0-9]/g, '');
-            
-            // 파라미터가 없으면 현재 파일명에서 추출
-            if (!outfitNum) {
-                const filename = window.location.pathname.split('/').pop();
-                outfitNum = filename.replace(/[^0-9]/g, '') || '1';
-            }
-
-            const img = document.getElementById('outfit-img-target');
-            const title = document.getElementById('outfit-title-text');
-            const switcher = document.getElementById('outfit-switcher');
-
-            // 2. 이미지 및 타이틀 설정 (루트 기준 경로 ./images/ 사용)
-            if (img && outfitNum) {
-                img.src = `../images/outfit/wwm${outfitNum}.jpg`; 
-                title.innerText = `의상 쇼케이스 #${outfitNum}`;
-                
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    title.innerText = `이미지(wwm${outfitNum}.jpg)를 찾을 수 없습니다.`;
-                };
-            }
-
-            // 3. 드롭다운 22개 고정 생성 및 현재 값 선택
-            if (switcher) {
-                for (let i = 1; i <= 21; i++) {
-                    const opt = document.createElement('option');
-                    opt.value = i;
-                    opt.innerText = `의상 #${i} 보기`;
-                    if (i.toString() === outfitNum) opt.selected = true;
-                    switcher.appendChild(opt);
-                }
-            }
-        })();
-    </script>
 </div>

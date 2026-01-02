@@ -2927,24 +2927,15 @@ function openGuideDirect(filename) {
  * @param {number} outfitId - 쇼케이스 번호 (1~22)
  */
 function openOutfitDirect(outfitId) {
-    const tabName = 'guide'; 
-    const guideKey = 'outfit'; // GUIDE_MAP의 키값
+    // 1. 탭 전환
+    switchTab('guide', false);
 
-    // 1. 가이드 탭으로 전환 (SPA 구조 유지)
-    switchTab(tabName, false);
+    // 2. 파라미터 업데이트 (키값을 'g'와 'id'로 명확히 지정)
+    updateUrlQuery('g', 'outfit'); // ?g=outfit
+    updateUrlQuery('id', outfitId); // &id=1
 
-    // 2. URL 파라미터 강제 고정 (tab=id 현상 방지)
-    // 첫 번째 인자를 'g'로, 두 번째를 키값으로 명확히 지정합니다.
-    if (typeof updateUrlQuery === 'function') {
-        updateUrlQuery('g', guideKey);   // ?g=outfit 생성
-        updateUrlQuery('id', outfitId); // &id=1 추가
-    }
-
-    // 3. 콘텐츠 로드 (이미 로드된 상태여도 실행)
-    if (typeof loadGuideContent === 'function') {
-        // outfit.html 파일을 불러오면서 outfitId를 전달
-        loadGuideContent('outfit.html', outfitId);
-    }
+    // 3. 파일 로드
+    loadGuideContent('outfit.html', null);
 }
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★// [script.js] shareBuildToCloud 함수 (최종 완성본)
 function shareBuildToCloud() {

@@ -57,35 +57,49 @@
     </div>
 
     <script>
-        (function() {
-            // 현재 파일명에서 숫자 추출 (예: 'outfit5.html' -> '5')
-            const filename = window.location.href.split('/').pop().split('?')[0] || window.location.pathname.split('/').pop();
-            const outfitNum = filename.replace(/[^0-9]/g, '') || '1';
+       (function() {
+    // 1. 브라우저 주소창에서 파라미터 읽기 (SPA 구조 대응)
+    const urlParams = new URLSearchParams(window.location.search);
+    const gParam = urlParams.get('g') || ''; // 예: 'outfit1'
+    
+    // 2. 파라미터 값에서 숫자만 추출 (예: 'outfit15' -> '15')
+    // 만약 g 파라미터가 없다면 파일명에서 숫자를 찾는 기존 방식 병행
+    let outfitNum = gParam.replace(/[^0-9]/g, '');
+    
+    if (!outfitNum) {
+        const filename = window.location.href.split('/').pop();
+        outfitNum = filename.replace(/[^0-9]/g, '') || '1';
+    }
 
-            const img = document.getElementById('outfit-img-target');
-            const title = document.getElementById('outfit-title-text');
-            const switcher = document.getElementById('outfit-switcher');
+    const img = document.getElementById('outfit-img-target');
+    const title = document.getElementById('outfit-title-text');
+    const switcher = document.getElementById('outfit-switcher');
 
-            // 1. 이미지 및 타이틀 설정
-            if (img) {
-                // 이미지 경로는 상위 폴더의 images/wwm{N}.jpg 가정
-                img.src = `../images/outfit/wwm${outfitNum}.jpg`; 
-                title.innerText = `의상 쇼케이스 #${outfitNum}`;
-                
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    title.innerText = `이미지(wwm${outfitNum}.jpg) 미발견`;
-                };
-            }
+    // 3. 이미지 출력 (SPA이므로 루트 기준 ./images/ 경로 사용)
+    if (img && outfitNum) {
+        // 주소창이 wwm.tips/ 이므로 이미지는 ./images/ 폴더에서 찾음
+        img.src = `../images/outfit/wwm${outfitNum}.jpg`; 
+        title.innerText = `의상 쇼케이스 #${outfitNum}`;
+        
+        img.onerror = function() {
+            this.style.display = 'none';
+            title.innerText = `이미지(wwm${outfitNum}.jpg)를 찾을 수 없습니다.`;
+        };
+    }
 
-            // 2. 드롭다운 옵션 21개 생성 및 현재 번호 선택
+    // 4. 드롭다운 상태 업데이트 (현재 번호 선택)
+    if (switcher) {
+        // 드롭다운이 비어있다면 21개 생성
+        if (switcher.options.length === 0) {
             for (let i = 1; i <= 21; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
-                opt.innerText = `#${i} 보기`;
-                if (i.toString() === outfitNum) opt.selected = true;
+                opt.innerText = `의상 #${i} 보기`;
                 switcher.appendChild(opt);
             }
-        })();
+        }
+        switcher.value = outfitNum;
+    }
+})();
     </script>
 </div>

@@ -4302,34 +4302,46 @@ function navigateToOutfit(num) {
         location.href = '?g=outfit' + num;
     }
 }
-
 /**
- * SPA 주입 후 실행될 이미지 로드 함수 (index.html 또는 별도 js파일)
+ * SPA 주입 후 실행될 이미지 로드 및 경로 표시 함수
  */
 function syncOutfitImage() {
     const urlParams = new URLSearchParams(window.location.search);
     const gParam = urlParams.get('g') || '';
     
-    // g=outfit12 에서 숫자 '12'만 추출
+    // g=outfit12 에서 숫자 '12' 추출
     const outfitNum = gParam.replace(/[^0-9]/g, '');
     
     const img = document.getElementById('outfit-img-target');
     const title = document.getElementById('outfit-title-text');
+    const debugText = document.getElementById('debug-img-url'); // 경로 표시용
     const selects = document.querySelectorAll('.outfit-nav-select');
 
     if (img && outfitNum) {
-        // 이미지는 루트 기준 ./images/ 폴더에서 호출
-        img.src = `./images/wwm${outfitNum}.jpg`; 
-        if (title) title.innerText = `의상 쇼케이스 #${outfitNum}`;
+        const targetSrc = `./images/wwm${outfitNum}.jpg`; // 생성된 주소
         
-        // 드롭다운 현재 번호와 동기화
-        selects.forEach(select => {
-            select.value = outfitNum;
-        });
+        // 1. 이미지 주소 설정
+        img.src = targetSrc; 
+        
+        // 2. 화면에 실제 주소 표시 (디버깅용)
+        if (debugText) {
+            debugText.innerText = "현재 호출 중인 경로: " + targetSrc;
+            debugText.style.color = "blue"; 
+        }
 
+        // 3. 타이틀 및 드롭다운 동기화
+        if (title) title.innerText = `의상 쇼케이스 #${outfitNum}`;
+        selects.forEach(select => { select.value = outfitNum; });
+
+        // 에러 발생 시 처리
         img.onerror = function() {
             this.style.display = 'none';
-            if (title) title.innerText = `이미지(wwm${outfitNum}.jpg)를 찾을 수 없습니다.`;
+            if (debugText) {
+                debugText.innerText = "호출 실패한 경로: " + targetSrc;
+                debugText.style.color = "red";
+            }
         };
+    } else {
+        if (debugText) debugText.innerText = "오류: 파라미터에서 숫자를 찾을 수 없습니다.";
     }
 }

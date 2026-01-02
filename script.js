@@ -96,6 +96,11 @@ const dummyMapData = [
         title: "약수안",
         key: "yak", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         image: "images/maps/yak.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "침식의 숲",
+        key: "cf", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/cf.jpg" // (썸네일 이미지가 있다면 유지)
     }
 ];
 

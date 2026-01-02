@@ -285,63 +285,150 @@
         let devRecording = false;
         let devPathList = [];
 
-        document.addEventListener('DOMContentLoaded', () => {
-    const targetPath = urlParams.get('path'); // URL에서 경로 파라미터 획득
-    const searchInput = document.getElementById('marker-search'); // 검색창 요소
-    const searchResultList = document.getElementById('search-result-list'); // 검색 결과 리스트
+       document.addEventListener('DOMContentLoaded', () => {
+    const targetPath = urlParams.get('path');
+    const searchInput = document.getElementById('marker-search');
+    const searchResultList = document.getElementById('search-result-list');
 
-    // 1. 현재 선택된 맵의 JSON 데이터만 우선적으로 로드
+    // [최적화 로드] 현재 맵 데이터 우선 로드
     fetch(currentConfig.json)
-        .then(res => {
-            if (!res.ok) throw new Error(`Failed to load ${currentMapId}`);
-            return res.json();
-        })
+        .then(res => res.json())
         .then(data => {
-            cachedData = data; // 현재 맵 데이터 저장
-            
-            // 전역 캐시에 현재 맵 데이터 우선 등록
+            cachedData = data;
             data.forEach(item => {
                 globalMarkerCache[item.id] = { ...item, map: currentMapId };
             });
 
-            // 마커 생성 및 사이드바 생성 시작 (분할 렌더링 방식)
+            // 마커 생성 (Chunk 방식 적용됨)
             createMarkers(data);
             generateSidebar(data);
 
-            // URL에 특정 마커 ID가 있을 경우 해당 위치로 이동
+            // URL 파라미터에 마커 ID가 있으면 즉시 점프
             const targetMarkerId = urlParams.get('marker');
             if (targetMarkerId && !targetPath) {
-                // 이 로직은 createMarkers의 비동기 처리가 끝난 후 실행되도록 finalizeMarkers 내부에서 처리 권장
+                // 마커가 완전히 생성될 시간을 벌기 위해 0.8초 뒤 실행
+                setTimeout(() => jumpToMarker(targetMarkerId), 800);
             }
 
-            loadPathData(false, targetPath); // 경로 데이터 로드
-
-            // 2. 다른 맵들의 데이터는 3초 뒤에 백그라운드에서 천천히 로드하여 초기 렉 방지
+            loadPathData(false, targetPath);
+            // 다른 맵 데이터는 나중에 백그라운드 로드
             setTimeout(loadOtherMapsData, 3000);
-        })
-        .catch(err => {
-            console.warn("데이터 로드 실패, 샘플 데이터 사용:", err);
-            cachedData = sampleData; // 실패 시 샘플 데이터 사용
-            createMarkers(sampleData);
-            generateSidebar(sampleData);
-            loadPathData(true);
         });
-});
 
-// 백그라운드에서 다른 지도의 데이터를 캐싱하는 함수
+    // 검색창 입력 이벤트
+    searchInput.addEventListener('input', function (e) {
+        const keyword = e.target.value.trim().toLowerCase();
+        searchResultList.innerHTML = '';
+
+        if (keyword === "") {
+            searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색어를 입력하세요.</div>';
+            return;
+        }
+
+        // 전역 캐시(모든 맵 데이터)에서 검색
+        const results = Object.values(globalMarkerCache).filter(item => 
+            (item.name && item.name.toLowerCase().includes(keyword)) || 
+            (item.desc && item.desc.toLowerCase().includes(keyword))
+        );
+
+        if (results.length === 0) {
+            searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>';
+            return;
+        }
+
+        results.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'search-result-row';
+            const imgName = typeMapping[item.type] || "stone";
+            const mapName = mapsDB[item.map] ? mapsDB[item.map].name : "";
+
+            row.innerHTML = `
+                <div class="result-info">
+                    <div class="result-name">${item.name} <small style="color:#888;">(${mapName})</small></div>
+                    <div class="result-desc">${item.desc || ''}</div>
+                </div>
+                <img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">
+            `;
+
+            row.onclick = () => {
+                if (item.map === currentMapId) {
+                    // 현재 맵이면 바로 점프
+                    jumpToMarker(item.id);
+                } else {
+                    // 다른 맵이면 확인 후 페이지 이동
+                    if (confirm(`'${mapName}' 지도로 이동하시겠습니까?`)) {
+                        window.location.href = `?id=${item.map}&marker=${item.id}`;
+                    }
+                }
+                if (window.innerWidth <= 768) closeAllPanels();
+            };
+            searchResultList.appendChild(row);
+        });
+    });
+});
+/**
+ * 특정 마커로 지도를 이동시키고 팝업을 여는 함수
+ * @param {string|number} id - 마커의 고유 ID
+ */
+function jumpToMarker(id) {
+    // 1. 현재 로드된 모든 마커 중에서 ID가 일치하는 객체 찾기
+    const targetItem = allMarkers.find(m => m.id == id);
+    
+    if (!targetItem) {
+        console.warn("현재 맵에서 마커를 찾을 수 없습니다. ID:", id);
+        return;
+    }
+
+    const marker = targetItem.marker;
+    const type = targetItem.type;
+    const group = layerGroups[type];
+
+    // 2. 해당 타입의 레이어가 꺼져있다면 강제로 켜기
+    if (!map.hasLayer(group)) {
+        map.addLayer(group);
+        // 사이드바 UI 상태도 동기화 (활성화 표시)
+        const filterItems = document.querySelectorAll('.filter-item');
+        filterItems.forEach(div => {
+            if (div.querySelector('.filter-text-name').innerText === type) {
+                div.classList.remove('inactive');
+                div.classList.add('active');
+            }
+        });
+        saveFilterState();
+    }
+
+    // 3. 이동 및 팝업 표시
+    if (isClusterOn && group && group.zoomToShowLayer) {
+        // 클러스터 모드일 경우: 클러스터를 펼치면서 해당 마커로 이동
+        group.zoomToShowLayer(marker, function () {
+            marker.openPopup();
+        });
+    } else {
+        // 일반 모드일 경우: 부드럽게 이동 후 팝업 오픈
+        map.flyTo(marker.getLatLng(), 0, { animate: true, duration: 1.0 });
+        map.once('moveend', function () {
+            marker.openPopup();
+        });
+    }
+}
 function loadOtherMapsData() {
-    Object.keys(mapsDB).forEach(key => {
-        if (key === currentMapId) return; // 이미 로드된 지도는 제외
-        fetch(mapsDB[key].json)
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(item => {
-                    globalMarkerCache[item.id] = { ...item, map: key }; // 전역 캐시에 저장
-                });
-            }).catch(e => console.log(`${key} 데이터 백그라운드 로드 실패`));
+    const mapKeys = Object.keys(mapsDB).filter(key => key !== currentMapId);
+    
+    // 지도를 하나씩 순차적으로 비동기 로드하여 네트워크 부하 감소
+    let p = Promise.resolve();
+    mapKeys.forEach(key => {
+        p = p.then(() => fetch(mapsDB[key].json))
+             .then(res => res.json())
+             .then(data => {
+                 data.forEach(item => {
+                     // 이미 존재하는 ID가 아니면 캐시에 추가 (맵 정보 포함)
+                     if (!globalMarkerCache[item.id]) {
+                        globalMarkerCache[item.id] = { ...item, map: key };
+                     }
+                 });
+             }).catch(e => console.log(`${key} 로드 대기 중...`));
     });
 }
-
         // Dev Mode 기능
         window.toggleDevRecording = function () {
             devRecording = !devRecording;

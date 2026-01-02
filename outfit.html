@@ -1,0 +1,76 @@
+<div class="quest-detail-container" style="text-align: left;">
+    <style>
+        /* 수묵화 테마 스타일 계승 */
+        .outfit-display-box {
+            background-color: #f4f4f2;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 15px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+        .outfit-img {
+            width: 100%; /* 너비 100% 고정 */
+            height: auto;
+            border-radius: 2px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+        .back-to-list-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: var(--wuxia-accent-gold);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 2px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .back-to-list-btn:hover { opacity: 0.9; }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">의상</span>
+        <h2 id="outfit-title" style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+            쇼케이스 상세 보기
+        </h2>
+        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">연운십육성 강호의 멋을 담은 의상 기록</p>
+    </div>
+
+    <div class="outfit-display-box">
+        <img id="dynamic-outfit-img" src="" alt="의상 이미지" class="outfit-img">
+    </div>
+
+    <div style="text-align: center;">
+        <a onclick="location.href='index.html'" class="back-to-list-btn">
+             목록으로 돌아가기
+        </a>
+    </div>
+
+    <script>
+        /**
+         * URL 파라미터에서 ID를 읽어 이미지를 동적으로 변경하는 스크립트
+         */
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const outfitId = urlParams.get('id') || '1'; // ID가 없으면 기본값 1
+            
+            const imgElement = document.getElementById('dynamic-outfit-img');
+            const titleElement = document.getElementById('outfit-title');
+
+            if (imgElement) {
+                // wwm{id}.jpg 형식으로 이미지 경로 설정
+                imgElement.src = `./images/outfit/wwm${outfitId}.jpg`; 
+                titleElement.innerText = `쇼케이스 #${outfitId} 상세보기`;
+                
+                // 이미지 로드 실패 시 처리 (선택 사항)
+                imgElement.onerror = function() {
+                    this.src = 'https://via.placeholder.com/800x1200?text=Image+Not+Found';
+                };
+            }
+        })();
+    </script>
+</div>

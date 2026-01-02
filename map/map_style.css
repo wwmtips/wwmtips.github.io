@@ -357,12 +357,19 @@
             transition: filter 0.5s ease;
         }
 
+     .bottom-left-controls{
+     z-index: 10000 !important;
+     position: fixed;
+}
         /* UI 컨테이너 (클릭 통과) */
         .top-left-controls, .top-right-controls, 
-        .bottom-left-controls, .bottom-right-controls, .bottom-center-controls {
-            position: fixed; z-index: 90000 !important; 
-            pointer-events: none !important; 
-            display: flex; flex-direction: column; gap: 8px;
+        .bottom-right-controls, .bottom-center-controls {
+            position: fixed;
+            z-index: 9000 !important;
+            pointer-events: none !important;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .top-left-controls { top: 15px; left: 15px; }

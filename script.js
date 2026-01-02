@@ -2922,36 +2922,32 @@ function openGuideDirect(filename) {
         if (foundId) updateUrlQuery('guide', foundId);
         loadGuideContent(filename, null);
     }
-}
-/**
+}/**
  * 의상 쇼케이스 전용 바로가기 기능
- * @param {string|number} outfitId - 쇼케이스 ID (1~22)
+ * @param {number} outfitId - 쇼케이스 번호 (1~22)
  */
 function openOutfitDirect(outfitId) {
     const filename = 'outfit.html';
-    const tabName = 'guide'; // 가이드 탭을 사용한다고 가정
-
-    // 1. 'outfit.html'에 매칭되는 가이드 ID 찾기 (예: 'outfit')
+    // GUIDE_MAP에서 'outfit.html'에 해당하는 키값('outfit')을 찾습니다.
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
 
-    // 2. 가이드 데이터가 아직 로드되지 않았을 때 (새로고침 직후 등)
+    // 1. 가이드 데이터가 아직 로드되지 않았을 때 (새로고침 직후 등)
     if (!isGuideLoaded) {
         if (foundId) {
-            // 가이드 탭 ID와 의상 고유 ID를 함께 쿼리에 저장
-            updateUrlQuery(tabName, foundId);
-            updateUrlQuery('id', outfitId); 
+            // 주소창 파라미터를 'g' 또는 'guide'에 맞춰 업데이트 (URL 형식을 확인하세요)
+            updateUrlQuery('g', foundId); 
+            updateUrlQuery('id', outfitId); // 의상 ID 추가
         }
-        switchTab(tabName, false);
-    }
-    // 3. 이미 로드되어 있을 때
+        switchTab('guide', false);
+    } 
+    // 2. 이미 로드되어 있을 때
     else {
-        // 탭 전환 후 강제로 아웃핏 콘텐츠와 ID 교체
-        switchTab(tabName, false);
+        switchTab('guide', false);
         if (foundId) {
-            updateUrlQuery(tabName, foundId);
-            updateUrlQuery('id', outfitId);
+            updateUrlQuery('g', foundId); 
+            updateUrlQuery('id', outfitId); // 의상 ID 추가
         }
-        // outfit.html을 불러오면서 파라미터로 outfitId 전달
+        // 콘텐츠를 로드하면서 outfitId를 함께 전달하여 outfit.html 내부 스크립트 실행 유도
         loadGuideContent(filename, outfitId);
     }
 }

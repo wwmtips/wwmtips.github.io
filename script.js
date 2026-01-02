@@ -2921,7 +2921,38 @@ function openGuideDirect(filename) {
         loadGuideContent(filename, null);
     }
 }
+/**
+ * 의상 쇼케이스 전용 바로가기 기능
+ * @param {string|number} outfitId - 쇼케이스 ID (1~22)
+ */
+function openOutfitDirect(outfitId) {
+    const filename = 'outfit.html';
+    const tabName = 'guide'; // 가이드 탭을 사용한다고 가정
 
+    // 1. 'outfit.html'에 매칭되는 가이드 ID 찾기 (예: 'outfit')
+    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
+
+    // 2. 가이드 데이터가 아직 로드되지 않았을 때 (새로고침 직후 등)
+    if (!isGuideLoaded) {
+        if (foundId) {
+            // 가이드 탭 ID와 의상 고유 ID를 함께 쿼리에 저장
+            updateUrlQuery(tabName, foundId);
+            updateUrlQuery('id', outfitId); 
+        }
+        switchTab(tabName, false);
+    }
+    // 3. 이미 로드되어 있을 때
+    else {
+        // 탭 전환 후 강제로 아웃핏 콘텐츠와 ID 교체
+        switchTab(tabName, false);
+        if (foundId) {
+            updateUrlQuery(tabName, foundId);
+            updateUrlQuery('id', outfitId);
+        }
+        // outfit.html을 불러오면서 파라미터로 outfitId 전달
+        loadGuideContent(filename, outfitId);
+    }
+}
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★// [script.js] shareBuildToCloud 함수 (최종 완성본)
 function shareBuildToCloud() {
     // 1. 입력값 가져오기

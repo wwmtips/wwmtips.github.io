@@ -914,7 +914,7 @@ const GUIDE_MAP = {
     'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html', 'b4': 'boss/b4.html', 'b5': 'boss/b5.html',
     'w1': 'world1.html', 'nb': 'newb.html', 'wp': 'guide/weapon.html', 'up': 'guide/up.html', 'w2': 'world2.html',
     'outfit1': 'outfit/outfit1.html',
-    'outfit2': 'outfit/outfit1.html',
+    'outfit2': 'outfit/outfit2.html',
     'outfit3': 'outfit/outfit3.html',
     'outfit4': 'outfit/outfit4.html',
     'outfit5': 'outfit/outfit5.html',

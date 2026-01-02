@@ -197,29 +197,44 @@
         };
 
         const colorMapping = {
-            "상자": "#4CAF50", // 밝은 초록
-            "보스": "#F44336", // 밝은 빨강
-            "고양이": "#607D8B", // 파란 회색 (검정은 너무 어두워서 변경)
-            "묘물": "#009688", // 밝은 청록
-            "만사록": "#FF9800", // 주황
-            "경계석": "#9C27B0", // 밝은 보라
-            "기연": "#E91E63", // 진한 분홍
-            "묘묘냥": "#673AB7", // 짙은 보라
-            "천지록": "#2196F3", // 밝은 파랑
-            "사건": "#3F51B5",
-            "낚시대결": "#272a57",
-            "투호대결": "#272a57",
-            "영지": "#d8d5a8",
-            "강호의벗": "#fbceb1",
-            "유물": "#003458",
-            "탐방": "#fbceb1",
-            "상기": "#fbceb1",
-            "엽자희": "#fbceb1",
-            "만물의울림": "#fbceb1", "곡경심유": "#fbceb1", "궁술대결": "#fbceb1", "기타": "#fbceb1", "야외제사": "#fbceb1",
-            "무술로맺은인연": "#fbceb1", "화술논쟁": "#fbceb1", "풍류의선률": "#fbceb1", "의술치유": "#fbceb1", "채집": "#b1fbba",
-            "엽자희": "#b1fbba",
-            "화장실": "#ebebeb"
+            // [기존 유지] 주요 탐색 요소
+            "상자": "#4CAF50",       // 밝은 초록
+            "보스": "#F44336",       // 밝은 빨강
+            "고양이": "#607D8B",     // 파란 회색
+            "묘물": "#009688",       // 밝은 청록
+            "만사록": "#FF9800",     // 주황
+            "경계석": "#9C27B0",     // 밝은 보라
+            "기연": "#E91E63",       // 진한 분홍
+            "묘묘냥": "#673AB7",     // 짙은 보라
+            "천지록": "#2196F3",     // 밝은 파랑
+            "사건": "#3F51B5",       // 남색
 
+            // [세분화] 대결 및 활동 (남색 계열 분리)
+            "낚시대결": "#272a57",   // 진한 남색 (기본)
+            "투호대결": "#3f4481",   // 연한 남색/보라
+
+            // [세분화] 영지 및 거점
+            "영지": "#d8d5a8",       // 올리브 베이지
+
+            // [세분화] 강호/교류 활동 (살구색 #fbceb1 기반 변주)
+            "강호의벗": "#fbceb1",   // 기본 살구색
+            "탐방": "#f7d794",       // 부드러운 황토색
+            "상기": "#f3a683",       // 진한 살구색
+            "유물": "#003458",       // 깊은 바다색 (중복 제거)
+            "만물의울림": "#a29bfe", // 연보라
+            "곡경심유": "#fab1a0",   // 연한 코랄
+            "궁술대결": "#81ecec",   // 연한 하늘색
+            "기타": "#dfe6e9",       // 밝은 회색
+            "야외제사": "#fdcb6e",   // 머스터드 옐로우
+            "무술로맺은인연": "#74b9ff", // 스카이 블루
+            "화술논쟁": "#ff7675",   // 연한 빨강
+            "풍류의선률": "#e17055", // 테라코타 (악기 느낌)
+            "의술치유": "#55efc4",   // 민트 그린
+
+            // [세분화] 생활 및 채집 (초록 계열 분리)
+            "채집": "#b1fbba",       // 밝은 연두 (기본)
+            "엽자희": "#5ec49e",     // 비취색 (카드 게임)
+            "화장실": "#ebebeb"      // 아주 밝은 회색
         };
 
 
@@ -285,64 +300,64 @@
         let devRecording = false;
         let devPathList = [];
 
-       document.addEventListener('DOMContentLoaded', () => {
-    const targetPath = urlParams.get('path');
-    const searchInput = document.getElementById('marker-search');
-    const searchResultList = document.getElementById('search-result-list');
+        document.addEventListener('DOMContentLoaded', () => {
+            const targetPath = urlParams.get('path');
+            const searchInput = document.getElementById('marker-search');
+            const searchResultList = document.getElementById('search-result-list');
 
-    // [최적화 로드] 현재 맵 데이터 우선 로드
-    fetch(currentConfig.json)
-        .then(res => res.json())
-        .then(data => {
-            cachedData = data;
-            data.forEach(item => {
-                globalMarkerCache[item.id] = { ...item, map: currentMapId };
-            });
+            // [최적화 로드] 현재 맵 데이터 우선 로드
+            fetch(currentConfig.json)
+                .then(res => res.json())
+                .then(data => {
+                    cachedData = data;
+                    data.forEach(item => {
+                        globalMarkerCache[item.id] = { ...item, map: currentMapId };
+                    });
 
-            // 마커 생성 (Chunk 방식 적용됨)
-            createMarkers(data);
-            generateSidebar(data);
+                    // 마커 생성 (Chunk 방식 적용됨)
+                    createMarkers(data);
+                    generateSidebar(data);
 
-            // URL 파라미터에 마커 ID가 있으면 즉시 점프
-            const targetMarkerId = urlParams.get('marker');
-            if (targetMarkerId && !targetPath) {
-                // 마커가 완전히 생성될 시간을 벌기 위해 0.8초 뒤 실행
-                setTimeout(() => jumpToMarker(targetMarkerId), 800);
-            }
+                    // URL 파라미터에 마커 ID가 있으면 즉시 점프
+                    const targetMarkerId = urlParams.get('marker');
+                    if (targetMarkerId && !targetPath) {
+                        // 마커가 완전히 생성될 시간을 벌기 위해 0.8초 뒤 실행
+                        setTimeout(() => jumpToMarker(targetMarkerId), 800);
+                    }
 
-            loadPathData(false, targetPath);
-            // 다른 맵 데이터는 나중에 백그라운드 로드
-            setTimeout(loadOtherMapsData, 3000);
-        });
+                    loadPathData(false, targetPath);
+                    // 다른 맵 데이터는 나중에 백그라운드 로드
+                    setTimeout(loadOtherMapsData, 3000);
+                });
 
-    // 검색창 입력 이벤트
-    searchInput.addEventListener('input', function (e) {
-        const keyword = e.target.value.trim().toLowerCase();
-        searchResultList.innerHTML = '';
+            // 검색창 입력 이벤트
+            searchInput.addEventListener('input', function (e) {
+                const keyword = e.target.value.trim().toLowerCase();
+                searchResultList.innerHTML = '';
 
-        if (keyword === "") {
-            searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색어를 입력하세요.</div>';
-            return;
-        }
+                if (keyword === "") {
+                    searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색어를 입력하세요.</div>';
+                    return;
+                }
 
-        // 전역 캐시(모든 맵 데이터)에서 검색
-        const results = Object.values(globalMarkerCache).filter(item => 
-            (item.name && item.name.toLowerCase().includes(keyword)) || 
-            (item.desc && item.desc.toLowerCase().includes(keyword))
-        );
+                // 전역 캐시(모든 맵 데이터)에서 검색
+                const results = Object.values(globalMarkerCache).filter(item =>
+                    (item.name && item.name.toLowerCase().includes(keyword)) ||
+                    (item.desc && item.desc.toLowerCase().includes(keyword))
+                );
 
-        if (results.length === 0) {
-            searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>';
-            return;
-        }
+                if (results.length === 0) {
+                    searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>';
+                    return;
+                }
 
-        results.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'search-result-row';
-            const imgName = typeMapping[item.type] || "stone";
-            const mapName = mapsDB[item.map] ? mapsDB[item.map].name : "";
+                results.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'search-result-row';
+                    const imgName = typeMapping[item.type] || "stone";
+                    const mapName = mapsDB[item.map] ? mapsDB[item.map].name : "";
 
-            row.innerHTML = `
+                    row.innerHTML = `
                 <div class="result-info">
                     <div class="result-name">${item.name} <small style="color:#888;">(${mapName})</small></div>
                     <div class="result-desc">${item.desc || ''}</div>
@@ -350,85 +365,85 @@
                 <img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">
             `;
 
-            row.onclick = () => {
-                if (item.map === currentMapId) {
-                    // 현재 맵이면 바로 점프
-                    jumpToMarker(item.id);
-                } else {
-                    // 다른 맵이면 확인 후 페이지 이동
-                    if (confirm(`'${mapName}' 지도로 이동하시겠습니까?`)) {
-                        window.location.href = `?id=${item.map}&marker=${item.id}`;
-                    }
-                }
-                if (window.innerWidth <= 768) closeAllPanels();
-            };
-            searchResultList.appendChild(row);
+                    row.onclick = () => {
+                        if (item.map === currentMapId) {
+                            // 현재 맵이면 바로 점프
+                            jumpToMarker(item.id);
+                        } else {
+                            // 다른 맵이면 확인 후 페이지 이동
+                            if (confirm(`'${mapName}' 지도로 이동하시겠습니까?`)) {
+                                window.location.href = `?id=${item.map}&marker=${item.id}`;
+                            }
+                        }
+                        if (window.innerWidth <= 768) closeAllPanels();
+                    };
+                    searchResultList.appendChild(row);
+                });
+            });
         });
-    });
-});
-/**
- * 특정 마커로 지도를 이동시키고 팝업을 여는 함수
- * @param {string|number} id - 마커의 고유 ID
- */
-function jumpToMarker(id) {
-    // 1. 현재 로드된 모든 마커 중에서 ID가 일치하는 객체 찾기
-    const targetItem = allMarkers.find(m => m.id == id);
-    
-    if (!targetItem) {
-        console.warn("현재 맵에서 마커를 찾을 수 없습니다. ID:", id);
-        return;
-    }
+        /**
+         * 특정 마커로 지도를 이동시키고 팝업을 여는 함수
+         * @param {string|number} id - 마커의 고유 ID
+         */
+        function jumpToMarker(id) {
+            // 1. 현재 로드된 모든 마커 중에서 ID가 일치하는 객체 찾기
+            const targetItem = allMarkers.find(m => m.id == id);
 
-    const marker = targetItem.marker;
-    const type = targetItem.type;
-    const group = layerGroups[type];
-
-    // 2. 해당 타입의 레이어가 꺼져있다면 강제로 켜기
-    if (!map.hasLayer(group)) {
-        map.addLayer(group);
-        // 사이드바 UI 상태도 동기화 (활성화 표시)
-        const filterItems = document.querySelectorAll('.filter-item');
-        filterItems.forEach(div => {
-            if (div.querySelector('.filter-text-name').innerText === type) {
-                div.classList.remove('inactive');
-                div.classList.add('active');
+            if (!targetItem) {
+                console.warn("현재 맵에서 마커를 찾을 수 없습니다. ID:", id);
+                return;
             }
-        });
-        saveFilterState();
-    }
 
-    // 3. 이동 및 팝업 표시
-    if (isClusterOn && group && group.zoomToShowLayer) {
-        // 클러스터 모드일 경우: 클러스터를 펼치면서 해당 마커로 이동
-        group.zoomToShowLayer(marker, function () {
-            marker.openPopup();
-        });
-    } else {
-        // 일반 모드일 경우: 부드럽게 이동 후 팝업 오픈
-        map.flyTo(marker.getLatLng(), 0, { animate: true, duration: 1.0 });
-        map.once('moveend', function () {
-            marker.openPopup();
-        });
-    }
-}
-function loadOtherMapsData() {
-    const mapKeys = Object.keys(mapsDB).filter(key => key !== currentMapId);
-    
-    // 지도를 하나씩 순차적으로 비동기 로드하여 네트워크 부하 감소
-    let p = Promise.resolve();
-    mapKeys.forEach(key => {
-        p = p.then(() => fetch(mapsDB[key].json))
-             .then(res => res.json())
-             .then(data => {
-                 data.forEach(item => {
-                     // 이미 존재하는 ID가 아니면 캐시에 추가 (맵 정보 포함)
-                     if (!globalMarkerCache[item.id]) {
-                        globalMarkerCache[item.id] = { ...item, map: key };
-                     }
-                 });
-             }).catch(e => console.log(`${key} 로드 대기 중...`));
-    });
-}
+            const marker = targetItem.marker;
+            const type = targetItem.type;
+            const group = layerGroups[type];
+
+            // 2. 해당 타입의 레이어가 꺼져있다면 강제로 켜기
+            if (!map.hasLayer(group)) {
+                map.addLayer(group);
+                // 사이드바 UI 상태도 동기화 (활성화 표시)
+                const filterItems = document.querySelectorAll('.filter-item');
+                filterItems.forEach(div => {
+                    if (div.querySelector('.filter-text-name').innerText === type) {
+                        div.classList.remove('inactive');
+                        div.classList.add('active');
+                    }
+                });
+                saveFilterState();
+            }
+
+            // 3. 이동 및 팝업 표시
+            if (isClusterOn && group && group.zoomToShowLayer) {
+                // 클러스터 모드일 경우: 클러스터를 펼치면서 해당 마커로 이동
+                group.zoomToShowLayer(marker, function () {
+                    marker.openPopup();
+                });
+            } else {
+                // 일반 모드일 경우: 부드럽게 이동 후 팝업 오픈
+                map.flyTo(marker.getLatLng(), 0, { animate: true, duration: 1.0 });
+                map.once('moveend', function () {
+                    marker.openPopup();
+                });
+            }
+        }
+        function loadOtherMapsData() {
+            const mapKeys = Object.keys(mapsDB).filter(key => key !== currentMapId);
+
+            // 지도를 하나씩 순차적으로 비동기 로드하여 네트워크 부하 감소
+            let p = Promise.resolve();
+            mapKeys.forEach(key => {
+                p = p.then(() => fetch(mapsDB[key].json))
+                    .then(res => res.json())
+                    .then(data => {
+                        data.forEach(item => {
+                            // 이미 존재하는 ID가 아니면 캐시에 추가 (맵 정보 포함)
+                            if (!globalMarkerCache[item.id]) {
+                                globalMarkerCache[item.id] = { ...item, map: key };
+                            }
+                        });
+                    }).catch(e => console.log(`${key} 로드 대기 중...`));
+            });
+        }
         // Dev Mode 기능
         window.toggleDevRecording = function () {
             devRecording = !devRecording;
@@ -958,83 +973,83 @@ function loadOtherMapsData() {
         }
 
         // 마커 생성 함수
-       function createMarkers(data) {
-    const storageKey = `completed_${currentMapId}`;
-    const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-    const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+        function createMarkers(data) {
+            const storageKey = `completed_${currentMapId}`;
+            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
 
-    // 1. 기존 레이어 제거 및 초기화
-    for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
-    allMarkers = [];
-    layerGroups = {};
+            // 1. 기존 레이어 제거 및 초기화
+            for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
+            allMarkers = [];
+            layerGroups = {};
 
-    const markersByType = {};
-    let index = 0;
-    const CHUNK_SIZE = 500;
+            const markersByType = {};
+            let index = 0;
+            const CHUNK_SIZE = 500;
 
-    // [개선] 레이어 그룹을 미리 생성하고, 필터가 켜져 있다면 즉시 맵에 추가해둡니다.
-    // 그래야 마커가 추가될 때 화면에 바로 보입니다.
-    const uniqueTypes = [...new Set(data.map(item => item.type))];
-    uniqueTypes.forEach(type => {
-        if (isClusterOn) {
-            layerGroups[type] = createClusterGroup(type);
-        } else {
-            layerGroups[type] = L.layerGroup();
-        }
-        
-        // 필터 설정 확인 후 맵에 미리 추가
-        const shouldShow = (savedFilters[type] !== undefined) ? savedFilters[type] : true;
-        if (shouldShow) {
-            layerGroups[type].addTo(map);
-        }
-    });
+            // [개선] 레이어 그룹을 미리 생성하고, 필터가 켜져 있다면 즉시 맵에 추가해둡니다.
+            // 그래야 마커가 추가될 때 화면에 바로 보입니다.
+            const uniqueTypes = [...new Set(data.map(item => item.type))];
+            uniqueTypes.forEach(type => {
+                if (isClusterOn) {
+                    layerGroups[type] = createClusterGroup(type);
+                } else {
+                    layerGroups[type] = L.layerGroup();
+                }
 
-    function processChunk() {
-        const chunk = data.slice(index, index + CHUNK_SIZE);
-        
-        chunk.forEach(item => {
-            const isCompleted = completedList.includes(item.id);
-            const imgName = typeMapping[item.type] || "stone";
-            const iconPath = `../images/${imgName}.png`;
-            const pinColor = colorMapping[item.type] || "#555";
+                // 필터 설정 확인 후 맵에 미리 추가
+                const shouldShow = (savedFilters[type] !== undefined) ? savedFilters[type] : true;
+                if (shouldShow) {
+                    layerGroups[type].addTo(map);
+                }
+            });
 
-            const pinIcon = L.divIcon({
-                className: isCompleted ? 'marker-completed' : '',
-                html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
+            function processChunk() {
+                const chunk = data.slice(index, index + CHUNK_SIZE);
+
+                chunk.forEach(item => {
+                    const isCompleted = completedList.includes(item.id);
+                    const imgName = typeMapping[item.type] || "stone";
+                    const iconPath = `../images/${imgName}.png`;
+                    const pinColor = colorMapping[item.type] || "#555";
+
+                    const pinIcon = L.divIcon({
+                        className: isCompleted ? 'marker-completed' : '',
+                        html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
                          <div class="pin-inner-circle">
                            <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                          </div>
                        </div>`,
-                iconSize: pinSize,
-                iconAnchor: [pinSize[0] / 2, pinSize[1] / 2],
-                popupAnchor: [0, -(pinSize[1] / 2 + 5)]
-            });
+                        iconSize: pinSize,
+                        iconAnchor: [pinSize[0] / 2, pinSize[1] / 2],
+                        popupAnchor: [0, -(pinSize[1] / 2 + 5)]
+                    });
 
-            const marker = L.marker([item.y, item.x], { icon: pinIcon });
-            marker.bindPopup(() => generatePopupContent(item, storageKey));
-            
-            // [핵심] 이미 맵에 추가된 layerGroups에 마커를 넣으면 즉시 화면에 보입니다.
-            layerGroups[item.type].addLayer(marker);
-            
-            allMarkers.push({ 
-                id: item.id, name: item.name, desc: item.desc || "", 
-                type: item.type, marker: marker 
-            });
-        });
+                    const marker = L.marker([item.y, item.x], { icon: pinIcon });
+                    marker.bindPopup(() => generatePopupContent(item, storageKey));
 
-        index += CHUNK_SIZE;
+                    // [핵심] 이미 맵에 추가된 layerGroups에 마커를 넣으면 즉시 화면에 보입니다.
+                    layerGroups[item.type].addLayer(marker);
 
-        if (index < data.length) {
-            // 다음 프레임에서 나머지 처리 (이 과정이 화면에 실시간으로 반영됨)
-            requestAnimationFrame(processChunk);
-        } else {
-            console.log("모든 마커 렌더링 완료");
-            // finalizeMarkers 호출 필요 없음 (이미 위에서 다 추가됨)
+                    allMarkers.push({
+                        id: item.id, name: item.name, desc: item.desc || "",
+                        type: item.type, marker: marker
+                    });
+                });
+
+                index += CHUNK_SIZE;
+
+                if (index < data.length) {
+                    // 다음 프레임에서 나머지 처리 (이 과정이 화면에 실시간으로 반영됨)
+                    requestAnimationFrame(processChunk);
+                } else {
+                    console.log("모든 마커 렌더링 완료");
+                    // finalizeMarkers 호출 필요 없음 (이미 위에서 다 추가됨)
+                }
+            }
+
+            processChunk();
         }
-    }
-
-    processChunk();
-}
 
         // 클러스터 그룹 생성을 분리하여 최적화 옵션 적용
         function createClusterGroup(type) {
@@ -1279,40 +1294,40 @@ function loadOtherMapsData() {
 
 
         // 성능 향상을 위한 디바운스 타이머 변수
-let searchTimer;
+        let searchTimer;
 
-searchInput.addEventListener('input', function (e) {
-    // 0.2초 동안 추가 입력이 없을 때만 검색 실행 (성능 최적화)
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => {
-        const keyword = e.target.value.trim().toLowerCase();
-        searchResultList.innerHTML = '';
+        searchInput.addEventListener('input', function (e) {
+            // 0.2초 동안 추가 입력이 없을 때만 검색 실행 (성능 최적화)
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                const keyword = e.target.value.trim().toLowerCase();
+                searchResultList.innerHTML = '';
 
-        if (keyword === "") {
-            searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색어를 입력하세요.</div>';
-            return;
-        }
+                if (keyword === "") {
+                    searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색어를 입력하세요.</div>';
+                    return;
+                }
 
-        // 1. [수정] 전역 캐시(모든 맵 데이터)를 대상으로 검색
-        const results = Object.values(globalMarkerCache).filter(item => 
-            (item.name && item.name.toLowerCase().includes(keyword)) || 
-            (item.desc && item.desc.toLowerCase().includes(keyword))
-        );
+                // 1. [수정] 전역 캐시(모든 맵 데이터)를 대상으로 검색
+                const results = Object.values(globalMarkerCache).filter(item =>
+                    (item.name && item.name.toLowerCase().includes(keyword)) ||
+                    (item.desc && item.desc.toLowerCase().includes(keyword))
+                );
 
-        if (results.length === 0) {
-            searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>';
-            return;
-        }
+                if (results.length === 0) {
+                    searchResultList.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">검색 결과가 없습니다.</div>';
+                    return;
+                }
 
-        // 2. 결과 렌더링
-        results.forEach(item => {
-            const row = document.createElement('div'); 
-            row.className = 'search-result-row';
-            const imgName = typeMapping[item.type] || "stone";
-            const mapName = mapsDB[item.map] ? mapsDB[item.map].name : "알 수 없음";
+                // 2. 결과 렌더링
+                results.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'search-result-row';
+                    const imgName = typeMapping[item.type] || "stone";
+                    const mapName = mapsDB[item.map] ? mapsDB[item.map].name : "알 수 없음";
 
-            // 검색 결과에 소속 맵 이름 표시 추가
-            row.innerHTML = `
+                    // 검색 결과에 소속 맵 이름 표시 추가
+                    row.innerHTML = `
                 <div class="result-info">
                     <div class="result-name">${item.name} <small style="color:#aaa;">[${mapName}]</small></div>
                     <div class="result-desc">${item.desc || ''}</div>
@@ -1320,24 +1335,24 @@ searchInput.addEventListener('input', function (e) {
                 <img src="../images/${imgName}.png" class="result-type-icon" onerror="this.style.display='none'">
             `;
 
-            row.onclick = () => {
-                if (item.map === currentMapId) {
-                    // 3. [수정] 중앙 집중화된 이동 함수 사용
-                    jumpToMarker(item.id);
-                } else {
-                    // 4. [추가] 다른 맵일 경우 확인 후 이동
-                    if (confirm(`'${mapName}' 지도로 이동하시겠습니까?`)) {
-                        window.location.href = `?id=${item.map}&marker=${item.id}`;
-                    }
-                }
-                
-                // 모바일 패널 닫기 (기준 통일: 768px)
-                if (window.innerWidth <= 768) closeAllPanels();
-            };
-            searchResultList.appendChild(row);
+                    row.onclick = () => {
+                        if (item.map === currentMapId) {
+                            // 3. [수정] 중앙 집중화된 이동 함수 사용
+                            jumpToMarker(item.id);
+                        } else {
+                            // 4. [추가] 다른 맵일 경우 확인 후 이동
+                            if (confirm(`'${mapName}' 지도로 이동하시겠습니까?`)) {
+                                window.location.href = `?id=${item.map}&marker=${item.id}`;
+                            }
+                        }
+
+                        // 모바일 패널 닫기 (기준 통일: 768px)
+                        if (window.innerWidth <= 768) closeAllPanels();
+                    };
+                    searchResultList.appendChild(row);
+                });
+            }, 200); // 200ms 대기 후 실행
         });
-    }, 200); // 200ms 대기 후 실행
-});
         // 팝업 내용 생성
         // 팝업 내용 생성 (Dev 모드 ID 복사 버튼 추가됨)
         function generatePopupContent(item, storageKey) {

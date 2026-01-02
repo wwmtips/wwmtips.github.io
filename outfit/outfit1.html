@@ -7,13 +7,13 @@
         }
         .outfit-nav-select {
             background-color: #f4f4f2; border: 1px solid var(--wuxia-accent-gold);
-            color: var(--wuxia-text-main); padding: 4px 10px; border-radius: 4px; cursor: pointer;
+            color: var(--wuxia-text-main); padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.9em;
         }
-        .outfit-display-container {
+        .outfit-display-box {
             background-color: #f4f4f2; border: 1px solid #ddd; border-radius: 4px;
             padding: 10px; text-align: center;
         }
-        .outfit-img { width: 100%; height: auto; border-radius: 2px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .outfit-img { width: 100%; height: auto; border-radius: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     </style>
 
     <div class="outfit-header-flex">
@@ -21,14 +21,37 @@
             <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em;">의상</span>
             <h2 id="outfit-title-text" style="color: var(--wuxia-accent-gold); display: inline-block; margin-left: 10px;">쇼케이스</h2>
         </div>
-        <select id="outfit-switcher" class="outfit-nav-select" onchange="navigateToOutfit(this.value)"></select>
+        
+        <select class="outfit-nav-select" onchange="openGuideDirect('outfit/outfit' + this.value + '.html')">
+            <option value="1">의상 #1 보기</option>
+            <option value="2">의상 #2 보기</option>
+            <option value="3">의상 #3 보기</option>
+            <option value="4">의상 #4 보기</option>
+            <option value="5">의상 #5 보기</option>
+            <option value="6">의상 #6 보기</option>
+            <option value="7">의상 #7 보기</option>
+            <option value="8">의상 #8 보기</option>
+            <option value="9">의상 #9 보기</option>
+            <option value="10">의상 #10 보기</option>
+            <option value="11">의상 #11 보기</option>
+            <option value="12">의상 #12 보기</option>
+            <option value="13">의상 #13 보기</option>
+            <option value="14">의상 #14 보기</option>
+            <option value="15">의상 #15 보기</option>
+            <option value="16">의상 #16 보기</option>
+            <option value="17">의상 #17 보기</option>
+            <option value="18">의상 #18 보기</option>
+            <option value="19">의상 #19 보기</option>
+            <option value="20">의상 #20 보기</option>
+            <option value="21">의상 #21 보기</option>
+        </select>
     </div>
 
-    <div class="outfit-display-container">
+    <div class="outfit-display-box">
         <img id="outfit-img-target" src="" alt="의상 이미지" class="outfit-img">
     </div>
 
     <div style="text-align: center; margin-top: 30px;">
-        <button onclick="location.href='../'" style="background: var(--wuxia-accent-gold); color: white; border: none; padding: 10px 25px; cursor: pointer; border-radius: 4px; font-weight: bold;">목록으로 돌아가기</button>
+        <button onclick="location.href='index.html'" style="background: var(--wuxia-accent-gold); color: white; border: none; padding: 10px 25px; cursor: pointer; border-radius: 4px; font-weight: bold;">목록으로 돌아가기</button>
     </div>
 </div>

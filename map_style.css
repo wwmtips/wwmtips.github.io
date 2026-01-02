@@ -689,3 +689,10 @@ html, body, #map {
         .dev-temp-label:before {
             border-top-color: #ff00ff; 
         }
+        /* 녹화 모드에서 선택된 마커 강조 */
+.dev-selected {
+    filter: drop-shadow(0 0 5px #00e5ff) !important;
+    border: 2px solid #00e5ff !important;
+    border-radius: 50%;
+    z-index: 1000 !important;
+}

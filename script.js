@@ -2927,28 +2927,23 @@ function openGuideDirect(filename) {
  * @param {number} outfitId - 쇼케이스 번호 (1~22)
  */
 function openOutfitDirect(outfitId) {
-    const filename = 'outfit.html';
-    // GUIDE_MAP에서 'outfit.html'에 해당하는 키값('outfit')을 찾습니다.
-    const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
+    const tabName = 'guide'; 
+    const guideKey = 'outfit'; // GUIDE_MAP의 키값
 
-    // 1. 가이드 데이터가 아직 로드되지 않았을 때 (새로고침 직후 등)
-    if (!isGuideLoaded) {
-        if (foundId) {
-            // 주소창 파라미터를 'g' 또는 'guide'에 맞춰 업데이트 (URL 형식을 확인하세요)
-            updateUrlQuery('g', foundId); 
-            updateUrlQuery('id', outfitId); // 의상 ID 추가
-        }
-        switchTab('guide', false);
-    } 
-    // 2. 이미 로드되어 있을 때
-    else {
-        switchTab('guide', false);
-        if (foundId) {
-            updateUrlQuery('g', foundId); 
-            updateUrlQuery('id', outfitId); // 의상 ID 추가
-        }
-        // 콘텐츠를 로드하면서 outfitId를 함께 전달하여 outfit.html 내부 스크립트 실행 유도
-        loadGuideContent(filename, outfitId);
+    // 1. 가이드 탭으로 전환 (SPA 구조 유지)
+    switchTab(tabName, false);
+
+    // 2. URL 파라미터 강제 고정 (tab=id 현상 방지)
+    // 첫 번째 인자를 'g'로, 두 번째를 키값으로 명확히 지정합니다.
+    if (typeof updateUrlQuery === 'function') {
+        updateUrlQuery('g', guideKey);   // ?g=outfit 생성
+        updateUrlQuery('id', outfitId); // &id=1 추가
+    }
+
+    // 3. 콘텐츠 로드 (이미 로드된 상태여도 실행)
+    if (typeof loadGuideContent === 'function') {
+        // outfit.html 파일을 불러오면서 outfitId를 전달
+        loadGuideContent('outfit.html', outfitId);
     }
 }
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★// [script.js] shareBuildToCloud 함수 (최종 완성본)

@@ -1,7 +1,7 @@
 <div class="quest-detail-container" style="text-align: left;">
     <style>
-        /* majang.html 수묵화 테마 계승 */
-        .outfit-display-container {
+        /* [수묵화 테마] majang.html 스타일 계승 */
+        .outfit-main-box {
             background-color: #f4f4f2; /* 연한 미색 배경 */
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -9,78 +9,65 @@
             margin-top: 15px;
             text-align: center;
         }
-        .outfit-img {
+        .outfit-img-full {
             width: 100%; /* 너비 100% 고정 */
             height: auto;
             border-radius: 2px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .outfit-quick-nav {
-            padding: 4px 10px;
+        .outfit-nav-select {
+            float: right;
+            padding: 4px 8px;
             border: 1px solid var(--wuxia-accent-gold);
             background: #f4f4f2;
+            font-size: 0.85em;
             color: var(--wuxia-text-main);
-            font-size: 0.9em;
-            cursor: pointer;
-            float: right;
         }
     </style>
 
     <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 15px; overflow: hidden;">
         <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">의상</span>
-        <h2 id="outfit-header-title" style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">쇼케이스</h2>
+        <h2 id="outfit-display-title" style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">쇼케이스</h2>
         
-        <select id="outfit-quick-nav" class="outfit-quick-nav" onchange="openOutfitDirect(this.value)">
+        <select id="outfit-quick-select" class="outfit-nav-select" onchange="openOutfitDirect(this.value)">
             </select>
     </div>
 
-    <div class="outfit-display-container">
-        <img id="outfit-main-image" src="" alt="의상 이미지" class="outfit-img">
+    <div class="outfit-main-box">
+        <img id="outfit-img-target" src="" alt="의상 이미지" class="outfit-img-full">
     </div>
 
-    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ccc;">
+    <div style="text-align: center; margin-top: 30px;">
         <button onclick="location.href='index.html'" style="background: var(--wuxia-accent-gold); color: white; border: none; padding: 10px 25px; cursor: pointer; border-radius: 4px; font-weight: bold;">
-            목록으로 돌아가기 (홈)
+            목록으로 돌아가기
         </button>
     </div>
 
     <script>
-        /**
-         * 의상 쇼케이스 초기화 스크립트
-         */
-        (function initOutfit() {
-            const params = new URLSearchParams(window.location.search);
+        (function initOutfitPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const outfitId = urlParams.get('id') || '1'; // ID 없으면 1번 기본값
             
-            // [핵심] id가 없거나 null이면 기본값 '1'을 사용하도록 설정
-            const id = params.get('id') || '1'; 
-            
-            const mainImg = document.getElementById('outfit-main-image');
-            const headerTitle = document.getElementById('outfit-header-title');
-            const navDropdown = document.getElementById('outfit-quick-nav');
+            const targetImg = document.getElementById('outfit-img-target');
+            const targetTitle = document.getElementById('outfit-display-title');
+            const selectMenu = document.getElementById('outfit-quick-select');
 
-            // 1. 이미지 및 타이틀 업데이트
-            if (mainImg) {
-                mainImg.src = `images/outfit/wwm${id}.jpg`; // 이미지 경로: wwm1.jpg ~ wwm22.jpg
-                headerTitle.innerText = `의상 쇼케이스 #${id}`;
+            // 이미지 및 타이틀 설정
+            if (targetImg) {
+                targetImg.src = `images/outfit/wwm${outfitId}.jpg`; // 이미지 경로
+                targetTitle.innerText = `쇼케이스 #${outfitId}`;
             }
-            
-            // 2. 드롭다운 메뉴 생성 (1~22번)
-            if (navDropdown) {
-                for(let i = 1; i <= 22; i++) {
+
+            // 드롭다운 1~22 자동 생성
+            if (selectMenu) {
+                for(let i=1; i<=22; i++) {
                     const opt = document.createElement('option');
                     opt.value = i;
-                    opt.innerText = `쇼케이스 #${i}`;
-                    // 현재 ID와 일치하면 선택 상태로 표시
-                    if(i.toString() === id) opt.selected = true;
-                    navDropdown.appendChild(opt);
+                    opt.innerText = `의상 #${i}`;
+                    if(i.toString() === outfitId) opt.selected = true;
+                    selectMenu.appendChild(opt);
                 }
             }
-            
-            // 이미지 로드 실패 시 예외 처리 (이미지 파일이 없을 경우 대비)
-            mainImg.onerror = function() {
-                this.style.display = 'none';
-                headerTitle.innerText = `의상 정보를 찾을 수 없습니다 (ID: ${id})`;
-            };
         })();
     </script>
 </div>

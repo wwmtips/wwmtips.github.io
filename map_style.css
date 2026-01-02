@@ -696,3 +696,18 @@ html, body, #map {
     border-radius: 50%;
     z-index: 1000 !important;
 }
+
+/* 저장/불러오기 팝업을 최상단으로 올림 */
+.save-load-popup {
+    z-index: 9999 !important; /* 경로 패널보다 높은 숫자 부여 */
+}
+
+/* 컨트롤 박스들의 기본 레이어도 확인 */
+.bottom-left-controls, .bottom-right-controls, .top-right-controls {
+    z-index: 1000;
+}
+
+/* 경로 패널의 레이어 (참고용) */
+.path-panel {
+    z-index: 2000; /* 팝업이 이것보다 높아야 함 */
+}

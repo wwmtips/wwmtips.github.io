@@ -125,33 +125,33 @@ document.addEventListener('DOMContentLoaded', loadMansarokMenu);
 // 만사록 데이터를 불러와 상단에 배치하는 함수 (최종 수정본)
 async function loadMansarokMenu() {
     try {
-        const response = await fetch('json/quests.json');
+        const response = await fetch('json/quests.json'); 
         if (!response.ok) throw new Error('데이터 로드 실패');
-
+        
         const data = await response.json();
-
+        
         // 1. 만사록 타입 필터링 후 최대 9개만 자르기
         const mansarokList = data
             .slice(0, 6); // [핵심] 0번부터 8번 인덱스까지만 선택
-        // .filter(item => item.type === '만사록')
+                   // .filter(item => item.type === '만사록')
         const container = document.getElementById('mansarok-list');
         if (!container) return;
-
-        container.innerHTML = '';
+        
+        container.innerHTML = ''; 
 
         mansarokList.forEach(item => {
             const btn = document.createElement('a');
             btn.className = 'mansarok-btn';
             btn.href = "javascript:void(0);";
-
+            
             // 내부 함수 호출 방식 유지
-            btn.onclick = () => {
+            btn.onclick = () => { 
                 if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
-                    switchTab('quest');
-                    loadQuestDetail(item.filepath, item.id);
+                    switchTab('quest'); 
+                    loadQuestDetail(item.filepath, item.id); 
                 }
             };
-
+            
             btn.innerHTML = `<span>${item.name}</span>`;
             container.appendChild(btn);
         });
@@ -164,23 +164,23 @@ async function loadMansarokMenu() {
 function renderMansarok(data) {
     const listContainer = document.getElementById('mansarok-list');
     if (!listContainer) return;
-    listContainer.innerHTML = '';
+    listContainer.innerHTML = ''; 
 
     // 만사록 타입만 필터링
     const filtered = data.filter(item => item.type === "만사록");
 
     filtered.forEach(item => {
         const numericId = item.id.replace(/[^0-9]/g, "");
-
+        
         const btn = document.createElement('a');
         btn.className = 'mansarok-btn';
         btn.href = "javascript:void(0);"; // 주소 이동 방지
-
+        
         // [핵심] 내부 상세 보기 함수 호출
-        btn.onclick = () => {
+        btn.onclick = () => { 
             if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
-                switchTab('quest');
-                loadQuestDetail(item.filepath, item.id);
+                switchTab('quest'); 
+                loadQuestDetail(item.filepath, item.id); 
             } else {
                 console.warn('탭 전환 또는 상세 로드 함수가 없습니다.');
             }
@@ -220,32 +220,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const listContainer = document.getElementById('mansarok-list');
 
     function renderMansarok(data) {
-        const listContainer = document.getElementById('mansarok-list');
-        if (!listContainer) return;
-        listContainer.innerHTML = '';
+    const listContainer = document.getElementById('mansarok-list');
+    if (!listContainer) return;
+    listContainer.innerHTML = ''; 
 
-        // 1. 만사록 타입만 필터링
-        const filtered = data.filter(item => item.type === "만사록");
+    // 1. 만사록 타입만 필터링
+    const filtered = data.filter(item => item.type === "만사록");
 
-        filtered.forEach(item => {
-            // 버튼 엘리먼트 생성 (a 태그 대신 div나 button 권장, a 사용 시 href="javascript:void(0)" 처리)
-            const btn = document.createElement('a');
-            btn.className = 'mansarok-btn';
-            btn.href = "javascript:void(0);"; // 페이지 이동 방지
+    filtered.forEach(item => {
+        // 버튼 엘리먼트 생성 (a 태그 대신 div나 button 권장, a 사용 시 href="javascript:void(0)" 처리)
+        const btn = document.createElement('a');
+        btn.className = 'mansarok-btn';
+        btn.href = "javascript:void(0);"; // 페이지 이동 방지
+        
+        // 2. [핵심] 클릭 시 내부 함수 호출 설정
+        // 기존에 정의된 switchTab과 loadQuestDetail 함수를 사용합니다.
+        btn.onclick = () => { 
+            switchTab('quest'); 
+            loadQuestDetail(item.filepath, item.id); 
+        };
 
-            // 2. [핵심] 클릭 시 내부 함수 호출 설정
-            // 기존에 정의된 switchTab과 loadQuestDetail 함수를 사용합니다.
-            btn.onclick = () => {
-                switchTab('quest');
-                loadQuestDetail(item.filepath, item.id);
-            };
-
-            // 버튼 내용 삽입
-            btn.innerHTML = `<span>${item.name}</span>`;
-
-            listContainer.appendChild(btn);
-        });
-    }
+        // 버튼 내용 삽입
+        btn.innerHTML = `<span>${item.name}</span>`;
+        
+        listContainer.appendChild(btn);
+    });
+}
 
     // 로컬 더미 데이터로 실행
     renderMansarok(dummyQuests);
@@ -359,9 +359,9 @@ function loadData() {
             // ★ 보스 데이터 전역 변수에 저장
             globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
             characterData = personResult;
-            // 로컬 테스트용 캐릭터 데이터 배열
+                // 로컬 테스트용 캐릭터 데이터 배열
 
-
+            
             if (quests.length > 0) {
                 quests.sort((a, b) => {
                     const numA = parseInt((a.id || "").replace('q', '')) || 0;
@@ -396,7 +396,7 @@ function loadData() {
             renderComboSlots();
             renderHomeChunji(); // ★ 메인 화면용 리스트 추가 호출 ★
             // ★ 생일 체크 호출 추가
-            checkCharacterBirthday();
+         checkCharacterBirthday();
 
             if (typeof renderHomeCharacters === 'function') {
                 renderHomeCharacters();
@@ -409,9 +409,9 @@ function loadData() {
                 renderBossList('bossGrid', 'all');
             }
             // 홈 화면에 보스 섹션이 있다면 (예: id="home-boss-list")
-            /*   if (document.getElementById('home-boss-list')) {
-                   renderBossList('home-boss-list', 'all', 2);
-               }*/
+         /*   if (document.getElementById('home-boss-list')) {
+                renderBossList('home-boss-list', 'all', 2);
+            }*/
 
             // 상세 페이지 진입 처리
             if (shortQuestId) {
@@ -838,11 +838,6 @@ function loadGuideContent(filename, btnElement) {
     if (filename !== 'boss.html') {
         innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
     }
-    // [추가] 만약 불러온 파일이 의상 관련이라면 초기화 함수 실행
-    if (filename.includes('outfit')) {
-        initOutfitShowcase();
-        
-    }
 
     fetch(filename)
         .then(res => {
@@ -911,9 +906,9 @@ const GUIDE_MAP = {
     'news': 'news.html', 'tierlist': 'guide_tier.html', 'weapon': 'tier_weapon.html',
     'build': 'build.html', 'map': 'maps.html', 'side': 'beta.html', 'hw': 'npc.html',
     'boss': 'boss.html', 'marts': 'marts.html', 'harts': 'harts.html', 'skill': 'skils.html',
-    'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html', 'b4': 'boss/b4.html', 'b5': 'boss/b5.html',
-    'w1': 'world1.html', 'nb': 'newb.html', 'wp': 'guide/weapon.html', 'up': 'guide/up.html', 'w2': 'world2.html',
-    'outfit1': 'outfit/outfit1.html',
+    'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html','b4': 'boss/b4.html','b5': 'boss/b5.html',
+    'w1':'world1.html', 'nb':'newb.html', 'wp':'guide/weapon.html', 'up':'guide/up.html', 'w2':'world2.html',
+     'outfit1': 'outfit/outfit1.html',
     'outfit2': 'outfit/outfit2.html',
     'outfit3': 'outfit/outfit3.html',
     'outfit4': 'outfit/outfit4.html',
@@ -3698,7 +3693,7 @@ function renderAchievements(data) {
         return;
     }
 
-    container.innerHTML = '';
+    container.innerHTML = ''; 
 
     // ★ 핵심: 모바일(768px 이하)일 때는 4개, PC일 때는 10개로 제한 ★
     const isMobile = window.innerWidth <= 768;
@@ -3827,7 +3822,7 @@ function renderHomeCharacters() {
         div.onclick = () => {
             if (typeof openPersonDetail === 'function') {
                 // 특정 필드만 골라 담지 말고, 원본 char 객체를 통째로 전달합니다.
-                openPersonDetail(char);
+                openPersonDetail(char); 
             }
         };
 
@@ -3914,7 +3909,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     // 이벤트를 보관해둠
     deferredPrompt = e;
-
+    
     // 숨겨져 있던 버튼 컨테이너를 표시 (이제 설치 가능하니까!)
     if (installContainer) {
         installContainer.style.setProperty('display', 'flex', 'important');
@@ -3935,7 +3930,7 @@ if (installBtn) {
 
         // 결과와 상관없이 프롬프트는 1회용이므로 초기화
         deferredPrompt = null;
-
+        
         // 설치창이 닫혔으므로 버튼 다시 숨기기
         if (installContainer) installContainer.style.display = 'none';
     });
@@ -3952,14 +3947,14 @@ function renderHomeChunji() {
     if (!container || !chunjiData) return;
 
     container.innerHTML = '';
-
+    
     // 무림록과 균형을 맞추기 위해 6개 또는 9개 출력
-    const displayList = chunjiData.slice(0, 6);
+    const displayList = chunjiData.slice(0, 6); 
 
     displayList.forEach(item => {
         const div = document.createElement('div');
         div.className = 'chunji-item-card';
-
+        
         div.onclick = () => {
             if (typeof switchTab === 'function' && typeof loadChunjiDetail === 'function') {
                 switchTab('chunji');
@@ -3994,19 +3989,19 @@ function createConfetti() {
     const container = document.querySelector('.confetti-container');
     if (!container) return;
 
-    const colors = ['#d4af37', '#b71c1c', '#ffffff', '#ffd700'];
-
+    const colors = ['#d4af37', '#b71c1c', '#ffffff', '#ffd700']; 
+    
     for (let i = 0; i < 60; i++) { // 개수 증가
         const piece = document.createElement('div');
         piece.className = 'confetti-piece';
-
+        
         piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         piece.style.left = Math.random() * 100 + '%';
-
+        
         // 딜레이와 지속시간을 조절해 끊기지 않게 함
-        piece.style.animationDelay = Math.random() * 10 + 's';
+        piece.style.animationDelay = Math.random() * 10 + 's'; 
         piece.style.animationDuration = (Math.random() * 3 + 4) + 's';
-
+        
         container.appendChild(piece);
     }
 }
@@ -4021,11 +4016,11 @@ function checkCharacterBirthday(testName = null) {
     // 1. [핵심] 오늘 이미 팝업을 확인(축하 완료)했는지 체크
     if (!testName && localStorage.getItem('birthday_wishes_done') === todayKey) {
         console.log("오늘의 생일 축하를 이미 완료했습니다.");
-        return;
+        return; 
     }
 
     // 2. 인물 찾기
-    const birthdayChar = testName
+    const birthdayChar = testName 
         ? characterData.find(char => char.name === testName)
         : characterData.find(char => char.link === currentMonthDay);
 
@@ -4038,18 +4033,18 @@ function checkCharacterBirthday(testName = null) {
 function completeBirthdayWish(todayKey) {
     // 로컬 스토리지에 오늘 날짜 저장
     localStorage.setItem('birthday_wishes_done', todayKey);
-
+    
     // 팝업 제거
     const overlay = document.querySelector('.birthday-overlay');
     if (overlay) overlay.remove();
-
+    
     console.log("생일 축하 완료 기록 저장됨:", todayKey);
 }
 
 function showBirthdayPopup(char, todayKey) {
     const overlay = document.createElement('div');
     overlay.className = 'birthday-overlay';
-
+    
     overlay.innerHTML = `
         <div class="birthday-card">
             <div class="confetti-container"></div>
@@ -4071,7 +4066,7 @@ function showBirthdayPopup(char, todayKey) {
             </div>
         </div>
     `;
-
+    
     document.body.insertAdjacentElement('afterbegin', overlay);
     createConfetti();
 }
@@ -4115,7 +4110,7 @@ function updateStatusText() {
 
 function initPlayer() {
     const listItems = document.getElementById('playlist-items');
-    if (!listItems) return;
+    if(!listItems) return;
 
     listItems.innerHTML = playlist.map((track, i) => `
         <li class="playlist-item-li ${i === currentIdx ? 'active' : ''}" onclick="selectTrack(${i})">
@@ -4140,7 +4135,7 @@ function loadTrack(i) {
     if (!playlist[i]) return;
     audio.src = playlist[i].src;
     // HTML 요소에 직접 텍스트 주입
-    document.getElementById('player-title').textContent = playlist[i].title;
+    document.getElementById('player-title').textContent = playlist[i].title; 
 }
 
 function updateUI() {
@@ -4152,7 +4147,7 @@ function updateUI() {
         audioBtn.innerText = 'Ⅱ';
         audioTitle.classList.add('running');
     }
-
+    
     // 리스트 내 활성 곡 강조
     document.querySelectorAll('.playlist-item-li').forEach((li, idx) => {
         li.classList.toggle('active', idx === currentIdx);
@@ -4203,7 +4198,7 @@ document.addEventListener('DOMContentLoaded', initPlayer);
 function refreshPlayerUI() {
     const statusText = document.getElementById('playlist-status');
     const audioTitle = document.getElementById('player-title');
-
+    
     // 1. 상단 상태 텍스트 갱신 (예: 악보 목록 3 / 20)
     if (statusText) {
         statusText.innerText = `${currentIdx + 1} / ${playlist.length}`;
@@ -4232,10 +4227,10 @@ function refreshPlayerUI() {
 function selectTrack(i) {
     currentIdx = i; // 인덱스 변경
     loadTrack(currentIdx);
-
+    
     // 리스트 닫기 및 재생
     if (dropdown) dropdown.classList.remove('show');
-
+    
     audio.play().then(() => {
         refreshPlayerUI(); // 재생 성공 시 UI 전체 갱신
     }).catch(() => {

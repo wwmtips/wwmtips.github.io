@@ -1,4 +1,14 @@
 [
+  
+  {
+    "id": "q192",
+    "name": "북쪽 외곽 상자 위치",
+    "location": "개봉 북쪽 외곽",
+    "type": "탐색",
+    "bgimg": "q192_3.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q192.html"
+  },
   {
     "id": "q191",
     "name": "무우 동굴의 내막",

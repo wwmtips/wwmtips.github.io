@@ -811,70 +811,66 @@ function updateUrlQuery(tab, id) {
 
     if (url.toString() !== window.location.href) history.pushState(null, '', url);
 }
-
+// [수정] 가이드 콘텐츠 로드 함수 (r 파라미터 보존 로직 추가)
 function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if (!innerContainer) return;
 
-    // 1. [파라미터 보존] r 파라미터(레이드 ID) 미리 저장
+    // ★ [핵심 1] 주소가 바뀌기 전에 r 파라미터를 미리 가져옵니다!
     const currentParams = new URLSearchParams(window.location.search);
     const savedRaidId = currentParams.get('r');
 
-    // 2. [파라미터 고정] updateUrlQuery를 쓰지 않고 직접 ?g= 형태로 주소를 박습니다.
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
-    if (foundId) {
-        // 절대 수정 금지: ?g=값 형태로 주소창 강제 고정
-        const newUrl = `?g=${foundId}${savedRaidId ? '&r=' + savedRaidId : ''}`;
-        window.history.replaceState(null, '', newUrl); 
-    }
 
-    // 3. [기존 로직] 버튼 활성화 스타일 및 레이아웃 처리
+    // 여기서 updateUrlQuery가 실행되면서 주소창의 ?r=... 이 지워집니다.
+    if (foundId) updateUrlQuery('guide', foundId);
+
     if (btnElement) {
         document.querySelectorAll('#view-guide .guide-item-btn').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
     }
+
     const codeView = document.querySelector('.code-page-container');
     if (codeView) codeView.style.display = 'none';
+
     innerContainer.style.display = 'block';
 
-    // 4. [기존 로직] 로딩 메시지
     if (filename !== 'boss.html') {
         innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
     }
+    // [추가] 만약 불러온 파일이 의상 관련이라면 초기화 함수 실행
+    if (filename.includes('outfit')) {
+        initOutfitShowcase();
+        
+    }
 
-    // 5. 콘텐츠 로드 시작
     fetch(filename)
         .then(res => {
-            if (!res.ok) throw new Error("파일 로드 실패");
+            if (!res.ok) throw new Error("파일을 찾을 수 없습니다.");
             return res.text();
         })
         .then(html => {
-            // HTML 주입
             innerContainer.innerHTML = html;
 
-            // 6. [의상 전용] 주입 직후 이미지 동기화 실행
-            if (filename.includes('outfit')) {
-                setTimeout(syncOutfitImage, 30); 
-            }
-
-            // 7. [기타 가이드 초기화] 뉴스, 비급, 숙제 등
             if (filename === 'news.html') renderGuideNewsList();
             if (filename === 'harts.html') renderHeartLibrary();
             if (filename === 'marts.html') renderMartLibrary();
             if (filename === 'npc.html') initHomeworkChecklist();
 
-            // 8. [보스 상세 복구] r 파라미터가 있을 경우 상세 페이지 로드
+            // ★ [핵심 2] 아까 저장해둔 savedRaidId를 사용합니다.
             if (filename === 'boss.html' && savedRaidId) {
-                // 주소창 형식을 ?g=boss&r=값으로 유지
-                const raidUrl = '?g=boss&r=' + savedRaidId;
-                window.history.replaceState(null, '', raidUrl);
+                // 1) 지워진 주소를 다시 복구 (보기 좋게)
+                const newUrl = '?g=boss&r=' + savedRaidId;
+                window.history.replaceState({ path: newUrl }, '', newUrl);
+
+                // 2) 상세 페이지 로드
                 setTimeout(() => {
                     loadContent('boss/' + savedRaidId + '.html');
                 }, 50);
             }
         })
         .catch(err => {
-            innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.</div>`;
+            innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.<br></div>`;
         });
 }
 
@@ -4252,45 +4248,3 @@ audio.addEventListener('ended', () => {
     currentIdx = (currentIdx + 1) % playlist.length;
     selectTrack(currentIdx);
 });
-
-
-/**
- * outfit.js: 의상 쇼케이스 전역 관리 스크립트
- */
-
-// 드롭다운 변경 시 호출되는 함수
-function navigateToOutfit(num) {
-    const targetFile = 'outfit/outfit' + num + '.html';
-    if (typeof openGuideDirect === 'function') {
-        openGuideDirect(targetFile);
-        // SPA 로드 완료 후 0.1초 뒤에 UI 업데이트 실행 (콘텐츠 삽입 대기)
-        setTimeout(initOutfitShowcase, 100);
-    } else {
-        location.href = '?g=outfit' + num;
-    }
-}
-/**
- * SPA 주입 후 실행될 이미지 로드 및 경로 표시 함수
- */function syncOutfitImage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const gParam = urlParams.get('g') || ''; 
-    
-    // g=outfit1 에서 숫자만 추출하여 이미지 매칭
-    const outfitNum = gParam.replace(/[^0-9]/g, '');
-    
-    const img = document.getElementById('outfit-img-target');
-    const title = document.getElementById('outfit-title-text');
-    const select = document.querySelector('.outfit-nav-select');
-
-    if (img && outfitNum) {
-        // 이미지는 ./images/outfit/wwm{번호}.jpg
-        img.src = `../images/outfit/wwm${outfitNum}.jpg`; 
-        if (title) title.innerText = `의상 쇼케이스 #${outfitNum}`;
-        if (select) select.value = outfitNum; // 하드코딩된 드롭다운 값 동기화
-
-        img.onerror = function() {
-            this.style.display = 'none';
-            if (title) title.innerText = `이미지 미발견 (wwm${outfitNum}.jpg)`;
-        };
-    }
-}

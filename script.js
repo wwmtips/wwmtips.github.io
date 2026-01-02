@@ -810,19 +810,21 @@ function updateUrlQuery(tab, id) {
     }
 
     if (url.toString() !== window.location.href) history.pushState(null, '', url);
-}function loadGuideContent(filename, btnElement) {
+}
+function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if (!innerContainer) return;
 
-    // ★ [핵심 1] 주소가 바뀌기 전에 r 파라미터를 미리 저장
+    // 1. [기존 유지] r 파라미터(레이드 ID) 미리 저장
     const currentParams = new URLSearchParams(window.location.search);
     const savedRaidId = currentParams.get('r');
 
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
 
-    // URL 업데이트 (파라미터 g를 사용하여 ?g=outfit1 형태를 만듦)
+    // ★ [절대 유지] 사용자님의 파라미터 규칙 (?g=파일명키)
     if (foundId) updateUrlQuery('g', foundId); 
 
+    // 2. [기존 유지] 버튼 활성화 스타일
     if (btnElement) {
         document.querySelectorAll('#view-guide .guide-item-btn').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
@@ -830,37 +832,36 @@ function updateUrlQuery(tab, id) {
 
     const codeView = document.querySelector('.code-page-container');
     if (codeView) codeView.style.display = 'none';
-
     innerContainer.style.display = 'block';
 
-    // 로딩 메시지
+    // 3. [기존 유지] 로딩 메시지
     if (filename !== 'boss.html') {
         innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
     }
 
     fetch(filename)
         .then(res => {
-            if (!res.ok) throw new Error("파일을 찾을 수 없습니다.");
+            if (!res.ok) throw new Error("파일 로드 실패");
             return res.text();
         })
         .then(html => {
-            // [중요] 1. 먼저 HTML을 화면에 주입합니다.
+            // 4. [기존 유지] HTML 주입
             innerContainer.innerHTML = html;
 
-            // [중요] 2. 화면에 요소들이 생겨난 직후에 의상 로직을 실행합니다.
+            // 5. [신규 추가] 의상 쇼케이스 이미지 로드 (주입 직후 실행)
             if (filename.includes('outfit')) {
-                // DOM 렌더링을 보장하기 위해 아주 잠깐의 지연을 줍니다.
                 setTimeout(syncOutfitImage, 30); 
             }
 
-            // 기타 가이드 초기화 로직
+            // 6. [기존 유지] 가이드별 특수 초기화 함수들
             if (filename === 'news.html') renderGuideNewsList();
             if (filename === 'harts.html') renderHeartLibrary();
             if (filename === 'marts.html') renderMartLibrary();
             if (filename === 'npc.html') initHomeworkChecklist();
 
-            // ★ [핵심 2] boss 상세 페이지 복구 로직
+            // 7. [기존 유지] 보스 레이드 상세 페이지 복구
             if (filename === 'boss.html' && savedRaidId) {
+                // 이 부분은 보스 레이드 전용 주소 복구 로직입니다.
                 const newUrl = '?g=boss&r=' + savedRaidId;
                 window.history.replaceState({ path: newUrl }, '', newUrl);
                 setTimeout(() => {
@@ -870,7 +871,6 @@ function updateUrlQuery(tab, id) {
         })
         .catch(err => {
             innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.</div>`;
-            console.error(err);
         });
 }
 

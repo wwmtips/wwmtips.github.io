@@ -816,41 +816,63 @@ function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if (!innerContainer) return;
 
-    // 1. 기존 파라미터 보존 (boss 레이드 정보 등)
+    // ★ [핵심 1] 주소가 바뀌기 전에 r 파라미터를 미리 저장
     const currentParams = new URLSearchParams(window.location.search);
     const savedRaidId = currentParams.get('r');
 
-    // 2. [수정] 파라미터를 ?g=파일명키 형태로 강제 고정
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
-    if (foundId) {
-        // 기존 updateUrlQuery 대신 직접 주소를 갈아치웁니다.
-        const newUrl = `?g=${foundId}${savedRaidId ? '&r=' + savedRaidId : ''}`;
-        window.history.replaceState(null, '', newUrl); // [핵심] ?g=up 형태로 고정
-    }
 
-    // 3. UI 활성화 처리
+    // URL 업데이트 (파라미터 g를 사용하여 ?g=outfit1 형태를 만듦)
+    if (foundId) updateUrlQuery('g', foundId); 
+
     if (btnElement) {
         document.querySelectorAll('#view-guide .guide-item-btn').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
     }
 
-    // 4. 콘텐츠 로드 (fetch)
+    const codeView = document.querySelector('.code-page-container');
+    if (codeView) codeView.style.display = 'none';
+
+    innerContainer.style.display = 'block';
+
+    // 로딩 메시지
+    if (filename !== 'boss.html') {
+        innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
+    }
+
     fetch(filename)
-        .then(res => res.text())
+        .then(res => {
+            if (!res.ok) throw new Error("파일을 찾을 수 없습니다.");
+            return res.text();
+        })
         .then(html => {
+            // [중요] 1. 먼저 HTML을 화면에 주입합니다.
             innerContainer.innerHTML = html;
 
-            // [중요] 의상 쇼케이스일 경우 이미지 동기화 실행
+            // [중요] 2. 화면에 요소들이 생겨난 직후에 의상 로직을 실행합니다.
             if (filename.includes('outfit')) {
+                // DOM 렌더링을 보장하기 위해 아주 잠깐의 지연을 줍니다.
                 setTimeout(syncOutfitImage, 30); 
             }
 
-            // boss 상세 페이지 복구 로직
+            // 기타 가이드 초기화 로직
+            if (filename === 'news.html') renderGuideNewsList();
+            if (filename === 'harts.html') renderHeartLibrary();
+            if (filename === 'marts.html') renderMartLibrary();
+            if (filename === 'npc.html') initHomeworkChecklist();
+
+            // ★ [핵심 2] boss 상세 페이지 복구 로직
             if (filename === 'boss.html' && savedRaidId) {
+                const newUrl = '?g=boss&r=' + savedRaidId;
+                window.history.replaceState({ path: newUrl }, '', newUrl);
                 setTimeout(() => {
                     loadContent('boss/' + savedRaidId + '.html');
                 }, 50);
             }
+        })
+        .catch(err => {
+            innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">내용을 불러올 수 없습니다.</div>`;
+            console.error(err);
         });
 }
 
@@ -4248,37 +4270,43 @@ function navigateToOutfit(num) {
 /**
  * SPA 주입 후 실행될 이미지 로드 및 경로 표시 함수
  */
-
 function syncOutfitImage() {
     const urlParams = new URLSearchParams(window.location.search);
+    const gParam = urlParams.get('g') || '';
     
-    // 1. ?g=outfit1 에서 'outfit1' 문자열을 가져옵니다.
-    const gParam = urlParams.get('g') || ''; 
-    
-    // 2. 'outfit1'에서 숫자 '1'만 추출합니다.
+    // g=outfit12 에서 숫자 '12' 추출
     const outfitNum = gParam.replace(/[^0-9]/g, '');
     
     const img = document.getElementById('outfit-img-target');
     const title = document.getElementById('outfit-title-text');
-    const debugText = document.getElementById('debug-img-url');
+    const debugText = document.getElementById('debug-img-url'); // 경로 표시용
     const selects = document.querySelectorAll('.outfit-nav-select');
 
     if (img && outfitNum) {
-        // [이미지 경로] images/outfit/wwm1.jpg
-        const targetSrc = `../images/outfit/wwm${outfitNum}.jpg`; 
+        const targetSrc = `../images/outfit/wwm${outfitNum}.jpg`; // 생성된 주소
         
-        img.src = targetSrc;
-        if (title) title.innerText = `쇼케이스 #${outfitNum}`;
-        if (debugText) debugText.innerText = "이미지 경로: " + targetSrc;
+        // 1. 이미지 주소 설정
+        img.src = targetSrc; 
+        
+        // 2. 화면에 실제 주소 표시 (디버깅용)
+        if (debugText) {
+            debugText.innerText = "현재 호출 중인 경로: " + targetSrc;
+            debugText.style.color = "blue"; 
+        }
 
-        // 고정 드롭다운 리스트와 현재 번호 동기화
-        selects.forEach(select => {
-            select.value = outfitNum;
-        });
+        // 3. 타이틀 및 드롭다운 동기화
+        if (title) title.innerText = `의상 쇼케이스 #${outfitNum}`;
+        selects.forEach(select => { select.value = outfitNum; });
 
+        // 에러 발생 시 처리
         img.onerror = function() {
             this.style.display = 'none';
-            if (title) title.innerText = `이미지 미발견 (#${outfitNum})`;
+            if (debugText) {
+                debugText.innerText = "호출 실패한 경로: " + targetSrc;
+                debugText.style.color = "red";
+            }
         };
+    } else {
+        if (debugText) debugText.innerText = "오류: 파라미터에서 숫자를 찾을 수 없습니다.";
     }
 }

@@ -1629,61 +1629,67 @@
 
         // ★ [경로 요약] 모든 맵의 진행도를 통합 계산
         function updatePathSummaryUI() {
-            const container = document.getElementById('path-summary-bar');
+    const container = document.getElementById('path-summary-bar');
 
-            // 경로 레이어가 없으면 숨김
-            if (!currentPathLayer) {
-                container.style.display = 'none';
-                return;
-            }
+    // 1. 경로 데이터가 없으면 숨김
+    if (!currentPathLayer || !currentPathIds || currentPathIds.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
 
-            const summary = {};
+    const summary = {};
+    
+    // 모든 맵의 완료 목록을 미리 가져와서 캐싱 (성능 최적화)
+    const allCompletedData = {};
+    Object.keys(mapsDB).forEach(mapId => {
+        allCompletedData[mapId] = JSON.parse(localStorage.getItem(`completed_${mapId}`)) || [];
+    });
 
-            currentPathIds.forEach(entry => {
-                // 1. ID와 Map ID 추출
-                let id, mapId;
-                if (typeof entry === 'object') {
-                    id = entry.id;
-                    mapId = entry.map;
-                } else {
-                    id = entry;
-                    // 객체가 아닌 경우, 캐시에서 맵 정보를 찾음. 없으면 현재 맵으로 가정
-                    const cachedItem = globalMarkerCache[id];
-                    mapId = cachedItem ? cachedItem.map : currentMapId;
-                }
-
-                // 2. 전역 캐시에서 아이템 정보 조회
-                const item = globalMarkerCache[id];
-
-                if (item) {
-                    // 3. 해당 마커가 속한 맵의 완료 기록을 가져옴
-                    const storageKey = `completed_${mapId}`;
-                    const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-
-                    if (!summary[item.type]) {
-                        summary[item.type] = { total: 0, done: 0 };
-                    }
-                    summary[item.type].total++;
-
-                    // 4. 완료 여부 체크
-                    if (completedList.includes(id)) {
-                        summary[item.type].done++;
-                    }
-                }
-            });
-
-            // HTML 생성
-            const htmlChunks = Object.entries(summary).map(([type, d]) =>
-                `<div class="summary-chunk">${type} <b>(${d.done}/${d.total})</b></div>`
-            );
-
-            if (htmlChunks.length === 0) {
-                container.style.display = 'none';
-            } else {
-                container.innerHTML = htmlChunks.join('');
-                container.style.display = 'flex';
-            }
+    currentPathIds.forEach(entry => {
+        let id, mapId;
+        
+        // 2. 항목에서 ID와 Map 추출
+        if (typeof entry === 'object') {
+            id = entry.id;
+            mapId = entry.map;
+        } else {
+            id = entry;
+            // 정보가 없으면 캐시 확인, 캐시에도 없으면 현재 맵으로 가정
+            const cachedItem = globalMarkerCache[id];
+            mapId = cachedItem ? cachedItem.map : currentMapId;
         }
+
+        // 3. 마커의 세부 정보(타입) 확인
+        const item = globalMarkerCache[id];
+        
+        // 데이터가 아직 로드되지 않았더라도 최소한의 카운트는 유지하기 위해 처리
+        const type = item ? item.type : "미분류"; 
+
+        if (!summary[type]) {
+            summary[type] = { total: 0, done: 0 };
+        }
+        
+        summary[type].total++;
+
+        // 4. 해당 맵의 완료 목록에 ID가 있는지 확인 (문자/숫자 타입 강제 일치)
+        const isDone = allCompletedData[mapId] && allCompletedData[mapId].some(cId => String(cId) === String(id));
+        if (isDone) {
+            summary[type].done++;
+        }
+    });
+
+    // 5. HTML 생성 (데이터가 하나라도 있을 때만 표시)
+    const htmlChunks = Object.entries(summary).map(([type, d]) =>
+        `<div class="summary-chunk">${type} <b>(${d.done}/${d.total})</b></div>`
+    );
+
+    if (htmlChunks.length === 0) {
+        container.style.display = 'none';
+    } else {
+        container.innerHTML = htmlChunks.join('');
+        container.style.display = 'flex';
+    }
+}
     </script>
 
 </body>

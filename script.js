@@ -501,7 +501,7 @@ function renderHomeSlider(quests) {
         const tag = quest.type || "분류 없음";
         const title = quest.name;
         const desc = quest.location || "지역 정보 없음";
-        const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : 'images/bg.jpg';
+        const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : `quests/explore/${quest.bgimg}`;
 
         const slideDiv = document.createElement('div');
         slideDiv.className = 'hero-slide';

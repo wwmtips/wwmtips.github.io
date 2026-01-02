@@ -10,7 +10,7 @@
             margin-bottom: 20px;
         }
         .outfit-nav-select {
-            background-color: #f4f4f2;
+            background-color: #f4f4f2; /* 연한 미색 배경 */
             border: 1px solid var(--wuxia-accent-gold);
             color: var(--wuxia-text-main);
             padding: 4px 10px;
@@ -27,7 +27,7 @@
             text-align: center;
         }
         .outfit-img {
-            width: 100%; /* 너비 100% 고정 */
+            width: 100%; /* 너비 100% 사이즈 */
             height: auto;
             border-radius: 2px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -42,7 +42,7 @@
             </h2>
         </div>
         
-        <select id="outfit-switcher" class="outfit-nav-select" onchange="openGuideDirect('outfit/outfit' + this.value + '.html')">
+        <select id="outfit-switcher" class="outfit-nav-select" onchange="navigateToOutfit(this.value)">
             </select>
     </div>
 
@@ -57,49 +57,56 @@
     </div>
 
     <script>
-       (function() {
-    // 1. 브라우저 주소창에서 파라미터 읽기 (SPA 구조 대응)
-    const urlParams = new URLSearchParams(window.location.search);
-    const gParam = urlParams.get('g') || ''; // 예: 'outfit1'
-    
-    // 2. 파라미터 값에서 숫자만 추출 (예: 'outfit15' -> '15')
-    // 만약 g 파라미터가 없다면 파일명에서 숫자를 찾는 기존 방식 병행
-    let outfitNum = gParam.replace(/[^0-9]/g, '');
-    
-    if (!outfitNum) {
-        const filename = window.location.href.split('/').pop();
-        outfitNum = filename.replace(/[^0-9]/g, '') || '1';
-    }
-
-    const img = document.getElementById('outfit-img-target');
-    const title = document.getElementById('outfit-title-text');
-    const switcher = document.getElementById('outfit-switcher');
-
-    // 3. 이미지 출력 (SPA이므로 루트 기준 ./images/ 경로 사용)
-    if (img && outfitNum) {
-        // 주소창이 wwm.tips/ 이므로 이미지는 ./images/ 폴더에서 찾음
-        img.src = `../images/outfit/wwm${outfitNum}.jpg`; 
-        title.innerText = `의상 쇼케이스 #${outfitNum}`;
-        
-        img.onerror = function() {
-            this.style.display = 'none';
-            title.innerText = `이미지(wwm${outfitNum}.jpg)를 찾을 수 없습니다.`;
-        };
-    }
-
-    // 4. 드롭다운 상태 업데이트 (현재 번호 선택)
-    if (switcher) {
-        // 드롭다운이 비어있다면 21개 생성
-        if (switcher.options.length === 0) {
-            for (let i = 1; i <= 21; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = `의상 #${i} 보기`;
-                switcher.appendChild(opt);
+        /**
+         * SPA 엔진의 openGuideDirect를 호출하여 g 파라미터와 콘텐츠를 교체합니다.
+         */
+        function navigateToOutfit(num) {
+            const targetFile = 'outfit/outfit' + num + '.html';
+            if (typeof openGuideDirect === 'function') {
+                openGuideDirect(targetFile);
+            } else {
+                // SPA 함수를 찾을 수 없는 경우 강제 이동
+                location.href = '?g=outfit' + num;
             }
         }
-        switcher.value = outfitNum;
-    }
-})();
+
+        (function initOutfitUI() {
+            // 1. 주소창의 g 파라미터에서 숫자 추출 (예: ?g=outfit1 -> 1)
+            const urlParams = new URLSearchParams(window.location.search);
+            const gParam = urlParams.get('g') || '';
+            let outfitNum = gParam.replace(/[^0-9]/g, '');
+            
+            // 파라미터가 없으면 현재 파일명에서 추출
+            if (!outfitNum) {
+                const filename = window.location.pathname.split('/').pop();
+                outfitNum = filename.replace(/[^0-9]/g, '') || '1';
+            }
+
+            const img = document.getElementById('outfit-img-target');
+            const title = document.getElementById('outfit-title-text');
+            const switcher = document.getElementById('outfit-switcher');
+
+            // 2. 이미지 및 타이틀 설정 (루트 기준 경로 ./images/ 사용)
+            if (img && outfitNum) {
+                img.src = `../images/outfit/wwm${outfitNum}.jpg`; 
+                title.innerText = `의상 쇼케이스 #${outfitNum}`;
+                
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    title.innerText = `이미지(wwm${outfitNum}.jpg)를 찾을 수 없습니다.`;
+                };
+            }
+
+            // 3. 드롭다운 22개 고정 생성 및 현재 값 선택
+            if (switcher) {
+                for (let i = 1; i <= 21; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.innerText = `의상 #${i} 보기`;
+                    if (i.toString() === outfitNum) opt.selected = true;
+                    switcher.appendChild(opt);
+                }
+            }
+        })();
     </script>
 </div>

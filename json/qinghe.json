@@ -1,6 +1,16 @@
 [ 
 
   {
+    "id": 1767353295036,
+    "name": "화술논쟁",
+    "type": "화술논쟁",
+    "y": 1665,
+    "x": 996,
+    "desc": "",
+    "link": "",
+    "image": "https://wwm.tips/quests/images/q185_11.jpg"
+  },
+  {
     "id": 1767353225148,
     "name": "영지 (곡식창고)",
     "type": "영지",
@@ -109,16 +119,6 @@
     "desc": "",
     "link": "",
     "image": ""
-  },
-  {
-    "id": 1767352584908,
-    "name": "화술논쟁",
-    "type": "화술논쟁",
-    "y": 1634,
-    "x": 843,
-    "desc": "",
-    "link": "",
-    "image": "https://wwm.tips/quests/images/q185_11.jpg"
   },
   {
     "id": 1767352558660,

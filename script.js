@@ -838,11 +838,11 @@ function loadGuideContent(filename, btnElement) {
     if (filename !== 'boss.html') {
         innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
     }
-    // [추가] 만약 불러온 파일이 의상 관련이라면 초기화 함수 실행
-    if (filename.includes('outfit')) {
-        initOutfitShowcase();
-        
-    }
+    // 2. [호출 시점] 불러온 파일이 의상 쇼케이스(outfit) 관련일 때만 실행
+            if (filename.includes('outfit')) {
+                // DOM이 렌더링될 아주 짧은 시간을 벌어주기 위해 setTimeout 사용 권장
+                setTimeout(syncOutfitImage, 50); 
+            }
 
     fetch(filename)
         .then(res => {
@@ -914,7 +914,7 @@ const GUIDE_MAP = {
     'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html', 'b4': 'boss/b4.html', 'b5': 'boss/b5.html',
     'w1': 'world1.html', 'nb': 'newb.html', 'wp': 'guide/weapon.html', 'up': 'guide/up.html', 'w2': 'world2.html',
     'outfit1': 'outfit/outfit1.html',
-    'outfit2': 'outfit/outfit2.html',
+    'outfit2': 'outfit/outfit1.html',
     'outfit3': 'outfit/outfit3.html',
     'outfit4': 'outfit/outfit4.html',
     'outfit5': 'outfit/outfit5.html',

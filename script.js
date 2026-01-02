@@ -4269,7 +4269,7 @@ function initOutfitShowcase() {
 
     // 1. 이미지 및 타이틀 업데이트 (루트 기준 경로)
     if (img) {
-        img.src = `./images/wwm${outfitNum}.jpg`;
+        img.src = `../images/outfit/wwm${outfitNum}.jpg`;
         if (title) title.innerText = `의상 쇼케이스 #${outfitNum}`;
 
         img.onerror = function () {

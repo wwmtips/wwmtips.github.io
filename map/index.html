@@ -682,34 +682,27 @@
         };
 
         // [수정] 경로 활성화 함수 (평면 좌표 정렬 기능 포함)
-        /**
- * [통합 버전] 경로 활성화 함수
- * - JSON의 첫 번째 마커를 시작점으로 고정
- * - 지상 -> 지하 순서로 최단 거리 정렬 (TSP)
- * - 다른 맵 이동 및 요약 UI 업데이트 포함
- */
+   
         async function activatePath(pathKey) {
-            // 1. 마커 로딩 대기 (이전과 동일)
             if (allMarkers.length < (cachedData ? cachedData.length : 0)) {
                 setTimeout(() => activatePath(pathKey), 500);
                 return;
             }
 
             clearPath();
-
-            // 기존 핀 제거 (버그 수정 포함)
+            // 기존 마커 제거
             for (const key in layerGroups) {
                 if (map.hasLayer(layerGroups[key])) map.removeLayer(layerGroups[key]);
             }
 
             document.body.classList.add('viewing-path');
             const routeData = pathData[pathKey];
-            if (!routeData || !routeData.markers || routeData.markers.length === 0) return;
+            if (!routeData || !routeData.markers || routeData.markers.length < 2) return; // 최소 2개 필요
 
             const originalRouteIds = routeData.markers;
             activePathMarkersMap = {};
 
-            // 2. 데이터 분류
+            // 1. 데이터 분류
             let localMarkerItems = [];
             let otherMapEntries = [];
 
@@ -724,55 +717,57 @@
                 }
             });
 
-            // 3. [핵심 수정] JSON의 첫 번째 마커를 '무조건' 1번으로 고정
-            const firstEntry = originalRouteIds[0];
-            const firstId = (typeof firstEntry === 'object') ? firstEntry.id : firstEntry;
+            // 2. [핵심] 시작점(First)과 끝점(Last) 고정 추출
+            const firstId = (typeof originalRouteIds[0] === 'object') ? originalRouteIds[0].id : originalRouteIds[0];
+            const lastId = (typeof originalRouteIds[originalRouteIds.length - 1] === 'object')
+                ? originalRouteIds[originalRouteIds.length - 1].id
+                : originalRouteIds[originalRouteIds.length - 1];
 
-            // 전체 목록에서 시작 마커를 찾아내어 리스트에서 분리합니다.
-            const startIdx = localMarkerItems.findIndex(m => String(m.id) === String(firstId));
             let startMarker = null;
-            if (startIdx !== -1) {
-                startMarker = localMarkerItems.splice(startIdx, 1)[0]; // 원본 리스트에서 제거하여 중복 방지
-            }
+            let endMarker = null;
+            let middleItems = [];
 
-            // 4. 남은 마커들을 지상/지하로 분리하여 정렬
-            const normalItems = localMarkerItems.filter(i => !i.name.includes('(지하)'));
-            const undergroundItems = localMarkerItems.filter(i => i.name.includes('(지하)'));
+            localMarkerItems.forEach(item => {
+                if (String(item.id) === String(firstId)) {
+                    startMarker = item;
+                } else if (String(item.id) === String(lastId)) {
+                    endMarker = item;
+                } else {
+                    middleItems.push(item);
+                }
+            });
 
+            // 3. 정렬 실행
             let finalSorted = [];
 
-            if (startMarker) {
-                finalSorted.push(startMarker); // [중요] 0순위로 삽입
+            if (startMarker && endMarker) {
+                // (1) 시작점 추가
+                finalSorted.push(startMarker);
+
+                // (2) 중간 지점들을 지상/지하 구분하여 정렬
+                const normalMiddle = middleItems.filter(i => !i.name.includes('(지하)'));
+                const undergroundMiddle = middleItems.filter(i => i.name.includes('(지하)'));
+
                 const startLatLng = startMarker.marker.getLatLng();
 
-                // 지상 마커 시작인 경우
-                if (!startMarker.name.includes('(지하)')) {
-                    const sortedNormal = solveTSP(normalItems, startLatLng);
-                    const lastPoint = sortedNormal.length > 0 ? sortedNormal[sortedNormal.length - 1].marker.getLatLng() : startLatLng;
-                    const sortedUnderground = solveTSP(undergroundItems, lastPoint);
-                    finalSorted = [...finalSorted, ...sortedNormal, ...sortedUnderground];
-                } else {
-                    // 지하 마커 시작인 경우
-                    const sortedUnderground = solveTSP(undergroundItems, startLatLng);
-                    const lastPoint = sortedUnderground.length > 0 ? sortedUnderground[sortedUnderground.length - 1].marker.getLatLng() : startLatLng;
-                    const sortedNormal = solveTSP(normalItems, lastPoint);
-                    finalSorted = [...finalSorted, ...sortedUnderground, ...sortedNormal];
-                }
+                // 중간 지점 정렬
+                const sortedNormal = solveTSP(normalMiddle, startLatLng);
+                const lastNormalPoint = sortedNormal.length > 0
+                    ? sortedNormal[sortedNormal.length - 1].marker.getLatLng()
+                    : startLatLng;
+                const sortedUnderground = solveTSP(undergroundMiddle, lastNormalPoint);
+
+                finalSorted = [...finalSorted, ...sortedNormal, ...sortedUnderground];
+
+                // (3) 마지막에 끝점 추가
+                finalSorted.push(endMarker);
             } else {
-                // 시작 마커를 못 찾은 경우에 대한 예외 처리
+                // 시작/끝점 중 하나라도 현재 맵에 없으면 일반 TSP 수행
                 finalSorted = solveTSP(localMarkerItems, null);
             }
 
-            // 5. 이후 렌더링 로직 (이전과 동일)
-            const sortedLocalEntries = finalSorted.map(item => ({ id: item.id, map: currentMapId }));
-            currentPathIds = [...sortedLocalEntries, ...otherMapEntries];
-
-            if (finalSorted.length === 0 && otherMapEntries.length > 0) {
-                const nextTarget = otherMapEntries[0];
-                localStorage.setItem('activePathKey', pathKey);
-                window.location.href = `?id=${nextTarget.map}&marker=${nextTarget.id}&path=${pathKey}`;
-                return;
-            }
+            // 4. 데이터 재구성 및 렌더링
+            currentPathIds = [...finalSorted.map(i => ({ id: i.id, map: currentMapId })), ...otherMapEntries];
 
             renderPathGraphics(finalSorted, otherMapEntries.length > 0);
             localStorage.setItem('activePathKey', pathKey);

@@ -903,12 +903,11 @@ function checkUrlParams() {
 // 6. 가이드(Guide) 기능
 // =========================================
 const GUIDE_MAP = {
-    'outfit':'outfit.html', 'news': 'news.html', 'tierlist': 'guide_tier.html', 'weapon': 'tier_weapon.html',
+    'news': 'news.html', 'tierlist': 'guide_tier.html', 'weapon': 'tier_weapon.html',
     'build': 'build.html', 'map': 'maps.html', 'side': 'beta.html', 'hw': 'npc.html',
     'boss': 'boss.html', 'marts': 'marts.html', 'harts': 'harts.html', 'skill': 'skils.html',
-    'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html'
-    , 'b3': 'boss/b3.html','b4': 'boss/b4.html','b5': 'boss/b5.html',
-    'w1':'world1.html', 'nb':'newb.html', 'wp':'guide/weapon.html', 'up':'guide/up.html', 'w2':'world2.html'
+    'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html','b4': 'boss/b4.html','b5': 'boss/b5.html',
+    'w1':'world1.html', 'nb':'newb.html', 'wp':'guide/weapon.html', 'up':'guide/up.html', 'w2':'world2.html', 'outfit':'outfit.html'
 };
 
 function loadGuideView() {
@@ -916,14 +915,10 @@ function loadGuideView() {
     if (!container) return;
 
     const urlParams = new URLSearchParams(window.location.search);
-    
-    // [수정] g(카테고리)를 id보다 먼저 읽어야 합니다!
-    const targetId = urlParams.get('g') || urlParams.get('id'); 
-    
+    const targetId = urlParams.get('id') || urlParams.get('g');
     let fileToLoad = 'news.html';
-    if (targetId && GUIDE_MAP[targetId]) {
-        fileToLoad = GUIDE_MAP[targetId];
-    }
+    if (targetId && GUIDE_MAP[targetId]) fileToLoad = GUIDE_MAP[targetId];
+
     if (isGuideLoaded) {
         const targetBtn = findButtonByFile(fileToLoad);
         loadGuideContent(fileToLoad, targetBtn);
@@ -2927,21 +2922,6 @@ function openGuideDirect(filename) {
     }
 }
 
-/**
- * 의상 쇼케이스 전용 바로가기 기능
- * @param {number} outfitId - 쇼케이스 번호 (1~22)
- */
-function openOutfitDirect(outfitId) {
-    // 1. 탭 전환
-    switchTab('guide', false);
-
-    // 2. 파라미터 업데이트 (키값을 'g'와 'id'로 명확히 지정)
-    updateUrlQuery('g', 'outfit'); // ?g=outfit
-    updateUrlQuery('id', outfitId); // &id=1
-
-    // 3. 파일 로드
-    loadGuideContent('outfit.html', null);
-}
 // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★// [script.js] shareBuildToCloud 함수 (최종 완성본)
 function shareBuildToCloud() {
     // 1. 입력값 가져오기

@@ -286,81 +286,61 @@
         let devPathList = [];
 
         document.addEventListener('DOMContentLoaded', () => {
-            const targetPath = urlParams.get('path');
+    const targetPath = urlParams.get('path'); // URL에서 경로 파라미터 획득
+    const searchInput = document.getElementById('marker-search'); // 검색창 요소
+    const searchResultList = document.getElementById('search-result-list'); // 검색 결과 리스트
 
-            // 검색 기능
-            const searchInput = document.getElementById('marker-search');
-            const searchResultList = document.getElementById('search-result-list');
-            // mapsDB에 있는 모든 JSON 로드
-            const fetchPromises = Object.keys(mapsDB).map(key => {
-                return fetch(mapsDB[key].json)
-                    .then(res => {
-                        if (!res.ok) throw new Error(`Failed to load ${key}`);
-                        return res.json();
-                    })
-                    .then(data => ({ key, data }));
+    // 1. 현재 선택된 맵의 JSON 데이터만 우선적으로 로드
+    fetch(currentConfig.json)
+        .then(res => {
+            if (!res.ok) throw new Error(`Failed to load ${currentMapId}`);
+            return res.json();
+        })
+        .then(data => {
+            cachedData = data; // 현재 맵 데이터 저장
+            
+            // 전역 캐시에 현재 맵 데이터 우선 등록
+            data.forEach(item => {
+                globalMarkerCache[item.id] = { ...item, map: currentMapId };
             });
 
-            Promise.all(fetchPromises)
-                .then(results => {
-                    // 결과를 globalMarkerCache에 통합 저장
-                    results.forEach(({ key, data }) => {
-                        data.forEach(item => {
-                            // 각 마커에 소속 map 정보를 추가하여 저장
-                            globalMarkerCache[item.id] = { ...item, map: key };
-                        });
+            // 마커 생성 및 사이드바 생성 시작 (분할 렌더링 방식)
+            createMarkers(data);
+            generateSidebar(data);
 
-                        // 현재 보여줄 맵 데이터 저장
-                        if (key === currentMapId) {
-                            cachedData = data;
-                        }
-                    });
+            // URL에 특정 마커 ID가 있을 경우 해당 위치로 이동
+            const targetMarkerId = urlParams.get('marker');
+            if (targetMarkerId && !targetPath) {
+                // 이 로직은 createMarkers의 비동기 처리가 끝난 후 실행되도록 finalizeMarkers 내부에서 처리 권장
+            }
 
-                    // 현재 맵 렌더링
-                    if (cachedData) {
-                        createMarkers(cachedData);
-                        generateSidebar(cachedData);
-                    } else {
-                        console.error("현재 맵 데이터를 찾을 수 없습니다.");
-                    }
+            loadPathData(false, targetPath); // 경로 데이터 로드
 
-                    // ★★★ [수정됨] URL에 marker 파라미터가 있으면 해당 위치로 점프 ★★★
-                    const targetMarkerId = urlParams.get('marker');
-                    // 경로 모드가 아닐 때만 여기서 바로 점프 (경로 모드는 activatePath에서 처리)
-                    if (targetMarkerId && !targetPath) {
-                        const targetItem = allMarkers.find(m => m.id == targetMarkerId);
-                        if (targetItem) {
-                            // 클러스터 모드인지 확인하여 처리
-                            const group = layerGroups[targetItem.type];
-                            if (isClusterOn && group && group.zoomToShowLayer) {
-                                // 클러스터 내부에 숨어있다면 펼치면서 이동
-                                group.zoomToShowLayer(targetItem.marker, function () {
-                                    targetItem.marker.openPopup();
-                                });
-                            } else {
-                                // 클러스터가 아니면 바로 이동 (줌 레벨 0)
-                                map.flyTo(targetItem.marker.getLatLng(), 0, { animate: true, duration: 1.0 });
-                                map.once('moveend', function () {
-                                    targetItem.marker.openPopup();
-                                });
-                            }
-                        }
-                    }
-                    // ★★★ 수정 끝 ★★★
-
-                    loadPathData(false, targetPath);
-                })
-                .catch(err => {
-                    console.warn("데이터 로드 실패, 샘플 데이터 사용:", err);
-                    cachedData = sampleData;
-                    // 샘플 데이터도 전역 캐시에 등록
-                    sampleData.forEach(item => globalMarkerCache[item.id] = { ...item, map: currentMapId });
-
-                    createMarkers(sampleData);
-                    generateSidebar(sampleData);
-                    loadPathData(true);
-                });
+            // 2. 다른 맵들의 데이터는 3초 뒤에 백그라운드에서 천천히 로드하여 초기 렉 방지
+            setTimeout(loadOtherMapsData, 3000);
+        })
+        .catch(err => {
+            console.warn("데이터 로드 실패, 샘플 데이터 사용:", err);
+            cachedData = sampleData; // 실패 시 샘플 데이터 사용
+            createMarkers(sampleData);
+            generateSidebar(sampleData);
+            loadPathData(true);
         });
+});
+
+// 백그라운드에서 다른 지도의 데이터를 캐싱하는 함수
+function loadOtherMapsData() {
+    Object.keys(mapsDB).forEach(key => {
+        if (key === currentMapId) return; // 이미 로드된 지도는 제외
+        fetch(mapsDB[key].json)
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(item => {
+                    globalMarkerCache[item.id] = { ...item, map: key }; // 전역 캐시에 저장
+                });
+            }).catch(e => console.log(`${key} 데이터 백그라운드 로드 실패`));
+    });
+}
 
         // Dev Mode 기능
         window.toggleDevRecording = function () {
@@ -891,288 +871,288 @@
         }
 
         // 마커 생성 함수
-       function createMarkers(data) {
-    const storageKey = `completed_${currentMapId}`;
-    const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-    const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-
-    // 초기화
-    for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
-    allMarkers = [];
-    layerGroups = {};
-
-    const markersByType = {};
-    let index = 0;
-    const CHUNK_SIZE = 500; // 한 번에 처리할 양
-
-    function processChunk() {
-        const chunk = data.slice(index, index + CHUNK_SIZE);
-        
-        chunk.forEach(item => {
-            if (!markersByType[item.type]) {
-                // 클러스터 설정 최적화 적용
-                if (isClusterOn) {
-                    markersByType[item.type] = createClusterGroup(item.type);
-                } else {
-                    markersByType[item.type] = L.layerGroup();
-                }
-            }
-
-            const isCompleted = completedList.includes(item.id);
-            const imgName = typeMapping[item.type] || "stone";
-            const iconPath = `../images/${imgName}.png`;
-            const pinColor = colorMapping[item.type] || "#555";
-
-            const pinIcon = L.divIcon({
-                className: isCompleted ? 'marker-completed' : '',
-                html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
-                         <div class="pin-inner-circle">
-                           <img src="${iconPath}" onerror="this.src='../images/stone.png'">
-                         </div>
-                       </div>`,
-                iconSize: pinSize,
-                iconAnchor: [pinSize[0] / 2, pinSize[1] / 2],
-                popupAnchor: [0, -(pinSize[1] / 2 + 5)]
-            });
-
-            const marker = L.marker([item.y, item.x], { icon: pinIcon });
-            marker.bindPopup(() => generatePopupContent(item, storageKey));
-            
-            // 레이어 그룹에 추가
-            markersByType[item.type].addLayer(marker);
-            
-            allMarkers.push({ 
-                id: item.id, name: item.name, desc: item.desc || "", 
-                type: item.type, marker: marker 
-            });
-        });
-
-        index += CHUNK_SIZE;
-
-        if (index < data.length) {
-            // 브라우저에게 숨 돌릴 틈을 주고 다음 덩어리 처리
-            requestAnimationFrame(processChunk);
-        } else {
-            // 모든 마커 생성이 끝나면 맵에 표시
-            finalizeMarkers(markersByType, savedFilters);
-        }
-    }
-
-    processChunk();
-}
-
-// 클러스터 그룹 생성을 분리하여 최적화 옵션 적용
-function createClusterGroup(type) {
-    const typeColor = colorMapping[type] || "#555";
-    return L.markerClusterGroup({
-        chunkedLoading: true,
-        chunkInterval: 50,
-        chunkDelay: 20,
-        disableClusteringAtZoom: 0,
-        maxClusterRadius: 70,
-        iconCreateFunction: function (cluster) {
-            const count = cluster.getChildCount();
-            return L.divIcon({
-                html: `<div class="simple-cluster-marker" style="--cluster-color: ${typeColor};">${count}</div>`,
-                className: '', iconSize: [30, 30], iconAnchor: [15, 15]
-            });
-        }
-    });
-}
-
-function finalizeMarkers(groups, savedFilters) {
-    layerGroups = groups;
-    for (const key in layerGroups) {
-        const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-        if (shouldShow) { layerGroups[key].addTo(map); }
-    }
-}
+        function createMarkers(data) {
             const storageKey = `completed_${currentMapId}`;
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
 
-            // 기존 레이어 그룹이 있다면 맵에서 제거
-            for (const key in layerGroups) {
-                map.removeLayer(layerGroups[key]);
-            }
-
+            // 초기화
+            for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
             allMarkers = [];
-            layerGroups = {}; // 초기화
-            const markersByType = {};
+            layerGroups = {};
 
-            try {
-                data.forEach(item => {
-                    // 타입별 배열 초기화
-                    if (!markersByType[item.type]) { markersByType[item.type] = []; }
+            const markersByType = {};
+            let index = 0;
+            const CHUNK_SIZE = 500; // 한 번에 처리할 양
+
+            function processChunk() {
+                const chunk = data.slice(index, index + CHUNK_SIZE);
+
+                chunk.forEach(item => {
+                    if (!markersByType[item.type]) {
+                        // 클러스터 설정 최적화 적용
+                        if (isClusterOn) {
+                            markersByType[item.type] = createClusterGroup(item.type);
+                        } else {
+                            markersByType[item.type] = L.layerGroup();
+                        }
+                    }
 
                     const isCompleted = completedList.includes(item.id);
                     const imgName = typeMapping[item.type] || "stone";
                     const iconPath = `../images/${imgName}.png`;
                     const pinColor = colorMapping[item.type] || "#555";
 
-                    // 기존 pinIcon 정의 부분을 아래 코드로 교체하세요.
-                    // createMarkers 함수 내부의 pinIcon 정의를 이걸로 덮어쓰세요.
-
-                    /* 찾을 위치: createMarkers 함수 내부
-                       수정 내용: style 속성을 바깥쪽 div(.pin-marker)로 이동
-                    */
-
-                    // [수정] 일반 핀 아이콘 정의 (색상 정보를 부모 div로 이동 + 앵커 수정)
                     const pinIcon = L.divIcon({
                         className: isCompleted ? 'marker-completed' : '',
-                        // ★ 핵심 변경: style="--pin-color..."를 바깥쪽 div(.pin-marker)로 옮겼습니다.
                         html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
+                         <div class="pin-inner-circle">
+                           <img src="${iconPath}" onerror="this.src='../images/stone.png'">
+                         </div>
+                       </div>`,
+                        iconSize: pinSize,
+                        iconAnchor: [pinSize[0] / 2, pinSize[1] / 2],
+                        popupAnchor: [0, -(pinSize[1] / 2 + 5)]
+                    });
+
+                    const marker = L.marker([item.y, item.x], { icon: pinIcon });
+                    marker.bindPopup(() => generatePopupContent(item, storageKey));
+
+                    // 레이어 그룹에 추가
+                    markersByType[item.type].addLayer(marker);
+
+                    allMarkers.push({
+                        id: item.id, name: item.name, desc: item.desc || "",
+                        type: item.type, marker: marker
+                    });
+                });
+
+                index += CHUNK_SIZE;
+
+                if (index < data.length) {
+                    // 브라우저에게 숨 돌릴 틈을 주고 다음 덩어리 처리
+                    requestAnimationFrame(processChunk);
+                } else {
+                    // 모든 마커 생성이 끝나면 맵에 표시
+                    finalizeMarkers(markersByType, savedFilters);
+                }
+            }
+
+            processChunk();
+        }
+
+        // 클러스터 그룹 생성을 분리하여 최적화 옵션 적용
+        function createClusterGroup(type) {
+            const typeColor = colorMapping[type] || "#555";
+            return L.markerClusterGroup({
+                chunkedLoading: true,
+                chunkInterval: 50,
+                chunkDelay: 20,
+                disableClusteringAtZoom: 0,
+                maxClusterRadius: 70,
+                iconCreateFunction: function (cluster) {
+                    const count = cluster.getChildCount();
+                    return L.divIcon({
+                        html: `<div class="simple-cluster-marker" style="--cluster-color: ${typeColor};">${count}</div>`,
+                        className: '', iconSize: [30, 30], iconAnchor: [15, 15]
+                    });
+                }
+            });
+        }
+
+        function finalizeMarkers(groups, savedFilters) {
+            layerGroups = groups;
+            for (const key in layerGroups) {
+                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
+                if (shouldShow) { layerGroups[key].addTo(map); }
+            }
+        }
+        const storageKey = `completed_${currentMapId}`;
+        const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+        const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+
+        // 기존 레이어 그룹이 있다면 맵에서 제거
+        for (const key in layerGroups) {
+            map.removeLayer(layerGroups[key]);
+        }
+
+        allMarkers = [];
+        layerGroups = {}; // 초기화
+        const markersByType = {};
+
+        try {
+            data.forEach(item => {
+                // 타입별 배열 초기화
+                if (!markersByType[item.type]) { markersByType[item.type] = []; }
+
+                const isCompleted = completedList.includes(item.id);
+                const imgName = typeMapping[item.type] || "stone";
+                const iconPath = `../images/${imgName}.png`;
+                const pinColor = colorMapping[item.type] || "#555";
+
+                // 기존 pinIcon 정의 부분을 아래 코드로 교체하세요.
+                // createMarkers 함수 내부의 pinIcon 정의를 이걸로 덮어쓰세요.
+
+                /* 찾을 위치: createMarkers 함수 내부
+                   수정 내용: style 속성을 바깥쪽 div(.pin-marker)로 이동
+                */
+
+                // [수정] 일반 핀 아이콘 정의 (색상 정보를 부모 div로 이동 + 앵커 수정)
+                const pinIcon = L.divIcon({
+                    className: isCompleted ? 'marker-completed' : '',
+                    // ★ 핵심 변경: style="--pin-color..."를 바깥쪽 div(.pin-marker)로 옮겼습니다.
+                    html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
                                <div class="pin-inner-circle">
                                    <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                                </div>
                            </div>`,
 
-                        // 모양이 원형으로 바뀌므로 중심점(Anchor)도 정중앙으로 맞춰야 합니다.
-                        iconSize: pinSize,
-                        iconAnchor: [pinSize[0] / 2, pinSize[1] / 2],
-                        popupAnchor: [0, -(pinSize[1] / 2 + 5)]
-                    });
-                    const marker = L.marker([item.y, item.x], { icon: pinIcon });
+                    // 모양이 원형으로 바뀌므로 중심점(Anchor)도 정중앙으로 맞춰야 합니다.
+                    iconSize: pinSize,
+                    iconAnchor: [pinSize[0] / 2, pinSize[1] / 2],
+                    popupAnchor: [0, -(pinSize[1] / 2 + 5)]
+                });
+                const marker = L.marker([item.y, item.x], { icon: pinIcon });
 
-                    // Dev Mode 클릭 이벤트 (녹화 및 상태 표시)
-                    // Dev Mode 클릭 이벤트 (타입별 전체 집계 기능)
-                    marker.on('click', () => {
-                        if (devRecording) {
-                            const existingIndex = devPathList.findIndex(entry => entry.id === item.id && entry.map === currentMapId);
+                // Dev Mode 클릭 이벤트 (녹화 및 상태 표시)
+                // Dev Mode 클릭 이벤트 (타입별 전체 집계 기능)
+                marker.on('click', () => {
+                    if (devRecording) {
+                        const existingIndex = devPathList.findIndex(entry => entry.id === item.id && entry.map === currentMapId);
 
-                            // 1. 리스트 추가/제거
-                            if (existingIndex > -1) {
-                                devPathList.splice(existingIndex, 1);
-                                L.DomUtil.removeClass(marker._icon, 'dev-selected');
-                            } else {
-                                devPathList.push({ id: item.id, map: currentMapId });
-                                L.DomUtil.addClass(marker._icon, 'dev-selected');
+                        // 1. 리스트 추가/제거
+                        if (existingIndex > -1) {
+                            devPathList.splice(existingIndex, 1);
+                            L.DomUtil.removeClass(marker._icon, 'dev-selected');
+                        } else {
+                            devPathList.push({ id: item.id, map: currentMapId });
+                            L.DomUtil.addClass(marker._icon, 'dev-selected');
+                        }
+
+                        // 2. 전체 개수 업데이트
+                        document.getElementById('dev-count').innerText = devPathList.length;
+
+                        // ★ 3. [핵심] 현재 담긴 모든 마커의 타입별 개수 계산
+                        const typeCounts = {};
+
+                        devPathList.forEach(entry => {
+                            // 마커 정보 찾기 (전역 캐시 우선, 없으면 현재 맵 리스트)
+                            let targetInfo = globalMarkerCache[entry.id];
+                            if (!targetInfo) {
+                                targetInfo = allMarkers.find(m => m.id == entry.id);
                             }
 
-                            // 2. 전체 개수 업데이트
-                            document.getElementById('dev-count').innerText = devPathList.length;
+                            // 타입 카운팅
+                            if (targetInfo && targetInfo.type) {
+                                typeCounts[targetInfo.type] = (typeCounts[targetInfo.type] || 0) + 1;
+                            }
+                        });
 
-                            // ★ 3. [핵심] 현재 담긴 모든 마커의 타입별 개수 계산
-                            const typeCounts = {};
+                        // 4. 화면에 요약해서 보여주기
+                        const statusBox = document.getElementById('dev-status');
+                        if (statusBox) {
+                            // "타입 갯수" 문자열 생성 (예: 상자 2 | 보스 1)
+                            const summaryHtml = Object.entries(typeCounts)
+                                .map(([type, count]) =>
+                                    `<span><span class="dev-type-tag">${type}</span> <span class="dev-type-count">${count}</span></span>`
+                                )
+                                .join('<span style="color:#555; margin:0 6px;">|</span>'); // 구분자
 
-                            devPathList.forEach(entry => {
-                                // 마커 정보 찾기 (전역 캐시 우선, 없으면 현재 맵 리스트)
-                                let targetInfo = globalMarkerCache[entry.id];
-                                if (!targetInfo) {
-                                    targetInfo = allMarkers.find(m => m.id == entry.id);
-                                }
-
-                                // 타입 카운팅
-                                if (targetInfo && targetInfo.type) {
-                                    typeCounts[targetInfo.type] = (typeCounts[targetInfo.type] || 0) + 1;
-                                }
-                            });
-
-                            // 4. 화면에 요약해서 보여주기
-                            const statusBox = document.getElementById('dev-status');
-                            if (statusBox) {
-                                // "타입 갯수" 문자열 생성 (예: 상자 2 | 보스 1)
-                                const summaryHtml = Object.entries(typeCounts)
-                                    .map(([type, count]) =>
-                                        `<span><span class="dev-type-tag">${type}</span> <span class="dev-type-count">${count}</span></span>`
-                                    )
-                                    .join('<span style="color:#555; margin:0 6px;">|</span>'); // 구분자
-
-                                if (summaryHtml) {
-                                    statusBox.innerHTML = summaryHtml;
-                                    statusBox.style.display = 'flex';
-                                } else {
-                                    statusBox.style.display = 'none';
-                                }
+                            if (summaryHtml) {
+                                statusBox.innerHTML = summaryHtml;
+                                statusBox.style.display = 'flex';
+                            } else {
+                                statusBox.style.display = 'none';
                             }
                         }
-                        // 일반 모드 팝업
-                    });
-
-                    marker.bindPopup(() => generatePopupContent(item, storageKey));
-                    markersByType[item.type].push(marker);
-                    allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
+                    }
+                    // 일반 모드 팝업
                 });
 
-                // 클러스터 또는 일반 레이어 그룹 생성
-                for (const type in markersByType) {
-                    const markersArray = markersByType[type];
-                    if (isClusterOn) {
-                        const typeColor = colorMapping[type] || "#555";
-                        if (!layerGroups[type]) {
-                            layerGroups[type] = L.markerClusterGroup({
-                                disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false,
-                                chunkedLoading: true, chunkInterval: 200,
-                                animate: false, animateAddingMarkers: false, maxClusterRadius: 80,
-                                iconCreateFunction: function (cluster) {
-                                    const count = cluster.getChildCount();
-                                    const countText = count > 99 ? '99+' : count;
-                                    // 배경색 대신 CSS 변수로 색상 정보만 전달
-                                    const html = `
+                marker.bindPopup(() => generatePopupContent(item, storageKey));
+                markersByType[item.type].push(marker);
+                allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
+            });
+
+            // 클러스터 또는 일반 레이어 그룹 생성
+            for (const type in markersByType) {
+                const markersArray = markersByType[type];
+                if (isClusterOn) {
+                    const typeColor = colorMapping[type] || "#555";
+                    if (!layerGroups[type]) {
+                        layerGroups[type] = L.markerClusterGroup({
+                            disableClusteringAtZoom: 0, spiderfyOnMaxZoom: true, showCoverageOnHover: false,
+                            chunkedLoading: true, chunkInterval: 200,
+                            animate: false, animateAddingMarkers: false, maxClusterRadius: 80,
+                            iconCreateFunction: function (cluster) {
+                                const count = cluster.getChildCount();
+                                const countText = count > 99 ? '99+' : count;
+                                // 배경색 대신 CSS 변수로 색상 정보만 전달
+                                const html = `
                                     <div class="simple-cluster-marker" style="--cluster-color: ${typeColor};">
                                         ${countText}
                                     </div>`;
 
-                                    return L.divIcon({
-                                        html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
-                                    });
-                                }
-                            });
-                        }
-                        layerGroups[type].addLayers(markersArray);
-                    } else {
-                        if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
-                        markersArray.forEach(m => layerGroups[type].addLayer(m));
+                                return L.divIcon({
+                                    html: html, className: '', iconSize: [30, 30], iconAnchor: [15, 15]
+                                });
+                            }
+                        });
                     }
+                    layerGroups[type].addLayers(markersArray);
+                } else {
+                    if (!layerGroups[type]) { layerGroups[type] = L.layerGroup(); }
+                    markersArray.forEach(m => layerGroups[type].addLayer(m));
                 }
+            }
 
-                // 필터 상태 반영
-                for (const key in layerGroups) {
-                    const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
-                    if (shouldShow) { layerGroups[key].addTo(map); }
-                }
-            } catch (e) { console.error("Marker creation error:", e); }
+            // 필터 상태 반영
+            for (const key in layerGroups) {
+                const shouldShow = (savedFilters[key] !== undefined) ? savedFilters[key] : true;
+                if (shouldShow) { layerGroups[key].addTo(map); }
+            }
+        } catch (e) { console.error("Marker creation error:", e); }
 
 
         // 사이드바 필터 생성
         function generateSidebar(data) {
-    const filterList = document.getElementById('filter-list');
-    if (!filterList) return;
-    filterList.innerHTML = '';
+            const filterList = document.getElementById('filter-list');
+            if (!filterList) return;
+            filterList.innerHTML = '';
 
-    const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
-    const counts = {};
-    
-    // 데이터 집계
-    data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
+            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+            const counts = {};
 
-    // DocumentFragment를 사용하여 한 번만 DOM에 삽입 (성능 향상)
-    const fragment = document.createDocumentFragment();
+            // 데이터 집계
+            data.forEach(item => counts[item.type] = (counts[item.type] || 0) + 1);
 
-    Object.entries(counts).forEach(([type, count]) => {
-        const div = document.createElement('div');
-        const isActive = (savedFilters[type] !== undefined) ? savedFilters[type] : true;
+            // DocumentFragment를 사용하여 한 번만 DOM에 삽입 (성능 향상)
+            const fragment = document.createDocumentFragment();
 
-        div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
-        const imgName = typeMapping[type] || "stone";
-        div.innerHTML = `
+            Object.entries(counts).forEach(([type, count]) => {
+                const div = document.createElement('div');
+                const isActive = (savedFilters[type] !== undefined) ? savedFilters[type] : true;
+
+                div.className = `filter-item ${isActive ? 'active' : 'inactive'}`;
+                const imgName = typeMapping[type] || "stone";
+                div.innerHTML = `
             <div class="filter-left-group">
                 <img src="../images/${imgName}.png" class="filter-icon-img">
                 <span class="filter-text-name">${type}</span>
             </div>
             <span class="filter-count">${count}</span>`;
-            
-        div.onclick = function () {
-            const isNowActive = div.classList.toggle('active');
-            div.classList.toggle('inactive', !isNowActive);
-            toggleLayer(type, isNowActive);
-            saveFilterState();
-        };
-        fragment.appendChild(div);
-    });
 
-    filterList.appendChild(fragment);
-}
+                div.onclick = function () {
+                    const isNowActive = div.classList.toggle('active');
+                    div.classList.toggle('inactive', !isNowActive);
+                    toggleLayer(type, isNowActive);
+                    saveFilterState();
+                };
+                fragment.appendChild(div);
+            });
+
+            filterList.appendChild(fragment);
+        }
 
         function saveFilterState() {
             const status = {};

@@ -958,75 +958,83 @@ function loadOtherMapsData() {
         }
 
         // 마커 생성 함수
-        function createMarkers(data) {
-            const storageKey = `completed_${currentMapId}`;
-            const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
-            const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
+       function createMarkers(data) {
+    const storageKey = `completed_${currentMapId}`;
+    const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
 
-            // 초기화
-            for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
-            allMarkers = [];
-            layerGroups = {};
+    // 1. 기존 레이어 제거 및 초기화
+    for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
+    allMarkers = [];
+    layerGroups = {};
 
-            const markersByType = {};
-            let index = 0;
-            const CHUNK_SIZE = 500; // 한 번에 처리할 양
+    const markersByType = {};
+    let index = 0;
+    const CHUNK_SIZE = 500;
 
-            function processChunk() {
-                const chunk = data.slice(index, index + CHUNK_SIZE);
+    // [개선] 레이어 그룹을 미리 생성하고, 필터가 켜져 있다면 즉시 맵에 추가해둡니다.
+    // 그래야 마커가 추가될 때 화면에 바로 보입니다.
+    const uniqueTypes = [...new Set(data.map(item => item.type))];
+    uniqueTypes.forEach(type => {
+        if (isClusterOn) {
+            layerGroups[type] = createClusterGroup(type);
+        } else {
+            layerGroups[type] = L.layerGroup();
+        }
+        
+        // 필터 설정 확인 후 맵에 미리 추가
+        const shouldShow = (savedFilters[type] !== undefined) ? savedFilters[type] : true;
+        if (shouldShow) {
+            layerGroups[type].addTo(map);
+        }
+    });
 
-                chunk.forEach(item => {
-                    if (!markersByType[item.type]) {
-                        // 클러스터 설정 최적화 적용
-                        if (isClusterOn) {
-                            markersByType[item.type] = createClusterGroup(item.type);
-                        } else {
-                            markersByType[item.type] = L.layerGroup();
-                        }
-                    }
+    function processChunk() {
+        const chunk = data.slice(index, index + CHUNK_SIZE);
+        
+        chunk.forEach(item => {
+            const isCompleted = completedList.includes(item.id);
+            const imgName = typeMapping[item.type] || "stone";
+            const iconPath = `../images/${imgName}.png`;
+            const pinColor = colorMapping[item.type] || "#555";
 
-                    const isCompleted = completedList.includes(item.id);
-                    const imgName = typeMapping[item.type] || "stone";
-                    const iconPath = `../images/${imgName}.png`;
-                    const pinColor = colorMapping[item.type] || "#555";
-
-                    const pinIcon = L.divIcon({
-                        className: isCompleted ? 'marker-completed' : '',
-                        html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
+            const pinIcon = L.divIcon({
+                className: isCompleted ? 'marker-completed' : '',
+                html: `<div class="pin-marker" style="--pin-color: ${pinColor};">
                          <div class="pin-inner-circle">
                            <img src="${iconPath}" onerror="this.src='../images/stone.png'">
                          </div>
                        </div>`,
-                        iconSize: pinSize,
-                        iconAnchor: [pinSize[0] / 2, pinSize[1] / 2],
-                        popupAnchor: [0, -(pinSize[1] / 2 + 5)]
-                    });
+                iconSize: pinSize,
+                iconAnchor: [pinSize[0] / 2, pinSize[1] / 2],
+                popupAnchor: [0, -(pinSize[1] / 2 + 5)]
+            });
 
-                    const marker = L.marker([item.y, item.x], { icon: pinIcon });
-                    marker.bindPopup(() => generatePopupContent(item, storageKey));
+            const marker = L.marker([item.y, item.x], { icon: pinIcon });
+            marker.bindPopup(() => generatePopupContent(item, storageKey));
+            
+            // [핵심] 이미 맵에 추가된 layerGroups에 마커를 넣으면 즉시 화면에 보입니다.
+            layerGroups[item.type].addLayer(marker);
+            
+            allMarkers.push({ 
+                id: item.id, name: item.name, desc: item.desc || "", 
+                type: item.type, marker: marker 
+            });
+        });
 
-                    // 레이어 그룹에 추가
-                    markersByType[item.type].addLayer(marker);
+        index += CHUNK_SIZE;
 
-                    allMarkers.push({
-                        id: item.id, name: item.name, desc: item.desc || "",
-                        type: item.type, marker: marker
-                    });
-                });
-
-                index += CHUNK_SIZE;
-
-                if (index < data.length) {
-                    // 브라우저에게 숨 돌릴 틈을 주고 다음 덩어리 처리
-                    requestAnimationFrame(processChunk);
-                } else {
-                    // 모든 마커 생성이 끝나면 맵에 표시
-                    finalizeMarkers(markersByType, savedFilters);
-                }
-            }
-
-            processChunk();
+        if (index < data.length) {
+            // 다음 프레임에서 나머지 처리 (이 과정이 화면에 실시간으로 반영됨)
+            requestAnimationFrame(processChunk);
+        } else {
+            console.log("모든 마커 렌더링 완료");
+            // finalizeMarkers 호출 필요 없음 (이미 위에서 다 추가됨)
         }
+    }
+
+    processChunk();
+}
 
         // 클러스터 그룹 생성을 분리하여 최적화 옵션 적용
         function createClusterGroup(type) {

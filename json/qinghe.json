@@ -1,6 +1,26 @@
 [ 
 
   {
+    "id": 1767353552380,
+    "name": "상자 (비밀통로)",
+    "type": "상자",
+    "y": 1694,
+    "x": 1813,
+    "desc": "",
+    "link": "",
+    "image": "https://wwm.tips/quests/images/q185_272.jpg"
+  },
+  {
+    "id": 1767353539763,
+    "name": "상자 (비밀통로)",
+    "type": "상자",
+    "y": 1691,
+    "x": 1783,
+    "desc": "",
+    "link": "",
+    "image": "https://wwm.tips/quests/images/q185_271.jpg"
+  },
+  {
     "id": 1767353295036,
     "name": "화술논쟁",
     "type": "화술논쟁",

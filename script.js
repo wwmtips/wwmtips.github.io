@@ -4268,7 +4268,7 @@ function syncOutfitImage() {
         const targetSrc = `./images/outfit/wwm${outfitNum}.jpg`; 
         
         img.src = targetSrc;
-        if (title) title.innerText = `의상 쇼케이스 #${outfitNum}`;
+        if (title) title.innerText = `쇼케이스 #${outfitNum}`;
         if (debugText) debugText.innerText = "이미지 경로: " + targetSrc;
 
         // 고정 드롭다운 리스트와 현재 번호 동기화

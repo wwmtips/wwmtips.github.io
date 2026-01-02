@@ -1,0 +1,91 @@
+<div class="quest-detail-container" style="text-align: left;">
+    <style>
+        /* [수묵화 테마] majang.html 스타일 계승 */
+        .outfit-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--wuxia-accent-red);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .outfit-nav-select {
+            background-color: #f4f4f2;
+            border: 1px solid var(--wuxia-accent-gold);
+            color: var(--wuxia-text-main);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            cursor: pointer;
+            outline: none;
+        }
+        .outfit-display-container {
+            background-color: #f4f4f2;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
+        }
+        .outfit-img {
+            width: 100%; /* 너비 100% 고정 */
+            height: auto;
+            border-radius: 2px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+
+    <div class="outfit-header-flex">
+        <div>
+            <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">의상</span>
+            <h2 id="outfit-title-text" style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                쇼케이스
+            </h2>
+        </div>
+        
+        <select id="outfit-switcher" class="outfit-nav-select" onchange="openGuideDirect('outfit/outfit' + this.value + '.html')">
+            </select>
+    </div>
+
+    <div class="outfit-display-container">
+        <img id="outfit-img-target" src="" alt="의상 이미지" class="outfit-img">
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <button onclick="location.href='index.html'" style="background: var(--wuxia-accent-gold); color: white; border: none; padding: 10px 25px; cursor: pointer; border-radius: 4px; font-weight: bold;">
+             목록으로 돌아가기
+        </button>
+    </div>
+
+    <script>
+        (function() {
+            // 현재 파일명에서 숫자 추출 (예: 'outfit5.html' -> '5')
+            const filename = window.location.href.split('/').pop().split('?')[0] || window.location.pathname.split('/').pop();
+            const outfitNum = filename.replace(/[^0-9]/g, '') || '1';
+
+            const img = document.getElementById('outfit-img-target');
+            const title = document.getElementById('outfit-title-text');
+            const switcher = document.getElementById('outfit-switcher');
+
+            // 1. 이미지 및 타이틀 설정
+            if (img) {
+                // 이미지 경로는 상위 폴더의 images/wwm{N}.jpg 가정
+                img.src = `../images/outfit/wwm${outfitNum}.jpg`; 
+                title.innerText = `의상 쇼케이스 #${outfitNum}`;
+                
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    title.innerText = `이미지(wwm${outfitNum}.jpg) 미발견`;
+                };
+            }
+
+            // 2. 드롭다운 옵션 21개 생성 및 현재 번호 선택
+            for (let i = 1; i <= 21; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `#${i} 보기`;
+                if (i.toString() === outfitNum) opt.selected = true;
+                switcher.appendChild(opt);
+            }
+        })();
+    </script>
+</div>

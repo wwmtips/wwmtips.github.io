@@ -907,7 +907,28 @@ const GUIDE_MAP = {
     'build': 'build.html', 'map': 'maps.html', 'side': 'beta.html', 'hw': 'npc.html',
     'boss': 'boss.html', 'marts': 'marts.html', 'harts': 'harts.html', 'skill': 'skils.html',
     'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html','b4': 'boss/b4.html','b5': 'boss/b5.html',
-    'w1':'world1.html', 'nb':'newb.html', 'wp':'guide/weapon.html', 'up':'guide/up.html', 'w2':'world2.html', 'outfit':'outfit.html'
+    'w1':'world1.html', 'nb':'newb.html', 'wp':'guide/weapon.html', 'up':'guide/up.html', 'w2':'world2.html',
+    'outfit1': 'outfit/outfit1.html',
+    'outfit2': 'outfit/outfit2.html',
+    'outfit3': 'outfit/outfit3.html',
+    'outfit4': 'outfit/outfit4.html',
+    'outfit5': 'outfit/outfit5.html',
+    'outfit6': 'outfit/outfit6.html',
+    'outfit7': 'outfit/outfit7.html',
+    'outfit8': 'outfit/outfit8.html',
+    'outfit9': 'outfit/outfit9.html',
+    'outfit10': 'outfit/outfit10.html',
+    'outfit11': 'outfit/outfit11.html',
+    'outfit12': 'outfit/outfit12.html',
+    'outfit13': 'outfit/outfit13.html',
+    'outfit14': 'outfit/outfit14.html',
+    'outfit15': 'outfit/outfit15.html',
+    'outfit16': 'outfit/outfit16.html',
+    'outfit17': 'outfit/outfit17.html',
+    'outfit18': 'outfit/outfit18.html',
+    'outfit19': 'outfit/outfit19.html',
+    'outfit20': 'outfit/outfit20.html',
+    'outfit21': 'outfit/outfit21.html'
 };
 
 function loadGuideView() {

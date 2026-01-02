@@ -810,69 +810,60 @@ function updateUrlQuery(tab, id) {
     }
 
     if (url.toString() !== window.location.href) history.pushState(null, '', url);
-}
-/**
- * 모든 커스텀 로직이 포함된 가이드 로드 함수
- */
-function loadGuideContent(filename, btnElement) {
+}function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if (!innerContainer) return;
 
-    // 1. [기존 로직] 주소가 바뀌기 전에 r 파라미터(레이드 ID) 보존
+    // ★ [핵심 1] 주소가 바뀌기 전에 r 파라미터를 미리 저장
     const currentParams = new URLSearchParams(window.location.search);
     const savedRaidId = currentParams.get('r');
 
-    // 2. [기존 로직] GUIDE_MAP에서 키를 찾아 URL 업데이트
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
-    if (foundId) {
-        // 사용자님의 기존 파라미터 규칙을 그대로 따릅니다.
-        updateUrlQuery('g', foundId); 
-    }
 
-    // 3. [기존 로직] 버튼 활성화 스타일 관리
+    // URL 업데이트 (파라미터 g를 사용하여 ?g=outfit1 형태를 만듦)
+    if (foundId) updateUrlQuery('g', foundId); 
+
     if (btnElement) {
         document.querySelectorAll('#view-guide .guide-item-btn').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
     }
 
-    // 4. [기존 로직] 코드 뷰 등 기타 레이아웃 처리
     const codeView = document.querySelector('.code-page-container');
     if (codeView) codeView.style.display = 'none';
+
     innerContainer.style.display = 'block';
 
-    // 5. [기존 로직] 로딩 메시지 출력 (보스 페이지 제외)
+    // 로딩 메시지
     if (filename !== 'boss.html') {
         innerContainer.innerHTML = '<div style="text-align:center; padding:50px; color:#888;">비급을 펼치는 중...</div>';
     }
 
-    // 6. 파일 가져오기 (fetch)
     fetch(filename)
         .then(res => {
             if (!res.ok) throw new Error("파일을 찾을 수 없습니다.");
             return res.text();
         })
         .then(html => {
-            // [핵심] 7. HTML 주입 (모든 로직의 기준점)
+            // [중요] 1. 먼저 HTML을 화면에 주입합니다.
             innerContainer.innerHTML = html;
 
-            // 8. [신규 추가] 의상 쇼케이스일 경우 이미지 동기화 실행
-            // 주입 직후에 실행해야 이미지를 띄울 요소를 찾을 수 있습니다.
+            // [중요] 2. 화면에 요소들이 생겨난 직후에 의상 로직을 실행합니다.
             if (filename.includes('outfit')) {
+                // DOM 렌더링을 보장하기 위해 아주 잠깐의 지연을 줍니다.
                 setTimeout(syncOutfitImage, 30); 
             }
 
-            // 9. [기존 로직] 각 가이드별 특수 렌더링 함수 호출
+            // 기타 가이드 초기화 로직
             if (filename === 'news.html') renderGuideNewsList();
             if (filename === 'harts.html') renderHeartLibrary();
             if (filename === 'marts.html') renderMartLibrary();
             if (filename === 'npc.html') initHomeworkChecklist();
 
-            // 10. [기존 로직] 보스 레이드 상세 페이지 복구 로직
+            // ★ [핵심 2] boss 상세 페이지 복구 로직
             if (filename === 'boss.html' && savedRaidId) {
                 const newUrl = '?g=boss&r=' + savedRaidId;
                 window.history.replaceState({ path: newUrl }, '', newUrl);
                 setTimeout(() => {
-                    // boss 폴더 내의 상세 파일을 로드
                     loadContent('boss/' + savedRaidId + '.html');
                 }, 50);
             }
@@ -882,6 +873,7 @@ function loadGuideContent(filename, btnElement) {
             console.error(err);
         });
 }
+
 
 function checkUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);

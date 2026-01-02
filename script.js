@@ -916,11 +916,17 @@ function loadGuideView() {
     if (!container) return;
 
     const urlParams = new URLSearchParams(window.location.search);
-    // [수정] g(카테고리)를 먼저 찾고, 없으면 id를 찾습니다.
-    const targetId = urlParams.get('g') || urlParams.get('id');
+    
+    // [수정] g(카테고리)를 먼저 확인합니다. (예: outfit, boss)
+    // g가 없으면 예외적으로 id를 확인합니다.
+    const targetId = urlParams.get('g') || urlParams.get('id'); 
+    
     let fileToLoad = 'news.html';
-    if (targetId && GUIDE_MAP[targetId]) fileToLoad = GUIDE_MAP[targetId];
-
+    
+    // GUIDE_MAP에서 'outfit' 키를 찾아 'outfit.html'을 결정합니다.
+    if (targetId && GUIDE_MAP[targetId]) {
+        fileToLoad = GUIDE_MAP[targetId];
+    }
     if (isGuideLoaded) {
         const targetBtn = findButtonByFile(fileToLoad);
         loadGuideContent(fileToLoad, targetBtn);

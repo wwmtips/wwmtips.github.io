@@ -695,7 +695,15 @@
                 return;
             }
 
-            clearPath(); // 기존 경로 제거
+            // 2. 초기화 (기존 경로 제거 및 UI 복원)
+            clearPath();
+
+            // [추가] 경로 모드 진입 시 기존 마커 레이어 모두 제거 (버그 수정)
+            for (const key in layerGroups) {
+                if (map.hasLayer(layerGroups[key])) {
+                    map.removeLayer(layerGroups[key]);
+                }
+            }
             document.body.classList.add('viewing-path');
             const routeData = pathData[pathKey];
             if (!routeData || !routeData.markers || routeData.markers.length === 0) return;
@@ -957,8 +965,15 @@
                     layerGroups[type] = L.layerGroup();
                 }
 
+                // [수정] 경로 모드가 아닐 때만 맵에 레이어 추가
+                const isViewingPath = document.body.classList.contains('viewing-path');
                 const shouldShow = (savedFilters[type] !== undefined) ? savedFilters[type] : true;
-                if (shouldShow) { layerGroups[type].addTo(map); }
+
+                if (shouldShow && !isViewingPath) {
+                    layerGroups[type].addTo(map);
+                }
+
+
             });
 
             let index = 0;

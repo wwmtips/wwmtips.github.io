@@ -916,7 +916,8 @@ function loadGuideView() {
     if (!container) return;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const targetId = urlParams.get('id') || urlParams.get('g');
+    // [수정] g(카테고리)를 먼저 찾고, 없으면 id를 찾습니다.
+    const targetId = urlParams.get('g') || urlParams.get('id');
     let fileToLoad = 'news.html';
     if (targetId && GUIDE_MAP[targetId]) fileToLoad = GUIDE_MAP[targetId];
 

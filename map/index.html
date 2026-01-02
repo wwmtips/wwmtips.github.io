@@ -978,17 +978,11 @@
             const completedList = JSON.parse(localStorage.getItem(storageKey)) || [];
             const savedFilters = JSON.parse(localStorage.getItem('map_filter_settings')) || {};
 
-            // 1. 기존 레이어 제거 및 초기화
+            // 1. 초기화 및 레이어 사전 준비
             for (const key in layerGroups) { map.removeLayer(layerGroups[key]); }
             allMarkers = [];
             layerGroups = {};
 
-            const markersByType = {};
-            let index = 0;
-            const CHUNK_SIZE = 500;
-
-            // [개선] 레이어 그룹을 미리 생성하고, 필터가 켜져 있다면 즉시 맵에 추가해둡니다.
-            // 그래야 마커가 추가될 때 화면에 바로 보입니다.
             const uniqueTypes = [...new Set(data.map(item => item.type))];
             uniqueTypes.forEach(type => {
                 if (isClusterOn) {
@@ -997,12 +991,12 @@
                     layerGroups[type] = L.layerGroup();
                 }
 
-                // 필터 설정 확인 후 맵에 미리 추가
                 const shouldShow = (savedFilters[type] !== undefined) ? savedFilters[type] : true;
-                if (shouldShow) {
-                    layerGroups[type].addTo(map);
-                }
+                if (shouldShow) { layerGroups[type].addTo(map); }
             });
+
+            let index = 0;
+            const CHUNK_SIZE = 500;
 
             function processChunk() {
                 const chunk = data.slice(index, index + CHUNK_SIZE);
@@ -1026,29 +1020,69 @@
                     });
 
                     const marker = L.marker([item.y, item.x], { icon: pinIcon });
-                    marker.bindPopup(() => generatePopupContent(item, storageKey));
 
-                    // [핵심] 이미 맵에 추가된 layerGroups에 마커를 넣으면 즉시 화면에 보입니다.
-                    layerGroups[item.type].addLayer(marker);
+                    // --- [핵심] 개발자 모드 녹화 이벤트 복구 ---
+                    marker.on('click', (e) => {
+                        if (typeof devRecording !== 'undefined' && devRecording) {
+                            // 기본 팝업이 뜨지 않도록 전파 방지 (선택 사항)
+                            // L.DomEvent.stopPropagation(e); 
 
-                    allMarkers.push({
-                        id: item.id, name: item.name, desc: item.desc || "",
-                        type: item.type, marker: marker
+                            const existingIndex = devPathList.findIndex(entry => entry.id === item.id && entry.map === currentMapId);
+
+                            if (existingIndex > -1) {
+                                devPathList.splice(existingIndex, 1);
+                                L.DomUtil.removeClass(marker._icon, 'dev-selected');
+                            } else {
+                                devPathList.push({ id: item.id, map: currentMapId });
+                                L.DomUtil.addClass(marker._icon, 'dev-selected');
+                            }
+
+                            // 카운트 업데이트
+                            document.getElementById('dev-count').innerText = devPathList.length;
+
+                            // 타입별 집계 업데이트
+                            updateDevStatusBox();
+                        }
                     });
+                    // ------------------------------------------
+
+                    marker.bindPopup(() => generatePopupContent(item, storageKey));
+                    layerGroups[item.type].addLayer(marker);
+                    allMarkers.push({ id: item.id, name: item.name, desc: item.desc || "", type: item.type, marker: marker });
                 });
 
                 index += CHUNK_SIZE;
-
                 if (index < data.length) {
-                    // 다음 프레임에서 나머지 처리 (이 과정이 화면에 실시간으로 반영됨)
                     requestAnimationFrame(processChunk);
-                } else {
-                    console.log("모든 마커 렌더링 완료");
-                    // finalizeMarkers 호출 필요 없음 (이미 위에서 다 추가됨)
                 }
             }
 
             processChunk();
+        }
+
+        // 개발자 모드 상태 박스 업데이트 헬퍼 함수
+        function updateDevStatusBox() {
+            const statusBox = document.getElementById('dev-status');
+            if (!statusBox) return;
+
+            const typeCounts = {};
+            devPathList.forEach(entry => {
+                const targetInfo = globalMarkerCache[entry.id];
+                if (targetInfo && targetInfo.type) {
+                    typeCounts[targetInfo.type] = (typeCounts[targetInfo.type] || 0) + 1;
+                }
+            });
+
+            const summaryHtml = Object.entries(typeCounts)
+                .map(([type, count]) => `<span><span class="dev-type-tag">${type}</span> <span class="dev-type-count">${count}</span></span>`)
+                .join('<span style="color:#555; margin:0 6px;">|</span>');
+
+            if (summaryHtml) {
+                statusBox.innerHTML = summaryHtml;
+                statusBox.style.display = 'flex';
+            } else {
+                statusBox.style.display = 'none';
+            }
         }
 
         // 클러스터 그룹 생성을 분리하여 최적화 옵션 적용

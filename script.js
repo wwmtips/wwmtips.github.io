@@ -841,6 +841,7 @@ function loadGuideContent(filename, btnElement) {
     // [추가] 만약 불러온 파일이 의상 관련이라면 초기화 함수 실행
     if (filename.includes('outfit')) {
         initOutfitShowcase();
+        
     }
 
     fetch(filename)
@@ -4299,5 +4300,36 @@ function navigateToOutfit(num) {
         setTimeout(initOutfitShowcase, 100);
     } else {
         location.href = '?g=outfit' + num;
+    }
+}
+
+/**
+ * SPA 주입 후 실행될 이미지 로드 함수 (index.html 또는 별도 js파일)
+ */
+function syncOutfitImage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const gParam = urlParams.get('g') || '';
+    
+    // g=outfit12 에서 숫자 '12'만 추출
+    const outfitNum = gParam.replace(/[^0-9]/g, '');
+    
+    const img = document.getElementById('outfit-img-target');
+    const title = document.getElementById('outfit-title-text');
+    const selects = document.querySelectorAll('.outfit-nav-select');
+
+    if (img && outfitNum) {
+        // 이미지는 루트 기준 ./images/ 폴더에서 호출
+        img.src = `./images/wwm${outfitNum}.jpg`; 
+        if (title) title.innerText = `의상 쇼케이스 #${outfitNum}`;
+        
+        // 드롭다운 현재 번호와 동기화
+        selects.forEach(select => {
+            select.value = outfitNum;
+        });
+
+        img.onerror = function() {
+            this.style.display = 'none';
+            if (title) title.innerText = `이미지(wwm${outfitNum}.jpg)를 찾을 수 없습니다.`;
+        };
     }
 }

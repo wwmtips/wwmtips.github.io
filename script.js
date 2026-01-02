@@ -4265,7 +4265,7 @@ function syncOutfitImage() {
 
     if (img && outfitNum) {
         // [이미지 경로] images/outfit/wwm1.jpg
-        const targetSrc = `./images/outfit/wwm${outfitNum}.jpg`; 
+        const targetSrc = `../images/outfit/wwm${outfitNum}.jpg`; 
         
         img.src = targetSrc;
         if (title) title.innerText = `쇼케이스 #${outfitNum}`;

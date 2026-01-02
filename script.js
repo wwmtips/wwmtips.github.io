@@ -816,14 +816,16 @@ function loadGuideContent(filename, btnElement) {
     const innerContainer = document.getElementById('guide-dynamic-content');
     if (!innerContainer) return;
 
-    // 1. 기존 파라미터 보존 로직 (boss 관련)
+    // 1. 기존 파라미터 보존 (boss 레이드 정보 등)
     const currentParams = new URLSearchParams(window.location.search);
     const savedRaidId = currentParams.get('r');
 
-    // 2. 파라미터 업데이트 - 깔끔하게 ?g=outfit1 형태로 생성
+    // 2. [수정] 파라미터를 ?g=파일명키 형태로 강제 고정
     const foundId = Object.keys(GUIDE_MAP).find(key => GUIDE_MAP[key] === filename);
     if (foundId) {
-        updateUrlQuery('g', foundId); // 이 부분이 ?g=outfit1 을 만듭니다.
+        // 기존 updateUrlQuery 대신 직접 주소를 갈아치웁니다.
+        const newUrl = `?g=${foundId}${savedRaidId ? '&r=' + savedRaidId : ''}`;
+        window.history.replaceState(null, '', newUrl); // [핵심] ?g=up 형태로 고정
     }
 
     // 3. UI 활성화 처리
@@ -832,25 +834,23 @@ function loadGuideContent(filename, btnElement) {
         btnElement.classList.add('active');
     }
 
-    // 4. 콘텐츠 로딩 (fetch)
+    // 4. 콘텐츠 로드 (fetch)
     fetch(filename)
         .then(res => res.text())
         .then(html => {
             innerContainer.innerHTML = html;
 
-            // [중요] 콘텐츠 주입 후 이미지 동기화 함수 호출
+            // [중요] 의상 쇼케이스일 경우 이미지 동기화 실행
             if (filename.includes('outfit')) {
                 setTimeout(syncOutfitImage, 30); 
             }
 
-            // 기타 초기화 로직 (news, boss 등)
-            if (filename === 'news.html') renderGuideNewsList();
+            // boss 상세 페이지 복구 로직
             if (filename === 'boss.html' && savedRaidId) {
-                // boss 복구 로직...
+                setTimeout(() => {
+                    loadContent('boss/' + savedRaidId + '.html');
+                }, 50);
             }
-        })
-        .catch(err => {
-            innerContainer.innerHTML = `<div style="text-align:center; padding:50px; color:#b71c1c;">로드 실패</div>`;
         });
 }
 

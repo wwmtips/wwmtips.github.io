@@ -3,7 +3,9 @@
         /* majang.html 수묵화 테마 스타일 계승 */
         .outfit-header-flex {
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;
+            border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px;   
+             margin-top: -20px;
+
         }
         .outfit-nav-select {
             background-color: #f4f4f2; border: 1px solid var(--wuxia-accent-gold);
@@ -19,7 +21,7 @@
     <div class="outfit-header-flex">
         <div>
             <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em;">의상</span>
-            <h2 id="outfit-title-text" style="color: var(--wuxia-accent-gold); display: inline-block; margin-left: 10px;">쇼케이스</h2>
+            <h2 id="outfit-title-text" style="color: var(--wuxia-accent-gold); display: inline-block; margin-left: 10px;">쇼케이스 #8</h2>
         </div>
         
         <select class="outfit-nav-select" onchange="openGuideDirect('outfit/outfit' + this.value + '.html')">
@@ -47,7 +49,7 @@
         </select>
     </div>
     <div class="outfit-display-box">
-        <img id="outfit-img-target" src="" alt="의상 이미지" class="outfit-img">
+        <img id="outfit-img-target" src="../images/outfit/wwm8.jpg" alt="의상 이미지" class="outfit-img">
     </div>
 
     <div style="text-align: center; margin-top: 30px;">

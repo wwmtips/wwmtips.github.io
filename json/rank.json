@@ -1,17 +1,20 @@
-[
-  { "rank": 1, "name": "Averse", "score": 5044 },
-  { "rank": 2, "name": "Gatomato", "score": 4685 },
-  { "rank": 3, "name": "skii", "score": 4664 },
-  { "rank": 4, "name": "bubbly", "score": 4597 },
-  { "rank": 5, "name": "Charlietea", "score": 4504 },
-  { "rank": 6, "name": "IRibbit", "score": 4501 },
-  { "rank": 7, "name": "GhostElectric", "score": 4489 },
-  { "rank": 8, "name": "SaberZX", "score": 4479 },
-  { "rank": 9, "name": "DaGe", "score": 4443 },
-  { "rank": 10, "name": "Gorlami", "score": 4407 },
-  { "rank": 11, "name": "Zacharu", "score": 4402 },
-  { "rank": 12, "name": "ellle", "score": 4328 },
-  { "rank": 13, "name": "ninelie", "score": 4326 },
-  { "rank": 14, "name": "twinscarface", "score": 4311 },
-  { "rank": 15, "name": "GameBreaker God", "score": 4311 }
-]
+{
+"update_date": "26-01-03 T22:03",
+  "rankings": [
+        { "rank": 1, "name": "Averse", "score": 5044 },
+        { "rank": 2, "name": "Gatomato", "score": 4685 },
+        { "rank": 3, "name": "skii", "score": 4664 },
+        { "rank": 4, "name": "bubbly", "score": 4597 },
+        { "rank": 5, "name": "Charlietea", "score": 4504 },
+        { "rank": 6, "name": "IRibbit", "score": 4501 },
+        { "rank": 7, "name": "GhostElectric", "score": 4489 },
+        { "rank": 8, "name": "SaberZX", "score": 4479 },
+        { "rank": 9, "name": "DaGe", "score": 4443 },
+        { "rank": 10, "name": "Gorlami", "score": 4407 },
+        { "rank": 11, "name": "Zacharu", "score": 4402 },
+        { "rank": 12, "name": "ellle", "score": 4328 },
+        { "rank": 13, "name": "ninelie", "score": 4326 },
+        { "rank": 14, "name": "twinscarface", "score": 4311 },
+        { "rank": 15, "name": "GameBreaker God", "score": 4311 }
+  ]
+}

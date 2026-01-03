@@ -4261,21 +4261,22 @@ audio.addEventListener('ended', () => {
 let pvpFullData = []; // 데이터를 저장할 빈 배열
 let currentPvpPage = 0;
 const pvpItemsPerPage = 3;
+let pvpLastUpdate = ""; // 날짜를 저장할 변수 추가
 
-// 1. JSON 데이터를 불러오는 함수
 async function fetchRankingData() {
     try {
-        const response = await fetch('json/rank.json'); // JSON 경로
-        pvpFullData = await response.json();
+        const response = await fetch('json/rank.json');
+        const data = await response.json();
         
-        // 데이터 로드 후 즉시 첫 화면 표시 및 타이머 시작
+        pvpFullData = data.rankings;      // 리스트 데이터
+        pvpLastUpdate = data.update_date; // 최상위 날짜 데이터
+
         updatePvpRanking();
         setInterval(updatePvpRanking, 6000); 
     } catch (error) {
-        console.error("랭킹 데이터를 불러오는 중 오류가 발생했습니다:", error);
+        console.error("데이터 로드 실패:", error);
     }
 }
-
 // 2. 화면을 그리는 함수
 function updatePvpRanking() {
     const listEl = document.getElementById('pvp-list');
@@ -4305,11 +4306,11 @@ function updatePvpRanking() {
     // 인디케이터 업데이트
     if (pageEl) {
         const totalPages = Math.ceil(pvpFullData.length / pvpItemsPerPage);
-        pageEl.innerText = `${currentPvpPage + 1} / ${totalPages}`;
+        pageEl.innerText = `${pvpLastUpdate}`;
     }
 
     // 다음 페이지 계산 (끝에 도달하면 다시 0으로)
-    currentPvpPage = (currentPvpPage + 1) % Math.ceil(pvpFullData.length / pvpItemsPerPage);
+   // currentPvpPage = (currentPvpPage + 1) % Math.ceil(pvpFullData.length / pvpItemsPerPage);
 }
 
 // 초기 실행: 데이터를 먼저 불러옵니다.

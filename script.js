@@ -4258,6 +4258,8 @@ audio.addEventListener('ended', () => {
     currentIdx = (currentIdx + 1) % playlist.length;
     selectTrack(currentIdx);
 });
+
+
 let pvpFullData = []; // 데이터를 저장할 빈 배열
 let currentPvpPage = 0;
 const pvpItemsPerPage = 3;
@@ -4306,7 +4308,7 @@ function updatePvpRanking() {
     // 인디케이터 업데이트
     if (pageEl) {
         const totalPages = Math.ceil(pvpFullData.length / pvpItemsPerPage);
-        pageEl.innerText = `${pvpLastUpdate}`;
+        pageEl.innerText = `${pvpLastUpdate} 기준`;
     }
 
     // 다음 페이지 계산 (끝에 도달하면 다시 0으로)

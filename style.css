@@ -6682,3 +6682,36 @@ body.dark-mode .pwa-install-desc { color: #888; }
     from { opacity: 0; transform: translateY(3px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* PC 화면 (브라우저 너비 1024px 이상) 설정 */
+@media (min-width: 1024px) {
+    #pvp-list {
+        display: grid !important;
+        /* 한 줄에 동일한 너비로 3개 배치 */
+        grid-template-columns: repeat(3, 1fr) !important;
+        background-color: #fff;
+    }
+
+    .rank-item {
+        /* 가로 배치 시 항목 사이의 구분선을 세로선으로 변경 */
+        border-bottom: none !important; 
+        border-right: 1px solid #f5f5f5 !important;
+        padding: 15px !important;
+        justify-content: center; /* 항목 내부 중앙 정렬 */
+    }
+
+    /* 마지막 항목(3번째)은 우측 선 제거 */
+    .rank-item:last-child {
+        border-right: none !important;
+    }
+
+    /* TOP 3 디자인이 적용된 경우 배경 강조가 가로로 보이도록 조정 */
+    .rank-item.top-3 {
+        border-left: none !important; /* 기존 세로형 강조 제거 */
+        border-top: 4px solid #d4af37 !important; /* 상단 포인트 라인으로 변경 (선택 사항) */
+    }
+    
+    .rank-item.rank-1 { border-top-color: #d4af37 !important; }
+    .rank-item.rank-2 { border-top-color: #aaa !important; }
+    .rank-item.rank-3 { border-top-color: #cd7f32 !important; }
+}

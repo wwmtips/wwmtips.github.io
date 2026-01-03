@@ -943,7 +943,8 @@ const GUIDE_MAP = {
     'outfit18': 'outfit/outfit18.html',
     'outfit19': 'outfit/outfit19.html',
     'outfit20': 'outfit/outfit20.html',
-    'outfit21': 'outfit/outfit21.html'
+    'outfit21': 'outfit/outfit21.html',
+    'ar1':'arena/g1.html'
 };
 
 function loadGuideView() {

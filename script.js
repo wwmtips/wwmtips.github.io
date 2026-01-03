@@ -4295,7 +4295,7 @@ function updatePvpRanking() {
         return `
             <div class="rank-item ${rankClass}">
                 <div class="rank-num-text">${p.rank}</div>
-                <img src="images/char/${p.name}.png" class="rank-p-img" onerror="this.src='images/logo.png'">
+                <img src="images/rank/${p.name}.png" class="rank-p-img" onerror="this.src='images/logo.png'">
                 <div class="rank-p-name">${p.name}</div>
                 <div class="rank-p-score">${p.score.toLocaleString()}</div>
             </div>

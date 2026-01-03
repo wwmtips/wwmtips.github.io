@@ -4310,7 +4310,7 @@ function updatePvpRanking() {
     }
 
     // 다음 페이지 계산 (끝에 도달하면 다시 0으로)
-   // currentPvpPage = (currentPvpPage + 1) % Math.ceil(pvpFullData.length / pvpItemsPerPage);
+     currentPvpPage = (currentPvpPage + 1) % Math.ceil(pvpFullData.length / pvpItemsPerPage);
 }
 
 // 초기 실행: 데이터를 먼저 불러옵니다.

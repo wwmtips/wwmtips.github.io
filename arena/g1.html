@@ -30,13 +30,35 @@
         color: #888;
         font-size: 0.85em;
     }
+       .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
 </style>
 
 <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 25px;">
     <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">심층 공략</span>
     <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">글로벌 랭킹 1위가 추천하는 아레나 필수 조율 가이드</h2>
 </div>
-
+  <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/ly-5GYIRFx0" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </div>
 <div class="guide-section">
     <h3 style="color: var(--wuxia-text-main); font-size: 1.15em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">1. 개요</h3>
     <div class="guide-card">
@@ -137,15 +159,6 @@
     </div>
 </div>
 
-<div class="guide-section">
-    <h3 style="color: var(--wuxia-text-main); font-size: 1.15em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">3. 결론 및 요약</h3>
-    <div class="guide-card">
-        <div style="color: var(--wuxia-text-sub); line-height: 1.8;">
-            논검에서 상위 랭크로 가기 위해서는 단순한 피지컬뿐만 아니라 장비 세팅의 효율화가 필수적입니다.<br>
-            Averse가 제시한 'Best-in-Slot' 조율을 참고해 높은 티어의 자리를 정복하시기 바랍니다.
-        </div>
-    </div>
-</div>
 
 <div class="source-footer">
     이 글은 글로벌 랭커 <strong>Averse</strong>의 분석을 참고하여 제작되었습니다.

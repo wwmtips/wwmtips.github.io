@@ -4258,3 +4258,59 @@ audio.addEventListener('ended', () => {
     currentIdx = (currentIdx + 1) % playlist.length;
     selectTrack(currentIdx);
 });
+let pvpFullData = []; // 데이터를 저장할 빈 배열
+let currentPvpPage = 0;
+const pvpItemsPerPage = 3;
+
+// 1. JSON 데이터를 불러오는 함수
+async function fetchRankingData() {
+    try {
+        const response = await fetch('json/rank.json'); // JSON 경로
+        pvpFullData = await response.json();
+        
+        // 데이터 로드 후 즉시 첫 화면 표시 및 타이머 시작
+        updatePvpRanking();
+        setInterval(updatePvpRanking, 6000); 
+    } catch (error) {
+        console.error("랭킹 데이터를 불러오는 중 오류가 발생했습니다:", error);
+    }
+}
+
+// 2. 화면을 그리는 함수
+function updatePvpRanking() {
+    const listEl = document.getElementById('pvp-list');
+    const pageEl = document.getElementById('pvp-page-indicator');
+    
+    if (!listEl || pvpFullData.length === 0) return;
+
+    const start = currentPvpPage * pvpItemsPerPage;
+    const end = start + pvpItemsPerPage;
+    const currentList = pvpFullData.slice(start, end);
+
+    // 랭킹 리스트 생성 (1~3위 특수 클래스 추가)
+    listEl.innerHTML = currentList.map(p => {
+        // 순위별 특수 디자인을 위한 클래스 생성
+        const rankClass = p.rank <= 3 ? `rank-${p.rank} top-3` : '';
+        
+        return `
+            <div class="rank-item ${rankClass}">
+                <div class="rank-num-text">${p.rank}</div>
+                <img src="images/char/${p.name}.png" class="rank-p-img" onerror="this.src='images/logo.png'">
+                <div class="rank-p-name">${p.name}</div>
+                <div class="rank-p-score">${p.score.toLocaleString()}</div>
+            </div>
+        `;
+    }).join('');
+
+    // 인디케이터 업데이트
+    if (pageEl) {
+        const totalPages = Math.ceil(pvpFullData.length / pvpItemsPerPage);
+        pageEl.innerText = `${currentPvpPage + 1} / ${totalPages}`;
+    }
+
+    // 다음 페이지 계산 (끝에 도달하면 다시 0으로)
+    currentPvpPage = (currentPvpPage + 1) % Math.ceil(pvpFullData.length / pvpItemsPerPage);
+}
+
+// 초기 실행: 데이터를 먼저 불러옵니다.
+document.addEventListener("DOMContentLoaded", fetchRankingData);

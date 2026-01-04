@@ -423,10 +423,36 @@ function loadData() {
                 const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
                 if (foundChunji) { switchTab('chunji'); loadChunjiDetail(foundChunji); }
             }
-            else if (targetTab === 'quest' && targetId) {
-                const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
-                const foundQuest = globalData.quests.find(q => q.id === formattedId);
-                if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
+           else if (targetTab === 'quest' && targetId) {
+                // [수정] 필터 단축 코드 매핑 (원하는 약어와 실제 select value를 연결)
+                const filterMap = {
+                    'm': '만사록',
+                    'g': '가이드',
+                    't': '탐색',
+                    'h': '화간집',
+                    'e': '이벤트',
+                    'etc': '기타'
+                };
+
+                // 1. 만약 id가 필터 코드(m, g 등)라면 -> 필터링 실행
+                if (filterMap[targetId]) {
+                    const typeName = filterMap[targetId];
+                    const selectEl = document.getElementById('quest-type-select');
+                    
+                    if (selectEl) {
+                        selectEl.value = typeName; // 드롭다운 값 변경
+                        // 필터 변경 함수 호출 (지역 목록 갱신 + 리스트 다시 그리기)
+                        if (typeof onQuestTypeChange === 'function') {
+                            onQuestTypeChange();
+                        }
+                    }
+                } 
+                // 2. 필터 코드가 아니라면 -> 기존처럼 퀘스트 상세 보기 실행
+                else {
+                    const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
+                    const foundQuest = globalData.quests.find(q => q.id === formattedId);
+                    if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
+                }
             }
 
             if (typeof checkEventStatus === 'function') checkEventStatus();

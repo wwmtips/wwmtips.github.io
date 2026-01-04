@@ -428,6 +428,7 @@ function loadData() {
                 const filterMap = {
                     'm': '만사록',
                     'g': '가이드',
+                    'in': '인연의 궤적',
                     't': '탐색',
                     'h': '화간집',
                     'e': '이벤트',

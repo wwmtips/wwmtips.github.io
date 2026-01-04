@@ -136,7 +136,7 @@ async function loadMansarokMenu() {
         const mansarokContainer = document.getElementById('mansarok-list');
 
         const isPc = window.innerWidth >= 1024; 
-        const limit = isPc ? 12 : 6;
+        const limit = isPc ? 18 : 6;
 
         if (mansarokContainer) {
             const mansarokList = data

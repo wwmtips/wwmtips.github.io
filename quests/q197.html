@@ -121,12 +121,11 @@
             color: #000;
         }
     </style>
-
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+<div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
         <span
             style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">보스 공략</span>
         <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-           봉여지 공략</h2>
+          하백</h2>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; width: 100%;">
             <div
@@ -151,13 +150,22 @@
     </div>
 
     <div class="disclaimer-box">
-        봉여지 공략은 <b><a href="https://game8.co/games/Where-Winds-Meet">game8</a></b>의 자료를 번역해 제공합니다. 제공자의 요청이 있는 경우 게시글이 삭제될 수 있습니다.<br>
+        하백 진수전의 공략은 <b><a href="https://game8.co/games/Where-Winds-Meet/archives/570870">game8</a></b>의 자료를 번역해 제공합니다. 제공자의 요청이 있는 경우 게시글이 삭제될 수 있습니다.<br>
         <span style="font-size: 0.85em; opacity: 0.8;">This guide features translated content from game8. This post may
             be removed at the request of the original provider.</span>
     </div>
     <p style="margin-bottom: 30px; line-height: 1.7;">
-        봉여지는 <b>천상래 진수전</b>을 가는 길에 만날 수 있는 야외 보스입니다. 봉여지의 공략 및 패턴을 아래에서 확인하세요.
+        하백은 <b>천상래 진수전</b>에서 만날 수 있는 캠페인 보스입니다. 하백의 공략 및 패턴을 아래에서 확인하세요.
     </p>
+
+    <div class="boss-tab-header">
+        <button class="boss-tab-btn active" onclick="openBossTab('phase1', this)">
+            1페이즈
+        </button>
+        <button class="boss-tab-btn" onclick="openBossTab('phase2', this)">
+            2페이즈
+        </button>
+    </div>
 
     <div id="tab-phase1" class="boss-tab-content active">
         <table class="guide-table">
@@ -174,145 +182,127 @@
             <tbody>
                 <tr>
                     <td>
-                        <span class="skill-name">신속 공격</span>
+                        <span class="skill-name">물줄기</span>
 
                     </td>
                     <td>
                         <div class="video-container">
                             <video autoplay muted loop playsinline>
-                                <source src="https://img.game8.co/4363910/a2f53f89b6036c9193b7d183d11f4152.mp4/show"
+                                <source src="https://img.game8.co/4364215/dbc4db9905803cefe56051ffc7a2c6f0.mp4/show"
                                     type="video/mp4">
                                 브라우저가 비디오 태그를 지원하지 않습니다.
                             </video>
                         </div>
                         <p style="font-size: 0.75em; margin: 0; color: #555;">
-                            무기를 이용한 강력한 근접 콤보 공격을 펼칩니다. 이 공격은 타이밍을 잘 맞춰 완벽하게 막아 내면 반격으로 이어질 수 있고, 회피할 수도 있습니다 .
+                            원거리에서 빠른 속도로 물줄기를 발사합니다. 이 기술은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다.
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="skill-name">창던지기</span>
+                        <span class="skill-name">해일</span>
 
                     </td>
                     <td>
                         <div class="video-container">
                             <video autoplay muted loop playsinline>
-                                <source src="https://img.game8.co/4363911/d369598250070636fccd003de8c466eb.mp4/show"
+                                <source src="https://img.game8.co/4364217/c9787e798dbd1793ac5df354bb708289.mp4/show"
                                     type="video/mp4">
                                 브라우저가 비디오 태그를 지원하지 않습니다.
                             </video>
                         </div>
                         <p style="font-size: 0.75em; margin: 0; color: #555;">
-                            멀리서 무기를 던집니다. 이 공격은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다.
+                            전장에 세 개의 거대한 파도를 일으킵니다. 이 공격은 적절한 타이밍에 점프하여 피할 수 있습니다.
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="skill-name">강습</span>
+                        <span class="skill-name">강철꼬리</span>
 
                     </td>
                     <td>
                         <div class="video-container">
                             <video autoplay muted loop playsinline>
-                                <source src="https://img.game8.co/4363913/39fa6561d782f9c346ab06217c263ff0.mp4/show"
+                                <source src="https://img.game8.co/4364219/a2a48ea5b87ec040b562eef314123434.mp4/show"
                                     type="video/mp4">
                                 브라우저가 비디오 태그를 지원하지 않습니다.
                             </video>
                         </div>
                         <p style="font-size: 0.75em; margin: 0; color: #555;">
-                            공중에서 몸을 뒤집으며 강력한 베기 공격을 두 차례 가합니다. 이 공격은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다.
+                            몸을 뒤집어 거대한 꼬리로 당신을 공격합니다. 이 공격은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다 .
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="skill-name">다중베기</span>
+                        <span class="skill-name">물대포</span>
 
                     </td>
                     <td>
                         <div class="video-container">
                             <video autoplay muted loop playsinline>
-                                <source src="https://img.game8.co/4363915/4ae58225ad0b09e0dad8ed9da88c1910.mp4/show"
+                                <source src="https://img.game8.co/4364222/f5704e806a57da2b8b985c47b31d4962.mp4/show"
                                     type="video/mp4">
                                 브라우저가 비디오 태그를 지원하지 않습니다.
                             </video>
                         </div>
                         <p style="font-size: 0.75em; margin: 0; color: #555;">
-                            여러 방향에서 돌진하며 여러 번 베는 공격을 합니다. 이 공격은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다.
+                            주변의 물을 모아 원거리에서 강력한 구체를 발사합니다. 이 기술은 타이밍만 잘 맞추면 패링 이나 회피가 가능합니다.
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="skill-name">공중잡기</span>
+                        <span class="skill-name">해일2</span>
 
                     </td>
                     <td>
                         <div class="video-container">
                             <video autoplay muted loop playsinline>
-                                <source src="https://img.game8.co/4363920/4bc3a045e632d24db4efee1b06449439.mp4/show"
+                                <source src="https://img.game8.co/4364224/519dcb2b598cdd1021cc06ce01a8dea2.mp4/show"
                                     type="video/mp4">
                                 브라우저가 비디오 태그를 지원하지 않습니다.
                             </video>
                         </div>
                         <p style="font-size: 0.75em; margin: 0; color: #555;">
-                            공중으로 뛰어올랐다가 빠르게 당신에게 내려앉아 바닥에 내던집니다. 이 공격은 타이밍만 잘 맞추면 피할 수 있습니다 .
+                            직선 경로에 강력한 물줄기를 뿌립니다. 이 공격은 적절한 타이밍에 점프하여 피할 수 있습니다.
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="skill-name">검기</span>
+                        <span class="skill-name">몸통박치기</span>
 
                     </td>
                     <td>
                         <div class="video-container">
                             <video autoplay muted loop playsinline>
-                                <source src="https://img.game8.co/4363921/9930ab4ec468152b27446b3ae1ec7545.mp4/show"
+                                <source src="https://img.game8.co/4364226/ff30d358d00d2b0a5b5a5e3d6f6d01df.mp4/show"
                                     type="video/mp4">
                                 브라우저가 비디오 태그를 지원하지 않습니다.
                             </video>
                         </div>
                         <p style="font-size: 0.75em; margin: 0; color: #555;">
-                           멀리서 강력한 바람 공격을 날립니다. 이 공격은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다 .
+                            물 밖으로 솟구쳐 올라 전장에 강타한 후 잠시 후 다시 바다로 굴러떨어집니다. 이 공격은 범위 밖으로 벗어나 면 피할 수 있습니다.
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="skill-name">출혈부메랑</span>
+                        <span class="skill-name">우박세례</span>
 
                     </td>
                     <td>
                         <div class="video-container">
                             <video autoplay muted loop playsinline>
-                                <source src="https://img.game8.co/4363922/6d9187439814d5c931af4f9bdb801056.mp4/show"
+                                <source src="https://img.game8.co/4364230/f2fbd26ffd220a53cdffebabd819de80.mp4/show"
                                     type="video/mp4">
                                 브라우저가 비디오 태그를 지원하지 않습니다.
                             </video>
                         </div>
                         <p style="font-size: 0.75em; margin: 0; color: #555;">
-                            멀리서 무기를 두 번 빠르게 던집니다. 이 공격은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다 .
-                        </p>
-                    </td>
-                </tr>
-                 <tr>
-                    <td>
-                        <span class="skill-name">발차기</span>
-
-                    </td>
-                    <td>
-                        <div class="video-container">
-                            <video autoplay muted loop playsinline>
-                                <source src="https://img.game8.co/4363932/b71b60e33384a58b89f6107584a54503.mp4/show"
-                                    type="video/mp4">
-                                브라우저가 비디오 태그를 지원하지 않습니다.
-                            </video>
-                        </div>
-                        <p style="font-size: 0.75em; margin: 0; color: #555;">
-                            빠른 속도로 연속 발차기를 구사합니다. 이 기술은 타이밍만 잘 맞추면 막 거나 피할 수 있습니다.
+                            물 밖으로 솟구쳐 올라 전장에 강타한 후 잠시 후 다시 바다로 굴러떨어집니다. 이 공격은 범위 밖으로 벗어나 면 피할 수 있습니다.
                         </p>
                     </td>
                 </tr>
@@ -320,6 +310,114 @@
         </table>
     </div>
 
+    <div id="tab-phase2" class="boss-tab-content">
+        <table class="guide-table">
+            <colgroup>
+                <col style="width: 35%;">
+                <col style="width: 65%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>기술</th>
+                    <th>영상</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="skill-name">검격</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364232/604731b08904bdc7aaea11b0515ed4c6.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                           강력한 근접 검 콤보 공격을 펼칩니다. 이 기술은 타이밍을 잘 맞추면 막 거나 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+
+                 <tr>
+                    <td>
+                        <span class="skill-name">그림자 검기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364233/98ff17058e55780aac8123f8d40c9388.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                          검에서 어둠의 에너지를 발사합니다. 이 기술은 타이밍을 잘 맞추면 막 거나 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+                
+                 <tr>
+                    <td>
+                        <span class="skill-name">회전베기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364241/4b2dd77e445a2b5db9798ad10e635e25.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                          몸을 붉게 빛내며 검을 회전시켜 공격합니다. 이 공격은 타이밍을 잘 맞추면 막 거나 피할 수 있습니다 .
+                        </p>
+                    </td>
+                </tr>
+                 <tr>
+                    <td>
+                        <span class="skill-name">필살베기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364242/11a95da89bdbecca3a22aa5e9d3d717c.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                          노란색으로 빛나며 검을 한 번 휘둘러 강력한 돌진 공격을 가합니다. 이 공격은 타이밍을 잘 맞추면 피할 수 있습니다 .
+                        </p>
+                    </td>
+                </tr>
+                 <tr>
+                    <td>
+                        <span class="skill-name">물 가르기</span>
+
+                    </td>
+                    <td>
+                        <div class="video-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="https://img.game8.co/4364244/0f27e6ebb319489c4f9651c78d7a633d.mp4/show"
+                                    type="video/mp4">
+                                브라우저가 비디오 태그를 지원하지 않습니다.
+                            </video>
+                        </div>
+                        <p style="font-size: 0.75em; margin: 0; color: #555;">
+                         용왕을 소환하여 물줄기를 쏘아 공격합니다. 이 공격은 적절한 타이밍에 점프하면 피할 수 있습니다.
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div style="text-align: center; margin-top: 40px;">
         <button onclick="loadContent('boss.html')"

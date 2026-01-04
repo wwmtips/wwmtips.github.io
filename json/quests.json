@@ -1,7 +1,16 @@
 [  
+     {
+    "id": "q197",
+    "name": "천상래 진수전 - 하백",
+    "location": "야외 보스",
+    "type": "보스 공략",
+    "bgimg": "q197_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q197.html"
+  }, 
    {
     "id": "q196",
-    "name": "봉여지 공략",
+    "name": "야외보스 - 봉여지",
     "location": "야외 보스",
     "type": "보스 공략",
     "bgimg": "q196_1.jpg",

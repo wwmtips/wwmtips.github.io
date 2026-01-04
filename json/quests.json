@@ -1,4 +1,13 @@
 [  
+   {
+    "id": "q196",
+    "name": "봉여지 공략",
+    "location": "야외 보스",
+    "type": "보스 공략",
+    "bgimg": "q196_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q196.html"
+  }, 
   {
     "id": "q195",
     "name": "풍화의 무도",

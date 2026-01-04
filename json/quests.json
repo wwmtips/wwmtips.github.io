@@ -1,5 +1,13 @@
 [
-  
+    {
+    "id": "q193",
+    "name": "망령공자 협경 공략",
+    "location": "보스 공략",
+    "type": "탐색",
+    "bgimg": "q193_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q193.html"
+  },
   {
     "id": "q192",
     "name": "북쪽 외곽 탐색",

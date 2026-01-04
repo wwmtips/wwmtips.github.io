@@ -1,0 +1,184 @@
+<div class="quest-detail-container" id="q193-container">
+    <style>
+        :root {
+            --wuxia-accent-red: #b71c1c;
+            --wuxia-accent-gold: #b08d55;
+            --wuxia-text-main: #333;
+            --wuxia-text-sub: #666;
+            --wuxia-bg-tab: #f4f4f2;
+        }
+
+        /* 헤더 및 기본 구조 */
+        .step-header {
+            color: var(--wuxia-text-main);
+            font-size: 1.1em;
+            border-left: 4px solid var(--wuxia-accent-gold);
+            padding-left: 10px;
+            font-weight: bold;
+            margin: 25px 0 12px 0;
+        }
+
+        /* 보스 공략 특화 스타일 (b3.html 스타일 반영) */
+        .mechanism-card {
+            background-color: #fff5f5;
+            border: 1px solid #ffc1c1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .mechanism-title {
+            color: var(--wuxia-accent-red);
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .pattern-box {
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .pattern-title {
+            display: block;
+            font-weight: bold;
+            color: var(--wuxia-accent-gold);
+            font-size: 1.05em;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 5px;
+        }
+
+        .wuxia-image-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .wuxia-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .important-text {
+            color: var(--wuxia-accent-red);
+            font-weight: bold;
+        }
+    </style>
+
+    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+        <span style="background-color: var(--wuxia-accent-red); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">보스</span>
+        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">보스 공략 가이드</h2>
+
+       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; width: 100%;">
+            <div
+                style="display: inline-flex; align-items: center; background-color: #f8f5f0; padding: 4px 12px 4px 4px; border-radius: 20px; border: 1px solid #eee;">
+                <div style="width: 22px; height: 22px; border-radius: 50%; overflow: hidden; margin-right: 8px;">
+                    <img src="https://wwm.tips/images/profile.jpg"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <span style="font-size: 0.75em; color: #888;">Posted by <strong
+                        style="color: var(--wuxia-accent-gold);">윤쫑</strong></span>
+            </div>
+
+            <div class="like-container" onclick="handleLikeClick()"
+                style="display: inline-flex; align-items: center; background-color: #fdfaf5; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--wuxia-accent-gold); cursor: pointer;">
+                <span
+                    style="font-size: 0.75em; color: var(--wuxia-accent-gold); font-weight: bold; display: flex; align-items: center; gap: 4px;">
+                    <span>♥</span>
+                    <span class="like-count">0</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mechanism-card">
+        <div class="mechanism-title">⚔️ 핵심 메커니즘</div>
+        <p style="font-size: 0.95em; line-height: 1.6; margin: 0;">
+            이 보스전의 알파이자 오메가입니다.<br><br>
+            <b>기믹:</b> 보스 체력바 아래 작은 체력바의 <span class="important-text">'빨간 선(임계점)'</span>을 확인하세요. 각 패턴 시전 전 가마 체력을 깎아 빨간 선 이하로 만들어야 합니다.<br>
+            <span class="important-text">실패 시:</span> 보스 복귀 시 전멸기급 광역 피해가 발생합니다.
+        </p>
+                    <div class="wuxia-image-container">
+                <img src="../quests/explore/q193_2.jpg">
+            </div>
+    </div>
+
+    <div class="step-header">🛡️ 주요 패턴 및 상세 대응법</div>
+
+    <div class="section-group">
+        <div class="pattern-box">
+            <span class="pattern-title">1. 전방 연속 공격</span>
+            <p style="font-size: 0.9em; color: var(--wuxia-text-sub);">정면 공격이 강력하므로 측면이나 후방에서 딜링을 시도하세요.</p>
+
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">2. 타겟팅 패턴</span>
+            <p style="font-size: 0.9em; color: var(--wuxia-text-sub);">발밑에 붉은 원이 생기면 타이밍에 맞춰 <b>패링</b>으로 방어하세요.</p>
+                        <div class="wuxia-image-container">
+                <img src="../quests/explore/q193_8.jpg">
+            </div>
+
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">3. 가마 복귀 (광역기)</span>
+            <p style="font-size: 0.9em; color: var(--wuxia-text-sub);">가마 체력이 높으면 생존이 어렵습니다. 화력을 집중해 가마를 파괴하세요.</p>
+
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">4. 납치 및 가마 들기 (협동)</span>
+            <p style="font-size: 0.9em; color: var(--wuxia-text-sub);">납치된 아군을 위해 두 명이 가마를 들고 <span class="important-text">노란 원(꽃 장판)</span>을 피해야 합니다. 이동 방향 통일이 핵심!</p>
+            <div class="wuxia-image-container">
+                <img src="../quests/explore/q193_3.jpg">
+            </div>
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">5. 2개의 가마 패턴</span>
+            <p style="font-size: 0.9em; color: var(--wuxia-text-sub);">두 가마 모두 빨간 선 이하로 깎아야 합니다. 빠른 타겟 변경이 필요합니다.</p>
+                        <div class="wuxia-image-container">
+                <img src="../quests/explore/q193_6.jpg">
+            </div>
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">6. 전원 붉은 원 (산개)</span>
+            <p style="font-size: 0.9em; color: var(--wuxia-text-sub);">겹치지 않게 흩어진 뒤 계속해서 <b>패링</b>을 유지하세요.</p>
+            <div class="wuxia-image-container">
+                <img src="../quests/explore/q193_5.jpg">
+            </div>
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">7. 돌진 막기</span>
+            <p style="font-size: 0.9em; color: var(--wuxia-text-sub);">빨간 선 경로 위에 서서 <b>패링</b>으로 저지하세요. 실패 시 난이도가 급상승합니다.</p>
+            <div class="wuxia-image-container">
+                <img src="../quests/explore/q193_4.jpg">
+            </div>
+        </div>
+
+        <div class="pattern-box">
+            <span class="pattern-title">8. 3개의 가마 (최종 패턴)</span>
+            <p style="font-size: 0.9em; color: var(--wuxia-text-sub);">한쪽으로 몰려다니며 최소 2개 이상의 가마를 무력화시켜야 합니다.</p>
+                        <div class="wuxia-image-container">
+                <img src="../quests/explore/q193_7.jpg">
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding-bottom: 50px;">
+        <button onclick="showQuestList()" style="background-color: #fff; border: 1px solid var(--wuxia-accent-gold); color: var(--wuxia-accent-gold); padding: 10px 30px; cursor: pointer; border-radius: 2px; font-weight: bold;">목록으로 돌아가기</button>
+    </div>
+</div>

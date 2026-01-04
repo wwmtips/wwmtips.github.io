@@ -1,4 +1,87 @@
 {
+  "kb": {
+    "title": "개봉부",
+    "category": "개봉",
+    "desc": "",
+    "markers": [
+      {
+        "id": 1767521143312,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521151928,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521158592,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521180943,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521188255,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521197736,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521225767,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521215391,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521250711,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521267335,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521278903,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521301351,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521312207,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521318567,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521860518,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521871015,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521371815,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521382127,
+        "map": "kaifeng"
+      },
+      {
+        "id": 1767521405847,
+        "map": "kaifeng"
+      }
+    ]
+  },
   "kbn": {
     "title": "북쪽 외곽",
     "category": "개봉",

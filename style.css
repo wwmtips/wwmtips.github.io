@@ -5519,6 +5519,7 @@ body.dark-mode .timer-row:hover {
     font-size: 0.8em !important;
     line-height: 34px !important;
     /* 세로 중앙 보정 */
+    font-weight: 600 !important;
     white-space: nowrap !important;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -5612,6 +5613,7 @@ body.dark-mode .timer-row:hover {
 
 /* 2. 내부 텍스트에도 동일하게 적용 */
 .mansarok-btn span {
+        font-weight: 600 !important;
     text-decoration: none !important;
     color: #333 !important;
 }

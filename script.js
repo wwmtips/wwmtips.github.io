@@ -129,15 +129,19 @@ async function loadMansarokMenu() {
         if (!response.ok) throw new Error('데이터 로드 실패');
 
         const data = await response.json();
-
+        
         // ----------------------------------------------------
         // 1. 기존 무림록 (지과 제외, 6개만 표시)
         // ----------------------------------------------------
         const mansarokContainer = document.getElementById('mansarok-list');
+
+        const isPc = window.innerWidth >= 1024; 
+        const limit = isPc ? 12 : 6;
+
         if (mansarokContainer) {
             const mansarokList = data
                 .filter(item => !['지과', '보스 공략'].includes(item.type))
-                .slice(0, 6);
+                .slice(0, limit);
 
             mansarokContainer.innerHTML = '';
 

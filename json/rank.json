@@ -1,20 +1,22 @@
 {
-"update_date": "26-01-03 T22:03",
+"update_date": "26-01-04 T15:00",
   "rankings": [
         { "rank": 1, "name": "Averse", "score": 5044 },
-        { "rank": 2, "name": "Gatomato", "score": 4685 },
-        { "rank": 3, "name": "skii", "score": 4664 },
-        { "rank": 4, "name": "bubbly", "score": 4597 },
-        { "rank": 5, "name": "Charlietea", "score": 4504 },
-        { "rank": 6, "name": "IRibbit", "score": 4501 },
-        { "rank": 7, "name": "GhostElectric", "score": 4489 },
-        { "rank": 8, "name": "SaberZX", "score": 4479 },
-        { "rank": 9, "name": "DaGe", "score": 4443 },
-        { "rank": 10, "name": "Gorlami", "score": 4407 },
-        { "rank": 11, "name": "Zacharu", "score": 4402 },
-        { "rank": 12, "name": "ellle", "score": 4328 },
-        { "rank": 13, "name": "ninelie", "score": 4326 },
-        { "rank": 14, "name": "twinscarface", "score": 4311 },
-        { "rank": 15, "name": "GameBreaker God", "score": 4311 }
+        { "rank": 2, "name": "skii", "score": 4808 },
+        { "rank": 3, "name": "ellle", "score": 4730 },
+        { "rank": 4, "name": "IRibbit", "score": 4672 },
+        { "rank": 5, "name": "SaberZX", "score": 4640 },
+        { "rank": 6, "name": "Gatomato", "score": 4640 },
+        { "rank": 7, "name": "Tezka", "score": 4639 }, 
+        { "rank": 8, "name": "bubbly", "score": 4613 },  
+        { "rank": 9, "name": "DaGe", "score": 4587 },   
+        { "rank": 10, "name": "GhostElectric", "score": 4585 },
+        { "rank": 11, "name": "Twigged", "score": 4547 },
+        { "rank": 12, "name": "Charlietea", "score": 4504 },
+        { "rank": 13, "name": "Azesus", "score": 4479 },
+        { "rank": 14, "name": "FlameStick", "score": 4469 },        
+        { "rank": 15, "name": "용운", "score": 4416 }
+
   ]
 }
+

@@ -4265,14 +4265,16 @@ let pvpFullData = []; // 데이터를 저장할 빈 배열
 let currentPvpPage = 0;
 const pvpItemsPerPage = 3;
 let pvpLastUpdate = ""; // 날짜를 저장할 변수 추가
+// ... 상단 변수 선언(pvpFullData 등)은 유지 ...
 
 async function fetchRankingData() {
     try {
         const response = await fetch('json/rank.json');
         const data = await response.json();
         
-        pvpFullData = data.rankings;      // 리스트 데이터
-        pvpLastUpdate = data.update_date; // 최상위 날짜 데이터
+        // [수정] 데이터를 불러온 즉시 점수(score) 높은 순으로 정렬합니다.
+        pvpFullData = data.rankings.sort((a, b) => b.score - a.score);
+        pvpLastUpdate = data.update_date;
 
         updatePvpRanking();
         setInterval(updatePvpRanking, 6000); 
@@ -4280,7 +4282,7 @@ async function fetchRankingData() {
         console.error("데이터 로드 실패:", error);
     }
 }
-// 2. 화면을 그리는 함수
+
 function updatePvpRanking() {
     const listEl = document.getElementById('pvp-list');
     const pageEl = document.getElementById('pvp-page-indicator');
@@ -4291,14 +4293,17 @@ function updatePvpRanking() {
     const end = start + pvpItemsPerPage;
     const currentList = pvpFullData.slice(start, end);
 
-    // 랭킹 리스트 생성 (1~3위 특수 클래스 추가)
-    listEl.innerHTML = currentList.map(p => {
-        // 순위별 특수 디자인을 위한 클래스 생성
-        const rankClass = p.rank <= 3 ? `rank-${p.rank} top-3` : '';
+    // [수정] 맵(map) 함수에서 인덱스(i)를 추가로 받습니다.
+    listEl.innerHTML = currentList.map((p, i) => {
+        // 실제 순위 계산: 현재 페이지 시작 번호 + 현재 리스트 내 순서 + 1
+        const calculatedRank = start + i + 1;
+        
+        // 계산된 순위를 바탕으로 1~3위 디자인 적용
+        const rankClass = calculatedRank <= 3 ? `rank-${calculatedRank} top-3` : '';
         
         return `
             <div class="rank-item ${rankClass}">
-                <div class="rank-num-text">${p.rank}</div>
+                <div class="rank-num-text">${calculatedRank}</div>
                 <img src="images/rank/${p.name}.png" class="rank-p-img" onerror="this.src='images/logo.png'">
                 <div class="rank-p-name">${p.name}</div>
                 <div class="rank-p-score">${p.score.toLocaleString()}</div>
@@ -4306,15 +4311,13 @@ function updatePvpRanking() {
         `;
     }).join('');
 
-    // 인디케이터 업데이트
+    // 업데이트 시간 표기
     if (pageEl) {
-        const totalPages = Math.ceil(pvpFullData.length / pvpItemsPerPage);
         pageEl.innerText = `${pvpLastUpdate} 기준`;
     }
 
-    // 다음 페이지 계산 (끝에 도달하면 다시 0으로)
-     currentPvpPage = (currentPvpPage + 1) % Math.ceil(pvpFullData.length / pvpItemsPerPage);
+    // 다음 페이지 계산
+    currentPvpPage = (currentPvpPage + 1) % Math.ceil(pvpFullData.length / pvpItemsPerPage);
 }
-
 // 초기 실행: 데이터를 먼저 불러옵니다.
 document.addEventListener("DOMContentLoaded", fetchRankingData);

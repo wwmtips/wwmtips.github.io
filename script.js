@@ -136,7 +136,7 @@ async function loadMansarokMenu() {
         const mansarokContainer = document.getElementById('mansarok-list');
         if (mansarokContainer) {
             const mansarokList = data
-                .filter(item => item.type !== '지과') // '지과' 제외
+                .filter(item => !['지과', '보스 공략'].includes(item.type))
                 .slice(0, 6);
 
             mansarokContainer.innerHTML = '';

@@ -122,7 +122,7 @@ function updateItemsPerPage() {
 // =========================================
 // 4. 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', loadMansarokMenu);
-// 만사록 데이터를 불러와 상단에 배치하는 함수 (최종 수정본)
+// 만사록 데이터를 불러와 상단에 배치하는 함수 (최종 수정본)// 만사록 데이터 로드 및 분배 (무림록 / 지과)
 async function loadMansarokMenu() {
     try {
         const response = await fetch('json/quests.json');
@@ -130,33 +130,60 @@ async function loadMansarokMenu() {
 
         const data = await response.json();
 
-        // 1. 만사록 타입 필터링 후 최대 9개만 자르기
-        const mansarokList = data
-            .slice(0, 6); // [핵심] 0번부터 8번 인덱스까지만 선택
-        // .filter(item => item.type === '만사록')
-        const container = document.getElementById('mansarok-list');
-        if (!container) return;
+        // ----------------------------------------------------
+        // 1. 기존 무림록 (지과 제외, 6개만 표시)
+        // ----------------------------------------------------
+        const mansarokContainer = document.getElementById('mansarok-list');
+        if (mansarokContainer) {
+            const mansarokList = data
+                .filter(item => item.type !== '지과') // '지과' 제외
+                .slice(0, 6);
 
-        container.innerHTML = '';
+            mansarokContainer.innerHTML = '';
 
-        mansarokList.forEach(item => {
-            const btn = document.createElement('a');
-            btn.className = 'mansarok-btn';
-            btn.href = "javascript:void(0);";
-
-            // 내부 함수 호출 방식 유지
-            btn.onclick = () => {
-                if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
+            mansarokList.forEach(item => {
+                const btn = document.createElement('a');
+                btn.className = 'mansarok-btn';
+                btn.href = "javascript:void(0);";
+                btn.onclick = () => {
                     switchTab('quest');
                     loadQuestDetail(item.filepath, item.id);
-                }
-            };
+                };
+                btn.innerHTML = `<span>${item.name}</span>`;
+                mansarokContainer.appendChild(btn);
+            });
+        }
 
-            btn.innerHTML = `<span>${item.name}</span>`;
-            container.appendChild(btn);
-        });
+        // ----------------------------------------------------
+        // 2. [추가] 지과 섹션 (지과만 표시)
+        // ----------------------------------------------------
+        // #pvp-container 안에 있는 .common-slim-grid를 찾습니다.
+        const pvpContainer = document.querySelector('#pvp-container .common-slim-grid');
+        
+        if (pvpContainer) {
+            const pvpList = data.filter(item => item.type === '지과'); // '지과'만 필터링
+
+            pvpContainer.innerHTML = ''; // 초기화
+
+            pvpList.forEach(item => {
+                // 디자인 통일성을 위해 'slim-btn' 클래스 사용
+                const btn = document.createElement('a');
+                btn.className = 'slim-btn'; 
+                btn.href = "javascript:void(0);";
+                
+                btn.onclick = () => {
+                    switchTab('quest');
+                    loadQuestDetail(item.filepath, item.id);
+                };
+
+                // slim-btn 구조에 맞춰 span으로 감싸줌
+                btn.innerHTML = `<span>${item.name}</span>`;
+                pvpContainer.appendChild(btn);
+            });
+        }
+
     } catch (error) {
-        console.error('만사록 로드 에러:', error);
+        console.error('만사록/지과 로드 에러:', error);
     }
 }
 

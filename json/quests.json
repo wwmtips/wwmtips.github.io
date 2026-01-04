@@ -1,4 +1,13 @@
-[   
+[  
+  {
+    "id": "q195",
+    "name": "풍화의 무도",
+    "location": "협경",
+    "type": "보스 공략",
+    "bgimg": "q195_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q195.html"
+  }, 
    {
     "id": "q194",
     "name": "PvP 조율 가이드",

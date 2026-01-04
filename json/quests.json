@@ -1,4 +1,13 @@
-[       
+[  
+  {
+    "id": "q199",
+    "name": "개봉부 탐색",
+    "location": "개봉부",
+    "type": "탐색",
+    "bgimg": "q198_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q198.html"
+  },      
   {
     "id": "q198",
     "name": "약수안 진수전 - 연심",

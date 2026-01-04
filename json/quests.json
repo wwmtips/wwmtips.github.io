@@ -1,4 +1,13 @@
-[  
+[       
+  {
+    "id": "q198",
+    "name": "약수안 진수전 - 연심",
+    "location": "야외 보스",
+    "type": "보스 공략",
+    "bgimg": "q198_1.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q198.html"
+  }, 
      {
     "id": "q197",
     "name": "천상래 진수전 - 하백",

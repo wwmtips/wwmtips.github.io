@@ -23,7 +23,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [★핵심 수정] 버튼 스타일 (기본: 가로 정렬) */
+        /* [버튼 스타일] - 40px 고정, 가로 정렬 */
         .mansarok-btn, .chunji-item-card { 
             display: flex; align-items: center; justify-content: center; 
             background-color: white; border-radius: 12px; 
@@ -36,38 +36,34 @@
             height: 40px !important;
             min-height: 40px !important;
             padding: 0 8px !important;
-            
-            /* 기본: 가로 정렬 (무림록용) */
-            flex-direction: row; 
-            gap: 6px; 
+            flex-direction: row; gap: 6px;
         }
         .mansarok-btn:active, .chunji-item-card:active { transform: scale(0.98); }
         .mansarok-btn:hover, .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
         
         .mansarok-btn span, .chunji-card-title { 
-            word-break: keep-all; white-space: nowrap; 
+            width: 100%; word-break: keep-all; white-space: nowrap; 
             overflow: hidden; text-overflow: ellipsis; 
+            font-size: 13px; font-weight: 600; color: inherit;
         }
-        .chunji-card-title { font-size: 13px; font-weight: 600; color: inherit; width: 100%; }
 
-        /* [슬라이더] position fix */
-        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
-        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
-        .hero-slide { 
-            flex: none; width: 100%; height: 100%; 
-            background-size: cover; background-position: center; 
-            position: relative !important; 
-            cursor: pointer; 
+        /* [천지록 상세 화면 디자인] */
+        .chunji-detail-card {
+            background-color: white; border-radius: 20px; padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f2f4f6; margin-bottom: 20px;
         }
-        .slide-content { 
-            position: absolute; bottom: 0; left: 0; right: 0; 
-            padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); 
-            color: white; z-index: 10; 
-        }
-        .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
-        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
-        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
-        .indicator.active { width: 18px; background: white; border-radius: 10px; }
+        .cd-header { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .cd-title { font-size: 22px; font-weight: 800; color: #191f28; margin-bottom: 6px; }
+        .cd-badge { display: inline-block; background: #f0f4f8; color: #4e5968; font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 600; }
+        .cd-section { margin-bottom: 24px; }
+        .cd-subtitle { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 8px; display: flex; align-items: center; }
+        .cd-subtitle::before { content: ''; display: inline-block; width: 4px; height: 14px; background: #3182f6; margin-right: 8px; border-radius: 2px; }
+        .cd-text { font-size: 14px; color: #555; line-height: 1.6; background: #fafafa; padding: 12px; border-radius: 8px; white-space: pre-line; }
+        .cd-img-container { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .cd-img { width: 100%; border-radius: 8px; border: 1px solid #eee; object-fit: cover; }
+        .nav-btn-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: #666; padding: 8px 12px; border-radius: 8px; transition: background 0.2s; }
+        .nav-move-btn:hover { background: #f5f5f5; color: #3182f6; }
 
         /* [타이머 리스트] */
         .timer-row {
@@ -141,6 +137,16 @@
         .search-result-item { padding: 12px 16px; border-bottom: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
         .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
+
+        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
+        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
+        .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative !important; cursor: pointer; }
+        .slide-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; z-index: 10; }
+        .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
+        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
+        .slide-link-btn { display:none; }
+        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
+        .indicator.active { width: 18px; background: white; border-radius: 10px; }
 
         /* 사이드바 */
         #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
@@ -323,7 +329,13 @@
                 <div id="chunji-list-container" class="grid grid-cols-2 gap-2 pb-20"></div>
                 <div id="chunji-pagination-container"></div>
             </div>
-            <div id="chunji-detail-view" style="display:none;"><div id="chunji-detail-content"></div></div>
+            <div id="chunji-detail-view" style="display:none;">
+                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showChunjiList()">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    목록으로 돌아가기
+                </button>
+                <div id="chunji-detail-content"></div>
+            </div>
         </div>
 
         <div id="view-quiz" style="display: none;" class="px-4 pt-4">
@@ -424,7 +436,7 @@
             document.body.style.overflow = ''; 
         }
 
-        // [★핵심] 무림록 상세 내부 네비게이션 (이전/다음) 로직
+        // [★핵심] 무림록 상세 내부 네비게이션
         window.renderQuestDetailOverride = function(id) {
             document.getElementById('quest-list-view').style.display = 'none';
             document.getElementById('quest-detail-view').style.display = 'block';
@@ -446,13 +458,13 @@
             const allIds = globalData.quests.map(q => q.id);
             const currIdx = allIds.indexOf(String(id));
 
-            let navHtml = '<div class="flex justify-between items-center mt-12 pt-6 border-t border-gray-100">';
+            let navHtml = '<div class="nav-btn-row">';
             if (currIdx > 0) {
-                navHtml += `<button onclick="renderQuestDetailOverride('${allIds[currIdx - 1]}')" class="flex items-center gap-1 text-gray-600 hover:text-blue-600 font-bold p-2"><span class="text-lg">←</span> 이전</button>`;
+                navHtml += `<button onclick="renderQuestDetailOverride('${allIds[currIdx - 1]}')" class="nav-move-btn"><span class="text-lg">←</span> 이전</button>`;
             } else { navHtml += `<div></div>`; }
 
             if (currIdx < allIds.length - 1) {
-                navHtml += `<button onclick="renderQuestDetailOverride('${allIds[currIdx + 1]}')" class="flex items-center gap-1 text-gray-600 hover:text-blue-600 font-bold p-2">다음 <span class="text-lg">→</span></button>`;
+                navHtml += `<button onclick="renderQuestDetailOverride('${allIds[currIdx + 1]}')" class="nav-move-btn">다음 <span class="text-lg">→</span></button>`;
             } else { navHtml += `<div></div>`; }
             navHtml += '</div>';
 
@@ -460,7 +472,7 @@
         };
         window.renderQuestDetail = window.renderQuestDetailOverride;
 
-        // [★핵심] 천지록 상세 내부 네비게이션 (이전/다음)
+        // [★핵심] 천지록 상세 화면 (CSS 스타일 적용) + 자동 데이터 감지
         window.renderChunjiDetailOverride = function(id) {
             document.getElementById('chunji-list-view').style.display = 'none';
             document.getElementById('chunji-detail-view').style.display = 'block';
@@ -469,12 +481,54 @@
             const item = chunjiData.find(c => c.id == id);
             if(!item) return;
 
+            // 본문 HTML 구성
+            let bodyHtml = '';
+
+            // 1. 획득 방법 (get)이 있는 경우
+            if (item.get) {
+                bodyHtml += `
+                    <div class="cd-section">
+                        <h3 class="cd-subtitle">획득 방법</h3>
+                        <p class="cd-text">${item.get}</p>
+                        <div class="cd-img-container">
+                            ${item.getimg1 ? `<img src="${item.getimg1}" class="cd-img">` : ''}
+                            ${item.getimg2 ? `<img src="${item.getimg2}" class="cd-img">` : ''}
+                        </div>
+                    </div>`;
+            }
+
+            // 2. 해독/설명 (dsec)이 있는 경우
+            if (item.dsec) {
+                bodyHtml += `
+                    <div class="cd-section">
+                        <h3 class="cd-subtitle">상세 내용</h3>
+                        <p class="cd-text">${item.dsec}</p>
+                        <div class="cd-img-container">
+                            ${item.dsecimg1 ? `<img src="${item.dsecimg1}" class="cd-img">` : ''}
+                            ${item.dsecimg2 ? `<img src="${item.dsecimg2}" class="cd-img">` : ''}
+                        </div>
+                    </div>`;
+            }
+
+            // 3. 만약 위 두 가지가 없고 'content'나 'desc'만 있는 경우 (서화 등)
+            if (!item.get && !item.dsec) {
+                const descText = item.content || item.desc || "상세 내용은 준비 중입니다.";
+                bodyHtml += `
+                    <div class="cd-section">
+                        <h3 class="cd-subtitle">설명</h3>
+                        <p class="cd-text">${descText}</p>
+                        ${item.image ? `<img src="${item.image}" class="cd-img mt-2">` : ''}
+                    </div>`;
+            }
+
+            // 최종 HTML 조립
             let html = `
-                <div class="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm mb-6">
-                    <h2 class="text-xl font-bold mb-1">${item.title}</h2>
-                    <span class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500">${item.type}</span>
-                    <div class="mt-4 text-sm text-gray-700 leading-relaxed whitespace-pre-line">${item.content || '내용이 없습니다.'}</div>
-                    ${item.image ? `<img src="${item.image}" class="mt-4 w-full rounded-xl border border-gray-100">` : ''}
+                <div class="chunji-detail-card">
+                    <div class="cd-header">
+                        <span class="cd-badge">천지록</span>
+                        <h2 class="cd-title">${item.title}</h2>
+                    </div>
+                    ${bodyHtml}
                 </div>
             `;
 
@@ -482,22 +536,24 @@
             const allIds = chunjiData.map(c => c.id);
             const currIdx = allIds.indexOf(String(id));
 
-            let navHtml = '<div class="flex justify-between items-center mt-6 pt-4 border-t border-gray-100">';
+            let navHtml = '<div class="nav-btn-row">';
             if (currIdx > 0) {
-                navHtml += `<button onclick="renderChunjiDetailOverride('${allIds[currIdx - 1]}')" class="flex items-center gap-1 text-gray-600 hover:text-blue-600 font-bold p-2"><span class="text-lg">←</span> 이전</button>`;
+                navHtml += `<button onclick="renderChunjiDetailOverride('${allIds[currIdx - 1]}')" class="nav-move-btn"><span class="text-lg">←</span> 이전</button>`;
             } else { navHtml += `<div></div>`; }
 
             if (currIdx < allIds.length - 1) {
-                navHtml += `<button onclick="renderChunjiDetailOverride('${allIds[currIdx + 1]}')" class="flex items-center gap-1 text-gray-600 hover:text-blue-600 font-bold p-2">다음 <span class="text-lg">→</span></button>`;
+                navHtml += `<button onclick="renderChunjiDetailOverride('${allIds[currIdx + 1]}')" class="nav-move-btn">다음 <span class="text-lg">→</span></button>`;
             } else { navHtml += `<div></div>`; }
             navHtml += '</div>';
 
             document.getElementById('chunji-detail-content').innerHTML = html + navHtml;
         };
+        window.loadChunjiDetail = window.renderChunjiDetailOverride;
         window.showChunjiDetail = window.renderChunjiDetailOverride;
 
 
-        // 천지록 리스트 렌더링 Override (onclick 연결용)
+        // [★핵심 수정] 천지록 리스트 렌더링 Override 
+        // -> 여기서 innerHTML에 div 두 개가 아니라, 무림록처럼 제목만 넣도록 수정
         window.renderChunjiListOverride = function() {
             const container = document.getElementById('chunji-list-container');
             if(!container) return;
@@ -511,19 +567,42 @@
 
             filtered = chunjiData.filter(item => {
                 if(typeFilter !== 'all' && item.type !== typeFilter) return false;
+                if(subFilter !== 'all' && item.subtype !== subFilter) return false; 
                 return true;
             });
 
             filtered.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'chunji-item-card'; 
-                // [중요] 상세 페이지로 이동할 때 우리가 만든 Override 함수 호출
                 div.onclick = function() { renderChunjiDetailOverride(item.id); }; 
-                div.innerHTML = `<div class="chunji-card-title">${item.title}</div>`;
+                
+                // [수정] 무림록과 100% 동일하게 제목(span) 하나만 넣음
+                div.innerHTML = `<span class="chunji-card-title">${item.title}</span>`;
                 container.appendChild(div);
             });
         };
         window.renderChunjiList = window.renderChunjiListOverride;
+
+        // [추가] 홈 화면용 천지록 렌더링도 동일하게 수정
+        window.renderHomeChunjiOverride = function() {
+            const container = document.getElementById('home-chunji-list');
+            if (!container || !chunjiData) return;
+            container.innerHTML = '';
+            const displayList = chunjiData.slice(0, 6);
+            displayList.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'chunji-item-card';
+                div.onclick = () => {
+                    if (typeof switchTab === 'function') {
+                        switchTab('chunji');
+                        renderChunjiDetailOverride(item.id);
+                    }
+                };
+                div.innerHTML = `<span class="chunji-card-title">${item.title}</span>`;
+                container.appendChild(div);
+            });
+        };
+        window.renderHomeChunji = window.renderHomeChunjiOverride;
 
 
         window.switchTab = function(tabName) {
@@ -563,6 +642,7 @@
                 }
                 if(typeof showQuestList === 'function') showQuestList();
             } else if (tabName === 'chunji') {
+                // 천지록 리스트 렌더링 호출 (덮어쓴 함수 사용)
                 if(typeof renderChunjiListOverride === 'function') {
                     renderChunjiListOverride(); 
                 } else if(typeof renderChunjiList === 'function') {
@@ -582,6 +662,11 @@
                 updateTimers();
             }
         }, 1000);
+        
+        // 홈 로드 시 천지록 홈 리스트 다시 그리기 (override 적용)
+        window.addEventListener('DOMContentLoaded', () => {
+             if(typeof renderHomeChunjiOverride === 'function') renderHomeChunjiOverride();
+        });
     </script>
 </body>
 </html>

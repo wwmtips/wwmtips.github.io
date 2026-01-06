@@ -29,6 +29,7 @@
             --btn-bg: #f9fafb;        
             --btn-bg-active: #f2f4f6; 
             --primary: #3182f6;       
+            --nav-bg: rgba(255,255,255,0.95);
         }
 
         body { font-family: 'Noto Sans KR', sans-serif; background-color: var(--bg-main); color: var(--text-main); -webkit-tap-highlight-color: transparent; padding-bottom: 80px; }
@@ -36,9 +37,13 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
         /* [헤더] */
-        .app-header { background: var(--bg-main); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; height: 60px; }
+        .app-header { 
+            background: var(--bg-main); padding: 0 20px; 
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            position: sticky; top: 0; z-index: 50; height: 60px; 
+        }
         
-        /* 메인 헤더 (검색바 + 햄버거) */
+        /* 1. 메인 헤더 (검색바 + 햄버거) */
         #header-main-mode { width: 100%; display: flex; align-items: center; gap: 12px; }
         
         .header-search-box { 
@@ -50,7 +55,7 @@
         
         .header-menu-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #333; cursor: pointer; flex-shrink: 0; }
 
-        /* 디테일 헤더 (뒤로가기) */
+        /* 2. 디테일 헤더 (뒤로가기) */
         #header-detail-mode { width: 100%; display: none; align-items: center; gap: 10px; }
         .header-back-btn { 
             display: flex; align-items: center; gap: 6px; 
@@ -84,13 +89,15 @@
         }
         .section-footer-btn:active { background: rgba(49, 130, 246, 0.15); }
 
-        /* [가로 스와이프] */
+        /* [가로 스와이프 컨테이너 공통] */
         .h-scroll-wrapper {
             display: flex; overflow-x: auto; gap: 12px; padding-bottom: 4px;
             scroll-snap-type: x mandatory;
         }
         .h-scroll-item {
-            flex: 0 0 32%; min-width: 110px; scroll-snap-align: start;
+            flex: 0 0 32%; /* 화면의 약 1/3씩 차지 */
+            min-width: 110px;
+            scroll-snap-align: start;
             display: flex; flex-direction: column;
             background: var(--bg-card); 
             border: 1px solid var(--border-color);
@@ -100,6 +107,7 @@
         }
         .h-scroll-item:active { transform: scale(0.98); }
 
+        /* 각 섹션별 아이템 내부 스타일 */
         .h-item-icon { font-size: 24px; margin-bottom: 8px; }
         .h-item-title { font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 2px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
         .h-item-sub { font-size: 11px; color: var(--text-sub); }
@@ -119,7 +127,7 @@
         .indicator { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
         .indicator.active { width: 15px; background: white; border-radius: 10px; }
 
-        /* [가이드 스와이프] */
+        /* [가이드 스와입] */
         .guide-scroll-container {
             display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px;
             scroll-snap-type: x mandatory;
@@ -143,10 +151,10 @@
         .g-dot { width: 6px; height: 6px; border-radius: 50%; background: #e5e7eb; transition: all 0.3s; }
         .g-dot.active { background: var(--primary); width: 12px; border-radius: 4px; }
 
-        /* [하단 탭바] - 글라스 효과 제거, 흰색 배경 */
+        /* [하단 탭바] */
         .bottom-nav { 
             position: fixed; bottom: 0; left: 0; right: 0; 
-            background: #ffffff; /* 완전 흰색 */
+            background: #ffffff;
             border-top: 1px solid var(--border-color); padding: 8px 20px 20px 20px; 
             display: flex; justify-content: space-between; z-index: 100; 
         }
@@ -190,15 +198,15 @@
         .chunji-detail-card { background-color: var(--bg-card); border-radius: 0; padding: 24px; box-shadow: none; border-bottom: 1px solid var(--bg-main); margin-bottom: 0; }
         .cd-header { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
         .cd-title { font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
-        .cd-badge { display: inline-block; background: var(--bg-main); color: var(--text-sub); font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+        .cd-badge { display: inline-block; background: var(--bg-main); color: var(--text-sub); font-size: 11px; padding: 3px 8px; border-radius: 0; font-weight: 600; }
         .cd-section { margin-bottom: 24px; }
         .cd-subtitle { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; display: flex; align-items: center; }
-        .cd-subtitle::before { content: ''; display: inline-block; width: 4px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 2px; }
-        .cd-text { font-size: 14px; color: var(--text-main); line-height: 1.6; background: var(--bg-main); padding: 12px; border-radius: 8px; white-space: pre-line; }
+        .cd-subtitle::before { content: ''; display: inline-block; width: 4px; height: 14px; background: var(--primary); margin-right: 8px; border-radius: 0; }
+        .cd-text { font-size: 14px; color: var(--text-main); line-height: 1.6; background: var(--bg-main); padding: 12px; border-radius: 0; white-space: pre-line; }
         .cd-img-container { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .cd-img { width: 100%; border-radius: 8px; border: 1px solid var(--border-color); object-fit: cover; }
-        .nav-btn-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); }
-        .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: #8b95a1; padding: 8px 12px; border-radius: 8px; transition: background 0.2s; }
+        .cd-img { width: 100%; border-radius: 0; border: 1px solid #eee; object-fit: cover; }
+        .nav-btn-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: #8b95a1; padding: 8px 12px; border-radius: 0; transition: background 0.2s; }
         .nav-move-btn:hover { background: #f2f4f6; color: #3182f6; }
         
         /* 인물 바텀시트 */
@@ -215,7 +223,7 @@
         #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
         #sidebar-overlay.active { display: block; }
         
-        /* 사이드바 내부 스타일 (복구) */
+        /* 사이드바 내부 스타일 */
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border-color); }
         .sidebar-back-btn { font-size: 24px; color: #333; cursor: pointer; }
         .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 15px 0; font-size: 16px; font-weight: 600; color: #333; cursor: pointer; border-bottom: 1px solid #f9f9f9; }
@@ -466,14 +474,6 @@
             <div id="person-detail-body"></div>
         </div>
     </div>
-
-    <div id="info-modal" class="hidden fixed inset-0 bg-black/50 z-[2000] flex items-center justify-center p-4" onclick="closeInfoModal()">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-sm" onclick="event.stopPropagation()">
-            <div class="flex items-center gap-4 mb-4"><img id="modal-img" src="" class="w-16 h-16 object-contain border rounded-lg"><h3 id="modal-name" class="text-lg font-bold"></h3></div>
-            <p id="modal-desc" class="text-sm text-gray-600 leading-relaxed"></p>
-            <button onclick="closeInfoModal()" class="w-full mt-4 bg-gray-100 py-3 rounded-xl font-bold text-gray-700">닫기</button>
-        </div>
-    </div>
     
     <div id="report-sheet-modal" class="fixed inset-0 z-[9999] hidden">
         <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="closeReportSheet()"></div>
@@ -510,7 +510,7 @@
     <script src="timer.js"></script>
 
     <script>
-        // [데이터 직접 로드 함수]
+        // [데이터 직접 로드 함수] - script.js 의존성 낮춤
         async function loadDataDirectly() {
             // 무림록 데이터 로드
             try {
@@ -525,8 +525,10 @@
             try {
                 const cRes = await fetch('json/chunji.json');
                 const cData = await cRes.json();
-                window.chunjiData = cData; 
-                renderChunjiDirect(cData);
+                // chunji.json 구조에 따라 배열 또는 객체 처리
+                const list = Array.isArray(cData) ? cData : (cData.chunji || []);
+                window.chunjiData = list; 
+                renderChunjiDirect(list);
             } catch(e) { console.error("천지록 로드 실패", e); }
         }
 
@@ -536,7 +538,7 @@
             const tabList = document.getElementById('mansarok-list');
             const filtered = data.filter(item => !['지과', '보스 공략'].includes(item.type));
             
-            // 1. 홈 스와이프
+            // 1. 홈 스와이프 (9개)
             if(homeSwipe) {
                 homeSwipe.innerHTML = '';
                 filtered.slice(0, 9).forEach(item => {
@@ -549,7 +551,7 @@
                 });
             }
 
-            // 2. 탭 리스트
+            // 2. 탭 리스트 (초기 20개만 렌더링, 전체는 script.js의 renderQuestList가 담당)
             if(tabList) {
                 tabList.innerHTML = '';
                 filtered.slice(0, 20).forEach(item => {
@@ -566,6 +568,7 @@
         // [천지록 렌더링 (홈 + 탭)]
         function renderChunjiDirect(data) {
             const homeSwipe = document.getElementById('home-chunji-swipe');
+            const tabList = document.getElementById('chunji-list-container');
             
             // 1. 홈 스와이프
             if(homeSwipe) {
@@ -576,6 +579,19 @@
                     div.onclick = () => { switchTab('chunji'); renderChunjiDetailOverride(item.id); };
                     div.innerHTML = `<div class="h-item-icon">🏺</div><div class="h-item-title">${item.title}</div><div class="h-item-sub">${item.type}</div>`;
                     homeSwipe.appendChild(div);
+                });
+            }
+            
+            // 2. 탭 리스트 (초기 로딩용)
+            if(tabList && tabList.children.length === 0) {
+                 // script.js가 나중에 덮어쓰더라도 초기 데이터를 보여줌
+                 tabList.innerHTML = '';
+                 data.slice(0, 20).forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'chunji-item-card'; 
+                    div.onclick = function() { renderChunjiDetailOverride(item.id); }; 
+                    div.innerHTML = `<span class="chunji-card-title">${item.title}</span>`;
+                    tabList.appendChild(div);
                 });
             }
         }
@@ -653,10 +669,10 @@
             if(!quest) return;
 
             let html = `
-                <h2 class="text-xl font-bold mb-2">${quest.title}</h2>
+                <h2 class="text-xl font-bold mb-2">${quest.name}</h2>
                 <div class="flex gap-2 mb-4">
                     <span class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">${quest.type}</span>
-                    <span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">${quest.location}</span>
+                    <span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">${quest.location || '위치 정보 없음'}</span>
                 </div>
                 <div class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">${quest.content || '내용이 없습니다.'}</div>
                 ${quest.image ? `<img src="${quest.image}" class="mt-4 w-full rounded-xl border" style="border-radius:0;">` : ''}
@@ -888,7 +904,6 @@
         }, 1000);
         
         window.addEventListener('DOMContentLoaded', () => {
-             if(typeof renderHomeChunjiOverride === 'function') renderHomeChunjiOverride();
              loadDataDirectly(); // 데이터 강제 로드
         });
     </script>

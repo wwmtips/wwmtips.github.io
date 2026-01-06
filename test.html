@@ -16,6 +16,24 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <link rel="apple-touch-icon" sizes="57x57" href="fav/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="fav/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="fav/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="fav/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="fav/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="fav/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="fav/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="fav/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="fav/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="fav/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="fav/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="fav/favicon-16x16.png">
+    <link rel="manifest" href="fav/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="fav/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -653,7 +671,8 @@
                 const list = document.getElementById('mansarok-list');
                 if (!list) return;
                 list.innerHTML = '';
-                data.filter(i => !['지과', '보스 공략'].includes(i.type)).slice(0, 6).forEach(item => {
+                const limit = window.innerWidth >= 1024 ? 10 : 3;    
+                data.filter(i => !['지과', '보스 공략'].includes(i.type)).slice(0, limit).forEach(item => {
                     const loc = item.location ? `<span class="bg-gray-100 text-gray-500 text-[11px] px-1.5 py-0.5 rounded font-medium mr-2">[${item.location}]</span>` : '';
                     list.innerHTML += `<div class="flex items-center justify-between py-3 px-1 cursor-pointer border-b border-gray-50 last:border-none active:bg-gray-50" onclick="switchTab('quest'); loadQuestDetail('${item.filepath}','${item.id}')">
                         <div class="flex items-center overflow-hidden">${loc}<span class="text-[15px] font-semibold text-gray-800 truncate">${item.name}</span></div>
@@ -668,7 +687,8 @@
             const list = document.getElementById('home-chunji-list');
             if (!list) return;
             list.innerHTML = '';
-            chunjiData.slice(0, 3).forEach(item => {
+            const limit = window.innerWidth >= 1024 ? 10 : 3;    
+            chunjiData.slice(0, limit).forEach(item => {
                 // 무림록의 [지역] 태그와 똑같은 디자인으로 [타입] 태그 생성
                 const typeBadge = item.type ? `<span class="bg-gray-100 text-gray-500 text-[11px] px-1.5 py-0.5 rounded font-medium mr-2">[${item.type}]</span>` : '';
 

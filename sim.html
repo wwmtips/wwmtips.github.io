@@ -1,33 +1,60 @@
-<div class="text-left mt-[10px] mb-[10px] pl-[5px]">
-    <span class="bg-[#b08d55] text-white px-2 py-[3px] rounded-[2px] font-bold text-[0.85em] align-middle">도구</span>
-    <span class="text-[#b08d55] text-[1.6rem] font-bold align-middle ml-2 font-serif">운기조식</span>
-    <div class="text-[#888] text-[0.95rem] mt-2 ml-[2px]">심력이 가득 찰 때까지 남은 시간을 계산합니다.</div>
-</div>
-
-<div class="border-t-2 border-[#c92a2a] mb-[25px] w-full"></div>
-
-<div class="bg-white p-[30px_25px] rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.03)] text-center max-w-full box-border">
+<div class="max-w-4xl mx-auto space-y-8 p-4 lg:p-0 text-left">
     
-    <div id="input-screen">
-        <label for="currentPoint" class="block text-left font-bold text-[#333] mb-3 text-[1.1rem]">현재 수치 (0 ~ 499)</label>
-        <input type="number" id="currentPoint" 
-               class="w-full p-[15px] text-[1.2rem] border border-gray-300 rounded box-border outline-none transition-colors mb-5 focus:border-[#b08d55]" 
-               placeholder="숫자를 입력하시오" min="0" max="499">
-        <button class="w-full p-[16px] bg-[#c92a2a] text-white border-none rounded text-[1.1rem] font-bold cursor-pointer hover:bg-[#a01d1d]" 
-                onclick="calculateTime()">계산하기</button>
+    <div class="border-b-2 border-blue-600 pb-6 mb-6">
+        <div class="space-y-2">
+            <div class="flex items-center gap-3">
+                <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Tools</span>
+                <span class="text-gray-400 text-sm font-medium">유틸리티</span>
+            </div>
+            <h2 class="text-3xl font-black text-gray-900 leading-tight tracking-tight">운기조식</h2>
+            <p class="text-gray-500 text-[14px] mt-2 font-medium">심력이 가득 찰 때까지 남은 시간을 계산합니다.</p>
+        </div>
     </div>
 
-    <div id="result-screen" style="display: none; animation: fadeIn 0.3s;">
-        <div class="bg-[#fffcf5] border border-[#b08d55] p-5 rounded mb-5">
-            <div id="remainText" class="text-[2rem] font-bold text-[#333] mb-2 break-keep"></div>
-            <div id="dateText" class="text-base text-[#777]"></div>
+    <div class="w-full">
+        
+        <div id="input-screen" class="space-y-6">
+            <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm">
+                <label for="currentPoint" class="block font-black text-gray-800 mb-4 text-lg ml-1">
+                    현재 심력 수치 <span class="text-blue-600 font-normal text-sm ml-1">(0~499)</span>
+                </label>
+                <input type="number" id="currentPoint" 
+                       class="w-full p-5 text-3xl font-black bg-white border-2 border-gray-100 rounded-2xl focus:border-blue-500 outline-none transition-all placeholder-gray-300" 
+                       placeholder="0" min="0" max="499">
+            </div>
+            
+            <button class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-lg font-black shadow-lg shadow-blue-100 active:scale-[0.98] transition-all" 
+                    onclick="calculateTime()">
+                계산하기
+            </button>
         </div>
-        <button class="w-full p-[16px] bg-gray-600 text-white border-none rounded text-[1.1rem] font-bold cursor-pointer hover:bg-gray-700 mt-[15px]" 
-                onclick="resetCalculator()">다시 계산하기</button>
+
+        <div id="result-screen" style="display: none; animation: fadeIn 0.4s ease;" class="space-y-6">
+            <div class="bg-blue-50 border border-blue-100 p-10 rounded-3xl text-center relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 text-9xl text-blue-200/30 rotate-12 select-none">⏳</div>
+                
+                <div id="remainText" class="text-5xl font-black text-blue-900 mb-3 break-keep relative z-10 tracking-tight"></div>
+                <div id="dateText" class="text-[15px] font-bold text-blue-600/70 relative z-10"></div>
+            </div>
+            
+            <button class="w-full py-5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-2xl text-sm font-bold active:scale-[0.98] transition-all" 
+                    onclick="resetCalculator()">
+                다시 계산하기
+            </button>
+        </div>
+
+    </div>
+
+    <div class="bg-amber-50 p-5 rounded-2xl border border-amber-100">
+        <p class="text-[13px] text-amber-900 leading-relaxed">
+            <strong class="font-bold">📍 참고사항:</strong> 연운십육성의 심력은 9분당 1포인트가 자동으로 회복됩니다. 최대치(500) 도달 시 회복이 중단되니 예정 시간을 꼭 확인하세요.
+        </p>
     </div>
 
 </div>
 
 <style>
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* 숫자 입력창 화살표 제거 */
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 </style>

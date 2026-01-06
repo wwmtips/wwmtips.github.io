@@ -1,43 +1,55 @@
-<div class="max-w-4xl mx-auto space-y-8 p-4 lg:p-0 text-left">
+<div class="max-w-4xl mx-auto space-y-6 p-4 lg:p-0 text-left">
     
-    <div class="border-b-2 border-blue-600 pb-6 mb-6">
-        <div class="space-y-2">
-            <div class="flex items-center gap-3">
-                <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Tools</span>
-                <span class="text-gray-400 text-sm font-medium">유틸리티</span>
+    <div class="border-b border-gray-200 pb-5 mb-6">
+        <div class="flex items-center gap-2 mb-2">
+            <span class="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded uppercase">Tools</span>
+            <span class="text-gray-400 text-xs font-medium">유틸리티</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 mb-4">운기조식</h2>
+        
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-2">
+                <div class="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px]">🧘</div>
+                <span class="text-[13px] text-gray-500 font-medium italic">심력 회복 시간 계산기</span>
             </div>
-            <h2 class="text-3xl font-black text-gray-900 leading-tight">운기조식</h2>
-            <p class="text-gray-500 text-[14px] mt-2 font-medium">심력이 가득 찰 때까지 남은 시간을 계산합니다.</p>
+            
+            <div class="like-container flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100 cursor-pointer active:scale-95 transition-transform" 
+                 onclick="handleLikeClick()">
+                <span class="text-[13px] text-blue-600 font-black flex items-center gap-1">
+                    <span class="text-[14px]">♥</span>
+                    <span class="like-count">0</span>
+                </span>
+            </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8">
+    <div class="w-full">
         
         <div id="input-screen" class="space-y-6">
-            <div>
-                <label for="currentPoint" class="block text-[16px] font-bold text-gray-800 mb-3 ml-1">
-                    현재 심력 수치 <span class="text-blue-600 font-medium text-sm">(0 ~ 499)</span>
+            <div class="space-y-4">
+                <label for="currentPoint" class="block text-[16px] font-bold text-gray-800 ml-1">
+                    현재 수치 <span class="text-blue-600 text-sm font-medium">(0 ~ 499)</span>
                 </label>
                 <input type="number" id="currentPoint" 
-                       class="w-full p-5 text-2xl font-black bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all placeholder-gray-300" 
-                       placeholder="0" min="0" max="499">
+                       class="w-full p-5 text-3xl font-black bg-gray-50 border-2 border-gray-100 rounded-2xl focus:bg-white focus:border-blue-500 outline-none transition-all placeholder-gray-300" 
+                       placeholder="숫자를 입력하시오" min="0" max="499">
             </div>
             
-            <button class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-lg font-black shadow-lg shadow-blue-100 transition-all active:scale-95" 
+            <button class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-lg font-black shadow-lg shadow-blue-100 transition-all active:scale-[0.98]" 
                     onclick="calculateTime()">
                 계산하기
             </button>
         </div>
 
-        <div id="result-screen" class="hidden animate-fadeIn space-y-6">
-            <div class="bg-blue-50 border border-blue-100 p-8 rounded-2xl text-center relative overflow-hidden">
-                <div class="absolute -right-4 -top-4 text-8xl text-blue-100/50 opacity-50 rotate-12">⏳</div>
+        <div id="result-screen" style="display: none; animation: fadeIn 0.3s;" class="space-y-6">
+            <div class="bg-blue-600 p-10 rounded-3xl text-center shadow-xl shadow-blue-100 relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 text-9xl text-white/10 rotate-12">⏳</div>
                 
-                <div id="remainText" class="text-4xl lg:text-5xl font-black text-blue-900 mb-3 break-keep relative z-10"></div>
-                <div id="dateText" class="text-sm font-bold text-blue-600/70 relative z-10"></div>
+                <div id="remainText" class="text-5xl font-black text-white mb-3 break-keep relative z-10"></div>
+                <div id="dateText" class="text-sm font-bold text-white/70 relative z-10"></div>
             </div>
             
-            <button class="w-full py-4 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-2xl text-sm font-bold transition-all active:scale-95" 
+            <button class="w-full py-5 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-2xl text-sm font-bold transition-all active:scale-[0.98]" 
                     onclick="resetCalculator()">
                 다시 계산하기
             </button>
@@ -45,9 +57,9 @@
 
     </div>
 
-    <div class="bg-amber-50 p-5 rounded-2xl border border-amber-100">
+    <div class="mt-10 p-5 bg-amber-50 rounded-2xl border border-amber-100">
         <p class="text-[13px] text-amber-900 leading-relaxed">
-            <strong class="font-bold">📍 참고사항:</strong> 심력은 9분당 1포인트씩 자동으로 회복됩니다. 최대치인 500에 도달하면 더 이상 회복되지 않으므로 시간을 잘 확인하세요.
+            <strong class="font-bold">📍 알림:</strong> 심력은 9분당 1포인트씩 회복됩니다. 최대치인 500에 도달하면 더 이상 회복되지 않으므로 시간을 잘 확인하세요.
         </p>
     </div>
 
@@ -55,7 +67,6 @@
 
 <style>
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fadeIn { animation: fadeIn 0.4s ease forwards; }
-    /* 숫자 입력창 화살표 제거 */
+    /* 입력창 숫자 화살표 제거 */
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 </style>

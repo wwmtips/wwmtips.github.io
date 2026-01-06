@@ -23,7 +23,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [버튼 스타일] - 40px 고정, 가로 정렬 */
+        /* [핵심] 버튼 스타일 (무림록/천지록 공통 - 40px 고정, 가로 정렬) */
         .mansarok-btn, .chunji-item-card { 
             display: flex; align-items: center; justify-content: center; 
             background-color: white; border-radius: 12px; 
@@ -59,8 +59,10 @@
         .cd-subtitle { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 8px; display: flex; align-items: center; }
         .cd-subtitle::before { content: ''; display: inline-block; width: 4px; height: 14px; background: #3182f6; margin-right: 8px; border-radius: 2px; }
         .cd-text { font-size: 14px; color: #555; line-height: 1.6; background: #fafafa; padding: 12px; border-radius: 8px; white-space: pre-line; }
-        .cd-img-container { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .cd-img-container { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
+        .cd-img-container.grid-2 { grid-template-columns: 1fr 1fr; }
         .cd-img { width: 100%; border-radius: 8px; border: 1px solid #eee; object-fit: cover; }
+        
         .nav-btn-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
         .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: #666; padding: 8px 12px; border-radius: 8px; transition: background 0.2s; }
         .nav-move-btn:hover { background: #f5f5f5; color: #3182f6; }
@@ -436,7 +438,7 @@
             document.body.style.overflow = ''; 
         }
 
-        // [★핵심] 무림록 상세 내부 네비게이션
+        // [무림록 상세 내부 네비게이션]
         window.renderQuestDetailOverride = function(id) {
             document.getElementById('quest-list-view').style.display = 'none';
             document.getElementById('quest-detail-view').style.display = 'block';
@@ -472,7 +474,7 @@
         };
         window.renderQuestDetail = window.renderQuestDetailOverride;
 
-        // [★핵심] 천지록 상세 화면 (CSS 스타일 적용) + 자동 데이터 감지
+        // [천지록 상세 화면 (CSS 스타일 적용 + 이미지 데이터 자동 감지)]
         window.renderChunjiDetailOverride = function(id) {
             document.getElementById('chunji-list-view').style.display = 'none';
             document.getElementById('chunji-detail-view').style.display = 'block';
@@ -481,37 +483,39 @@
             const item = chunjiData.find(c => c.id == id);
             if(!item) return;
 
+            const imgTag = (src) => src ? `<img src="${src}" class="cd-img" onerror="this.style.display='none'">` : '';
+
             // 본문 HTML 구성
             let bodyHtml = '';
 
-            // 1. 획득 방법 (get)이 있는 경우
-            if (item.get) {
+            // 1. 획득 방법 (get)이 있거나 이미지가 있는 경우
+            if (item.get || item.getimg1 || item.getimg2) {
                 bodyHtml += `
                     <div class="cd-section">
                         <h3 class="cd-subtitle">획득 방법</h3>
-                        <p class="cd-text">${item.get}</p>
-                        <div class="cd-img-container">
-                            ${item.getimg1 ? `<img src="${item.getimg1}" class="cd-img">` : ''}
-                            ${item.getimg2 ? `<img src="${item.getimg2}" class="cd-img">` : ''}
+                        <p class="cd-text">${item.get || ''}</p>
+                        <div class="cd-img-container ${item.getimg1 && item.getimg2 ? 'grid-2' : ''}">
+                            ${imgTag(item.getimg1)}
+                            ${imgTag(item.getimg2)}
                         </div>
                     </div>`;
             }
 
-            // 2. 해독/설명 (dsec)이 있는 경우
-            if (item.dsec) {
+            // 2. 해독/설명 (dsec)이 있거나 이미지가 있는 경우
+            if (item.dsec || item.dsecimg1 || item.dsecimg2) {
                 bodyHtml += `
                     <div class="cd-section">
                         <h3 class="cd-subtitle">상세 내용</h3>
-                        <p class="cd-text">${item.dsec}</p>
-                        <div class="cd-img-container">
-                            ${item.dsecimg1 ? `<img src="${item.dsecimg1}" class="cd-img">` : ''}
-                            ${item.dsecimg2 ? `<img src="${item.dsecimg2}" class="cd-img">` : ''}
+                        <p class="cd-text">${item.dsec || ''}</p>
+                        <div class="cd-img-container ${item.dsecimg1 && item.dsecimg2 ? 'grid-2' : ''}">
+                            ${imgTag(item.dsecimg1)}
+                            ${imgTag(item.dsecimg2)}
                         </div>
                     </div>`;
             }
 
-            // 3. 만약 위 두 가지가 없고 'content'나 'desc'만 있는 경우 (서화 등)
-            if (!item.get && !item.dsec) {
+            // 3. 만약 위 두 가지가 없고 'content'나 'desc'만 있는 경우
+            if (!item.get && !item.dsec && !item.getimg1 && !item.dsecimg1) {
                 const descText = item.content || item.desc || "상세 내용은 준비 중입니다.";
                 bodyHtml += `
                     <div class="cd-section">
@@ -552,35 +556,55 @@
         window.showChunjiDetail = window.renderChunjiDetailOverride;
 
 
-        // [★핵심 수정] 천지록 리스트 렌더링 Override 
-        // -> 여기서 innerHTML에 div 두 개가 아니라, 무림록처럼 제목만 넣도록 수정
+        // [통합된 천지록 리스트 렌더링 함수] - 디자인(card) + 기능(pagination) 통합
         window.renderChunjiListOverride = function() {
             const container = document.getElementById('chunji-list-container');
+            const paginationContainer = document.getElementById('chunji-pagination-container');
             if(!container) return;
             container.innerHTML = '';
             
-            let filtered = chunjiData;
-            if(typeof chunjiData === 'undefined') return;
+            // 데이터 필터링 (chunjiData가 전역에 있다고 가정)
+            if(typeof chunjiData === 'undefined' || !chunjiData) return;
 
-            const typeFilter = document.getElementById('chunji-type-select').value;
-            const subFilter = document.getElementById('chunji-subtype-select').value;
+            // 현재 선택된 필터값 가져오기 (필터가 없으면 'all')
+            const typeSelect = document.getElementById('chunji-type-select');
+            const subtypeSelect = document.getElementById('chunji-subtype-select');
+            const selectedType = typeSelect ? typeSelect.value : 'all';
+            const selectedSubtype = subtypeSelect ? subtypeSelect.value : 'all';
 
-            filtered = chunjiData.filter(item => {
-                if(typeFilter !== 'all' && item.type !== typeFilter) return false;
-                if(subFilter !== 'all' && item.subtype !== subFilter) return false; 
+            // 1. 필터링
+            currentChunjiData = chunjiData.filter(item => {
+                if(selectedType !== 'all' && item.type !== selectedType) return false;
+                if(selectedSubtype !== 'all' && item.subtype !== selectedSubtype) return false; 
                 return true;
             });
 
-            filtered.forEach(item => {
+            if (currentChunjiData.length === 0) {
+                container.innerHTML = '<div style="grid-column: 1/-1; padding:40px 0; text-align:center; color:#888;">해당하는 기록이 없습니다.</div>';
+                if (paginationContainer) paginationContainer.innerHTML = '';
+                return;
+            }
+
+            // 2. 페이징 계산
+            // itemsPerPage는 script.js에 정의됨 (보통 12)
+            const safeItemsPerPage = (typeof itemsPerPage !== 'undefined') ? itemsPerPage : 12;
+            const startIndex = (currentChunjiPage - 1) * safeItemsPerPage;
+            const endIndex = startIndex + safeItemsPerPage;
+            const pageData = currentChunjiData.slice(startIndex, endIndex);
+
+            // 3. 리스트 아이템 생성 (디자인: mansarok-btn 스타일)
+            pageData.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'chunji-item-card'; 
+                div.className = 'chunji-item-card'; // 스타일 클래스
                 div.onclick = function() { renderChunjiDetailOverride(item.id); }; 
-                
-                // [수정] 무림록과 100% 동일하게 제목(span) 하나만 넣음
                 div.innerHTML = `<span class="chunji-card-title">${item.title}</span>`;
                 container.appendChild(div);
             });
+
+            // 4. 페이지네이션 버튼 렌더링
+            renderChunjiPagination();
         };
+        // script.js의 함수를 덮어씀
         window.renderChunjiList = window.renderChunjiListOverride;
 
         // [추가] 홈 화면용 천지록 렌더링도 동일하게 수정
@@ -642,7 +666,6 @@
                 }
                 if(typeof showQuestList === 'function') showQuestList();
             } else if (tabName === 'chunji') {
-                // 천지록 리스트 렌더링 호출 (덮어쓴 함수 사용)
                 if(typeof renderChunjiListOverride === 'function') {
                     renderChunjiListOverride(); 
                 } else if(typeof renderChunjiList === 'function') {

@@ -60,6 +60,35 @@
         /* 네비게이션 활성화 스타일 */
         .nav-item.active { @apply text-gray-900; }
         .nav-item.active svg { @apply stroke-gray-900 stroke-2; }
+
+        /* 재생 중 제목 흐르는 효과 */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 10s linear infinite;
+}
+
+/* 느린 회전 (아이콘용) */
+.animate-spin-slow {
+    animation: spin 8s linear infinite;
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 스크롤바 숨기기 */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
     </style>
 </head>
 
@@ -123,12 +152,58 @@
 
     <aside id="main-sidebar"
         class="fixed top-0 right-[-100%] w-full max-w-[320px] h-full bg-white z-[3000] flex flex-col transition-[right] duration-300 ease-in-out shadow-2xl">
-        <div class="flex justify-between items-center px-5 h-[60px] border-b border-gray-100">
-            <div class="text-lg font-bold text-gray-800">전체 메뉴</div>
-            <div class="flex gap-4 text-gray-800">
-                <button>🔔</button>
-                <button>⚙️</button>
-                <button onclick="closeSidebar()">✕</button>
+        <div class="p-5 border-b border-gray-100 relative bg-white">
+            <div class=" relative bg-white">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-[11px] font-black text-gray-400 uppercase tracking-widest">연운위키</span>
+                    <button
+                        class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors"
+                        onclick="closeSidebar()">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="relative">
+                    <div onclick="togglePlaylist()"
+                        class="flex items-center justify-between bg-gray-50 hover:bg-gray-100 p-3 rounded-xl border border-gray-100 cursor-pointer transition-all active:scale-[0.98] group">
+                        <div class="flex items-center gap-3 overflow-hidden">
+                            <div id="player-icon"
+                                class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white flex-none shadow-sm shadow-blue-100 transition-transform">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="flex flex-col overflow-hidden">
+                                <div class="overflow-hidden whitespace-nowrap">
+                                    <span id="player-title" class="inline-block text-xs font-bold text-gray-800">곡 목록을
+                                        불러오는 중...</span>
+                                </div>
+                                <span class="text-[10px] text-gray-400 mt-0.5">연운위키 OST</span>
+                            </div>
+                        </div>
+                        <button id="audio-toggle-btn" onclick="handlePlayPause(event)"
+                            class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm text-blue-600 hover:scale-110 transition-transform flex-none ml-2">
+                            ▶
+                        </button>
+                    </div>
+
+                    <div id="playlist-dropdown"
+                        class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[70] overflow-hidden animate-in fade-in slide-in-from-top-2">
+                        <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex justify-between items-center">
+                            <span id="playlist-status" class="text-[10px] font-bold text-gray-400">0 / 0</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+                        </div>
+                        <ul id="playlist-items" class="max-h-[220px] overflow-y-auto no-scrollbar">
+                        </ul>
+                    </div>
+                </div>
+
+                <audio id="main-audio" preload="auto"></audio>
             </div>
         </div>
         <div class="flex-1 overflow-y-auto p-5">
@@ -875,6 +950,7 @@
             if (typeof loadMansarokMenu === 'function') loadMansarokMenu();
             if (typeof renderHomeChunjiOverride === 'function') setTimeout(renderHomeChunjiOverride, 500);
         });
+
     </script>
 </body>
 

@@ -2647,7 +2647,76 @@ function loadChunjiDetailById(id) {
         loadChunjiDetail(item);
     }
 }
+// [수정] 천지록 상세 보기 (Tailwind 디자인 완벽 적용)
+window.loadChunjiDetail = function(item) {
+    const listView = document.getElementById('chunji-list-view');
+    const detailView = document.getElementById('chunji-detail-view');
+    const contentBox = document.getElementById('chunji-detail-content');
 
+    if (!listView || !detailView || !contentBox) return;
+
+    // 리스트 숨기고 상세 화면 보이기
+    listView.style.display = 'none';
+    detailView.style.display = 'block';
+    
+    // 데이터 가공 (JSON 필드 대응)
+    const typeBadge = (item.type || item.subtype) ? `<span class="inline-block px-2.5 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg mb-4">${item.type || item.subtype}</span>` : '';
+    const getText = item.get ? item.get.replace(/\n/g, '<br>') : "";
+    const dsecText = item.dsec ? item.dsec.replace(/\n/g, '<br>') : (item.desc || "").replace(/\n/g, '<br>');
+
+    // 이미지 배열 처리 (getimg, dsecimg 등 모든 이미지 필드 체크)
+    const images = [item.getimg1, item.getimg2, item.dsecimg1, item.dsecimg2, item.image].filter(img => img && img.trim() !== "");
+    let imagesHtml = '';
+    if (images.length > 0) {
+        imagesHtml = `<div class="grid grid-cols-1 gap-4 mt-8">`;
+        images.forEach(img => {
+            imagesHtml += `<img src="${img}" class="w-full rounded-2xl border border-gray-100 shadow-md" onerror="this.style.display='none'">`;
+        });
+        imagesHtml += `</div>`;
+    }
+
+    // HTML 내용 주입
+    contentBox.innerHTML = `
+        <div class="flex flex-col">
+            <div class="border-b border-gray-100 pb-6 mb-6">
+                ${typeBadge}
+                <h2 class="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">${item.title}</h2>
+            </div>
+            
+            ${getText ? `
+                <div class="mb-8">
+                    <h4 class="text-sm font-bold text-blue-500 mb-3 flex items-center gap-2">🔍 획득 방법</h4>
+                    <div class="text-[16px] text-gray-700 leading-relaxed font-medium bg-blue-50/50 p-5 rounded-2xl border border-blue-100/50">
+                        ${getText}
+                    </div>
+                </div>
+            ` : ''}
+
+            ${dsecText ? `
+                <div class="mb-8">
+                    <h4 class="text-sm font-bold text-gray-400 mb-3 flex items-center gap-2">📝 상세 정보</h4>
+                    <div class="text-[15px] text-gray-600 leading-relaxed">
+                        ${dsecText}
+                    </div>
+                </div>
+            ` : ''}
+
+            ${imagesHtml}
+
+            ${item.coords ? `
+                <div class="mt-8 p-4 bg-gray-50 rounded-2xl border border-gray-100 flex items-center gap-3">
+                    <span class="text-xl">📍</span>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Coordinates</span>
+                        <span class="text-sm font-bold text-gray-900">${item.coords}</span>
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+    `;
+
+    window.scrollTo(0, 0);
+};
 // =========================================
 // [통합] 바텀 시트 공통 기능 및 탭 설정
 // =========================================
@@ -4107,180 +4176,6 @@ function showBirthdayPopup(char, todayKey) {
     createConfetti();
 }
 
-const playlist = [
-    { title: "Bladestorm Over Jianghu", src: "music/1 - Bladestorm Over Jianghu.mp3" },
-    { title: "White Gale Execution", src: "music/2 - White Gale Execution.mp3" },
-    { title: "Crimson Cliff Last Stand", src: "music/3 - Crimson Cliff Last Stand.mp3" },
-    { title: "Ten Banners, One Field", src: "music/4 - Ten Banners, One Field.mp3" },
-    { title: "Lantern Pulse Under Kaifeng", src: "music/5 - Lantern Pulse Under Kaifeng.mp3" },
-    { title: "Fuyao Core Ignition", src: "music/6 - Fuyao Core Ignition.mp3" },
-    { title: "He Xi Sandstorm Reckoning", src: "music/7 - He Xi Sandstorm Reckoning.mp3" },
-    { title: "Crimson Spur Relay", src: "music/8 - Crimson Spur Relay.mp3" },
-    { title: "Clockwork Reliquary Collapse", src: "music/9 - Clockwork Reliquary Collapse.mp3" },
-    { title: "Wind Over Broken Roofs", src: "music/10 - Wind Over Broken Roofs.mp3" },
-    { title: "Snowdrift Vanguard", src: "music/11 - Snowdrift Vanguard.mp3" },
-    { title: "Wolfwind Ridge Pursuit", src: "music/12 - Wolfwind Ridge Pursuit.mp3" },
-    { title: "Broken Wall Thunderline", src: "music/13 - Broken Wall Thunderline.mp3" },
-    { title: "Ashen Gears of Huigu", src: "music/14 - Ashen Gears of Huigu.mp3" },
-    { title: "Coffin Wake at Cixin", src: "music/15 - Coffin Wake at Cixin.mp3" },
-    { title: "Heavenbreaker Warlord", src: "music/16 - Heavenbreaker Warlord.mp3" },
-    { title: "Ghostlight Siege Run", src: "music/17 - Ghostlight Siege Run.mp3" },
-    { title: "Riftline Killzone", src: "music/18 - Riftline Killzone.mp3" },
-    { title: "Lotus Ash Cataclysm", src: "music/19 - Lotus Ash Cataclysm.mp3" },
-    { title: "Rift of the Earth-Fiend", src: "music/20 - Rift of the Earth-Fiend.mp3" }
-];
-
-let currentIdx = 0;
-const audio = document.getElementById('main-audio');
-const audioTitle = document.getElementById('player-title');
-const audioBtn = document.getElementById('audio-toggle-btn');
-const dropdown = document.getElementById('playlist-dropdown');
-
-function updateStatusText() {
-    const statusText = document.getElementById('playlist-status');
-    if (statusText) {
-        // (현재 인덱스 + 1 / 전체 곡 수) 형식으로 변경
-        statusText.innerText = `${currentIdx + 1} / ${playlist.length}`;
-    }
-}
-
-function initPlayer() {
-    const listItems = document.getElementById('playlist-items');
-    if (!listItems) return;
-
-    listItems.innerHTML = playlist.map((track, i) => `
-        <li class="playlist-item-li ${i === currentIdx ? 'active' : ''}" onclick="selectTrack(${i})">
-            <span class="track-num">${i + 1}</span>
-            <span class="track-name">${track.title}</span>
-        </li>
-    `).join('');
-    refreshPlayerUI(); // 초기 상태 (1 / 20) 반영
-    loadTrack(currentIdx);
-    updateStatusText(); // 초기화 시 실행
-    updateUI();
-}
-
-function selectTrack(i) {
-    currentIdx = i;
-    loadTrack(i);
-    audio.play().then(updateUI);
-    updateStatusText(); // 곡 선택 시 실행
-    if (dropdown) dropdown.classList.remove('show');
-}
-function loadTrack(i) {
-    if (!playlist[i]) return;
-    audio.src = playlist[i].src;
-    // HTML 요소에 직접 텍스트 주입
-    document.getElementById('player-title').textContent = playlist[i].title;
-}
-
-function updateUI() {
-    // 재생 중일 때만 버튼 아이콘을 변경하고 제목을 흐르게 함
-    if (audio.paused) {
-        audioBtn.innerText = '▶';
-        audioTitle.classList.remove('running');
-    } else {
-        audioBtn.innerText = 'Ⅱ';
-        audioTitle.classList.add('running');
-    }
-
-    // 리스트 내 활성 곡 강조
-    document.querySelectorAll('.playlist-item-li').forEach((li, idx) => {
-        li.classList.toggle('active', idx === currentIdx);
-    });
-}
-
-function handlePlayPause(e) {
-    e.stopPropagation(); // 드롭다운 토글 방지
-    if (audio.paused) {
-        audio.play().then(updateUI);
-    } else {
-        audio.pause();
-        updateUI();
-    }
-}
-
-function togglePlaylist() {
-    dropdown.classList.toggle('show');
-}
-
-function selectTrack(i) {
-    currentIdx = i;
-    loadTrack(i);
-    audio.play().then(updateUI);
-
-    // [추가] 곡을 선택하면 플레이리스트 드롭다운을 닫음
-    if (dropdown) {
-        dropdown.classList.remove('show');
-    }
-}
-
-// 기존 사이드바 닫기 함수에 리스트 닫기 추가
-function closeSidebar() {
-    const sidebar = document.getElementById('main-sidebar');
-    if (sidebar) sidebar.classList.remove('active');
-    if (dropdown) dropdown.classList.remove('show');
-}
-
-// 오디오 이벤트 리스너
-audio.addEventListener('play', updateUI);
-audio.addEventListener('pause', updateUI);
-audio.addEventListener('ended', () => selectTrack((currentIdx + 1) % playlist.length));
-
-// 페이지 로드 시 초기화 실행
-document.addEventListener('DOMContentLoaded', initPlayer);
-
-// 상태 업데이트 통합 함수
-function refreshPlayerUI() {
-    const statusText = document.getElementById('playlist-status');
-    const audioTitle = document.getElementById('player-title');
-
-    // 1. 상단 상태 텍스트 갱신 (예: 악보 목록 3 / 20)
-    if (statusText) {
-        statusText.innerText = `${currentIdx + 1} / ${playlist.length}`;
-    }
-
-    // 2. 플레이어 바 제목 갱신 및 흐름 제어
-    if (audioTitle) {
-        audioTitle.textContent = playlist[currentIdx].title;
-        // 재생 중일 때만 흐르게 함
-        if (!audio.paused) {
-            audioTitle.classList.add('running');
-        }
-    }
-
-    // 3. 리스트 내 'active' 클래스 이동 (하이라이트)
-    document.querySelectorAll('.playlist-item-li').forEach((li, idx) => {
-        if (idx === currentIdx) {
-            li.classList.add('active');
-        } else {
-            li.classList.remove('active');
-        }
-    });
-}
-
-// 곡 선택 함수
-function selectTrack(i) {
-    currentIdx = i; // 인덱스 변경
-    loadTrack(currentIdx);
-
-    // 리스트 닫기 및 재생
-    if (dropdown) dropdown.classList.remove('show');
-
-    audio.play().then(() => {
-        refreshPlayerUI(); // 재생 성공 시 UI 전체 갱신
-    }).catch(() => {
-        refreshPlayerUI(); // 차단되어도 UI는 갱신
-    });
-}
-
-// 다음 곡 자동 재생 시에도 인덱스 갱신
-audio.addEventListener('ended', () => {
-    currentIdx = (currentIdx + 1) % playlist.length;
-    selectTrack(currentIdx);
-});
-
-
 let pvpFullData = []; // 데이터를 저장할 빈 배열
 let currentPvpPage = 0;
 const pvpItemsPerPage = 3;
@@ -4341,3 +4236,124 @@ function updatePvpRanking() {
 }
 // 초기 실행: 데이터를 먼저 불러옵니다.
 document.addEventListener("DOMContentLoaded", fetchRankingData);
+const playlist = [
+    { title: "Bladestorm Over Jianghu", src: "music/1 - Bladestorm Over Jianghu.mp3" },
+    { title: "White Gale Execution", src: "music/2 - White Gale Execution.mp3" },
+    { title: "Crimson Cliff Last Stand", src: "music/3 - Crimson Cliff Last Stand.mp3" },
+    { title: "Ten Banners, One Field", src: "music/4 - Ten Banners, One Field.mp3" },
+    { title: "Lantern Pulse Under Kaifeng", src: "music/5 - Lantern Pulse Under Kaifeng.mp3" },
+    { title: "Fuyao Core Ignition", src: "music/6 - Fuyao Core Ignition.mp3" },
+    { title: "He Xi Sandstorm Reckoning", src: "music/7 - He Xi Sandstorm Reckoning.mp3" },
+    { title: "Crimson Spur Relay", src: "music/8 - Crimson Spur Relay.mp3" },
+    { title: "Clockwork Reliquary Collapse", src: "music/9 - Clockwork Reliquary Collapse.mp3" },
+    { title: "Wind Over Broken Roofs", src: "music/10 - Wind Over Broken Roofs.mp3" },
+    { title: "Snowdrift Vanguard", src: "music/11 - Snowdrift Vanguard.mp3" },
+    { title: "Wolfwind Ridge Pursuit", src: "music/12 - Wolfwind Ridge Pursuit.mp3" },
+    { title: "Broken Wall Thunderline", src: "music/13 - Broken Wall Thunderline.mp3" },
+    { title: "Ashen Gears of Huigu", src: "music/14 - Ashen Gears of Huigu.mp3" },
+    { title: "Coffin Wake at Cixin", src: "music/15 - Coffin Wake at Cixin.mp3" },
+    { title: "Heavenbreaker Warlord", src: "music/16 - Heavenbreaker Warlord.mp3" },
+    { title: "Ghostlight Siege Run", src: "music/17 - Ghostlight Siege Run.mp3" },
+    { title: "Riftline Killzone", src: "music/18 - Riftline Killzone.mp3" },
+    { title: "Lotus Ash Cataclysm", src: "music/19 - Lotus Ash Cataclysm.mp3" },
+    { title: "Rift of the Earth-Fiend", src: "music/20 - Rift of the Earth-Fiend.mp3" }
+];
+
+let currentIdx = 0;
+let audio, audioTitle, audioBtn, dropdown;
+
+// 플레이어 초기화
+function initPlayer() {
+    audio = document.getElementById('main-audio');
+    audioTitle = document.getElementById('player-title');
+    audioBtn = document.getElementById('audio-toggle-btn');
+    dropdown = document.getElementById('playlist-dropdown');
+
+    if (!audio) {
+        console.error("오디오 요소를 찾을 수 없습니다. HTML에 <audio id='main-audio'>가 있는지 확인하세요.");
+        return;
+    }
+
+    const listItems = document.getElementById('playlist-items');
+    if (listItems) {
+        listItems.innerHTML = playlist.map((track, i) => `
+            <li class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-50 last:border-none playlist-item-li" 
+                onclick="selectTrack(${i})">
+                <span class="text-[10px] font-bold text-gray-300 w-4">${i + 1}</span>
+                <span class="text-xs font-medium text-gray-600 truncate">${track.title}</span>
+            </li>
+        `).join('');
+    }
+    
+    loadTrack(currentIdx);
+    updateStatusText();
+}
+
+function updateStatusText() {
+    const statusText = document.getElementById('playlist-status');
+    if (statusText) statusText.innerText = `${currentIdx + 1} / ${playlist.length}`;
+}
+
+function loadTrack(i) {
+    if (!playlist[i] || !audio) return;
+    audio.src = playlist[i].src;
+    if (audioTitle) audioTitle.textContent = playlist[i].title;
+}
+
+function selectTrack(i) {
+    currentIdx = i;
+    loadTrack(i);
+    audio.play()
+        .then(updateUI)
+        .catch(e => console.log("자동 재생이 차단되었습니다. 화면을 클릭한 후 재생 버튼을 눌러주세요.", e));
+    updateStatusText();
+    if (dropdown) dropdown.classList.remove('show');
+}
+
+function updateUI() {
+    if (!audio || !audioBtn) return;
+
+    if (audio.paused) {
+        audioBtn.innerText = '▶';
+        audioTitle.classList.remove('animate-marquee');
+    } else {
+        audioBtn.innerText = 'Ⅱ';
+        audioTitle.classList.add('animate-marquee');
+    }
+
+    // 활성 곡 강조
+    document.querySelectorAll('.playlist-item-li').forEach((li, idx) => {
+        li.classList.toggle('bg-blue-50', idx === currentIdx);
+        const name = li.querySelector('span:last-child');
+        if (name) name.classList.toggle('text-blue-600', idx === currentIdx);
+    });
+}
+
+function handlePlayPause(e) {
+    if (e) e.stopPropagation();
+    if (!audio) return;
+
+    if (audio.paused) {
+        audio.play().then(updateUI).catch(err => {
+            alert("재생하려면 화면을 한 번 클릭해 주세요!");
+        });
+    } else {
+        audio.pause();
+        updateUI();
+    }
+}
+
+function togglePlaylist() {
+    if (dropdown) dropdown.classList.toggle('show');
+}
+
+// 초기화 호출
+document.addEventListener('DOMContentLoaded', initPlayer);
+
+// 곡이 끝나면 다음 곡 재생
+if (audio) {
+    audio.onended = () => {
+        currentIdx = (currentIdx + 1) % playlist.length;
+        selectTrack(currentIdx);
+    };
+}

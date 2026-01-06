@@ -1,51 +1,48 @@
-<div class="quest-detail-container max-w-4xl mx-auto space-y-8 p-4 lg:p-0 text-left" id="q190-container">
+<div class="quest-detail-container max-w-4xl mx-auto space-y-10 p-4 lg:p-0 text-left" id="q191-container">
     
-    <div class="border-b-2 border-blue-600 pb-6 mb-6">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-            <div class="space-y-2">
-                <div class="flex items-center gap-3">
-                    <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Explore</span>
-                    <span class="text-gray-400 text-sm font-medium">개봉부 탐색 가이드</span>
-                </div>
-                <h2 class="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">북쪽 외곽 탐색 가이드</h2>
+    <div class="border-b border-gray-200 pb-5 mb-6">
+        <div class="flex items-center gap-2 mb-2 text-left">
+            <span class="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded uppercase">Explore</span>
+            <span class="text-gray-400 text-xs font-medium">탐색 지침서</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 mb-4 leading-tight">탐색 상세 가이드</h2>
+        
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-2">
+                <img src="https://wwm.tips/images/profile.jpg" class="w-5 h-5 rounded-full object-cover border border-gray-100">
+                <span class="text-[13px] text-gray-500 font-medium">Posted by <strong class="text-blue-600">윤쫑</strong></span>
             </div>
             
-            <div class="flex items-center gap-3">
-                <div class="flex items-center bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 shadow-sm">
-                    <div class="w-5 h-5 rounded-full overflow-hidden mr-2">
-                        <img src="https://wwm.tips/images/profile.jpg" class="w-full h-full object-cover">
-                    </div>
-                    <span class="text-[12px] text-gray-500 font-medium">Posted by <strong class="text-blue-600">윤쫑</strong></span>
-                </div>
-                
-                <div class="like-container flex items-center bg-blue-50 px-3 py-1.5 rounded-full border border-blue-100 cursor-pointer hover:bg-blue-100 transition-all active:scale-95" 
-                     onclick="handleLikeClick()">
-                    <span class="text-[12px] text-blue-600 font-extrabold flex items-center gap-1.5">
-                        <span class="text-[14px]">♥</span>
-                        <span class="like-count">0</span>
-                    </span>
-                </div>
+            <div class="like-container flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100 cursor-pointer active:scale-95 transition-transform" 
+                 onclick="handleLikeClick()">
+                <span class="text-[13px] text-blue-600 font-black flex items-center gap-1">
+                    <span class="text-[14px]">♥</span>
+                    <span class="like-count">0</span>
+                </span>
             </div>
         </div>
     </div>
 
-    <div class="space-y-6">
+    <div class="space-y-12">
         
-        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-5">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5 mb-4">
-                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>상자 (19개)
+        <div class="space-y-4">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>상자 파밍 경로
             </h3>
+            <p class="text-[15px] text-gray-600 leading-relaxed pl-3.5">
+                해당 지역의 모든 상자 위치를 포함한 영상 가이드입니다. 순서대로 진행하시면 100% 달성이 가능합니다.
+            </p>
             <div class="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-gray-900">
                 <iframe src="https://www.youtube.com/embed/S3dX7K5QUps" 
                         class="w-full h-full" frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen></iframe>
             </div>
-        </section>
+        </div>
 
-        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-5">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5 mb-4">
-                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>묘물 (6개)
+        <div class="space-y-4">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>묘물 및 수집 요소
             </h3>
             <div class="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-gray-900">
                 <iframe src="https://www.youtube.com/embed/maOgUkKgu1s" 
@@ -53,28 +50,24 @@
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                         allowfullscreen></iframe>
             </div>
-        </section>
+        </div>
 
-        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-5">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5 mb-4">
+        <div class="space-y-4 pb-10">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5">
                 <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>전체 경로 정보
             </h3>
-            <div class="w-full h-[450px] rounded-xl overflow-hidden border border-gray-100 shadow-inner">
+            <div class="w-full h-[450px] lg:h-[600px] rounded-xl overflow-hidden border border-gray-100 shadow-inner bg-gray-50">
                 <iframe src="https://wwm.tips/map/?id=kaifeng&path=kb" class="w-full h-full" frameborder="0"></iframe>
             </div>
-        </section>
+        </div>
 
     </div>
 
-    <div class="flex justify-center pt-10 pb-12">
+    <div class="flex justify-center pt-10 pb-16 border-t border-dashed border-gray-200">
         <button onclick="showQuestList()" 
-                class="px-10 py-3.5 bg-white border border-gray-200 text-gray-600 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all shadow-sm active:scale-95">
+                class="px-10 py-3.5 bg-white border border-gray-200 text-gray-600 rounded-xl text-sm font-bold shadow-sm active:scale-95 transition-all">
             목록으로 돌아가기
         </button>
     </div>
 
 </div>
-
-<style>
-    #q190-container iframe { width: 100%; height: 100%; }
-</style>

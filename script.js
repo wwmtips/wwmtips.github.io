@@ -4367,3 +4367,35 @@ if (audio) {
 
 // 초기화 실행
 document.addEventListener('DOMContentLoaded', initGlobalSearch);
+
+/* script.js 또는 index.html 하단에 배치 */
+window.openBossTab = function(phase, btn) {
+    // 1. 모든 탭 내용 숨기기
+    const contents = document.querySelectorAll('.boss-tab-content');
+    contents.forEach(content => {
+        // hidden 클래스를 추가하고 동시에 스타일로도 확실히 숨김 처리
+        content.classList.add('hidden');
+        content.style.display = 'none';
+    });
+
+    // 2. 선택한 탭 내용 보이기
+    const activeTab = document.getElementById('tab-' + phase);
+    if (activeTab) {
+        activeTab.classList.remove('hidden');
+        // Tailwind의 space-y-6가 동작하도록 block이나 flex로 설정
+        activeTab.style.display = 'block'; 
+    }
+
+    // 3. 모든 버튼 스타일 초기화
+    const buttons = document.querySelectorAll('.boss-tab-btn');
+    buttons.forEach(b => {
+        b.classList.remove('active-tab-style');
+        b.classList.add('text-gray-500', 'hover:bg-white/50');
+        b.style.backgroundColor = ''; // 인라인 스타일 초기화
+        b.style.color = '';
+    });
+
+    // 4. 클릭된 버튼에 활성 스타일 적용
+    btn.classList.add('active-tab-style');
+    btn.classList.remove('text-gray-500', 'hover:bg-white/50');
+};

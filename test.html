@@ -23,7 +23,31 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [타이머 리스트 카드 스타일] */
+        /* [슬라이더 스타일 수정] - 글자 중첩 방지 핵심 */
+        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
+        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
+        
+        /* ★중요: position: relative !important로 글자가 자기 카드 밖으로 못 나가게 강제 */
+        .hero-slide { 
+            flex: none; width: 100%; height: 100%; 
+            background-size: cover; background-position: center; 
+            position: relative !important; /* 여기 수정됨 */
+            cursor: pointer; 
+        }
+        
+        /* 슬라이더 텍스트: 자기 부모(.hero-slide) 기준으로 배치 */
+        .slide-content { 
+            position: absolute; bottom: 0; left: 0; right: 0; 
+            padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); 
+            color: white; z-index: 10;
+        }
+        .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
+        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
+        .slide-link-btn { display:none; }
+        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
+        .indicator.active { width: 18px; background: white; border-radius: 10px; }
+
+        /* [타이머 리스트 카드] */
         .timer-row {
             background-color: white; border-radius: 20px; padding: 18px 20px; margin-bottom: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); border: 1px solid #f2f4f6; cursor: pointer;
@@ -33,19 +57,18 @@
         .timer-info { display: flex; flex-direction: column; gap: 4px; }
         .timer-name { font-size: 16px; font-weight: 700; color: #191f28; display: flex; align-items: center; gap: 6px; }
         .timer-desc { font-size: 12px; color: #8b95a1; display: flex; align-items: center; gap: 6px; }
-        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 15px; font-weight: 600; color: #333; text-align: right; letter-spacing: -0.5px; }
+        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 15px; font-weight: 600; color: #333; text-align: right; }
         .timer-clock.urgent { color: #e53935; animation: blink 2s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
         .status-badge { padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; color: white; }
-        .status-ing { background-color: #3182f6; } 
-        .status-urgent { background-color: #e53935; } 
-        .status-event { background-color: #f59e0b; }
+        .status-ing { background-color: #3182f6; } .status-urgent { background-color: #e53935; } 
+        .status-event { background-color: #f59e0b; } .status-end { background-color: #9e9e9e; }
         .timer-progress { font-size: 11px; font-weight: 700; color: #3182f6; background-color: #e8f3ff; padding: 2px 8px; border-radius: 12px; }
 
         /* [바텀시트] */
         #timer-sheet-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 9999; 
+            background: rgba(0,0,0,0.6); z-index: 9999;
             display: none; opacity: 0; transition: opacity 0.2s;
             backdrop-filter: blur(2px);
         }
@@ -61,26 +84,6 @@
         #timer-sheet-modal.show .sheet-container { transform: translateY(0); }
         .sheet-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 24px auto; }
         
-        /* [천지록 아이템 스타일] - 그리드용 */
-        .chunji-item-card { 
-            background-color: white; border-radius: 16px; padding: 12px; margin-bottom: 0; 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03); border: 1px solid #f2f4f6; 
-            cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            min-height: 60px; text-align: center; transition: all 0.2s; 
-        }
-        .chunji-item-card:active { transform: scale(0.98); }
-        .chunji-card-title { font-size: 14px; font-weight: 600; color: #333; word-break: keep-all; }
-
-        /* [천지록 리스트 아이템 스타일] - 상세 목록용 */
-        .chunji-item { 
-            background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 10px; 
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; 
-            cursor: pointer; display: flex; justify-content: space-between; align-items: center; 
-        }
-        .chunji-text-group { display: flex; flex-direction: column; gap: 2px; }
-        .chunji-title { font-weight: 700; font-size: 15px; color: #191f28; }
-        .chunji-type { font-size: 12px; color: #8b95a1; }
-
         /* [체크리스트 아이템] */
         .task-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px dashed #f0f0f0; cursor: pointer; }
         .task-item:last-child { border-bottom: none; }
@@ -94,23 +97,37 @@
         .task-item.completed .task-title { text-decoration: line-through; color: #b0b8c1; }
         .task-item.completed .task-loc { color: #d1d6db; background: #f9fafb; }
 
-        /* [버튼 스타일: 가이드/무림록 공통] */
-        .mansarok-btn { display: flex; align-items: center; justify-content: center; background-color: white; padding: 10px; border-radius: 16px; border: 1px solid #f2f4f6; font-size: 14px; font-weight: 600; color: #333; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.03); transition: all 0.2s; text-align: center; }
+        /* [심플 버튼 스타일: 가이드/무림록 공통] */
+        .mansarok-btn { 
+            display: flex; align-items: center; justify-content: center; 
+            background-color: white; border-radius: 16px; border: 1px solid #f2f4f6; 
+            font-size: 13px; font-weight: 600; color: #333; cursor: pointer; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03); transition: all 0.2s; text-align: center;
+        }
         .mansarok-btn:active { transform: scale(0.98); }
         .mansarok-btn:hover { border-color: #3182f6; color: #3182f6; }
-        .mansarok-btn span { width: 100%; word-break: keep-all; }
+        .mansarok-btn span { word-break: keep-all; }
 
-        /* 기타 스타일 */
+        /* 기존 스타일들 */
+        .chunji-item-card { background-color: white; border-radius: 16px; padding: 12px; margin-bottom: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.03); border: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; justify-content: center; min-height: 60px; text-align: center; transition: all 0.2s; }
+        .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
+        .chunji-card-title { font-size: 14px; font-weight: 600; color: #333; word-break: keep-all; }
+        .chunji-item { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .chunji-text-group { display: flex; flex-direction: column; gap: 2px; }
+        .chunji-title { font-weight: 700; font-size: 15px; color: #191f28; }
+        .chunji-type { font-size: 12px; color: #8b95a1; }
+        
         .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
         .quest-card:active { transform: scale(0.98); }
         .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
         .quest-type { font-size: 12px; color: #8b95a1; }
         .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
-        
+
         .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; }
         .answer-table th { background: #f9fafb; padding: 12px; font-size: 13px; color: #6b7684; text-align: left; border-bottom: 1px solid #f2f4f6; }
         .answer-table td { padding: 14px 12px; font-size: 14px; color: #333; border-bottom: 1px solid #f2f4f6; }
-        
+        .highlight { color: #3182f6; font-weight: bold; }
+
         .pagination-controls { display: flex; justify-content: center; gap: 6px; margin-top: 20px; margin-bottom: 40px; }
         .pagination-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #8b95a1; background: transparent; }
         .pagination-btn.active { background-color: #3182f6; color: white; }
@@ -122,17 +139,6 @@
         .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
         .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
 
-        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
-        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
-        .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; cursor: pointer; }
-        .slide-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
-        .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
-        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
-        .slide-link-btn { display:none; }
-        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
-        .indicator.active { width: 18px; background: white; border-radius: 10px; }
-
-        /* 사이드바 */
         #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
         #main-sidebar.active { right: 0; }
         #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
@@ -144,7 +150,6 @@
         .char-overlay-box { padding: 4px; text-align: center; }
         .char-h-affil { font-size: 8px; color: #888; }
 
-        /* 인물 바텀시트 */
         #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; opacity: 0; transition: opacity 0.3s; }
         #person-bottom-sheet.active { display: block; opacity: 1; }
         #person-bottom-sheet .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 80vh; overflow-y: auto; }
@@ -202,23 +207,29 @@
             <section class="mt-8 px-4">
                 <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">기본 가이드</h3></div>
                 <div class="grid grid-cols-3 gap-2">
-                    <a onclick="openGuideDirect('newb.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
-                        <span class="text-xl">📜</span><span class="text-[11px] leading-tight">강호 입문서</span>
+                    <a onclick="openGuideDirect('newb.html')" class="mansarok-btn flex-col gap-1.5 !py-3">
+                        <span class="text-2xl">📜</span>
+                        <span class="text-[12px] leading-tight">강호 입문서</span>
                     </a>
-                    <a onclick="openGuideDirect('guide/up.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
-                        <span class="text-xl">📈</span><span class="text-[11px] leading-tight">육성 가이드</span>
+                    <a onclick="openGuideDirect('guide/up.html')" class="mansarok-btn flex-col gap-1.5 !py-3">
+                        <span class="text-2xl">📈</span>
+                        <span class="text-[12px] leading-tight">육성 가이드</span>
                     </a>
-                    <a onclick="openGuideDirect('moon.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
-                        <span class="text-xl">🏛️</span><span class="text-[11px] leading-tight">문파 입문</span>
+                    <a onclick="openGuideDirect('moon.html')" class="mansarok-btn flex-col gap-1.5 !py-3">
+                        <span class="text-2xl">🏛️</span>
+                        <span class="text-[12px] leading-tight">문파 입문</span>
                     </a>
-                    <a onclick="openGuideDirect('guide/weapon.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
-                        <span class="text-xl">⚔️</span><span class="text-[11px] leading-tight">장비 도감</span>
+                    <a onclick="openGuideDirect('guide/weapon.html')" class="mansarok-btn flex-col gap-1.5 !py-3">
+                        <span class="text-2xl">⚔️</span>
+                        <span class="text-[12px] leading-tight">장비 도감</span>
                     </a>
-                    <a onclick="openGuideDirect('tier_weapon.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
-                        <span class="text-xl">🌀</span><span class="text-[11px] leading-tight">무공 도감</span>
+                    <a onclick="openGuideDirect('tier_weapon.html')" class="mansarok-btn flex-col gap-1.5 !py-3">
+                        <span class="text-2xl">🌀</span>
+                        <span class="text-[12px] leading-tight">무공 도감</span>
                     </a>
-                    <a onclick="openGuideDirect('majang.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
-                        <span class="text-xl">🀄</span><span class="text-[11px] leading-tight">마작 가이드</span>
+                    <a onclick="openGuideDirect('majang.html')" class="mansarok-btn flex-col gap-1.5 !py-3">
+                        <span class="text-2xl">🀄</span>
+                        <span class="text-[12px] leading-tight">마작 가이드</span>
                     </a>
                 </div>
             </section>
@@ -348,7 +359,6 @@
                 <h2 class="text-xl font-bold mt-2">전체 메뉴</h2>
                 <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">✕</button>
             </div>
-            
             <ul class="space-y-6">
                 <li><a onclick="switchTab('home'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🏠 홈</a></li>
                 <li><a onclick="switchTab('quest'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">📜 무림록</a></li>

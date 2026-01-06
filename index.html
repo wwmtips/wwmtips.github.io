@@ -260,36 +260,33 @@
         class="fixed inset-0 bg-black/40 z-[2999] hidden backdrop-blur-sm transition-opacity"></div>
 
     <header
-        class="sticky top-0 z-50 bg-white h-[60px] lg:h-[72px] flex items-center px-5 lg:px-8 gap-4 border-b border-gray-100 transition-all duration-300 shadow-sm">
+        class="sticky top-0 z-50 bg-white h-[60px] lg:h-[72px] flex items-center px-3 lg:px-8 gap-4 border-b border-gray-100 transition-all duration-300 shadow-sm">
 
         <div class="hidden lg:block font-black text-xl text-blue-600 cursor-pointer flex-none"
             onclick="switchTab('home')">연운위키</div>
 
-        <div class="flex-1 mx-4 lg:mx-10 relative">
-            <div
-                class="bg-gray-100 rounded-xl h-11 flex items-center px-4 text-gray-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 transition-all border border-transparent focus-within:border-blue-200">
-                <svg class="w-5 h-5 flex-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
+        <div class="flex-1 ml-0 mr-4 lg:mx-10 relative">
+    <div class="bg-gray-100 rounded-xl h-11 flex items-center px-4 text-gray-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 transition-all border border-transparent focus-within:border-blue-200">
+        <svg class="w-5 h-5 flex-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        
+        <input type="text" id="header-search-input" placeholder="통합 검색" 
+               oninput="handleGlobalSearch(event)"
+               class="bg-transparent border-none w-full h-full ml-3 outline-none text-gray-800 text-sm font-bold placeholder-gray-400" 
+               autocomplete="off">
+        
+        <button id="search-clear-btn" class="hidden text-gray-400 hover:text-gray-600 ml-2" onclick="document.getElementById('header-search-input').value=''; this.style.display='none'; document.getElementById('global-search-results').style.display='none';">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
 
-                <input type="text" id="header-search-input" placeholder="통합 검색" oninput="handleGlobalSearch(event)"
-                    class="bg-transparent border-none w-full h-full ml-3 outline-none text-gray-800 text-sm font-bold placeholder-gray-400"
-                    autocomplete="off">
-
-                <button id="search-clear-btn" class="hidden text-gray-400 hover:text-gray-600 ml-2"
-                    onclick="document.getElementById('header-search-input').value=''; this.style.display='none'; document.getElementById('global-search-results').style.display='none';">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
-            </div>
-
-            <div id="global-search-results"
-                class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2">
-            </div>
-        </div>
+    <div id="global-search-results" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[100] overflow-hidden">
+    </div>
+</div>
 
         <nav class="hidden lg:flex items-center gap-6 text-sm font-bold text-gray-500 ml-auto">
             <button onclick="switchTab('home')" id="pc-nav-home"

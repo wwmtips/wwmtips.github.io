@@ -1,167 +1,96 @@
-<div class="quest-detail-container" style="text-align: left; position: relative;">
+<div class="quest-detail-container max-w-4xl mx-auto space-y-8 p-4 lg:p-0 text-left relative" id="mart-guide-container">
     
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
-        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            비결
-        </h2>
+    <div class="border-b-2 border-blue-600 pb-6 mb-6">
+        <div class="space-y-2">
+            <div class="flex items-center gap-3">
+                <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Martial</span>
+                <span class="text-gray-400 text-sm font-medium">무공 비결 도감</span>
+            </div>
+            <h2 class="text-3xl font-black text-gray-900 leading-tight">비결</h2>
+            <p class="text-gray-500 text-[14px] mt-2 font-medium">강호에 흩어진 비결들을 확인하고 획득 경로를 파악하세요.</p>
+        </div>
     </div>
 
     <div id="mart-library-list" class="heart-library-grid">
-        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
-            데이터를 불러오는 중...
+        <div class="col-span-full text-center py-20">
+            <div class="inline-block w-8 h-8 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-400 text-sm font-medium">비급을 펼치는 중...</p>
         </div>
     </div>
 
-    <div id="guide-overlay" class="bottom-sheet-overlay" onclick="closeMartDetailSheet()"></div>
+    <div id="guide-overlay" class="fixed inset-0 bg-black/60 z-[11000] hidden opacity-0 transition-opacity duration-300 pointer-events-none" onclick="closeMartDetailSheet()"></div>
 
-    <div id="mart-detail-sheet" class="bottom-sheet">
-        <div class="sheet-header">
-            <h3 id="mart-sheet-title">비결 상세</h3>
-            <button onclick="closeMartDetailSheet()" class="close-sheet-btn">✕</button>
+    <div id="mart-detail-sheet" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[32px] shadow-2xl z-[11001] translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[85vh]">
+        <div class="sheet-header flex items-center justify-between px-6 py-5 border-b border-gray-100">
+            <h3 id="mart-sheet-title" class="text-lg font-black text-gray-900 tracking-tight">비결 상세</h3>
+            <button onclick="closeMartDetailSheet()" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full text-gray-400 hover:text-gray-900 transition-colors">✕</button>
         </div>
-        <div class="sheet-content" id="mart-sheet-content">
+        <div class="sheet-content flex-1 overflow-y-auto p-6 scrollbar-hide text-left" id="mart-sheet-content">
             </div>
+        <div class="h-8 bg-white flex-none"></div>
     </div>
 
     <style>
-        /* 1. 그리드 스타일 (아이템 목록) */
+        /* 1. 반응형 그리드 시스템 (모바일 최적화) */
         .heart-library-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 15px;
-            padding: 10px 0;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
+        @media (min-width: 640px) { .heart-library-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 1024px) { .heart-library-grid { grid-template-columns: repeat(6, 1fr); } }
+
+        /* 2. 개별 아이템 카드 스타일 (JS 생성 요소용) */
         .heart-lib-item {
+            background: #fff;
+            border: 1px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 16px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 15px 5px;
-            border: 1px solid #eee;
-            border-radius: 8px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
             cursor: pointer;
-            transition: all 0.2s;
-            background: #fff;
-            position: relative; /* 중요 */
-            z-index: 1;
         }
         .heart-lib-item:hover {
-            border-color: var(--wuxia-accent-gold);
-            background-color: #fffcf5;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            z-index: 10;
+            border-color: #3b82f6; /* blue-500 */
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
         }
         .heart-lib-img {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             object-fit: contain;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
         }
         .heart-lib-name {
-            font-size: 0.8em;
-            color: #555;
+            font-size: 12px;
+            font-weight: 700;
+            color: #374151; /* gray-700 */
             text-align: center;
+            line-height: 1.3;
             word-break: keep-all;
-            line-height: 1.2;
         }
 
-        /* 2. 어두운 배경 (오버레이) - 시트보다 숫자가 작아야 함 */
-        #guide-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.6); /* 좀 더 진하게 */
-            z-index: 11000 !important; /* 아주 높은 숫자 */
-            display: none; 
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
+        /* 3. 시트 애니메이션 제어 */
+        body.mart-sheet-open { overflow: hidden; }
+        body.mart-sheet-open #guide-overlay { display: block; opacity: 1; pointer-events: auto; }
+        body.mart-sheet-open #mart-detail-sheet { transform: translateY(0); }
 
-        /* 3. 비결 상세 시트 (하얀 창) - 오버레이보다 숫자가 커야 함 */
-        #mart-detail-sheet {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: auto; /* 내용만큼 늘어남 */
-            min-height: 300px; /* 내용 없어도 최소 높이 보장 */
-            max-height: 85vh;
-            
-            background-color: #ffffff !important; /* 흰색 강제 적용 */
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
-            
-            z-index: 11001 !important; /* 오버레이(11000)보다 무조건 높게! */
-            
-            transform: translateY(110%); /* 평소엔 화면 아래로 숨김 */
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            
-            display: flex;
-            flex-direction: column;
-            visibility: visible; /* 강제 보이기 */
-        }
-
-        /* PC 화면 대응 */
+        /* PC 화면 시트 너비 제한 */
         @media (min-width: 768px) {
             #mart-detail-sheet {
-                width: 500px;
+                width: 480px;
                 left: 50%;
-                transform: translate(-50%, 110%); /* PC에선 중앙 정렬 + 아래로 숨김 */
+                margin-left: -240px;
+                border-radius: 32px 32px 0 0;
             }
         }
 
-        /* 시트 내부 디자인 */
-        #mart-detail-sheet .sheet-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff; /* 헤더도 흰색 */
-            border-radius: 20px 20px 0 0;
-        }
-        #mart-detail-sheet .sheet-header h3 {
-            margin: 0;
-            font-size: 1.1em;
-            color: #333;
-            font-weight: bold;
-        }
-        #mart-detail-sheet .close-sheet-btn {
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            color: #999;
-            padding: 0 10px;
-        }
-        #mart-detail-sheet .sheet-content {
-            padding: 20px;
-            overflow-y: auto;
-            flex: 1;
-            background: #fff;
-        }
-
-        /* 4. 활성화 상태 (JS가 body에 클래스를 붙이면 작동) */
-        body.mart-sheet-open #guide-overlay {
-            display: block;
-            opacity: 1;
-        }
-
-        /* 모바일 활성화 */
-        body.mart-sheet-open #mart-detail-sheet {
-            transform: translateY(0);
-        }
-
-        /* PC 활성화 (중앙 정렬 유지하며 올라오기) */
-        @media (min-width: 768px) {
-            body.mart-sheet-open #mart-detail-sheet {
-                transform: translate(-50%, 0);
-            }
-        }
+        /* 스크롤바 숨김 처리 */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
-
 </div>

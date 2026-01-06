@@ -23,13 +23,14 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [타이머 리스트 카드] */
+        /* [타이머 리스트 카드 스타일] */
         .timer-row {
             background-color: white; border-radius: 20px; padding: 18px 20px; margin-bottom: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); border: 1px solid #f2f4f6; cursor: pointer;
             display: flex; justify-content: space-between; align-items: center; transition: all 0.2s;
         }
         .timer-row:active { transform: scale(0.98); background-color: #fafafa; }
+        
         .timer-info { display: flex; flex-direction: column; gap: 4px; }
         .timer-name { font-size: 16px; font-weight: 700; color: #191f28; display: flex; align-items: center; gap: 6px; }
         .timer-desc { font-size: 12px; color: #8b95a1; display: flex; align-items: center; gap: 6px; }
@@ -37,21 +38,20 @@
         .timer-clock.urgent { color: #e53935; animation: blink 2s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
         .status-badge { padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; color: white; }
-        .status-ing { background-color: #3182f6; }
+        .status-ing { background-color: #3182f6; } 
+        .status-urgent { background-color: #e53935; } 
         .status-event { background-color: #f59e0b; }
         .timer-progress { font-size: 11px; font-weight: 700; color: #3182f6; background-color: #e8f3ff; padding: 2px 8px; border-radius: 12px; }
 
-        /* [바텀시트 공통] */
-        .bottom-sheet-modal {
+        /* [바텀시트 스타일] */
+        #timer-sheet-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 9999;
+            background: rgba(0,0,0,0.6); z-index: 9999; 
             display: none; opacity: 0; transition: opacity 0.2s;
             backdrop-filter: blur(2px);
         }
-        .bottom-sheet-modal.show, 
-        .bottom-sheet-modal.active { display: block; opacity: 1; } /* active는 script.js 호환용 */
-        
-        .sheet-container, .bottom-sheet-content {
+        #timer-sheet-modal.show { display: block; opacity: 1; }
+        .sheet-container {
             position: absolute; bottom: 0; width: 100%; background: white;
             border-top-left-radius: 24px; border-top-right-radius: 24px;
             padding: 24px 24px 40px 24px;
@@ -59,11 +59,10 @@
             max-height: 85vh; overflow-y: auto;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
         }
-        .bottom-sheet-modal.show .sheet-container,
-        .bottom-sheet-modal.active .bottom-sheet-content { transform: translateY(0); }
+        #timer-sheet-modal.show .sheet-container { transform: translateY(0); }
         .sheet-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 24px auto; }
         
-        /* [체크리스트 아이템] */
+        /* 체크리스트 아이템 */
         .task-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px dashed #f0f0f0; cursor: pointer; }
         .task-item:last-child { border-bottom: none; }
         .task-left { display: flex; align-items: center; gap: 12px; }
@@ -74,53 +73,66 @@
         .task-item.completed .task-check { background: #3182f6; border-color: #3182f6; }
         .task-item.completed .task-check::after { content: '✔'; color: white; font-size: 14px; font-weight: bold; }
         .task-item.completed .task-title { text-decoration: line-through; color: #b0b8c1; }
+        .task-item.completed .task-loc { color: #d1d6db; background: #f9fafb; }
 
-        /* 기존 스타일 유지 */
-        .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
-        .quest-card:active { transform: scale(0.98); }
-        .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
-        .quest-type { font-size: 12px; color: #8b95a1; }
-        .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
-        .chunji-item-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.03); border: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; justify-content: center; min-height: 50px; text-align: center; transition: all 0.2s; }
-        .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
-        .chunji-card-title { font-size: 14px; font-weight: 600; color: #333; }
-        .chunji-item { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .chunji-text-group { display: flex; flex-direction: column; gap: 2px; }
-        .chunji-title { font-weight: 700; font-size: 15px; color: #191f28; }
-        .chunji-type { font-size: 12px; color: #8b95a1; }
-        .mansarok-btn { display: flex; align-items: center; justify-content: center; background-color: white; padding: 14px 10px; border-radius: 14px; border: 1px solid #f2f4f6; font-size: 14px; font-weight: 600; color: #333; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: all 0.2s; text-align: center; }
+        /* [버튼 스타일] - mansarok-btn */
+        .mansarok-btn { display: flex; align-items: center; justify-content: center; background-color: white; padding: 10px; border-radius: 16px; border: 1px solid #f2f4f6; font-size: 14px; font-weight: 600; color: #333; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.03); transition: all 0.2s; text-align: center; }
         .mansarok-btn:hover { border-color: #3182f6; color: #3182f6; }
         .mansarok-btn span { width: 100%; word-break: keep-all; }
-        .pagination-controls { display: flex; justify-content: center; gap: 6px; margin-top: 20px; margin-bottom: 40px; }
-        .pagination-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #8b95a1; background: transparent; }
-        .pagination-btn.active { background-color: #3182f6; color: white; }
-        .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; }
-        .answer-table th { background: #f9fafb; padding: 12px; font-size: 13px; color: #6b7684; text-align: left; border-bottom: 1px solid #f2f4f6; }
-        .answer-table td { padding: 14px 12px; font-size: 14px; color: #333; border-bottom: 1px solid #f2f4f6; }
-        .highlight { color: #3182f6; font-weight: bold; }
+
+        /* 기존 스타일 유지 */
         .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
         .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
-        .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; cursor: pointer; }
         .slide-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
         .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
         .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
         .slide-link-btn { display:none; }
         .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
         .indicator.active { width: 18px; background: white; border-radius: 10px; }
-        #global-search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); z-index: 60; border: 1px solid #f2f4f6; border-top: none; max-height:300px; overflow-y:auto; }
-        .search-result-item { padding: 12px 16px; border-bottom: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-        .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
-        .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
+
         #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
         #main-sidebar.active { right: 0; }
         #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
         #sidebar-overlay.active { display: block; }
+
         .map-card-horizontal, .char-card-horizontal { flex: none; width: 72px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
         .map-h-img, .char-h-img { width: 100%; height: 72px; object-fit: cover; }
         .map-h-title, .char-h-name { font-size: 10px; font-weight: bold; padding: 4px; text-align: center; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .char-overlay-box { padding: 4px; text-align: center; }
         .char-h-affil { font-size: 8px; color: #888; }
+
+        .chunji-item { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .chunji-text-group { display: flex; flex-direction: column; gap: 2px; }
+        .chunji-title { font-weight: 700; font-size: 15px; color: #191f28; }
+        .chunji-type { font-size: 12px; color: #8b95a1; }
+
+        .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
+        .quest-card:active { transform: scale(0.98); }
+        .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
+        .quest-type { font-size: 12px; color: #8b95a1; }
+        .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
+
+        .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; }
+        .answer-table th { background: #f9fafb; padding: 12px; font-size: 13px; color: #6b7684; text-align: left; border-bottom: 1px solid #f2f4f6; }
+        .answer-table td { padding: 14px 12px; font-size: 14px; color: #333; border-bottom: 1px solid #f2f4f6; }
+        .highlight { color: #3182f6; font-weight: bold; }
+
+        .pagination-controls { display: flex; justify-content: center; gap: 6px; margin-top: 20px; margin-bottom: 40px; }
+        .pagination-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #8b95a1; background: transparent; }
+        .pagination-btn.active { background-color: #3182f6; color: white; }
+
         .nav-btn.active svg { color: #3182f6; } .nav-btn.active span { color: #3182f6; font-weight: 700; }
+
+        #global-search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); z-index: 60; border: 1px solid #f2f4f6; border-top: none; max-height:300px; overflow-y:auto; }
+        .search-result-item { padding: 12px 16px; border-bottom: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
+        .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
+
+        #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; opacity: 0; transition: opacity 0.3s; }
+        #person-bottom-sheet.active { display: block; opacity: 1; }
+        #person-bottom-sheet .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 80vh; overflow-y: auto; }
+        #person-bottom-sheet.active .bottom-sheet-content { transform: translateY(0); }
     </style>
 </head>
 
@@ -174,12 +186,30 @@
             <section class="mt-8 px-4">
                 <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">기본 가이드</h3></div>
                 <div class="grid grid-cols-3 gap-2">
-                    <a onclick="openGuideDirect('newb.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">📜</div><span class="text-[11px] font-bold text-gray-700">강호 입문서</span></a>
-                    <a onclick="openGuideDirect('guide/up.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">📈</div><span class="text-[11px] font-bold text-gray-700">육성 가이드</span></a>
-                    <a onclick="openGuideDirect('moon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">🏛️</div><span class="text-[11px] font-bold text-gray-700">문파 입문</span></a>
-                    <a onclick="openGuideDirect('guide/weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">⚔️</div><span class="text-[11px] font-bold text-gray-700">장비 도감</span></a>
-                    <a onclick="openGuideDirect('tier_weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">🌀</div><span class="text-[11px] font-bold text-gray-700">무공 도감</span></a>
-                    <a onclick="openGuideDirect('majang.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">🀄</div><span class="text-[11px] font-bold text-gray-700">마작 가이드</span></a>
+                    <a onclick="openGuideDirect('newb.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
+                        <span class="text-xl">📜</span>
+                        <span class="text-[11px] leading-tight">강호 입문서</span>
+                    </a>
+                    <a onclick="openGuideDirect('guide/up.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
+                        <span class="text-xl">📈</span>
+                        <span class="text-[11px] leading-tight">육성 가이드</span>
+                    </a>
+                    <a onclick="openGuideDirect('moon.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
+                        <span class="text-xl">🏛️</span>
+                        <span class="text-[11px] leading-tight">문파 입문</span>
+                    </a>
+                    <a onclick="openGuideDirect('guide/weapon.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
+                        <span class="text-xl">⚔️</span>
+                        <span class="text-[11px] leading-tight">장비 도감</span>
+                    </a>
+                    <a onclick="openGuideDirect('tier_weapon.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
+                        <span class="text-xl">🌀</span>
+                        <span class="text-[11px] leading-tight">무공 도감</span>
+                    </a>
+                    <a onclick="openGuideDirect('majang.html')" class="mansarok-btn flex-col gap-0.5 !py-2 !h-16">
+                        <span class="text-xl">🀄</span>
+                        <span class="text-[11px] leading-tight">마작 가이드</span>
+                    </a>
                 </div>
             </section>
 
@@ -271,6 +301,7 @@
         
         <div id="view-archive" style="display: none;" class="px-4 pt-4"><div id="archive-grid-container"></div></div>
         <div id="view-guide" style="display: none;" class="px-4 pt-4"><div id="guide-content-loader"></div><div id="guide-dynamic-content"></div></div>
+        <div id="view-code" style="display: none;" class="px-4 pt-4"><div id="code-content-loader"></div></div> 
         <div id="view-builder" style="display: none;" class="px-4 pt-4"><div id="tools-menu"><div id="build-list-container"></div></div><div id="builder-interface" style="display:none;"></div></div>
         <div id="view-map-detail" style="display: none; height: 100vh;"><iframe id="map-iframe" class="w-full h-full border-0"></iframe></div>
     </main>
@@ -282,7 +313,7 @@
         <button id="nav-quiz" onclick="switchTab('quiz')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span class="text-[10px]">스무고개</span></button>
     </nav>
 
-    <div id="timer-sheet-modal" class="bottom-sheet-modal">
+    <div id="timer-sheet-modal">
         <div class="bottom-sheet-overlay absolute inset-0" onclick="closeTimerSheet()"></div>
         <div class="sheet-container">
             <div class="sheet-handle"></div>
@@ -294,10 +325,35 @@
         </div>
     </div>
 
-    <div id="person-bottom-sheet" class="bottom-sheet-modal">
+    <div id="person-bottom-sheet">
         <div class="bottom-sheet-overlay absolute inset-0" onclick="closePersonDetail()"></div>
         <div class="bottom-sheet-content">
             <div id="person-detail-body"></div>
+        </div>
+    </div>
+
+    <aside id="main-sidebar">
+        <div class="p-6 relative">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold mt-2">전체 메뉴</h2>
+                <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">✕</button>
+            </div>
+            
+            <ul class="space-y-6">
+                <li><a onclick="switchTab('home'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🏠 홈</a></li>
+                <li><a onclick="switchTab('quest'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">📜 무림록</a></li>
+                <li><a onclick="switchTab('archive'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🏆 업적 도감</a></li>
+                <li><a onclick="switchTab('quiz'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">❓ 퀴즈 족보</a></li>
+                <li><a onclick="openGuideDirect('code.html'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🎫 교환 코드</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <div id="info-modal" class="hidden fixed inset-0 bg-black/50 z-[2000] flex items-center justify-center p-4" onclick="closeInfoModal()">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm" onclick="event.stopPropagation()">
+            <div class="flex items-center gap-4 mb-4"><img id="modal-img" src="" class="w-16 h-16 object-contain border rounded-lg"><h3 id="modal-name" class="text-lg font-bold"></h3></div>
+            <p id="modal-desc" class="text-sm text-gray-600 leading-relaxed"></p>
+            <button onclick="closeInfoModal()" class="w-full mt-4 bg-gray-100 py-3 rounded-xl font-bold text-gray-700">닫기</button>
         </div>
     </div>
 
@@ -316,14 +372,17 @@
             document.getElementById('sidebar-overlay').classList.remove('active');
             document.body.style.overflow = ''; 
         }
+        
         function openGuideDirect(url) {
             console.log("가이드 이동:", url);
             if (typeof loadGuideContent === 'function') {
+                loadGuideContent(url); 
+                switchTab('guide');
+            } else {
                 switchTab('guide');
             }
         }
         
-        // ★★★ 스크롤 문제 해결: 닫을 때 overflow 해제 추가 ★★★
         function closeTimerSheet() { 
             document.getElementById('timer-sheet-modal').classList.remove('show'); 
             document.body.style.overflow = ''; 
@@ -344,7 +403,7 @@
                 }
             }
             
-            const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-archive', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-todo'];
+            const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-archive', 'view-news', 'view-guide', 'view-code', 'view-builder', 'view-map-detail', 'view-todo'];
             views.forEach(v => { 
                 const el = document.getElementById(v);
                 if(el) el.style.display = (v === 'view-' + tabName) ? 'block' : 'none'; 
@@ -354,11 +413,9 @@
             const activeBtn = document.getElementById('nav-' + tabName);
             if(activeBtn) activeBtn.classList.add('active');
             
-            // [할 일 탭] timer.js 업데이트 트리거
             if (tabName === 'todo' && typeof updateTimers === 'function') {
                 updateTimers();
             }
-            // [기존 탭 로직]
             else if (tabName === 'quiz') {
                 const tbody = document.getElementById('quiz-table-body');
                 if (typeof globalData !== 'undefined' && globalData.quiz && tbody && tbody.children.length === 0) {

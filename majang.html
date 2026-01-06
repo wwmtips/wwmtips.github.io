@@ -1,132 +1,147 @@
-<div class="quest-detail-container" style="text-align: left;">
+<div class="max-w-4xl mx-auto space-y-10 p-4 lg:p-0">
     
-    <style>
-        /* [수묵화 테마] 마작 가이드 스타일 */
-        .mj-tile-row {
-            background-color: #f4f4f2; /* 연한 미색 배경 */
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 15px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.02);
-        }
-        .mj-tile {
-            font-size: 3rem; 
-            line-height: 1;
-            cursor: help;
-            transition: transform 0.2s;
-            filter: drop-shadow(1px 2px 1px rgba(0,0,0,0.1)); /* 입체감 살짝 */
-        }
-        .mj-tile:hover {
-            transform: scale(1.2) translateY(-5px);
-        }
-        .mj-category {
-            color: var(--wuxia-text-main); 
-            font-size: 0.95em; 
-            margin-bottom: 5px; 
-            display: block;
-            font-weight: bold;
-            padding-left: 5px;
-            border-left: 3px solid var(--wuxia-accent-gold);
-        }
-    </style>
-
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
-        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            마작 입문서
-        </h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">강호의 고수가 되기 위한 마작패 식별 및 화료법</p>
+    <div class="border-b-2 border-blue-600 pb-6 mb-8">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">가이드</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">마작 입문서</h2>
+        <p class="text-gray-500 text-[14px] mt-2 font-medium">강호의 고수가 되기 위한 마작패 식별 및 화료법</p>
     </div>
 
-    <div class="detail-chunk" style="margin-bottom: 30px;">
-        <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
-            <p style="margin: 0 0 10px 0; color: var(--wuxia-accent-red);">
-                <strong>📍 핵심 요약</strong>
+    <section class="bg-amber-50 rounded-2xl border border-amber-100 p-6 shadow-sm">
+        <h3 class="text-[16px] font-bold text-amber-900 mb-3 flex items-center gap-2">
+            📍 핵심 요약
+        </h3>
+        <p class="text-[15px] text-amber-900/90 leading-relaxed">
+            마작은 14개의 패를 모아 <strong class="text-amber-950 font-black">'완성된 형태(화료)'</strong>를 만드는 두뇌 싸움입니다.<br>
+            수많은 패 중에서 나에게 필요한 패를 취하고, 필요 없는 패를 버리며 상대보다 빠르게 <span class="text-blue-600 font-bold">용의 형상</span>을 완성해야 합니다.
+        </p>
+    </section>
+
+    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-gray-50/50 px-5 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full mr-2.5"></span>1. 수패 (숫자가 있는 패)
+            </h3>
+        </div>
+        <div class="p-6 space-y-8">
+            <p class="text-gray-600 text-[15px] leading-relaxed">
+                숫자 1부터 9까지 존재하는 패입니다. 연속된 숫자(예: 1,2,3)나 똑같은 패 3개를 모을 때 주로 사용됩니다.
             </p>
-            <p style="margin: 0; color: var(--wuxia-text-main); font-size: 0.95em; line-height: 1.6;">
-                마작은 14개의 패를 모아 <strong>'완성된 형태(화료)'</strong>를 만드는 두뇌 싸움입니다.<br>
-                수많은 패 중에서 나에게 필요한 패를 취하고, 필요 없는 패를 버리며 상대보다 빠르게 <span style="color:var(--wuxia-accent-gold); font-weight:bold;">용의 형상</span>을 완성해야 합니다.
+
+            <div class="space-y-3">
+                <span class="text-[13px] font-bold text-gray-700 border-l-3 border-blue-600 pl-2">만수패 (萬子): 한자 '만'이 적힌 패</span>
+                <div class="bg-gray-50 rounded-xl p-4 flex flex-wrap gap-2 lg:gap-3 justify-center shadow-inner">
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="1만">🀇</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="2만">🀈</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="3만">🀉</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="4만">🀊</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="5만">🀋</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="6만">🀌</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="7만">🀍</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="8만">🀎</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="9만">🀏</span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <span class="text-[13px] font-bold text-gray-700 border-l-3 border-blue-600 pl-2">통수패 (筒子): 둥근 문양이 그려진 패</span>
+                <div class="bg-gray-50 rounded-xl p-4 flex flex-wrap gap-2 lg:gap-3 justify-center shadow-inner">
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="1통">🀙</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="2통">🀚</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="3통">🀛</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="4통">🀜</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="5통">🀝</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="6통">🀞</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="7통">🀟</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="8통">🀠</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="9통">🀡</span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <span class="text-[13px] font-bold text-gray-700 border-l-3 border-blue-600 pl-2">삭수패 (索子): 대나무 모양 (1삭은 공작새)</span>
+                <div class="bg-gray-50 rounded-xl p-4 flex flex-wrap gap-2 lg:gap-3 justify-center shadow-inner">
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="1삭(공작)">🀐</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="2삭">🀑</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="3삭">🀒</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="4삭">🀓</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="5삭">🀔</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="6삭">🀕</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="7삭">🀖</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="8삭">🀗</span>
+                    <span class="text-4xl lg:text-5xl hover:scale-125 transition-transform cursor-help drop-shadow-sm" title="9삭">🀘</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-gray-50/50 px-5 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full mr-2.5"></span>2. 자패 (글자가 있는 패)
+            </h3>
+        </div>
+        <div class="p-6 space-y-6">
+            <p class="text-gray-600 text-[15px] leading-relaxed">
+                숫자가 아닌 글자 패입니다. 이 패들은 <strong class="text-gray-900">'연속된 순서'로 쓸 수 없으며</strong>, 오직 <span class="text-red-500 font-black">똑같은 패 2개 또는 3개</span>를 모을 때만 사용합니다.
             </p>
+
+            <div class="bg-gray-900 rounded-2xl p-6 flex flex-wrap gap-4 lg:gap-6 justify-center shadow-lg">
+                <div class="flex gap-2">
+                    <span class="text-4xl lg:text-5xl text-white hover:scale-125 transition-transform cursor-help" title="동">🀀</span>
+                    <span class="text-4xl lg:text-5xl text-white hover:scale-125 transition-transform cursor-help" title="남">🀁</span>
+                    <span class="text-4xl lg:text-5xl text-white hover:scale-125 transition-transform cursor-help" title="서">🀂</span>
+                    <span class="text-4xl lg:text-5xl text-white hover:scale-125 transition-transform cursor-help" title="북">🀃</span>
+                </div>
+                <div class="hidden lg:block w-px h-12 bg-gray-700 self-center"></div>
+                <div class="flex gap-2">
+                    <span class="text-4xl lg:text-5xl text-white hover:scale-125 transition-transform cursor-help" title="백">🀆</span>
+                    <span class="text-4xl lg:text-5xl text-green-400 hover:scale-125 transition-transform cursor-help" title="발">🀅</span>
+                    <span class="text-4xl lg:text-5xl text-red-500 hover:scale-125 transition-transform cursor-help" title="중">🀄</span>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-4 border-l-4 border-gray-300">
+                <p class="text-[13px] text-gray-700 leading-relaxed">
+                    <strong class="text-blue-600">💡 초반 팁:</strong> 삼원패(백, 발, 중)는 3개를 모으면 그 자체로 점수(역)가 되므로 초보자가 노리기 가장 좋습니다.
+                </p>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
-
-    <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
-            1. 수패 (숫자가 있는 패)
-        </h3>
-        <p style="color: var(--wuxia-text-sub); line-height: 1.8; margin-bottom: 15px;">
-            숫자 1부터 9까지 존재하는 패입니다. 연속된 숫자(예: 1,2,3)나 똑같은 패 3개를 모을 때 주로 사용됩니다.
-        </p>
-
-        <span class="mj-category"> 만수패 (萬子): 한자 '만'이 적힌 패</span>
-        <div class="mj-tile-row">
-            <span class="mj-tile" title="1만">🀇</span><span class="mj-tile" title="2만">🀈</span><span class="mj-tile" title="3만">🀉</span>
-            <span class="mj-tile" title="4만">🀊</span><span class="mj-tile" title="5만">🀋</span><span class="mj-tile" title="6만">🀌</span>
-            <span class="mj-tile" title="7만">🀍</span><span class="mj-tile" title="8만">🀎</span><span class="mj-tile" title="9만">🀏</span>
+    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-gray-50/50 px-5 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full mr-2.5"></span>3. 승리 조건: 화료
+            </h3>
         </div>
-
-        <span class="mj-category"> 통수패 (筒子): 둥근 문양이 그려진 패</span>
-        <div class="mj-tile-row">
-            <span class="mj-tile" title="1통">🀙</span><span class="mj-tile" title="2통">🀚</span><span class="mj-tile" title="3통">🀛</span>
-            <span class="mj-tile" title="4통">🀜</span><span class="mj-tile" title="5통">🀝</span><span class="mj-tile" title="6통">🀞</span>
-            <span class="mj-tile" title="7통">🀟</span><span class="mj-tile" title="8통">🀠</span><span class="mj-tile" title="9통">🀡</span>
+        <div class="p-6 space-y-6">
+            <p class="text-gray-600 text-[15px]">
+                승리하기 위해서는 14개의 패로 <strong class="text-gray-900">[몸통 4세트 + 머리 1세트]</strong>를 완성해야 합니다.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-blue-50/30 p-5 rounded-2xl border border-blue-100/50">
+                    <h4 class="font-bold text-blue-700 mb-2 flex items-center gap-2">
+                        몸통 <span class="text-[11px] font-normal opacity-70">(3개씩 4세트)</span>
+                    </h4>
+                    <p class="text-[13px] text-gray-600 leading-relaxed">
+                        연속된 숫자 <span class="inline-block bg-white px-2 py-1 rounded border border-blue-100 mx-1 text-lg">🀇🀈🀉</span><br>
+                        혹은 똑같은 패 3개 <span class="inline-block bg-white px-2 py-1 rounded border border-blue-100 mx-1 text-lg">🀅🀅🀅</span>
+                    </p>
+                </div>
+                <div class="bg-red-50/30 p-5 rounded-2xl border border-red-100/50">
+                    <h4 class="font-bold text-red-700 mb-2 flex items-center gap-2">
+                        머리 <span class="text-[11px] font-normal opacity-70">(2개 1세트)</span>
+                    </h4>
+                    <p class="text-[13px] text-gray-600 leading-relaxed">
+                        완전히 똑같은 패 2개 <span class="inline-block bg-white px-2 py-1 rounded border border-red-100 mx-1 text-lg">🀄🀄</span><br>
+                        <span class="text-[11px] text-red-400 font-medium">※ 용의 눈이라고 부릅니다.</span>
+                    </p>
+                </div>
+            </div>
         </div>
-
-        <span class="mj-category"> 삭수패 (索子): 대나무 모양 (1삭은 공작새)</span>
-        <div class="mj-tile-row">
-            <span class="mj-tile" title="1삭(공작)">🀐</span><span class="mj-tile" title="2삭">🀑</span><span class="mj-tile" title="3삭">🀒</span>
-            <span class="mj-tile" title="4삭">🀓</span><span class="mj-tile" title="5삭">🀔</span><span class="mj-tile" title="6삭">🀕</span>
-            <span class="mj-tile" title="7삭">🀖</span><span class="mj-tile" title="8삭">🀗</span><span class="mj-tile" title="9삭">🀘</span>
-        </div>
-    </div>
-
-    <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
-            2. 자패 (글자가 있는 패)
-        </h3>
-        <p style="color: var(--wuxia-text-sub); line-height: 1.6; margin-bottom: 10px;">
-            숫자가 아닌 글자 패입니다. 이 패들은 <strong>'연속된 순서'로 쓸 수 없으며</strong>, 오직 <span style="color:var(--wuxia-accent-red); font-weight:bold;">똑같은 패 2개 또는 3개</span>를 모을 때만 사용합니다.
-        </p>
-        
-        <div class="mj-tile-row">
-            <span class="mj-tile" title="동">🀀</span><span class="mj-tile" title="남">🀁</span><span class="mj-tile" title="서">🀂</span><span class="mj-tile" title="북">🀃</span>
-            <span style="border-right: 1px solid #ccc; margin: 0 15px;"></span>
-            <span class="mj-tile" title="백">🀆</span><span class="mj-tile" title="발">🀅</span><span class="mj-tile" title="중">🀄</span>
-        </div>
-
-        <p style="color: var(--wuxia-text-main); font-size: 0.9em; margin-top: 10px; background-color: #f9f9f9; padding: 10px; border-left: 3px solid #999;">
-            <strong>💡 초반 팁:</strong> 삼원패(백, 발, 중)는 3개를 모으면 그 자체로 점수(역)가 되므로 초보자가 노리기 가장 좋습니다.
-        </p>
-    </div>
-
-    <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.2em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">
-            3. 승리 조건: 화료
-        </h3>
-        <p style="color: var(--wuxia-text-sub); line-height: 1.6;">
-            승리하기 위해서는 14개의 패로 <strong>[몸통 4세트 + 머리 1세트]</strong>를 완성해야 합니다.
-        </p>
-        
-        <div style="background-color: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 4px; margin-top: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-            <ul style="color: var(--wuxia-text-sub); line-height: 1.8; padding-left: 20px; margin: 0;">
-                <li style="margin-bottom: 10px;">
-                    <strong style="color: var(--wuxia-text-main);">몸통 (3개씩 4세트):</strong><br>
-                    연속된 숫자 <span style="color:#333; font-size:1.1em;">(🀇🀈🀉)</span> 혹은 똑같은 패 3개 <span style="color:#333; font-size:1.1em;">(🀅🀅🀅)</span>
-                </li>
-                <li>
-                    <strong style="color: var(--wuxia-text-main);">머리 (2개 1세트):</strong><br>
-                    완전히 똑같은 패 2개 <span style="color:#333; font-size:1.1em;">(🀄🀄)</span> - 용의 눈
-                </li>
-            </ul>
-        </div>
-    </div>
+    </section>
 
 </div>

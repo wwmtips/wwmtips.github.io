@@ -1,422 +1,1294 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>연운: 한국 위키</title>
-    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
+
         gtag('config', 'G-5SMVDZTDST');
     </script>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="강호의 고수가 되기 위한 필수 지침서. 일일/주간 숙제, 무림록, 최신 쿠폰 코드를 한눈에 확인하세요.">
+    <meta name="description" content="강호의 고수가 되기 위한 필수 지침서. 일일/주간 숙제, 무림록, 최신 쿠폰 코드를 한눈에 확인하세요.">
 
+    <meta property="og:title" content="연운 위키">
+    <meta property="og:image" content="fav/apple-icon-120x120.png">
+    <meta property="og:url" content="https://wwm.tips/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="fav/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="fav/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="fav/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="fav/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="fav/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="fav/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="fav/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="fav/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="fav/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="fav/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="fav/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="fav/favicon-16x16.png">
+    <link rel="manifest" href="fav/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="fav/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { primary: '#3182f6', bgMain: '#f2f4f6' }
-                }
-            }
+        // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
+        const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbzSYkfFvOnpuL9MUWpHJk-wFa6_u8pAJW5OOVy0oYY8JK36E5n7oq7wxlMnU-vGKqBr/exec";
+        // 2. [추가] 빌드 공유용 주소 (새로 만든 스크립트 배포 주소)
+        const BUILD_API_URL = "https://script.google.com/macros/s/AKfycbz7c8YREyAa6aD1F3f7Hve3meAsOtjepSX_zyZLVbloj9qosdLgSArdBYFGKGYmNU2_tQ/exec";
+
+        /* document.addEventListener("DOMContentLoaded", function() {
+             checkEventStatus(); // 이벤트 로직은 EVENT_API_URL을 사용 (수정 불필요)
+         });*/
+
+        function checkEventStatus() {
+            const banner = document.getElementById('luckyBanner');
+            const title = document.getElementById('luckyTitle');
+            const desc = document.getElementById('luckyDesc');
+
+            if (!banner) return;
+
+            // 로딩 중 클릭 방지
+            banner.style.pointerEvents = 'none';
+            banner.style.cursor = 'wait';
+            banner.style.opacity = '0.7';
+
+            // 1. 내 IP 가져오기
+            fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(ipData => {
+                    const userIp = ipData.ip;
+                    // 2. 서버에 상태 + 내 IP 전송
+                    return fetch(`${EVENT_API_URL}?action=status&ip=${userIp}`);
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // 로딩 해제
+                    banner.style.pointerEvents = 'auto';
+                    banner.style.cursor = 'pointer';
+                    banner.style.opacity = '1';
+
+                    // ★ [케이스 1] 내가 당첨자인 경우
+                    if (data.startsWith("MYWIN")) {
+                        const myCode = data.split(":")[1]; // 코드 추출
+
+                        // 배너 스타일 (금색으로 강조하거나, 기본 빨강 유지)
+                        banner.classList.remove('ended');
+
+                        // 클릭 시 코드 알림
+                        banner.onclick = function (e) {
+                            e.preventDefault(); // 페이지 이동 막기
+                            alert(`축하합니다! 대협의 당첨 코드: [ ${myCode} ]\n잊지 말고 캡처해두시오!\n24시간 내에 등록되지 않을 경우 다음 이벤트를 위해 자동 환불 처리되오!`);
+                        };
+
+                        title.innerText = "🎉 축하하오! 당첨이오! 🎉";
+                        // desc.style.fontWeight = "bold"; 
+                        desc.innerText = "여기를 눌러 당첨 코드를 확인하시오!";
+
+                        // ★ [케이스 2] 다른 사람이 당첨되어 종료된 경우
+                    } else if (data.startsWith("GAMEOVER")) {
+                        const parts = data.split(":");
+                        let winnerName = "익명";
+                        if (parts.length > 1) winnerName = parts[1];
+
+                        // 흑백 처리
+                        banner.classList.add('ended');
+
+                        banner.onclick = function (e) {
+                            e.preventDefault();
+                            alert(`이미 [${winnerName}]님이 당첨되셨습니다. 다음 기회에!`);
+                        };
+
+                        title.innerText = "행운봉투 이벤트 종료";
+                        title.style.color = "#ffcdd2";
+                        desc.innerText = `${winnerName} 대협이 행운봉투를 여셨소!`;
+
+                        // ★ [케이스 3] 이벤트 진행 중
+                    } else {
+                        banner.onclick = function () { location.href = 'event/'; };
+                        title.innerText = "행운봉투 도착!";
+                        desc.innerText = "새해 [볶]음면 받으세요!";
+                    }
+                })
+                .catch(err => {
+                    console.log("오류:", err);
+                    // 에러 발생 시 기본 복구
+                    banner.style.pointerEvents = 'auto';
+                    banner.style.cursor = 'pointer';
+                    banner.style.opacity = '1';
+                    banner.onclick = function () { location.href = 'event/'; };
+                });
         }
     </script>
-    <style type="text/tailwindcss">
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f2f4f6; color: #191f28; -webkit-tap-highlight-color: transparent; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .snap-x-mandatory { scroll-snap-type: x mandatory; }
-        .snap-start { scroll-snap-align: start; }
-        
-        /* [중요] timer.js 호환성을 위한 유틸리티 */
-        .show { display: block !important; } /* 바텀시트 강제 표시 */
-        
-        /* 네비게이션 활성화 스타일 */
-        .nav-item.active { @apply text-gray-900; }
-        .nav-item.active svg { @apply stroke-gray-900 stroke-2; }
-    </style>
+    </body>
+
+</html>
+
 </head>
 
-<body class="pb-24">
+<body>
 
-    <script src="hw.js"></script>
-    <script src="script.js"></script>
-    <script src="timer.js"></script>
-
-    <div id="sidebar-overlay" onclick="closeSidebar()" class="fixed inset-0 bg-black/40 z-[2999] hidden backdrop-blur-sm transition-opacity"></div>
-
-    <header class="sticky top-0 z-50 bg-white h-[60px] flex items-center px-5 gap-3 border-b border-gray-100">
-        <div class="flex-1 bg-gray-100 rounded-lg h-10 flex items-center px-3 text-gray-500">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="header-search-input" placeholder="검색" class="bg-transparent border-none w-full h-full ml-2 outline-none text-gray-800 text-sm" autocomplete="off">
-        </div>
-
-        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-gray-800 cursor-pointer hover:bg-gray-50 rounded-full transition-colors">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-        
-        <div id="global-search-results" class="hidden absolute top-[60px] left-0 right-0 bg-white z-50 border-t shadow-lg max-h-[300px] overflow-y-auto"></div>
-    </header>
-
-    <aside id="main-sidebar" class="fixed top-0 right-[-100%] w-full max-w-[320px] h-full bg-white z-[3000] flex flex-col transition-[right] duration-300 ease-in-out shadow-2xl">
-        <div class="flex justify-between items-center px-5 h-[60px] border-b border-gray-100">
-            <div class="text-lg font-bold text-gray-800">전체 메뉴</div>
-            <div class="flex gap-4 text-gray-800">
-                 <button>🔔</button>
-                 <button>⚙️</button>
-                 <button onclick="closeSidebar()">✕</button>
+    <div id="fixed-top-bar">
+        <header id="main-header">
+            <div class="logo">
+                <span class="logo-icon">
+                    <a href="#" onclick="switchTab('home'); closeSidebar(); return false;">
+                        <img src="images/logo.png" width="36px" height="36px" alt="로고">
+                    </a>
+                </span>
             </div>
-        </div>
-        <div class="flex-1 overflow-y-auto p-5">
-            <div class="mb-8">
-                <div class="text-xs font-bold text-gray-400 mb-3">바로가기</div>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3 text-[16px] font-bold text-gray-800 cursor-pointer" onclick="switchTab('home'); closeSidebar();"><span class="text-xl w-6 text-center">🏠</span> 홈</div>
-                    <div class="flex items-center gap-3 text-[16px] font-bold text-gray-800 cursor-pointer" onclick="switchTab('todo'); closeSidebar();"><span class="text-xl w-6 text-center">⏰</span> 오늘의 할 일</div>
-                    <div class="flex items-center gap-3 text-[16px] font-bold text-gray-800 cursor-pointer" onclick="switchTab('quest'); closeSidebar();"><span class="text-xl w-6 text-center">📜</span> 무림록</div>
-                    <div class="flex items-center gap-3 text-[16px] font-bold text-gray-800 cursor-pointer" onclick="switchTab('chunji'); closeSidebar();"><span class="text-xl w-6 text-center">🏺</span> 천지록</div>
-                </div>
+
+            <div class="search-container">
+                <input type="text" id="header-search-input" placeholder="통합 검색" autocomplete="off">
+                <button id="search-clear-btn" class="search-clear-btn" style="display:none;">X</button>
+                <div id="global-search-results" class="search-dropdown"></div>
             </div>
-            
-            <div class="mb-8">
-                <div class="text-xs font-bold text-gray-400 mb-3">커뮤니티</div>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3 text-[16px] font-bold text-gray-800 cursor-pointer" onclick="switchTab('quiz'); closeSidebar();"><span class="text-xl w-6 text-center">❓</span> 스무고개 족보</div>
-                    <div class="flex items-center gap-3 text-[16px] font-bold text-gray-800 cursor-pointer" onclick="openGuideDirect('code.html'); closeSidebar();"><span class="text-xl w-6 text-center">🎫</span> 교환 코드</div>
-                    <div class="flex items-center gap-3 text-[16px] font-bold text-gray-800 cursor-pointer" onclick="openReportSheet(); closeSidebar();"><span class="text-xl w-6 text-center">📢</span> 제보하기</div>
-                </div>
-            </div>
-        </div>
-    </aside>
+
+            <button id="menu-toggle-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </header>
+
+    </div>
+
 
     <main id="main-content">
         <div id="view-home">
-            <section class="relative aspect-[21/10] bg-gray-200 mb-3 overflow-hidden">
-                <div class="w-full h-full relative">
-                    <div id="hero-slider-track" class="flex h-full transition-transform duration-500 ease-in-out"></div> 
-                    <div id="slider-indicators" class="absolute bottom-4 w-full flex justify-center gap-1.5 z-10"></div>
+            <div class="hero-slider-wrapper">
+                <div id="hero-slider-track" class="slider-track"></div>
+                <div class="slider-controls">
+                    <button class="slider-btn prev" onclick="moveSlide(-1)">❮</button>
+                    <button class="slider-btn next" onclick="moveSlide(1)">❯</button>
+                </div>
+                <div id="slider-indicators" class="slider-indicators"></div>
+            </div>
+
+            <section class="mansarok-section" style="margin-top: 0px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>기본 가이드</h3>
+                </div>
+                <div class="common-slim-grid">
+
+                    <a class="slim-btn" onclick="openGuideDirect('newb.html')">
+                        <span>강호 입문서</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('guide/up.html')">
+                        <span>육성 가이드</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('moon.html')">
+                        <span>문파별 입문 방법</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('guide/weapon.html')">
+                        <span>장비 도감</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('tier_weapon.html')">
+                        <span>무공 도감</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('majang.html')">
+                        <span>마작 가이드</span>
+                    </a>
                 </div>
             </section>
 
-            <section class="bg-white p-5 mb-3">
-                <div class="flex justify-between items-end mb-4">
-                    <h3 class="text-[19px] font-extrabold text-gray-900">기본 가이드</h3>
+            <section id="mansarok-container" class="mansarok-section" style="margin-top: 0px;margin-bottom: 5px;">
+                <div class="section-header-clickable" onclick="switchTab('quest')">
+                    <h3><span class="deco-bar"></span>무림록</h3>
+                    <span style="font-size:0.8em; color:#999;">전체보기 ></span>
                 </div>
-                <div class="relative">
-                    <div id="guide-scroll-wrapper" class="flex overflow-x-auto gap-3 pb-4 snap-x-mandatory no-scrollbar lg:grid lg:grid-cols-6 lg:gap-4 lg:pb-0">
-                        <a onclick="openGuideDirect('newb.html')" class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                            <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl border border-orange-100/50">📜</div>
-                            <span class="text-xs font-bold text-gray-600 text-center leading-tight whitespace-nowrap">강호<br>입문서</span>
-                        </a>
-                        <a onclick="openGuideDirect('guide/up.html')" class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                            <div class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-2xl border border-red-100/50">📈</div>
-                            <span class="text-xs font-bold text-gray-600 text-center leading-tight whitespace-nowrap">육성<br>가이드</span>
-                        </a>
-                        <a onclick="openGuideDirect('moon.html')" class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                            <div class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl border border-gray-200/50">🏛️</div>
-                            <span class="text-xs font-bold text-gray-600 text-center leading-tight whitespace-nowrap">문파<br>입문</span>
-                        </a>
-                        <a onclick="openGuideDirect('guide/weapon.html')" class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                            <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl border border-blue-100/50">⚔️</div>
-                            <span class="text-xs font-bold text-gray-600 text-center leading-tight whitespace-nowrap">장비<br>도감</span>
-                        </a>
-                        <a onclick="openGuideDirect('tier_weapon.html')" class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                            <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl border border-purple-100/50">🌀</div>
-                            <span class="text-xs font-bold text-gray-600 text-center leading-tight whitespace-nowrap">무공<br>도감</span>
-                        </a>
-                        <a onclick="openGuideDirect('majang.html')" class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                            <div class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center text-2xl border border-pink-100/50">🀄</div>
-                            <span class="text-xs font-bold text-gray-600 text-center leading-tight whitespace-nowrap">마작<br>가이드</span>
-                        </a>
-                    </div>
-                    <div class="flex justify-center gap-1.5 mt-2 lg:hidden" id="guide-indicators">
-                        <div class="w-1.5 h-1.5 rounded-full bg-blue-500 transition-all duration-300"></div>
-                        <div class="w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-300"></div>
-                    </div>
+                <div id="mansarok-list" class="mansarok-grid">
                 </div>
             </section>
 
-            <section class="bg-white p-5 mb-3">
-                <div class="flex justify-between items-end mb-4">
-                    <h3 class="text-[19px] font-extrabold text-gray-900">오늘의 할 일</h3>
-                    <span class="text-sm font-bold text-gray-400 cursor-pointer hover:text-gray-600" onclick="switchTab('todo')">더보기</span>
+            <section class="timer-section">
+                <div class="section-header-clickable" onclick="openGuideDirect('npc.html')" ;>
+                    <h3><span class="deco-bar"></span>강호령</h3>
+                    <span style="font-size:0.8em; color:#999;">전체보기 ></span>
                 </div>
-                <div id="gangho-timer-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div class="text-center py-10 text-gray-400 text-sm">데이터를 불러오는 중...</div>
+                <div id="gangho-timer-list" class="map-grid">
                 </div>
-            </section>
-
-            <section class="bg-white p-5 mb-3">
-                <div class="flex justify-between items-end mb-4">
-                    <h3 class="text-[19px] font-extrabold text-gray-900">무림록</h3>
-                    <span class="text-sm font-bold text-gray-400 cursor-pointer hover:text-gray-600" onclick="switchTab('quest')">전체보기</span>
-                </div>
-                <div id="mansarok-list" class="flex flex-col divide-y divide-gray-100"></div>
             </section>
             
-            <section class="bg-white p-5 mb-3">
-                <div class="flex justify-between items-end mb-4">
-                    <h3 class="text-[19px] font-extrabold text-gray-900">천지록</h3>
-                    <span class="text-sm font-bold text-gray-400 cursor-pointer hover:text-gray-600" onclick="switchTab('chunji')">전체보기</span>
+            <section class="chunji-section">
+                <div class="section-header-clickable" onclick="showView('chunji')">
+                    <h3><span class="deco-bar"></span>천지록</h3>
+                    <span style="font-size:0.8em; color:#999;">전체보기 ></span>
                 </div>
-                <div id="home-chunji-list" class="flex flex-col divide-y divide-gray-100"></div>
+                <div id="home-chunji-list" class="chunji-list-main">
+                </div>
             </section>
-        </div>
 
-        <div id="view-todo" style="display: none;" class="p-5">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-gray-900">강호 시시각각</h2>
-                <span id="server-time" class="text-xs font-mono bg-white border border-gray-200 px-2 py-1 rounded text-gray-500">00:00:00</span>
+            <section class="section-header-clickable">
+                <h3><span class="deco-bar"></span>인물</h3>
+            </section>
+            <div id="home-char-list">
             </div>
-            <div id="gangho-timer-list-tab" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-        </div>
 
-        <div id="view-quest" style="display: none;" class="p-5">
-            <div id="quest-list-view">
-                <div class="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
-                    <select id="quest-type-select" class="bg-white border border-gray-200 text-sm p-2 rounded-lg outline-none focus:border-blue-500" onchange="onQuestTypeChange()"><option value="all">전체</option></select>
-                    <select id="quest-location-select" class="bg-white border border-gray-200 text-sm p-2 rounded-lg outline-none focus:border-blue-500" onchange="applyQuestFilter()"><option value="all">지역</option></select>
+            <section class="boss-section">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>적수</h3>
                 </div>
-                <div id="quest-grid-container" class="space-y-3"></div>
-                <div id="pagination-container" class="flex justify-center gap-2 mt-8 pb-10"></div>
-            </div>
-            <div id="quest-detail-view" style="display:none;">
-                <button onclick="showQuestList()" class="mb-4 text-sm font-bold text-blue-600 flex items-center"><span class="text-lg mr-1">←</span> 목록으로</button>
-                <div id="quest-content-loader" class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm min-h-[200px]"></div>
-            </div>
-        </div>
-
-        <div id="view-chunji" style="display: none;" class="p-5">
-            <div id="chunji-list-view">
-                <div class="flex gap-2 mb-4">
-                    <select id="chunji-type-select" class="bg-white border border-gray-200 text-sm p-2 rounded-lg outline-none" onchange="onChunjiTypeChange()"><option value="all">전체</option></select>
-                </div>
-                <div id="chunji-list-container" class="grid grid-cols-1 gap-0 bg-white rounded-xl border border-gray-100 divide-y divide-gray-100"></div>
-                <div id="chunji-pagination-container" class="flex justify-center gap-2 mt-8 pb-10"></div>
-            </div>
-            <div id="chunji-detail-view" style="display:none;">
-                <button onclick="showChunjiList()" class="mb-4 text-sm font-bold text-blue-600 flex items-center"><span class="text-lg mr-1">←</span> 목록으로</button>
-                <div id="chunji-detail-content" class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm min-h-[200px]"></div>
-            </div>
-        </div>
-
-        <div id="view-quiz" style="display: none;" class="p-5">
-            <div id="quiz-counter-area" class="text-xs text-gray-500 mb-2 font-medium">데이터 로딩 중...</div>
-            <input type="text" id="quiz-local-search" class="w-full bg-white border border-gray-200 p-3 rounded-xl mb-4 text-sm outline-none focus:border-blue-500 transition-colors" placeholder="단서를 입력하세요 (예: 가시)">
-            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-                <table class="w-full text-sm text-left"><tbody id="quiz-table-body"></tbody></table>
-            </div>
-        </div>
-
-        <div id="view-guide" style="display: none;" class="p-5"><div id="guide-content-loader"></div><div id="guide-dynamic-content" class="bg-white rounded-xl p-5 border border-gray-100"></div></div>
-    </main>
-
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 h-[60px] flex justify-between items-center px-6 z-50">
-        <button id="nav-home" onclick="switchTab('home')" class="nav-item active flex flex-col items-center justify-center w-14 gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-            <span class="text-[10px] font-bold">홈</span>
-        </button>
-        <button id="nav-quest" onclick="switchTab('quest')" class="nav-item flex flex-col items-center justify-center w-14 gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            <span class="text-[10px] font-bold">무림록</span>
-        </button>
-        <button id="nav-todo" onclick="switchTab('todo')" class="nav-item flex flex-col items-center justify-center w-14 gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-            <span class="text-[10px] font-bold">할 일</span>
-        </button>
-        <button id="nav-quiz" onclick="switchTab('quiz')" class="nav-item flex flex-col items-center justify-center w-14 gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="text-[10px] font-bold">스무고개</span>
-        </button>
-    </nav>
-
-    <div id="timer-sheet-modal" class="fixed inset-0 z-[9999] hidden backdrop-blur-sm transition-opacity">
-        <div class="absolute inset-0 bg-black/50" onclick="closeTimerSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-white rounded-t-2xl p-6 shadow-2xl transition-transform duration-300">
-            <div id="timer-detail-content"></div>
-        </div>
-    </div>
-    
-    <div id="report-sheet-modal" class="fixed inset-0 z-[9999] hidden">
-        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="closeReportSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-white rounded-t-2xl p-6 transition-transform transform translate-y-full duration-300 ease-out">
-            <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-6"></div>
-            <div class="bg-gray-50 p-4 rounded-xl mb-4 text-sm text-gray-600">오류 제보는 언제나 환영합니다.</div>
-            <button onclick="window.open('https://open.kakao.com/o/sXW3q9bg', '_blank')" class="w-full py-4 bg-yellow-300 rounded-xl font-bold text-gray-900">카카오톡으로 제보하기</button>
-        </div>
-    </div>
-
-    <script>
-        // 사이드바
-        function toggleSidebar() { 
-            const sb = document.getElementById('main-sidebar');
-            const ol = document.getElementById('sidebar-overlay');
-            if(sb && ol) { sb.style.right = '0'; ol.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
-        }
-        function closeSidebar() { 
-            const sb = document.getElementById('main-sidebar');
-            const ol = document.getElementById('sidebar-overlay');
-            if(sb && ol) { sb.style.right = '-100%'; ol.classList.add('hidden'); document.body.style.overflow = ''; }
-        }
-
-        // 가이드 스크롤 인디케이터
-        const guideScroll = document.getElementById('guide-scroll-wrapper');
-        const guideDots = document.getElementById('guide-indicators')?.children;
-        if(guideScroll && guideDots) {
-            guideScroll.addEventListener('scroll', () => {
-                const percent = guideScroll.scrollLeft / (guideScroll.scrollWidth - guideScroll.clientWidth);
-                if(percent > 0.5) {
-                    guideDots[0].classList.replace('bg-blue-500', 'bg-gray-200');
-                    guideDots[1].classList.replace('bg-gray-200', 'bg-blue-500');
-                } else {
-                    guideDots[1].classList.replace('bg-blue-500', 'bg-gray-200');
-                    guideDots[0].classList.replace('bg-gray-200', 'bg-blue-500');
-                }
-            });
-        }
-
-        // 탭 전환
-        window.switchTab = function(tabName) {
-            const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-todo', 'view-guide'];
-            views.forEach(v => { document.getElementById(v).style.display = (v === 'view-' + tabName) ? 'block' : 'none'; });
-            
-            const navIds = ['nav-home', 'nav-quest', 'nav-todo', 'nav-quiz'];
-            navIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (id === 'nav-' + tabName) { el.classList.add('active'); el.classList.remove('text-gray-400'); }
-                else { el.classList.remove('active'); el.classList.add('text-gray-400'); }
-            });
-            window.scrollTo(0, 0);
-        };
-
-        // 가이드 바로가기
-        function openGuideDirect(url) {
-            if (typeof loadGuideContent === 'function') { loadGuideContent(url); switchTab('guide'); } 
-            else { switchTab('guide'); }
-        }
-
-        // 타이머 시트 닫기 & 호환성
-        function closeTimerSheet() { 
-            const modal = document.getElementById('timer-sheet-modal');
-            modal.classList.add('hidden'); 
-            modal.classList.remove('show');
-        }
-
-        // 할 일 리스트 (안전장치 + Tailwind 스타일)
-        window.updateTimers = function() {
-            const homeList = document.getElementById('gangho-timer-list');
-            const tabList = document.getElementById('gangho-timer-list-tab');
-            
-            const timerData = (typeof TIMERS !== 'undefined') ? TIMERS : [
-                { name: '일일 초기화', desc: '매일 05:00', type: 'reset', freq: 'daily' },
-                { name: '주간 초기화', desc: '매주 월 05:00', type: 'reset', freq: 'weekly' }
-            ];
-
-            const now = new Date();
-            const serverTimeEl = document.getElementById('server-time');
-            if (serverTimeEl) serverTimeEl.innerText = now.toTimeString().split(' ')[0];
-
-            let html = '';
-            timerData.forEach(timer => {
-                let timeText = "확인";
-                let isUrgent = false;
-                
-                if (typeof getNextResetTime === 'function' && typeof formatDuration === 'function' && timer.type === 'reset') {
-                    const target = getNextResetTime(timer.freq, now);
-                    const diff = target - now;
-                    timeText = formatDuration(diff);
-                    if (diff < 3 * 60 * 60 * 1000) isUrgent = true;
-                } else if (timer.type === 'daily_operating') {
-                    const h = now.getHours();
-                    timeText = (h >= 5 && h < 7) ? "휴장" : "운영";
-                }
-
-                const clockClass = isUrgent ? "text-red-500 bg-red-50" : "text-blue-500 bg-blue-50";
-                html += `
-                <div class="bg-white p-4 rounded-xl border border-gray-100 flex justify-between items-center cursor-pointer active:scale-95 transition-transform shadow-sm" onclick="openTimerSheetByName('${timer.name}')">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-xl text-orange-500">⏰</div>
-                        <div>
-                            <div class="font-bold text-gray-800 text-[15px]">${timer.name}</div>
-                            <div class="text-xs text-gray-500 mt-0.5">${timer.desc}</div>
+          
+                <div id="home-boss-list" class="swipe-track">
+                          <div class="mini-card" onclick="location.href='https://wwm.tips/?q=193'">
+                        <img src=" images/em/10.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">망령 공자</span>
+                            <span class="mini-sub">협경</span>
                         </div>
                     </div>
-                    <div class="text-xs font-bold px-2 py-1 rounded-md ${clockClass}">${timeText}</div>
-                </div>`;
+                    <div class="mini-card" onclick="openGuideDirect('boss/b2.html')">
+                        <img src="images/em/2.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">몽유도인</span>
+                            <span class="mini-sub">협경</span>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="location.href='https://wwm.tips/?q=195'">
+                        <img src="images/em/3.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">사자춤 형제</span>
+                            <span class="mini-sub">협경</span>
+                        </div>
+                    </div>
+                    <div class="mini-card" onclick="location.href='https://wwm.tips/?q=198'">
+                        <img src="images/em/4.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">연심</span>
+                            <span class="mini-sub">진수전</span>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" onclick="location.href='https://wwm.tips/?q=197'">
+                        <img src="images/em/9.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">하백</span>
+                            <span class="mini-sub">진수전</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mini-card" onclick="location.href='https://wwm.tips/?q=196'">
+                        <img src=" images/em/7.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">봉여지</span>
+                            <span class="mini-sub">야외 보스</span>
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <img src="images/em/5.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">백랑주</span>
+                            <span class="mini-sub">야외 보스</span>
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <img src="images/em/6.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">무명 장군</span>
+                            <span class="mini-sub">야외 보스</span>
+                        </div>
+                    </div>
+                    <div class="mini-card">
+                        <img src="images/em/8.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">도주</span>
+                            <span class="mini-sub">진수전</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="map-section">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>세계 탐험</h3>
+
+                </div>
+                <div id="home-map-list"></div>
+            </section>
+
+            
+
+            <section id="pvp-container" class="mansarok-section" style="margin-top: 0px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>지과</h3>
+                </div>
+                <div class="common-slim-grid"></div>
+            </section>
+
+            <section class="chunji-section">
+                <div class="section-header-clickable">
+                    <div class="title-group">
+                        <h3><span class="deco-bar"></span>고수록</h3>
+                    </div>
+                    <span id="pvp-page-indicator" style="font-size:0.65em; color:#999;">26-01-03 T22:03 기준</span>
+                </div>
+                <div id="pvp-list" class="ranking-list-wrapper">
+                </div>
+            </section>
+
+   
+
+            
+            <section class="mansarok-section" style="margin-top: 0px; margin-bottom: 00px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>세계관</h3>
+                </div>
+                <div class="common-slim-grid">
+                    <a class="slim-btn" onclick="openGuideDirect('world1.html')">
+                        <span>서막</span>
+                    </a>
+                    <a class="slim-btn" onclick="window.location.href = 'https://wwm.tips/?q=21'">
+                        <span>왕청 전</span>
+                    </a>
+                    <a class="slim-btn" onclick="window.location.href = 'https://wwm.tips/?q=11'">
+                        <span>청하 요약</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('world2.html')">
+                        <span>개봉 요약</span>
+                    </a>
+                </div>
+            </section>
+            <section class="mansarok-section" style="margin-top: 0px; margin-bottom: 10px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>의상 쇼케이스</h3>
+                </div>
+                <div class="common-slim-grid">
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit1.html')">
+                        <span>쇼케이스 #1</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit2.html')">
+                        <span>쇼케이스 #2</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit3.html')">
+                        <span>쇼케이스 #3</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit4.html')">
+                        <span>쇼케이스 #4</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit5.html')">
+                        <span>쇼케이스 #5</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit6.html')">
+                        <span>쇼케이스 #6</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit7.html')">
+                        <span>쇼케이스 #7</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit8.html')">
+                        <span>쇼케이스 #8</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit9.html')">
+                        <span>쇼케이스 #9</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit10.html')">
+                        <span>쇼케이스 #10</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit11.html')">
+                        <span>쇼케이스 #11</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit12.html')">
+                        <span>쇼케이스 #12</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit13.html')">
+                        <span>쇼케이스 #13</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit14.html')">
+                        <span>쇼케이스 #14</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit15.html')">
+                        <span>쇼케이스 #15</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit16.html')">
+                        <span>쇼케이스 #16</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit17.html')">
+                        <span>쇼케이스 #17</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit18.html')">
+                        <span>쇼케이스 #18</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit19.html')">
+                        <span>쇼케이스 #19</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit20.html')">
+                        <span>쇼케이스 #20</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit21.html')">
+                        <span>쇼케이스 #21</span>
+                    </a>
+                </div>
+            </section>
+            <section class="achievement-section">
+                <div class="section-header-clickable" onclick="switchTab('archive')">
+                    <h3><span class="deco-bar"></span>업적</h3>
+                    <span style="font-size:0.8em; color:#999; margin-right:5px;">전체보기 ></span>
+                </div>
+                <div id="achievement-list" class="achievement-grid">
+                    <div style="text-align:center; color:#999; padding:10px;">로딩 중...</div>
+                </div>
+            </section>
+
+
+
+            <div id="timer-sheet-modal" class="bottom-sheet-modal" onclick="closeTimerSheet(event)">
+                <div class="sheet-container">
+                    <button type="button" class="sheet-close-btn" onclick="closeTimerSheet()">&times;</button>
+                    <div class="sheet-body-content" style="padding-top: 20px;">
+                        <div id="timer-detail-content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <section class="recent-updates-section">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>커뮤니티 업데이트</h3>
+                </div>
+                <div id="home-recent-news" class="quest-grid"></div>
+            </section>
+
+            <!--
+
+            <section class="profile-section" style="margin-top: 0; margin-bottom: 0;">
+    <div class="section-header-clickable">
+        <h3><span class="deco-bar"></span>인게임 제보</h3>
+    </div>
+    
+    <div class="ingame-report-card" onclick="openReportSheet()" style="cursor: pointer;">
+        <div class="card-bg-deco"></div>
+
+        <div class="char-portrait-box">
+            <img src="images/profile.jpg" alt="윤쫑" onerror="this.src='images/logo.png'">
+            <div class="char-level-bar">
+                <span class="lvl-num">개발</span>
+            </div>
+        </div>
+
+        <div class="char-info-box">
+            <div class="char-header">
+                <span class="char-name">윤쫑</span>
+            </div>
+            <div class="char-id-row">
+                <span class="label">위키 이슈는 언제나 환영!</span>
+            </div>
+        </div>
+    </div>
+     <div class="ingame-report-card" onclick="openProgressSheet()" style="cursor: pointer;">
+        <div class="card-bg-deco"></div>
+
+        <div class="char-portrait-box">
+            <img src="images/profile2.jpg" alt="" onerror="this.src='images/logo.png'">
+            <div class="char-level-bar">
+                <span class="lvl-num">정보</span>
+            </div>
+        </div>
+
+        <div class="char-info-box">
+            <div class="char-header">
+                <span class="char-name">문진관 제자</span>
+            </div>
+            <div class="char-id-row">
+                <span class="label">만사록 현황 확인하기</span>
+            </div>
+        </div>
+     </div>
+</section>-->
+
+
+            <!--
+<section class="recent-updates-section">
+    <div class="section-header-clickable"> <h3><span class="deco-bar"></span>화간유사</h3> </div>
+    <div id="home-recent-news" class="video-grid"></div>
+</section>
+      -->
+
+            <!-- 제보 -->
+
+            <!-- <section class="community-updates-section" style="margin-top: 0px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>수집된 무림록</h3>
+                </div>
+                <div id="home-community-news" class="quest-grid"></div>
+            </section>-->
+
+
+
+
+        </div>
+
+        <div id="view-quiz" style="display: none;">
+            <section id="answer-container">
+                <div class="status-bar" id="quiz-counter-area">데이터 로딩 중...</div>
+                <div class="inner-search-area">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="quiz-local-search" class="inner-search-box"
+                            placeholder="단서를 입력하세요. (예: 가시)">
+                    </div>
+                </div>
+                <div class="list-scroll-area">
+                    <table class="answer-table">
+                        <colgroup>
+                            <col style="width: 30%">
+                            <col style="width: 30%">
+                            <col style="width: 40%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>단서</th>
+                                <th>정답</th>
+                                <th>제보</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quiz-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div id="view-quest" style="display: none;">
+            <section id="quest-list-view" style="margin-top: 0; padding: 0;">
+                <!--  <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 30px; margin-top: 20px;">
+                    <div class="guide-item-btn active" onclick="filterQuestType('all', this)"><span class="guide-title">전체</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('인연의 궤적', this)"><span class="guide-title">인연의 궤적</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('만사록', this)"><span class="guide-title">만사록</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('화간집', this)"><span class="guide-title">화간집</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('이벤트', this)"><span class="guide-title">이벤트</span></div>
+                    <div class="guide-item-btn" onclick="filterQuestType('기타', this)"><span class="guide-title">기타</span></div>
+                </div>-->
+
+                <div class="filter-bar-wrapper" style="margin-bottom: 20px; margin-top: 20px;">
+                    <select id="quest-type-select" class="custom-select" onchange="onQuestTypeChange()">
+                        <option value="all">전체</option>
+                        <option value="인연의 궤적">인연의 궤적</option>
+                        <option value="만사록">만사록</option>
+                        <option value="탐색">탐색</option>
+                        <option value="화간집">화간집</option>
+                        <option value="지과">지과</option>
+                        <option value="보스 공략">보스 공략</option>
+                        <option value="가이드">가이드</option>
+                        <option value="이벤트">이벤트</option>
+                        <option value="기타">기타</option>
+                    </select>
+
+                    <select id="quest-location-select" class="custom-select" onchange="applyQuestFilter()">
+                        <option value="all">모든 지역</option>
+                    </select>
+                </div>
+
+                <div
+                    style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 10px;">
+                    <span
+                        style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
+                    <h2
+                        style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                        무림록</h2>
+                    <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 2px;">게임 내 퀘스트, 세계관, 만사록 정보를
+                        확인하세요.</p>
+                </div>
+
+                <div id="quest-grid-container" class="quest-grid"></div>
+                <div id="pagination-container" class="pagination-controls"></div>
+            </section>
+
+            <section id="quest-detail-view" style="display: none;">
+                <button class="back-button" onclick="showQuestList()">← 목록으로 돌아가기</button>
+                <div id="quest-content-loader" class="detail-content-box">로딩 중...</div>
+            </section>
+        </div>
+
+
+        <div id="view-archive" style="display: none;">
+            <section style="margin-top: 20px;">
+                <div
+                    style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 20px;">
+                    <span
+                        style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
+                    <h2
+                        style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                        업적 도감</h2>
+                    <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">강호에서 달성할 수 있는 모든 업적의
+                        기록입니다.</p>
+                </div>
+
+                <div id="archive-grid-container" class="archive-full-grid"></div>
+            </section>
+        </div>
+
+        <div id="view-chunji" style="display: none;">
+            <section id="chunji-list-view" style="margin-top: 0; padding: 0;">
+
+                <div class="filter-bar-wrapper" style="margin-bottom: 20px; margin-top: 20px;">
+                    <select id="chunji-type-select" class="custom-select" onchange="onChunjiTypeChange()">
+                        <option value="all">전체</option>
+                        <option value="병기">병기</option>
+                        <option value="협도">협도</option>
+                        <option value="음식">음식</option>
+                        <option value="풍물">풍물</option>
+                        <option value="시화">시화</option>
+                    </select>
+
+                    <select id="chunji-subtype-select" class="custom-select" onchange="applyChunjiFilter()">
+                        <option value="all">모든 항목</option>
+                    </select>
+                </div>
+                <div
+                    style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 8px; margin-bottom: 20px;">
+                    <span
+                        style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">목록</span>
+                    <h2
+                        style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                        천지록</h2>
+                    <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 2px;">유물의 획득처와 해독법을 기록한 고서입니다.
+                    </p>
+                </div>
+
+                <div id="chunji-list-container" class="chunji-list"></div>
+                <div id="chunji-pagination-container" class="pagination-controls"
+                    style="margin-top: 20px; margin-bottom: 20px;"></div>
+            </section>
+
+            <section id="chunji-detail-view" style="display: none;">
+                <button class="back-button" onclick="showChunjiList()">← 목록으로 돌아가기</button>
+                <div id="chunji-detail-content" class="detail-content-box"></div>
+            </section>
+        </div>
+
+
+
+        <div id="view-news" style="display: none;">
+            <section style="margin-top: 30px;">
+                <div class="large-font-chunk"
+                    style="margin-bottom: 20px; border:none; background:none; padding-left:0;">
+                    <h2 style="color:var(--wuxia-accent-gold); margin:0;">공지사항</h2>
+                </div>
+                <div id="full-news-list" class="item-list-container"></div>
+            </section>
+        </div>
+
+        <div id="view-guide" style="display: none;">
+            <div id="guide-content-loader" style="margin-top: 0px; text-align: center;">로딩 중...</div>
+        </div>
+
+        <div id="view-builder" style="display: none;">
+            <div id="tools-menu" style="margin-top: 20px; padding: 0 5px;">
+                <div class="guide-grid-menu" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 10px;">
+                    <div class="guide-item-btn active" onclick="filterBuilds('all', this)">전체</div>
+                    <div class="guide-item-btn" onclick="filterBuilds('PvE', this)">탐험 (PvE)</div>
+                    <div class="guide-item-btn" onclick="filterBuilds('PvP', this)">논검 (PvP)</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 20px;">
+                    <button
+                        onclick="document.getElementById('tools-menu').style.display='none'; document.getElementById('builder-interface').style.display='block';"
+                        style="padding: 12px 0; background-color: #fff; border: 1px solid #ddd; border-radius: 4px; color: #333; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: all 0.2s;"
+                        onmouseover="this.style.borderColor='var(--wuxia-accent-gold)'; this.style.color='var(--wuxia-accent-gold)'"
+                        onmouseout="this.style.borderColor='#ddd'; this.style.color='#333'">
+                        <span>✍️</span> 빌드 만들기
+                    </button>
+
+                </div>
+                <div id="build-list-container" class="build-list-wrapper">
+                    <div style="text-align:center; padding: 30px; color: #999;">
+                        불러오는 중...
+                    </div>
+                </div>
+            </div>
+
+            <div id="builder-interface" style="display: none;">
+                <button class="back-button" onclick="closeBuilderInterface()">
+                    ← 목록으로 돌아가기
+                </button>
+                <div class="quest-detail-container" style="margin-top: 10px;">
+                    <div
+                        style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
+                        <span
+                            style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">도구</span>
+                        <h2
+                            style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
+                            나만의 빌드
+                        </h2>
+                        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">원하는 장비와 무공을 조합하여
+                            공유하세요.</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <span class="slot-label">무기 및 무술 (2)</span>
+                        <div class="slot-group">
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('weapons', 0)"><span>+</span><img
+                                        id="slot-weapons-0" style="display:none;"></div>
+                                <div class="slot-name" id="name-weapons-0"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('weapons', 1)"><span>+</span><img
+                                        id="slot-weapons-1" style="display:none;"></div>
+                                <div class="slot-name" id="name-weapons-1"></div>
+                            </div>
+                        </div>
+
+                        <span class="slot-label">심법 (4)</span>
+                        <div class="slot-group">
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('hearts', 0)"><span>+</span><img
+                                        id="slot-hearts-0" style="display:none;"></div>
+                                <div class="slot-name" id="name-hearts-0"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('hearts', 1)"><span>+</span><img
+                                        id="slot-hearts-1" style="display:none;"></div>
+                                <div class="slot-name" id="name-hearts-1"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('hearts', 2)"><span>+</span><img
+                                        id="slot-hearts-2" style="display:none;"></div>
+                                <div class="slot-name" id="name-hearts-2"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('hearts', 3)"><span>+</span><img
+                                        id="slot-hearts-3" style="display:none;"></div>
+                                <div class="slot-name" id="name-hearts-3"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 30px;">
+
+
+                        </div>
+                        <span class="slot-label">비결 (8)</span>
+                        <div class="slot-group">
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('marts', 0)"><span>+</span><img
+                                        id="slot-marts-0" style="display:none;"></div>
+                                <div class="slot-name" id="name-marts-0"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('marts', 1)"><span>+</span><img
+                                        id="slot-marts-1" style="display:none;"></div>
+                                <div class="slot-name" id="name-marts-1"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('marts', 2)"><span>+</span><img
+                                        id="slot-marts-2" style="display:none;"></div>
+                                <div class="slot-name" id="name-marts-2"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('marts', 3)"><span>+</span><img
+                                        id="slot-marts-3" style="display:none;"></div>
+                                <div class="slot-name" id="name-marts-3"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('marts', 4)"><span>+</span><img
+                                        id="slot-marts-4" style="display:none;"></div>
+                                <div class="slot-name" id="name-marts-4"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('marts', 5)"><span>+</span><img
+                                        id="slot-marts-5" style="display:none;"></div>
+                                <div class="slot-name" id="name-marts-5"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('marts', 6)"><span>+</span><img
+                                        id="slot-marts-6" style="display:none;"></div>
+                                <div class="slot-name" id="name-marts-6"></div>
+                            </div>
+                            <div class="slot-wrapper">
+                                <div class="item-slot" onclick="openBuilderModal('marts', 7)"><span>+</span><img
+                                        id="slot-marts-7" style="display:none;"></div>
+                                <div class="slot-name" id="name-marts-7"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span class="slot-label" style="margin-top: 0;">🔥 추천 콤보</span>
+                        <button onclick="resetComboSlots()"
+                            style="font-size:0.8em; color:#999; background:none; border:none; cursor:pointer;">↺
+                            초기화</button>
+                    </div>
+                    <div class="slot-group" id="combo-slot-container">
+                    </div>
+                    <div class="builder-footer">
+                        <div
+                            style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 15px;">
+
+                            <div style="display: flex; gap: 20px; margin-bottom: 15px; justify-content: center;">
+                                <label
+                                    style="cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: bold;">
+                                    <input type="radio" name="buildType" value="PvE" checked> 🌲 탐험 (PvE)
+                                </label>
+                                <label
+                                    style="cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: bold;">
+                                    <input type="radio" name="buildType" value="PvP"> ⚔️ 논검 (PvP)
+                                </label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <div style="flex: 1; text-align: left;">
+                                    <span class="slot-label"
+                                        style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">✍️
+                                        빌드 이름</span>
+                                    <input type="text" id="build-title" placeholder="예: 무적의 우산" maxlength="20"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                                </div>
+                                <div style="flex: 1; text-align: left;">
+                                    <span class="slot-label"
+                                        style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">👤
+                                        닉네임</span>
+                                    <input type="text" id="build-creator" placeholder="작성자명" maxlength="10"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <div style="flex: 1; text-align: left;">
+                                    <span class="slot-label"
+                                        style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">⚔️
+                                        추천 무기</span>
+                                    <input type="text" id="rec-weapons" placeholder="예: 비준 세트" maxlength="20"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                                </div>
+                                <div style="flex: 1; text-align: left;">
+                                    <span class="slot-label"
+                                        style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">🛡️
+                                        추천 방어구</span>
+                                    <input type="text" id="rec-armor" placeholder="예: 이설 세트" maxlength="20"
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 10px; text-align: left;">
+                                <span class="slot-label"
+                                    style="margin-top: 0; border: none; padding: 0; margin-bottom: 5px; font-size: 0.85em;">📝
+                                    설명 (선택)</span>
+                                <textarea id="build-desc" placeholder="빌드의 특징이나 운영법을 간단히 적어주세요." rows="3"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; resize: none; font-family: inherit;"></textarea>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button class="browse-button" style="flex: 1; background-color: #555;"
+                                onclick="generateBuildUrl()">🔗 링크만 복사</button>
+                            <button class="browse-button" style="flex: 2; background-color: var(--wuxia-accent-gold);"
+                                onclick="shareBuildToCloud()">📤 빌드 공유하기</button>
+                        </div>
+                        <input type="text" id="result-url" readonly onclick="this.select()"
+                            style="display:none; margin-top:10px; width:100%;">
+                    </div>
+
+                    <div id="builder-modal" class="modal-overlay" onclick="closeBuilderModal(event)"
+                        style="display:none;">
+                        <div class="modal-content" onclick="event.stopPropagation()">
+                            <h3 id="builder-modal-title" style="margin-top:0;">아이템 선택</h3>
+                            <div id="builder-modal-list" class="item-list-grid"></div>
+                            <button onclick="closeBuilderModal(null)"
+                                style="margin-top:20px; width:100%; padding:10px;">닫기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="build-detail-overlay" class="bottom-sheet-overlay"
+                onclick="if(event.target === this) closeBuildDetailSheet(event)"></div>
+            <div id="<build-de></build-de>tail-sheet" class="bottom-sheet" onclick="event.stopPropagation()">
+                <div class="sheet-header">
+                    <h3 id="build-sheet-title">빌드 상세 정보</h3>
+                    <button onclick="closeBuildDetailSheet(null)" class="close-sheet-btn">✕</button>
+                </div>
+                <div class="sheet-content build-detail-content">
+                    <div style="text-align: center; padding: 50px; color: #999;">데이터 로딩 중...</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-map-detail" style="display: none; height: 100%;">
+            <div
+                style="margin-top: 20px; border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center;">
+                    <button class="back-button" onclick="closeMapDetail()" style="margin: 0 15px 0 0;">← 돌아가기</button>
+                    <div style="display: inline-block;">
+                        <span
+                            style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">지도</span>
+                        <h2 id="map-detail-title"
+                            style="display: inline-block; color: var(--wuxia-accent-gold); margin: 0 0 0 5px; vertical-align: middle;">
+                            지도 상세
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quest-detail-container"
+                style="padding: 0; overflow: hidden; height: calc(100vh - 250px); background: #1a1a1a; border: 1px solid #333;">
+                <iframe id="map-iframe" src="" frameborder="0"
+                    style="width: 100%; height: 100%; display: block;"></iframe>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                if (new URLSearchParams(window.location.search).get('b')) {
+                    document.getElementById('tools-menu').style.display = 'none';
+                    document.getElementById('builder-interface').style.display = 'block';
+                }
             });
+            // 사이드바 열기/닫기 토글
+            function toggleSidebar() {
+                const sidebar = document.getElementById('main-sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
 
-            if (homeList) homeList.innerHTML = html;
-            if (tabList) tabList.innerHTML = html;
-        };
-
-        // 타이머 시트 열기 헬퍼 (timer.js 연동)
-        // timer.js가 있으면 openTimerSheet를 호출하고, 모달의 hidden을 제거하여 보여줍니다.
-        window.openTimerSheetByName = function(name) {
-            if (typeof TIMERS !== 'undefined') {
-                const t = TIMERS.find(x => x.name === name);
-                if (t && typeof openTimerSheet === 'function') {
-                    openTimerSheet(t);
-                    // Tailwind 'hidden' 클래스 제거하여 표시 보장
-                    document.getElementById('timer-sheet-modal').classList.remove('hidden');
+                // 클래스 토글로 CSS 애니메이션 작동
+                if (sidebar.classList.contains('active')) {
+                    closeSidebar();
+                } else {
+                    sidebar.classList.add('active');
+                    overlay.classList.add('active');
+                    // 스크롤 방지 (선택사항)
+                    document.body.style.overflow = 'hidden';
                 }
             }
-        };
-        
-        // 제보 시트 제어
-        function openReportSheet() { 
-            const sheet = document.getElementById('report-sheet-modal');
-            sheet.classList.remove('hidden'); 
-            setTimeout(() => sheet.children[1].classList.remove('translate-y-full'), 10);
-        }
-        function closeReportSheet() {
-            const sheet = document.getElementById('report-sheet-modal');
-            sheet.children[1].classList.add('translate-y-full');
-            setTimeout(() => sheet.classList.add('hidden'), 300);
-        }
 
-        // 무림록 로더
-        function loadMansarokMenu() {
-            fetch('json/quests.json').then(r=>r.json()).then(data => {
-                const list = document.getElementById('mansarok-list');
-                if(!list) return;
-                list.innerHTML = '';
-                data.filter(i=>!['지과','보스 공략'].includes(i.type)).slice(0,10).forEach(item => {
-                    const loc = item.location ? `<span class="bg-gray-100 text-gray-500 text-[11px] px-1.5 py-0.5 rounded font-medium mr-2">[${item.location}]</span>` : '';
-                    list.innerHTML += `<div class="flex items-center justify-between py-3 px-1 cursor-pointer border-b border-gray-50 last:border-none active:bg-gray-50" onclick="switchTab('quest'); loadQuestDetail('${item.filepath}','${item.id}')">
-                        <div class="flex items-center overflow-hidden">${loc}<span class="text-[15px] font-semibold text-gray-800 truncate">${item.name}</span></div>
-                        <span class="text-gray-300 text-lg">›</span>
-                    </div>`;
-                });
-            }).catch(e=>console.log(e));
-        }
-        
-        function renderHomeChunjiOverride() {
-            if (typeof chunjiData === 'undefined') return;
-            const list = document.getElementById('home-chunji-list');
-            if(!list) return;
-            list.innerHTML = '';
-            chunjiData.slice(0, 6).forEach(item => {
-                list.innerHTML += `<div class="flex items-center justify-between py-3 px-1 cursor-pointer border-b border-gray-50 last:border-none active:bg-gray-50" onclick="switchTab('chunji'); loadChunjiDetail(item)">
-                    <span class="text-[15px] font-semibold text-gray-800 truncate">${item.title}</span>
-                    <span class="text-gray-300 text-lg">›</span>
-                </div>`;
-            });
-        }
-        window.renderHomeChunji = renderHomeChunjiOverride;
+            // 사이드바 닫기
+            function closeSidebar() {
+                const sidebar = document.getElementById('main-sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
 
-        // 초기화
-        setInterval(updateTimers, 1000);
-        window.addEventListener('DOMContentLoaded', () => {
-            updateTimers(); 
-            loadMansarokMenu();
-            setTimeout(() => { if(typeof renderHomeChunjiOverride === 'function') renderHomeChunjiOverride(); }, 500);
-        });
-    </script>
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                // [추가] 사이드바가 닫힐 때 뮤직 리스트 드롭다운도 함께 제거
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
+            }
+
+            // 사이드바 내부 서브메뉴 토글 (아코디언 효과)
+            function toggleSidebarSub(element) {
+                // 클릭된 요소의 다음 형제 요소(리스트)를 찾음
+                const subList = element.nextElementSibling;
+
+                // 표시 상태 토글
+                if (subList.style.display === 'block') {
+                    subList.style.display = 'none';
+                    element.classList.remove('expanded');
+                } else {
+                    subList.style.display = 'block';
+                    element.classList.add('expanded');
+                }
+            }
+
+        </script>
+
+    </main>
+
+    <footer id="main-footer" style="padding: 20px 15px; margin-top: 30px;">
+        <div class="version-info" style="margin-bottom: 5px;">
+            「연운」 한국 위키 <span style="font-size: 0.8em; font-weight: normal; color: #666;">v1.0</span>
+        </div>
+
+        <p class="copyright-disclaimer" style="margin-bottom: 10px; font-size: 0.75em; text-align: center;">
+            본 위키는 팬에 의해 제작/운영되며 공식 위키가 아닙니다.<br>
+            데이터의 저작권은 원저작권자에게 있습니다.
+        </p>
+
+        <div style="margin-top: 10px;">
+            <a href="https://wwm.tips/qna" target="_blank"
+                style="color: #555; font-size: 0.85em; text-decoration: none; text-align: center;">
+                문의 및 제보
+            </a>
+            <span style="color: #ccc; margin: 0 8px; font-size: 0.8em;">|</span>
+            <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;"
+                style="color: #555; font-size: 0.85em; text-decoration: none;">
+                맨 위로
+            </a>
+        </div>
+
+        <aside id="main-sidebar">
+            <div class="sidebar-header">
+
+                <div class="sidebar-audio-player-container">
+                    <div class="sidebar-audio-player" onclick="togglePlaylist()">
+                        <div class="audio-info">
+                            <span class="audio-title" id="player-title">곡 목록을 불러오는 중...</span>
+                        </div>
+                        <button id="audio-toggle-btn" class="audio-ctrl-btn" onclick="handlePlayPause(event)">▶</button>
+                    </div>
+
+                    <div id="playlist-dropdown" class="playlist-dropdown">
+                        <div class="playlist-header">
+                            <span id="playlist-status">Playlist (0/0)</span>
+                        </div>
+                        <ul id="playlist-items" class="playlist-ul"></ul>
+                    </div>
+                </div>
+
+                <button class="close-sidebar-btn" onclick="closeSidebar()">×</button>
+
+                <audio id="main-audio" preload="auto"></audio>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="sidebar-item" id="nav-home" onclick="closeSidebar(); switchTab('home');">
+                    홈
+                </div>
+                <div class="sidebar-item" id="nav-hw" onclick="closeSidebar(); openGuideDirect('npc.html');">
+                    할 일 목록
+                </div>
+                <div class="sidebar-group">
+                    <div class="sidebar-item has-sub" id="nav-code" onclick="toggleSidebarSub(this)">
+                        <span>도감</span>
+                        <span class="arrow"></span>
+                    </div>
+                    <div class="sidebar-sub-list">
+                        <button onclick="closeSidebar(); openGuideDirect('harts.html');">심법</button>
+                        <button onclick="closeSidebar(); openGuideDirect('marts.html');">비결</button>
+                        <button onclick="closeSidebar(); switchTab('archive');">업적</button>
+                        <button onclick="closeSidebar(); openGuideDirect('code.html');">교환 코드</button>                        
+                        <button onclick="closeSidebar(); openGuideDirect('sim.html');">심력 계산기</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-group">
+                    <div class="sidebar-item has-sub" id="nav-guide" onclick="toggleSidebarSub(this)">
+                        <span>공략</span>
+                        <span class="arrow"></span>
+                    </div>
+                    <div class="sidebar-sub-list" id="nav-quest">
+                        <button onclick="closeSidebar(); location.href='https://wwm.tips/?tab=quest&id=m'">
+                            만사록</button>
+                        <button onclick="closeSidebar(); location.href='https://wwm.tips/?tab=quest&id=t'">
+                            탐색</button>                            
+                        <button onclick="closeSidebar(); location.href='https://wwm.tips/?tab=quest&id=in'">
+                            인연의 궤적</button>
+                        <button id="nav-chunji" onclick="closeSidebar(); switchTab('chunji');">
+                            천지록</button>
+                        <button onclick="closeSidebar(); location.href='https://wwm.tips/?tab=quest&id=boss'">협경/진수전</button>
+                    </div>
+                </div>
+                <div class="sidebar-item" id="nav-quiz" onclick="closeSidebar(); switchTab('quiz');">
+                    스무고개 족보
+                </div>
+                <div class="sidebar-item" id="nav-quiz" onclick="location.href='map/'">
+                    지도
+                </div>
+                <!--<div class="sidebar-group">
+                    <div class="sidebar-item has-sub" id="nav-tool" onclick="toggleSidebarSub(this)">
+                        <span>도구</span>
+                        <span class="arrow"></span>
+                    </div>
+                    <div class="sidebar-sub-list">
+                        <button id="nav-builder" onclick="closeSidebar(); switchTab('builder');">빌드 제작</button>
+                    </div>
+                </div>-->
+            </div>
+            <div id="install-container" style="display: none;">
+                <button id="btn-install-app" class="pwa-install-card">
+                    <div class="pwa-logo-section">
+                        <img src="fav/android-icon-192x192.png" alt="Logo" onerror="this.src='images/logo.png'">
+                    </div>
+
+                    <div class="pwa-info-section">
+                        <div class="pwa-install-title">연운 위키 앱 설치</div>
+                        <div class="pwa-install-desc">홈에 추가해 빠르게 이용하세요!</div>
+                    </div>
+
+                    <div class="pwa-action-section">
+                        <i class="fas fa-plus-square"></i>
+                    </div>
+                </button>
+            </div>
+            <!--
+<div id="install-container" style="display: none; margin-bottom: 10px;">
+    <button id="btn-install-app" class="btn-primary" style="width: 100%; background-color: #28a745; border-color: #28a745;">
+        <i class="fas fa-download"></i> 앱으로 설치하기
+    </button>
+</div>-->
+            <div class="sidebar-footer-report" onclick="closeSidebar(); openReportSheet()">
+                <div class="mini-profile-img">
+                    <img src="images/profile.jpg" onerror="this.src='images/logo.png'" alt="제보">
+                </div>
+                <div class="footer-text-group">
+                    <span class="footer-main-text">인게임 제보하기</span>
+
+                </div>
+            </div>
+
+        </aside>
+
+        <script src="hw.js"></script>
+        <script src="script.js"></script>
+        <script src="calc.js"></script>
+        <script src="timer.js"></script>
+
+        <p style="margin-top: 15px; margin-bottom: 0; font-size: 0.7em; color: #999;">
+            &copy; 2025 WWM.TIPS. All rights reserved.
+        </p>
+    </footer>
+
+    <div id="report-sheet-modal" class="bottom-sheet-modal" onclick="closeReportSheet(event)">
+        <div class="sheet-container">
+            <button type="button" class="sheet-close-btn" onclick="closeReportSheet()">
+                &times; </button>
+            <div class="sheet-tabs">
+                <button class="sheet-tab-btn active" onclick="switchReportTab('report', this)">인게임 제보</button>
+                <button class="sheet-tab-btn" onclick="switchReportTab('gift', this)">응원하기</button>
+            </div>
+
+            <div class="sheet-body-content">
+
+                <div id="tab-content-report" class="tab-content-item" style="display: block;">
+                    <div style="padding: 20px 0;">
+
+                        <p style="color: #555; line-height: 1.6; margin-bottom: 20px; font-size: 0.95em;">
+                            위키에 오류가 발생하거나 이미지 누락 등 이슈 발견 시 인게임 내 <strong>귓속말</strong>로 제보해 주시면 보다 빠르게 확인 후 처리 할 수 있습니다.
+                        </p>
+
+                        <div
+                            style="background-color: #fff5f5; border: 1px dashed #ef9a9a; border-radius: 4px; padding: 15px;">
+                            <p style="color: #c62828; font-weight: bold; font-size: 0.9em; margin: 0 0 5px 0;">⚠ 주의사항
+                            </p>
+                            <p style="color: #d32f2f; font-size: 0.85em; margin: 0; line-height: 1.4;">
+                                위키 오류 제보 외의 사적인 메시지나 장난성 귓속말을 보내시는 경우,답변 없이 <strong>차단</strong>될 수 있습니다.
+                            </p>
+                        </div>
+
+                        <div style="margin-top: 20px; text-align: center;">
+                            <button onclick="copyToClipboard('0047792402', this)"
+                                style="background: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                '윤쫑' ID 복사하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-content-gift" class="tab-content-item" style="display: none;">
+                    <div style="padding: 20px 0;">
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 20px; line-height: 1.5;">
+                            커피보단 인게임 내 프로필에서 <strong>좋아요</strong>를 눌러 응원해주세요.
+                        </p>
+
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+
+                            <div style="border: 1px solid #eee; border-radius: 4px; overflow: hidden;">
+                                <div
+                                    style="background: #f9f9f9; padding: 8px 12px; font-size: 0.85em; font-weight: bold; color: #555;">
+                                    STEP 1.친구 추가 > ID 입력
+                                </div>
+                                <div
+                                    style="height: 90px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                                    <img src="images/step1.jpg" alt="ID검색"
+                                        style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                            </div>
+
+                            <div style="border: 1px solid #eee; border-radius: 4px; overflow: hidden;">
+                                <div
+                                    style="background: #f9f9f9; padding: 8px 12px; font-size: 0.85em; font-weight: bold; color: #555;">
+                                    STEP 2.좌측 상단 좋아요 버튼 클릭
+                                </div>
+                                <div
+                                    style="height: 90px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                                    <img src="images/step2.jpg" alt="좋아요클릭"
+                                        style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px; text-align: center;">
+                                <button onclick="copyToClipboard('0047792402', this)"
+                                    style="background: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                    '윤쫑' ID 복사하기
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="progress-sheet-modal" class="bottom-sheet-modal" onclick="closeProgressSheet(event)">
+        <div class="sheet-container">
+
+            <button type="button" class="sheet-close-btn" onclick="closeProgressSheet()">
+                &times;
+            </button>
+
+            <div class="sheet-tabs">
+                <button class="sheet-tab-btn active" onclick="switchProgressTab('status', this)">진행 현황</button>
+                <button class="sheet-tab-btn" onclick="switchProgressTab('cheer', this)">응원하기</button>
+            </div>
+
+            <div class="sheet-body-content">
+
+                <div id="tab-p-status" class="tab-content-item" style="display: block;">
+                    <div style="padding: 20px 0;">
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">
+                            현재 수집된 무림록 및 업데이트 현황입니다.
+                        </p>
+
+                        <div id="home-community-news" class="quest-grid" style="display: block;"></div>
+                    </div>
+                </div>
+
+                <div id="tab-p-cheer" class="tab-content-item" style="display: none;">
+                    <div
+                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center;">
+
+                        <div style="font-size: 3em; margin-bottom: 20px;">🙏</div>
+
+                        <p
+                            style="font-size: 1.1em; font-weight: bold; color: #333; margin: 0 0 10px 0; font-family: 'Noto Serif KR', serif;">
+                            응원은 마음으로 받겠습니다.
+                        </p>
+
+                        <p style="font-size: 1em; color: #666; margin: 0; font-family: 'Noto Serif KR', serif;">
+                            대협!
+                        </p>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div id="info-modal" class="info-modal-overlay" onclick="closeInfoModal()">
+        <div class="info-modal-card" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="closeInfoModal()">✕</button>
+            <div class="info-header">
+                <img id="modal-img" src="" onerror="this.src='images/logo.png'">
+                <h3 id="modal-name">아이템 이름</h3>
+            </div>
+            <div class="info-body">
+                <p id="modal-desc">설명 데이터가 없습니다.</p>
+            </div>
+        </div>
+    </div>
+    <div id="person-bottom-sheet" class="bottom-sheet-modal">
+        <div class="bottom-sheet-overlay" onclick="closePersonDetail()"></div>
+        <div class="bottom-sheet-content">
+            <div id="person-detail-body"></div>
+        </div>
+    </div>
 </body>
+
 </html>
+
+</body>
+
+    </html>

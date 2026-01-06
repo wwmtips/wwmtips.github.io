@@ -25,39 +25,97 @@
         /* [공통] 데코바 */
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [필수] script.js 호환 스타일 */
-        .quest-card {
-            background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s;
+        /* [필수] script.js 및 timer.js 호환 스타일 */
+        
+        /* 1. timer.js가 생성하는 타이머 카드 스타일 (토스 스타일로 재정의) */
+        .timer-row {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f2f4f6;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.1s;
         }
+        .timer-row:active { transform: scale(0.98); }
+        
+        /* 긴급 상황(시간 얼마 안 남음) 깜빡임 */
+        @keyframes urgentBlink { 0% { border-color: #ef9a9a; background-color: #fff; } 50% { border-color: #e53935; background-color: #ffebee; } 100% { border-color: #ef9a9a; background-color: #fff; } }
+        .timer-urgent-blink { animation: urgentBlink 2s infinite; }
+        .row-completed { opacity: 0.6; filter: grayscale(100%); }
+
+        /* 타이머 내부 텍스트 스타일 */
+        .timer-left { display: flex; flex-direction: column; gap: 4px; }
+        .timer-right { text-align: right; }
+        .timer-title { font-weight: 700; font-size: 15px; color: #191f28; display: flex; align-items: center; }
+        .timer-status-row { font-size: 12px; color: #8b95a1; display: flex; gap: 6px; align-items: center; }
+        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 700; color: #3182f6; letter-spacing: -0.5px; }
+        
+        /* 상태 뱃지 */
+        .status-badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
+        .status-ing { background-color: #3182f6; }
+        .status-end { background-color: #999; }
+        .status-event { background-color: #f59e0b; }
+        .status-urgent { background-color: #ef5350; }
+
+        /* 2. 타이머/숙제 바텀시트 스타일 (timer.js 호환) */
+        #timer-sheet-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 5000;
+            display: none; opacity: 0; transition: opacity 0.3s;
+        }
+        #timer-sheet-modal.show { display: block; opacity: 1; }
+        
+        #timer-sheet-modal .sheet-container {
+            position: absolute; bottom: 0; width: 100%;
+            background: white;
+            border-top-left-radius: 24px; border-top-right-radius: 24px;
+            padding: 24px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            max-height: 80vh; overflow-y: auto;
+        }
+        #timer-sheet-modal.show .sheet-container { transform: translateY(0); }
+        
+        .sheet-close-btn {
+            position: absolute; top: 15px; right: 20px;
+            font-size: 24px; color: #999; background: none; border: none; cursor: pointer;
+        }
+
+        /* 숙제 리스트 아이템 */
+        .task-list-wrapper { margin-top: 15px; }
+        .task-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer;
+        }
+        .task-item:last-child { border-bottom: none; }
+        .task-loc { font-size: 11px; color: #3182f6; background: #e8f3ff; padding: 2px 6px; border-radius: 4px; margin-right: 6px; font-weight: bold; }
+        .task-title { font-size: 14px; color: #333; }
+        .task-check-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: #3182f6; font-weight: bold; }
+        .task-item.completed .task-title { text-decoration: line-through; color: #aaa; }
+        .task-item.completed .task-loc { background: #eee; color: #aaa; }
+
+        /* 기타 기존 스타일 유지 */
+        .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
         .quest-card:active { transform: scale(0.98); }
         .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
         .quest-type { font-size: 12px; color: #8b95a1; }
         .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
 
-        .chunji-item-card {
-            background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03); border: 1px solid #f2f4f6; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; min-height: 50px; text-align: center; transition: all 0.2s;
-        }
+        .chunji-item-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.03); border: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; justify-content: center; min-height: 50px; text-align: center; transition: all 0.2s; }
         .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
         .chunji-card-title { font-size: 14px; font-weight: 600; color: #333; }
 
-        .chunji-item {
-            background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .chunji-item { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .chunji-text-group { display: flex; flex-direction: column; gap: 2px; }
         .chunji-title { font-weight: 700; font-size: 15px; color: #191f28; }
         .chunji-type { font-size: 12px; color: #8b95a1; }
 
-        .mansarok-btn {
-            display: flex; align-items: center; justify-content: center; background-color: white;
-            padding: 14px 10px; border-radius: 14px; border: 1px solid #f2f4f6; font-size: 14px; font-weight: 600;
-            color: #333; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: all 0.2s; text-align: center;
-        }
+        .mansarok-btn { display: flex; align-items: center; justify-content: center; background-color: white; padding: 14px 10px; border-radius: 14px; border: 1px solid #f2f4f6; font-size: 14px; font-weight: 600; color: #333; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: all 0.2s; text-align: center; }
         .mansarok-btn:hover { border-color: #3182f6; color: #3182f6; }
         .mansarok-btn span { width: 100%; word-break: keep-all; }
 
@@ -150,26 +208,8 @@
                     <span id="server-time" class="text-xs text-gray-400 font-mono tracking-tighter">00:00:00</span>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col justify-between h-[80px]">
-                        <div class="flex items-center justify-between mb-1">
-                            <span class="text-xs font-bold text-gray-500">일일 숙제</span>
-                            <span class="text-[10px] bg-red-50 text-red-500 px-1.5 py-0.5 rounded font-medium">Reset</span>
-                        </div>
-                        <div class="text-right">
-                            <div id="daily-timer" class="text-xl font-bold text-gray-800 font-mono tracking-tight">--:--:--</div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col justify-between h-[80px]">
-                        <div class="flex items-center justify-between mb-1">
-                            <span class="text-xs font-bold text-gray-500">주간 숙제</span>
-                            <span class="text-[10px] bg-blue-50 text-blue-500 px-1.5 py-0.5 rounded font-medium">Weekly</span>
-                        </div>
-                        <div class="text-right">
-                            <div id="weekly-timer" class="text-xl font-bold text-gray-800 font-mono tracking-tight">--일 --:--</div>
-                        </div>
-                    </div>
+                <div id="gangho-timer-list">
+                    <div style="padding:20px; text-align:center; color:#999; font-size:0.9em;">시간을 읽는 중...</div>
                 </div>
             </section>
 
@@ -380,6 +420,15 @@
         </div>
     </div>
 
+    <div id="timer-sheet-modal">
+        <div class="sheet-container">
+            <button type="button" class="sheet-close-btn" onclick="closeTimerSheet()">&times;</button>
+            <div class="sheet-body-content" style="padding-top: 20px;">
+                <div id="timer-detail-content"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="hw.js"></script>
     <script src="script.js"></script>
     <script src="timer.js"></script>
@@ -403,8 +452,13 @@
                 switchTab('guide');
             }
         }
+        // 숙제 바텀시트 닫기 (html에서 직접 호출할 경우 대비)
+        function closeTimerSheet() {
+            const modal = document.getElementById('timer-sheet-modal');
+            if(modal) modal.classList.remove('show');
+        }
         
-        // 탭 전환 함수
+        // 탭 전환
         window.switchTab = function(tabName) {
             const header = document.getElementById('main-header');
             if (header) {
@@ -456,8 +510,7 @@
             }
         };
 
-        // [수정된 부분] 타이머 초기화를 위한 간단한 스크립트 추가
-        // script.js 로딩 지연 등으로 타이머가 안 뜰 경우를 대비해 1초마다 갱신 시도
+        // 타이머 초기화 안전장치
         setInterval(function() {
             if (typeof updateTimers === 'function') {
                 updateTimers();

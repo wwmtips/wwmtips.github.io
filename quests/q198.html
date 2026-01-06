@@ -138,19 +138,35 @@
     .active-tab-style { background-color: white; color: #2563eb; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
 </style>
 <script>
-    function openBossTab(phase, btn) {
-        // 모든 탭 숨기기
-        document.querySelectorAll('.boss-tab-content').forEach(content => content.classList.add('hidden'));
-        // 선택한 탭 보이기
-        document.getElementById('tab-' + phase).classList.remove('hidden');
-        
-        // 모든 버튼 스타일 초기화
-        document.querySelectorAll('.boss-tab-btn').forEach(b => {
-            b.classList.remove('active-tab-style');
-            b.classList.add('text-gray-500', 'hover:bg-white/50');
-        });
-        // 활성 버튼 스타일 적용
-        btn.classList.add('active-tab-style');
-        btn.classList.remove('text-gray-500', 'hover:bg-white/50');
+/* script.js 또는 index.html 하단에 배치 */
+window.openBossTab = function(phase, btn) {
+    // 1. 모든 탭 내용 숨기기
+    const contents = document.querySelectorAll('.boss-tab-content');
+    contents.forEach(content => {
+        // hidden 클래스를 추가하고 동시에 스타일로도 확실히 숨김 처리
+        content.classList.add('hidden');
+        content.style.display = 'none';
+    });
+
+    // 2. 선택한 탭 내용 보이기
+    const activeTab = document.getElementById('tab-' + phase);
+    if (activeTab) {
+        activeTab.classList.remove('hidden');
+        // Tailwind의 space-y-6가 동작하도록 block이나 flex로 설정
+        activeTab.style.display = 'block'; 
     }
+
+    // 3. 모든 버튼 스타일 초기화
+    const buttons = document.querySelectorAll('.boss-tab-btn');
+    buttons.forEach(b => {
+        b.classList.remove('active-tab-style');
+        b.classList.add('text-gray-500', 'hover:bg-white/50');
+        b.style.backgroundColor = ''; // 인라인 스타일 초기화
+        b.style.color = '';
+    });
+
+    // 4. 클릭된 버튼에 활성 스타일 적용
+    btn.classList.add('active-tab-style');
+    btn.classList.remove('text-gray-500', 'hover:bg-white/50');
+};
 </script>

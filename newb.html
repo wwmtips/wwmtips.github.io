@@ -1,136 +1,111 @@
-<div class="quest-detail-container" style="text-align: left;">
+<div class="max-w-4xl mx-auto space-y-8 p-4 lg:p-0">
     
-    <style>
-        /* 수묵화 테마 계승 및 확장 */
-        .guide-section { margin-bottom: 40px; }
-        .guide-card {
-            background-color: #fffcf5; 
-            border: 1px solid var(--wuxia-accent-gold); 
-            padding: 20px; 
-            border-radius: 4px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            margin-top: 10px;
-        }
-        .guide-list { color: var(--wuxia-text-sub); line-height: 1.8; padding-left: 20px; margin: 0; }
-        .guide-list li { margin-bottom: 10px; }
-        .guide-list strong { color: var(--wuxia-text-main); }
-        
-        .img-box { text-align: center; margin: 15px 0; }
-        .img-inline { vertical-align: middle; margin: 0 2px; }
-        .accent-box { 
-            background-color: #f9f9f9; 
-            padding: 12px; 
-            border-left: 3px solid #999; 
-            font-size: 0.9em; 
-            margin: 10px 0;
-        }
-        .link-tag {
-            display: inline-block;
-            background-color: #eee;
-            padding: 2px 8px;
-            border-radius: 4px;
-            color: var(--wuxia-accent-red);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9em;
-            
-        }
-        .source-footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px dashed #ccc;
-            text-align: center;
-            color: #888;
-            font-size: 0.85em;
-        }
-        .source-footer a { color: var(--wuxia-accent-gold); text-decoration: none; }
-    </style>
-
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 25px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
-        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">초반 운영 및 탐색 비책</h2>
+    <div class="border-b-2 border-blue-600 pb-6 mb-8">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Guide</span>
+            <span class="text-gray-400 text-sm font-medium">연운십육성 입문서</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">초반 운영 및 탐색 비책</h2>
     </div>
 
-    <div class="guide-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.15em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">1. 초반 운영 및 성장</h3>
-        <div class="guide-card">
-            <ul class="guide-list">
-                <li><strong>메인 스토리 우선:</strong> 레벨 15 달성 및 <strong>돌파</strong>를 최우선으로 하세요.</li>
-                <li><strong>지역 해금:</strong> 다음 지역 이동과 특정 비결 해금은 메인 스토리 진행도에 묶여 있습니다.</li>
-                <li><strong>사이드 미션 팁:</strong> 보상이 캐릭터 레벨에 맞춰 지급되므로, 일정 레벨 달성 후 진행하는 것이 이득입니다.</li>
-                <li><strong>지도 확보:</strong> 맵 탐색 시 
-                    <img class="img-inline" src="images/ic_chun.png" width="24"> 
-                    아이콘의 <strong>천애객</strong>을 찾아 맵부터 받으세요.</li>
-                <li><strong>빠른 이동:</strong> 
-                    <img class="img-inline" src="images/ic_pin.png" width="20"> 
-                    포인트를 찍으며 탐색하세요.</li>
+    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-gray-50/50 px-5 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full mr-2.5"></span>1. 초반 운영 및 성장
+            </h3>
+        </div>
+        <div class="p-6">
+            <ul class="space-y-4">
+                <li class="flex gap-3">
+                    <span class="text-blue-600 font-bold">01</span>
+                    <p class="text-gray-600 leading-relaxed"><strong class="text-gray-900">메인 스토리 우선:</strong> 레벨 15 달성 및 <span class="text-red-500 font-bold underline">돌파</span>를 최우선으로 하세요.</p>
+                </li>
+                <li class="flex gap-3">
+                    <span class="text-blue-600 font-bold">02</span>
+                    <p class="text-gray-600 leading-relaxed"><strong class="text-gray-900">지역 해금:</strong> 다음 지역 이동과 특정 비결 해금은 메인 스토리 진행도에 묶여 있습니다.</p>
+                </li>
+                <li class="flex gap-3">
+                    <span class="text-blue-600 font-bold">03</span>
+                    <p class="text-gray-600 leading-relaxed"><strong class="text-gray-900">지도 확보:</strong> 맵 탐색 시 <img class="inline-block w-6 h-6 mx-1" src="images/ic_chun.png"> 아이콘의 <span class="font-bold text-gray-800">천애객</span>을 찾아 맵부터 받으세요.</p>
+                </li>
+                <li class="flex gap-3">
+                    <span class="text-blue-600 font-bold">04</span>
+                    <p class="text-gray-600 leading-relaxed"><strong class="text-gray-900">빠른 이동:</strong> <img class="inline-block w-5 h-5 mx-1" src="images/ic_pin.png"> 포인트를 찍으며 탐색하세요.</p>
+                </li>
             </ul>
         </div>
-    </div>
+    </section>
 
-    <div class="guide-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.15em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">2. 탐색조예와 비행 면허</h3>
-        <div class="guide-card">
-            <ul class="guide-list">
-                <li><strong>탐색조예:</strong> 장비 착용 요구 스탯이며, 미니게임을 통해 포인트를 올릴 수 있습니다.</li>
-                <li><strong>탐색 스킬:</strong> 포인트 적립 시 미니맵 보물상자 표시, 낙하 피해 무효화 등 편의 스킬이 해금됩니다.</li>
-                <li><strong>대경공 면허(모운패):</strong> 각 맵에서 <strong>4,000 탐험 포인트</strong>를 모아야 획득 가능합니다. </li>
-            </ul>
-            <div class="img-box">
-                <img src="images/guide/1.jpg" style="max-width:90%; border-radius:4px;">
+    <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-gray-50/50 px-5 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full mr-2.5"></span>2. 탐색조예와 비행 면허
+            </h3>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                <ul class="space-y-4">
+                    <li class="bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                        <p class="text-sm text-gray-700"><strong class="text-blue-700">탐색조예:</strong> 장비 착용 요구 스탯이며, 미니게임을 통해 포인트를 올릴 수 있습니다.</p>
+                    </li>
+                    <li class="bg-purple-50/50 p-3 rounded-xl border border-purple-100">
+                        <p class="text-sm text-gray-700"><strong class="text-purple-700">대경공 면허(모운패):</strong> 각 맵에서 4,000 탐험 포인트를 모아야 획득 가능합니다.</p>
+                    </li>
+                </ul>
+                <div class="rounded-xl overflow-hidden shadow-lg border border-gray-100">
+                    <img src="images/guide/1.jpg" class="w-full h-auto object-cover" alt="탐색 가이드">
+                </div>
             </div>
         </div>
+    </section>
+
+    <section class="bg-amber-50 rounded-2xl border border-amber-100 p-6">
+        <h3 class="text-lg font-black text-amber-900 mb-4 flex items-center gap-2">
+            💡 강호의 잡기 및 꿀팁
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white/60 p-4 rounded-xl">
+                <p class="text-[13px] text-amber-900 leading-relaxed">
+                    <span class="font-bold block mb-1">⏰ 시간 조정</span>
+                    시진 메뉴를 통해 퀘스트에 필요한 시간으로 빨리감기가 가능합니다.
+                </p>
+            </div>
+            <div class="bg-white/60 p-4 rounded-xl">
+                <p class="text-[13px] text-amber-900 leading-relaxed">
+                    <span class="font-bold block mb-1">💇 무료 헤어</span>
+                    청하 마을 거울과 상호작용 시 매일 2번 무료 스킨을 얻을 수 있습니다.
+                </p>
+            </div>
+            <div class="bg-white/60 p-4 rounded-xl">
+                <p class="text-[13px] text-amber-900 leading-relaxed">
+                    <span class="font-bold block mb-1">💰 행운 봉투</span>
+                    월드 채팅의 봉투는 클릭 시 돈을 잃을 수 있으니 주의하세요.
+                </p>
+            </div>
+            <div class="bg-white/60 p-4 rounded-xl">
+                <p class="text-[13px] text-amber-900 leading-relaxed">
+                    <span class="font-bold block mb-1">🛠️ 무기고 수집</span>
+                    41레벨 이상 장비는 분해하지 말고 무기고에 수집해 스탯을 챙기세요.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="flex flex-wrap gap-3 justify-center py-6">
+        <a href="https://arca.live/b/wherewindsmeet/154084014" target="_blank" 
+           class="px-5 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-blue-600 transition-colors shadow-lg shadow-gray-200">
+           🔥 취화유 파밍법 바로가기
+        </a>
+        <a href="https://arca.live/b/wherewindsmeet/155056710" target="_blank" 
+           class="px-5 py-2.5 bg-gray-100 text-gray-600 rounded-xl text-sm font-bold hover:bg-blue-50 hover:text-blue-600 transition-colors border border-gray-200">
+           🐍 취독산 파밍법 바로가기
+        </a>
     </div>
 
-    <div class="guide-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.15em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">3. 제작 및 질병 치료</h3>
-        <div class="guide-card">
-            <ul class="guide-list">
-                <li><strong>제작 기능:</strong> 소지품 메뉴에서 회복약, 음식 등을 최대 5회까지 즉석 제작할 수 있습니다.</li>
-                <li><strong>회복약 업그레이드:</strong> 활명의관 <strong>요초야</strong>에게 약용 전설을 반납하여 성능을 올릴 수 있습니다.</li>
-                <li><strong>무료 치료:</strong> 멀티모드에서는 의생(유저)들에게 무료로 치료받을 수 있습니다. 대가로 좋아요 5개를 권장합니다.</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="guide-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.15em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">4. 무공 운용 및 무기고</h3>
-        <div class="guide-card">
-            <ul class="guide-list">
-                <li><strong>힐 무공 활용:</strong> 초반엔 소모품인 물약보다 힐 무공을 배워 보조로 쓰는 것이 효율적입니다.</li>
-                <li><strong>재료 반환:</strong> 무공 업글 재료는 시즌 1회 무료 반환이 가능하며, 비결은 61렙까지 무료 반환됩니다.</li>
-                <li><strong>무기고(51렙 해금):</strong> 41레벨 이상 장비는 영구 스탯 보너스를 위해 분해하지 말고 무기고에 수집하세요.</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="guide-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.15em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">5. 자원 관리 및 주간 숙제</h3>
-        <div class="guide-card">
-            <ul class="guide-list">
-                <li><strong>심력 관리:</strong> 9분에 1씩 회복됩니다. 레벨업 구간에는 최대치에서 -160 정도를 유지하며 아껴두세요.</li>
-                <li><strong>동맹(길드) 필수:</strong> 기예 스킬 트리, 장명옥 주급, 추가 보상 등을 위해 빠른 가입을 추천합니다.</li>
-                <li><strong>주간 교환소:</strong> 매주 마옥과 장명옥을 모아 심공 및 장비 업그레이드 아이템을 전부 교환하는 것이 핵심입니다.</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="guide-section">
-        <h3 style="color: var(--wuxia-text-main); font-size: 1.15em; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 15px; font-weight: bold;">💡 강호의 잡기</h3>
-        <div class="accent-box">
-            • <strong>시간 조정:</strong> 시진 메뉴를 통해 퀘스트에 필요한 시간으로 빨리감기가 가능합니다.<br>
-            • <strong>외형 설정 팁:</strong> 무기 숨기기, 액세서리 각도/위치 조절 등 상세 설정이 가능합니다.<br>
-            • <strong>행운 봉투:</strong> 클릭 시 돈을 잃을 수 있으니 월드 채팅의 봉투는 주의하세요.<br>
-            • <strong>무료 헤어 획득법:</strong> 청하 마을 거울과 상호작용 시 매일 2번 무료 스킨을 얻을 수 있습니다.
-        </div>
-        
-        <div style="margin-top:20px;">
-            <a href="https://arca.live/b/wherewindsmeet/154084014?category=Info&p=1" target="_blank" class="link-tag">🔥 취화유 파밍법</a>
-            <a href="https://arca.live/b/wherewindsmeet/155056710?mode=best&p=1" target="_blank" class="link-tag" style="margin-left:10px;">🐍 취독산 파밍법</a>
-        </div>
-    </div>
-<div class="source-footer">
-        이 글은 연운 아카라이브 <strong>Lieutenant</strong>님의 글을 참고하여 제작 했습니다.<br>
-        <a href="https://arca.live/b/wherewindsmeet/153352105?p=1" target="_blank">[원글 보러가기]</a>
-    </div>
+    <footer class="text-center pt-8 border-t border-dashed border-gray-200">
+        <p class="text-gray-400 text-[12px] font-medium leading-relaxed">
+            본 가이드는 연운 아카라이브 <span class="text-gray-600 font-bold">Lieutenant</span>님의 정보를 바탕으로 제작되었습니다.<br>
+            <a href="https://arca.live/b/wherewindsmeet/153352105" target="_blank" class="text-blue-500 hover:underline">원글 보러가기 ›</a>
+        </p>
+    </footer>
 </div>

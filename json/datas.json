@@ -2,6 +2,12 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "이동수단", "answer": "가마", "user": "한아름꽃" },
+{ "hint": "밴드", "answer": "베이스기타", "user": "오현기" },
+{ "hint": "7월 7일", "answer": "직녀", "user": "w" },
+{ "hint": "독침", "answer": "꿀벌", "user": "약초" },
+{ "hint": "지식", "answer": "책", "user": "Provi" },
+
 { "hint": "가죽", "answer": "채찍", "user": "니꺼내꺼" },
 { "hint": "독서", "answer": "책", "user": "독고구패황" },
 { "hint": "씨앗", "answer": "정향", "user": "연갤러" },

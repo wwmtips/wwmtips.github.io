@@ -1,146 +1,61 @@
-<style>
-    /* 1. 제목 영역 스타일 (박스 밖) */
-    .page-header-area {
-        text-align: left;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        padding-left: 5px; /* 약간의 여백 */
-    }
-
-    .header-badge {
-        background-color: #b08d55; /* 금색 */
-        color: #fff;
-        padding: 3px 8px;
-        border-radius: 2px;
-        font-weight: bold;
-        font-size: 0.85em;
-        vertical-align: middle;
-    }
-
-    .header-title {
-        color: #b08d55; /* 금색 */
-        font-size: 1.6rem;
-        font-weight: bold;
-        vertical-align: middle;
-        margin-left: 8px;
-        font-family: 'Noto Serif KR', serif; /* 명조체 느낌 */
-    }
-
-    .header-subtitle {
-        color: #888;
-        font-size: 0.95rem;
-        margin-top: 8px;
-        margin-left: 2px;
-    }
-
-    /* 2. 빨간색 구분선 */
-    .red-divider {
-        border-top: 2px solid #c92a2a; /* 짙은 적색 */
-        margin-bottom: 25px;
-        width: 100%;
-    }
-
-    /* 3. 내용 박스 스타일 (흰색 배경) */
-    .calc-content-box {
-        background-color: #fff;
-        padding: 30px 25px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.03); /* 부드러운 그림자 */
-        text-align: center;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-
-    /* 입력창 및 버튼 스타일 */
-    .calc-label {
-        display: block;
-        text-align: left;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 12px;
-        font-size: 1.1rem;
-    }
-
-    .calc-input {
-        width: 100%;
-        padding: 15px;
-        font-size: 1.2rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
-        outline: none;
-        transition: border-color 0.2s;
-        margin-bottom: 20px;
-    }
-
-    .calc-input:focus {
-        border-color: #b08d55;
-    }
-
-    .calc-btn {
-        width: 100%;
-        padding: 16px;
-        background-color: #c92a2a;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-    }
+<div class="max-w-4xl mx-auto space-y-8 p-4 lg:p-0 text-left">
     
-    .calc-btn:hover { background-color: #a01d1d; }
-
-    .calc-btn.reset {
-        background-color: #666;
-        margin-top: 15px;
-    }
-
-    /* 결과 텍스트 */
-    .result-text-big {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 8px;
-        word-break: keep-all;
-    }
-    .result-text-small {
-        font-size: 1rem;
-        color: #777;
-    }
-    
-    /* 결과 박스 강조 (선택사항) */
-    .result-highlight {
-        background-color: #fffcf5;
-        border: 1px solid #b08d55;
-        padding: 20px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-    }
-</style>
-
-<div class="page-header-area">
-    <span class="header-badge">도구</span>
-    <span class="header-title">운기조식</span>
-    <div class="header-subtitle">심력이 가득 찰 때까지 남은 시간을 계산합니다.</div>
-</div>
-
-<div class="red-divider"></div>
-
-<div class="calc-content-box">
-    
-    <div id="input-screen">
-        <label for="currentPoint" class="calc-label">현재 수치 (0 ~ 499)</label>
-        <input type="number" id="currentPoint" class="calc-input" placeholder="숫자를 입력하시오" min="0" max="499">
-        <button class="calc-btn" onclick="calculateTime()">계산하기</button>
-    </div>
-
-    <div id="result-screen" style="display: none; animation: fadeIn 0.3s;">
-        <div class="result-highlight">
-            <div id="remainText" class="result-text-big"></div>
-            <div id="dateText" class="result-text-small"></div>
+    <div class="border-b-2 border-blue-600 pb-6 mb-6">
+        <div class="space-y-2">
+            <div class="flex items-center gap-3">
+                <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Tools</span>
+                <span class="text-gray-400 text-sm font-medium">유틸리티</span>
+            </div>
+            <h2 class="text-3xl font-black text-gray-900 leading-tight">운기조식</h2>
+            <p class="text-gray-500 text-[14px] mt-2 font-medium">심력이 가득 찰 때까지 남은 시간을 계산합니다.</p>
         </div>
-        <button class="calc-btn reset" onclick="resetCalculator()">다시 계산하기</button>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 lg:p-8">
+        
+        <div id="input-screen" class="space-y-6">
+            <div>
+                <label for="currentPoint" class="block text-[16px] font-bold text-gray-800 mb-3 ml-1">
+                    현재 심력 수치 <span class="text-blue-600 font-medium text-sm">(0 ~ 499)</span>
+                </label>
+                <input type="number" id="currentPoint" 
+                       class="w-full p-5 text-2xl font-black bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all placeholder-gray-300" 
+                       placeholder="0" min="0" max="499">
+            </div>
+            
+            <button class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-lg font-black shadow-lg shadow-blue-100 transition-all active:scale-95" 
+                    onclick="calculateTime()">
+                계산하기
+            </button>
+        </div>
+
+        <div id="result-screen" class="hidden animate-fadeIn space-y-6">
+            <div class="bg-blue-50 border border-blue-100 p-8 rounded-2xl text-center relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 text-8xl text-blue-100/50 opacity-50 rotate-12">⏳</div>
+                
+                <div id="remainText" class="text-4xl lg:text-5xl font-black text-blue-900 mb-3 break-keep relative z-10"></div>
+                <div id="dateText" class="text-sm font-bold text-blue-600/70 relative z-10"></div>
+            </div>
+            
+            <button class="w-full py-4 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-2xl text-sm font-bold transition-all active:scale-95" 
+                    onclick="resetCalculator()">
+                다시 계산하기
+            </button>
+        </div>
+
+    </div>
+
+    <div class="bg-amber-50 p-5 rounded-2xl border border-amber-100">
+        <p class="text-[13px] text-amber-900 leading-relaxed">
+            <strong class="font-bold">📍 참고사항:</strong> 심력은 9분당 1포인트씩 자동으로 회복됩니다. 최대치인 500에 도달하면 더 이상 회복되지 않으므로 시간을 잘 확인하세요.
+        </p>
     </div>
 
 </div>
+
+<style>
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fadeIn { animation: fadeIn 0.4s ease forwards; }
+    /* 숫자 입력창 화살표 제거 */
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+</style>

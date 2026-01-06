@@ -1,276 +1,134 @@
-<div class="quest-detail-container" style="text-align: left;">
+<div class="max-w-4xl mx-auto space-y-12 p-4 lg:p-0">
     
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
-        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            무기 및 무술 등급표
-        </h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">현재 메타에서 가장 강력한 무기와 무술 정보</p>
+    <div class="border-b-2 border-blue-600 pb-6 mb-8">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">무기 정보</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">무기 및 무술 등급표</h2>
+        <p class="text-gray-500 text-[14px] mt-2 font-medium">현재 메타에서 가장 강력한 무기와 무술 정보</p>
     </div>
 
-    <style>
-        /* [수묵화 테마] 티어 테이블 스타일 */
-        .tier-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-            font-size: 0.95em;
-            background-color: #fff; /* 흰색 배경 */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        }
-        
-        .tier-table th {
-            border: 1px solid #ddd;
-            padding: 12px;
-            /* 은은한 한지 느낌의 배경색 */
-            background-color: #fffcf5; 
-            color: var(--wuxia-text-main);
-            font-weight: bold;
-            text-align: center;
-            border-bottom: 2px solid var(--wuxia-accent-gold); /* 헤더 강조 */
-        }
-        
-        .tier-table td {
-            border: 1px solid #eee;
-            padding: 15px;
-            vertical-align: middle;
-            color: var(--wuxia-text-sub); /* 본문은 진한 회색 */
-            line-height: 1.6;
-        }
-
-        /* 마우스 올렸을 때 줄 강조 */
-        .tier-table tbody tr:hover {
-            background-color: #fafafa;
-        }
-
-        .weapon-cell {
-            text-align: center;
-            width: 120px; 
-            min-width: 100px;
-            background-color: #fdfdfd; /* 이름 칸만 아주 살짝 구분 */
-            border-right: 1px solid #eee;
-        }
-
-        .weapon-icon-box {
-            width: 64px;
-            height: 64px;
-            background-color: #f4f4f2; /* 아이콘 배경: 연한 미색 */
-            border: 1px solid #ddd;
-            margin: 0 auto 10px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-        }
-
-        .weapon-name {
-            display: block;
-            color: var(--wuxia-text-main); /* 무기 이름: 진한 색 */
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-        
-        /* 등급별 섹션 제목 스타일 */
-        .tier-heading {
-            color: var(--wuxia-text-main);
-            font-size: 1.3em; 
-            border-left: 4px solid var(--wuxia-accent-red); 
-            padding-left: 10px; 
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        
-        .tier-heading span {
-            color: var(--wuxia-accent-gold); /* S, A, B 글자만 금색 */
-        }
-    </style>
-
-    <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 class="tier-heading">
-            <span>S</span> 티어 무기 및 무술
+    <section class="space-y-4">
+        <h3 class="text-xl font-black text-gray-900 flex items-center gap-2.5 mb-6">
+            <span class="w-8 h-8 bg-amber-400 text-white rounded-lg flex items-center justify-center text-sm">S</span>
+            티어 무기 및 무술
         </h3>
         
-        <table class="tier-table">
-            <thead>
-                <tr>
-                    <th>무술</th>
-                    <th>설명</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                            <img src="images/w1.png" alt="우산" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='☂️'">
-                        </div>
-                        <span class="weapon-name">우산-소생의 향</span>
-                    </td>
-                    <td>
-                        소생의 향은 지속 치유와 피해량 증가 효과를 제공하는 보조 무기입니다. 다른 무기와도 궁합이 매우 좋습니다. 쉽게 교체하고, 스킬을 활성화하고, 다른 무기로 교체하여 피해를 입힐 수 있기 때문입니다.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                            <img src="images/w2.PNG" alt="팬" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🪭'">
-                        </div>
-                        <span class="weapon-name">부채-천계의 수호</span>
-                    </td>
-                    <td>
-                        천계의 수호는 소생의 향보다 뛰어난 치유력을 제공하는 지원 무기이지만, 피해량 증가 효과는 없습니다. 처음부터 사용 가능하기 때문에 초반 생존에 강력한 선택지입니다. 직접 피해량은 낮지만, 무한한 치유를 통해 적을 막고 제거 하는 데 집중할 수 있습니다. 
-                        멀티플레이어에서는 매우 중요한 역할을 합니다.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                            <img src="images/w3.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='⚔️'">
-                        </div>
-                        <span class="weapon-name">검-구현의 검무</span>
-                    </td>
-                    <td>
-                        구현의 검무는 시간이 지남에 따라 중첩된 피해를 입히는 무기로, 심득을 사용하면 한번에 중첩된 지속피해를 폭발시켜 높은 피해를 입힙니다. 출혈 피해 외에도, 이 무기는 높은 기동성을 갖추고 있어 공격 도중 틈새를 메우거나 위치를 변경할 수 있어 방어와 공격의 균형을 잘 맞춥니다.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                            <img src="images/w4.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">검-무명의 검무</span>
-                    </td>
-                    <td>
-                        무명의 검무는 기동성이 뛰어난 무기로, 콤보 도중 적의 사거리를 자유롭게 드나들 수 있습니다. 단일 대상과 광역 대상의 조합이 뛰어나 게임 내 대부분의 콘텐츠에서 유용하게 사용할 수 있습니다.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="grid grid-cols-1 gap-4">
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col md:flex-row gap-5 items-start">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl flex-none border border-amber-400/30 flex items-center justify-center shadow-lg">
+                    <img src="images/w1.png" class="w-[80%] h-[80%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='☂️'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[17px] font-bold text-gray-900 mb-2">우산-소생의 향</h4>
+                    <p class="text-[14px] text-gray-600 leading-relaxed">소생의 향은 지속 치유와 피해량 증가 효과를 제공하는 보조 무기입니다. 다른 무기와도 궁합이 매우 좋습니다. 쉽게 교체하고, 스킬을 활성화하고, 다른 무기로 교체하여 피해를 입힐 수 있기 때문입니다.</p>
+                </div>
+            </div>
 
-    <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 class="tier-heading">
-            <span>A</span> 티어 무기 및 무술
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col md:flex-row gap-5 items-start">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl flex-none border border-amber-400/30 flex items-center justify-center shadow-lg">
+                    <img src="images/w2.PNG" class="w-[80%] h-[80%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='🪭'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[17px] font-bold text-gray-900 mb-2">부채-천계의 수호</h4>
+                    <p class="text-[14px] text-gray-600 leading-relaxed">천계의 수호는 소생의 향보다 뛰어난 치유력을 제공하는 지원 무기이지만, 피해량 증가 효과는 없습니다. 처음부터 사용 가능하기 때문에 초반 생존에 강력한 선택지입니다. 직접 피해량은 낮지만, 무한한 치유를 통해 적을 막고 제거 하는 데 집중할 수 있습니다. 멀티플레이어에서는 매우 중요한 역할을 합니다.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col md:flex-row gap-5 items-start">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl flex-none border border-amber-400/30 flex items-center justify-center shadow-lg">
+                    <img src="images/w3.PNG" class="w-[80%] h-[80%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='⚔️'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[17px] font-bold text-gray-900 mb-2">검-구현의 검무</h4>
+                    <p class="text-[14px] text-gray-600 leading-relaxed">구현의 검무는 시간이 지남에 따라 중첩된 피해를 입히는 무기로, 심득을 사용하면 한번에 중첩된 지속피해를 폭발시켜 높은 피해를 입힙니다. 출혈 피해 외에도, 이 무기는 높은 기동성을 갖추고 있어 공격 도중 틈새를 메우거나 위치를 변경할 수 있어 방어와 공격의 균형을 잘 맞춥니다.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col md:flex-row gap-5 items-start">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl flex-none border border-amber-400/30 flex items-center justify-center shadow-lg">
+                    <img src="images/w4.PNG" class="w-[80%] h-[80%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[17px] font-bold text-gray-900 mb-2">검-무명의 검무</h4>
+                    <p class="text-[14px] text-gray-600 leading-relaxed">무명의 검무는 기동성이 뛰어난 무기로, 콤보 도중 적의 사거리를 자유롭게 드나들 수 있습니다. 단일 대상과 광역 대상의 조합이 뛰어나 게임 내 대부분의 콘텐츠에서 유용하게 사용할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="space-y-4">
+        <h3 class="text-xl font-black text-gray-900 flex items-center gap-2.5 mb-6">
+            <span class="w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center text-sm">A</span>
+            티어 무기 및 무술
         </h3>
         
-        <table class="tier-table">
-            <thead>
-                <tr>
-                    <th>무술</th>
-                    <th>설명</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                             <img src="images/w5.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">창-격류의 파동</span>
-                    </td>
-                    <td>
-                        격류의 파동은 적 무리를 상대할 때 강력한 선택지입니다. 스킬 중 하나가 적중 횟수에 따라 공격력을 증가시키는 버프를 제공하기 때문입니다. 이 무기의 유일한 단점은 보스와 같은 단일 대상에게는 최대 버프를 얻기 어렵다는 것입니다.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                             <img src="images/w6.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">쌍도-윤회의 가르침</span>
-                    </td>
-                    <td>
-                        윤회의 가르침은 적을 압도하는 빠른 공격을 가할 수 있는 무자비한 무기이지만, 방어력이 매우 낮습니다. 뛰어난 기동성을 갖춰 적을 빠르게 추격할 수 있지만, 광역 피해는 부족합니다. 격노의 화염은 상당한 강화 효과를 제공하지만, 솔로 플레이에서는 그 효과를 극대화하기 어렵습니다. 생존하기에는 부족하며, 피해를 줄이기 위해 공격을 피해야 하는 게임이다보니 콤보가 쉽게 깨집니다.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                             <img src="images/w7.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">맥도-탄식의 검기</span>
-                    </td>
-                    <td>
-                        탄식의 검기는 느리지만 강력하며, 강력한 충전 공격을 자랑합니다. 또한 최대 체력에 비례하는 보호막을 제공하여 충전 중에도 적의 공격을 방어할 수 있습니다. 탱커에게는 완벽한 무기이지만, 방어나 회피 시 충전이 취소된다는 단점이 있습니다. 
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                             <img src="images/w8.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">창-무명 창법</span>
-                    </td>
-                    <td>
-                        무명 창법은 빠른 강공격과 스킬의 지구력 감소 버프 덕분에 꽤 강력한 피해를 줄 수 있습니다. 하지만 이 무기의 단점은 사거리가 짧아 여러 원거리 적을 상대할 때 다소 부족하고, 항상 적의 공격 범위 안에 있게 된다는 것입니다.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex gap-4 items-start">
+                <div class="w-14 h-14 bg-gray-900 rounded-xl flex-none border border-blue-500/20 flex items-center justify-center shadow-md">
+                    <img src="images/w5.PNG" class="w-[75%] h-[75%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[15px] font-bold text-gray-900 mb-1">창-격류의 파동</h4>
+                    <p class="text-[12px] text-gray-500 leading-relaxed">격류의 파동은 적 무리를 상대할 때 강력한 선택지입니다. 스킬 중 하나가 적중 횟수에 따라 공격력을 증가시키는 버프를 제공하기 때문입니다.</p>
+                </div>
+            </div>
 
-    <div class="detail-chunk" style="margin-bottom: 40px;">
-        <h3 class="tier-heading">
-            <span>B</span> 티어 무기 및 무술
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex gap-4 items-start">
+                <div class="w-14 h-14 bg-gray-900 rounded-xl flex-none border border-blue-500/20 flex items-center justify-center shadow-md">
+                    <img src="images/w6.PNG" class="w-[75%] h-[75%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[15px] font-bold text-gray-900 mb-1">쌍도-윤회의 가르침</h4>
+                    <p class="text-[12px] text-gray-500 leading-relaxed">윤회의 가르침은 적을 압도하는 빠른 공격을 가할 수 있는 무자비한 무기이지만, 방어력이 매우 낮습니다.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex gap-4 items-start">
+                <div class="w-14 h-14 bg-gray-900 rounded-xl flex-none border border-blue-500/20 flex items-center justify-center shadow-md">
+                    <img src="images/w7.PNG" class="w-[75%] h-[75%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[15px] font-bold text-gray-900 mb-1">맥도-탄식의 검기</h4>
+                    <p class="text-[12px] text-gray-500 leading-relaxed">탄식의 검기는 느리지만 강력하며, 강력한 충전 공격을 자랑합니다. 탱커에게는 완벽한 무기입니다.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex gap-4 items-start">
+                <div class="w-14 h-14 bg-gray-900 rounded-xl flex-none border border-blue-500/20 flex items-center justify-center shadow-md">
+                    <img src="images/w8.PNG" class="w-[75%] h-[75%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[15px] font-bold text-gray-900 mb-1">창-무명 창법</h4>
+                    <p class="text-[12px] text-gray-500 leading-relaxed">무명 창법은 빠른 강공격과 스킬의 지구력 감소 버프 덕분에 꽤 강력한 피해를 줄 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="space-y-4">
+        <h3 class="text-xl font-black text-gray-900 flex items-center gap-2.5 mb-6">
+            <span class="w-8 h-8 bg-gray-400 text-white rounded-lg flex items-center justify-center text-sm">B</span>
+            티어 무기 및 무술
         </h3>
         
-        <table class="tier-table">
-            <thead>
-                <tr>
-                    <th>무술</th>
-                    <th>설명</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                             <img src="images/w9.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">사슬-속세의 지혜</span>
-                    </td>
-                    <td>
-                       속세의 지혜는 빠른 공격으로 적에게 타격을 가하는 동시에 강력한 쥐를 소환하여 협동 공격합니다. 이 무기는 사거리는 괜찮지만 광역 공격 능력이 부족합니다. 
-                       강력한 쥐 덕분에 보조 무기로는 괜찮지만, 쥐가 10초밖에 지속되지 않아 교체 후 다시 소환해야 한다는 점을 고려하면 다소 부족합니다.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                             <img src="images/w10.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">우산-봄의 선율</span>
-                    </td>
-                    <td>
-                        봄의 선율은 모든 무기 중 가장 넓은 사거리를 자랑합니다. 주 무기로 사용하거나 투사체를 발사하는 보조 무기로 사용할 수 있습니다. 다만 불멸의 꽃을 활성화하려면 충전이 필요하며 충전 후 가벼운 공격은 공중에 떠서 피해를 입힐 수 있지만, 
-                        완전히 안전한 것은 아닙니다. 공중에 떠 있는 동안에도 특정 적의 공격에 맞을 수 있으며, 착지 시에는 스태미나를 소모하기 때문에 취약해집니다.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                             <img src="images/w11.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">부채-청산의 정수</span>
-                    </td>
-                    <td>
-                        청산의 정수는 기동성과 사거리가 뛰어나며, 적을 공중으로 띄워 훌륭한 콤보를 만들어낼 수 있습니다. 하지만 이 무기의 단점은 콤보의 일관성이 부족하다는 점입니다. 
-                        적이 특정 애니메이션 동안 발사되는 것을 견뎌내지 못하거나, 적이 기동 중일 경우 공격이 빗나갈 수 있습니다.
-                    </td>
-                </tr>
-                <tr>
-                    <td class="weapon-cell">
-                        <div class="weapon-icon-box">
-                             <img src="images/w12.PNG" alt="검" style="width:50px;" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
-                        </div>
-                        <span class="weapon-name">창-풍뢰의 징표</span>
-                    </td>
-                    <td>
-                        풍뢰의 징표는 방어력 향상에 중점을 둔 무기이기 때문에 게임 내 모든 무기 중 피해량이 가장 낮은 무기 중 하나입니다. 
-                        적절한 피해 감소 버프를 제공하고 적에게 취약 효과를 부여하여 보조 무기로 사용하기에 적합합니다.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-gray-50/50 rounded-2xl border border-gray-100 p-5 flex gap-4 items-start">
+                <div class="w-14 h-14 bg-gray-900 rounded-xl flex-none border border-gray-200 flex items-center justify-center shadow-sm">
+                    <img src="images/w9.PNG" class="w-[75%] h-[75%] object-contain" onerror="this.style.display='none'; this.parentNode.innerText='🗡️'">
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[15px] font-bold text-gray-400 mb-1">사슬-속세의 지혜</h4>
+                    <p class="text-[12px] text-gray-400 leading-relaxed">속세의 지혜는 빠른 공격으로 적에게 타격을 가하는 동시에 강력한 쥐를 소환하여 협동 공격합니다.</p>
+                </div>
+            </div>
+            </div>
+    </section>
 
+    <footer class="text-center pt-10 border-t border-dashed border-gray-200">
+        <p class="text-gray-400 text-[12px] font-medium leading-relaxed">
+            본 등급표는 최신 밸런스 패치 및 커뮤니티 데이터를 기반으로 작성되었습니다.<br>
+            플레이어의 숙련도와 장비 세팅에 따라 효율이 달라질 수 있습니다.
+        </p>
+    </footer>
 </div>

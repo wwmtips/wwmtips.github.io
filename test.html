@@ -443,36 +443,83 @@
         }
 
         // [2] 탭 전환
-        window.switchTab = function (tabName) {
+        // [수정] 탭 전환 및 주소창(URL) 동기화 로직
+        window.switchTab = function (tabName, updateHistory = true) {
+            // 1. 요청하신 URL 파라미터 이름 매핑 (할 일 -> hw)
+            const urlMapping = {
+                'home': '',
+                'quest': 'quest',
+                'hw': 'hw',
+                'todo': 'hw', // 기존 'todo' 호출 시에도 'hw'로 처리
+                'quiz': 'quiz',
+                'chunji': 'chunji'
+            };
+
+            const targetParam = urlMapping[tabName] || tabName;
+
+            // 2. 화면(View) 전환 (기존 ID 구조 유지: view-todo는 그대로 사용 가능)
             const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-todo', 'view-guide'];
             views.forEach(v => {
                 const el = document.getElementById(v);
-                if (el) el.style.display = (v === 'view-' + tabName) ? 'block' : 'none';
+                if (!el) return;
+
+                // 'hw'로 들어와도 'view-todo'를 보여주도록 매칭
+                const isTarget = (v === 'view-' + tabName) || (tabName === 'hw' && v === 'view-todo');
+                el.style.display = isTarget ? 'block' : 'none';
             });
 
-            // PC 상단 메뉴 활성화
+            // 3. 네비게이션 버튼 활성화 스타일 갱신
+            updateNavUI(tabName === 'hw' ? 'todo' : tabName);
+
+            // 4. 주소창(URL) 변경 로직 (핵심)
+            if (updateHistory) {
+                let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+
+                // 홈이 아니면 ?tab=... 추가, 홈이면 파라미터 없이 깔끔하게 표시
+                if (targetParam && targetParam !== 'home') {
+                    newUrl += '?tab=' + targetParam;
+                }
+
+                window.history.pushState({ tab: tabName }, '', newUrl);
+            }
+
+            window.scrollTo(0, 0);
+
+            // 탭 전환 시 타이머/리스트 갱신
+            if (tabName === 'hw' || tabName === 'todo' || tabName === 'home') updateTimers();
+        };
+
+        // 네비게이션 버튼 색상 변경 보조 함수
+        function updateNavUI(activeTab) {
+            // PC 상단 메뉴
             const pcNavIds = ['pc-nav-home', 'pc-nav-quest', 'pc-nav-chunji', 'pc-nav-todo', 'pc-nav-quiz'];
             pcNavIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
-                if (id === 'pc-nav-' + tabName) { el.classList.add('text-blue-600', 'active'); el.classList.remove('text-gray-500'); }
-                else { el.classList.remove('text-blue-600', 'active'); el.classList.add('text-gray-500'); }
+                const isMatch = id === 'pc-nav-' + activeTab;
+                el.classList.toggle('text-blue-600', isMatch);
+                el.classList.toggle('active', isMatch);
+                el.classList.toggle('text-gray-500', !isMatch);
             });
 
-            // 모바일 하단 메뉴 활성화
+            // 모바일 하단 바
             const navIds = ['nav-home', 'nav-quest', 'nav-todo', 'nav-quiz'];
             navIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
-                if (id === 'nav-' + tabName) { el.classList.add('active'); el.classList.remove('text-gray-400'); }
-                else { el.classList.remove('active'); el.classList.add('text-gray-400'); }
+                const isMatch = id === 'nav-' + activeTab;
+                el.classList.toggle('active', isMatch);
+                el.classList.toggle('text-gray-400', !isMatch);
             });
-            window.scrollTo(0, 0);
+        }
 
-            // 탭 전환 시 타이머/리스트 갱신
-            if (tabName === 'todo' || tabName === 'home') updateTimers();
+        // 브라우저 뒤로가기/앞으로가기 버튼 대응
+        window.onpopstate = function (event) {
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab') || 'home';
+            // 뒤로가기 시에는 URL을 또 다시 push하지 않도록 false 전달
+            switchTab(tab, false);
         };
-
         // [3] 숙제 데이터 및 체크리스트 관리 (안전하게 로컬 정의)
         const LOCAL_TASK_DATA = [
             { id: 'm_1', freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },

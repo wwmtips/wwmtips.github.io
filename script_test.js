@@ -755,124 +755,53 @@ function loadHomeMaps() {
 }
 
 // script.js 파일의 switchTab 함수 교체
-
-function switchTab(tabName, updateHistory = true) {
-    // 1. 화면 전환 (기존 로직)
-    const views = ['view-home', 'view-quiz', 'view-quest', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-chunji', , 'view-archive'];
-    views.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
-
-    const navs = ['nav-home', 'nav-quiz', 'nav-quest', 'nav-code', 'nav-builder', 'nav-more', 'nav-chunji'];
-    navs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active'); });
-
-    document.querySelectorAll('.dropdown-item').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-dropdown-content').forEach(el => { el.classList.remove('show'); });
-
-    // 2. [최적화 핵심] 탭을 눌렀을 때, 내용이 비어있으면 그때 그리기 (Lazy Rendering)
-    if (tabName === 'home') {
-        document.getElementById('view-home').style.display = 'block';
-        document.getElementById('nav-home').classList.add('active');
-    }
-    else if (tabName === 'chunji') {
-        document.getElementById('view-chunji').style.display = 'block';
-        document.getElementById('nav-chunji').classList.add('active');
-        // 데이터가 있는데 화면이 비어있으면 렌더링
-        const container = document.getElementById('chunji-list-container');
-        if (container && container.children.length === 0 && chunjiData.length > 0) {
-            renderChunjiList();
-        }
-        showChunjiList();
-    }
-    else if (tabName === 'quiz') {
-        document.getElementById('view-quiz').style.display = 'block';
-        document.getElementById('nav-more').classList.add('active');
-        const quizBtn = document.getElementById('nav-quiz');
-        if (quizBtn) quizBtn.classList.add('active');
-
-        // 렌더링 체크
-        const tbody = document.getElementById('quiz-table-body');
-        if (tbody && tbody.children.length === 0 && globalData.quiz.length > 0) {
-            renderQuizTable(globalData.quiz);
-            updateQuizCounter();
-        }
-    }
-    else if (tabName === 'quest') {
-        document.getElementById('view-quest').style.display = 'block';
-        document.getElementById('nav-quest').classList.add('active');
-
-        // 렌더링 체크
-        const container = document.getElementById('quest-grid-container');
-        if (container && container.children.length === 0 && globalData.quests.length > 0) {
-            renderQuestList();
-        }
-        showQuestList();
-    }
-    else if (tabName === 'news') {
-        document.getElementById('view-news').style.display = 'block';
-
-        // 렌더링 체크
-        const container = document.getElementById('full-news-list');
-        if (container && container.children.length === 0 && globalData.news.length > 0) {
-            renderFullNews(globalData.news);
-        }
-    }
-    // [추가] 업적 전체보기 탭 전환
-    else if (tabName === 'archive') {
-        document.getElementById('view-archive').style.display = 'block';
-        // 전체 목록 그리기 함수 호출
-        renderFullAchievementList();
-    }
-
-    else if (tabName === 'builder') {
-        document.getElementById('view-builder').style.display = 'block';
-        document.getElementById('nav-more').classList.add('active');
-        const builderItem = document.getElementById('nav-builder');
-        if (builderItem) builderItem.classList.add('active');
-
-        document.getElementById('tools-menu').style.display = 'block';
-        document.getElementById('builder-interface').style.display = 'none';
-
-        // 데이터 체크 및 렌더링
-        if (!builderData) {
-            fetch('json/builder_data.json')
-                .then(res => res.json())
-                .then(data => { builderData = data; renderBuildList('all'); })
-                .catch(err => console.error(err));
+// [2] 탭 전환 (URL 업데이트 및 뒤로 가기 완벽 대응)
+window.switchTab = function(tabName, updateHistory = true) {
+    const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-todo', 'view-guide'];
+    views.forEach(v => { 
+        const el = document.getElementById(v);
+        if(el) el.style.display = (v === 'view-' + tabName) ? 'block' : 'none'; 
+    });
+    
+    // PC 상단 메뉴 활성화 (pc-nav-XXX)
+    const pcNavIds = ['pc-nav-home', 'pc-nav-quest', 'pc-nav-chunji', 'pc-nav-todo', 'pc-nav-quiz'];
+    pcNavIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (id === 'pc-nav-' + tabName) {
+            el.classList.add('text-blue-600', 'active');
+            el.classList.remove('text-gray-500');
         } else {
-            const container = document.getElementById('build-list-container');
-            // 로딩 문구만 있거나 비어있으면 렌더링
-            if (container && (container.children.length === 0 || container.innerText.includes('불러오는 중'))) {
-                renderBuildList('all');
-            }
+            el.classList.remove('text-blue-600', 'active');
+            el.classList.add('text-gray-500');
         }
+    });
 
-        if (new URLSearchParams(window.location.search).get('b')) {
-            openBuilderInterface();
-            loadViewer();
+    // 모바일 하단 메뉴 활성화 (nav-XXX)
+    const navIds = ['nav-home', 'nav-quest', 'nav-todo', 'nav-quiz'];
+    navIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (id === 'nav-' + tabName) {
+            el.classList.add('active');
+            el.classList.remove('text-gray-400');
+        } else {
+            el.classList.remove('active');
+            el.classList.add('text-gray-400');
         }
-    }
-    else if (tabName === 'guide' || tabName === 'code') {
-        // 가이드는 기존 로직 유지 (이미 동적 로딩임)
-        const guideView = document.getElementById('view-guide');
-        if (guideView) {
-            guideView.style.display = 'block';
-            if (!isGuideLoaded) {
-                loadGuideView();
-            } else {
-                const newsBtn = findButtonByFile('news.html');
-                if (newsBtn) loadGuideContent('news.html', newsBtn);
-            }
-        }
-        document.getElementById('nav-code').classList.add('active');
+    });
+
+    // ★ [핵심 수정] URL 파라미터 업데이트 호출 (script.js의 함수 활용)
+    // updateHistory가 true일 때만 주소창을 변경하여 뒤로 가기 시 무한 루프 방지
+    if (updateHistory && typeof updateUrlQuery === 'function') {
+        updateUrlQuery(tabName);
     }
 
-    // 3. URL 업데이트
-    if (updateHistory) {
-        // 가이드는 내부에서 처리하므로 제외
-        if (tabName !== 'guide' && tabName !== 'code') {
-            updateUrlQuery(tabName);
-        }
-    }
-}
+    window.scrollTo(0, 0);
+    
+    // 탭 전환 시 타이머/리스트 갱신
+    if(tabName === 'todo' || tabName === 'home') updateTimers();
+};
 
 // [수정] URL 파라미터 관리 함수 (r 파라미터 초기화 포함)
 function updateUrlQuery(tab, id) {

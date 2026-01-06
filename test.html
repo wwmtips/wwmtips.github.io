@@ -33,7 +33,7 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="fav/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -373,7 +373,7 @@
     </main>
 
     <nav
-        class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 h-[60px] flex justify-between items-center px-6 z-50">
+        class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 h-[60px] flex justify-between items-center px-6 z-50">
         <button id="nav-home" onclick="switchTab('home')"
             class="nav-item active flex flex-col items-center justify-center w-14 gap-1 text-gray-400">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -431,7 +431,7 @@
     </div>
 
     <script>
-        // 사이드바
+        // [1] 사이드바 제어
         function toggleSidebar() {
             const sb = document.getElementById('main-sidebar');
             const ol = document.getElementById('sidebar-overlay');
@@ -443,83 +443,198 @@
             if (sb && ol) { sb.style.right = '-100%'; ol.classList.add('hidden'); document.body.style.overflow = ''; }
         }
 
-        // 가이드 스크롤 인디케이터
-        const guideScroll = document.getElementById('guide-scroll-wrapper');
-        const guideDots = document.getElementById('guide-indicators')?.children;
-        if (guideScroll && guideDots) {
-            guideScroll.addEventListener('scroll', () => {
-                const percent = guideScroll.scrollLeft / (guideScroll.scrollWidth - guideScroll.clientWidth);
-                if (percent > 0.5) {
-                    guideDots[0].classList.replace('bg-blue-500', 'bg-gray-200');
-                    guideDots[1].classList.replace('bg-gray-200', 'bg-blue-500');
-                } else {
-                    guideDots[1].classList.replace('bg-blue-500', 'bg-gray-200');
-                    guideDots[0].classList.replace('bg-gray-200', 'bg-blue-500');
-                }
-            });
-        }
-
-        // 탭 전환
+        // [2] 탭 전환
         window.switchTab = function (tabName) {
             const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-todo', 'view-guide'];
-            views.forEach(v => { document.getElementById(v).style.display = (v === 'view-' + tabName) ? 'block' : 'none'; });
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if (el) el.style.display = (v === 'view-' + tabName) ? 'block' : 'none';
+            });
 
+            // PC 상단 메뉴 활성화
+            const pcNavIds = ['pc-nav-home', 'pc-nav-quest', 'pc-nav-chunji', 'pc-nav-todo', 'pc-nav-quiz'];
+            pcNavIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (id === 'pc-nav-' + tabName) { el.classList.add('text-blue-600', 'active'); el.classList.remove('text-gray-500'); }
+                else { el.classList.remove('text-blue-600', 'active'); el.classList.add('text-gray-500'); }
+            });
+
+            // 모바일 하단 메뉴 활성화
             const navIds = ['nav-home', 'nav-quest', 'nav-todo', 'nav-quiz'];
             navIds.forEach(id => {
                 const el = document.getElementById(id);
+                if (!el) return;
                 if (id === 'nav-' + tabName) { el.classList.add('active'); el.classList.remove('text-gray-400'); }
                 else { el.classList.remove('active'); el.classList.add('text-gray-400'); }
             });
             window.scrollTo(0, 0);
+
+            // 탭 전환 시 타이머/리스트 갱신
+            if (tabName === 'todo' || tabName === 'home') updateTimers();
         };
 
-        // 가이드 바로가기
-        function openGuideDirect(url) {
-            if (typeof loadGuideContent === 'function') { loadGuideContent(url); switchTab('guide'); }
-            else { switchTab('guide'); }
-        }
+        // [3] 숙제 데이터 및 체크리스트 관리 (안전하게 로컬 정의)
+        const LOCAL_TASK_DATA = [
+            { id: 'm_1', freq: 'monthly', type: '구매', loc: '공명상점', title: '음의 선율 구매' },
+            { id: 'm_2', freq: 'monthly', type: '구매', loc: '공명상점', title: '선율 할인권 구매' },
+            { id: 'w_7', freq: 'weekly', type: '전투', loc: '협경', title: '협경 클리어' },
+            { id: 'w_8', freq: 'weekly', type: '전투', loc: '검무장', title: '검무장 클리어' },
+            { id: 'w_1', freq: 'weekly', type: '구매', loc: '강호백진', title: '음의 선율 구매' },
+            { id: 'w_5', freq: 'weekly', type: '구매', loc: '시즌상점', title: '음의 선율 구매' },
+            { id: 'w_2', freq: 'weekly', type: '구매', loc: '시즌상점', title: '심법 심득 상자 구매' },
+            { id: 'w_3', freq: 'weekly', type: '구매', loc: '시즌상점', title: '비결 지원 상자 구매' },
+            { id: 'w_4', freq: 'weekly', type: '구매', loc: '시즌상점', title: '작은 단백전 상자 구매' },
+            { id: 'w_6', freq: 'weekly', type: '구매', loc: '강호령 상점', title: '비결 지원 상자 구매' },
+            { id: 'w_9', freq: 'weekly', type: '활동', loc: '동맹', title: '화물 운송' },
+            { id: 'w_13', freq: 'weekly', type: '활동', loc: '무역', title: '시매사 교환' },
+            { id: 'w_10', freq: 'weekly', type: '구매', loc: '시즌상점', title: '기술 필기 구매' },
+            { id: 'w_11', freq: 'weekly', type: '구매', loc: '기술양성', title: '기술 선택 상자 구매' },
+            { id: 'w_12', freq: 'weekly', type: '구매', loc: '심득교환', title: '심법 선택 상자 구매' },
+            { id: 'w_13', freq: 'weekly', type: '구매', loc: '유파시련', title: '심법/비결 상자 구매' },
+            { id: 'd_2', freq: 'daily', type: '활동', loc: '현상령', title: '수배/복수 현상령' },
+            { id: 'd_4', freq: 'daily', type: '활동', loc: '꿈속', title: '엽비휴의 도박 상기판' },
+            { id: 'd_5', freq: 'daily', type: '활동', loc: '필드', title: '비결 재료 채집' },
+            { id: 'd_6', freq: 'daily', type: '활동', loc: '필드', title: '야생마 포획' },
+            { id: 'd_7', freq: 'daily', type: '활동', loc: '공덕지', title: '동전 던지고 소원 빌기' },
+            { id: 'd_3', freq: 'daily', type: '활동', loc: '강호호령', title: '문파 호령' }
+        ];
 
-        // 타이머 시트 닫기 & 호환성
-        function closeTimerSheet() {
+        window.toggleTaskCheck = function (taskId) {
+            const statusData = (typeof getChecklistStatus === 'function') ? getChecklistStatus() : { checked: {} };
+            if (statusData.checked[taskId]) delete statusData.checked[taskId];
+            else statusData.checked[taskId] = true;
+
+            if (typeof saveChecklistStatus === 'function') saveChecklistStatus(statusData);
+            else localStorage.setItem('wwm_checklist_v3', JSON.stringify(statusData)); // fallback
+
+            updateTimers(); // 화면 갱신
+        };
+
+        // [4] 바텀 시트 열기 (완벽 수정)
+        window.openTimerSheetByName = function (name) {
+            if (typeof TIMERS === 'undefined') return;
+            const timer = TIMERS.find(x => x.name === name);
+            if (!timer) return;
+
             const modal = document.getElementById('timer-sheet-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('show');
-        }
+            const contentBox = document.getElementById('timer-detail-content');
+            if (!modal || !contentBox) return;
 
-        // 할 일 리스트 (안전장치 + Tailwind 스타일)
-        // [수정] 할 일 리스트 렌더링 (홈: 요약 카드 / 할일 탭: 전체 펼쳐보기)
-        // [수정] 할 일 리스트 렌더링 (홈: 요약 카드 / 할일 탭: 전체 펼쳐보기)
+            // 헤더 생성
+            let html = `
+            <div class="text-center mb-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-1">${timer.name}</h3>
+                <p class="text-sm text-gray-500">${timer.desc}</p>
+            </div>
+        `;
+
+            // 리스트 생성
+            if (timer.type === 'reset') {
+                const statusData = (typeof getChecklistStatus === 'function') ? getChecklistStatus() : { checked: {} };
+                // 전역 TASK_DATA가 없으면 로컬 데이터 사용
+                const sourceData = (typeof TASK_DATA !== 'undefined') ? TASK_DATA : LOCAL_TASK_DATA;
+                const tasks = sourceData.filter(t => t.freq === timer.freq);
+
+                if (tasks.length > 0) {
+                    html += `<div class="grid grid-cols-1 gap-3 max-h-[60vh] overflow-y-auto no-scrollbar pb-10">`;
+                    tasks.forEach(task => {
+                        const isChecked = statusData.checked[task.id];
+                        const bgClass = isChecked ? 'bg-blue-50 border-blue-100' : 'bg-gray-50 border-gray-100';
+                        const textClass = isChecked ? 'text-gray-400 line-through' : 'text-gray-800';
+                        const checkIcon = isChecked ? '✔' : '';
+
+                        html += `
+                        <div id="sheet-task-${task.id}" class="flex items-center justify-between p-4 rounded-xl border ${bgClass} cursor-pointer active:scale-95 transition-all" onclick="toggleSheetTask('${task.id}')">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <span class="text-[11px] px-1.5 py-0.5 bg-white border border-gray-200 rounded text-gray-500 whitespace-nowrap font-bold">${task.loc}</span>
+                                <span class="text-[15px] font-medium ${textClass} truncate">${task.title}</span>
+                            </div>
+                            <div class="task-check-icon w-6 h-6 rounded-full border border-gray-300 bg-white flex items-center justify-center text-sm text-blue-600 font-bold flex-none shadow-sm">${checkIcon}</div>
+                        </div>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<p class="text-center text-gray-400 py-10">체크리스트가 없습니다.</p>`;
+                }
+            } else {
+                html += `<div class="bg-gray-50 p-5 rounded-xl border border-gray-100 text-gray-600 leading-relaxed text-sm">${timer.desc}<br>시간에 맞춰 참여해보세요!</div>`;
+            }
+
+            contentBox.innerHTML = html;
+            modal.classList.remove('hidden'); // Tailwind 숨김 해제
+            modal.classList.add('show');      // 호환성용 클래스 추가
+        };
+
+        // 시트 내부 체크 토글 (UI 즉시 갱신)
+        window.toggleSheetTask = function (taskId) {
+            toggleTaskCheck(taskId); // 데이터 저장
+
+            // UI 즉시 반영
+            const el = document.getElementById(`sheet-task-${taskId}`);
+            if (el) {
+                const statusData = (typeof getChecklistStatus === 'function') ? getChecklistStatus() : { checked: {} };
+                const isChecked = statusData.checked[taskId];
+                const icon = el.querySelector('.task-check-icon');
+                const title = el.querySelector('span.truncate');
+
+                if (isChecked) {
+                    el.className = "flex items-center justify-between p-4 rounded-xl border bg-blue-50 border-blue-100 cursor-pointer active:scale-95 transition-all";
+                    if (title) title.className = "text-[15px] font-medium text-gray-400 line-through truncate";
+                    if (icon) icon.innerText = '✔';
+                } else {
+                    el.className = "flex items-center justify-between p-4 rounded-xl border bg-gray-50 border-gray-100 cursor-pointer active:scale-95 transition-all";
+                    if (title) title.className = "text-[15px] font-medium text-gray-800 truncate";
+                    if (icon) icon.innerText = '';
+                }
+            }
+        };
+
+        // 시트 닫기
+        window.closeTimerSheet = function () {
+            const modal = document.getElementById('timer-sheet-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('show');
+            }
+        };
+
+        // [5] 타이머/할일 렌더링 (통합)
         window.updateTimers = function () {
-            const homeList = document.getElementById('gangho-timer-list');
-            const todoList = document.getElementById('gangho-timer-list-tab');
-
-            // 데이터가 없으면 로드 대기
-            if (typeof TIMERS === 'undefined' || typeof TASK_DATA === 'undefined') return;
-
+            if (typeof TIMERS === 'undefined') return;
             const now = new Date();
             const serverTimeEl = document.getElementById('server-time');
             if (serverTimeEl) serverTimeEl.innerText = now.toTimeString().split(' ')[0];
 
-            // 체크리스트 상태 가져오기
             const statusData = (typeof getChecklistStatus === 'function') ? getChecklistStatus() : { checked: {} };
+            const sourceData = (typeof TASK_DATA !== 'undefined') ? TASK_DATA : LOCAL_TASK_DATA;
 
-            // ---------------------------------------------------------
-            // 1. 홈 화면 (기존 로직 유지: 요약 카드 형태)
-            // ---------------------------------------------------------
+            // 1. 홈 화면 (요약)
+            const homeList = document.getElementById('gangho-timer-list');
             if (homeList && document.getElementById('view-home').style.display !== 'none') {
                 let homeHtml = '';
                 TIMERS.forEach(timer => {
                     let timeText = "확인";
                     let isUrgent = false;
+                    let progressHtml = "";
+                    let iconClass = "bg-orange-50 text-orange-500";
+                    let iconSymbol = "⏰";
 
                     if (timer.type === 'reset') {
                         const target = getNextResetTime(timer.freq, now);
                         const diff = target - now;
                         timeText = formatDuration(diff);
                         if (diff < 3 * 60 * 60 * 1000) isUrgent = true;
+
+                        const tasks = sourceData.filter(t => t.freq === timer.freq);
+                        if (tasks.length > 0) {
+                            const done = tasks.filter(t => statusData.checked[t.id]).length;
+                            const isAllDone = (done === tasks.length);
+                            progressHtml = `<span class="text-xs font-bold ${isAllDone ? 'text-blue-600' : 'text-gray-400'} ml-1">(${done}/${tasks.length})</span>`;
+                            if (isAllDone) { iconClass = "bg-blue-50 text-blue-600"; iconSymbol = "✔"; }
+                        }
                     } else if (timer.type === 'daily_operating') {
-                        const h = now.getHours();
-                        timeText = (h >= 5 && h < 7) ? "휴장" : "운영";
+                        timeText = (now.getHours() >= 5 && now.getHours() < 7) ? "휴장" : "운영";
                     } else if (timer.type === 'schedule') {
                         const res = calculateSchedule(timer.schedules, now);
                         timeText = res.timeStr;
@@ -527,27 +642,24 @@
 
                     const clockClass = isUrgent ? "text-red-500 bg-red-50" : "text-blue-500 bg-blue-50";
                     homeHtml += `
-            <div class="bg-white p-4 rounded-xl border border-gray-100 flex justify-between items-center cursor-pointer active:scale-95 transition-transform shadow-sm" onclick="openTimerSheetByName('${timer.name}')">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-xl text-orange-500">⏰</div>
-                    <div>
-                        <div class="font-bold text-gray-800 text-[15px]">${timer.name}</div>
-                        <div class="text-xs text-gray-500 mt-0.5">${timer.desc}</div>
+                <div class="bg-white p-4 rounded-xl border border-gray-100 flex justify-between items-center cursor-pointer active:scale-95 transition-transform shadow-sm" onclick="openTimerSheetByName('${timer.name}')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl ${iconClass} flex items-center justify-center text-xl transition-colors">${iconSymbol}</div>
+                        <div>
+                            <div class="font-bold text-gray-800 text-[15px] flex items-center">${timer.name}${progressHtml}</div>
+                            <div class="text-xs text-gray-500 mt-0.5">${timer.desc}</div>
+                        </div>
                     </div>
-                </div>
-                <div class="text-xs font-bold px-2 py-1 rounded-md ${clockClass}">${timeText}</div>
-            </div>`;
+                    <div class="text-xs font-bold px-2 py-1 rounded-md ${clockClass}">${timeText}</div>
+                </div>`;
                 });
                 homeList.innerHTML = homeHtml;
             }
 
-            // ---------------------------------------------------------
-            // 2. 할 일 탭 (일간/주간/월간 섹션별 전체 표시)
-            // ---------------------------------------------------------
+            // 2. 할 일 탭 (전체)
+            const todoList = document.getElementById('gangho-timer-list-tab');
             if (todoList && document.getElementById('view-todo').style.display !== 'none') {
                 let todoHtml = '';
-
-                // [수정] 06:00 초기화로 시간 변경
                 const groups = [
                     { title: '📅 일일 컨텐츠', desc: '매일 06:00 초기화', ids: ['daily', 'pvp_daily'] },
                     { title: '📅 주간 컨텐츠', desc: '매주 월요일 06:00 초기화', ids: ['weekly', 'fireworks_weekly'] },
@@ -557,158 +669,165 @@
                 groups.forEach(group => {
                     let groupContent = '';
                     let groupTimeStr = '';
-
-                    // 그룹에 속한 타이머들을 순회하며 컨텐츠 생성
                     group.ids.forEach(timerId => {
                         const timer = TIMERS.find(t => t.id === timerId);
                         if (!timer) return;
 
-                        // A. 남은 시간 계산 (헤더용)
                         if (timer.type === 'reset' && !groupTimeStr) {
                             const target = getNextResetTime(timer.freq, now);
                             const diff = target - now;
                             groupTimeStr = `<span class="text-blue-600 font-bold">${formatDuration(diff)}</span> 남음`;
                         }
 
-                        // B. 체크리스트 아이템 생성 (reset 타입)
                         if (timer.type === 'reset') {
-                            const tasks = TASK_DATA.filter(t => t.freq === timer.freq);
+                            const tasks = sourceData.filter(t => t.freq === timer.freq);
                             if (tasks.length > 0) {
                                 groupContent += `<div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3">`;
                                 tasks.forEach(task => {
                                     const isChecked = statusData.checked[task.id];
-                                    // 체크 여부에 따른 스타일
                                     const bgClass = isChecked ? 'bg-blue-50 border-blue-100' : 'bg-gray-50 border-gray-100';
                                     const textClass = isChecked ? 'text-gray-400 line-through' : 'text-gray-800';
                                     const checkIcon = isChecked ? '✔' : '';
-
                                     groupContent += `
-                                <div class="flex items-center justify-between p-3 rounded-xl border ${bgClass} cursor-pointer active:scale-95 transition-all" onclick="toggleTaskCheck('${task.id}', this)">
-                                    <div class="flex items-center gap-2 overflow-hidden">
-                                        <span class="text-[10px] px-1.5 py-0.5 bg-white border border-gray-200 rounded text-gray-500 whitespace-nowrap">${task.loc}</span>
-                                        <span class="text-sm font-medium ${textClass} truncate">${task.title}</span>
-                                    </div>
-                                    <div class="w-5 h-5 rounded-full border border-gray-300 bg-white flex items-center justify-center text-xs text-blue-600 font-bold flex-none">${checkIcon}</div>
-                                </div>
-                            `;
+                                    <div class="flex items-center justify-between p-3 rounded-xl border ${bgClass} cursor-pointer active:scale-95 transition-all" onclick="toggleTaskCheck('${task.id}', this)">
+                                        <div class="flex items-center gap-2 overflow-hidden">
+                                            <span class="text-[10px] px-1.5 py-0.5 bg-white border border-gray-200 rounded text-gray-500 whitespace-nowrap">${task.loc}</span>
+                                            <span class="text-sm font-medium ${textClass} truncate">${task.title}</span>
+                                        </div>
+                                        <div class="w-5 h-5 rounded-full border border-gray-300 bg-white flex items-center justify-center text-xs text-blue-600 font-bold flex-none">${checkIcon}</div>
+                                    </div>`;
                                 });
                                 groupContent += `</div>`;
                             }
-                        }
-                        // C. 기타 일정 아이템 생성 (운영 시간, 이벤트 등)
-                        else {
-                            let statusText = "";
+                        } else {
+                            let statusText = "확인";
                             let statusClass = "bg-gray-100 text-gray-500";
-
                             if (timer.type === 'daily_operating') {
-                                const res = calculateDailyOperating(now);
-                                statusText = res.statusText;
-                                statusClass = res.badgeClass === 'status-ing' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500';
+                                statusText = (now.getHours() >= 5 && now.getHours() < 7) ? "휴장" : "운영";
+                                statusClass = statusText === '운영' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500';
                             } else if (timer.type === 'schedule') {
                                 const res = calculateSchedule(timer.schedules, now);
                                 statusText = res.statusText + " (" + res.timeStr + ")";
                                 statusClass = res.isRunning ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500';
                             } else if (timer.type === 'event') {
-                                statusText = "진행 중";
-                                statusClass = 'bg-purple-50 text-purple-600';
+                                statusText = "진행 중"; statusClass = 'bg-purple-50 text-purple-600';
                             }
-
                             groupContent += `
-                        <div class="mt-3 p-3 bg-white border border-gray-100 rounded-xl flex justify-between items-center shadow-sm">
-                            <span class="text-sm font-bold text-gray-700">🚩 ${timer.name}</span>
-                            <span class="text-xs font-bold px-2 py-1 rounded ${statusClass}">${statusText}</span>
-                        </div>
-                    `;
+                            <div class="mt-3 p-3 bg-white border border-gray-100 rounded-xl flex justify-between items-center shadow-sm">
+                                <span class="text-sm font-bold text-gray-700">🚩 ${timer.name}</span>
+                                <span class="text-xs font-bold px-2 py-1 rounded ${statusClass}">${statusText}</span>
+                            </div>`;
                         }
                     });
-
-                    // 그룹 섹션 HTML 조립
                     todoHtml += `
-                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
-                    <div class="flex justify-between items-end pb-3 border-b border-gray-100 mb-2">
-                        <div>
-                            <h3 class="text-lg font-extrabold text-gray-900 leading-none">${group.title}</h3>
-                            <p class="text-xs text-gray-400 mt-1">${group.desc}</p>
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                        <div class="flex justify-between items-end pb-3 border-b border-gray-100 mb-2">
+                            <div><h3 class="text-lg font-extrabold text-gray-900 leading-none">${group.title}</h3><p class="text-xs text-gray-400 mt-1">${group.desc}</p></div>
+                            <div class="text-xs text-right">${groupTimeStr}</div>
                         </div>
-                        <div class="text-xs text-right">${groupTimeStr}</div>
-                    </div>
-                    ${groupContent}
-                </div>
-            `;
+                        ${groupContent}
+                    </div>`;
                 });
-
                 todoList.innerHTML = todoHtml;
             }
         };
-        // 타이머 시트 열기 헬퍼 (timer.js 연동)
-        // timer.js가 있으면 openTimerSheet를 호출하고, 모달의 hidden을 제거하여 보여줍니다.
-        window.openTimerSheetByName = function (name) {
-            if (typeof TIMERS !== 'undefined') {
-                const t = TIMERS.find(x => x.name === name);
-                if (t && typeof openTimerSheet === 'function') {
-                    openTimerSheet(t);
-                    // Tailwind 'hidden' 클래스 제거하여 표시 보장
-                    document.getElementById('timer-sheet-modal').classList.remove('hidden');
-                }
-            }
-        };
+        // ============================================================
+        // ★ 아래 코드를 <script> 맨 마지막에 붙여넣으세요.
+        // ★ 무림록/천지록 리스트의 스타일과 개수(PC 10개/모바일)를 제어합니다.
+        // ============================================================
+        // [수정] 천지록 홈 화면 렌더링 (클릭 이벤트 버그 수정 + 스타일 유지)
+        function renderHomeChunjiOverride() {
+            if (typeof chunjiData === 'undefined') return;
+            const list = document.getElementById('home-chunji-list');
+            if (!list) return;
 
-        // 제보 시트 제어
-        function openReportSheet() {
-            const sheet = document.getElementById('report-sheet-modal');
-            sheet.classList.remove('hidden');
-            setTimeout(() => sheet.children[1].classList.remove('translate-y-full'), 10);
-        }
-        function closeReportSheet() {
-            const sheet = document.getElementById('report-sheet-modal');
-            sheet.children[1].classList.add('translate-y-full');
-            setTimeout(() => sheet.classList.add('hidden'), 300);
-        }
+            list.innerHTML = '';
 
-        // 무림록 로더
+            // PC는 10개, 모바일은 3개
+            const limit = window.innerWidth >= 1024 ? 10 : 3;
+
+            chunjiData.slice(0, limit).forEach(item => {
+                // 1. 요소를 직접 생성 (div)
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between py-3 px-1 cursor-pointer border-b border-gray-50 last:border-none active:bg-gray-50 hover:bg-gray-50 transition-colors";
+
+                // 2. 클릭 이벤트 직접 연결 (이제 item 객체가 제대로 넘어갑니다)
+                div.onclick = function () {
+                    switchTab('chunji');
+                    loadChunjiDetail(item);
+                };
+
+                // 3. 내부 HTML 구성
+                const typeBadge = item.type ? `<span class="bg-gray-100 text-gray-500 text-[11px] px-1.5 py-0.5 rounded font-medium mr-2 flex-none">[${item.type}]</span>` : '';
+
+                div.innerHTML = `
+            <div class="flex items-center overflow-hidden min-w-0">
+                ${typeBadge}
+                <span class="text-[15px] font-semibold text-gray-800 truncate">${item.title}</span>
+            </div>
+            <span class="text-gray-300 text-lg flex-none ml-2">›</span>
+        `;
+
+                // 4. 리스트에 추가
+                list.appendChild(div);
+            });
+        }
+        window.renderHomeChunji = renderHomeChunjiOverride;
+
+        // [수정] 무림록 홈 화면 렌더링 (클릭 이벤트 안전성 강화)
         function loadMansarokMenu() {
             fetch('json/quests.json').then(r => r.json()).then(data => {
                 const list = document.getElementById('mansarok-list');
                 if (!list) return;
                 list.innerHTML = '';
-                const limit = window.innerWidth >= 1024 ? 10 : 3;    
+
+                const limit = window.innerWidth >= 1024 ? 10 : 5;
+
                 data.filter(i => !['지과', '보스 공략'].includes(i.type)).slice(0, limit).forEach(item => {
-                    const loc = item.location ? `<span class="bg-gray-100 text-gray-500 text-[11px] px-1.5 py-0.5 rounded font-medium mr-2">[${item.location}]</span>` : '';
-                    list.innerHTML += `<div class="flex items-center justify-between py-3 px-1 cursor-pointer border-b border-gray-50 last:border-none active:bg-gray-50" onclick="switchTab('quest'); loadQuestDetail('${item.filepath}','${item.id}')">
-                        <div class="flex items-center overflow-hidden">${loc}<span class="text-[15px] font-semibold text-gray-800 truncate">${item.name}</span></div>
-                        <span class="text-gray-300 text-lg">›</span>
-                    </div>`;
+                    // 1. 요소 생성
+                    const div = document.createElement('div');
+                    div.className = "flex items-center justify-between py-3 px-1 cursor-pointer border-b border-gray-50 last:border-none active:bg-gray-50 hover:bg-gray-50 transition-colors";
+
+                    // 2. 클릭 이벤트 연결
+                    div.onclick = function () {
+                        switchTab('quest');
+                        loadQuestDetail(item.filepath, item.id);
+                    };
+
+                    // 3. 내부 HTML
+                    const loc = item.location ? `<span class="bg-gray-100 text-gray-500 text-[11px] px-1.5 py-0.5 rounded font-medium mr-2 flex-none">[${item.location}]</span>` : '';
+
+                    div.innerHTML = `
+                <div class="flex items-center overflow-hidden min-w-0">
+                    ${loc}
+                    <span class="text-[15px] font-semibold text-gray-800 truncate">${item.name}</span>
+                </div>
+                <span class="text-gray-300 text-lg flex-none ml-2">›</span>
+            `;
+
+                    list.appendChild(div);
                 });
             }).catch(e => console.log(e));
         }
 
-        function renderHomeChunjiOverride() {
-            if (typeof chunjiData === 'undefined') return;
-            const list = document.getElementById('home-chunji-list');
-            if (!list) return;
-            list.innerHTML = '';
-            const limit = window.innerWidth >= 1024 ? 10 : 3;    
-            chunjiData.slice(0, limit).forEach(item => {
-                // 무림록의 [지역] 태그와 똑같은 디자인으로 [타입] 태그 생성
-                const typeBadge = item.type ? `<span class="bg-gray-100 text-gray-500 text-[11px] px-1.5 py-0.5 rounded font-medium mr-2">[${item.type}]</span>` : '';
+        // 초기 실행
+        loadMansarokMenu();
+        setTimeout(renderHomeChunjiOverride, 500);
 
-                list.innerHTML += `<div class="flex items-center justify-between py-3 px-1 cursor-pointer border-b border-gray-50 last:border-none active:bg-gray-50" onclick="switchTab('chunji'); loadChunjiDetail(item)">
-            <div class="flex items-center overflow-hidden">
-                ${typeBadge}
-                <span class="text-[15px] font-semibold text-gray-800 truncate">${item.title}</span>
-            </div>
-            <span class="text-gray-300 text-lg">›</span>
-        </div>`;
-            });
-        }
-        window.renderHomeChunji = renderHomeChunjiOverride;
+        // [3] 페이지 로드 시 즉시 실행
+        loadMansarokMenu();
+        setTimeout(renderHomeChunjiOverride, 500); // 데이터 로딩 시간 고려
+        // [6] 기타 유틸 (가이드, 제보 등)
+        window.openGuideDirect = function (url) { if (typeof loadGuideContent === 'function') { loadGuideContent(url); switchTab('guide'); } else { switchTab('guide'); } };
+        window.openReportSheet = function () { const sheet = document.getElementById('report-sheet-modal'); sheet.classList.remove('hidden'); setTimeout(() => sheet.children[1].classList.remove('translate-y-full'), 10); };
+        window.closeReportSheet = function () { const sheet = document.getElementById('report-sheet-modal'); sheet.children[1].classList.add('translate-y-full'); setTimeout(() => sheet.classList.add('hidden'), 300); };
 
-        // 초기화
+        // [7] 초기화 실행
         setInterval(updateTimers, 1000);
         window.addEventListener('DOMContentLoaded', () => {
             updateTimers();
-            loadMansarokMenu();
-            setTimeout(() => { if (typeof renderHomeChunjiOverride === 'function') renderHomeChunjiOverride(); }, 500);
+            if (typeof loadMansarokMenu === 'function') loadMansarokMenu();
+            if (typeof renderHomeChunjiOverride === 'function') setTimeout(renderHomeChunjiOverride, 500);
         });
     </script>
 </body>

@@ -1402,17 +1402,6 @@ function showQuestList() {
     updateUrlQuery('quest');
 }
 
-function showChunjiList() {
-    const listView = document.getElementById('chunji-list-view');
-    const detailView = document.getElementById('chunji-detail-view');
-
-    // 이미 다 그려져 있으므로 보여주기만 하면 됨
-    if (listView && detailView) {
-        listView.style.display = 'block';
-        detailView.style.display = 'none';
-    }
-    updateUrlQuery('chunji');
-}
 
 function filterQuestType(type, btnElement) {
     const buttons = document.querySelectorAll('#view-quest .guide-item-btn');
@@ -2501,45 +2490,68 @@ function renderChunjiList() {
 
     renderChunjiPagination();
 }
-// 상세 보기 로드
-function loadChunjiDetail(item, index) {
+// [수정] 천지록 상세 보기 (Tailwind CSS 디자인 적용)
+function loadChunjiDetail(item) {
     const listView = document.getElementById('chunji-list-view');
     const detailView = document.getElementById('chunji-detail-view');
-    const content = document.getElementById('chunji-detail-content');
+    const contentBox = document.getElementById('chunji-detail-content');
 
-    if (listView) listView.style.display = 'none';
-    if (detailView) detailView.style.display = 'block';
+    if (!listView || !detailView || !contentBox) return;
 
-    // URL 업데이트 (선택 사항)
-    // updateUrlQuery('chunji', index); 
+    // 1. 화면 전환 (리스트 숨김 -> 상세 보임)
+    listView.style.display = 'none';
+    detailView.style.display = 'block';
+    
+    // 2. 데이터 가공
+    const typeBadge = item.type ? `<span class="inline-block px-2.5 py-1 mb-3 text-xs font-bold text-blue-600 bg-blue-50 rounded-lg">${item.type}</span>` : '';
+    
+    // 줄바꿈 처리 (데이터에 \n이 있을 경우 <br>로 변환)
+    const descText = (item.desc || item.content || "내용이 없습니다.").replace(/\n/g, '<br>');
+    
+    // 이미지 처리 (이미지 경로가 있다면 표시)
+    let imageHtml = '';
+    if (item.image) {
+        imageHtml = `<img src="${item.image}" class="w-full rounded-xl mt-6 shadow-sm border border-gray-100" onerror="this.style.display='none'">`;
+    }
 
-    // 이미지 HTML 생성 헬퍼
-    const createImgHtml = (src) => src ? `<img src="${src}" class="detail-img" onerror="this.style.display='none'">` : '';
+    // 좌표 정보 (있다면 표시)
+    const coordHtml = item.coords ? `
+        <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-2 text-sm text-gray-600 font-medium">
+            <span>📍</span>
+            <span>좌표: <span class="text-gray-900 font-bold select-all">${item.coords}</span></span>
+        </div>` : '';
 
-    content.innerHTML = `
-        <div class="chunji-detail-header">
-            <span class="badge item">유물</span>
-            <h2 class="chunji-detail-title">${item.title}</h2>
-        </div>
-
-        <div class="detail-section">
-            <h3 class="detail-subtitle">획득 방법</h3>
-            <p class="detail-text">${item.get || '정보 없음'}</p>
-            <div class="detail-images">
-                ${createImgHtml(item.getimg1)}
-                ${createImgHtml(item.getimg2)}
+    // 3. HTML 주입 (카드형 디자인)
+    contentBox.innerHTML = `
+        <div class="flex flex-col">
+            <div class="border-b border-gray-100 pb-5 mb-5">
+                ${typeBadge}
+                <h1 class="text-2xl font-black text-gray-900 leading-tight break-keep">${item.title}</h1>
             </div>
-        </div>
-
-        <div class="detail-section">
-            <h3 class="detail-subtitle">해독 방법</h3>
-            <p class="detail-text">${item.dsec || '정보 없음'}</p> <div class="detail-images">
-                ${createImgHtml(item.dsecimg1)}
-                ${createImgHtml(item.dsecimg2)}
+            
+            <div class="text-[15px] text-gray-700 leading-relaxed font-medium break-keep">
+                ${descText}
             </div>
+
+            ${imageHtml}
+            ${coordHtml}
         </div>
     `;
+
+    // 스크롤 최상단으로 이동
     window.scrollTo(0, 0);
+}
+
+// [수정] 천지록 목록으로 돌아가기
+function showChunjiList() {
+    const listView = document.getElementById('chunji-list-view');
+    const detailView = document.getElementById('chunji-detail-view');
+
+    if (listView && detailView) {
+        detailView.style.display = 'none';
+        listView.style.display = 'block';
+        window.scrollTo(0, 0);
+    }
 }
 
 // =========================================

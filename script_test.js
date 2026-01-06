@@ -86,6 +86,26 @@ const dummyMapData = [
         title: "망천평원",
         key: "mang", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
         image: "images/maps/mang.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "소자령",
+        key: "sj", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/sj.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "약수안",
+        key: "yak", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/yak.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "침식의 숲",
+        key: "cf", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/cf.jpg" // (썸네일 이미지가 있다면 유지)
+    },
+    {
+        title: "형연",
+        key: "hy", // ★ 이 키값이 map/?id=qinghe 로 들어갑니다
+        image: "images/maps/hy.jpg" // (썸네일 이미지가 있다면 유지)
     }
 ];
 
@@ -102,41 +122,72 @@ function updateItemsPerPage() {
 // =========================================
 // 4. 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', loadMansarokMenu);
-// 만사록 데이터를 불러와 상단에 배치하는 함수 (최종 수정본)
+// 만사록 데이터를 불러와 상단에 배치하는 함수 (최종 수정본)// 만사록 데이터 로드 및 분배 (무림록 / 지과)
 async function loadMansarokMenu() {
     try {
-        const response = await fetch('json/quests.json'); 
+        const response = await fetch('json/quests.json');
         if (!response.ok) throw new Error('데이터 로드 실패');
-        
+
         const data = await response.json();
         
-        // 1. 만사록 타입 필터링 후 최대 9개만 자르기
-        const mansarokList = data
-            .slice(0, 6); // [핵심] 0번부터 8번 인덱스까지만 선택
-                   // .filter(item => item.type === '만사록')
-        const container = document.getElementById('mansarok-list');
-        if (!container) return;
-        
-        container.innerHTML = ''; 
+        // ----------------------------------------------------
+        // 1. 기존 무림록 (지과 제외, 6개만 표시)
+        // ----------------------------------------------------
+        const mansarokContainer = document.getElementById('mansarok-list');
 
-        mansarokList.forEach(item => {
-            const btn = document.createElement('a');
-            btn.className = 'mansarok-btn';
-            btn.href = "javascript:void(0);";
-            
-            // 내부 함수 호출 방식 유지
-            btn.onclick = () => { 
-                if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
-                    switchTab('quest'); 
-                    loadQuestDetail(item.filepath, item.id); 
-                }
-            };
-            
-            btn.innerHTML = `<span>${item.name}</span>`;
-            container.appendChild(btn);
-        });
+        const isPc = window.innerWidth >= 1024; 
+        const limit = isPc ? 18 : 6;
+
+        if (mansarokContainer) {
+            const mansarokList = data
+                .filter(item => !['지과', '보스 공략'].includes(item.type))
+                .slice(0, limit);
+
+            mansarokContainer.innerHTML = '';
+
+            mansarokList.forEach(item => {
+                const btn = document.createElement('a');
+                btn.className = 'mansarok-btn';
+                btn.href = "javascript:void(0);";
+                btn.onclick = () => {
+                    switchTab('quest');
+                    loadQuestDetail(item.filepath, item.id);
+                };
+                btn.innerHTML = `<span>${item.name}</span>`;
+                mansarokContainer.appendChild(btn);
+            });
+        }
+
+        // ----------------------------------------------------
+        // 2. [추가] 지과 섹션 (지과만 표시)
+        // ----------------------------------------------------
+        // #pvp-container 안에 있는 .common-slim-grid를 찾습니다.
+        const pvpContainer = document.querySelector('#pvp-container .common-slim-grid');
+        
+        if (pvpContainer) {
+            const pvpList = data.filter(item => item.type === '지과'); // '지과'만 필터링
+
+            pvpContainer.innerHTML = ''; // 초기화
+
+            pvpList.forEach(item => {
+                // 디자인 통일성을 위해 'slim-btn' 클래스 사용
+                const btn = document.createElement('a');
+                btn.className = 'slim-btn'; 
+                btn.href = "javascript:void(0);";
+                
+                btn.onclick = () => {
+                    switchTab('quest');
+                    loadQuestDetail(item.filepath, item.id);
+                };
+
+                // slim-btn 구조에 맞춰 span으로 감싸줌
+                btn.innerHTML = `<span>${item.name}</span>`;
+                pvpContainer.appendChild(btn);
+            });
+        }
+
     } catch (error) {
-        console.error('만사록 로드 에러:', error);
+        console.error('만사록/지과 로드 에러:', error);
     }
 }
 
@@ -144,23 +195,23 @@ async function loadMansarokMenu() {
 function renderMansarok(data) {
     const listContainer = document.getElementById('mansarok-list');
     if (!listContainer) return;
-    listContainer.innerHTML = ''; 
+    listContainer.innerHTML = '';
 
     // 만사록 타입만 필터링
     const filtered = data.filter(item => item.type === "만사록");
 
     filtered.forEach(item => {
         const numericId = item.id.replace(/[^0-9]/g, "");
-        
+
         const btn = document.createElement('a');
         btn.className = 'mansarok-btn';
         btn.href = "javascript:void(0);"; // 주소 이동 방지
-        
+
         // [핵심] 내부 상세 보기 함수 호출
-        btn.onclick = () => { 
+        btn.onclick = () => {
             if (typeof switchTab === 'function' && typeof loadQuestDetail === 'function') {
-                switchTab('quest'); 
-                loadQuestDetail(item.filepath, item.id); 
+                switchTab('quest');
+                loadQuestDetail(item.filepath, item.id);
             } else {
                 console.warn('탭 전환 또는 상세 로드 함수가 없습니다.');
             }
@@ -200,32 +251,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const listContainer = document.getElementById('mansarok-list');
 
     function renderMansarok(data) {
-    const listContainer = document.getElementById('mansarok-list');
-    if (!listContainer) return;
-    listContainer.innerHTML = ''; 
+        const listContainer = document.getElementById('mansarok-list');
+        if (!listContainer) return;
+        listContainer.innerHTML = '';
 
-    // 1. 만사록 타입만 필터링
-    const filtered = data.filter(item => item.type === "만사록");
+        // 1. 만사록 타입만 필터링
+        const filtered = data.filter(item => item.type === "만사록");
 
-    filtered.forEach(item => {
-        // 버튼 엘리먼트 생성 (a 태그 대신 div나 button 권장, a 사용 시 href="javascript:void(0)" 처리)
-        const btn = document.createElement('a');
-        btn.className = 'mansarok-btn';
-        btn.href = "javascript:void(0);"; // 페이지 이동 방지
-        
-        // 2. [핵심] 클릭 시 내부 함수 호출 설정
-        // 기존에 정의된 switchTab과 loadQuestDetail 함수를 사용합니다.
-        btn.onclick = () => { 
-            switchTab('quest'); 
-            loadQuestDetail(item.filepath, item.id); 
-        };
+        filtered.forEach(item => {
+            // 버튼 엘리먼트 생성 (a 태그 대신 div나 button 권장, a 사용 시 href="javascript:void(0)" 처리)
+            const btn = document.createElement('a');
+            btn.className = 'mansarok-btn';
+            btn.href = "javascript:void(0);"; // 페이지 이동 방지
 
-        // 버튼 내용 삽입
-        btn.innerHTML = `<span>${item.name}</span>`;
-        
-        listContainer.appendChild(btn);
-    });
-}
+            // 2. [핵심] 클릭 시 내부 함수 호출 설정
+            // 기존에 정의된 switchTab과 loadQuestDetail 함수를 사용합니다.
+            btn.onclick = () => {
+                switchTab('quest');
+                loadQuestDetail(item.filepath, item.id);
+            };
+
+            // 버튼 내용 삽입
+            btn.innerHTML = `<span>${item.name}</span>`;
+
+            listContainer.appendChild(btn);
+        });
+    }
 
     // 로컬 더미 데이터로 실행
     renderMansarok(dummyQuests);
@@ -339,9 +390,9 @@ function loadData() {
             // ★ 보스 데이터 전역 변수에 저장
             globalBossData = Array.isArray(bossDataResult) ? bossDataResult : [];
             characterData = personResult;
-                // 로컬 테스트용 캐릭터 데이터 배열
+            // 로컬 테스트용 캐릭터 데이터 배열
 
-            
+
             if (quests.length > 0) {
                 quests.sort((a, b) => {
                     const numA = parseInt((a.id || "").replace('q', '')) || 0;
@@ -376,7 +427,7 @@ function loadData() {
             renderComboSlots();
             renderHomeChunji(); // ★ 메인 화면용 리스트 추가 호출 ★
             // ★ 생일 체크 호출 추가
-    checkCharacterBirthday();
+            checkCharacterBirthday();
 
             if (typeof renderHomeCharacters === 'function') {
                 renderHomeCharacters();
@@ -384,14 +435,14 @@ function loadData() {
             if (typeof renderAchievements === 'function') {
                 renderAchievements(archiveData);
             }
-            // ★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
+            //★ [추가] 보스 목록 그리기 (보스 페이지 or 홈 화면)
             if (document.getElementById('bossGrid')) {
                 renderBossList('bossGrid', 'all');
             }
             // 홈 화면에 보스 섹션이 있다면 (예: id="home-boss-list")
-            if (document.getElementById('home-boss-list')) {
-                renderBossList('home-boss-list', 'all', 2);
-            }
+            /*   if (document.getElementById('home-boss-list')) {
+                   renderBossList('home-boss-list', 'all', 2);
+               }*/
 
             // 상세 페이지 진입 처리
             if (shortQuestId) {
@@ -403,10 +454,39 @@ function loadData() {
                 const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
                 if (foundChunji) { switchTab('chunji'); loadChunjiDetail(foundChunji); }
             }
-            else if (targetTab === 'quest' && targetId) {
-                const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
-                const foundQuest = globalData.quests.find(q => q.id === formattedId);
-                if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
+           else if (targetTab === 'quest' && targetId) {
+                // [수정] 필터 단축 코드 매핑 (원하는 약어와 실제 select value를 연결)
+                const filterMap = {
+                    'm': '만사록',
+                    'g': '가이드',
+                    'in': '인연의 궤적',
+                    'boss': '보스 공략',
+                    'pvp': '지과',
+                    't': '탐색',
+                    'h': '화간집',
+                    'e': '이벤트',
+                    'etc': '기타'
+                };
+
+                // 1. 만약 id가 필터 코드(m, g 등)라면 -> 필터링 실행
+                if (filterMap[targetId]) {
+                    const typeName = filterMap[targetId];
+                    const selectEl = document.getElementById('quest-type-select');
+                    
+                    if (selectEl) {
+                        selectEl.value = typeName; // 드롭다운 값 변경
+                        // 필터 변경 함수 호출 (지역 목록 갱신 + 리스트 다시 그리기)
+                        if (typeof onQuestTypeChange === 'function') {
+                            onQuestTypeChange();
+                        }
+                    }
+                } 
+                // 2. 필터 코드가 아니라면 -> 기존처럼 퀘스트 상세 보기 실행
+                else {
+                    const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
+                    const foundQuest = globalData.quests.find(q => q.id === formattedId);
+                    if (foundQuest) loadQuestDetail(foundQuest.filepath, formattedId);
+                }
             }
 
             if (typeof checkEventStatus === 'function') checkEventStatus();
@@ -461,6 +541,7 @@ function loadBuildsInBackground(targetTab) {
 // =========================================
 // 4. 홈 화면 로직 (슬라이더 & 뉴스 등)
 // =========================================
+// [수정] 홈 화면 슬라이더 렌더링 (스타일 깨짐 수정)
 function renderHomeSlider(quests) {
     const track = document.getElementById('hero-slider-track');
     const indicators = document.getElementById('slider-indicators');
@@ -473,7 +554,7 @@ function renderHomeSlider(quests) {
     const sliderData = quests.slice(0, 3);
 
     if (sliderData.length === 0) {
-        track.innerHTML = '<div style="color:white; text-align:center; padding-top:100px;">불러올 소식이 없습니다.</div>';
+        track.innerHTML = '<div style="color:gray; text-align:center; padding-top:100px; width:100%;">불러올 소식이 없습니다.</div>';
         return;
     }
 
@@ -481,20 +562,37 @@ function renderHomeSlider(quests) {
         const tag = quest.type || "분류 없음";
         const title = quest.name;
         const desc = quest.location || "지역 정보 없음";
-        const bgImage = quest.bgimg ? `quests/images/${quest.bgimg}` : 'images/bg.jpg';
+        
+        // 이미지 경로 설정
+        const primaryPath = `quests/images/${quest.bgimg}`;
+        const fallbackPath = `quests/explore/${quest.bgimg}`;
 
         const slideDiv = document.createElement('div');
-        slideDiv.className = 'hero-slide';
-        slideDiv.style.backgroundImage = `url('${bgImage}')`;
+        
+        // ★ 핵심 수정: w-full(너비100%), flex-shrink-0(찌그러짐 방지), bg-cover(이미지 꽉채움) 추가
+        slideDiv.className = 'w-full h-full flex-shrink-0 relative bg-cover bg-center transition-all duration-500';
 
+        // 1. 기본 배경 설정
+        slideDiv.style.backgroundImage = `url('${primaryPath}')`;
+
+        // 2. 이미지 에러 체크
+        const imgTester = new Image();
+        imgTester.src = primaryPath;
+        imgTester.onerror = () => {
+            slideDiv.style.backgroundImage = `url('${fallbackPath}')`;
+        };
+
+        // 3. 슬라이드 내부 텍스트 디자인 (그라데이션 오버레이 포함)
         slideDiv.innerHTML = `
-            <div class="slide-content">
-                <span class="slide-tag">${tag}</span>
-                <h2 class="slide-title">${title}</h2>
-                <p class="slide-desc">${desc}</p>
-                <button class="slide-link-btn">이야기 확인하기 ↗</button>
-            </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div class="absolute bottom-6 left-6 text-white z-10 text-left">
+            <span class="bg-blue-600 text-[10px] px-2 py-0.5 rounded font-bold mb-2 inline-block">${tag}</span>
+            <h2 class="text-2xl font-black mb-1 leading-tight shadow-sm">${title}</h2>
+            <p class="text-sm text-gray-200 opacity-90 font-medium mb-3">${desc}</p>
+       
+        </div>
         `;
+        
         slideDiv.onclick = () => {
             switchTab('quest');
             loadQuestDetail(quest.filepath, quest.id);
@@ -502,11 +600,28 @@ function renderHomeSlider(quests) {
         slideDiv.style.cursor = 'pointer';
         track.appendChild(slideDiv);
 
+        // 인디케이터(점) 생성
         const dot = document.createElement('div');
-        dot.className = `indicator ${index === 0 ? 'active' : ''}`;
+        dot.className = `w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${index === 0 ? 'bg-white w-6' : 'bg-white/50'}`;
         dot.onclick = (e) => { e.stopPropagation(); goToSlide(index); };
         indicators.appendChild(dot);
     });
+    
+    // 인디케이터 업데이트 함수 재정의 (active 스타일 대응)
+    window.updateSliderPosition = function() {
+        const track = document.getElementById('hero-slider-track');
+        const dots = indicators.children;
+        if (track) track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+        
+        for(let i=0; i<dots.length; i++) {
+            if(i === currentSlideIndex) {
+                dots[i].className = 'w-6 h-2 rounded-full bg-white transition-all duration-300 cursor-pointer';
+            } else {
+                dots[i].className = 'w-2 h-2 rounded-full bg-white/50 transition-all duration-300 cursor-pointer';
+            }
+        }
+    }
+
     startSlider();
 }
 
@@ -886,7 +1001,30 @@ const GUIDE_MAP = {
     'news': 'news.html', 'tierlist': 'guide_tier.html', 'weapon': 'tier_weapon.html',
     'build': 'build.html', 'map': 'maps.html', 'side': 'beta.html', 'hw': 'npc.html',
     'boss': 'boss.html', 'marts': 'marts.html', 'harts': 'harts.html', 'skill': 'skils.html',
-    'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html'
+    'majang': 'majang.html', 'code': 'code.html', 'moon': 'moon.html', 'b1': 'boss/b1.html', 'b2': 'boss/b2.html', 'b3': 'boss/b3.html', 'b4': 'boss/b4.html', 'b5': 'boss/b5.html',
+    'w1': 'world1.html', 'nb': 'newb.html', 'wp': 'guide/weapon.html', 'up': 'guide/up.html', 'w2': 'world2.html',
+    'outfit1': 'outfit/outfit1.html',
+    'outfit2': 'outfit/outfit2.html',
+    'outfit3': 'outfit/outfit3.html',
+    'outfit4': 'outfit/outfit4.html',
+    'outfit5': 'outfit/outfit5.html',
+    'outfit6': 'outfit/outfit6.html',
+    'outfit7': 'outfit/outfit7.html',
+    'outfit8': 'outfit/outfit8.html',
+    'outfit9': 'outfit/outfit9.html',
+    'outfit10': 'outfit/outfit10.html',
+    'outfit11': 'outfit/outfit11.html',
+    'outfit12': 'outfit/outfit12.html',
+    'outfit13': 'outfit/outfit13.html',
+    'outfit14': 'outfit/outfit14.html',
+    'outfit15': 'outfit/outfit15.html',
+    'outfit16': 'outfit/outfit16.html',
+    'outfit17': 'outfit/outfit17.html',
+    'outfit18': 'outfit/outfit18.html',
+    'outfit19': 'outfit/outfit19.html',
+    'outfit20': 'outfit/outfit20.html',
+    'outfit21': 'outfit/outfit21.html',
+    'ar1':'arena/g1.html'
 };
 
 function loadGuideView() {
@@ -1100,6 +1238,7 @@ function selectQuestResult(filepath, id) {
 // =========================================
 // 8. 렌더링 서브 함수들
 // =========================================
+// [수정] 스무고개 테이블 렌더링 (Tailwind CSS 디자인 적용)
 function renderQuizTable(data, keyword = '') {
     const tbody = document.getElementById('quiz-table-body');
     if (!tbody) return;
@@ -1108,47 +1247,82 @@ function renderQuizTable(data, keyword = '') {
     if (data && data.length > 0) {
         data.forEach(item => {
             const tr = document.createElement('tr');
+            
+            // 행 스타일: 하단 테두리, 마우스 오버 시 연한 회색 배경
+            tr.className = 'border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors';
+
             let hint = item.hint, answer = item.answer;
+            
+            // 검색어 하이라이팅 (노란 배경 + 굵은 글씨)
             if (keyword) {
                 const regex = new RegExp(`(${keyword})`, 'gi');
-                hint = hint.replace(regex, '<span class="highlight">$1</span>');
-                answer = answer.replace(regex, '<span class="highlight">$1</span>');
+                const highlight = '<span class="bg-yellow-200 text-yellow-900 font-bold px-0.5 rounded">$1</span>';
+                hint = hint.replace(regex, highlight);
+                answer = answer.replace(regex, highlight);
             }
-            tr.innerHTML = `<td>${hint}</td><td>${answer}</td><td class="user-cell">${item.user || '-'}</td>`;
+            
+            // 셀 스타일 적용: 패딩, 폰트 굵기 조절
+            tr.innerHTML = `
+                <td class="px-4 py-3 text-gray-500 font-medium w-[40%] align-middle break-keep">${hint}</td>
+                <td class="px-4 py-3 text-gray-900 font-bold w-[40%] align-middle break-keep">${answer}</td>
+                <td class="px-4 py-3 text-right text-xs text-gray-400 w-[20%] align-middle whitespace-nowrap">${item.user || '-'}</td>
+            `;
             tbody.appendChild(tr);
         });
     } else {
+        // 결과 없음 표시
         const noResultTr = document.createElement('tr');
-        noResultTr.innerHTML = `<td colspan="3" style="padding:20px; color:#888; text-align:center;">일치하는 족보가 없습니다.</td>`;
+        noResultTr.innerHTML = `<td colspan="3" class="py-12 text-center text-gray-400 text-sm">일치하는 족보가 없습니다.</td>`;
         tbody.appendChild(noResultTr);
     }
 
+    // 제보하기 버튼 행 (하단 고정)
     const reportTr = document.createElement('tr');
-    reportTr.className = 'quiz-report-row';
-    reportTr.style.cursor = 'pointer';
-    reportTr.style.backgroundColor = '#fff8e1';
-    reportTr.style.fontWeight = 'bold';
-    reportTr.style.color = '#d48806';
+    reportTr.className = 'cursor-pointer bg-amber-50 hover:bg-amber-100 transition-colors border-t border-amber-100';
     reportTr.onclick = () => { window.open('report/', '_blank'); };
-    reportTr.innerHTML = `<td colspan="3" style="text-align: center; padding: 15px;">📢 찾는 족보가 없나요? 여기를 눌러 제보해주세요!</td>`;
+    reportTr.innerHTML = `
+        <td colspan="3" class="py-4 text-center text-amber-600 font-bold text-sm">
+            📢 찾는 족보가 없나요? 제보하기
+        </td>
+    `;
     tbody.appendChild(reportTr);
 }
 
+// [수정] 족보 카운터 및 랭킹 (Tailwind CSS 적용)
 function updateQuizCounter() {
     const counter = document.getElementById('quiz-counter-area');
     if (!counter || !globalData.quiz) return;
+    
     const totalCount = globalData.quiz.length;
     const userCounts = {};
+    
+    // 유저별 기여도 계산
     globalData.quiz.forEach(item => {
-        if (item.user && item.user.trim() !== '' && item.user !== '-') userCounts[item.user] = (userCounts[item.user] || 0) + 1;
+        if (item.user && item.user.trim() !== '' && item.user !== '-') {
+            userCounts[item.user] = (userCounts[item.user] || 0) + 1;
+        }
     });
+    
+    // 상위 3명 추출
     const sortedUsers = Object.entries(userCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+    
     let rankHtml = '';
     if (sortedUsers.length > 0) {
-        const rankParts = sortedUsers.map((u, i) => i === 0 ? `<span class="rainbow-text">${i + 1}위 ${u[0]}(${u[1]})</span>` : `<span style="color: #888;">${i + 1}위 ${u[0]}(${u[1]})</span>`);
-        rankHtml = `<br><span style="font-size:0.85em; color:#ffd700; margin-top:5px; display:inline-block;">🏆${rankParts.join(' · ')}</span>`;
+        const rankParts = sortedUsers.map((u, i) => {
+            // 1위는 그라데이션 텍스트, 나머지는 회색
+            if (i === 0) return `<span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 font-bold ml-1">${i + 1}위 ${u[0]}(${u[1]})</span>`;
+            return `<span class="text-gray-400 ml-1">${i + 1}위 ${u[0]}(${u[1]})</span>`;
+        });
+        
+        rankHtml = `<div class="mt-1 text-[11px] text-gray-400 flex items-center flex-wrap gap-1">
+            <span class="text-yellow-500 font-bold">🏆 기여 랭킹:</span> ${rankParts.join('<span class="text-gray-300">·</span>')}
+        </div>`;
     }
-    counter.innerHTML = `총 <b>${totalCount}</b>개의 족보가 등록되었습니다.${rankHtml}`;
+    
+    counter.innerHTML = `<div class="flex flex-col">
+        <span class="text-gray-600">총 <b class="text-blue-600">${totalCount}</b>개의 족보가 등록되었습니다.</span>
+        ${rankHtml}
+    </div>`;
 }
 
 function filterQuizData(keyword) {
@@ -1175,13 +1349,25 @@ function renderQuestList() {
     renderPagination();
 }
 
+// [수정] 무림록 카드 생성 함수 (Tailwind CSS 적용)
 function createQuestCard(quest, container) {
     const card = document.createElement('div');
-    card.className = 'quest-card';
+    
+    // 기존 class="quest-card" 대신 Tailwind 클래스 적용
+    // (흰 배경, 둥근 모서리, 그림자, 클릭 효과 등)
+    card.className = 'bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform hover:bg-gray-50';
+    
     card.onclick = () => { switchTab('quest'); loadQuestDetail(quest.filepath, quest.id); };
+    
+    // 내부 텍스트와 뱃지 스타일도 Tailwind로 변경
     card.innerHTML = `
-        <div class="quest-info"><div class="quest-name">${quest.name}</div><div class="quest-type">${quest.type}</div></div>
-        <div class="quest-badge">${quest.location}</div>
+        <div class="flex flex-col gap-1 overflow-hidden">
+            <div class="font-bold text-gray-900 text-[15px] truncate">${quest.name}</div>
+            <div class="text-xs text-gray-400">${quest.type}</div>
+        </div>
+        <div class="flex-none bg-gray-100 text-gray-500 text-xs px-2.5 py-1 rounded-lg font-medium ml-3">
+            ${quest.location || '지역'}
+        </div>
     `;
     container.appendChild(card);
 }
@@ -2276,26 +2462,45 @@ window.addEventListener('click', function (event) {
 // =========================================
 
 // 목록 렌더링
+// [수정] 천지록 목록 렌더링 (Tailwind CSS 적용)
 function renderChunjiList() {
     const container = document.getElementById('chunji-list-container');
+    const paginationContainer = document.getElementById('chunji-pagination-container');
+
     if (!container) return;
     container.innerHTML = '';
 
-    if (!chunjiData || chunjiData.length === 0) {
-        container.innerHTML = '<div style="padding:20px; text-align:center; color:#888;">데이터가 없습니다.</div>';
+    // 데이터가 없을 때
+    if (!currentChunjiData || currentChunjiData.length === 0) {
+        container.innerHTML = '<div style="padding:40px 0; text-align:center; color:#888;">해당하는 기록이 없습니다.</div>';
+        if (paginationContainer) paginationContainer.innerHTML = '';
         return;
     }
 
-    chunjiData.forEach((item, index) => {
+    // [페이징 계산]
+    const startIndex = (currentChunjiPage - 1) * itemsPerPage; 
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = currentChunjiData.slice(startIndex, endIndex);
+
+    pageData.forEach((item) => {
         const div = document.createElement('div');
-        div.className = 'chunji-item';
-        div.onclick = () => loadChunjiDetail(item, index);
-        // 썸네일 없이 텍스트만 표시
-        div.innerHTML = `<div class="chunji-title">${item.title}</div>`;
+        // 스타일 적용 (무림록과 통일감 유지)
+        div.className = 'bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform hover:bg-gray-50 mb-3';
+        div.onclick = () => loadChunjiDetail(item);
+
+        div.innerHTML = `
+            <div class="flex flex-col gap-1 overflow-hidden">
+                <div class="font-bold text-gray-900 text-[15px] truncate">${item.title}</div>
+                <div class="text-xs text-gray-400">${item.type || '분류 없음'}</div>
+            </div>
+            <div class="text-gray-300 text-lg">›</div>
+        `;
+
         container.appendChild(div);
     });
-}
 
+    renderChunjiPagination();
+}
 // 상세 보기 로드
 function loadChunjiDetail(item, index) {
     const listView = document.getElementById('chunji-list-view');
@@ -2398,8 +2603,7 @@ function filterChunjiType(type, btnElement) {
     currentChunjiPage = 1;
     renderChunjiList();
 }
-
-// 2. 목록 렌더링 (페이징 적용됨)
+// [수정] 천지록 목록 렌더링 (무림록과 똑같은 개별 카드 스타일 적용)
 function renderChunjiList() {
     const container = document.getElementById('chunji-list-container');
     const paginationContainer = document.getElementById('chunji-pagination-container');
@@ -2415,29 +2619,29 @@ function renderChunjiList() {
     }
 
     // [페이징 계산]
-    const startIndex = (currentChunjiPage - 1) * itemsPerPage; // itemsPerPage는 전역변수(12) 사용
+    const startIndex = (currentChunjiPage - 1) * itemsPerPage; 
     const endIndex = startIndex + itemsPerPage;
-
-    // 현재 페이지에 해당하는 데이터만 자르기
     const pageData = currentChunjiData.slice(startIndex, endIndex);
 
     pageData.forEach((item) => {
-        // 주의: 필터링/페이징 된 상태이므로 index 대신 item 자체를 넘김
         const div = document.createElement('div');
-        div.className = 'chunji-item';
+        
+        // ★ 핵심: 무림록과 동일한 Tailwind 카드 스타일 적용
+        div.className = 'bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform hover:bg-gray-50';
+        
         div.onclick = () => loadChunjiDetail(item);
 
         div.innerHTML = `
-            <div class="chunji-text-group">
-                <div class="chunji-title">${item.title}</div>
-                <div class="chunji-type">${item.type || '기타'}</div>
+            <div class="flex flex-col gap-1 overflow-hidden">
+                <div class="font-bold text-gray-900 text-[15px] truncate">${item.title}</div>
+                <div class="text-xs text-gray-400">${item.type || '분류 없음'}</div>
             </div>
+            <div class="text-gray-300 text-lg">›</div>
         `;
 
         container.appendChild(div);
     });
 
-    // 페이지네이션 버튼 렌더링 호출
     renderChunjiPagination();
 }
 
@@ -3651,7 +3855,7 @@ function renderAchievements(data) {
         return;
     }
 
-    container.innerHTML = ''; 
+    container.innerHTML = '';
 
     // ★ 핵심: 모바일(768px 이하)일 때는 4개, PC일 때는 10개로 제한 ★
     const isMobile = window.innerWidth <= 768;
@@ -3780,7 +3984,7 @@ function renderHomeCharacters() {
         div.onclick = () => {
             if (typeof openPersonDetail === 'function') {
                 // 특정 필드만 골라 담지 말고, 원본 char 객체를 통째로 전달합니다.
-                openPersonDetail(char); 
+                openPersonDetail(char);
             }
         };
 
@@ -3867,7 +4071,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     // 이벤트를 보관해둠
     deferredPrompt = e;
-    
+
     // 숨겨져 있던 버튼 컨테이너를 표시 (이제 설치 가능하니까!)
     if (installContainer) {
         installContainer.style.setProperty('display', 'flex', 'important');
@@ -3888,7 +4092,7 @@ if (installBtn) {
 
         // 결과와 상관없이 프롬프트는 1회용이므로 초기화
         deferredPrompt = null;
-        
+
         // 설치창이 닫혔으므로 버튼 다시 숨기기
         if (installContainer) installContainer.style.display = 'none';
     });
@@ -3905,14 +4109,14 @@ function renderHomeChunji() {
     if (!container || !chunjiData) return;
 
     container.innerHTML = '';
-    
+
     // 무림록과 균형을 맞추기 위해 6개 또는 9개 출력
-    const displayList = chunjiData.slice(0, 6); 
+    const displayList = chunjiData.slice(0, 6);
 
     displayList.forEach(item => {
         const div = document.createElement('div');
         div.className = 'chunji-item-card';
-        
+
         div.onclick = () => {
             if (typeof switchTab === 'function' && typeof loadChunjiDetail === 'function') {
                 switchTab('chunji');
@@ -3947,19 +4151,19 @@ function createConfetti() {
     const container = document.querySelector('.confetti-container');
     if (!container) return;
 
-    const colors = ['#d4af37', '#b71c1c', '#ffffff', '#ffd700']; 
-    
+    const colors = ['#d4af37', '#b71c1c', '#ffffff', '#ffd700'];
+
     for (let i = 0; i < 60; i++) { // 개수 증가
         const piece = document.createElement('div');
         piece.className = 'confetti-piece';
-        
+
         piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         piece.style.left = Math.random() * 100 + '%';
-        
+
         // 딜레이와 지속시간을 조절해 끊기지 않게 함
-        piece.style.animationDelay = Math.random() * 10 + 's'; 
+        piece.style.animationDelay = Math.random() * 10 + 's';
         piece.style.animationDuration = (Math.random() * 3 + 4) + 's';
-        
+
         container.appendChild(piece);
     }
 }
@@ -3974,11 +4178,11 @@ function checkCharacterBirthday(testName = null) {
     // 1. [핵심] 오늘 이미 팝업을 확인(축하 완료)했는지 체크
     if (!testName && localStorage.getItem('birthday_wishes_done') === todayKey) {
         console.log("오늘의 생일 축하를 이미 완료했습니다.");
-        return; 
+        return;
     }
 
     // 2. 인물 찾기
-    const birthdayChar = testName 
+    const birthdayChar = testName
         ? characterData.find(char => char.name === testName)
         : characterData.find(char => char.link === currentMonthDay);
 
@@ -3991,18 +4195,18 @@ function checkCharacterBirthday(testName = null) {
 function completeBirthdayWish(todayKey) {
     // 로컬 스토리지에 오늘 날짜 저장
     localStorage.setItem('birthday_wishes_done', todayKey);
-    
+
     // 팝업 제거
     const overlay = document.querySelector('.birthday-overlay');
     if (overlay) overlay.remove();
-    
+
     console.log("생일 축하 완료 기록 저장됨:", todayKey);
 }
 
 function showBirthdayPopup(char, todayKey) {
     const overlay = document.createElement('div');
     overlay.className = 'birthday-overlay';
-    
+
     overlay.innerHTML = `
         <div class="birthday-card">
             <div class="confetti-container"></div>
@@ -4024,7 +4228,242 @@ function showBirthdayPopup(char, todayKey) {
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentElement('afterbegin', overlay);
     createConfetti();
 }
+
+const playlist = [
+    { title: "Bladestorm Over Jianghu", src: "music/1 - Bladestorm Over Jianghu.mp3" },
+    { title: "White Gale Execution", src: "music/2 - White Gale Execution.mp3" },
+    { title: "Crimson Cliff Last Stand", src: "music/3 - Crimson Cliff Last Stand.mp3" },
+    { title: "Ten Banners, One Field", src: "music/4 - Ten Banners, One Field.mp3" },
+    { title: "Lantern Pulse Under Kaifeng", src: "music/5 - Lantern Pulse Under Kaifeng.mp3" },
+    { title: "Fuyao Core Ignition", src: "music/6 - Fuyao Core Ignition.mp3" },
+    { title: "He Xi Sandstorm Reckoning", src: "music/7 - He Xi Sandstorm Reckoning.mp3" },
+    { title: "Crimson Spur Relay", src: "music/8 - Crimson Spur Relay.mp3" },
+    { title: "Clockwork Reliquary Collapse", src: "music/9 - Clockwork Reliquary Collapse.mp3" },
+    { title: "Wind Over Broken Roofs", src: "music/10 - Wind Over Broken Roofs.mp3" },
+    { title: "Snowdrift Vanguard", src: "music/11 - Snowdrift Vanguard.mp3" },
+    { title: "Wolfwind Ridge Pursuit", src: "music/12 - Wolfwind Ridge Pursuit.mp3" },
+    { title: "Broken Wall Thunderline", src: "music/13 - Broken Wall Thunderline.mp3" },
+    { title: "Ashen Gears of Huigu", src: "music/14 - Ashen Gears of Huigu.mp3" },
+    { title: "Coffin Wake at Cixin", src: "music/15 - Coffin Wake at Cixin.mp3" },
+    { title: "Heavenbreaker Warlord", src: "music/16 - Heavenbreaker Warlord.mp3" },
+    { title: "Ghostlight Siege Run", src: "music/17 - Ghostlight Siege Run.mp3" },
+    { title: "Riftline Killzone", src: "music/18 - Riftline Killzone.mp3" },
+    { title: "Lotus Ash Cataclysm", src: "music/19 - Lotus Ash Cataclysm.mp3" },
+    { title: "Rift of the Earth-Fiend", src: "music/20 - Rift of the Earth-Fiend.mp3" }
+];
+
+let currentIdx = 0;
+const audio = document.getElementById('main-audio');
+const audioTitle = document.getElementById('player-title');
+const audioBtn = document.getElementById('audio-toggle-btn');
+const dropdown = document.getElementById('playlist-dropdown');
+
+function updateStatusText() {
+    const statusText = document.getElementById('playlist-status');
+    if (statusText) {
+        // (현재 인덱스 + 1 / 전체 곡 수) 형식으로 변경
+        statusText.innerText = `${currentIdx + 1} / ${playlist.length}`;
+    }
+}
+
+function initPlayer() {
+    const listItems = document.getElementById('playlist-items');
+    if (!listItems) return;
+
+    listItems.innerHTML = playlist.map((track, i) => `
+        <li class="playlist-item-li ${i === currentIdx ? 'active' : ''}" onclick="selectTrack(${i})">
+            <span class="track-num">${i + 1}</span>
+            <span class="track-name">${track.title}</span>
+        </li>
+    `).join('');
+    refreshPlayerUI(); // 초기 상태 (1 / 20) 반영
+    loadTrack(currentIdx);
+    updateStatusText(); // 초기화 시 실행
+    updateUI();
+}
+
+function selectTrack(i) {
+    currentIdx = i;
+    loadTrack(i);
+    audio.play().then(updateUI);
+    updateStatusText(); // 곡 선택 시 실행
+    if (dropdown) dropdown.classList.remove('show');
+}
+function loadTrack(i) {
+    if (!playlist[i]) return;
+    audio.src = playlist[i].src;
+    // HTML 요소에 직접 텍스트 주입
+    document.getElementById('player-title').textContent = playlist[i].title;
+}
+
+function updateUI() {
+    // 재생 중일 때만 버튼 아이콘을 변경하고 제목을 흐르게 함
+    if (audio.paused) {
+        audioBtn.innerText = '▶';
+        audioTitle.classList.remove('running');
+    } else {
+        audioBtn.innerText = 'Ⅱ';
+        audioTitle.classList.add('running');
+    }
+
+    // 리스트 내 활성 곡 강조
+    document.querySelectorAll('.playlist-item-li').forEach((li, idx) => {
+        li.classList.toggle('active', idx === currentIdx);
+    });
+}
+
+function handlePlayPause(e) {
+    e.stopPropagation(); // 드롭다운 토글 방지
+    if (audio.paused) {
+        audio.play().then(updateUI);
+    } else {
+        audio.pause();
+        updateUI();
+    }
+}
+
+function togglePlaylist() {
+    dropdown.classList.toggle('show');
+}
+
+function selectTrack(i) {
+    currentIdx = i;
+    loadTrack(i);
+    audio.play().then(updateUI);
+
+    // [추가] 곡을 선택하면 플레이리스트 드롭다운을 닫음
+    if (dropdown) {
+        dropdown.classList.remove('show');
+    }
+}
+
+// 기존 사이드바 닫기 함수에 리스트 닫기 추가
+function closeSidebar() {
+    const sidebar = document.getElementById('main-sidebar');
+    if (sidebar) sidebar.classList.remove('active');
+    if (dropdown) dropdown.classList.remove('show');
+}
+
+// 오디오 이벤트 리스너
+audio.addEventListener('play', updateUI);
+audio.addEventListener('pause', updateUI);
+audio.addEventListener('ended', () => selectTrack((currentIdx + 1) % playlist.length));
+
+// 페이지 로드 시 초기화 실행
+document.addEventListener('DOMContentLoaded', initPlayer);
+
+// 상태 업데이트 통합 함수
+function refreshPlayerUI() {
+    const statusText = document.getElementById('playlist-status');
+    const audioTitle = document.getElementById('player-title');
+
+    // 1. 상단 상태 텍스트 갱신 (예: 악보 목록 3 / 20)
+    if (statusText) {
+        statusText.innerText = `${currentIdx + 1} / ${playlist.length}`;
+    }
+
+    // 2. 플레이어 바 제목 갱신 및 흐름 제어
+    if (audioTitle) {
+        audioTitle.textContent = playlist[currentIdx].title;
+        // 재생 중일 때만 흐르게 함
+        if (!audio.paused) {
+            audioTitle.classList.add('running');
+        }
+    }
+
+    // 3. 리스트 내 'active' 클래스 이동 (하이라이트)
+    document.querySelectorAll('.playlist-item-li').forEach((li, idx) => {
+        if (idx === currentIdx) {
+            li.classList.add('active');
+        } else {
+            li.classList.remove('active');
+        }
+    });
+}
+
+// 곡 선택 함수
+function selectTrack(i) {
+    currentIdx = i; // 인덱스 변경
+    loadTrack(currentIdx);
+
+    // 리스트 닫기 및 재생
+    if (dropdown) dropdown.classList.remove('show');
+
+    audio.play().then(() => {
+        refreshPlayerUI(); // 재생 성공 시 UI 전체 갱신
+    }).catch(() => {
+        refreshPlayerUI(); // 차단되어도 UI는 갱신
+    });
+}
+
+// 다음 곡 자동 재생 시에도 인덱스 갱신
+audio.addEventListener('ended', () => {
+    currentIdx = (currentIdx + 1) % playlist.length;
+    selectTrack(currentIdx);
+});
+
+
+let pvpFullData = []; // 데이터를 저장할 빈 배열
+let currentPvpPage = 0;
+const pvpItemsPerPage = 3;
+let pvpLastUpdate = ""; // 날짜를 저장할 변수 추가
+// ... 상단 변수 선언(pvpFullData 등)은 유지 ...
+
+async function fetchRankingData() {
+    try {
+        const response = await fetch('json/rank.json');
+        const data = await response.json();
+        
+        // [수정] 데이터를 불러온 즉시 점수(score) 높은 순으로 정렬합니다.
+        pvpFullData = data.rankings.sort((a, b) => b.score - a.score);
+        pvpLastUpdate = data.update_date;
+
+        updatePvpRanking();
+        setInterval(updatePvpRanking, 6000); 
+    } catch (error) {
+        console.error("데이터 로드 실패:", error);
+    }
+}
+
+function updatePvpRanking() {
+    const listEl = document.getElementById('pvp-list');
+    const pageEl = document.getElementById('pvp-page-indicator');
+    
+    if (!listEl || pvpFullData.length === 0) return;
+
+    const start = currentPvpPage * pvpItemsPerPage;
+    const end = start + pvpItemsPerPage;
+    const currentList = pvpFullData.slice(start, end);
+
+    // [수정] 맵(map) 함수에서 인덱스(i)를 추가로 받습니다.
+    listEl.innerHTML = currentList.map((p, i) => {
+        // 실제 순위 계산: 현재 페이지 시작 번호 + 현재 리스트 내 순서 + 1
+        const calculatedRank = start + i + 1;
+        
+        // 계산된 순위를 바탕으로 1~3위 디자인 적용
+        const rankClass = calculatedRank <= 3 ? `rank-${calculatedRank} top-3` : '';
+        
+        return `
+            <div class="rank-item ${rankClass}">
+                <div class="rank-num-text">${calculatedRank}</div>
+                <img src="images/rank/${p.name}.png" class="rank-p-img" onerror="this.src='images/logo.png'">
+                <div class="rank-p-name">${p.name}</div>
+                <div class="rank-p-score">${p.score.toLocaleString()}</div>
+            </div>
+        `;
+    }).join('');
+
+    // 업데이트 시간 표기
+    if (pageEl) {
+        pageEl.innerText = `${pvpLastUpdate} 기준`;
+    }
+
+    // 다음 페이지 계산
+    currentPvpPage = (currentPvpPage + 1) % Math.ceil(pvpFullData.length / pvpItemsPerPage);
+}
+// 초기 실행: 데이터를 먼저 불러옵니다.
+document.addEventListener("DOMContentLoaded", fetchRankingData);

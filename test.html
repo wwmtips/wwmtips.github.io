@@ -18,53 +18,56 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* [기본 설정] - 배경색을 흰색으로 변경 (섹션 구분선으로 분리) */
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #fff; color: #191f28; -webkit-tap-highlight-color: transparent; padding-bottom: 80px; }
+        /* [기본 설정] - 배경색 회색 통일 */
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f2f4f6; color: #191f28; -webkit-tap-highlight-color: transparent; padding-bottom: 80px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* [헤더] - 직각 디자인 */
-        .app-header { background: #fff; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; height: 60px; border-bottom: 1px solid #eee; }
+        /* [헤더] - 배경색을 body와 동일하게 변경 (#f2f4f6) */
+        .app-header { background: #f2f4f6; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; height: 60px; }
         .header-default { width: 100%; display: flex; align-items: center; justify-content: space-between; }
         .app-logo { font-size: 22px; font-weight: 900; color: #191f28; letter-spacing: -0.5px; }
         .header-actions { display: flex; align-items: center; gap: 8px; }
         
-        /* 검색 모드 */
+        /* 검색 모드 (활성 시 배경 흰색으로 전환 효과) */
         .header-search-mode { width: 100%; display: none; align-items: center; }
-        .header-search-box { flex: 1; background: #f2f4f6; border-radius: 0; height: 40px; display: flex; align-items: center; padding: 0 12px; } /* Radius 제거 */
+        .header-search-box { flex: 1; background: #fff; border-radius: 0; height: 40px; display: flex; align-items: center; padding: 0 12px; }
         .header-search-input { background: transparent; border: none; width: 100%; height: 100%; font-size: 15px; outline: none; color: #333; margin-left: 8px; }
         
         .header-icon-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #333; cursor: pointer; border-radius: 0; transition: background 0.2s; }
-        .header-icon-btn:active { background: #f2f4f6; }
+        .header-icon-btn:active { background: #e5e7eb; }
 
         /* [검색 결과창] */
         #global-search-results { display: none; position: absolute; top: 60px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 60; border-top: 1px solid #eee; max-height:300px; overflow-y:auto; padding: 10px 0; }
         .search-result-item { padding: 12px 20px; border-bottom: 1px solid #f9f9f9; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .badge { padding: 2px 6px; border-radius: 0; font-size: 10px; font-weight: bold; color: white; } /* Radius 제거 */
+        .badge { padding: 2px 6px; border-radius: 0; font-size: 10px; font-weight: bold; color: white; }
         .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
 
-        /* [청크(Chunk) 스타일 - Full Width & No Radius] */
+        /* [청크(Chunk) 스타일] - No Radius, Full Width, White Background */
         .toss-section { 
             background: #fff; 
-            border-radius: 0; /* 직각 */
+            border-radius: 0; 
             padding: 24px 20px; 
             margin: 0; 
-            border-bottom: 12px solid #f2f4f6; /* 섹션 구분선 역할 */
+            border-bottom: 12px solid #f2f4f6; /* 섹션 사이 간격 역할 */
         }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .section-title { font-size: 20px; font-weight: 800; color: #191f28; }
         
-        /* 하단 '더 보기' 버튼 - 직각 */
+        /* [버튼] 파란색 유지 */
         .section-footer-btn {
             display: block; width: 100%; text-align: center; 
             padding: 14px 0; margin-top: 10px;
-            color: #8b95a1; font-size: 14px; font-weight: 600; 
-            background: #f9fafb; border-radius: 0; /* 직각 */
+            color: #3182f6; /* 파란색 텍스트 */
+            font-size: 14px; font-weight: 600; 
+            background: #f2f8ff; /* 연한 파란 배경 */
+            border-radius: 0; 
             cursor: pointer;
+            transition: background 0.2s;
         }
-        .section-footer-btn:active { background: #e5e7eb; }
+        .section-footer-btn:active { background: #e1f0ff; }
 
-        /* [슬라이더] - 직각 */
+        /* [슬라이더] */
         .hero-section { margin: 0; border-radius: 0; overflow: hidden; border-bottom: 12px solid #f2f4f6; }
         .hero-slider-wrapper { position: relative; width: 100%; aspect-ratio: 21/10; background: #e5e7eb; border-radius: 0; }
         .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
@@ -73,51 +76,76 @@
         .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
         .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 0; margin-bottom: 4px; display: inline-block; }
         .slide-link-btn { display:none; }
-        .indicator { width: 6px; height: 6px; border-radius: 0; background: rgba(255,255,255,0.4); cursor: pointer; } /* 점도 사각형 */
+        .indicator { width: 6px; height: 6px; border-radius: 0; background: rgba(255,255,255,0.4); cursor: pointer; }
         .indicator.active { width: 18px; background: white; border-radius: 0; }
 
-        /* [가이드 아이콘 그리드] - 직각 */
+        /* [가이드 아이콘 그리드] */
         .guide-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
         .guide-icon-btn { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s; }
         .guide-icon-btn:active { transform: scale(0.95); }
         .guide-icon-box { 
-            width: 52px; height: 52px; border-radius: 0; /* 직각 */
+            width: 52px; height: 52px; border-radius: 16px; 
             background: #f9fafb; display: flex; align-items: center; justify-content: center; 
             font-size: 24px; margin-bottom: 8px; border: 1px solid #f2f4f6;
         }
         .guide-icon-text { font-size: 12px; color: #4e5968; font-weight: 600; text-align: center; line-height: 1.3; }
 
-        /* [리스트 아이템 (무림록/천지록)] */
+        /* [리스트 아이템] - 무림록/천지록 */
         .mansarok-btn, .chunji-item-card { 
             display: flex !important; align-items: center; justify-content: space-between !important; 
             padding: 16px 0 !important; border-bottom: 1px solid #f2f4f6 !important; 
             background: transparent !important; box-shadow: none !important; 
-            border: none !important; border-radius: 0 !important; /* 직각 */
+            border: none !important; border-radius: 0 !important;
             margin-bottom: 0 !important; width: 100% !important; height: auto !important; min-height: auto !important;
-            flex-direction: row !important; gap: 6px !important;
+            flex-direction: row !important; gap: 8px !important;
         }
         .mansarok-btn:last-child, .chunji-item-card:last-child { border-bottom: none !important; }
         
-        .mansarok-btn span, .chunji-card-title { 
-            font-size: 16px; font-weight: 600; color: #333; text-align: left; flex: 1;
-            width: 100%; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .mansarok-btn::after, .chunji-item-card::after {
-            content: '›'; font-size: 22px; color: #d1d5db; font-weight: 300; margin-left: 10px;
+        /* [★추가] 지역 뱃지 스타일 */
+        .list-loc-badge {
+            font-size: 11px; color: #8b95a1; background: #f2f4f6; 
+            padding: 2px 6px; border-radius: 4px; font-weight: 600; margin-right: 4px; flex-shrink: 0;
         }
 
-        /* [타이머 리스트 - 할 일] - 직각 */
+        .mansarok-btn span, .chunji-card-title { 
+            font-size: 16px; font-weight: 600; color: #333; text-align: left;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .mansarok-btn::after, .chunji-item-card::after {
+            content: '›'; font-size: 22px; color: #d1d5db; font-weight: 300; margin-left: auto;
+        }
+
+        /* [★수정] 타이머 리스트 - [0/4] 표시를 위해 구조 변경 */
         .timer-row {
-            background-color: #f9fafb; border-radius: 0; /* 직각 */
-            padding: 16px; margin-bottom: 10px;
+            background-color: #fff; border-bottom: 1px solid #f2f4f6; 
+            border-radius: 0; padding: 16px 0; margin-bottom: 0;
             display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
-        .timer-info { display: flex; flex-direction: column; gap: 2px; }
-        .timer-name { font-size: 15px; font-weight: 700; color: #191f28; display: flex; align-items: center; gap: 6px; }
-        .timer-desc { font-size: 11px; color: #8b95a1; }
-        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 600; color: #333; }
-        .status-badge { padding: 2px 6px; border-radius: 0; font-size: 10px; font-weight: 700; color: white; display: none; }
-        .timer-progress { font-size: 11px; font-weight: 700; color: #3182f6; background-color: #e8f3ff; padding: 2px 8px; border-radius: 0; }
+        .timer-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+        
+        /* 타이머 아이콘 (가상요소) */
+        .timer-row::before {
+            content: '⏰';
+            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px;
+            background: #fff1f1; /* 연한 빨강 배경 */
+            font-size: 20px;
+            border-radius: 12px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .timer-name { font-size: 15px; font-weight: 700; color: #191f28; display: flex; align-items: center; gap: 4px; }
+        .timer-desc { font-size: 12px; color: #8b95a1; }
+        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 700; color: #3182f6; } 
+        .timer-clock.urgent { color: #e53935; }
+        
+        /* [★수정] 진행도 텍스트 스타일 */
+        .timer-progress-text { 
+            font-size: 12px; font-weight: 700; color: #3182f6; 
+            margin-right: 4px;
+        }
+        .status-badge { display: none; } /* 뱃지 숨김 */
 
         /* [하단 탭바] */
         .bottom-nav { 
@@ -135,11 +163,11 @@
         /* [바텀시트 및 기타] */
         #timer-sheet-modal, #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: none; opacity: 0; transition: opacity 0.2s; backdrop-filter: blur(2px); }
         #timer-sheet-modal.show, #person-bottom-sheet.active { display: block; opacity: 1; }
-        .sheet-container, .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 0; border-top-right-radius: 0; /* 직각 */ padding: 24px 24px 40px 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 85vh; overflow-y: auto; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
+        .sheet-container, .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 0; border-top-right-radius: 0; padding: 24px 24px 40px 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 85vh; overflow-y: auto; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
         #timer-sheet-modal.show .sheet-container, #person-bottom-sheet.active .bottom-sheet-content { transform: translateY(0); }
         .sheet-handle, .sheet-handle-bar { width: 40px; height: 4px; background: #e0e0e0; border-radius: 0; margin: 0 auto 24px auto; }
 
-        /* 천지록 상세 화면 - 직각 */
+        /* 천지록 상세 화면 */
         .chunji-detail-card { background-color: white; border-radius: 0; padding: 24px; box-shadow: none; border-bottom: 1px solid #f2f4f6; margin-bottom: 0; }
         .cd-header { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .cd-title { font-size: 22px; font-weight: 800; color: #191f28; margin-bottom: 6px; }
@@ -153,7 +181,7 @@
         .nav-btn-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
         .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: #666; padding: 8px 12px; border-radius: 0; transition: background 0.2s; }
         
-        /* 인물 바텀시트 - 직각 */
+        /* 인물 바텀시트 */
         .person-sheet-header { text-align: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
         .person-img-container { display: inline-block; padding: 5px; background: white; border-radius: 0; box-shadow: none; border: 1px solid #eee; margin-bottom: 15px; }
         .person-img-large { width: 100px; height: 100px; border-radius: 0; object-fit: cover; }
@@ -161,7 +189,7 @@
         .person-bio-box { background: #f9f9f9; padding: 16px; border-radius: 0; margin-top: 20px; }
         .person-close-btn { width: 100%; padding: 14px; background: #333; color: white; border-radius: 0; font-weight: 700; font-size: 15px; margin-top: 30px; cursor: pointer; }
 
-        /* 기존 유지 스타일 (직각화) */
+        /* 기타 스타일 */
         .quest-card { background-color: white; border-radius: 0; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
         .quest-card:active { transform: scale(0.99); }
         .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
@@ -229,16 +257,6 @@
 
             <section class="toss-section">
                 <div class="section-header">
-                    <h3 class="section-title">오늘의 할 일</h3>
-                </div>
-                <div id="gangho-timer-list" class="flex flex-col">
-                    <div style="text-align:center; color:#999; padding:20px;">로딩 중...</div>
-                </div>
-                <div class="section-footer-btn" onclick="switchTab('todo')">더 보기</div>
-            </section>
-
-            <section class="toss-section">
-                <div class="section-header">
                     <h3 class="section-title">기본 가이드</h3>
                 </div>
                 <div class="guide-grid">
@@ -267,6 +285,16 @@
                         <span class="guide-icon-text">마작<br>가이드</span>
                     </a>
                 </div>
+            </section>
+
+            <section class="toss-section">
+                <div class="section-header">
+                    <h3 class="section-title">오늘의 할 일</h3>
+                </div>
+                <div id="gangho-timer-list" class="flex flex-col">
+                    <div style="text-align:center; color:#999; padding:20px;">로딩 중...</div>
+                </div>
+                <div class="section-footer-btn" onclick="switchTab('todo')">더 보기</div>
             </section>
 
             <section class="toss-section">
@@ -447,7 +475,7 @@
             document.body.style.overflow = ''; 
         }
 
-        // [무림록 상세]
+        // [★수정] 무림록 상세 내부 네비게이션
         window.renderQuestDetailOverride = function(id) {
             document.getElementById('quest-list-view').style.display = 'none';
             document.getElementById('quest-detail-view').style.display = 'block';
@@ -463,7 +491,7 @@
                     <span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">${quest.location}</span>
                 </div>
                 <div class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">${quest.content || '내용이 없습니다.'}</div>
-                ${quest.image ? `<img src="${quest.image}" class="mt-4 w-full border" style="border-radius:0;">` : ''}
+                ${quest.image ? `<img src="${quest.image}" class="mt-4 w-full rounded-xl border" style="border-radius:0;">` : ''}
             `;
 
             const allIds = globalData.quests.map(q => q.id);
@@ -483,7 +511,7 @@
         };
         window.renderQuestDetail = window.renderQuestDetailOverride;
 
-        // [천지록 상세]
+        // [★수정] 천지록 상세 화면
         window.renderChunjiDetailOverride = function(id) {
             document.getElementById('chunji-list-view').style.display = 'none';
             document.getElementById('chunji-detail-view').style.display = 'block';
@@ -556,7 +584,7 @@
         window.showChunjiDetail = window.renderChunjiDetailOverride;
 
 
-        // [천지록 리스트 렌더링 - 단순 리스트 형태]
+        // [★수정] 천지록 리스트 렌더링 - 단순 리스트 형태
         window.renderChunjiListOverride = function() {
             const container = document.getElementById('chunji-list-container');
             if(!container) return;
@@ -574,8 +602,6 @@
                 return true;
             });
 
-            // CSS로 리스트화 (mansarok-btn 클래스 활용하지 않고 직접 스타일링된 div 사용)
-            // .chunji-item-card 클래스는 CSS에서 w-100% 등으로 재정의됨
             filtered.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'chunji-item-card'; 
@@ -586,7 +612,7 @@
         };
         window.renderChunjiList = window.renderChunjiListOverride;
 
-        // [홈 화면용 천지록 렌더링]
+        // [★수정] 홈 화면용 천지록 렌더링
         window.renderHomeChunjiOverride = function() {
             const container = document.getElementById('home-chunji-list');
             if (!container || !chunjiData) return;
@@ -594,7 +620,7 @@
             const displayList = chunjiData.slice(0, 6);
             displayList.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'chunji-item-card'; // CSS에서 리스트 형태로 강제 변환됨
+                div.className = 'chunji-item-card';
                 div.onclick = () => {
                     if (typeof switchTab === 'function') {
                         switchTab('chunji');
@@ -606,7 +632,122 @@
             });
         };
         window.renderHomeChunji = window.renderHomeChunjiOverride;
+        
+        // [★추가] 타이머 오버라이드: 아이콘/텍스트 순서 변경 & [0/4] 추가
+        window.updateTimers = function() {
+            const container = document.getElementById('gangho-timer-list');
+            if (!container) return; 
 
+            if (container.children.length === 0 || container.innerText.includes('불러오는 중')) {
+                container.innerHTML = '';
+            }
+
+            const now = new Date();
+            const statusData = getCheckStatus(); // timer.js의 함수
+
+            const serverTimeEl = document.getElementById('server-time');
+            if (serverTimeEl) serverTimeEl.innerText = now.toTimeString().split(' ')[0];
+
+            TIMERS.forEach(timer => {
+                let row = document.getElementById(`timer-card-${timer.id}`);
+                
+                if (!row) {
+                    row = document.createElement('div');
+                    row.id = `timer-card-${timer.id}`;
+                    row.className = 'timer-row';
+                    row.onclick = function() { openTimerSheet(timer); };
+                    container.appendChild(row);
+                }
+
+                let timeText = "";
+                let isUrgent = false;
+                let progressText = ""; // 텍스트 형태 진행도
+
+                if (timer.type === 'reset') {
+                    const target = getNextReset(timer.freq, now);
+                    const diff = target - now;
+                    timeText = formatTime(diff);
+                    if (diff < 3 * 60 * 60 * 1000) isUrgent = true;
+
+                    // 진행도 텍스트 계산
+                    const tasks = TASK_DATA.filter(t => t.freq === timer.freq);
+                    if (tasks.length > 0) {
+                        const done = tasks.filter(t => statusData.checked[t.id]).length;
+                        progressText = `<span class="timer-progress-text">[${done}/${tasks.length}]</span>`;
+                        if (done === tasks.length) row.style.opacity = "0.6";
+                        else row.style.opacity = "1";
+                    }
+                } 
+                else if (timer.type === 'daily_operating') {
+                    const h = now.getHours();
+                    if (h >= 5 && h < 7) timeText = "휴장 중";
+                    else timeText = "운영 중";
+                }
+                else {
+                    timeText = "시간 확인";
+                }
+
+                // [수정된 HTML 구조] 아이콘(가상요소) -> 진행도 -> 제목
+                row.innerHTML = `
+                    <div class="timer-info">
+                        <div class="timer-name">
+                            ${progressText}
+                            ${timer.name}
+                        </div>
+                        <div class="timer-desc">
+                            <span>${timer.desc}</span>
+                        </div>
+                    </div>
+                    <div class="timer-clock ${isUrgent ? 'urgent' : ''}">${timeText}</div>
+                `;
+            });
+            
+            // 탭 동기화
+            const tabList = document.getElementById('gangho-timer-list-tab');
+            if(tabList) tabList.innerHTML = container.innerHTML;
+        };
+
+        // [★추가] 만사록 리스트에 지역 뱃지 추가 (overriding renderMansarok)
+        async function loadMansarokMenu() {
+            try {
+                const response = await fetch('json/quests.json');
+                if (!response.ok) throw new Error('데이터 로드 실패');
+
+                const data = await response.json();
+                
+                const mansarokContainer = document.getElementById('mansarok-list');
+                const isPc = window.innerWidth >= 1024; 
+                const limit = isPc ? 18 : 6;
+
+                if (mansarokContainer) {
+                    const mansarokList = data
+                        .filter(item => !['지과', '보스 공략'].includes(item.type))
+                        .slice(0, limit);
+
+                    mansarokContainer.innerHTML = '';
+
+                    mansarokList.forEach(item => {
+                        const btn = document.createElement('a');
+                        btn.className = 'mansarok-btn';
+                        btn.href = "javascript:void(0);";
+                        btn.onclick = () => {
+                            switchTab('quest');
+                            loadQuestDetail(item.filepath, item.id);
+                        };
+                        
+                        // [★수정] 지역 뱃지 추가
+                        const locBadge = item.location ? `<span class="list-loc-badge">[${item.location}]</span>` : '';
+                        
+                        btn.innerHTML = `${locBadge}<span>${item.name}</span>`;
+                        mansarokContainer.appendChild(btn);
+                    });
+                }
+            } catch (error) {
+                console.error('만사록 로드 에러:', error);
+            }
+        }
+        // DOMContentLoaded에서 loadMansarokMenu가 호출되므로, 여기서 덮어쓰지 않고 
+        // 기존 리스너가 실행되게 둠. 단, 위 함수 정의로 인해 호이스팅 되거나 덮어써짐.
 
         window.switchTab = function(tabName) {
             // 헤더가 항상 보이도록 설정
@@ -628,10 +769,6 @@
             
             if (tabName === 'todo' && typeof updateTimers === 'function') {
                 updateTimers();
-                // [추가] 탭별 리스트 분리 처리 (홈 화면 리스트와 별개)
-                const homeList = document.getElementById('gangho-timer-list');
-                const tabList = document.getElementById('gangho-timer-list-tab');
-                if(homeList && tabList) tabList.innerHTML = homeList.innerHTML;
             }
             else if (tabName === 'quiz') {
                 const tbody = document.getElementById('quiz-table-body');

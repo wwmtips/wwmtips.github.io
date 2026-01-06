@@ -418,112 +418,120 @@
                 <div class="lg:grid lg:grid-cols-2 lg:gap-6">
 
                     <section
-                        class="bg-white p-5 mb-3 lg:mb-0 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm lg:h-full">
+                        class="bg-white p-5 mb-3 lg:mb-6 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm w-full lg:col-span-full">
                         <div class="mb-4">
                             <h3 class="text-[19px] font-extrabold text-gray-900">기본 가이드</h3>
                         </div>
-                        <div id="guide-scroll-wrapper"
-                            class="flex overflow-x-auto gap-3 pb-4 snap-x snap-mandatory no-scrollbar lg:grid lg:grid-cols-6 lg:gap-4 lg:pb-0">
-                            <a onclick="openGuideDirect('newb.html')"
-                                class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                                <div
-                                    class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl border border-orange-100/50">
-                                    📜</div>
-                                <span
-                                    class="text-[11px] font-bold text-gray-600 text-center whitespace-nowrap">강호입문서</span>
-                            </a>
-                            <a onclick="openGuideDirect('guide/up.html')"
-                                class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                                <div
-                                    class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-2xl border border-red-100/50">
-                                    📈</div>
-                                <span
-                                    class="text-[11px] font-bold text-gray-600 text-center whitespace-nowrap">육성가이드</span>
-                            </a>
-                            <a onclick="openGuideDirect('moon.html')"
-                                class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                                <div
-                                    class="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl border border-gray-200/50">
-                                    🏛️</div>
-                                <span
-                                    class="text-[11px] font-bold text-gray-600 text-center whitespace-nowrap">문파입문</span>
-                            </a>
-                            <a onclick="openGuideDirect('guide/weapon.html')"
-                                class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                                <div
-                                    class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl border border-blue-100/50">
-                                    ⚔️</div>
-                                <span
-                                    class="text-[11px] font-bold text-gray-600 text-center whitespace-nowrap">장비도감</span>
-                            </a>
-                            <a onclick="openGuideDirect('tier_weapon.html')"
-                                class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                                <div
-                                    class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl border border-purple-100/50">
-                                    🌀</div>
-                                <span
-                                    class="text-[11px] font-bold text-gray-600 text-center whitespace-nowrap">무공도감</span>
-                            </a>
-                            <a onclick="openGuideDirect('majang.html')"
-                                class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto">
-                                <div
-                                    class="w-12 h-12 bg-pink-50 rounded-2xl flex items-center justify-center text-2xl border border-pink-100/50">
-                                    🀄</div>
-                                <span
-                                    class="text-[11px] font-bold text-gray-600 text-center whitespace-nowrap">마작가이드</span>
-                            </a>
+                        <div class="relative">
+                            <div id="guide-scroll-wrapper"
+                                class="flex overflow-x-auto gap-3 pb-4 snap-x snap-mandatory no-scrollbar lg:grid lg:grid-cols-6 lg:gap-4 lg:pb-0">
+
+                                <a onclick="openGuideDirect('newb.html')"
+                                    class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto lg:py-4">
+                                    <div
+                                        class="w-12 h-12 lg:w-16 lg:h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl lg:text-3xl border border-orange-100/50">
+                                        📜</div>
+                                    <span
+                                        class="text-[11px] lg:text-[13px] font-bold text-gray-600 text-center whitespace-nowrap">강호입문서</span>
+                                </a>
+
+                                <a onclick="openGuideDirect('guide/up.html')"
+                                    class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto lg:py-4">
+                                    <div
+                                        class="w-12 h-12 lg:w-16 lg:h-16 bg-red-50 rounded-2xl flex items-center justify-center text-2xl lg:text-3xl border border-red-100/50">
+                                        📈</div>
+                                    <span
+                                        class="text-[11px] lg:text-[13px] font-bold text-gray-600 text-center whitespace-nowrap">육성가이드</span>
+                                </a>
+
+                                <a onclick="openGuideDirect('moon.html')"
+                                    class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto lg:py-4">
+                                    <div
+                                        class="w-12 h-12 lg:w-16 lg:h-16 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl lg:text-3xl border border-gray-200/50">
+                                        🏛️</div>
+                                    <span
+                                        class="text-[11px] lg:text-[13px] font-bold text-gray-600 text-center whitespace-nowrap">문파입문</span>
+                                </a>
+
+                                <a onclick="openGuideDirect('guide/weapon.html')"
+                                    class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto lg:py-4">
+                                    <div
+                                        class="w-12 h-12 lg:w-16 lg:h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl lg:text-3xl border border-blue-100/50">
+                                        ⚔️</div>
+                                    <span
+                                        class="text-[11px] lg:text-[13px] font-bold text-gray-600 text-center whitespace-nowrap">장비도감</span>
+                                </a>
+
+                                <a onclick="openGuideDirect('tier_weapon.html')"
+                                    class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto lg:py-4">
+                                    <div
+                                        class="w-12 h-12 lg:w-16 lg:h-16 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl lg:text-3xl border border-purple-100/50">
+                                        🌀</div>
+                                    <span
+                                        class="text-[11px] lg:text-[13px] font-bold text-gray-600 text-center whitespace-nowrap">무공도감</span>
+                                </a>
+
+                                <a onclick="openGuideDirect('majang.html')"
+                                    class="flex-none w-[23%] snap-start flex flex-col items-center gap-2 cursor-pointer active:scale-95 transition lg:w-auto lg:py-4">
+                                    <div
+                                        class="w-12 h-12 lg:w-16 lg:h-16 bg-pink-50 rounded-2xl flex items-center justify-center text-2xl lg:text-3xl border border-pink-100/50">
+                                        🀄</div>
+                                    <span
+                                        class="text-[11px] lg:text-[13px] font-bold text-gray-600 text-center whitespace-nowrap">마작가이드</span>
+                                </a>
+                            </div>
+
+                            <div class="flex justify-center gap-1.5 mt-2 lg:hidden" id="guide-indicators">
+                                <div class="w-4 h-1.5 rounded-full bg-blue-500 transition-all duration-300"></div>
+                                <div class="w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-300"></div>
+                            </div>
                         </div>
-                        <div class="flex justify-center gap-1.5 mt-2 lg:hidden" id="guide-indicators">
-                            <div class="w-4 h-1.5 rounded-full bg-blue-500 transition-all duration-300"></div>
-                            <div class="w-1.5 h-1.5 rounded-full bg-gray-200 transition-all duration-300"></div>
+                    </section>
+
+                    <section class="bg-white p-5 mb-3 lg:mb-0 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm">
+                        <div class="mb-4">
+                            <h3 class="text-[19px] font-extrabold text-gray-900">무림록</h3>
                         </div>
+                        <div id="mansarok-list"
+                            class="flex flex-col divide-y divide-gray-100 lg:divide-none lg:grid lg:grid-cols-2 lg:gap-3">
+                        </div>
+
+                        <button onclick="switchTab('quest')"
+                            class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
+                            무림록 전체보기
+                        </button>
+                    </section>
+
+                    <section class="bg-white p-5 mb-3 lg:mb-0 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm">
+                        <div class="mb-4">
+                            <h3 class="text-[19px] font-extrabold text-gray-900">천지록</h3>
+                        </div>
+                        <div id="home-chunji-list"
+                            class="flex flex-col divide-y divide-gray-100 lg:divide-none lg:grid lg:grid-cols-2 lg:gap-3">
+                        </div>
+
+                        <button onclick="switchTab('chunji')"
+                            class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
+                            천지록 전체보기
+                        </button>
+                    </section>
+
+                    <section class="bg-white p-5 mb-3 lg:mb-0 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm">
+                        <div class="mb-4">
+                            <h3 class="text-[19px] font-extrabold text-gray-900">오늘의 할 일</h3>
+                        </div>
+                        <div id="gangho-timer-list" class="grid grid-cols-1 gap-3">
+                            <div class="text-center py-10 text-gray-400 text-sm">데이터를 불러오는 중...</div>
+                        </div>
+
+                        <button onclick="switchTab('todo')"
+                            class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
+                            전체 시간표 확인하기
+                        </button>
+                    </section>
+
                 </div>
-                </section>
-
-                <section class="bg-white p-5 mb-3 lg:mb-0 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm">
-                    <div class="mb-4">
-                        <h3 class="text-[19px] font-extrabold text-gray-900">무림록</h3>
-                    </div>
-                    <div id="mansarok-list"
-                        class="flex flex-col divide-y divide-gray-100 lg:divide-none lg:grid lg:grid-cols-2 lg:gap-3">
-                    </div>
-
-                    <button onclick="switchTab('quest')"
-                        class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
-                        무림록 전체보기
-                    </button>
-                </section>
-
-                <section class="bg-white p-5 mb-3 lg:mb-0 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm">
-                    <div class="mb-4">
-                        <h3 class="text-[19px] font-extrabold text-gray-900">천지록</h3>
-                    </div>
-                    <div id="home-chunji-list"
-                        class="flex flex-col divide-y divide-gray-100 lg:divide-none lg:grid lg:grid-cols-2 lg:gap-3">
-                    </div>
-
-                    <button onclick="switchTab('chunji')"
-                        class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
-                        천지록 전체보기
-                    </button>
-                </section>
-
-                <section class="bg-white p-5 mb-3 lg:mb-0 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm">
-                    <div class="mb-4">
-                        <h3 class="text-[19px] font-extrabold text-gray-900">오늘의 할 일</h3>
-                    </div>
-                    <div id="gangho-timer-list" class="grid grid-cols-1 gap-3">
-                        <div class="text-center py-10 text-gray-400 text-sm">데이터를 불러오는 중...</div>
-                    </div>
-
-                    <button onclick="switchTab('todo')"
-                        class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
-                        전체 시간표 확인하기
-                    </button>
-                </section>
-
             </div>
-        </div>
         </div>
 
         <div id="view-todo" style="display: none;" class="p-5">

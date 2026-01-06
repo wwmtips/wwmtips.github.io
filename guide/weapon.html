@@ -1,280 +1,237 @@
-<div class="quest-detail-container" style="text-align: left;">
+<div class="max-w-4xl mx-auto space-y-8 p-4 lg:p-0">
     
-    <style>
-        /* 문파 가이드 스타일을 계승한 장비 도감 전용 CSS */
-        .equip-card-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .compact-set-card {
-            background-color: #fff;
-            border: 1px solid #eee;
-            border-left: 4px solid var(--wuxia-accent-gold);
-            border-radius: 4px;
-            padding: 12px;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-
-        .compact-set-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--wuxia-accent-gold);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        /* 왼쪽: 장비 아이콘 (검은색 배경 고정) */
-        .set-icon-side {
-            flex: 0 0 65px;
-        }
-
-        .icon-black-box {
-            width: 65px;
-            height: 65px;
-            background-color: #1a1a1a;
-            border: 1.5px solid var(--wuxia-accent-gold);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .icon-black-box img {
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
-        }
-
-        /* 오른쪽: 상세 정보 */
-        .set-content-side {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .set-main-title {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 1rem;
-            font-weight: bold;
-            color: var(--wuxia-text-main);
-            border-bottom: 1px solid var(--wuxia-accent-red);
-            margin-bottom: 8px;
-            padding-bottom: 2px;
-        }
-
-        .sub-group {
-            margin-bottom: 6px;
-        }
-
-        .group-label {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--wuxia-accent-gold);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-bottom: 2px;
-        }
-
-        .group-label::before {
-            content: "◆";
-            font-size: 0.6rem;
-            color: var(--wuxia-accent-red);
-        }
-
-        .bonus-row {
-            font-size: 0.78rem;
-            color: var(--wuxia-text-sub);
-            line-height: 1.4;
-            padding-left: 10px;
-        }
-
-        .bonus-row b {
-            color: var(--wuxia-text-main);
-        }
-
-        /* 발동 효과 강조 (문파 팁 스타일) */
-        .small-callout {
-            font-size: 0.75rem;
-            background: rgba(255, 255, 255, 0.7);
-            border-left: 2px solid var(--wuxia-accent-gold);
-            padding: 4px 8px;
-            margin-top: 3px;
-            color: #555;
-            border-radius: 0 2px 2px 0;
-            line-height: 1.4;
-        }
-
-        @media (max-width: 500px) {
-            .compact-set-card { flex-direction: column; align-items: center; }
-        }
-    </style>
-
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">도감</span>
-        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">장비 도감</h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">다양한 장비를 확인하고 본인에게 맞는 장비를 착용하세요.</p>
+    <div class="border-b-2 border-blue-600 pb-6 mb-6">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">도감</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">장비 도감</h2>
+        <p class="text-gray-500 text-[14px] mt-2 font-medium">다양한 장비를 확인하고 본인에게 맞는 장비를 착용하세요.</p>
     </div>
 
-    <div class="equip-card-grid">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        <div class="compact-set-card">
-            <div class="set-icon-side">
-                <div class="icon-black-box"><img src="../guide/wp_img/1.png" alt="옥두"></div>
-            </div>
-            <div class="set-content-side">
-                <div class="set-main-title">옥두 세트</div>
-                <div class="sub-group">
-                    <div class="group-label">무기: 옥잔</div>
-                    <div class="bonus-row">2세트: 최대 외공 공격 <b>+1</b> / 4세트: 무기 스킬 시전 시 <b>'옥두'</b> 발동</div>
-                    <div class="small-callout">각성 피해 10%↑, 기력 40% 미만 대상 각성 피해 추가 20%↑</div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl border border-blue-900/30 flex items-center justify-center shrink-0 shadow-lg">
+                    <img src="../guide/wp_img/1.png" class="w-[85%] h-[85%] object-contain" alt="옥두">
                 </div>
-                <div class="sub-group">
-                    <div class="group-label">방어구: 역상</div>
-                    <div class="bonus-row">2세트: 최대 외공 방어 <b>+1</b> / 4세트: 보호막 지속 시간 2초 연장</div>
-                    <div class="small-callout">진기 85% 초과 혹은 보호막 적용 중 받는 모든 기혈 피해 20% 감소</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="compact-set-card">
-            <div class="set-icon-side">
-                <div class="icon-black-box"><img src="../guide/wp_img/2.png" alt="참매"></div>
-            </div>
-            <div class="set-content-side">
-                <div class="set-main-title">참매 세트</div>
-                <div class="sub-group">
-                    <div class="group-label">무기: 비준</div>
-                    <div class="bonus-row">2세트: 각성 확률 <b>+0.1%</b> / 4세트: 각성 발동 시 <b>'창공의 매'</b> 발동</div>
-                    <div class="small-callout">외공 공격력 2%↑, 5초 동안 지속되며 최대 5중첩</div>
-                </div>
-                <div class="sub-group">
-                    <div class="group-label">방어구: 매의 용맹</div>
-                    <div class="bonus-row">2세트: 최대 외공 방어 <b>+1</b> / 4세트: 지속 피해/치유 시 1중첩 부여</div>
-                    <div class="small-callout">10초간 받는 피해 1.2% 감소, 최대 중첩 시 10초간 다음 피격 피해 90% 감소</div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-gray-900 border-b border-blue-600/20 pb-1 mb-3">옥두 세트</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 무기: 옥잔</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 최대 외공 공격 <strong class="text-gray-900">+1</strong> / 4세트: 무기 스킬 시전 시 <strong class="text-gray-900">'옥두'</strong> 발동</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                각성 피해 10%↑, 기력 40% 미만 대상 각성 피해 추가 20%↑
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 방어구: 역상</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 최대 외공 방어 <strong class="text-gray-900">+1</strong> / 4세트: 보호막 지속 시간 2초 연장</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                진기 85% 초과 혹은 보호막 적용 중 받는 모든 기혈 피해 20% 감소
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="compact-set-card">
-            <div class="set-icon-side">
-                <div class="icon-black-box"><img src="../guide/wp_img/3.png" alt="단비"></div>
-            </div>
-            <div class="set-content-side">
-                <div class="set-main-title">단비 세트</div>
-                <div class="sub-group">
-                    <div class="group-label">무기: 단비</div>
-                    <div class="bonus-row">2세트: 기혈 최대치 <b>+40</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">모든 치명타 피해/치유 10% 증가, 기혈 보호막 상태일 때 추가 15% 증가</div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl border border-blue-900/30 flex items-center justify-center shrink-0 shadow-lg">
+                    <img src="../guide/wp_img/2.png" class="w-[85%] h-[85%] object-contain" alt="참매">
                 </div>
-                <div class="sub-group">
-                    <div class="group-label">방어구: 계월</div>
-                    <div class="bonus-row">2세트: 기혈 최대치 <b>+40</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">방어 중 피격 시 30% 확률로 최대 기혈 10% 보호막 생성 및 기혈 2% 회복 (재발동 60초)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="compact-set-card">
-            <div class="set-icon-side">
-                <div class="icon-black-box"><img src="../guide/wp_img/4.png" alt="연귀"></div>
-            </div>
-            <div class="set-content-side">
-                <div class="set-main-title">연귀 세트</div>
-                <div class="sub-group">
-                    <div class="group-label">무기: 제비의 귀환</div>
-                    <div class="bonus-row">2세트: 최소 외공 공격 <b>+1</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">진기 40% 미만 대상 약공격 시 외공 피해 15%↑, 탈진 대상 추가 5%↑</div>
-                </div>
-                <div class="sub-group">
-                    <div class="group-label">방어구: 계월</div>
-                    <div class="bonus-row">2세트: 최소 외공 방어 <b>+1</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">완벽 회피 시 50% 확률로 최대 HP 3% 및 인내력 10pt 회복</div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-gray-900 border-b border-blue-600/20 pb-1 mb-3">참매 세트</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 무기: 비준</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 각성 확률 <strong class="text-gray-900">+0.1%</strong> / 4세트: 각성 발동 시 <strong class="text-gray-900">'창공의 매'</strong> 발동</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                외공 공격력 2%↑, 5초 동안 지속되며 최대 5중첩
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 방어구: 매의 용맹</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 최대 외공 방어 <strong class="text-gray-900">+1</strong> / 4세트: 지속 피해/치유 시 1중첩 부여</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                10초간 받는 피해 1.2% 감소, 최대 중첩 시 10초간 다음 피격 피해 90% 감소
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="compact-set-card">
-            <div class="set-icon-side">
-                <div class="icon-black-box"><img src="../guide/wp_img/5.png" alt="연류"></div>
-            </div>
-            <div class="set-content-side">
-                <div class="set-main-title">연류 세트</div>
-                <div class="sub-group">
-                    <div class="group-label">무기: 연류중중</div>
-                    <div class="bonus-row">2세트: 정확률 <b>+0.1%</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">약공격 후 강공격 피해 12%↑ 혹은 강공격 후 약공격 차지 피해 12%↑</div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl border border-blue-900/30 flex items-center justify-center shrink-0 shadow-lg">
+                    <img src="../guide/wp_img/3.png" class="w-[85%] h-[85%] object-contain" alt="단비">
                 </div>
-                <div class="sub-group">
-                    <div class="group-label">방어구: 계월</div>
-                    <div class="bonus-row">2세트: 기혈 최대치 <b>+40</b> / 4세트: '불지한' 효과 획득</div>
-                    <div class="small-callout">피해 입지 않고 10초 유지 시 다음 피격 피해 및 2초간 모든 피해 40% 감소</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="compact-set-card">
-            <div class="set-icon-side">
-                <div class="icon-black-box"><img src="../guide/wp_img/6.png" alt="완화"></div>
-            </div>
-            <div class="set-content-side">
-                <div class="set-main-title">완화 세트</div>
-                <div class="sub-group">
-                    <div class="group-label">무기: 완화</div>
-                    <div class="bonus-row">2세트: 치명타 확률 <b>+0.1%</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">최대 기혈 상태서 치명타 확률 5%↑, 치명타 피해/치유 효과 15% 증가</div>
-                </div>
-                <div class="sub-group">
-                    <div class="group-label">방어구: 이설</div>
-                    <div class="bonus-row">2세트: 외공 방어력 <b>+1</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">기혈 20% 미만 혹은 단일 피해 40% 초과 시 치유하면 기혈 25% 회복 (재발동 60초)</div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-gray-900 border-b border-blue-600/20 pb-1 mb-3">단비 세트</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 무기: 단비</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 기혈 최대치 <strong class="text-gray-900">+40</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                모든 치명타 피해/치유 10% 증가, 기혈 보호막 상태일 때 추가 15% 증가
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 방어구: 계월</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 기혈 최대치 <strong class="text-gray-900">+40</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                방어 중 피격 시 30% 확률로 최대 기혈 10% 보호막 생성 및 기혈 2% 회복 (재발동 60초)
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="compact-set-card">
-            <div class="set-icon-side">
-                <div class="icon-black-box"><img src="../guide/wp_img/7.png" alt="금풍"></div>
-            </div>
-            <div class="set-content-side">
-                <div class="set-main-title">금풍 세트</div>
-                <div class="sub-group">
-                    <div class="group-label">무기: 질풍</div>
-                    <div class="bonus-row">2세트: 최대 외공 공격 <b>+1</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">공중 강공격 피해 10%↑ 및 넘어뜨리기 효과 적용 (10초 주기)</div>
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl border border-blue-900/30 flex items-center justify-center shrink-0 shadow-lg">
+                    <img src="../guide/wp_img/4.png" class="w-[85%] h-[85%] object-contain" alt="연귀">
                 </div>
-                <div class="sub-group">
-                    <div class="group-label">방어구: 능파보</div>
-                    <div class="bonus-row">2세트: 기혈 최대치 <b>+40</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">받아치기 성공 시 추가 효과 및 2초 동안 받는 모든 피해 20% 감소</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="compact-set-card">
-            <div class="set-icon-side">
-                <div class="icon-black-box"><img src="../guide/wp_img/8.png" alt="산경"></div>
-            </div>
-            <div class="set-content-side">
-                <div class="set-main-title">산경 세트</div>
-                <div class="sub-group">
-                    <div class="group-label">무기: 질풍</div>
-                    <div class="bonus-row">2세트: 외공 공격 <b>+1</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">기혈 50% 이상 대상 피해 5%↑, 체력 5%마다 피해 1%씩 추가 증가</div>
-                </div>
-                <div class="sub-group">
-                    <div class="group-label">방어구: 능파보</div>
-                    <div class="bonus-row">2세트: 외공 방어력 <b>+1</b> / 4세트 보너스 활성화</div>
-                    <div class="small-callout">받는 피해 5% 감소, 기혈 60% 미만 시 체력 10% 감소마다 피해 1% 추가 감소 (최대 5중첩)</div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-gray-900 border-b border-blue-600/20 pb-1 mb-3">연귀 세트</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 무기: 제비의 귀환</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 최소 외공 공격 <strong class="text-gray-900">+1</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                진기 40% 미만 대상 약공격 시 외공 피해 15%↑, 탈진 대상 추가 5%↑
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 방어구: 계월</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 최소 외공 방어 <strong class="text-gray-900">+1</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                완벽 회피 시 50% 확률로 최대 HP 3% 및 인내력 10pt 회복
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl border border-blue-900/30 flex items-center justify-center shrink-0 shadow-lg">
+                    <img src="../guide/wp_img/5.png" class="w-[85%] h-[85%] object-contain" alt="연류">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-gray-900 border-b border-blue-600/20 pb-1 mb-3">연류 세트</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 무기: 연류중중</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 정확률 <strong class="text-gray-900">+0.1%</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                약공격 후 강공격 피해 12%↑ 혹은 강공격 후 약공격 차지 피해 12%↑
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 방어구: 계월</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 기혈 최대치 <strong class="text-gray-900">+40</strong> / 4세트: '불지한' 효과 획득</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                피해 입지 않고 10초 유지 시 다음 피격 피해 및 2초간 모든 피해 40% 감소
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl border border-blue-900/30 flex items-center justify-center shrink-0 shadow-lg">
+                    <img src="../guide/wp_img/6.png" class="w-[85%] h-[85%] object-contain" alt="완화">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-gray-900 border-b border-blue-600/20 pb-1 mb-3">완화 세트</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 무기: 완화</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 치명타 확률 <strong class="text-gray-900">+0.1%</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                최대 기혈 상태서 치명타 확률 5%↑, 치명타 피해/치유 효과 15% 증가
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 방어구: 이설</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 외공 방어력 <strong class="text-gray-900">+1</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                기혈 20% 미만 혹은 단일 피해 40% 초과 시 치유하면 기혈 25% 회복 (재발동 60초)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl border border-blue-900/30 flex items-center justify-center shrink-0 shadow-lg">
+                    <img src="../guide/wp_img/7.png" class="w-[85%] h-[85%] object-contain" alt="금풍">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-gray-900 border-b border-blue-600/20 pb-1 mb-3">금풍 세트</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 무기: 질풍</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 최대 외공 공격 <strong class="text-gray-900">+1</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                공중 강공격 피해 10%↑ 및 넘어뜨리기 효과 적용 (10초 주기)
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 방어구: 능파보</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 기혈 최대치 <strong class="text-gray-900">+40</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                받아치기 성공 시 추가 효과 및 2초 동안 받는 모든 피해 20% 감소
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-shadow">
+            <div class="flex gap-4">
+                <div class="w-16 h-16 bg-gray-900 rounded-xl border border-blue-900/30 flex items-center justify-center shrink-0 shadow-lg">
+                    <img src="../guide/wp_img/8.png" class="w-[85%] h-[85%] object-contain" alt="산경">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold text-gray-900 border-b border-blue-600/20 pb-1 mb-3">산경 세트</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 무기: 질풍</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 외공 공격 <strong class="text-gray-900">+1</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                기혈 50% 이상 대상 피해 5%↑, 체력 5%마다 피해 1%씩 추가 증가
+                            </div>
+                        </div>
+                        <div>
+                            <span class="text-[13px] font-bold text-blue-600 flex items-center gap-1 mb-1">◆ 방어구: 능파보</span>
+                            <p class="text-[12px] text-gray-600 leading-tight mb-1.5">2세트: 외공 방어력 <strong class="text-gray-900">+1</strong> / 4세트 보너스 활성화</p>
+                            <div class="bg-gray-50 border-l-2 border-blue-500 p-2 rounded-r-lg text-[11px] text-gray-500 leading-relaxed">
+                                받는 피해 5% 감소, 기혈 60% 미만 시 체력 10% 감소마다 피해 1% 추가 감소 (최대 5중첩)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="pt-8 text-center">
+        <p class="text-gray-400 text-[12px] font-medium">
+            본 도감은 최신 패치 정보를 기반으로 작성되었습니다.
+        </p>
     </div>
 </div>

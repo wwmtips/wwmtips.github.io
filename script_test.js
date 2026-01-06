@@ -129,13 +129,13 @@ async function loadMansarokMenu() {
         if (!response.ok) throw new Error('데이터 로드 실패');
 
         const data = await response.json();
-        
+
         // ----------------------------------------------------
         // 1. 기존 무림록 (지과 제외, 6개만 표시)
         // ----------------------------------------------------
         const mansarokContainer = document.getElementById('mansarok-list');
 
-        const isPc = window.innerWidth >= 1024; 
+        const isPc = window.innerWidth >= 1024;
         const limit = isPc ? 18 : 6;
 
         if (mansarokContainer) {
@@ -163,7 +163,7 @@ async function loadMansarokMenu() {
         // ----------------------------------------------------
         // #pvp-container 안에 있는 .common-slim-grid를 찾습니다.
         const pvpContainer = document.querySelector('#pvp-container .common-slim-grid');
-        
+
         if (pvpContainer) {
             const pvpList = data.filter(item => item.type === '지과'); // '지과'만 필터링
 
@@ -172,9 +172,9 @@ async function loadMansarokMenu() {
             pvpList.forEach(item => {
                 // 디자인 통일성을 위해 'slim-btn' 클래스 사용
                 const btn = document.createElement('a');
-                btn.className = 'slim-btn'; 
+                btn.className = 'slim-btn';
                 btn.href = "javascript:void(0);";
-                
+
                 btn.onclick = () => {
                     switchTab('quest');
                     loadQuestDetail(item.filepath, item.id);
@@ -454,7 +454,7 @@ function loadData() {
                 const foundChunji = globalData.chunji.find(c => c.id === chunjiId);
                 if (foundChunji) { switchTab('chunji'); loadChunjiDetail(foundChunji); }
             }
-           else if (targetTab === 'quest' && targetId) {
+            else if (targetTab === 'quest' && targetId) {
                 // [수정] 필터 단축 코드 매핑 (원하는 약어와 실제 select value를 연결)
                 const filterMap = {
                     'm': '만사록',
@@ -472,7 +472,7 @@ function loadData() {
                 if (filterMap[targetId]) {
                     const typeName = filterMap[targetId];
                     const selectEl = document.getElementById('quest-type-select');
-                    
+
                     if (selectEl) {
                         selectEl.value = typeName; // 드롭다운 값 변경
                         // 필터 변경 함수 호출 (지역 목록 갱신 + 리스트 다시 그리기)
@@ -480,7 +480,7 @@ function loadData() {
                             onQuestTypeChange();
                         }
                     }
-                } 
+                }
                 // 2. 필터 코드가 아니라면 -> 기존처럼 퀘스트 상세 보기 실행
                 else {
                     const formattedId = targetId.toLowerCase().startsWith('q') ? targetId : 'q' + targetId;
@@ -562,16 +562,32 @@ function renderHomeSlider(quests) {
         const tag = quest.type || "분류 없음";
         const title = quest.name;
         const desc = quest.location || "지역 정보 없음";
-        
+
         // 이미지 경로 설정
         const primaryPath = `quests/images/${quest.bgimg}`;
         const fallbackPath = `quests/explore/${quest.bgimg}`;
 
         const slideDiv = document.createElement('div');
-        
-        // ★ 핵심 수정: w-full(너비100%), flex-shrink-0(찌그러짐 방지), bg-cover(이미지 꽉채움) 추가
-        slideDiv.className = 'w-full h-full flex-shrink-0 relative bg-cover bg-center transition-all duration-500';
 
+        // ★ 핵심 수정: w-full min-w-full flex-shrink-0 를 추가하여 겹침 방지
+        // bg-cover bg-center를 통해 이미지가 꽉 차게 설정
+        slideDiv.className = 'w-full min-w-full h-full flex-shrink-0 relative bg-cover bg-center transition-all duration-500';
+
+        // 배경 이미지 설정 (기존 로직 유지)
+        slideDiv.style.backgroundImage = `url('${primaryPath}')`;
+
+        // 이미지 내부 텍스트 디자인 (그라데이션 추가)
+        slideDiv.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div class="absolute bottom-6 left-6 text-white z-10 text-left">
+            <span class="bg-blue-600 text-[10px] px-2 py-0.5 rounded font-bold mb-2 inline-block">${quest.type || "분류"}</span>
+            <h2 class="text-2xl font-black mb-1 leading-tight">${quest.name}</h2>
+            <p class="text-sm text-gray-200 opacity-90 font-medium mb-3">${quest.location || "지역"}</p>
+            <button class="bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/50 text-white text-xs px-4 py-1.5 rounded-full transition-colors font-bold">
+                이야기 확인하기 ↗
+            </button>
+        </div>
+    `;
         // 1. 기본 배경 설정
         slideDiv.style.backgroundImage = `url('${primaryPath}')`;
 
@@ -592,7 +608,7 @@ function renderHomeSlider(quests) {
        
         </div>
         `;
-        
+
         slideDiv.onclick = () => {
             switchTab('quest');
             loadQuestDetail(quest.filepath, quest.id);
@@ -606,15 +622,15 @@ function renderHomeSlider(quests) {
         dot.onclick = (e) => { e.stopPropagation(); goToSlide(index); };
         indicators.appendChild(dot);
     });
-    
+
     // 인디케이터 업데이트 함수 재정의 (active 스타일 대응)
-    window.updateSliderPosition = function() {
+    window.updateSliderPosition = function () {
         const track = document.getElementById('hero-slider-track');
         const dots = indicators.children;
         if (track) track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
-        
-        for(let i=0; i<dots.length; i++) {
-            if(i === currentSlideIndex) {
+
+        for (let i = 0; i < dots.length; i++) {
+            if (i === currentSlideIndex) {
                 dots[i].className = 'w-6 h-2 rounded-full bg-white transition-all duration-300 cursor-pointer';
             } else {
                 dots[i].className = 'w-2 h-2 rounded-full bg-white/50 transition-all duration-300 cursor-pointer';
@@ -1024,7 +1040,7 @@ const GUIDE_MAP = {
     'outfit19': 'outfit/outfit19.html',
     'outfit20': 'outfit/outfit20.html',
     'outfit21': 'outfit/outfit21.html',
-    'ar1':'arena/g1.html'
+    'ar1': 'arena/g1.html'
 };
 
 function loadGuideView() {
@@ -1247,12 +1263,12 @@ function renderQuizTable(data, keyword = '') {
     if (data && data.length > 0) {
         data.forEach(item => {
             const tr = document.createElement('tr');
-            
+
             // 행 스타일: 하단 테두리, 마우스 오버 시 연한 회색 배경
             tr.className = 'border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors';
 
             let hint = item.hint, answer = item.answer;
-            
+
             // 검색어 하이라이팅 (노란 배경 + 굵은 글씨)
             if (keyword) {
                 const regex = new RegExp(`(${keyword})`, 'gi');
@@ -1260,7 +1276,7 @@ function renderQuizTable(data, keyword = '') {
                 hint = hint.replace(regex, highlight);
                 answer = answer.replace(regex, highlight);
             }
-            
+
             // 셀 스타일 적용: 패딩, 폰트 굵기 조절
             tr.innerHTML = `
                 <td class="px-4 py-3 text-gray-500 font-medium w-[40%] align-middle break-keep">${hint}</td>
@@ -1292,20 +1308,20 @@ function renderQuizTable(data, keyword = '') {
 function updateQuizCounter() {
     const counter = document.getElementById('quiz-counter-area');
     if (!counter || !globalData.quiz) return;
-    
+
     const totalCount = globalData.quiz.length;
     const userCounts = {};
-    
+
     // 유저별 기여도 계산
     globalData.quiz.forEach(item => {
         if (item.user && item.user.trim() !== '' && item.user !== '-') {
             userCounts[item.user] = (userCounts[item.user] || 0) + 1;
         }
     });
-    
+
     // 상위 3명 추출
     const sortedUsers = Object.entries(userCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
-    
+
     let rankHtml = '';
     if (sortedUsers.length > 0) {
         const rankParts = sortedUsers.map((u, i) => {
@@ -1313,12 +1329,12 @@ function updateQuizCounter() {
             if (i === 0) return `<span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500 font-bold ml-1">${i + 1}위 ${u[0]}(${u[1]})</span>`;
             return `<span class="text-gray-400 ml-1">${i + 1}위 ${u[0]}(${u[1]})</span>`;
         });
-        
+
         rankHtml = `<div class="mt-1 text-[11px] text-gray-400 flex items-center flex-wrap gap-1">
             <span class="text-yellow-500 font-bold">🏆 기여 랭킹:</span> ${rankParts.join('<span class="text-gray-300">·</span>')}
         </div>`;
     }
-    
+
     counter.innerHTML = `<div class="flex flex-col">
         <span class="text-gray-600">총 <b class="text-blue-600">${totalCount}</b>개의 족보가 등록되었습니다.</span>
         ${rankHtml}
@@ -1352,13 +1368,13 @@ function renderQuestList() {
 // [수정] 무림록 카드 생성 함수 (Tailwind CSS 적용)
 function createQuestCard(quest, container) {
     const card = document.createElement('div');
-    
+
     // 기존 class="quest-card" 대신 Tailwind 클래스 적용
     // (흰 배경, 둥근 모서리, 그림자, 클릭 효과 등)
     card.className = 'bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform hover:bg-gray-50';
-    
+
     card.onclick = () => { switchTab('quest'); loadQuestDetail(quest.filepath, quest.id); };
-    
+
     // 내부 텍스트와 뱃지 스타일도 Tailwind로 변경
     card.innerHTML = `
         <div class="flex flex-col gap-1 overflow-hidden">
@@ -2467,7 +2483,7 @@ function renderChunjiList() {
     }
 
     // [페이징 계산]
-    const startIndex = (currentChunjiPage - 1) * itemsPerPage; 
+    const startIndex = (currentChunjiPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const pageData = currentChunjiData.slice(startIndex, endIndex);
 
@@ -2490,80 +2506,7 @@ function renderChunjiList() {
 
     renderChunjiPagination();
 }
-// [수정] 천지록 상세 보기 (get, dsec 필드 및 다중 이미지 대응)
-function loadChunjiDetail(item) {
-    const listView = document.getElementById('chunji-list-view');
-    const detailView = document.getElementById('chunji-detail-view');
-    const contentBox = document.getElementById('chunji-detail-content');
 
-    if (!listView || !detailView || !contentBox) return;
-
-    listView.style.display = 'none';
-    detailView.style.display = 'block';
-    
-    // 데이터 추출 및 줄바꿈 처리
-    const typeBadge = (item.type || item.subtype) ? `<span class="inline-block px-2 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-md mb-2">${item.type || item.subtype}</span>` : '';
-    const getText = item.get ? item.get.replace(/\n/g, '<br>') : "";
-    const dsecText = item.dsec ? item.dsec.replace(/\n/g, '<br>') : (item.desc || "").replace(/\n/g, '<br>');
-
-    // 이미지 배열 생성 (이미지가 있는 것만 필터링)
-    const images = [item.getimg1, item.getimg2, item.dsecimg1, item.dsecimg2, item.image].filter(img => img && img.trim() !== "");
-
-    let imagesHtml = '';
-    if (images.length > 0) {
-        imagesHtml = `<div class="grid grid-cols-1 gap-4 mt-8">`;
-        images.forEach(img => {
-            imagesHtml += `<img src="${img}" class="w-full rounded-2xl border border-gray-100 shadow-sm" onerror="this.style.display='none'">`;
-        });
-        imagesHtml += `</div>`;
-    }
-
-    // HTML 구성
-    contentBox.innerHTML = `
-        <div class="flex flex-col animate-in fade-in duration-300">
-            <div class="border-b border-gray-100 pb-5 mb-6">
-                ${typeBadge}
-                <h2 class="text-2xl font-black text-gray-900 leading-tight">${item.title}</h2>
-            </div>
-            
-            ${getText ? `
-                <div class="mb-6">
-                    <h4 class="text-sm font-bold text-blue-500 mb-2 flex items-center gap-1">
-                        <span class="text-base">🔍</span> 획득 방법
-                    </h4>
-                    <div class="text-[16px] text-gray-700 leading-relaxed font-medium bg-blue-50/30 p-4 rounded-xl border border-blue-100/50">
-                        ${getText}
-                    </div>
-                </div>
-            ` : ''}
-
-            ${dsecText ? `
-                <div class="mb-6">
-                    <h4 class="text-sm font-bold text-gray-400 mb-2 flex items-center gap-1">
-                        <span class="text-base">📝</span> 상세 설명
-                    </h4>
-                    <div class="text-[15px] text-gray-600 leading-relaxed break-keep">
-                        ${dsecText}
-                    </div>
-                </div>
-            ` : ''}
-
-            ${imagesHtml}
-
-            ${item.coords ? `
-                <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-3">
-                    <span class="text-lg">📍</span>
-                    <div class="flex flex-col">
-                        <span class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Coordinates</span>
-                        <span class="text-sm font-bold text-gray-900 select-all">${item.coords}</span>
-                    </div>
-                </div>
-            ` : ''}
-        </div>
-    `;
-
-    window.scrollTo(0, 0);
-}
 
 // [수정] 천지록 목록으로 돌아가기
 function showChunjiList() {
@@ -2654,16 +2597,16 @@ function renderChunjiList() {
     }
 
     // [페이징 계산]
-    const startIndex = (currentChunjiPage - 1) * itemsPerPage; 
+    const startIndex = (currentChunjiPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const pageData = currentChunjiData.slice(startIndex, endIndex);
 
     pageData.forEach((item) => {
         const div = document.createElement('div');
-        
+
         // ★ 핵심: 무림록과 동일한 Tailwind 카드 스타일 적용
         div.className = 'bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform hover:bg-gray-50';
-        
+
         div.onclick = () => loadChunjiDetail(item);
 
         div.innerHTML = `
@@ -4414,13 +4357,13 @@ async function fetchRankingData() {
     try {
         const response = await fetch('json/rank.json');
         const data = await response.json();
-        
+
         // [수정] 데이터를 불러온 즉시 점수(score) 높은 순으로 정렬합니다.
         pvpFullData = data.rankings.sort((a, b) => b.score - a.score);
         pvpLastUpdate = data.update_date;
 
         updatePvpRanking();
-        setInterval(updatePvpRanking, 6000); 
+        setInterval(updatePvpRanking, 6000);
     } catch (error) {
         console.error("데이터 로드 실패:", error);
     }
@@ -4429,7 +4372,7 @@ async function fetchRankingData() {
 function updatePvpRanking() {
     const listEl = document.getElementById('pvp-list');
     const pageEl = document.getElementById('pvp-page-indicator');
-    
+
     if (!listEl || pvpFullData.length === 0) return;
 
     const start = currentPvpPage * pvpItemsPerPage;
@@ -4440,10 +4383,10 @@ function updatePvpRanking() {
     listEl.innerHTML = currentList.map((p, i) => {
         // 실제 순위 계산: 현재 페이지 시작 번호 + 현재 리스트 내 순서 + 1
         const calculatedRank = start + i + 1;
-        
+
         // 계산된 순위를 바탕으로 1~3위 디자인 적용
         const rankClass = calculatedRank <= 3 ? `rank-${calculatedRank} top-3` : '';
-        
+
         return `
             <div class="rank-item ${rankClass}">
                 <div class="rank-num-text">${calculatedRank}</div>

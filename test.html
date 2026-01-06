@@ -26,6 +26,8 @@
             --text-sub: #8b95a1;      
             --border-color: #f2f4f6;  
             --input-bg: #fff;         
+            --btn-bg: #f9fafb;        
+            --btn-bg-active: #f2f4f6; 
             --primary: #3182f6;       
         }
 
@@ -35,14 +37,26 @@
         
         /* [헤더] */
         .app-header { background: var(--bg-main); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; height: 60px; }
+        
+        /* 메인 헤더 (검색바 + 햄버거) */
         #header-main-mode { width: 100%; display: flex; align-items: center; gap: 12px; }
         
-        .header-search-box { flex: 1; background: var(--input-bg); border-radius: 8px; height: 40px; display: flex; align-items: center; padding: 0 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .header-search-box { 
+            flex: 1; background: var(--input-bg); border-radius: 8px; height: 40px; 
+            display: flex; align-items: center; padding: 0 12px; 
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
         .header-search-input { background: transparent; border: none; width: 100%; height: 100%; font-size: 14px; outline: none; color: var(--text-main); margin-left: 8px; }
+        
         .header-menu-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #333; cursor: pointer; flex-shrink: 0; }
 
+        /* 디테일 헤더 (뒤로가기) */
         #header-detail-mode { width: 100%; display: none; align-items: center; gap: 10px; }
-        .header-back-btn { display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 700; color: var(--text-main); cursor: pointer; padding: 10px 0; }
+        .header-back-btn { 
+            display: flex; align-items: center; gap: 6px; 
+            font-size: 16px; font-weight: 700; color: var(--text-main); 
+            cursor: pointer; padding: 10px 0;
+        }
 
         /* [검색 결과창] */
         #global-search-results { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--bg-card); border-radius: 0 0 20px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 60; border-top: 1px solid var(--border-color); max-height:300px; overflow-y:auto; padding: 10px 0; }
@@ -51,21 +65,38 @@
         .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
 
         /* [청크(Chunk)] */
-        .toss-section { background: var(--bg-card); border-radius: 0; padding: 24px 20px; margin: 0; border-bottom: 8px solid var(--bg-main); }
+        .toss-section { 
+            background: var(--bg-card); 
+            border-radius: 0; 
+            padding: 24px 20px; 
+            margin: 0; 
+            border-bottom: 8px solid var(--bg-main); 
+        }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .section-title { font-size: 19px; font-weight: 800; color: var(--text-main); }
         
         .section-footer-btn {
-            display: block; width: 100%; text-align: center; padding: 12px 0; margin-top: 8px;
-            color: var(--primary); font-size: 13px; font-weight: 600; background: rgba(49, 130, 246, 0.08); border-radius: 8px; cursor: pointer; transition: background 0.2s;
+            display: block; width: 100%; text-align: center; 
+            padding: 12px 0; margin-top: 8px;
+            color: var(--primary); font-size: 13px; font-weight: 600; 
+            background: rgba(49, 130, 246, 0.08); 
+            border-radius: 8px; cursor: pointer; transition: background 0.2s;
         }
         .section-footer-btn:active { background: rgba(49, 130, 246, 0.15); }
 
-        /* [가로 스와이프 컨테이너] */
-        .h-scroll-wrapper { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+        /* [가로 스와이프] */
+        .h-scroll-wrapper {
+            display: flex; overflow-x: auto; gap: 12px; padding-bottom: 4px;
+            scroll-snap-type: x mandatory;
+        }
         .h-scroll-item {
-            flex: 0 0 32%; min-width: 110px; scroll-snap-align: start; display: flex; flex-direction: column;
-            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; cursor: pointer;
+            flex: 0 0 32%; min-width: 110px; scroll-snap-align: start;
+            display: flex; flex-direction: column;
+            background: var(--bg-card); 
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
         }
         .h-scroll-item:active { transform: scale(0.98); }
 
@@ -84,32 +115,48 @@
         .slide-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; z-index: 10; }
         .slide-title { font-size: 17px; font-weight: bold; margin-bottom: 4px; }
         .slide-tag { font-size: 10px; background: var(--primary); padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
+        .slide-link-btn { display:none; }
         .indicator { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
         .indicator.active { width: 15px; background: white; border-radius: 10px; }
 
         /* [가이드 스와이프] */
-        .guide-scroll-container { display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; scroll-snap-type: x mandatory; }
+        .guide-scroll-container {
+            display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px;
+            scroll-snap-type: x mandatory;
+        }
         @media (min-width: 1024px) {
             .guide-scroll-container { display: grid; grid-template-columns: repeat(6, 1fr); overflow-x: visible; }
             .guide-indicators { display: none !important; }
         }
-        .guide-icon-btn { flex: 0 0 22%; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .guide-icon-btn { 
+            flex: 0 0 22%; scroll-snap-align: start;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; 
+        }
         .guide-icon-btn:active { transform: scale(0.96); }
-        .guide-icon-box { width: 48px; height: 48px; border-radius: 18px; background: var(--bg-main); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 6px; }
+        .guide-icon-box { 
+            width: 48px; height: 48px; border-radius: 18px; 
+            background: var(--bg-main); display: flex; align-items: center; justify-content: center; 
+            font-size: 22px; margin-bottom: 6px; 
+        }
         .guide-icon-text { font-size: 11px; color: var(--text-sub); font-weight: 600; text-align: center; line-height: 1.3; white-space: nowrap; }
         .guide-indicators { display: flex; justify-content: center; gap: 4px; margin-top: 5px; }
         .g-dot { width: 6px; height: 6px; border-radius: 50%; background: #e5e7eb; transition: all 0.3s; }
         .g-dot.active { background: var(--primary); width: 12px; border-radius: 4px; }
 
-        /* [하단 탭바] */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); backdrop-filter: blur(10px); border-top: 1px solid var(--border-color); padding: 8px 20px 20px 20px; display: flex; justify-content: space-between; z-index: 100; }
+        /* [하단 탭바] - 글라스 효과 제거, 흰색 배경 */
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: #ffffff; /* 완전 흰색 */
+            border-top: 1px solid var(--border-color); padding: 8px 20px 20px 20px; 
+            display: flex; justify-content: space-between; z-index: 100; 
+        }
         .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-sub); width: 60px; cursor: pointer; }
         .nav-btn svg { width: 24px; height: 24px; }
         .nav-btn span { font-size: 10px; font-weight: 500; }
         .nav-btn.active { color: var(--text-main); }
         .nav-btn.active span { font-weight: 700; }
 
-        /* [리스트 아이템] - 무림록/천지록 */
+        /* [리스트 아이템] */
         .mansarok-btn, .chunji-item-card { 
             display: flex !important; align-items: center; justify-content: space-between !important; 
             padding: 12px 0 !important; border-bottom: 1px solid var(--border-color) !important; 
@@ -151,8 +198,8 @@
         .cd-img-container { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
         .cd-img { width: 100%; border-radius: 8px; border: 1px solid var(--border-color); object-fit: cover; }
         .nav-btn-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); }
-        .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: var(--text-sub); padding: 8px 12px; border-radius: 8px; transition: background 0.2s; }
-        .nav-move-btn:hover { background: var(--btn-bg-active); color: var(--primary); }
+        .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: #8b95a1; padding: 8px 12px; border-radius: 8px; transition: background 0.2s; }
+        .nav-move-btn:hover { background: #f2f4f6; color: #3182f6; }
         
         /* 인물 바텀시트 */
         .person-sheet-header { text-align: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
@@ -163,10 +210,18 @@
         .person-close-btn { width: 100%; padding: 14px; background: var(--text-main); color: var(--bg-card); border-radius: 12px; font-weight: 700; font-size: 15px; margin-top: 30px; cursor: pointer; }
 
         /* 사이드바 */
-        #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--bg-card); z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); color: var(--text-main); }
+        #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--bg-card); z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); color: var(--text-main); display: flex; flex-direction: column; }
         #main-sidebar.active { right: 0; }
         #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
         #sidebar-overlay.active { display: block; }
+        
+        /* 사이드바 내부 스타일 (복구) */
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border-color); }
+        .sidebar-back-btn { font-size: 24px; color: #333; cursor: pointer; }
+        .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 15px 0; font-size: 16px; font-weight: 600; color: #333; cursor: pointer; border-bottom: 1px solid #f9f9f9; }
+        .sidebar-menu-group { margin-bottom: 30px; }
+        .sidebar-group-title { font-size: 12px; color: #999; font-weight: bold; margin-bottom: 10px; }
+        .sidebar-icon { font-size: 20px; }
     </style>
 </head>
 
@@ -199,6 +254,47 @@
         
         <div id="global-search-results"></div>
     </header>
+
+    <aside id="main-sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-back-btn" onclick="closeSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </div>
+            <div style="font-weight:bold; font-size:16px;">전체 메뉴</div>
+            <div style="width:24px;"></div>
+        </div>
+        
+        <div style="padding:20px; overflow-y:auto;">
+            <div class="sidebar-menu-group">
+                <div class="sidebar-group-title">바로가기</div>
+                <div class="sidebar-item" onclick="switchTab('home'); closeSidebar();">
+                    <span class="sidebar-icon">🏠</span> 홈
+                </div>
+                <div class="sidebar-item" onclick="switchTab('todo'); closeSidebar();">
+                    <span class="sidebar-icon">⏰</span> 오늘의 할 일
+                </div>
+                <div class="sidebar-item" onclick="switchTab('quest'); closeSidebar();">
+                    <span class="sidebar-icon">📜</span> 무림록
+                </div>
+                <div class="sidebar-item" onclick="switchTab('chunji'); closeSidebar();">
+                    <span class="sidebar-icon">🏺</span> 천지록
+                </div>
+            </div>
+
+            <div class="sidebar-menu-group">
+                <div class="sidebar-group-title">커뮤니티</div>
+                <div class="sidebar-item" onclick="switchTab('quiz'); closeSidebar();">
+                    <span class="sidebar-icon">❓</span> 스무고개 족보
+                </div>
+                <div class="sidebar-item" onclick="openGuideDirect('code.html'); closeSidebar();">
+                    <span class="sidebar-icon">🎫</span> 교환 코드
+                </div>
+                <div class="sidebar-item" onclick="openReportSheet(); closeSidebar();">
+                    <span class="sidebar-icon">📢</span> 제보하기
+                </div>
+            </div>
+        </div>
+    </aside>
 
     <main id="main-content">
         
@@ -378,20 +474,50 @@
             <button onclick="closeInfoModal()" class="w-full mt-4 bg-gray-100 py-3 rounded-xl font-bold text-gray-700">닫기</button>
         </div>
     </div>
+    
+    <div id="report-sheet-modal" class="fixed inset-0 z-[9999] hidden">
+        <div class="absolute inset-0 bg-black/50 transition-opacity" onclick="closeReportSheet()"></div>
+        <div class="absolute bottom-0 w-full bg-white rounded-t-3xl p-6 transition-transform transform translate-y-full duration-300 ease-out" style="max-height: 80vh; overflow-y: auto;">
+            <div class="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-6"></div>
+            <div class="flex border-b border-gray-200 mb-4">
+                <button onclick="switchReportTab('report', this)" class="sheet-tab-btn flex-1 py-3 text-center text-sm font-bold text-gray-800 border-b-2 border-black active">제보하기</button>
+                <button onclick="switchReportTab('gift', this)" class="sheet-tab-btn flex-1 py-3 text-center text-sm font-bold text-gray-400 border-b-2 border-transparent">후원하기</button>
+            </div>
+            <div id="tab-content-report">
+                <div class="bg-gray-50 p-4 rounded-xl mb-4 text-sm text-gray-600 leading-relaxed">
+                    오류 제보나 새로운 정보는 언제나 환영합니다.<br>
+                    여러분의 제보가 연운 위키를 만듭니다!
+                </div>
+                <button onclick="window.open('https://open.kakao.com/o/sXW3q9bg', '_blank')" class="w-full py-4 bg-[#FEE500] rounded-xl font-bold text-[#3c1e1e] flex items-center justify-center gap-2">
+                    💬 카카오톡으로 제보하기
+                </button>
+            </div>
+            <div id="tab-content-gift" style="display:none;">
+                <div class="text-center py-6">
+                    <div class="text-4xl mb-2">☕</div>
+                    <h3 class="text-lg font-bold mb-2">개발자에게 커피 한 잔</h3>
+                    <p class="text-sm text-gray-500 mb-6">서버 운영과 개발에 큰 힘이 됩니다.</p>
+                    <div class="bg-gray-100 p-4 rounded-xl text-center font-mono text-sm text-gray-700 select-all">
+                        kakaopay 3333-01-0000000
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="hw.js"></script>
     <script src="script.js"></script>
     <script src="timer.js"></script>
 
     <script>
-        // [데이터 직접 로드 함수] - script.js 의존성 낮춤
+        // [데이터 직접 로드 함수]
         async function loadDataDirectly() {
             // 무림록 데이터 로드
             try {
                 const qRes = await fetch('json/quests.json');
                 const qData = await qRes.json();
                 window.globalData = window.globalData || {};
-                window.globalData.quests = qData; // 전역 변수 동기화
+                window.globalData.quests = qData; 
                 renderMansarokDirect(qData);
             } catch(e) { console.error("무림록 로드 실패", e); }
 
@@ -399,7 +525,7 @@
             try {
                 const cRes = await fetch('json/chunji.json');
                 const cData = await cRes.json();
-                window.chunjiData = cData; // 전역 변수 동기화
+                window.chunjiData = cData; 
                 renderChunjiDirect(cData);
             } catch(e) { console.error("천지록 로드 실패", e); }
         }
@@ -410,7 +536,7 @@
             const tabList = document.getElementById('mansarok-list');
             const filtered = data.filter(item => !['지과', '보스 공략'].includes(item.type));
             
-            // 1. 홈 스와이프 (9개)
+            // 1. 홈 스와이프
             if(homeSwipe) {
                 homeSwipe.innerHTML = '';
                 filtered.slice(0, 9).forEach(item => {
@@ -423,7 +549,7 @@
                 });
             }
 
-            // 2. 탭 리스트 (초기 20개만 렌더링, 전체는 script.js의 renderQuestList가 담당)
+            // 2. 탭 리스트
             if(tabList) {
                 tabList.innerHTML = '';
                 filtered.slice(0, 20).forEach(item => {
@@ -440,9 +566,8 @@
         // [천지록 렌더링 (홈 + 탭)]
         function renderChunjiDirect(data) {
             const homeSwipe = document.getElementById('home-chunji-swipe');
-            const tabList = document.getElementById('chunji-list-container'); // 여기서는 임시로 보여주고 script.js가 덮어씀
             
-            // 1. 홈 스와이프 (9개)
+            // 1. 홈 스와이프
             if(homeSwipe) {
                 homeSwipe.innerHTML = '';
                 data.slice(0, 9).forEach(item => {
@@ -538,7 +663,6 @@
             `;
 
             let navHtml = '<div class="nav-btn-row">';
-            // 단순화된 네비게이션 (이전/다음 ID 계산은 복잡하므로 생략하거나 script.js의 로직 활용)
             navHtml += `<div onclick="switchTab('quest')" class="nav-move-btn" style="width:100%; text-align:center;">목록으로</div>`;
             navHtml += '</div>';
 
@@ -617,7 +741,6 @@
             const homeContainer = document.getElementById('home-timer-swipe');
             const tabContainer = document.getElementById('gangho-timer-list-tab');
 
-            // TIMERS가 로드되지 않았으면 대기
             if (typeof TIMERS === 'undefined') return;
 
             const now = new Date();
@@ -688,6 +811,31 @@
             const timer = TIMERS.find(t => t.name === name);
             if(timer) openTimerSheet(timer);
         }
+        
+        // 제보 팝업 (CSS 제어로 변경)
+        function closeReportSheet() { 
+            const sheet = document.getElementById('report-sheet-modal');
+            sheet.querySelector('div[class*="absolute bottom-0"]').classList.add('translate-y-full');
+            setTimeout(() => { sheet.classList.add('hidden'); }, 300);
+        }
+        function openReportSheet() { 
+            const sheet = document.getElementById('report-sheet-modal');
+            sheet.classList.remove('hidden'); 
+            setTimeout(() => {
+                sheet.querySelector('div[class*="absolute bottom-0"]').classList.remove('translate-y-full');
+            }, 10);
+        }
+        function switchReportTab(tab, btn) {
+            document.querySelectorAll('.sheet-tab-btn').forEach(b => {
+                b.classList.remove('border-black', 'text-gray-800');
+                b.classList.add('border-transparent', 'text-gray-400');
+            });
+            btn.classList.remove('border-transparent', 'text-gray-400');
+            btn.classList.add('border-black', 'text-gray-800');
+            
+            document.getElementById('tab-content-report').style.display = tab === 'report' ? 'block' : 'none';
+            document.getElementById('tab-content-gift').style.display = tab === 'gift' ? 'block' : 'none';
+        }
 
         window.switchTab = function(tabName) {
             // 탭 전환 시 항상 메인 헤더로 복귀
@@ -740,6 +888,7 @@
         }, 1000);
         
         window.addEventListener('DOMContentLoaded', () => {
+             if(typeof renderHomeChunjiOverride === 'function') renderHomeChunjiOverride();
              loadDataDirectly(); // 데이터 강제 로드
         });
     </script>

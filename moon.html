@@ -1,169 +1,143 @@
-<div class="quest-detail-container" style="text-align: left;">
+<div class="max-w-4xl mx-auto space-y-8 p-4 lg:p-0">
     
-    <style>
-        /* [수묵화 테마] 문파 가이드 전용 스타일 */
-        .sect-card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .sect-card {
-            background-color: #fff;
-            border: 1px solid #eee;
-            border-left: 4px solid var(--wuxia-accent-gold);
-            border-radius: 4px;
-            padding: 15px;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        }
-        .sect-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--wuxia-accent-gold);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-        .sect-name {
-            font-family: 'Noto Serif KR', serif;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: var(--wuxia-text-main);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .sect-method {
-            font-size: 0.9em;
-            color: var(--wuxia-text-sub);
-            line-height: 1.6;
-        }
-        .sect-badge {
-            font-size: 0.7em;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-weight: bold;
-            margin-left: auto;
-        }
-        .badge-join { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
-        .badge-limit { background-color: #fff3e0; color: #e65100; border: 1px solid #ffcc80; }
-        .badge-none { background-color: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
-        
-        .warn-box {
-            background-color: #fffcf5;
-            border: 1px solid var(--wuxia-accent-gold);
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 30px;
-        }
-    </style>
-
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
-        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            문파 입문 가이드
-        </h2>
-        <p style="color: var(--wuxia-text-sub); font-size: 0.9em; margin-top: 5px;">강호의 소속을 정하고 고유의 무공과 외형을 획득하십시오.</p>
+    <div class="border-b-2 border-blue-600 pb-6 mb-6">
+        <div class="flex items-center gap-3 mb-2">
+            <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">문파</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">문파 입문 가이드</h2>
+        <p class="text-gray-500 text-[14px] mt-2 font-medium">강호의 소속을 정하고 고유의 무공과 외형을 획득하십시오.</p>
     </div>
 
-    <div class="warn-box">
-        <p style="margin: 0 0 10px 0; color: var(--wuxia-accent-red); font-weight: bold;">
+    <section class="bg-amber-50 rounded-2xl border border-amber-100 p-5 lg:p-6 shadow-sm">
+        <h3 class="text-[16px] font-bold text-amber-900 mb-3 flex items-center gap-2">
             📍 가입 전 필수 확인 사항
-        </p>
-        <ul style="margin: 0; color: var(--wuxia-text-main); font-size: 0.9em; line-height: 1.7; padding-left: 20px;">
-            <li>문파 고유의 <strong>외형 및 특수 보너스</strong>를 획득할 수 있습니다.</li>
-            <li>주간 과제 미이행 시 문파 점수가 차감되며, 문파마다 상점 구성이 다릅니다.</li>
-            <li>탈퇴 시 <strong>재사용 대기 시간 및 불이익</strong>이 발생하니 신중히 결정하십시오.</li>
+        </h3>
+        <ul class="space-y-2.5">
+            <li class="flex items-start gap-2.5 text-[14px] text-amber-800/90 leading-relaxed">
+                <span class="mt-1.5 w-1 h-1 bg-amber-400 rounded-full shrink-0"></span>
+                <span>문파 고유의 <strong>외형 및 특수 보너스</strong>를 획득할 수 있습니다.</span>
+            </li>
+            <li class="flex items-start gap-2.5 text-[14px] text-amber-800/90 leading-relaxed">
+                <span class="mt-1.5 w-1 h-1 bg-amber-400 rounded-full shrink-0"></span>
+                <span>주간 과제 미이행 시 문파 점수가 차감되며, 문파마다 상점 구성이 다릅니다.</span>
+            </li>
+            <li class="flex items-start gap-2.5 text-[14px] text-amber-800/90 leading-relaxed">
+                <span class="mt-1.5 w-1 h-1 bg-amber-400 rounded-full shrink-0"></span>
+                <span>탈퇴 시 <strong>재사용 대기 시간 및 불이익</strong>이 발생하니 신중히 결정하십시오.</span>
+            </li>
         </ul>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-blue-100 transition-all">
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-[17px] font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-user-slash text-gray-400"></i> 미소속
+                </h4>
+                <span class="px-2 py-0.5 bg-green-50 text-green-600 border border-green-100 rounded text-[10px] font-bold">기본</span>
+            </div>
+            <p class="text-[13px] text-gray-500 leading-relaxed">
+                문파에 가입하지 않은 초기 상태입니다.<br>
+                <strong class="text-gray-700">전용 보상:</strong> 먹빛 옷자락, 소막의 가리개 구매 가능
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-blue-100 transition-all">
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-[17px] font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-leaf text-green-500"></i> 청천문
+                </h4>
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px] font-bold">가입 가능</span>
+            </div>
+            <div class="text-[13px] text-gray-500 leading-relaxed space-y-1">
+                <p>1. 장일호의 모든 퀘스트 라인 완료</p>
+                <p>2. 단기간에 많은 양의 장명옥 사용 시 초대장 발송</p>
+                <p class="text-[11px] text-red-500 font-medium">* 선택에 따라 구류문으로 경로가 바뀔 수 있음</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-blue-100 transition-all">
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-[17px] font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-mortar-pestle text-emerald-500"></i> 청계관
+                </h4>
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px] font-bold">가입 가능</span>
+            </div>
+            <p class="text-[13px] text-gray-500 leading-relaxed">
+                현자의 언덕 동북의원에 있는 <strong class="text-gray-700 font-bold">원박사</strong>의 퀘스트를 모두 완료하십시오.
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-blue-100 transition-all">
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-[17px] font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-sun text-orange-400"></i> 삼경천
+                </h4>
+                <span class="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px] font-bold">가입 가능</span>
+            </div>
+            <p class="text-[13px] text-gray-500 leading-relaxed">
+                선묘주 근처 삼경천 인도자 <strong class="text-gray-700 font-bold">일천제</strong>의 퀘스트 라인을 수행하십시오.<br>
+                <span class="text-[11px] font-medium text-gray-400">* 진짜 영패를 전달해야 합니다.</span>
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-red-100 shadow-sm p-5 hover:shadow-md transition-all">
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-[17px] font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-skull text-red-500"></i> 구류문
+                </h4>
+                <span class="px-2 py-0.5 bg-red-50 text-red-600 border border-red-100 rounded text-[10px] font-bold">특수 가입</span>
+            </div>
+            <div class="text-[13px] text-gray-500 leading-relaxed space-y-1">
+                <p>1. 삼경천 퀘스트 중 <strong class="text-gray-700 font-bold">가짜 영패</strong>를 전달</p>
+                <p>2. 풍화촌 입구에서 보석을 훔친 뒤 가입 제의 수락</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-blue-100 transition-all">
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-[17px] font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-music text-purple-500"></i> 취화음
+                </h4>
+                <span class="px-2 py-0.5 bg-orange-50 text-orange-600 border border-orange-100 rounded text-[10px] font-bold">조건부</span>
+            </div>
+            <div class="text-[13px] text-gray-500 leading-relaxed space-y-1">
+                <p>1. 개봉 도착 후 1주일 내 2명과 협연 관계 달성</p>
+                <p>2. 협연 및 해제 반복 후 24시간 조정 기간 거쳐 재반복</p>
+                <p class="text-[11px] font-medium text-gray-400">* 외형 점수 가입은 현재 글로벌 서버 불가</p>
+            </div>
+        </div>
+
+        <div class="bg-gray-50/50 rounded-2xl border border-gray-100 shadow-sm p-5 opacity-80">
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-[17px] font-bold text-gray-400 flex items-center gap-2">
+                    <i class="fas fa-mask"></i> 광란문
+                </h4>
+                <span class="px-2 py-0.5 bg-gray-100 text-gray-500 border border-gray-200 rounded text-[10px] font-bold">가입 불가</span>
+            </div>
+            <p class="text-[13px] text-gray-400 leading-relaxed">
+                신선나루 시일배의 힌트를 토대로 <strong class="text-gray-500">천, 지, 일, 조</strong> 네 가지 펜던트를 찾아 전달해야 합니다.
+            </p>
+        </div>
+
+        <div class="bg-gray-50/50 rounded-2xl border border-gray-100 shadow-sm p-5 opacity-80">
+            <div class="flex items-center justify-between mb-3">
+                <h4 class="text-[17px] font-bold text-gray-400 flex items-center gap-2">
+                    <i class="fas fa-guitar"></i> 이원
+                </h4>
+                <span class="px-2 py-0.5 bg-gray-100 text-gray-500 border border-gray-200 rounded text-[10px] font-bold">가입 불가</span>
+            </div>
+            <p class="text-[13px] text-gray-400 leading-relaxed">
+                멀티 모드로 번루 근처 NPC 접선. 연주를 통해 <strong class="text-gray-500">좋아요 10개 이상</strong> 획득 미션 완료 시 가입됩니다.
+            </p>
+        </div>
+
     </div>
 
-    <div class="sect-card-grid">
-        
-        <div class="sect-card" style="border-left-color: #aaa;">
-            <div class="sect-name">
-                <i class="fas fa-user-slash"></i> 미소속
-                <span class="sect-badge badge-join">기본</span>
-            </div>
-            <div class="sect-method">
-                문파에 가입하지 않은 초기 상태입니다.<br>
-                <strong>전용 보상:</strong> 먹빛 옷자락, 소막의 가리개 구매 가능
-            </div>
-        </div>
-
-        <div class="sect-card">
-            <div class="sect-name">
-                <i class="fas fa-leaf"></i> 청천문
-                <span class="sect-badge badge-join">가입 가능</span>
-            </div>
-            <div class="sect-method">
-                1. 장일호의 모든 퀘스트 라인 완료<br>
-                2. 단기간에 많은 양의 장명옥 사용 시 초대장 발송<br>
-                <small style="color: #b71c1c;">* 선택에 따라 구류문으로 경로가 바뀔 수 있음</small>
-            </div>
-        </div>
-
-        <div class="sect-card">
-            <div class="sect-name">
-                <i class="fas fa-mortar-pestle"></i> 청계관
-                <span class="sect-badge badge-join">가입 가능</span>
-            </div>
-            <div class="sect-method">
-                현자의 언덕 동북의원에 있는 <strong>원박사</strong>의 퀘스트를 모두 완료하십시오.
-            </div>
-        </div>
-
-        <div class="sect-card">
-            <div class="sect-name">
-                <i class="fas fa-sun"></i> 삼경천
-                <span class="sect-badge badge-join">가입 가능</span>
-            </div>
-            <div class="sect-method">
-                선묘주 근처 삼경천 인도자 <strong>일천제</strong>의 퀘스트 라인을 수행하십시오.<br>
-                <small>* 진짜 영패를 전달해야 합니다.</small>
-            </div>
-        </div>
-
-        <div class="sect-card" style="border-left-color: var(--wuxia-accent-red);">
-            <div class="sect-name">
-                <i class="fas fa-skull"></i> 구류문
-                <span class="sect-badge badge-join">특수 가입</span>
-            </div>
-            <div class="sect-method">
-                1. 삼경천 퀘스트 중 <strong>가짜 영패</strong>를 전달<br>
-                2. 풍화촌 입구에서 보석을 훔친 뒤 가입 제의 수락
-            </div>
-        </div>
-
-        <div class="sect-card">
-            <div class="sect-name">
-                <i class="fas fa-music"></i> 취화음
-                <span class="sect-badge badge-limit">조건부</span>
-            </div>
-            <div class="sect-method">
-                1. 개봉 도착 후 1주일 내 2명과 협연 관계 달성<br>
-                2. 협연 및 해제 반복 후 24시간 조정 기간 거쳐 재반복<br>
-                <small>* 외형 점수 가입은 현재 글로벌 서버 불가</small>
-            </div>
-        </div>
-
-        <div class="sect-card" style="opacity: 0.8;">
-            <div class="sect-name">
-                <i class="fas fa-mask"></i> 광란문
-                <span class="sect-badge badge-none">가입 불가</span>
-            </div>
-            <div class="sect-method">
-                신선나루 시일배의 힌트를 토대로 <strong>천, 지, 일, 조</strong> 네 가지 펜던트를 찾아 전달해야 합니다.
-            </div>
-        </div>
-
-        <div class="sect-card" style="opacity: 0.8;">
-            <div class="sect-name">
-                <i class="fas fa-guitar"></i> 이원
-                <span class="sect-badge badge-none">가입 불가</span>
-            </div>
-            <div class="sect-method">
-                멀티 모드로 번루 근처 NPC 접선. 연주를 통해 <strong>좋아요 10개 이상</strong> 획득 미션 완료 시 가입됩니다.
-            </div>
-        </div>
-
+    <div class="pt-8 text-center border-t border-dashed border-gray-200">
+        <p class="text-gray-400 text-[12px] font-medium">
+            ※ 문파 가입 조건은 게임 업데이트에 따라 변경될 수 있습니다.
+        </p>
     </div>
 </div>

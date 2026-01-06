@@ -4399,3 +4399,61 @@ window.openBossTab = function(phase, btn) {
     btn.classList.add('active-tab-style');
     btn.classList.remove('text-gray-500', 'hover:bg-white/50');
 };
+
+/**
+ * [운기조식] 심력 계산 로직 복구 및 최적화
+ */
+window.calculateTime = function() {
+    const inputEl = document.getElementById('currentPoint');
+    const val = parseInt(inputEl.value);
+
+    // 1. 유효성 검사
+    if (isNaN(val) || val < 0 || val > 499) {
+        alert("0에서 499 사이의 숫자를 입력하시오.");
+        inputEl.focus();
+        return;
+    }
+
+    // 2. 계산 로직 (9분당 1포인트 회복)
+    const needed = 500 - val;
+    const totalMinutes = needed * 9;
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+
+    // 3. 결과 텍스트 주입
+    document.getElementById('remainText').innerText = `${hours}시간 ${mins}분`;
+
+    // 4. 완료 예정 시각 계산
+    const now = new Date();
+    const finishDate = new Date(now.getTime() + totalMinutes * 60000);
+    const timeOption = { hour: '2-digit', minute: '2-digit' };
+    const finishTimeStr = finishDate.toLocaleTimeString([], timeOption);
+    
+    document.getElementById('dateText').innerText = `완료 예정 시간: ${finishTimeStr}`;
+
+    // 5. 화면 전환 (Tailwind hidden 클래스 완벽 제어)
+    const inputScreen = document.getElementById('input-screen');
+    const resultScreen = document.getElementById('result-screen');
+
+    if (inputScreen && resultScreen) {
+        inputScreen.classList.add('hidden'); // 입력창 숨김
+        resultScreen.classList.remove('hidden'); // 결과창 표시
+        resultScreen.style.display = 'block'; // 강제 표시 (안전장치)
+    }
+};
+
+/**
+ * 계산기 초기화 로직
+ */
+window.resetCalculator = function() {
+    const inputScreen = document.getElementById('input-screen');
+    const resultScreen = document.getElementById('result-screen');
+
+    if (inputScreen && resultScreen) {
+        document.getElementById('currentPoint').value = '';
+        inputScreen.classList.remove('hidden');
+        inputScreen.style.display = 'block';
+        resultScreen.classList.add('hidden');
+        resultScreen.style.display = 'none';
+    }
+};

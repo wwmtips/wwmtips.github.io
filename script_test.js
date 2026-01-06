@@ -2490,7 +2490,7 @@ function renderChunjiList() {
 
     renderChunjiPagination();
 }
-// [수정] 천지록 상세 보기 (Tailwind CSS 디자인 적용)
+// [수정] 천지록 상세 보기 (get, dsec 필드 및 다중 이미지 대응)
 function loadChunjiDetail(item) {
     const listView = document.getElementById('chunji-list-view');
     const detailView = document.getElementById('chunji-detail-view');
@@ -2498,47 +2498,70 @@ function loadChunjiDetail(item) {
 
     if (!listView || !detailView || !contentBox) return;
 
-    // 1. 화면 전환 (리스트 숨김 -> 상세 보임)
     listView.style.display = 'none';
     detailView.style.display = 'block';
     
-    // 2. 데이터 가공
-    const typeBadge = item.type ? `<span class="inline-block px-2.5 py-1 mb-3 text-xs font-bold text-blue-600 bg-blue-50 rounded-lg">${item.type}</span>` : '';
-    
-    // 줄바꿈 처리 (데이터에 \n이 있을 경우 <br>로 변환)
-    const descText = (item.desc || item.content || "내용이 없습니다.").replace(/\n/g, '<br>');
-    
-    // 이미지 처리 (이미지 경로가 있다면 표시)
-    let imageHtml = '';
-    if (item.image) {
-        imageHtml = `<img src="${item.image}" class="w-full rounded-xl mt-6 shadow-sm border border-gray-100" onerror="this.style.display='none'">`;
+    // 데이터 추출 및 줄바꿈 처리
+    const typeBadge = (item.type || item.subtype) ? `<span class="inline-block px-2 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-md mb-2">${item.type || item.subtype}</span>` : '';
+    const getText = item.get ? item.get.replace(/\n/g, '<br>') : "";
+    const dsecText = item.dsec ? item.dsec.replace(/\n/g, '<br>') : (item.desc || "").replace(/\n/g, '<br>');
+
+    // 이미지 배열 생성 (이미지가 있는 것만 필터링)
+    const images = [item.getimg1, item.getimg2, item.dsecimg1, item.dsecimg2, item.image].filter(img => img && img.trim() !== "");
+
+    let imagesHtml = '';
+    if (images.length > 0) {
+        imagesHtml = `<div class="grid grid-cols-1 gap-4 mt-8">`;
+        images.forEach(img => {
+            imagesHtml += `<img src="${img}" class="w-full rounded-2xl border border-gray-100 shadow-sm" onerror="this.style.display='none'">`;
+        });
+        imagesHtml += `</div>`;
     }
 
-    // 좌표 정보 (있다면 표시)
-    const coordHtml = item.coords ? `
-        <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-2 text-sm text-gray-600 font-medium">
-            <span>📍</span>
-            <span>좌표: <span class="text-gray-900 font-bold select-all">${item.coords}</span></span>
-        </div>` : '';
-
-    // 3. HTML 주입 (카드형 디자인)
+    // HTML 구성
     contentBox.innerHTML = `
-        <div class="flex flex-col">
-            <div class="border-b border-gray-100 pb-5 mb-5">
+        <div class="flex flex-col animate-in fade-in duration-300">
+            <div class="border-b border-gray-100 pb-5 mb-6">
                 ${typeBadge}
-                <h1 class="text-2xl font-black text-gray-900 leading-tight break-keep">${item.title}</h1>
+                <h2 class="text-2xl font-black text-gray-900 leading-tight">${item.title}</h2>
             </div>
             
-            <div class="text-[15px] text-gray-700 leading-relaxed font-medium break-keep">
-                ${descText}
-            </div>
+            ${getText ? `
+                <div class="mb-6">
+                    <h4 class="text-sm font-bold text-blue-500 mb-2 flex items-center gap-1">
+                        <span class="text-base">🔍</span> 획득 방법
+                    </h4>
+                    <div class="text-[16px] text-gray-700 leading-relaxed font-medium bg-blue-50/30 p-4 rounded-xl border border-blue-100/50">
+                        ${getText}
+                    </div>
+                </div>
+            ` : ''}
 
-            ${imageHtml}
-            ${coordHtml}
+            ${dsecText ? `
+                <div class="mb-6">
+                    <h4 class="text-sm font-bold text-gray-400 mb-2 flex items-center gap-1">
+                        <span class="text-base">📝</span> 상세 설명
+                    </h4>
+                    <div class="text-[15px] text-gray-600 leading-relaxed break-keep">
+                        ${dsecText}
+                    </div>
+                </div>
+            ` : ''}
+
+            ${imagesHtml}
+
+            ${item.coords ? `
+                <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center gap-3">
+                    <span class="text-lg">📍</span>
+                    <div class="flex flex-col">
+                        <span class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Coordinates</span>
+                        <span class="text-sm font-bold text-gray-900 select-all">${item.coords}</span>
+                    </div>
+                </div>
+            ` : ''}
         </div>
     `;
 
-    // 스크롤 최상단으로 이동
     window.scrollTo(0, 0);
 }
 
@@ -2712,44 +2735,6 @@ function changeChunjiPage(page) {
 }
 
 // 5. 상세 보기
-function loadChunjiDetail(item) {
-    const listView = document.getElementById('chunji-list-view');
-    const detailView = document.getElementById('chunji-detail-view');
-    const content = document.getElementById('chunji-detail-content');
-
-    if (listView) listView.style.display = 'none';
-    if (detailView) detailView.style.display = 'block';
-
-    if (item.id) updateUrlQuery('chunji', item.id);
-
-    const imgTag = (src) => src ? `<div class="detail-img-wrapper"><img src="${src}" alt="참고 이미지"></div>` : '';
-
-    content.innerHTML = `
-        <div class="chunji-header-area">
-            <span class="chunji-badge">천지록</span>
-            <h2 class="chunji-main-title">${item.title}</h2>
-        </div>
-
-        <div class="chunji-section">
-            <h3 class="chunji-sub-title">획득 방법</h3>
-            <p class="chunji-text">${item.get || '정보가 없습니다.'}</p>
-            <div class="chunji-img-grid">
-                ${imgTag(item.getimg1)}
-                ${imgTag(item.getimg2)}
-            </div>
-        </div>
-
-        <div class="chunji-section">
-            <h3 class="chunji-sub-title">해독 방법</h3>
-            <p class="chunji-text">${item.dsec || '정보가 없습니다.'}</p>
-            <div class="chunji-img-grid">
-                ${imgTag(item.dsecimg1)}
-                ${imgTag(item.dsecimg2)}
-            </div>
-        </div>
-    `;
-    window.scrollTo(0, 0);
-}
 
 // 6. 목록으로 돌아가기
 function showChunjiList() {

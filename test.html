@@ -14,133 +14,57 @@
     </script>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f2f4f6; color: #191f28; -webkit-tap-highlight-color: transparent; }
+        /* [토스 스타일 기본 테마] */
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f2f4f6; color: #191f28; -webkit-tap-highlight-color: transparent; padding-bottom: 80px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
-
-        /* [핵심] 버튼 스타일 (무림록/천지록 공통 - 40px 고정, 가로 정렬) */
-        .mansarok-btn, .chunji-item-card { 
-            display: flex; align-items: center; justify-content: center; 
-            background-color: white; border-radius: 12px; 
-            border: 1px solid #f2f4f6; 
-            color: #333; font-weight: 600; font-size: 13px; 
-            cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.03); 
-            transition: all 0.2s; margin-bottom: 0;
-            
-            /* 높이 40px 고정 */
-            height: 40px !important;
-            min-height: 40px !important;
-            padding: 0 8px !important;
-            flex-direction: row; gap: 6px;
-        }
-        .mansarok-btn:active, .chunji-item-card:active { transform: scale(0.98); }
-        .mansarok-btn:hover, .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
         
-        .mansarok-btn span, .chunji-card-title { 
-            width: 100%; word-break: keep-all; white-space: nowrap; 
-            overflow: hidden; text-overflow: ellipsis; 
-            font-size: 13px; font-weight: 600; color: inherit;
-        }
-
-        /* [천지록 상세 화면 디자인] */
-        .chunji-detail-card {
-            background-color: white; border-radius: 20px; padding: 24px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f2f4f6; margin-bottom: 20px;
-        }
-        .cd-header { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .cd-title { font-size: 22px; font-weight: 800; color: #191f28; margin-bottom: 6px; }
-        .cd-badge { display: inline-block; background: #f0f4f8; color: #4e5968; font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 600; }
-        .cd-section { margin-bottom: 24px; }
-        .cd-subtitle { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 8px; display: flex; align-items: center; }
-        .cd-subtitle::before { content: ''; display: inline-block; width: 4px; height: 14px; background: #3182f6; margin-right: 8px; border-radius: 2px; }
-        .cd-text { font-size: 14px; color: #555; line-height: 1.6; background: #fafafa; padding: 12px; border-radius: 8px; white-space: pre-line; }
-        .cd-img-container { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 10px; }
-        .cd-img-container.grid-2 { grid-template-columns: 1fr 1fr; }
-        .cd-img { width: 100%; border-radius: 8px; border: 1px solid #eee; object-fit: cover; }
+        /* [헤더] - 심플 모드 & 검색 모드 */
+        .app-header { background: #fff; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; height: 60px; }
+        .header-default { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .app-logo { font-size: 22px; font-weight: 900; color: #191f28; letter-spacing: -0.5px; }
+        .header-actions { display: flex; align-items: center; gap: 8px; }
         
-        .nav-btn-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-        .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: #666; padding: 8px 12px; border-radius: 8px; transition: background 0.2s; }
-        .nav-move-btn:hover { background: #f5f5f5; color: #3182f6; }
-
-        /* [타이머 리스트] */
-        .timer-row {
-            background-color: white; border-radius: 20px; padding: 18px 20px; margin-bottom: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); border: 1px solid #f2f4f6; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center; transition: all 0.2s;
-        }
-        .timer-row:active { transform: scale(0.98); background-color: #fafafa; }
-        .timer-info { display: flex; flex-direction: column; gap: 4px; }
-        .timer-name { font-size: 16px; font-weight: 700; color: #191f28; display: flex; align-items: center; gap: 6px; }
-        .timer-desc { font-size: 12px; color: #8b95a1; display: flex; align-items: center; gap: 6px; }
-        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 15px; font-weight: 600; color: #333; text-align: right; }
-        .timer-clock.urgent { color: #e53935; animation: blink 2s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .status-badge { padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; color: white; }
-        .status-ing { background-color: #3182f6; } .status-urgent { background-color: #e53935; } 
-        .status-event { background-color: #f59e0b; } .status-end { background-color: #9e9e9e; }
-        .timer-progress { font-size: 11px; font-weight: 700; color: #3182f6; background-color: #e8f3ff; padding: 2px 8px; border-radius: 12px; }
-
-        /* [바텀시트] */
-        #timer-sheet-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 9999; 
-            display: none; opacity: 0; transition: opacity 0.2s;
-            backdrop-filter: blur(2px);
-        }
-        #timer-sheet-modal.show { display: block; opacity: 1; }
-        .sheet-container {
-            position: absolute; bottom: 0; width: 100%; background: white;
-            border-top-left-radius: 24px; border-top-right-radius: 24px;
-            padding: 24px 24px 40px 24px;
-            transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            max-height: 85vh; overflow-y: auto;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-        }
-        #timer-sheet-modal.show .sheet-container { transform: translateY(0); }
-        .sheet-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 24px auto; }
+        /* 검색 모드 (초기 숨김) */
+        .header-search-mode { width: 100%; display: none; align-items: center; }
+        .header-search-box { flex: 1; background: #f2f4f6; border-radius: 8px; height: 40px; display: flex; align-items: center; padding: 0 12px; }
+        .header-search-input { background: transparent; border: none; width: 100%; height: 100%; font-size: 15px; outline: none; color: #333; margin-left: 8px; }
         
-        /* 체크리스트 아이템 */
-        .task-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px dashed #f0f0f0; cursor: pointer; }
-        .task-item:last-child { border-bottom: none; }
-        .task-left { display: flex; align-items: center; gap: 12px; }
-        .task-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #e5e8eb; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
-        .task-content { display: flex; flex-direction: column; gap: 2px; }
-        .task-loc { font-size: 11px; color: #8b95a1; background: #f2f4f6; padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
-        .task-title { font-size: 15px; font-weight: 500; color: #333; }
-        .task-item.completed .task-check { background: #3182f6; border-color: #3182f6; }
-        .task-item.completed .task-check::after { content: '✔'; color: white; font-size: 14px; font-weight: bold; }
-        .task-item.completed .task-title { text-decoration: line-through; color: #b0b8c1; }
-        .task-item.completed .task-loc { color: #d1d6db; background: #f9fafb; }
+        .header-icon-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #333; cursor: pointer; border-radius: 50%; transition: background 0.2s; }
+        .header-icon-btn:active { background: #f2f4f6; }
 
-        /* 기타 스타일 */
-        .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
-        .quest-card:active { transform: scale(0.98); }
-        .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
-        .quest-type { font-size: 12px; color: #8b95a1; }
-        .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
-
-        .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; }
-        .answer-table th { background: #f9fafb; padding: 12px; font-size: 13px; color: #6b7684; text-align: left; border-bottom: 1px solid #f2f4f6; }
-        .answer-table td { padding: 14px 12px; font-size: 14px; color: #333; border-bottom: 1px solid #f2f4f6; }
-        .highlight { color: #3182f6; font-weight: bold; }
-
-        .pagination-controls { display: flex; justify-content: center; gap: 6px; margin-top: 20px; margin-bottom: 40px; }
-        .pagination-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #8b95a1; background: transparent; }
-        .pagination-btn.active { background-color: #3182f6; color: white; }
-
-        .nav-btn.active svg { color: #3182f6; } .nav-btn.active span { color: #3182f6; font-weight: 700; }
-
-        #global-search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); z-index: 60; border: 1px solid #f2f4f6; border-top: none; max-height:300px; overflow-y:auto; }
-        .search-result-item { padding: 12px 16px; border-bottom: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        /* [검색 결과창] */
+        #global-search-results { display: none; position: absolute; top: 60px; left: 0; right: 0; background: white; border-radius: 0 0 24px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 60; border-top: 1px solid #eee; max-height:300px; overflow-y:auto; padding: 10px 0; }
+        .search-result-item { padding: 12px 20px; border-bottom: 1px solid #f9f9f9; cursor: pointer; display: flex; align-items: center; gap: 10px; }
         .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
         .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
 
-        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
+        /* [청크(Chunk) 스타일 카드] - 토스형 흰색 박스 */
+        .toss-section { 
+            background: #fff; 
+            border-radius: 24px; 
+            padding: 24px; 
+            margin: 0 16px 16px 16px; 
+            /* 그림자 없이 깔끔하게 떨어지는 스타일 */
+        }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .section-title { font-size: 20px; font-weight: 800; color: #191f28; }
+        
+        /* 하단 '더 보기' 버튼 스타일 */
+        .section-footer-btn {
+            display: block; width: 100%; text-align: center; 
+            padding: 14px 0; margin-top: 10px;
+            color: #8b95a1; font-size: 14px; font-weight: 600; 
+            background: #f9fafb; border-radius: 12px; cursor: pointer;
+        }
+        .section-footer-btn:active { background: #f2f4f6; }
+
+        /* [슬라이더] */
+        .hero-slider-wrapper { position: relative; width: 100%; aspect-ratio: 21/10; background: #e5e7eb; border-radius: 16px; overflow: hidden; }
         .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
         .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative !important; cursor: pointer; }
         .slide-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; z-index: 10; }
@@ -150,23 +74,109 @@
         .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
         .indicator.active { width: 18px; background: white; border-radius: 10px; }
 
+        /* [가이드 아이콘 그리드] - 토스 주식 탭 스타일 */
+        .guide-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .guide-icon-btn { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s; }
+        .guide-icon-btn:active { transform: scale(0.95); }
+        .guide-icon-box { 
+            width: 52px; height: 52px; border-radius: 20px; 
+            background: #f9fafb; display: flex; align-items: center; justify-content: center; 
+            font-size: 24px; margin-bottom: 8px; border: 1px solid #f2f4f6;
+        }
+        .guide-icon-text { font-size: 12px; color: #4e5968; font-weight: 600; text-align: center; line-height: 1.3; }
+
+        /* [리스트 아이템 (무림록/천지록)] - 버튼 느낌 제거, 순수 리스트화 */
+        .mansarok-btn, .chunji-item-card { 
+            display: flex !important; align-items: center; justify-content: space-between !important; 
+            padding: 16px 0 !important; border-bottom: 1px solid #f2f4f6 !important; 
+            background: transparent !important; box-shadow: none !important; 
+            border: none !important; border-radius: 0 !important;
+            margin-bottom: 0 !important; width: 100% !important; height: auto !important; min-height: auto !important;
+        }
+        .mansarok-btn:last-child, .chunji-item-card:last-child { border-bottom: none !important; }
+        
+        .mansarok-btn span, .chunji-card-title { 
+            font-size: 16px; font-weight: 600; color: #333; text-align: left; flex: 1;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        /* 우측 화살표 대신 하트 위치에 회색 화살표 */
+        .mansarok-btn::after, .chunji-item-card::after {
+            content: '›'; font-size: 22px; color: #d1d5db; font-weight: 300; margin-left: 10px;
+        }
+
+        /* [타이머 리스트 - 할 일] */
+        .timer-row {
+            background-color: #f9fafb; border-radius: 16px; padding: 16px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+        }
+        .timer-info { display: flex; flex-direction: column; gap: 2px; }
+        .timer-name { font-size: 15px; font-weight: 700; color: #191f28; display: flex; align-items: center; gap: 6px; }
+        .timer-desc { font-size: 11px; color: #8b95a1; }
+        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 600; color: #333; }
+        .status-badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; color: white; display: none; } /* 뱃지 숨김 (깔끔하게) */
+        .timer-progress { font-size: 11px; font-weight: 700; color: #3182f6; background-color: #e8f3ff; padding: 2px 8px; border-radius: 12px; }
+
+        /* [하단 탭바] */
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); 
+            border-top: 1px solid #eee; padding: 8px 20px 20px 20px; 
+            display: flex; justify-content: space-between; z-index: 100; 
+        }
+        .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #b0b8c1; width: 60px; cursor: pointer; }
+        .nav-btn svg { width: 24px; height: 24px; }
+        .nav-btn span { font-size: 10px; font-weight: 500; }
+        .nav-btn.active { color: #191f28; }
+        .nav-btn.active span { font-weight: 700; }
+
+        /* [바텀시트 및 기타] */
+        #timer-sheet-modal, #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: none; opacity: 0; transition: opacity 0.2s; backdrop-filter: blur(2px); }
+        #timer-sheet-modal.show, #person-bottom-sheet.active { display: block; opacity: 1; }
+        .sheet-container, .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px 24px 40px 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 85vh; overflow-y: auto; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
+        #timer-sheet-modal.show .sheet-container, #person-bottom-sheet.active .bottom-sheet-content { transform: translateY(0); }
+        .sheet-handle, .sheet-handle-bar { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 24px auto; }
+
+        /* 천지록 상세 화면 */
+        .chunji-detail-card { background-color: white; border-radius: 20px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f2f4f6; margin-bottom: 20px; }
+        .cd-header { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .cd-title { font-size: 22px; font-weight: 800; color: #191f28; margin-bottom: 6px; }
+        .cd-badge { display: inline-block; background: #f0f4f8; color: #4e5968; font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 600; }
+        .cd-section { margin-bottom: 24px; }
+        .cd-subtitle { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 8px; display: flex; align-items: center; }
+        .cd-subtitle::before { content: ''; display: inline-block; width: 4px; height: 14px; background: #3182f6; margin-right: 8px; border-radius: 2px; }
+        .cd-text { font-size: 14px; color: #555; line-height: 1.6; background: #fafafa; padding: 12px; border-radius: 8px; white-space: pre-line; }
+        .cd-img-container { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .cd-img { width: 100%; border-radius: 8px; border: 1px solid #eee; object-fit: cover; }
+        .nav-btn-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .nav-move-btn { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 600; color: #666; padding: 8px 12px; border-radius: 8px; transition: background 0.2s; }
+        
+        /* 인물 바텀시트 */
+        .person-sheet-header { text-align: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .person-img-container { display: inline-block; padding: 5px; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 15px; }
+        .person-img-large { width: 100px; height: 100px; border-radius: 12px; object-fit: cover; }
+        .person-info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed #eee; }
+        .person-bio-box { background: #f9f9f9; padding: 16px; border-radius: 12px; margin-top: 20px; }
+        .person-close-btn { width: 100%; padding: 14px; background: #333; color: white; border-radius: 12px; font-weight: 700; font-size: 15px; margin-top: 30px; cursor: pointer; }
+
+        /* 기존 유지 스타일 (그리드, 퀘스트 카드 등) */
+        .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
+        .quest-card:active { transform: scale(0.98); }
+        .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
+        .quest-type { font-size: 12px; color: #8b95a1; }
+        .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
+        .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; }
+        .answer-table th { background: #f9fafb; padding: 12px; font-size: 13px; color: #6b7684; text-align: left; border-bottom: 1px solid #f2f4f6; }
+        .answer-table td { padding: 14px 12px; font-size: 14px; color: #333; border-bottom: 1px solid #f2f4f6; }
+        .highlight { color: #3182f6; font-weight: bold; }
+        .pagination-controls { display: flex; justify-content: center; gap: 6px; margin-top: 20px; margin-bottom: 40px; }
+        .pagination-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #8b95a1; background: transparent; }
+        .pagination-btn.active { background-color: #3182f6; color: white; }
+
         /* 사이드바 */
         #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
         #main-sidebar.active { right: 0; }
         #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
         #sidebar-overlay.active { display: block; }
-
-        .map-card-horizontal, .char-card-horizontal { flex: none; width: 72px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
-        .map-h-img, .char-h-img { width: 100%; height: 72px; object-fit: cover; }
-        .map-h-title, .char-h-name { font-size: 10px; font-weight: bold; padding: 4px; text-align: center; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .char-overlay-box { padding: 4px; text-align: center; }
-        .char-h-affil { font-size: 8px; color: #888; }
-
-        /* 인물 바텀시트 */
-        #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; opacity: 0; transition: opacity 0.3s; }
-        #person-bottom-sheet.active { display: block; opacity: 1; }
-        #person-bottom-sheet .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 80vh; overflow-y: auto; }
-        #person-bottom-sheet.active .bottom-sheet-content { transform: translateY(0); }
     </style>
 </head>
 
@@ -178,117 +188,121 @@
 
     <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-    <header id="main-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
-        <div class="max-w-lg mx-auto px-4 h-[60px] flex items-center justify-between gap-3">
-            <div class="flex-1 h-10 bg-[#f2f4f6] rounded-2xl flex items-center px-3 relative">
-                <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" id="header-search-input" placeholder="무림의 정보를 검색해보세요" class="bg-transparent w-full ml-2 outline-none text-[15px] placeholder-gray-400 h-full" autocomplete="off">
-                <button id="search-clear-btn" class="text-gray-400 text-xs font-bold px-2" style="display:none;">✕</button>
-                <div id="global-search-results"></div>
+    <header id="main-header" class="app-header">
+        
+        <div id="header-default" class="header-default">
+            <div class="app-logo">연운</div>
+            <div class="header-actions">
+                <button onclick="toggleSearchLayer(true)" class="header-icon-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+                <button onclick="toggleSidebar()" class="header-icon-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
             </div>
-            <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-gray-600 rounded-full hover:bg-gray-100 transition-colors">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
         </div>
+
+        <div id="header-search-layer" class="header-search-mode">
+            <div class="header-search-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="header-search-input" placeholder="무림 정보 검색" class="header-search-input" autocomplete="off">
+            </div>
+            <button onclick="toggleSearchLayer(false)" style="margin-left: 10px; font-size: 14px; font-weight: 600; color: #666; white-space: nowrap;">취소</button>
+        </div>
+        
+        <div id="global-search-results"></div>
     </header>
 
-    <main id="main-content" class="pb-28 max-w-lg mx-auto">
+    <main id="main-content">
         
         <div id="view-home">
-            <section class="mt-0">
-                <div class="hero-slider-wrapper">
-                    <div id="hero-slider-track" class="slider-track h-full"></div>
+            
+            <section class="toss-section" style="padding:0; overflow:hidden;">
+                <div class="hero-slider-wrapper" style="border-radius:24px; aspect-ratio: 21/10;">
+                    <div id="hero-slider-track" class="slider-track"></div>
                     <div id="slider-indicators" class="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5"></div>
                 </div>
             </section>
 
-            <section class="mt-8 px-4">
-                <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">기본 가이드</h3></div>
-                <div class="grid grid-cols-3 gap-2">
-                    <a onclick="openGuideDirect('newb.html')" class="mansarok-btn flex-col gap-0.5 !py-3 !h-auto">
-                        <span class="text-2xl">📜</span>
-                        <span class="text-[12px] leading-tight mt-1">강호 입문서</span>
+            <section class="toss-section">
+                <div class="section-header">
+                    <h3 class="section-title">오늘의 할 일</h3>
+                </div>
+                <div id="gangho-timer-list" class="flex flex-col">
+                    <div style="text-align:center; color:#999; padding:20px;">로딩 중...</div>
+                </div>
+                <div class="section-footer-btn" onclick="switchTab('todo')">더 보기</div>
+            </section>
+
+            <section class="toss-section">
+                <div class="section-header">
+                    <h3 class="section-title">기본 가이드</h3>
+                </div>
+                <div class="guide-grid">
+                    <a onclick="openGuideDirect('newb.html')" class="guide-icon-btn">
+                        <div class="guide-icon-box" style="color:#d97706; background:#fffbf2;">📜</div>
+                        <span class="guide-icon-text">강호<br>입문서</span>
                     </a>
-                    <a onclick="openGuideDirect('guide/up.html')" class="mansarok-btn flex-col gap-0.5 !py-3 !h-auto">
-                        <span class="text-2xl">📈</span>
-                        <span class="text-[12px] leading-tight mt-1">육성 가이드</span>
+                    <a onclick="openGuideDirect('guide/up.html')" class="guide-icon-btn">
+                        <div class="guide-icon-box" style="color:#dc2626; background:#fef2f2;">📈</div>
+                        <span class="guide-icon-text">육성<br>가이드</span>
                     </a>
-                    <a onclick="openGuideDirect('moon.html')" class="mansarok-btn flex-col gap-0.5 !py-3 !h-auto">
-                        <span class="text-2xl">🏛️</span>
-                        <span class="text-[12px] leading-tight mt-1">문파 입문</span>
+                    <a onclick="openGuideDirect('moon.html')" class="guide-icon-btn">
+                        <div class="guide-icon-box" style="color:#4b5563; background:#f3f4f6;">🏛️</div>
+                        <span class="guide-icon-text">문파<br>입문</span>
                     </a>
-                    <a onclick="openGuideDirect('guide/weapon.html')" class="mansarok-btn flex-col gap-0.5 !py-3 !h-auto">
-                        <span class="text-2xl">⚔️</span>
-                        <span class="text-[12px] leading-tight mt-1">장비 도감</span>
+                    <a onclick="openGuideDirect('guide/weapon.html')" class="guide-icon-btn">
+                        <div class="guide-icon-box" style="color:#2563eb; background:#eff6ff;">⚔️</div>
+                        <span class="guide-icon-text">장비<br>도감</span>
                     </a>
-                    <a onclick="openGuideDirect('tier_weapon.html')" class="mansarok-btn flex-col gap-0.5 !py-3 !h-auto">
-                        <span class="text-2xl">🌀</span>
-                        <span class="text-[12px] leading-tight mt-1">무공 도감</span>
+                    <a onclick="openGuideDirect('tier_weapon.html')" class="guide-icon-btn">
+                        <div class="guide-icon-box" style="color:#7c3aed; background:#f5f3ff;">🌀</div>
+                        <span class="guide-icon-text">무공<br>도감</span>
                     </a>
-                    <a onclick="openGuideDirect('majang.html')" class="mansarok-btn flex-col gap-0.5 !py-3 !h-auto">
-                        <span class="text-2xl">🀄</span>
-                        <span class="text-[12px] leading-tight mt-1">마작 가이드</span>
+                    <a onclick="openGuideDirect('majang.html')" class="guide-icon-btn">
+                        <div class="guide-icon-box" style="color:#be123c; background:#fff1f2;">🀄</div>
+                        <span class="guide-icon-text">마작<br>가이드</span>
                     </a>
                 </div>
             </section>
 
-            <section id="mansarok-container" class="mt-10 px-4">
-                <div class="mb-4 flex items-center justify-between">
-                    <div class="flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">무림록</h3></div>
-                    <span class="text-xs text-gray-400 cursor-pointer" onclick="switchTab('quest')">전체보기 ></span>
+            <section class="toss-section">
+                <div class="section-header">
+                    <h3 class="section-title">무림록</h3>
                 </div>
-                <div id="mansarok-list" class="grid grid-cols-2 gap-2"></div>
+                <div id="mansarok-list" class="flex flex-col"></div>
+                <div class="section-footer-btn" onclick="switchTab('quest')">더 보기</div>
             </section>
 
-            <section class="mt-10 px-4">
-                <div class="mb-4 flex items-center justify-between">
-                    <div class="flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">천지록</h3></div>
-                    <span class="text-xs text-gray-400 cursor-pointer" onclick="switchTab('chunji')">전체보기 ></span>
+            <section class="toss-section">
+                <div class="section-header">
+                    <h3 class="section-title">천지록</h3>
                 </div>
-                <div id="home-chunji-list" class="grid grid-cols-2 gap-2"></div>
+                <div id="home-chunji-list" class="flex flex-col"></div>
+                <div class="section-footer-btn" onclick="switchTab('chunji')">더 보기</div>
             </section>
 
-            <section class="mt-10 mb-6">
-                <div class="px-4 mb-4 flex items-center justify-between">
-                    <div class="flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">인기 적수</h3></div>
-                    <span class="text-xs text-gray-400" onclick="enterBossDetail('boss.html')">전체보기 ></span>
-                </div>
-                <div class="flex overflow-x-auto gap-3 px-4 no-scrollbar">
+            <section class="mt-8 px-4" style="margin-bottom: 24px;">
+                <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">인기 적수</h3></div>
+                <div class="flex overflow-x-auto gap-3 no-scrollbar" style="padding-bottom: 10px;">
                     <a onclick="location.href='https://wwm.tips/?q=193'" class="flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2"><img src="images/em/10.png" onerror="this.src='images/logo.png'" class="h-10 object-contain"></div>
-                        <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">망령 공자</span><span class="text-[9px] text-blue-500 font-medium mt-0.5">협경</span>
+                        <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">망령 공자</span>
                     </a>
                     <a onclick="location.href='https://wwm.tips/?q=198'" class="flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2"><img src="images/em/4.png" onerror="this.src='images/logo.png'" class="h-10 object-contain"></div>
-                        <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">연심</span><span class="text-[9px] text-blue-500 font-medium mt-0.5">진수전</span>
+                        <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">연심</span>
                     </a>
                 </div>
-            </section>
-
-            <section class="mt-8 px-4">
-                <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">인물</h3></div>
-                <div id="home-char-list" class="flex gap-3 overflow-x-auto no-scrollbar"></div>
-            </section>
-            <section class="mt-8 px-4">
-                <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">세계 탐험</h3></div>
-                <div id="home-map-list" class="flex gap-3 overflow-x-auto no-scrollbar"></div>
             </section>
         </div>
 
         <div id="view-todo" style="display: none;" class="px-4 pt-4">
             <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-2">
-                    <span class="deco-bar"></span>
-                    <h2 class="text-xl font-bold text-gray-800">강호 시시각각</h2>
-                </div>
+                <div class="flex items-center gap-2"><span class="deco-bar"></span><h2 class="text-xl font-bold text-gray-800">강호 시시각각</h2></div>
                 <span id="server-time" class="text-xs text-gray-400 font-mono bg-white px-2 py-1 rounded-lg border border-gray-100 shadow-sm">00:00:00</span>
             </div>
-            <div id="gangho-timer-list" class="space-y-3">
-                <div class="text-center text-gray-400 py-10">데이터를 불러오는 중...</div>
-            </div>
-        </div>
+            <div id="gangho-timer-list-tab" class="space-y-3"></div> </div>
 
         <div id="view-quest" style="display: none;" class="px-4 pt-4">
             <div id="quest-list-view">
@@ -299,12 +313,8 @@
                 <div id="quest-grid-container"></div>
                 <div id="pagination-container"></div>
             </div>
-            
             <div id="quest-detail-view" style="display:none;">
-                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showQuestList()">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    목록으로 돌아가기
-                </button>
+                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showQuestList()"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>목록으로 돌아가기</button>
                 <div id="quest-content-loader"></div>
             </div>
         </div>
@@ -319,10 +329,7 @@
                 <div id="chunji-pagination-container"></div>
             </div>
             <div id="chunji-detail-view" style="display:none;">
-                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showChunjiList()">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    목록으로 돌아가기
-                </button>
+                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showChunjiList()"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>목록으로 돌아가기</button>
                 <div id="chunji-detail-content"></div>
             </div>
         </div>
@@ -340,11 +347,19 @@
         <div id="view-map-detail" style="display: none; height: 100vh;"><iframe id="map-iframe" class="w-full h-full border-0"></iframe></div>
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 px-2 py-2 flex justify-around items-center z-[50]">
-        <button id="nav-home" onclick="switchTab('home')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1 active"><svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg><span class="text-[10px] font-medium text-gray-500">홈</span></button>
-        <button id="nav-quest" onclick="switchTab('quest')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg><span class="text-[10px]">무림록</span></button>
-        <button id="nav-todo" onclick="switchTab('todo')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg><span class="text-[10px]">할 일</span></button>
-        <button id="nav-quiz" onclick="switchTab('quiz')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span class="text-[10px]">스무고개</span></button>
+    <nav class="bottom-nav">
+        <div id="nav-home" onclick="switchTab('home')" class="nav-btn active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg><span>홈</span>
+        </div>
+        <div id="nav-quest" onclick="switchTab('quest')" class="nav-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg><span>무림록</span>
+        </div>
+        <div id="nav-todo" onclick="switchTab('todo')" class="nav-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg><span>할 일</span>
+        </div>
+        <div id="nav-quiz" onclick="switchTab('quiz')" class="nav-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>스무고개</span>
+        </div>
     </nav>
 
     <div id="timer-sheet-modal">
@@ -366,22 +381,6 @@
         </div>
     </div>
 
-    <aside id="main-sidebar">
-        <div class="p-6 relative">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-xl font-bold mt-2">전체 메뉴</h2>
-                <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">✕</button>
-            </div>
-            <ul class="space-y-6">
-                <li><a onclick="switchTab('home'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🏠 홈</a></li>
-                <li><a onclick="switchTab('quest'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">📜 무림록</a></li>
-                <li><a onclick="switchTab('archive'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🏆 업적 도감</a></li>
-                <li><a onclick="switchTab('quiz'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">❓ 퀴즈 족보</a></li>
-                <li><a onclick="openGuideDirect('code.html'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🎫 교환 코드</a></li>
-            </ul>
-        </div>
-    </aside>
-
     <div id="info-modal" class="hidden fixed inset-0 bg-black/50 z-[2000] flex items-center justify-center p-4" onclick="closeInfoModal()">
         <div class="bg-white rounded-2xl p-6 w-full max-w-sm" onclick="event.stopPropagation()">
             <div class="flex items-center gap-4 mb-4"><img id="modal-img" src="" class="w-16 h-16 object-contain border rounded-lg"><h3 id="modal-name" class="text-lg font-bold"></h3></div>
@@ -395,6 +394,25 @@
     <script src="timer.js"></script>
 
     <script>
+        // 검색 레이어 토글 함수
+        function toggleSearchLayer(show) {
+            const defaultHeader = document.getElementById('header-default');
+            const searchLayer = document.getElementById('header-search-layer');
+            const searchInput = document.getElementById('header-search-input');
+            const searchResults = document.getElementById('global-search-results');
+
+            if (show) {
+                defaultHeader.style.display = 'none';
+                searchLayer.style.display = 'flex';
+                searchInput.focus();
+            } else {
+                defaultHeader.style.display = 'flex';
+                searchLayer.style.display = 'none';
+                searchInput.value = '';
+                if(searchResults) searchResults.style.display = 'none';
+            }
+        }
+
         function toggleSidebar() { 
             document.getElementById('main-sidebar').classList.add('active'); 
             document.getElementById('sidebar-overlay').classList.add('active');
@@ -425,7 +443,7 @@
             document.body.style.overflow = ''; 
         }
 
-        // [무림록 상세 내부 네비게이션]
+        // [무림록 상세]
         window.renderQuestDetailOverride = function(id) {
             document.getElementById('quest-list-view').style.display = 'none';
             document.getElementById('quest-detail-view').style.display = 'block';
@@ -461,7 +479,7 @@
         };
         window.renderQuestDetail = window.renderQuestDetailOverride;
 
-        // [천지록 상세 화면 (CSS 스타일 적용 + 이미지 데이터 자동 감지)]
+        // [천지록 상세]
         window.renderChunjiDetailOverride = function(id) {
             document.getElementById('chunji-list-view').style.display = 'none';
             document.getElementById('chunji-detail-view').style.display = 'block';
@@ -472,10 +490,7 @@
 
             const imgTag = (src) => src ? `<img src="${src}" class="cd-img" onerror="this.style.display='none'">` : '';
 
-            // 본문 HTML 구성
             let bodyHtml = '';
-
-            // 1. 획득 방법 (get)이 있거나 이미지가 있는 경우
             if (item.get || item.getimg1 || item.getimg2) {
                 bodyHtml += `
                     <div class="cd-section">
@@ -487,8 +502,6 @@
                         </div>
                     </div>`;
             }
-
-            // 2. 해독/설명 (dsec)이 있거나 이미지가 있는 경우
             if (item.dsec || item.dsecimg1 || item.dsecimg2) {
                 bodyHtml += `
                     <div class="cd-section">
@@ -500,8 +513,6 @@
                         </div>
                     </div>`;
             }
-
-            // 3. 만약 위 두 가지가 없고 'content'나 'desc'만 있는 경우
             if (!item.get && !item.dsec && !item.getimg1 && !item.dsecimg1) {
                 const descText = item.content || item.desc || "상세 내용은 준비 중입니다.";
                 bodyHtml += `
@@ -512,7 +523,6 @@
                     </div>`;
             }
 
-            // 최종 HTML 조립
             let html = `
                 <div class="chunji-detail-card">
                     <div class="cd-header">
@@ -523,7 +533,6 @@
                 </div>
             `;
 
-            // 네비게이션
             const allIds = chunjiData.map(c => c.id);
             const currIdx = allIds.indexOf(String(id));
 
@@ -543,58 +552,35 @@
         window.showChunjiDetail = window.renderChunjiDetailOverride;
 
 
-        // [통합된 천지록 리스트 렌더링 함수] - 디자인(card) + 기능(pagination) 통합
+        // [천지록 리스트 렌더링 - 단순 리스트 형태]
         window.renderChunjiListOverride = function() {
             const container = document.getElementById('chunji-list-container');
-            const paginationContainer = document.getElementById('chunji-pagination-container');
             if(!container) return;
             container.innerHTML = '';
             
-            // 데이터 필터링 (chunjiData가 전역에 있다고 가정)
-            if(typeof chunjiData === 'undefined' || !chunjiData) return;
+            let filtered = chunjiData;
+            if(typeof chunjiData === 'undefined') return;
 
-            // 현재 선택된 필터값 가져오기 (필터가 없으면 'all')
-            const typeSelect = document.getElementById('chunji-type-select');
-            const subtypeSelect = document.getElementById('chunji-subtype-select');
-            const selectedType = typeSelect ? typeSelect.value : 'all';
-            const selectedSubtype = subtypeSelect ? subtypeSelect.value : 'all';
+            const typeFilter = document.getElementById('chunji-type-select').value;
+            const subFilter = document.getElementById('chunji-subtype-select').value;
 
-            // 1. 필터링
-            currentChunjiData = chunjiData.filter(item => {
-                if(selectedType !== 'all' && item.type !== selectedType) return false;
-                if(selectedSubtype !== 'all' && item.subtype !== selectedSubtype) return false; 
+            filtered = chunjiData.filter(item => {
+                if(typeFilter !== 'all' && item.type !== typeFilter) return false;
+                if(subFilter !== 'all' && item.subtype !== subFilter) return false; 
                 return true;
             });
 
-            if (currentChunjiData.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; padding:40px 0; text-align:center; color:#888;">해당하는 기록이 없습니다.</div>';
-                if (paginationContainer) paginationContainer.innerHTML = '';
-                return;
-            }
-
-            // 2. 페이징 계산
-            // itemsPerPage는 script.js에 정의됨 (보통 12)
-            const safeItemsPerPage = (typeof itemsPerPage !== 'undefined') ? itemsPerPage : 12;
-            const startIndex = (currentChunjiPage - 1) * safeItemsPerPage;
-            const endIndex = startIndex + safeItemsPerPage;
-            const pageData = currentChunjiData.slice(startIndex, endIndex);
-
-            // 3. 리스트 아이템 생성 (디자인: mansarok-btn 스타일)
-            pageData.forEach(item => {
+            filtered.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'chunji-item-card'; // 스타일 클래스
+                div.className = 'chunji-item-card'; 
                 div.onclick = function() { renderChunjiDetailOverride(item.id); }; 
                 div.innerHTML = `<span class="chunji-card-title">${item.title}</span>`;
                 container.appendChild(div);
             });
-
-            // 4. 페이지네이션 버튼 렌더링
-            renderChunjiPagination();
         };
-        // script.js의 함수를 덮어씀
         window.renderChunjiList = window.renderChunjiListOverride;
 
-        // [추가] 홈 화면용 천지록 렌더링도 동일하게 수정
+        // [홈 화면용 천지록 렌더링]
         window.renderHomeChunjiOverride = function() {
             const container = document.getElementById('home-chunji-list');
             if (!container || !chunjiData) return;
@@ -602,7 +588,7 @@
             const displayList = chunjiData.slice(0, 6);
             displayList.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'chunji-item-card';
+                div.className = 'chunji-item-card'; // CSS에서 리스트 형태로 강제 변환됨
                 div.onclick = () => {
                     if (typeof switchTab === 'function') {
                         switchTab('chunji');
@@ -617,14 +603,11 @@
 
 
         window.switchTab = function(tabName) {
+            // 헤더가 항상 보이도록 설정
             const header = document.getElementById('main-header');
             if (header) {
-                if (tabName === 'quiz') {
-                    header.style.display = 'none';
-                } else {
-                    header.style.removeProperty('display');
-                    if (getComputedStyle(header).display === 'none') header.style.display = 'flex';
-                }
+                header.style.removeProperty('display');
+                if (getComputedStyle(header).display === 'none') header.style.display = 'flex';
             }
             
             const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-archive', 'view-news', 'view-guide', 'view-code', 'view-builder', 'view-map-detail', 'view-todo'];
@@ -639,6 +622,10 @@
             
             if (tabName === 'todo' && typeof updateTimers === 'function') {
                 updateTimers();
+                // [추가] 탭별 리스트 분리 처리 (홈 화면 리스트와 별개)
+                const homeList = document.getElementById('gangho-timer-list');
+                const tabList = document.getElementById('gangho-timer-list-tab');
+                if(homeList && tabList) tabList.innerHTML = homeList.innerHTML;
             }
             else if (tabName === 'quiz') {
                 const tbody = document.getElementById('quiz-table-body');
@@ -673,7 +660,6 @@
             }
         }, 1000);
         
-        // 홈 로드 시 천지록 홈 리스트 다시 그리기 (override 적용)
         window.addEventListener('DOMContentLoaded', () => {
              if(typeof renderHomeChunjiOverride === 'function') renderHomeChunjiOverride();
         });

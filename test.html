@@ -23,7 +23,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [핵심] 버튼 스타일 (무림록/천지록/가이드 공통) */
+        /* [★핵심 수정] 버튼 스타일 (기본: 가로 정렬) */
         .mansarok-btn, .chunji-item-card { 
             display: flex; align-items: center; justify-content: center; 
             background-color: white; border-radius: 12px; 
@@ -36,15 +36,38 @@
             height: 40px !important;
             min-height: 40px !important;
             padding: 0 8px !important;
+            
+            /* 기본: 가로 정렬 (무림록용) */
+            flex-direction: row; 
+            gap: 6px; 
         }
         .mansarok-btn:active, .chunji-item-card:active { transform: scale(0.98); }
         .mansarok-btn:hover, .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
         
         .mansarok-btn span, .chunji-card-title { 
-            width: 100%; word-break: keep-all; white-space: nowrap; 
+            word-break: keep-all; white-space: nowrap; 
             overflow: hidden; text-overflow: ellipsis; 
         }
-        .chunji-card-title { font-size: 13px; font-weight: 600; color: inherit; }
+        .chunji-card-title { font-size: 13px; font-weight: 600; color: inherit; width: 100%; }
+
+        /* [슬라이더] position fix */
+        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
+        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
+        .hero-slide { 
+            flex: none; width: 100%; height: 100%; 
+            background-size: cover; background-position: center; 
+            position: relative !important; 
+            cursor: pointer; 
+        }
+        .slide-content { 
+            position: absolute; bottom: 0; left: 0; right: 0; 
+            padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); 
+            color: white; z-index: 10; 
+        }
+        .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
+        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
+        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
+        .indicator.active { width: 18px; background: white; border-radius: 10px; }
 
         /* [타이머 리스트] */
         .timer-row {
@@ -61,7 +84,7 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
         .status-badge { padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; color: white; }
         .status-ing { background-color: #3182f6; } .status-urgent { background-color: #e53935; } 
-        .status-event { background-color: #f59e0b; }
+        .status-event { background-color: #f59e0b; } .status-end { background-color: #9e9e9e; }
         .timer-progress { font-size: 11px; font-weight: 700; color: #3182f6; background-color: #e8f3ff; padding: 2px 8px; border-radius: 12px; }
 
         /* [바텀시트] */
@@ -96,33 +119,12 @@
         .task-item.completed .task-title { text-decoration: line-through; color: #b0b8c1; }
         .task-item.completed .task-loc { color: #d1d6db; background: #f9fafb; }
 
-        /* [슬라이더] */
-        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
-        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
-        .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative !important; cursor: pointer; }
-        .slide-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; z-index: 10; }
-        .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
-        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
-        .slide-link-btn { display:none; }
-        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
-        .indicator.active { width: 18px; background: white; border-radius: 10px; }
-
         /* 기타 스타일 */
-        #global-search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); z-index: 60; border: 1px solid #f2f4f6; border-top: none; max-height:300px; overflow-y:auto; }
-        .search-result-item { padding: 12px 16px; border-bottom: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-        .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
-        .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
-
-        #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
-        #main-sidebar.active { right: 0; }
-        #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
-        #sidebar-overlay.active { display: block; }
-
-        .map-card-horizontal, .char-card-horizontal { flex: none; width: 72px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
-        .map-h-img, .char-h-img { width: 100%; height: 72px; object-fit: cover; }
-        .map-h-title, .char-h-name { font-size: 10px; font-weight: bold; padding: 4px; text-align: center; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .char-overlay-box { padding: 4px; text-align: center; }
-        .char-h-affil { font-size: 8px; color: #888; }
+        .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
+        .quest-card:active { transform: scale(0.98); }
+        .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
+        .quest-type { font-size: 12px; color: #8b95a1; }
+        .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
 
         .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; }
         .answer-table th { background: #f9fafb; padding: 12px; font-size: 13px; color: #6b7684; text-align: left; border-bottom: 1px solid #f2f4f6; }
@@ -135,6 +137,24 @@
 
         .nav-btn.active svg { color: #3182f6; } .nav-btn.active span { color: #3182f6; font-weight: 700; }
 
+        #global-search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); z-index: 60; border: 1px solid #f2f4f6; border-top: none; max-height:300px; overflow-y:auto; }
+        .search-result-item { padding: 12px 16px; border-bottom: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
+        .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
+
+        /* 사이드바 */
+        #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
+        #main-sidebar.active { right: 0; }
+        #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
+        #sidebar-overlay.active { display: block; }
+
+        .map-card-horizontal, .char-card-horizontal { flex: none; width: 72px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
+        .map-h-img, .char-h-img { width: 100%; height: 72px; object-fit: cover; }
+        .map-h-title, .char-h-name { font-size: 10px; font-weight: bold; padding: 4px; text-align: center; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .char-overlay-box { padding: 4px; text-align: center; }
+        .char-h-affil { font-size: 8px; color: #888; }
+
+        /* 인물 바텀시트 */
         #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; opacity: 0; transition: opacity 0.3s; }
         #person-bottom-sheet.active { display: block; opacity: 1; }
         #person-bottom-sheet .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 80vh; overflow-y: auto; }
@@ -303,13 +323,7 @@
                 <div id="chunji-list-container" class="grid grid-cols-2 gap-2 pb-20"></div>
                 <div id="chunji-pagination-container"></div>
             </div>
-            <div id="chunji-detail-view" style="display:none;">
-                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showChunjiList()">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    목록으로 돌아가기
-                </button>
-                <div id="chunji-detail-content"></div>
-            </div>
+            <div id="chunji-detail-view" style="display:none;"><div id="chunji-detail-content"></div></div>
         </div>
 
         <div id="view-quiz" style="display: none;" class="px-4 pt-4">
@@ -446,7 +460,7 @@
         };
         window.renderQuestDetail = window.renderQuestDetailOverride;
 
-        // [★핵심] 천지록 상세 내부 네비게이션 (이전/다음) - 무림록과 동일 적용
+        // [★핵심] 천지록 상세 내부 네비게이션 (이전/다음)
         window.renderChunjiDetailOverride = function(id) {
             document.getElementById('chunji-list-view').style.display = 'none';
             document.getElementById('chunji-detail-view').style.display = 'block';
@@ -480,51 +494,35 @@
 
             document.getElementById('chunji-detail-content').innerHTML = html + navHtml;
         };
-        // [중요] 기존 script.js가 사용하는 함수명(추정)을 덮어씀
-        // 보통 showChunjiDetail 혹은 renderChunjiDetail 등으로 호출될 것임
-        // 안전하게 window 전역에 선언
         window.showChunjiDetail = window.renderChunjiDetailOverride;
 
 
-        // ----------------------------------------------------
-        // 천지록/무림록 리스트 그릴 때 onclick 이벤트를 
-        // 우리가 만든 Override 함수로 연결하기 위한 리스트 렌더링 함수 재정의
-        // ----------------------------------------------------
+        // 천지록 리스트 렌더링 Override (onclick 연결용)
         window.renderChunjiListOverride = function() {
             const container = document.getElementById('chunji-list-container');
             if(!container) return;
             container.innerHTML = '';
             
-            // 필터링 (기존 변수 활용)
             let filtered = chunjiData;
-            // ...필터 로직이 script.js에 있다면 그대로 둠. 여기선 전체 데이터 기준 예시...
-            // (script.js의 필터링 로직을 그대로 쓰고 싶다면 이 함수 재정의는 신중해야 함)
-            // 하지만 onclick을 바꾸려면 재정의가 필요함.
-            
-            // script.js가 로드된 후 실행되므로 chunjiData는 있을 것임
             if(typeof chunjiData === 'undefined') return;
 
-            // 현재 선택된 필터값 가져오기
             const typeFilter = document.getElementById('chunji-type-select').value;
             const subFilter = document.getElementById('chunji-subtype-select').value;
 
             filtered = chunjiData.filter(item => {
                 if(typeFilter !== 'all' && item.type !== typeFilter) return false;
-                // 서브필터 로직은 데이터 구조에 따라 다름 (여기선 생략하거나 기본만)
                 return true;
             });
 
             filtered.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'chunji-item-card'; // ★ CSS에서 정의한 클래스 사용
-                div.onclick = function() { renderChunjiDetailOverride(item.id); }; // ★ Override 함수 호출
+                div.className = 'chunji-item-card'; 
+                // [중요] 상세 페이지로 이동할 때 우리가 만든 Override 함수 호출
+                div.onclick = function() { renderChunjiDetailOverride(item.id); }; 
                 div.innerHTML = `<div class="chunji-card-title">${item.title}</div>`;
                 container.appendChild(div);
             });
         };
-        // script.js의 renderChunjiList를 덮어씀 (로드 타이밍 주의)
-        // 안전하게: script.js 로드 후 실행되도록 1초 뒤 강제 덮어쓰기 시도 or 
-        // 사용자가 탭을 누를 때(switchTab) 호출
         window.renderChunjiList = window.renderChunjiListOverride;
 
 
@@ -565,7 +563,6 @@
                 }
                 if(typeof showQuestList === 'function') showQuestList();
             } else if (tabName === 'chunji') {
-                // 천지록 탭 진입 시: Override된 렌더 함수 사용
                 if(typeof renderChunjiListOverride === 'function') {
                     renderChunjiListOverride(); 
                 } else if(typeof renderChunjiList === 'function') {

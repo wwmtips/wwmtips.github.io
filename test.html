@@ -23,16 +23,16 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [★핵심 수정] 무림록 & 천지록 버튼 높이 40px 고정 */
+        /* [★핵심] 무림록 & 천지록 버튼 크기/스타일 완벽 통일 (40px) */
         .mansarok-btn, .chunji-item-card { 
             display: flex; align-items: center; justify-content: center; 
-            background-color: white; border-radius: 12px; /* 둥근 정도 살짝 줄임 */
+            background-color: white; border-radius: 12px; 
             border: 1px solid #f2f4f6; 
             color: #333; font-weight: 600; font-size: 13px; 
             cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.03); 
             transition: all 0.2s; margin-bottom: 0;
             
-            /* 높이 강제 고정 (35~40px 요청 반영) */
+            /* 높이 강제 고정 */
             height: 40px !important;
             min-height: 40px !important;
             padding: 0 8px !important;
@@ -40,14 +40,32 @@
         .mansarok-btn:active, .chunji-item-card:active { transform: scale(0.98); }
         .mansarok-btn:hover, .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
         
-        /* 텍스트 줄바꿈 방지 */
         .mansarok-btn span, .chunji-card-title { 
             width: 100%; word-break: keep-all; white-space: nowrap; 
             overflow: hidden; text-overflow: ellipsis; 
         }
         .chunji-card-title { font-size: 13px; font-weight: 600; color: inherit; }
 
-        /* [타이머 리스트 카드] */
+        /* [슬라이더] position fix */
+        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
+        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
+        .hero-slide { 
+            flex: none; width: 100%; height: 100%; 
+            background-size: cover; background-position: center; 
+            position: relative !important; 
+            cursor: pointer; 
+        }
+        .slide-content { 
+            position: absolute; bottom: 0; left: 0; right: 0; 
+            padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); 
+            color: white; z-index: 10; 
+        }
+        .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
+        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
+        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
+        .indicator.active { width: 18px; background: white; border-radius: 10px; }
+
+        /* [타이머 리스트] */
         .timer-row {
             background-color: white; border-radius: 20px; padding: 18px 20px; margin-bottom: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); border: 1px solid #f2f4f6; cursor: pointer;
@@ -97,33 +115,7 @@
         .task-item.completed .task-title { text-decoration: line-through; color: #b0b8c1; }
         .task-item.completed .task-loc { color: #d1d6db; background: #f9fafb; }
 
-        /* [기타 스타일 유지] */
-        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
-        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
-        .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative !important; cursor: pointer; }
-        .slide-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; z-index: 10; }
-        .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
-        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
-        .slide-link-btn { display:none; }
-        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
-        .indicator.active { width: 18px; background: white; border-radius: 10px; }
-
-        #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
-        #main-sidebar.active { right: 0; }
-        #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
-        #sidebar-overlay.active { display: block; }
-
-        .map-card-horizontal, .char-card-horizontal { flex: none; width: 72px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
-        .map-h-img, .char-h-img { width: 100%; height: 72px; object-fit: cover; }
-        .map-h-title, .char-h-name { font-size: 10px; font-weight: bold; padding: 4px; text-align: center; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .char-overlay-box { padding: 4px; text-align: center; }
-        .char-h-affil { font-size: 8px; color: #888; }
-
-        .chunji-item { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .chunji-text-group { display: flex; flex-direction: column; gap: 2px; }
-        .chunji-title { font-weight: 700; font-size: 15px; color: #191f28; }
-        .chunji-type { font-size: 12px; color: #8b95a1; }
-
+        /* 기타 스타일 */
         .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
         .quest-card:active { transform: scale(0.98); }
         .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
@@ -146,6 +138,19 @@
         .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
         .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
 
+        /* 사이드바 */
+        #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
+        #main-sidebar.active { right: 0; }
+        #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
+        #sidebar-overlay.active { display: block; }
+
+        .map-card-horizontal, .char-card-horizontal { flex: none; width: 72px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
+        .map-h-img, .char-h-img { width: 100%; height: 72px; object-fit: cover; }
+        .map-h-title, .char-h-name { font-size: 10px; font-weight: bold; padding: 4px; text-align: center; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .char-overlay-box { padding: 4px; text-align: center; }
+        .char-h-affil { font-size: 8px; color: #888; }
+
+        /* 인물 바텀시트 */
         #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; opacity: 0; transition: opacity 0.3s; }
         #person-bottom-sheet.active { display: block; opacity: 1; }
         #person-bottom-sheet .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 80vh; overflow-y: auto; }
@@ -295,7 +300,14 @@
                 <div id="quest-grid-container"></div>
                 <div id="pagination-container"></div>
             </div>
-            <div id="quest-detail-view" style="display:none;"><div id="quest-content-loader"></div></div>
+            
+            <div id="quest-detail-view" style="display:none;">
+                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showQuestList()">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    목록으로 돌아가기
+                </button>
+                <div id="quest-content-loader"></div>
+            </div>
         </div>
 
         <div id="view-chunji" style="display: none;" class="px-4 pt-4">
@@ -407,6 +419,62 @@
             document.getElementById('person-bottom-sheet').classList.remove('active'); 
             document.body.style.overflow = ''; 
         }
+
+        // [★핵심] 무림록 상세 내부 네비게이션 (이전/다음) 로직
+        // script.js에 있던 함수를 여기서 재정의하여 기능을 덮어씁니다.
+        // 이를 통해 script.js 파일을 수정하지 않고도 기능을 추가할 수 있습니다.
+        window.renderQuestDetailOverride = function(id) {
+            // 상세 화면 보이기
+            document.getElementById('quest-list-view').style.display = 'none';
+            document.getElementById('quest-detail-view').style.display = 'block';
+            window.scrollTo(0,0);
+
+            // 데이터 찾기
+            const quest = globalData.quests.find(q => q.id == id);
+            if(!quest) return;
+
+            // HTML 생성 (기존 로직 + 이미지 등)
+            let html = `
+                <h2 class="text-xl font-bold mb-2">${quest.title}</h2>
+                <div class="flex gap-2 mb-4">
+                    <span class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">${quest.type}</span>
+                    <span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">${quest.location}</span>
+                </div>
+                <div class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">${quest.content || '내용이 없습니다.'}</div>
+                ${quest.image ? `<img src="${quest.image}" class="mt-4 w-full rounded-xl border">` : ''}
+            `;
+
+            // [네비게이션 버튼 추가]
+            const allIds = globalData.quests.map(q => q.id);
+            const currIdx = allIds.indexOf(String(id)); // ID 타입 매칭 주의
+
+            let navHtml = '<div class="flex justify-between items-center mt-12 pt-6 border-t border-gray-100">';
+
+            // 이전 버튼
+            if (currIdx > 0) {
+                // onclick에서 renderQuestDetailOverride를 호출하도록 설정
+                navHtml += `<button onclick="renderQuestDetailOverride('${allIds[currIdx - 1]}')" class="flex items-center gap-1 text-gray-600 hover:text-blue-600 font-bold p-2"><span class="text-lg">←</span> 이전</button>`;
+            } else {
+                navHtml += `<div></div>`;
+            }
+
+            // 다음 버튼
+            if (currIdx < allIds.length - 1) {
+                navHtml += `<button onclick="renderQuestDetailOverride('${allIds[currIdx + 1]}')" class="flex items-center gap-1 text-gray-600 hover:text-blue-600 font-bold p-2">다음 <span class="text-lg">→</span></button>`;
+            } else {
+                navHtml += `<div></div>`;
+            }
+            navHtml += '</div>';
+
+            document.getElementById('quest-content-loader').innerHTML = html + navHtml;
+        };
+
+        // 기존 showQuestDetail 등의 함수가 호출될 때 이 override 함수를 사용하도록 연결
+        // (script.js 로드 후 실행됨)
+        // 주의: script.js의 그리드 onclick이 무엇을 호출하느냐에 따라 다릅니다.
+        // 만약 script.js가 'renderQuestDetail'을 쓴다면 아래처럼 덮어쓰기:
+        window.renderQuestDetail = window.renderQuestDetailOverride;
+
 
         window.switchTab = function(tabName) {
             const header = document.getElementById('main-header');

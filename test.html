@@ -265,21 +265,30 @@
         <div class="hidden lg:block font-black text-xl text-blue-600 cursor-pointer flex-none"
             onclick="switchTab('home')">연운위키</div>
 
-        <div
-            class="flex-1 bg-gray-100 rounded-lg h-10 lg:h-11 flex items-center px-3 text-gray-500 transition-all duration-300 max-w-[600px]">
-            <svg class="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="header-search-input" placeholder="통합 검색" oninput="handleGlobalSearch(event)"
-                autocomplete="off"
-                class="bg-transparent border-none w-full h-full ml-2 outline-none text-gray-800 text-sm lg:text-base"
-                autocomplete="off">
-            <button id="search-clear-btn" class="hidden text-gray-400 hover:text-gray-600"><svg class="w-4 h-4"
-                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                </svg></button>
+        <div class="flex-1 mx-4 lg:mx-10 relative">
+            <div
+                class="bg-gray-100 rounded-xl h-11 flex items-center px-4 text-gray-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 transition-all border border-transparent focus-within:border-blue-200">
+                <svg class="w-5 h-5 flex-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+
+                <input type="text" id="header-search-input" placeholder="통합 검색" oninput="handleGlobalSearch(event)"
+                    class="bg-transparent border-none w-full h-full ml-3 outline-none text-gray-800 text-sm font-bold placeholder-gray-400"
+                    autocomplete="off">
+
+                <button id="search-clear-btn" class="hidden text-gray-400 hover:text-gray-600 ml-2"
+                    onclick="document.getElementById('header-search-input').value=''; this.style.display='none'; document.getElementById('global-search-results').style.display='none';">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="global-search-results"
+                class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2">
+            </div>
         </div>
 
         <nav class="hidden lg:flex items-center gap-6 text-sm font-bold text-gray-500 ml-auto">
@@ -498,7 +507,7 @@
 
                         <button onclick="switchTab('quest')"
                             class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
-                            무림록 전체보기
+                            전체 보기
                         </button>
                     </section>
 
@@ -512,13 +521,13 @@
 
                         <button onclick="switchTab('chunji')"
                             class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
-                            천지록 전체보기
+                            전체 보기
                         </button>
                     </section>
 
                     <section class="bg-white p-5 mb-3 lg:mb-0 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm">
                         <div class="mb-4">
-                            <h3 class="text-[19px] font-extrabold text-gray-900">오늘의 할 일</h3>
+                            <h3 class="text-[19px] font-extrabold text-gray-900">할 일</h3>
                         </div>
                         <div id="gangho-timer-list" class="grid grid-cols-1 gap-3">
                             <div class="text-center py-10 text-gray-400 text-sm">데이터를 불러오는 중...</div>
@@ -526,10 +535,21 @@
 
                         <button onclick="switchTab('todo')"
                             class="w-full py-3.5 mt-3 bg-blue-50 text-blue-600 font-bold rounded-xl text-[15px] active:scale-95 transition-all hover:bg-blue-100">
-                            전체 시간표 확인하기
+                            전체 보기
                         </button>
                     </section>
 
+
+                    <section class="bg-white p-5 mb-3 lg:mb-6 lg:rounded-2xl lg:border lg:border-gray-200 lg:shadow-sm w-full lg:col-span-full">
+    <div class="mb-5 flex items-center justify-between">
+        <h3 class="text-[19px] font-extrabold text-gray-900">
+            <span class="w-1.5 h-5 bg-blue-600 inline-block rounded-full mr-2 align-middle"></span>세계 탐험
+        </h3>
+    </div>
+    
+    <div id="home-map-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
+        </div>
+</section>
                 </div>
             </div>
         </div>

@@ -727,32 +727,37 @@ function resetSliderTimer() {
     if (slideInterval) clearInterval(slideInterval);
     startSlider();
 }
-
-// [수정] 홈 화면 지역 정보 로드 (가로 스크롤 + URL 이동)
+// [수정] 세계 탐험 리스트 로드 (image_524c19.png 디자인 적용)
 function loadHomeMaps() {
     const mapList = document.getElementById('home-map-list');
     if (!mapList) return;
-    mapList.innerHTML = '';
 
-    // dummyMapData를 순회하며 카드 생성
-    dummyMapData.forEach(map => {
-        const div = document.createElement('div');
-        div.className = 'map-card-horizontal'; // 새로 만든 CSS 클래스 적용
+    mapList.innerHTML = dummyMapData.map(map => `
+        <div class="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-md transition-all cursor-pointer group"
+             onclick="window.location.href='map/?path=${map.key}'">
+            
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex-none">
+                    <img src="${map.image}" 
+                         class="w-full h-full object-cover" 
+                         onerror="this.src='images/logo.png'" 
+                         alt="${map.title}">
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[15px] font-bold text-gray-800 leading-tight">${map.title}</span>
+                    <span class="text-[11px] text-gray-400 mt-0.5 font-medium">지역 탐험 및 수집</span>
+                </div>
+            </div>
 
-        // ★ 클릭 시 해당 지역 URL로 이동
-        // 예: 현재주소/map/?id=qinghe 로 이동합니다.
-        div.onclick = () => {
-            window.location.href = `map/?path=${map.key}`;
-        };
-
-        div.innerHTML = `
-            <img src="${map.image}" class="map-h-img" onerror="this.src='images/logo.png'">
-            <div class="map-h-title">${map.title}</div>
-        `;
-
-        mapList.appendChild(div);
-    });
+            <div class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg text-[12px] font-bold group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                지도보기
+            </div>
+        </div>
+    `).join('');
 }
+
+// 페이지 로드 시 실행
+document.addEventListener('DOMContentLoaded', loadHomeMaps);
 
 // script.js 파일의 switchTab 함수 교체
 // [2] 탭 전환 (URL 업데이트 및 뒤로 가기 완벽 대응)

@@ -1,296 +1,151 @@
-<div class="quest-detail-container" style="text-align: left; position: relative;">
+<div class="quest-detail-container max-w-4xl mx-auto space-y-8 p-4 lg:p-0 text-left relative" id="heart-guide-container">
     
-    <div style="border-bottom: 2px solid var(--wuxia-accent-red); padding-bottom: 15px; margin-bottom: 20px;">
-        <span style="background-color: var(--wuxia-accent-gold); color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; font-size: 0.8em; vertical-align: middle;">가이드</span>
-        <h2 style="color: var(--wuxia-accent-gold); display: inline-block; margin: 0 0 0 10px; vertical-align: middle;">
-            심법
-        </h2>
+    <div class="border-b-2 border-blue-600 pb-6 mb-6">
+        <div class="space-y-2">
+            <div class="flex items-center gap-3">
+                <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Growth</span>
+                <span class="text-gray-400 text-sm font-medium">전투 패시브 시스템</span>
+            </div>
+            <h2 class="text-3xl font-black text-gray-900 leading-tight">심법</h2>
+            <p class="text-gray-500 text-[14px] mt-2 font-medium tracking-tight">캐릭터의 기초 능력치를 강화하고 유파별 특수 효과를 해금하세요.</p>
+        </div>
     </div>
 
-    <div style="margin-bottom: 20px; text-align: center;">
-        <button onclick="openGuideSheet()" style="
-            width: 100%;
-            padding: 15px;
-            background-color: #fff;
-            color: #333;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1em;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        "
-        onmouseover="this.style.borderColor='var(--wuxia-accent-gold)'; this.style.backgroundColor='#fffcf5'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.1)';"
-        onmouseout="this.style.borderColor='#ddd'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';"
-        >
-            <span style="margin-right: 8px;">📖</span> 육성 가이드 및 팁 보기
+    <div class="mb-6">
+        <button onclick="openGuideSheet()" class="w-full flex items-center justify-center gap-3 py-4 bg-blue-50 text-blue-700 rounded-2xl border border-blue-100 font-black text-[15px] hover:bg-blue-100 transition-all active:scale-[0.98] shadow-sm">
+            <span class="text-lg">📖</span> 심법 육성 가이드 및 팁 보기
         </button>
     </div>
 
     <div id="heart-library-list" class="heart-library-grid">
-        <div style="text-align: center; padding: 40px; color: #999;">
-            데이터를 불러오는 중...
+        <div class="col-span-full text-center py-20">
+            <div class="inline-block w-8 h-8 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-400 text-sm font-medium">심법 목록을 동기화 중...</p>
         </div>
     </div>
 
-    <div id="guide-overlay" class="bottom-sheet-overlay" onclick="closeGuideSheet(); closeHeartDetailSheet()"></div>
+    <div id="guide-overlay" class="fixed inset-0 bg-black/60 z-[11000] hidden opacity-0 transition-opacity duration-300 pointer-events-none" onclick="closeGuideSheet(); closeHeartDetailSheet()"></div>
 
-    <div id="guide-sheet" class="bottom-sheet">
-        
-        <div class="sheet-header">
-            <h3>심법 육성 가이드</h3>
-            <button onclick="closeGuideSheet()" class="close-sheet-btn">✕</button>
+    <div id="guide-sheet" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[32px] shadow-2xl z-[11001] translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[85vh]">
+        <div class="sheet-header flex items-center justify-between px-6 py-5 border-b border-gray-100 bg-white rounded-t-[32px]">
+            <h3 class="text-lg font-black text-gray-900 tracking-tight">심법 육성 가이드</h3>
+            <button onclick="closeGuideSheet()" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full text-gray-400 hover:text-gray-900 transition-colors">✕</button>
         </div>
-
-        <div class="sheet-content">
-            <div class="detail-chunk" style="margin-bottom: 30px;">
-                <div style="background-color: #fffcf5; border: 1px solid var(--wuxia-accent-gold); padding: 15px; border-radius: 4px;">
-                    <p style="margin: 0 0 10px 0; color: var(--wuxia-accent-red);"><strong>📍 개요</strong></p>
-                    <p style="margin: 0; color: #333; font-size: 0.95em; line-height: 1.6;">
-                        심법은 메뉴의 <strong>[육성]</strong> 탭에서 확인할 수 있는 패시브 능력입니다.<br>
-                        각 심법의 노드를 해금하여 강화하려면 <strong>'심득'</strong>이라는 재료가 필요하며, 하나의 심법을 완전히 돌파하는 것은 장기간의 노력이 필요한 <strong>엔드게임 콘텐츠</strong>입니다.
-                    </p>
-                </div>
-            </div>
-
-            <div class="detail-chunk" style="margin-bottom: 30px;">
-                <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
-                    필수 심법: '결의의 노래'
-                </h4>
-                <p style="color: #666; line-height: 1.6; font-size: 0.95em;">
-                    한 빌드에 4개의 심법이 필요하므로, 초반부터 주력 심법을 정해 자원을 집중해야 합니다. 아직 빌드를 정하지 못했다면, 모든 빌드에서 공통으로 사용되는 <strong>'결의의 노래'</strong>에 우선 투자하세요.
+        
+        <div class="sheet-content flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide text-left">
+            <div class="bg-amber-50 rounded-2xl border border-amber-100 p-5 relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 text-6xl opacity-10 grayscale select-none text-amber-900">📍</div>
+                <h4 class="text-amber-900 font-black text-sm mb-2 flex items-center gap-1.5 uppercase">Overview</h4>
+                <p class="text-[14px] text-amber-900/80 leading-relaxed font-medium">
+                    심법은 <strong>[육성]</strong> 탭의 패시브 능력입니다. <strong>'심득'</strong>을 소모해 노드를 해금하며, 완전 돌파는 상당한 시간이 소요되는 엔드게임 콘텐츠입니다.
                 </p>
             </div>
 
-            <div class="detail-chunk" style="margin-bottom: 30px;">
-                <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
-                    획득 방법 1: 심력 사용
+            <div class="space-y-3">
+                <h4 class="text-gray-900 font-black text-[16px] flex items-center gap-2">
+                    <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>추천: 결의의 노래
                 </h4>
-                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 4px;">
-                    <ul style="color: #555; line-height: 1.6; padding-left: 20px; margin: 0; font-size: 0.9em;">
-                        <li><strong>진수전 보스:</strong> 빨간 모자 아이콘</li>
-                        <li><strong>거점:</strong> 빨간 탑 아이콘</li>
-                        <li><strong>검무장:</strong> 심력 60 소모, 상자 3개 (첫 처치 시 +3개)</li>
+                <p class="text-[14px] text-gray-600 leading-relaxed pl-3.5 border-l-2 border-gray-100">
+                    한 빌드에 4개의 심법이 필요합니다. 빌드 확정 전이라면 모든 빌드 공통 필수인 <strong>'결의의 노래'</strong>에 우선 투자하세요.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                    <h4 class="text-gray-900 font-bold text-sm mb-3">방법 1: 심력 사용</h4>
+                    <ul class="space-y-2 text-[13px] text-gray-600 font-medium">
+                        <li class="flex items-center gap-2"><span class="text-red-500">🔴</span> 진수전 보스 (빨간 모자)</li>
+                        <li class="flex items-center gap-2"><span class="text-red-500">🔴</span> 거점 (빨간 탑)</li>
+                        <li class="flex items-center gap-2"><span class="text-blue-500">🔵</span> 검무장 (심력 60 소모)</li>
                     </ul>
                 </div>
-            </div>
-
-            <div class="detail-chunk" style="margin-bottom: 30px;">
-                <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
-                    획득 방법 2: 회수 및 교체
-                </h4>
-                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 4px;">
-                    <ol style="color: #555; line-height: 1.6; padding-left: 20px; margin: 0; font-size: 0.9em;">
-                        <li>인벤토리에서 필요 없는 심득 <strong>'회수'</strong> (주력 심득 잠금 필수!)</li>
-                        <li>획득한 '진귀한 서표'로 상점에서 원하는 유파 상자 구매</li>
+                <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                    <h4 class="text-gray-900 font-bold text-sm mb-3">방법 2: 회수 및 교체</h4>
+                    <ol class="space-y-2 text-[13px] text-gray-600 font-medium">
+                        <li class="flex gap-2 text-left"><span class="text-blue-600">1.</span> 불필요한 심득 회수 (주력 잠금 필수)</li>
+                        <li class="flex gap-2 text-left"><span class="text-blue-600">2.</span> 서표로 상점 내 유파 상자 구매</li>
                     </ol>
                 </div>
             </div>
-             <div class="detail-chunk" style="margin-bottom: 40px;">
-                <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
-                    획득 방법 3: 심법 변환 
-                </h4>
-                <p style="color: #666; line-height: 1.6; font-size: 0.95em;">
-                    두 심법 간에 <strong>심득 개수</strong>를 맞바꾸는 기능입니다. 시즌당 무료 4회 가능합니다.
-                </p>
-            </div>
 
-            <div class="detail-chunk" style="margin-bottom: 40px;">
-                <h4 style="color: #333; border-left: 4px solid var(--wuxia-accent-red); padding-left: 10px; margin-bottom: 10px; font-weight: bold;">
-                    💡 팁: 심법 빠른 돌파 (심법 세탁)
+            <div class="bg-blue-600 rounded-2xl p-6 shadow-xl shadow-blue-100 text-left">
+                <h4 class="text-white font-black text-lg mb-4 flex items-center gap-2 italic">
+                    💡 FAST GROWTH TIP
                 </h4>
-                <p style="color: #666; line-height: 1.6; font-size: 0.95em; margin-bottom: 15px;">
-                    최종 빌드를 미리 계획해두고, <strong>심법 변경</strong>을 통해 유파를 바꿔가며 상점의 유파별 상자를 구매하면 심득을 훨씬 빠르게 모을 수 있습니다.
+                <p class="text-blue-50 text-[14px] leading-relaxed mb-6 opacity-90">
+                    심법 변경 기능을 활용해 유파를 옮겨 다니며 상점의 <strong>유파별 상자</strong>를 모두 선점하면 성장 속도가 비약적으로 상승합니다.
                 </p>
-
-                <div style="background-color: #e3f2fd; padding: 15px; border-radius: 4px; border: 1px solid #bbdefb;">
-                    <p style="margin: 0 0 10px 0; color: #1565c0; font-weight: bold; font-size: 0.9em;">
-                        📝 예시) 목표: 구현+격류 / 명금–영 유파
-                    </p>
-                    <ol style="color: #444; line-height: 1.6; padding-left: 20px; margin: 0; font-size: 0.9em;">
-                        <li style="margin-bottom: 5px;">
-                            <strong>열석–위(탄식, 풍뢰)</strong>로 시작<br>
-                            └ 심득 교체로 열석 상자 600개 전부 교환
-                        </li>
-                        <li style="margin-bottom: 5px;">
-                            <strong>견사 또는 파죽</strong>으로 변경 (1주 대기)<br>
-                            └ 해당 유파 상자 600개 교환
-                        </li>
-                        <li>
-                            최종 목표인 <strong>명금–영</strong>으로 변경<br>
-                            └ 진행하면서 명금 상자 교환
-                        </li>
-                    </ol>
+                <div class="bg-white/10 rounded-xl p-4 space-y-3 border border-white/10">
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-white text-blue-600 rounded-full flex items-center justify-center text-xs font-black flex-none">1</div>
+                        <p class="text-white text-[13px] leading-tight font-medium"><strong>열석 유파</strong>로 시작해 상자 600개 전부 교환</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-white text-blue-600 rounded-full flex items-center justify-center text-xs font-black flex-none">2</div>
+                        <p class="text-white text-[13px] leading-tight font-medium"><strong>견사/파죽</strong> 변경 후 상자 600개 교환 (1주 대기)</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-6 h-6 bg-white text-blue-600 rounded-full flex items-center justify-center text-xs font-black flex-none">3</div>
+                        <p class="text-white text-[13px] leading-tight font-medium"><strong>최종 빌드 유파</strong>로 변경하여 마무리</p>
+                    </div>
                 </div>
-                
-                <p style="margin-top: 10px; color: #d32f2f; font-size: 0.85em;">
-                    ※ 주의: 최종 빌드에서 사용하는 '범용 심법'과 '전용 심법'의 개수를 정확히 구분해서 계획해야 낭비가 없습니다.
-                </p>
             </div>
-
-            <div style="height: 50px;"></div> </div>
-    </div>
-
-    <div id="heart-detail-sheet" class="bottom-sheet">
-        <div class="sheet-header">
-            <h3 id="heart-sheet-title">심법 상세</h3>
-            <button onclick="closeHeartDetailSheet()" class="close-sheet-btn">✕</button>
+            <div class="h-10"></div>
         </div>
-        <div class="sheet-content" id="heart-sheet-content">
-            </div>
     </div>
 
-   <style>
-        /* 1. 심법 리스트 그리드 스타일 */
+    <div id="heart-detail-sheet" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-[32px] shadow-2xl z-[11001] translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[85vh]">
+        <div class="sheet-header flex items-center justify-between px-6 py-5 border-b border-gray-100 bg-white rounded-t-[32px]">
+            <h3 id="heart-sheet-title" class="text-lg font-black text-gray-900">심법 상세</h3>
+            <button onclick="closeHeartDetailSheet()" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full text-gray-400 hover:text-gray-900 transition-colors">✕</button>
+        </div>
+        <div class="sheet-content flex-1 overflow-y-auto p-6 text-left" id="heart-sheet-content"></div>
+        <div class="h-8 bg-white flex-none"></div>
+    </div>
+
+    <style>
+        /* 모바일 3열 / 태블릿 4열 / PC 6열 그리드 */
         .heart-library-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 15px;
-            padding: 10px 0;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
+        @media (min-width: 640px) { .heart-library-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (min-width: 1024px) { .heart-library-grid { grid-template-columns: repeat(6, 1fr); } }
 
-        /* 2. 개별 아이템 카드 스타일 */
+        /* JS 생성 아이템 카드 스타일 */
         .heart-lib-item {
+            background: #fff;
+            border: 1px solid #f3f4f6;
+            border-radius: 20px;
+            padding: 16px 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 15px 5px;
-            border: 1px solid #eee;
-            border-radius: 8px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            transition: all 0.2s;
-            background: #fff;
         }
-
         .heart-lib-item:hover {
-            border-color: var(--wuxia-accent-gold);
-            background-color: #fffcf5;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border-color: #3b82f6;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
         }
+        .heart-lib-item:active { transform: scale(0.96); }
+        .heart-lib-img { width: 48px; height: 48px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
+        .heart-lib-name { font-size: 12px; font-weight: 700; color: #374151; text-align: center; line-height: 1.3; word-break: keep-all; }
 
-        .heart-lib-item:active {
-            transform: scale(0.95);
-        }
+        /* 시트 상태 제어 */
+        body.sheet-open, body.heart-sheet-open { overflow: hidden; }
+        body.sheet-open #guide-overlay, body.heart-sheet-open #guide-overlay { display: block; opacity: 1; pointer-events: auto; }
+        body.sheet-open #guide-sheet { transform: translateY(0); }
+        body.heart-sheet-open #heart-detail-sheet { transform: translateY(0); }
 
-        .heart-lib-img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            margin-bottom: 8px;
-        }
-
-        .heart-lib-name {
-            font-size: 0.8em;
-            color: #555;
-            text-align: center;
-            word-break: keep-all;
-            line-height: 1.2;
-        }
-
-        /* ========================================= */
-        /* 바텀시트 제어 스타일 */
-        /* ========================================= */
-        
-        /* 3. 모바일 기본 스타일 (전체 너비) */
-        .bottom-sheet {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            z-index: 1001;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: translateY(100%); /* 기본적으로 아래로 숨김 */
-            
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-            max-height: 85vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* [추가] 4. PC 화면 대응 (중앙 정렬) */
+        /* PC 화면 대응 */
         @media (min-width: 768px) {
-            .bottom-sheet {
-                width: 500px; /* PC에서는 500px로 고정 */
-                left: 50%;    /* 화면 중앙 */
-                /* transform은 아래 활성화 클래스에서 제어하므로 여기선 위치만 잡음 */
-                margin-left: -250px; /* width의 절반만큼 왼쪽으로 이동해 중앙 정렬 */
-                bottom: 20px; /* 화면 아래에서 살짝 띄움 */
-                border-radius: 15px; /* 네 모서리 모두 둥글게 */
-            }
-            
-            /* PC에서 숨김 상태 */
-            .bottom-sheet:not(#guide-sheet):not(#heart-detail-sheet) { 
-               /* 기본적으로 다 숨김 상태여야 함 (위의 transform:translateY(100%)가 적용됨) */
-            }
+            #guide-sheet, #heart-detail-sheet { width: 500px; left: 50%; margin-left: -250px; border-radius: 32px 32px 0 0; }
         }
 
-        /* 5. 활성화 제어 (ID별) */
-        
-        /* PC/모바일 공통: 열릴 때 위치 */
-        body.sheet-open #guide-sheet {
-            transform: translateY(0);
-        }
-
-        body.heart-sheet-open #heart-detail-sheet {
-            transform: translateY(0);
-        }
-
-        /* PC에서는 숨길 때 화면 밖으로 확실히 내리기 위해 transform 값 조정 필요 시 추가 */
-        @media (min-width: 768px) {
-            /* PC에서는 닫혀있을 때 화면 아래로 더 내려가야 함 (bottom:20px 때문) */
-            .bottom-sheet {
-                transform: translateY(120%); 
-            }
-            
-            /* PC에서 열릴 때 */
-            body.sheet-open #guide-sheet {
-                transform: translateY(0);
-            }
-            body.heart-sheet-open #heart-detail-sheet {
-                transform: translateY(0);
-            }
-        }
-
-        /* 오버레이 제어 */
-        body.sheet-open #guide-overlay,
-        body.heart-sheet-open #guide-overlay {
-            display: block;
-            opacity: 1;
-            z-index: 1000;
-        }
-        
-        .sheet-content {
-            overflow-y: auto;
-            flex: 1;
-            padding: 20px;
-            -webkit-overflow-scrolling: touch; 
-        }
-        
-        .sheet-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            /* PC에서는 헤더도 둥글게 유지 */
-        }
-        
-        @media (min-width: 768px) {
-            .sheet-header {
-                border-radius: 15px 15px 0 0;
-            }
-        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </div>

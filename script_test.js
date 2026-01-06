@@ -4357,3 +4357,10 @@ if (audio) {
         selectTrack(currentIdx);
     };
 }
+
+
+
+// 초기화 실행
+document.addEventListener('DOMContentLoaded', initGlobalSearch);
+
+

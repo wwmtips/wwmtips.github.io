@@ -61,16 +61,32 @@
 
     <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md px-4 py-3 flex items-center gap-3 border-b border-gray-100">
-        <div class="flex-1 bg-gray-100 rounded-xl px-4 py-2 flex items-center gap-2">
-            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md px-4 py-3 border-b border-gray-100">
+    <div class="flex items-center gap-3">
+        <div class="flex-1 bg-gray-100 rounded-xl px-4 py-2 flex items-center gap-2 relative">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            
             <input type="text" id="header-search-input" placeholder="무림의 정보를 검색해보세요" 
-                class="bg-transparent outline-none text-[15px] w-full placeholder-gray-400">
+                class="bg-transparent outline-none text-[15px] w-full placeholder-gray-400" autocomplete="off">
+            
+            <button id="search-clear-btn" class="text-gray-400 text-xs font-bold" style="display:none;">X</button>
+
+            <div id="global-search-results" class="absolute top-full left-0 right-0 bg-white shadow-xl rounded-b-2xl mt-1 overflow-hidden z-[60]">
+                </div>
         </div>
+
         <button onclick="toggleSidebar()" class="text-gray-500 p-1">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
         </button>
-    </header>
+    </div>
+</header>
+
 
     <main id="main-content" class="pb-28 max-w-lg mx-auto">
         

@@ -21,12 +21,12 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* 토스 포인트 블루 데코바 */
+        /* [공통] 데코바 */
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [중요] script.js가 생성하는 동적 요소 스타일링 (토스 디자인 적용) */
+        /* [필수] script.js 호환 스타일 (삭제 금지) */
         
-        /* 1. 퀘스트(무림록) 카드 스타일 */
+        /* 1. 퀘스트(무림록) 카드 */
         .quest-card {
             background-color: white;
             border-radius: 16px;
@@ -41,15 +41,30 @@
             transition: transform 0.1s;
         }
         .quest-card:active { transform: scale(0.98); }
-        .quest-info { display: flex; flex-direction: column; gap: 4px; }
         .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
         .quest-type { font-size: 12px; color: #8b95a1; }
-        .quest-badge { 
-            font-size: 11px; font-weight: 600; color: #3182f6; 
-            background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; 
-        }
+        .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
 
-        /* 2. 천지록 아이템 스타일 */
+        /* 2. 천지록 아이템 (script.js가 .chunji-item-card 클래스를 생성함) */
+        .chunji-item-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 0; /* 그리드 사용 시 마진 제거 */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            border: 1px solid #f2f4f6;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
+        .chunji-card-title { font-size: 14px; font-weight: 600; color: #333; }
+
+        /* 3. 천지록 리스트 아이템 (상세 목록용) */
         .chunji-item {
             background-color: white;
             border-radius: 16px;
@@ -65,14 +80,14 @@
         .chunji-text-group { display: flex; flex-direction: column; gap: 2px; }
         .chunji-title { font-weight: 700; font-size: 15px; color: #191f28; }
         .chunji-type { font-size: 12px; color: #8b95a1; }
-        .arrow-icon { color: #b0b8c1; font-size: 18px; }
 
-        /* 3. 홈 화면 무림록 버튼 (기존 script.js 호환) */
+        /* 4. 무림록 버튼 (홈 화면용) */
         .mansarok-btn {
             display: flex;
             align-items: center;
+            justify-content: center;
             background-color: white;
-            padding: 14px 16px;
+            padding: 14px 10px;
             border-radius: 14px;
             border: 1px solid #f2f4f6;
             font-size: 14px;
@@ -81,39 +96,38 @@
             cursor: pointer;
             box-shadow: 0 1px 3px rgba(0,0,0,0.03);
             transition: all 0.2s;
+            text-align: center;
         }
         .mansarok-btn:hover { border-color: #3182f6; color: #3182f6; }
-        .mansarok-btn span { width: 100%; }
+        .mansarok-btn span { width: 100%; word-break: keep-all; }
 
-        /* 4. 페이지네이션 버튼 */
+        /* 페이지네이션 */
         .pagination-controls { display: flex; justify-content: center; gap: 6px; margin-top: 20px; margin-bottom: 40px; }
-        .pagination-btn {
-            width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 600;
-            color: #8b95a1; background: transparent; transition: all 0.2s;
-        }
+        .pagination-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #8b95a1; background: transparent; }
         .pagination-btn.active { background-color: #3182f6; color: white; }
-        
-        /* 5. 족보 테이블 스타일 */
-        .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+        /* 족보 테이블 */
+        .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; }
         .answer-table th { background: #f9fafb; padding: 12px; font-size: 13px; color: #6b7684; text-align: left; border-bottom: 1px solid #f2f4f6; }
         .answer-table td { padding: 14px 12px; font-size: 14px; color: #333; border-bottom: 1px solid #f2f4f6; }
         .highlight { color: #3182f6; font-weight: bold; }
 
-        /* 슬라이더 및 사이드바 */
-        .slider-track { display: flex; transition: transform 0.5s ease-in-out; }
-        .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
+        /* 슬라이더 */
+        .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; border-radius: 24px; aspect-ratio: 21/10; }
+        .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
+        .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; cursor: pointer; }
         .slide-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
-        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
         .slide-title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
-        .slide-desc { font-size: 12px; opacity: 0.9; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-        .slide-link-btn { font-size: 11px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; backdrop-filter: blur(4px); }
-        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.3s; }
+        .slide-tag { font-size: 10px; background: #3182f6; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
+        .slide-link-btn { display:none; } /* 디자인상 버튼 숨김 */
+        .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
         .indicator.active { width: 18px; background: white; border-radius: 10px; }
 
         /* 검색 드롭다운 */
-        #global-search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); z-index: 60; border: 1px solid #f2f4f6; border-top: none; }
+        #global-search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); z-index: 60; border: 1px solid #f2f4f6; border-top: none; max-height:300px; overflow-y:auto; }
         .search-result-item { padding: 12px 16px; border-bottom: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-        .search-result-item:hover { background-color: #f9fafb; }
+        .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
+        .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
 
         /* 사이드바 */
         #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 2000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
@@ -121,14 +135,14 @@
         #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1999; backdrop-filter: blur(2px); }
         #sidebar-overlay.active { display: block; }
 
-        /* 지도 및 인물 가로 스크롤 카드 */
-        .map-card-horizontal, .char-card-horizontal { flex: none; width: 120px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
-        .map-h-img, .char-h-img { width: 100%; height: 80px; object-fit: cover; }
-        .map-h-title, .char-h-name { font-size: 12px; font-weight: bold; padding: 8px; text-align: center; color: #333; }
-        .char-overlay-box { padding: 8px; text-align: center; }
-        .char-h-affil { font-size: 10px; color: #888; margin-top: 2px; }
+        /* 가로 스크롤 카드 */
+        .map-card-horizontal, .char-card-horizontal { flex: none; width: 100px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
+        .map-h-img, .char-h-img { width: 100%; height: 100px; object-fit: cover; }
+        .map-h-title, .char-h-name { font-size: 11px; font-weight: bold; padding: 6px; text-align: center; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .char-overlay-box { padding: 6px; text-align: center; }
+        .char-h-affil { font-size: 9px; color: #888; }
 
-        /* 탭 활성화 스타일 */
+        /* 탭 활성화 */
         .nav-btn.active svg { color: #3182f6; }
         .nav-btn.active span { color: #3182f6; font-weight: 700; }
     </style>
@@ -157,9 +171,10 @@
     </header>
 
     <main id="main-content" class="pb-28 max-w-lg mx-auto">
+        
         <div id="view-home">
             <section class="mt-4 px-4">
-                <div class="hero-slider-wrapper relative w-full aspect-[21/10] bg-gray-200 rounded-3xl overflow-hidden shadow-sm">
+                <div class="hero-slider-wrapper">
                     <div id="hero-slider-track" class="slider-track h-full"></div>
                     <div id="slider-indicators" class="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5"></div>
                 </div>
@@ -168,22 +183,22 @@
             <section class="mt-8 px-4">
                 <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">기본 가이드</h3></div>
                 <div class="grid grid-cols-3 gap-2">
-                    <a onclick="openGuideDirect('newb.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center">
+                    <a onclick="openGuideDirect('newb.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="text-2xl mb-1">📜</div><span class="text-[11px] font-bold text-gray-700">강호 입문서</span>
                     </a>
-                    <a onclick="openGuideDirect('guide/up.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center">
+                    <a onclick="openGuideDirect('guide/up.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="text-2xl mb-1">📈</div><span class="text-[11px] font-bold text-gray-700">육성 가이드</span>
                     </a>
-                    <a onclick="openGuideDirect('moon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center">
+                    <a onclick="openGuideDirect('moon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="text-2xl mb-1">🏛️</div><span class="text-[11px] font-bold text-gray-700">문파 입문</span>
                     </a>
-                    <a onclick="openGuideDirect('guide/weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center">
+                    <a onclick="openGuideDirect('guide/weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="text-2xl mb-1">⚔️</div><span class="text-[11px] font-bold text-gray-700">장비 도감</span>
                     </a>
-                    <a onclick="openGuideDirect('tier_weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center">
+                    <a onclick="openGuideDirect('tier_weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="text-2xl mb-1">🌀</div><span class="text-[11px] font-bold text-gray-700">무공 도감</span>
                     </a>
-                    <a onclick="openGuideDirect('majang.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center">
+                    <a onclick="openGuideDirect('majang.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="text-2xl mb-1">🀄</div><span class="text-[11px] font-bold text-gray-700">마작 가이드</span>
                     </a>
                 </div>
@@ -204,21 +219,21 @@
                 </div>
                 <div id="home-chunji-list" class="grid grid-cols-2 gap-2"></div>
             </section>
-            
+
             <section class="mt-10 mb-6">
                 <div class="px-4 mb-4 flex items-center justify-between">
                     <div class="flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">인기 적수</h3></div>
-                    <span class="text-xs text-gray-400">전체보기 ></span>
+                    <span class="text-xs text-gray-400" onclick="enterBossDetail('boss.html')">전체보기 ></span>
                 </div>
                 <div class="flex overflow-x-auto gap-3 px-4 no-scrollbar">
-                     <a onclick="location.href='https://wwm.tips/?q=193'" class="flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center cursor-pointer">
+                    <a onclick="location.href='https://wwm.tips/?q=193'" class="flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2">
                             <img src="images/em/10.png" onerror="this.src='images/logo.png'" class="h-10 object-contain">
                         </div>
                         <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">망령 공자</span>
                         <span class="text-[9px] text-blue-500 font-medium mt-0.5">협경</span>
                     </a>
-                    <a onclick="location.href='https://wwm.tips/?q=198'" class="flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center cursor-pointer">
+                    <a onclick="location.href='https://wwm.tips/?q=198'" class="flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
                         <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2">
                             <img src="images/em/4.png" onerror="this.src='images/logo.png'" class="h-10 object-contain">
                         </div>
@@ -228,11 +243,10 @@
                 </div>
             </section>
 
-             <section class="mt-8 px-4">
+            <section class="mt-8 px-4">
                 <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">인물</h3></div>
                 <div id="home-char-list" class="flex gap-3 overflow-x-auto no-scrollbar"></div>
             </section>
-            
             <section class="mt-8 px-4">
                 <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">세계 탐험</h3></div>
                 <div id="home-map-list" class="flex gap-3 overflow-x-auto no-scrollbar"></div>
@@ -240,43 +254,53 @@
         </div>
 
         <div id="view-quest" style="display: none;" class="px-4 pt-4">
-            <div class="filter-bar-wrapper mb-4 flex gap-2 overflow-x-auto no-scrollbar">
-                <select id="quest-type-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="onQuestTypeChange()">
-                    <option value="all">전체</option>
-                    <option value="만사록">만사록</option>
-                    <option value="탐색">탐색</option>
-                    <option value="인연의 궤적">인연의 궤적</option>
-                    <option value="지과">지과</option>
-                </select>
-                <select id="quest-location-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="applyQuestFilter()">
-                    <option value="all">모든 지역</option>
-                </select>
+            <div id="quest-list-view">
+                <div class="filter-bar-wrapper mb-4 flex gap-2 overflow-x-auto no-scrollbar">
+                    <select id="quest-type-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="onQuestTypeChange()">
+                        <option value="all">전체</option>
+                        <option value="만사록">만사록</option>
+                        <option value="탐색">탐색</option>
+                        <option value="인연의 궤적">인연의 궤적</option>
+                        <option value="지과">지과</option>
+                    </select>
+                    <select id="quest-location-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="applyQuestFilter()">
+                        <option value="all">모든 지역</option>
+                    </select>
+                </div>
+                <div id="quest-grid-container"></div>
+                <div id="pagination-container"></div>
             </div>
-            <div id="quest-grid-container"></div>
-            <div id="pagination-container"></div>
             
-            <div id="quest-list-view" style="display:block;"></div>
             <div id="quest-detail-view" style="display:none;">
-                <button class="mb-4 text-sm font-bold text-blue-600" onclick="showQuestList()">← 목록으로 돌아가기</button>
+                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showQuestList()">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    목록으로 돌아가기
+                </button>
                 <div id="quest-content-loader"></div>
             </div>
         </div>
 
         <div id="view-chunji" style="display: none;" class="px-4 pt-4">
-            <div class="mb-4 flex gap-2">
-                <select id="chunji-type-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="onChunjiTypeChange()">
-                    <option value="all">전체</option>
-                    <option value="병기">병기</option>
-                    <option value="풍물">풍물</option>
-                </select>
-            </div>
             <div id="chunji-list-view">
+                <div class="mb-4 flex gap-2">
+                    <select id="chunji-type-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="onChunjiTypeChange()">
+                        <option value="all">전체</option>
+                        <option value="병기">병기</option>
+                        <option value="풍물">풍물</option>
+                    </select>
+                    <select id="chunji-subtype-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="applyChunjiFilter()">
+                        <option value="all">모든 항목</option>
+                    </select>
+                </div>
                 <div id="chunji-list-container"></div>
-                <div id="chunji-pagination-container" class="pagination-controls"></div>
-             </div>
+                <div id="chunji-pagination-container"></div>
+            </div>
 
-             <div id="chunji-detail-view" style="display:none;">
-                <button class="mb-4 text-sm font-bold text-blue-600" onclick="showChunjiList()">← 목록으로 돌아가기</button>
+            <div id="chunji-detail-view" style="display:none;">
+                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showChunjiList()">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    목록으로 돌아가기
+                </button>
                 <div id="chunji-detail-content"></div>
             </div>
         </div>
@@ -285,7 +309,6 @@
             <div id="quiz-counter-area" class="text-sm text-gray-500 mb-2">데이터 로딩 중...</div>
             <input type="text" id="quiz-local-search" class="w-full bg-white border border-gray-200 rounded-xl p-3 mb-4 text-sm" placeholder="단서를 입력하세요 (예: 가시)">
             <table class="answer-table w-full">
-                <thead><tr><th>단서</th><th>정답</th><th>제보</th></tr></thead>
                 <tbody id="quiz-table-body"></tbody>
             </table>
         </div>
@@ -295,11 +318,11 @@
         </div>
 
         <div id="view-news" style="display: none;" class="px-4 pt-4"><div id="full-news-list"></div></div>
-        <div id="view-guide" style="display: none;" class="px-4 pt-4"><div id="guide-content-loader"></div></div>
+        <div id="view-guide" style="display: none;" class="px-4 pt-4">
+            <div id="guide-content-loader"></div>
+            <div id="guide-dynamic-content"></div> </div>
         <div id="view-builder" style="display: none;" class="px-4 pt-4">
-            <div id="tools-menu">
-                <div id="build-list-container"></div>
-            </div>
+            <div id="tools-menu"><div id="build-list-container"></div></div>
             <div id="builder-interface" style="display:none;"></div>
         </div>
         <div id="view-map-detail" style="display: none; height: 100vh;">
@@ -309,7 +332,7 @@
 
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 px-2 py-2 flex justify-around items-center z-[100] pb-safe">
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 px-2 py-2 flex justify-around items-center z-[50]">
         <button id="nav-home" onclick="switchTab('home')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1 active">
             <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
             <span class="text-[10px] font-medium text-gray-500">홈</span>
@@ -352,34 +375,17 @@
             <button onclick="closeInfoModal()" class="w-full mt-4 bg-gray-100 py-3 rounded-xl font-bold text-gray-700">닫기</button>
         </div>
     </div>
+    
+    <div id="person-bottom-sheet" class="fixed inset-0 bg-black/50 z-[2000] hidden">
+        <div class="bottom-sheet-overlay absolute inset-0" onclick="closePersonDetail()"></div>
+        <div class="bottom-sheet-content absolute bottom-0 w-full bg-white rounded-t-3xl p-6 transition-transform transform translate-y-full">
+            <div id="person-detail-body"></div>
+        </div>
+    </div>
 
     <script src="hw.js"></script>
     <script src="script.js"></script>
     <script src="timer.js"></script>
 
-    <script>
-        // 사이드바 토글 로직
-        function toggleSidebar() { 
-            document.getElementById('main-sidebar').classList.add('active'); 
-            document.getElementById('sidebar-overlay').classList.add('active');
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closeSidebar() { 
-            document.getElementById('main-sidebar').classList.remove('active'); 
-            document.getElementById('sidebar-overlay').classList.remove('active');
-            document.body.style.overflow = ''; 
-        }
-        // 기본 가이드 이동
-        function openGuideDirect(url) {
-            console.log("가이드 이동:", url);
-            // 여기에 script.js의 loadGuideContent 로직 호출 혹은 페이지 이동
-            if (typeof loadGuideContent === 'function') {
-                // script.js에 있는 함수 호출
-                // 주의: 가이드 탭으로 먼저 이동해야 함
-                switchTab('guide');
-                // 실제 구현은 script.js의 openGuideDirect가 처리함
-            }
-        }
-    </script>
 </body>
 </html>

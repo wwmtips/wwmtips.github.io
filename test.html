@@ -22,112 +22,78 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* [공통] 데코바 */
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
-        /* [필수] script.js 및 timer.js 호환 스타일 */
-        
-        /* 1. timer.js가 생성하는 타이머 카드 스타일 (토스 스타일로 재정의) */
+        /* [타이머 리스트 카드] */
         .timer-row {
-            background-color: white;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid #f2f4f6;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.1s;
+            background-color: white; border-radius: 20px; padding: 18px 20px; margin-bottom: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); border: 1px solid #f2f4f6; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; transition: all 0.2s;
         }
-        .timer-row:active { transform: scale(0.98); }
-        
-        /* 긴급 상황(시간 얼마 안 남음) 깜빡임 */
-        @keyframes urgentBlink { 0% { border-color: #ef9a9a; background-color: #fff; } 50% { border-color: #e53935; background-color: #ffebee; } 100% { border-color: #ef9a9a; background-color: #fff; } }
-        .timer-urgent-blink { animation: urgentBlink 2s infinite; }
-        .row-completed { opacity: 0.6; filter: grayscale(100%); }
-
-        /* 타이머 내부 텍스트 스타일 */
-        .timer-left { display: flex; flex-direction: column; gap: 4px; }
-        .timer-right { text-align: right; }
-        .timer-title { font-weight: 700; font-size: 15px; color: #191f28; display: flex; align-items: center; }
-        .timer-status-row { font-size: 12px; color: #8b95a1; display: flex; gap: 6px; align-items: center; }
-        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 14px; font-weight: 700; color: #3182f6; letter-spacing: -0.5px; }
-        
-        /* 상태 뱃지 */
-        .status-badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
+        .timer-row:active { transform: scale(0.98); background-color: #fafafa; }
+        .timer-info { display: flex; flex-direction: column; gap: 4px; }
+        .timer-name { font-size: 16px; font-weight: 700; color: #191f28; display: flex; align-items: center; gap: 6px; }
+        .timer-desc { font-size: 12px; color: #8b95a1; display: flex; align-items: center; gap: 6px; }
+        .timer-clock { font-family: 'Roboto Mono', monospace; font-size: 15px; font-weight: 600; color: #333; text-align: right; }
+        .timer-clock.urgent { color: #e53935; animation: blink 2s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .status-badge { padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; color: white; }
         .status-ing { background-color: #3182f6; }
-        .status-end { background-color: #999; }
         .status-event { background-color: #f59e0b; }
-        .status-urgent { background-color: #ef5350; }
+        .timer-progress { font-size: 11px; font-weight: 700; color: #3182f6; background-color: #e8f3ff; padding: 2px 8px; border-radius: 12px; }
 
-        /* 2. 타이머/숙제 바텀시트 스타일 (timer.js 호환) */
+        /* [바텀시트] */
         #timer-sheet-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 5000;
-            display: none; opacity: 0; transition: opacity 0.3s;
+            background: rgba(0,0,0,0.6); z-index: 9999;
+            display: none; opacity: 0; transition: opacity 0.2s;
         }
         #timer-sheet-modal.show { display: block; opacity: 1; }
-        
-        #timer-sheet-modal .sheet-container {
-            position: absolute; bottom: 0; width: 100%;
-            background: white;
+        .sheet-container {
+            position: absolute; bottom: 0; width: 100%; background: white;
             border-top-left-radius: 24px; border-top-right-radius: 24px;
-            padding: 24px;
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            max-height: 80vh; overflow-y: auto;
+            padding: 24px 24px 40px 24px;
+            transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            max-height: 85vh; overflow-y: auto;
         }
         #timer-sheet-modal.show .sheet-container { transform: translateY(0); }
+        .sheet-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 24px auto; }
         
-        .sheet-close-btn {
-            position: absolute; top: 15px; right: 20px;
-            font-size: 24px; color: #999; background: none; border: none; cursor: pointer;
-        }
-
-        /* 숙제 리스트 아이템 */
-        .task-list-wrapper { margin-top: 15px; }
-        .task-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer;
-        }
+        /* [체크리스트 아이템] */
+        .task-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px dashed #f0f0f0; cursor: pointer; }
         .task-item:last-child { border-bottom: none; }
-        .task-loc { font-size: 11px; color: #3182f6; background: #e8f3ff; padding: 2px 6px; border-radius: 4px; margin-right: 6px; font-weight: bold; }
-        .task-title { font-size: 14px; color: #333; }
-        .task-check-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: #3182f6; font-weight: bold; }
-        .task-item.completed .task-title { text-decoration: line-through; color: #aaa; }
-        .task-item.completed .task-loc { background: #eee; color: #aaa; }
+        .task-left { display: flex; align-items: center; gap: 12px; }
+        .task-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #e5e8eb; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+        .task-content { display: flex; flex-direction: column; gap: 2px; }
+        .task-loc { font-size: 11px; color: #8b95a1; background: #f2f4f6; padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
+        .task-title { font-size: 15px; font-weight: 500; color: #333; }
+        .task-item.completed .task-check { background: #3182f6; border-color: #3182f6; }
+        .task-item.completed .task-check::after { content: '✔'; color: white; font-size: 14px; font-weight: bold; }
+        .task-item.completed .task-title { text-decoration: line-through; color: #b0b8c1; }
 
-        /* 기타 기존 스타일 유지 */
+        /* 기존 스타일 유지 */
         .quest-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.1s; }
         .quest-card:active { transform: scale(0.98); }
         .quest-name { font-weight: 700; font-size: 15px; color: #191f28; }
         .quest-type { font-size: 12px; color: #8b95a1; }
         .quest-badge { font-size: 11px; font-weight: 600; color: #3182f6; background-color: #e8f3ff; padding: 6px 10px; border-radius: 8px; }
-
         .chunji-item-card { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.03); border: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; justify-content: center; min-height: 50px; text-align: center; transition: all 0.2s; }
         .chunji-item-card:hover { border-color: #3182f6; color: #3182f6; }
         .chunji-card-title { font-size: 14px; font-weight: 600; color: #333; }
-
         .chunji-item { background-color: white; border-radius: 16px; padding: 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); border: 1px solid #f2f4f6; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .chunji-text-group { display: flex; flex-direction: column; gap: 2px; }
         .chunji-title { font-weight: 700; font-size: 15px; color: #191f28; }
         .chunji-type { font-size: 12px; color: #8b95a1; }
-
         .mansarok-btn { display: flex; align-items: center; justify-content: center; background-color: white; padding: 14px 10px; border-radius: 14px; border: 1px solid #f2f4f6; font-size: 14px; font-weight: 600; color: #333; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: all 0.2s; text-align: center; }
         .mansarok-btn:hover { border-color: #3182f6; color: #3182f6; }
         .mansarok-btn span { width: 100%; word-break: keep-all; }
-
         .pagination-controls { display: flex; justify-content: center; gap: 6px; margin-top: 20px; margin-bottom: 40px; }
         .pagination-btn { width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #8b95a1; background: transparent; }
         .pagination-btn.active { background-color: #3182f6; color: white; }
-
         .answer-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; }
         .answer-table th { background: #f9fafb; padding: 12px; font-size: 13px; color: #6b7684; text-align: left; border-bottom: 1px solid #f2f4f6; }
         .answer-table td { padding: 14px 12px; font-size: 14px; color: #333; border-bottom: 1px solid #f2f4f6; }
         .highlight { color: #3182f6; font-weight: bold; }
-
         .hero-slider-wrapper { position: relative; width: 100%; overflow: hidden; background: #e5e7eb; aspect-ratio: 21/10; }
         .slider-track { display: flex; height: 100%; transition: transform 0.5s ease-in-out; }
         .hero-slide { flex: none; width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; cursor: pointer; }
@@ -137,31 +103,24 @@
         .slide-link-btn { display:none; }
         .indicator { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
         .indicator.active { width: 18px; background: white; border-radius: 10px; }
-
         #global-search-results { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 0 0 16px 16px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); z-index: 60; border: 1px solid #f2f4f6; border-top: none; max-height:300px; overflow-y:auto; }
         .search-result-item { padding: 12px 16px; border-bottom: 1px solid #f2f4f6; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .badge { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
         .badge.quiz { background: #f59e0b; } .badge.item { background: #3b82f6; } .badge.info { background: #10b981; }
-
         #main-sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: white; z-index: 3000; transition: right 0.3s ease; box-shadow: -10px 0 20px rgba(0,0,0,0.1); }
         #main-sidebar.active { right: 0; }
         #sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2999; backdrop-filter: blur(2px); }
         #sidebar-overlay.active { display: block; }
-
         .map-card-horizontal, .char-card-horizontal { flex: none; width: 72px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f2f4f6; }
         .map-h-img, .char-h-img { width: 100%; height: 72px; object-fit: cover; }
         .map-h-title, .char-h-name { font-size: 10px; font-weight: bold; padding: 4px; text-align: center; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .char-overlay-box { padding: 4px; text-align: center; }
         .char-h-affil { font-size: 8px; color: #888; }
-
-        .nav-btn.active svg { color: #3182f6; }
-        .nav-btn.active span { color: #3182f6; font-weight: 700; }
-
+        .nav-btn.active svg { color: #3182f6; } .nav-btn.active span { color: #3182f6; font-weight: 700; }
         #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; opacity: 0; transition: opacity 0.3s; }
         #person-bottom-sheet.active { display: block; opacity: 1; }
         #person-bottom-sheet .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 80vh; overflow-y: auto; }
         #person-bottom-sheet.active .bottom-sheet-content { transform: translateY(0); }
-        .sheet-handle-bar { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px auto; }
     </style>
 </head>
 
@@ -182,9 +141,7 @@
                 <div id="global-search-results"></div>
             </div>
             <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-gray-600 rounded-full hover:bg-gray-100 transition-colors">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
         </div>
     </header>
@@ -199,41 +156,15 @@
                 </div>
             </section>
 
-            <section class="mt-6 px-4">
-                <div class="mb-3 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <span class="deco-bar"></span>
-                        <h3 class="text-lg font-bold">강호령</h3>
-                    </div>
-                    <span id="server-time" class="text-xs text-gray-400 font-mono tracking-tighter">00:00:00</span>
-                </div>
-                
-                <div id="gangho-timer-list">
-                    <div style="padding:20px; text-align:center; color:#999; font-size:0.9em;">시간을 읽는 중...</div>
-                </div>
-            </section>
-
             <section class="mt-8 px-4">
                 <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">기본 가이드</h3></div>
                 <div class="grid grid-cols-3 gap-2">
-                    <a onclick="openGuideDirect('newb.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
-                        <div class="text-2xl mb-1">📜</div><span class="text-[11px] font-bold text-gray-700">강호 입문서</span>
-                    </a>
-                    <a onclick="openGuideDirect('guide/up.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
-                        <div class="text-2xl mb-1">📈</div><span class="text-[11px] font-bold text-gray-700">육성 가이드</span>
-                    </a>
-                    <a onclick="openGuideDirect('moon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
-                        <div class="text-2xl mb-1">🏛️</div><span class="text-[11px] font-bold text-gray-700">문파 입문</span>
-                    </a>
-                    <a onclick="openGuideDirect('guide/weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
-                        <div class="text-2xl mb-1">⚔️</div><span class="text-[11px] font-bold text-gray-700">장비 도감</span>
-                    </a>
-                    <a onclick="openGuideDirect('tier_weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
-                        <div class="text-2xl mb-1">🌀</div><span class="text-[11px] font-bold text-gray-700">무공 도감</span>
-                    </a>
-                    <a onclick="openGuideDirect('majang.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
-                        <div class="text-2xl mb-1">🀄</div><span class="text-[11px] font-bold text-gray-700">마작 가이드</span>
-                    </a>
+                    <a onclick="openGuideDirect('newb.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">📜</div><span class="text-[11px] font-bold text-gray-700">강호 입문서</span></a>
+                    <a onclick="openGuideDirect('guide/up.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">📈</div><span class="text-[11px] font-bold text-gray-700">육성 가이드</span></a>
+                    <a onclick="openGuideDirect('moon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">🏛️</div><span class="text-[11px] font-bold text-gray-700">문파 입문</span></a>
+                    <a onclick="openGuideDirect('guide/weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">⚔️</div><span class="text-[11px] font-bold text-gray-700">장비 도감</span></a>
+                    <a onclick="openGuideDirect('tier_weapon.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">🌀</div><span class="text-[11px] font-bold text-gray-700">무공 도감</span></a>
+                    <a onclick="openGuideDirect('majang.html')" class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col items-center cursor-pointer active:scale-95 transition-transform"><div class="text-2xl mb-1">🀄</div><span class="text-[11px] font-bold text-gray-700">마작 가이드</span></a>
                 </div>
             </section>
 
@@ -260,18 +191,12 @@
                 </div>
                 <div class="flex overflow-x-auto gap-3 px-4 no-scrollbar">
                     <a onclick="location.href='https://wwm.tips/?q=193'" class="flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2">
-                            <img src="images/em/10.png" onerror="this.src='images/logo.png'" class="h-10 object-contain">
-                        </div>
-                        <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">망령 공자</span>
-                        <span class="text-[9px] text-blue-500 font-medium mt-0.5">협경</span>
+                        <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2"><img src="images/em/10.png" onerror="this.src='images/logo.png'" class="h-10 object-contain"></div>
+                        <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">망령 공자</span><span class="text-[9px] text-blue-500 font-medium mt-0.5">협경</span>
                     </a>
                     <a onclick="location.href='https://wwm.tips/?q=198'" class="flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
-                        <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2">
-                            <img src="images/em/4.png" onerror="this.src='images/logo.png'" class="h-10 object-contain">
-                        </div>
-                        <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">연심</span>
-                        <span class="text-[9px] text-blue-500 font-medium mt-0.5">진수전</span>
+                        <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2"><img src="images/em/4.png" onerror="this.src='images/logo.png'" class="h-10 object-contain"></div>
+                        <span class="text-[11px] font-bold text-gray-700 truncate w-full text-center">연심</span><span class="text-[9px] text-blue-500 font-medium mt-0.5">진수전</span>
                     </a>
                 </div>
             </section>
@@ -286,104 +211,73 @@
             </section>
         </div>
 
+        <div id="view-todo" style="display: none;" class="px-4 pt-4">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-2">
+                    <span class="deco-bar"></span>
+                    <h2 class="text-xl font-bold text-gray-800">강호 시시각각</h2>
+                </div>
+                <span id="server-time" class="text-xs text-gray-400 font-mono bg-white px-2 py-1 rounded-lg border border-gray-100 shadow-sm">00:00:00</span>
+            </div>
+            <div id="gangho-timer-list" class="space-y-3">
+                <div class="text-center text-gray-400 py-10">데이터를 불러오는 중...</div>
+            </div>
+        </div>
+
         <div id="view-quest" style="display: none;" class="px-4 pt-4">
             <div id="quest-list-view">
                 <div class="filter-bar-wrapper mb-4 flex gap-2 overflow-x-auto no-scrollbar">
-                    <select id="quest-type-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="onQuestTypeChange()">
-                        <option value="all">전체</option>
-                        <option value="만사록">만사록</option>
-                        <option value="탐색">탐색</option>
-                        <option value="인연의 궤적">인연의 궤적</option>
-                        <option value="지과">지과</option>
-                    </select>
-                    <select id="quest-location-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="applyQuestFilter()">
-                        <option value="all">모든 지역</option>
-                    </select>
+                    <select id="quest-type-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="onQuestTypeChange()"><option value="all">전체</option><option value="만사록">만사록</option><option value="탐색">탐색</option><option value="인연의 궤적">인연의 궤적</option><option value="지과">지과</option></select>
+                    <select id="quest-location-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="applyQuestFilter()"><option value="all">모든 지역</option></select>
                 </div>
                 <div id="quest-grid-container"></div>
                 <div id="pagination-container"></div>
             </div>
-            
-            <div id="quest-detail-view" style="display:none;">
-                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showQuestList()">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    목록으로 돌아가기
-                </button>
-                <div id="quest-content-loader"></div>
-            </div>
+            <div id="quest-detail-view" style="display:none;"><div id="quest-content-loader"></div></div>
         </div>
 
         <div id="view-chunji" style="display: none;" class="px-4 pt-4">
             <div id="chunji-list-view">
                 <div class="mb-4 flex gap-2">
-                    <select id="chunji-type-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="onChunjiTypeChange()">
-                        <option value="all">전체</option>
-                        <option value="병기">병기</option>
-                        <option value="풍물">풍물</option>
-                    </select>
-                    <select id="chunji-subtype-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="applyChunjiFilter()">
-                        <option value="all">모든 항목</option>
-                    </select>
+                    <select id="chunji-type-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="onChunjiTypeChange()"><option value="all">전체</option><option value="병기">병기</option><option value="풍물">풍물</option></select>
+                    <select id="chunji-subtype-select" class="bg-white border border-gray-200 text-sm rounded-lg p-2" onchange="applyChunjiFilter()"><option value="all">모든 항목</option></select>
                 </div>
                 <div id="chunji-list-container"></div>
                 <div id="chunji-pagination-container"></div>
             </div>
-
-            <div id="chunji-detail-view" style="display:none;">
-                <button class="mb-4 text-sm font-bold text-blue-600 flex items-center" onclick="showChunjiList()">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                    목록으로 돌아가기
-                </button>
-                <div id="chunji-detail-content"></div>
-            </div>
+            <div id="chunji-detail-view" style="display:none;"><div id="chunji-detail-content"></div></div>
         </div>
 
         <div id="view-quiz" style="display: none;" class="px-4 pt-4">
             <div id="quiz-counter-area" class="text-sm text-gray-500 mb-2">데이터 로딩 중...</div>
             <input type="text" id="quiz-local-search" class="w-full bg-white border border-gray-200 rounded-xl p-3 mb-4 text-sm" placeholder="단서를 입력하세요 (예: 가시)">
-            <table class="answer-table w-full">
-                <tbody id="quiz-table-body"></tbody>
-            </table>
+            <table class="answer-table w-full"><tbody id="quiz-table-body"></tbody></table>
         </div>
         
-        <div id="view-archive" style="display: none;" class="px-4 pt-4">
-             <div id="archive-grid-container" class="grid grid-cols-1 gap-3"></div>
-        </div>
-
-        <div id="view-news" style="display: none;" class="px-4 pt-4"><div id="full-news-list"></div></div>
-        <div id="view-guide" style="display: none;" class="px-4 pt-4">
-            <div id="guide-content-loader"></div>
-            <div id="guide-dynamic-content"></div>
-        </div>
-        <div id="view-builder" style="display: none;" class="px-4 pt-4">
-            <div id="tools-menu"><div id="build-list-container"></div></div>
-            <div id="builder-interface" style="display:none;"></div>
-        </div>
-        <div id="view-map-detail" style="display: none; height: 100vh;">
-            <button onclick="closeMapDetail()" class="absolute top-4 left-4 z-50 bg-white px-3 py-1 rounded shadow">닫기</button>
-            <iframe id="map-iframe" class="w-full h-full border-0"></iframe>
-        </div>
-
+        <div id="view-archive" style="display: none;" class="px-4 pt-4"><div id="archive-grid-container"></div></div>
+        <div id="view-guide" style="display: none;" class="px-4 pt-4"><div id="guide-content-loader"></div><div id="guide-dynamic-content"></div></div>
+        <div id="view-builder" style="display: none;" class="px-4 pt-4"><div id="tools-menu"><div id="build-list-container"></div></div><div id="builder-interface" style="display:none;"></div></div>
+        <div id="view-map-detail" style="display: none; height: 100vh;"><iframe id="map-iframe" class="w-full h-full border-0"></iframe></div>
     </main>
 
     <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 px-2 py-2 flex justify-around items-center z-[50]">
-        <button id="nav-home" onclick="switchTab('home')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1 active">
-            <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
-            <span class="text-[10px] font-medium text-gray-500">홈</span>
-        </button>
-        <button id="nav-quest" onclick="switchTab('quest')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1">
-            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-            <span class="text-[10px] font-medium text-gray-500">무림록</span>
-        </button>
-        <button onclick="location.href='map/'" class="nav-btn flex flex-col items-center gap-1 w-16 py-1">
-            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 20l-5.447-2.724A2 2 0 013 15.487V6.513a2 2 0 011.553-1.943L9 2l6 3 5.447-2.724A2 2 0 0121 4.236v8.974a2 2 0 01-1.553 1.943L15 18l-6 2z"></path></svg>
-            <span class="text-[10px] font-medium text-gray-500">지도</span>
-        </button>
-        <button id="nav-quiz" onclick="switchTab('quiz')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1">
-            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span class="text-[10px] font-medium text-gray-500">스무고개</span>
-        </button>
+        <button id="nav-home" onclick="switchTab('home')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1 active"><svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg><span class="text-[10px] font-medium text-gray-500">홈</span></button>
+        <button id="nav-quest" onclick="switchTab('quest')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg><span class="text-[10px]">무림록</span></button>
+        <button id="nav-todo" onclick="switchTab('todo')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg><span class="text-[10px]">할 일</span></button>
+        <button id="nav-quiz" onclick="switchTab('quiz')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span class="text-[10px]">스무고개</span></button>
     </nav>
+
+    <div id="timer-sheet-modal">
+        <div class="bottom-sheet-overlay absolute inset-0" onclick="closeTimerSheet()"></div>
+        <div class="sheet-container">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header flex justify-between items-center mb-6">
+                <h3 id="timer-sheet-title" class="text-xl font-bold text-gray-800">목록</h3>
+                <button onclick="closeTimerSheet()" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">✕</button>
+            </div>
+            <div id="timer-detail-content"></div>
+        </div>
+    </div>
 
     <aside id="main-sidebar">
         <div class="p-6 relative">
@@ -420,21 +314,11 @@
         </div>
     </div>
 
-    <div id="timer-sheet-modal">
-        <div class="sheet-container">
-            <button type="button" class="sheet-close-btn" onclick="closeTimerSheet()">&times;</button>
-            <div class="sheet-body-content" style="padding-top: 20px;">
-                <div id="timer-detail-content"></div>
-            </div>
-        </div>
-    </div>
-
     <script src="hw.js"></script>
     <script src="script.js"></script>
     <script src="timer.js"></script>
 
     <script>
-        // 사이드바 토글
         function toggleSidebar() { 
             document.getElementById('main-sidebar').classList.add('active'); 
             document.getElementById('sidebar-overlay').classList.add('active');
@@ -445,20 +329,15 @@
             document.getElementById('sidebar-overlay').classList.remove('active');
             document.body.style.overflow = ''; 
         }
-        // 가이드 이동
         function openGuideDirect(url) {
             console.log("가이드 이동:", url);
             if (typeof loadGuideContent === 'function') {
                 switchTab('guide');
             }
         }
-        // 숙제 바텀시트 닫기 (html에서 직접 호출할 경우 대비)
-        function closeTimerSheet() {
-            const modal = document.getElementById('timer-sheet-modal');
-            if(modal) modal.classList.remove('show');
-        }
-        
-        // 탭 전환
+        function closeTimerSheet() { document.getElementById('timer-sheet-modal').classList.remove('show'); }
+        function closePersonDetail() { document.getElementById('person-bottom-sheet').classList.remove('active'); }
+
         window.switchTab = function(tabName) {
             const header = document.getElementById('main-header');
             if (header) {
@@ -470,7 +349,8 @@
                 }
             }
             
-            const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-archive', 'view-news', 'view-guide', 'view-builder', 'view-map-detail'];
+            /* [중요] 오타 수정됨: 'view-quiz'"" -> 'view-quiz' */
+            const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-archive', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-todo'];
             views.forEach(v => { 
                 const el = document.getElementById(v);
                 if(el) el.style.display = (v === 'view-' + tabName) ? 'block' : 'none'; 
@@ -480,7 +360,12 @@
             const activeBtn = document.getElementById('nav-' + tabName);
             if(activeBtn) activeBtn.classList.add('active');
             
-            if (tabName === 'quiz') {
+            // [할 일 탭] timer.js 업데이트 트리거
+            if (tabName === 'todo' && typeof updateTimers === 'function') {
+                updateTimers();
+            }
+            // [기존 탭 로직]
+            else if (tabName === 'quiz') {
                 const tbody = document.getElementById('quiz-table-body');
                 if (typeof globalData !== 'undefined' && globalData.quiz && tbody && tbody.children.length === 0) {
                     if(typeof renderQuizTable === 'function') renderQuizTable(globalData.quiz);
@@ -498,10 +383,6 @@
                     if(typeof renderChunjiList === 'function') renderChunjiList();
                 }
                 if(typeof showChunjiList === 'function') showChunjiList();
-            } else if (tabName === 'archive') {
-                 if(typeof renderFullAchievementList === 'function') renderFullAchievementList();
-            } else if (tabName === 'builder') {
-                 if(typeof renderBuildList === 'function') renderBuildList('all');
             }
             
             window.scrollTo(0, 0);
@@ -510,7 +391,6 @@
             }
         };
 
-        // 타이머 초기화 안전장치
         setInterval(function() {
             if (typeof updateTimers === 'function') {
                 updateTimers();

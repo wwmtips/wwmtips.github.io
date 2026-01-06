@@ -1,17 +1,17 @@
-<div class="quest-detail-container max-w-4xl mx-auto space-y-8 p-4 lg:p-0 text-left" id="q190-container">
+<div class="max-w-4xl mx-auto space-y-8 p-4 lg:p-0 text-left">
     
     <div class="border-b-2 border-blue-600 pb-6 mb-6">
         <div class="flex flex-wrap items-center justify-between gap-4">
-            <div class="space-y-2">
+            <div class="space-y-2 text-left">
                 <div class="flex items-center gap-3">
-                    <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">탐색</span>
-                    <span class="text-gray-400 text-sm font-medium">개봉</span>
+                    <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">보스 공략</span>
+                    <span class="text-gray-400 text-sm font-medium">약수안 진수전</span>
                 </div>
-                <h2 class="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">북쪽 외곽 탐색 가이드</h2>
+                <h2 class="text-3xl font-black text-gray-900 leading-tight">연심</h2>
             </div>
             
             <div class="flex items-center gap-3">
-                <div class="flex items-center bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 shadow-sm">
+                <div class="flex items-center bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
                     <div class="w-5 h-5 rounded-full overflow-hidden mr-2">
                         <img src="https://wwm.tips/images/profile.jpg" class="w-full h-full object-cover">
                     </div>
@@ -29,52 +29,117 @@
         </div>
     </div>
 
-    <div class="space-y-6">
-        
-        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-5">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5 mb-4">
-                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>상자 (19개)
-            </h3>
-            <div class="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-gray-900">
-                <iframe src="https://www.youtube.com/embed/S3dX7K5QUps" 
-                        class="w-full h-full" frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen></iframe>
-            </div>
-        </section>
+    <div class="relative w-full">
+        <input type="radio" id="boss-tab-1" name="boss-phase-tabs" class="sr-only peer/tab1" checked>
+        <input type="radio" id="boss-tab-2" name="boss-phase-tabs" class="sr-only peer/tab2">
 
-        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-5">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5 mb-4">
-                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>묘물 (6개)
-            </h3>
-            <div class="aspect-video w-full rounded-xl overflow-hidden shadow-lg bg-gray-900">
-                <iframe src="https://www.youtube.com/embed/maOgUkKgu1s" 
-                        class="w-full h-full" frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen></iframe>
-            </div>
-        </section>
+        <div class="flex bg-gray-100 p-1 rounded-xl gap-1 mb-8">
+            <label for="boss-tab-1" class="flex-1 py-3 text-sm font-bold text-center rounded-lg cursor-pointer transition-all text-gray-500 hover:bg-white/50 
+                   peer-checked/tab1:bg-white peer-checked/tab1:text-blue-600 peer-checked/tab1:shadow-sm">
+                1페이즈
+            </label>
+            <label for="boss-tab-2" class="flex-1 py-3 text-sm font-bold text-center rounded-lg cursor-pointer transition-all text-gray-500 hover:bg-white/50 
+                   peer-checked/tab2:bg-white peer-checked/tab2:text-blue-600 peer-checked/tab2:shadow-sm">
+                2페이즈
+            </label>
+        </div>
 
-        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-5">
-            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5 mb-4">
-                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>전체 경로 정보
-            </h3>
-            <div class="w-full h-[450px] rounded-xl overflow-hidden border border-gray-100 shadow-inner">
-                <iframe src="https://wwm.tips/map/?id=kaifeng&path=kb" class="w-full h-full" frameborder="0"></iframe>
+        <div class="hidden peer-checked/tab1:block animate-fadeIn space-y-6">
+            <div class="bg-amber-50 border border-amber-100 p-5 rounded-2xl shadow-sm text-left">
+                <p class="text-[15px] text-amber-900 leading-relaxed">
+                    <strong class="text-amber-950 block mb-1 font-bold">연심(1페이즈)</strong>
+                    낫을 이용한 공격과 그림자 이동을 사용합니다. 대부분의 공격이 <b>패링과 회피</b>가 가능하므로 타이밍을 익히는 것이 중요합니다.
+                </p>
             </div>
-        </section>
 
+            <div class="space-y-4 text-left">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>주요 패턴 및 기믹
+                </h3>
+                
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:border-blue-100 transition-all">
+                        <span class="text-blue-600 text-[13px] font-black block mb-2 underline decoration-blue-200">1. 그림자 밟기</span>
+                        <p class="text-[14px] text-gray-600 leading-relaxed">첫 조우 시 잠시 사라졌다가 나타나며 플레이어의 <b>오른쪽</b>에서 공격합니다. 이 공격은 <b>패링과 회피</b>가 모두 가능합니다. 사라지는 타이밍을 보고 오른쪽을 주시하세요.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:border-blue-100 transition-all">
+                        <span class="text-blue-600 text-[13px] font-black block mb-2 underline decoration-blue-200">2. 포효하는 영혼</span>
+                        <p class="text-[14px] text-gray-600 leading-relaxed">연심이 공중에 떠올라 비명을 지르며 주변에 광역 피해를 입힙니다. 범위가 보이면 빠르게 이탈하거나 타이밍에 맞춰 <b>회피/패링</b>으로 대응할 수 있습니다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:border-blue-100 transition-all">
+                        <span class="text-blue-600 text-[13px] font-black block mb-2 underline decoration-blue-200">3. 낫 베기</span>
+                        <p class="text-[14px] text-gray-600 leading-relaxed">낫을 아래로 내렸다가 위로 베어 올리는 기본 공격입니다. 동작이 크므로 보고 <b>패링하거나 회피</b>하기 쉽습니다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-red-100 shadow-sm hover:border-red-200 transition-all border-l-4 border-l-red-500">
+                        <span class="text-red-500 text-[13px] font-black block mb-2">CRITICAL ATTACK</span>
+                        <h4 class="text-[16px] font-bold text-gray-800 mb-1">4. 특수 공격 (잡기)</h4>
+                        <p class="text-[14px] text-gray-600 leading-relaxed">연심이 가까운 거리에서 <b>붉은 빛</b>으로 충전한 뒤 잡기 공격을 시도합니다. 붉은 빛이 보일 때 정확한 타이밍에 <b>패링</b>을 성공하면 강력한 반격 기회를 얻을 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden peer-checked/tab2:block animate-fadeIn space-y-6">
+            <div class="bg-blue-50 border border-blue-100 p-5 rounded-2xl shadow-sm text-left">
+                <p class="text-[15px] text-blue-900 leading-relaxed">
+                    <strong class="text-blue-950 block mb-1 font-bold">연심(2페이즈)</strong>
+                    2페이즈는 <b>'뇌우'</b> 패턴으로 시작되며 공격 속도가 빨라집니다. 특히 <b>붉은 빛(강공격)</b>과 <b>막기 불가 패턴</b>을 구별하여 대응해야 합니다.
+                </p>
+            </div>
+
+            <div class="space-y-4 text-left">
+                <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>주요 패턴 및 기믹
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-900 p-6 rounded-2xl shadow-lg col-span-full border-l-4 border-l-blue-500">
+                        <span class="text-blue-400 text-[12px] font-black block mb-1">GIMMICK (IMMEDIATE DEATH)</span>
+                        <h4 class="text-[18px] font-bold text-white mb-2">1. 뇌우 (즉사급 광역기)</h4>
+                        <p class="text-[14px] text-gray-300 mb-4 leading-relaxed">2페이즈 시작과 동시에 연심이 공중으로 뛰어올라 폭풍을 소환합니다. 이후 맵 전체에 엄청난 광역 피해를 입힙니다.</p>
+                        <div class="bg-white/10 p-3 rounded-xl text-[13px] text-blue-100 border border-white/10">
+                            <strong class="text-white">📍 파훼법:</strong> 피하거나 막는 것이 불가능합니다. 반드시 맵에 있는 <b>석판 뒤로 숨어</b> 피해를 막아야 합니다.
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                        <h4 class="text-[15px] font-bold text-gray-800 mb-2 font-black">2. 두 번 베기</h4>
+                        <p class="text-[13px] text-gray-600 leading-relaxed text-left">뇌우 사용 직후 연계되는 경우가 많습니다. 낫으로 <b>수직과 수평</b>을 빠르게 베는 공격을 합니다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-red-100 shadow-sm border-l-4 border-l-red-500">
+                        <h4 class="text-[15px] font-bold text-gray-800 mb-1 font-black">3. 5연 베기 (붉은 빛)</h4>
+                        <p class="text-[13px] text-gray-600 leading-relaxed text-left"><b>붉은 빛</b>을 내며 낫을 뒤로 빼는 모션을 취한 뒤, 빠르게 5회 연속 공격을 가합니다. 타이밍에 맞춰 <b>완벽한 패링</b>을 성공시키면 반격할 수 있습니다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                        <h4 class="text-[15px] font-bold text-gray-800 mb-2 font-black">4. 3연 베기</h4>
+                        <p class="text-[13px] text-gray-600 leading-relaxed text-left">빠르게 두 번 공격 후, 짧은 딜레이를 두고 세 번째 공격을 합니다. 마지막 타격의 엇박자에 주의하여 <b>적절한 패링 타이밍</b>을 잡아야 합니다.</p>
+                    </div>
+                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-100">
+                        <h4 class="text-[15px] font-bold text-orange-900 mb-1 font-black">5. 번개 구슬 (막기 불가)</h4>
+                        <p class="text-[13px] text-orange-800/80 leading-relaxed text-left text-left">세 개의 번개 구슬을 발사한 후 앞으로 돌진 베기를 사용합니다. 이 공격은 <b>막을 수 없습니다</b>. 구슬과 돌진 모두 <b>회피</b>로 피해야 합니다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                        <h4 class="text-[15px] font-bold text-gray-800 mb-2 font-black">6. 돌진 베기</h4>
+                        <p class="text-[13px] text-gray-600 leading-relaxed text-left">낫을 뒤로 뺀 후 앞으로 달려들며 공격합니다. 거리가 벌어졌을 때 주로 사용합니다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                        <h4 class="text-[15px] font-bold text-gray-800 mb-2 font-black">7. 뇌진</h4>
+                        <p class="text-[13px] text-gray-600 leading-relaxed text-left">연심의 <b>체간 게이지가 낮을 때</b> 발동합니다. 제자리에 멈춰서 주변에 번개를 소환합니다. 이 공격은 패링이 불가능하므로 범위 밖으로 <b>회피</b>해야 합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="flex justify-center pt-10 pb-12">
-        <button onclick="showQuestList()" 
+    <div class="flex justify-center pt-10 pb-6 border-t border-dashed border-gray-200">
+        <button onclick="loadContent('boss.html')" 
                 class="px-10 py-3.5 bg-white border border-gray-200 text-gray-600 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all shadow-sm active:scale-95">
             목록으로 돌아가기
         </button>
     </div>
-
 </div>
 
 <style>
-    #q190-container iframe { width: 100%; height: 100%; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fadeIn { animation: fadeIn 0.4s ease forwards; }
 </style>

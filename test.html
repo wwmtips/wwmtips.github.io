@@ -21,7 +21,6 @@
         body { font-family: 'Noto Sans KR', sans-serif; background-color: #f2f4f6; color: #191f28; -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
         .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 
         /* [타이머 리스트 카드] */
@@ -42,21 +41,26 @@
         .status-event { background-color: #f59e0b; }
         .timer-progress { font-size: 11px; font-weight: 700; color: #3182f6; background-color: #e8f3ff; padding: 2px 8px; border-radius: 12px; }
 
-        /* [바텀시트] */
-        #timer-sheet-modal {
+        /* [바텀시트 공통] */
+        .bottom-sheet-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 9999;
             display: none; opacity: 0; transition: opacity 0.2s;
+            backdrop-filter: blur(2px);
         }
-        #timer-sheet-modal.show { display: block; opacity: 1; }
-        .sheet-container {
+        .bottom-sheet-modal.show, 
+        .bottom-sheet-modal.active { display: block; opacity: 1; } /* active는 script.js 호환용 */
+        
+        .sheet-container, .bottom-sheet-content {
             position: absolute; bottom: 0; width: 100%; background: white;
             border-top-left-radius: 24px; border-top-right-radius: 24px;
             padding: 24px 24px 40px 24px;
             transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             max-height: 85vh; overflow-y: auto;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
         }
-        #timer-sheet-modal.show .sheet-container { transform: translateY(0); }
+        .bottom-sheet-modal.show .sheet-container,
+        .bottom-sheet-modal.active .bottom-sheet-content { transform: translateY(0); }
         .sheet-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 24px auto; }
         
         /* [체크리스트 아이템] */
@@ -117,10 +121,6 @@
         .char-overlay-box { padding: 4px; text-align: center; }
         .char-h-affil { font-size: 8px; color: #888; }
         .nav-btn.active svg { color: #3182f6; } .nav-btn.active span { color: #3182f6; font-weight: 700; }
-        #person-bottom-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; display: none; opacity: 0; transition: opacity 0.3s; }
-        #person-bottom-sheet.active { display: block; opacity: 1; }
-        #person-bottom-sheet .bottom-sheet-content { position: absolute; bottom: 0; width: 100%; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); max-height: 80vh; overflow-y: auto; }
-        #person-bottom-sheet.active .bottom-sheet-content { transform: translateY(0); }
     </style>
 </head>
 
@@ -141,7 +141,9 @@
                 <div id="global-search-results"></div>
             </div>
             <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-gray-600 rounded-full hover:bg-gray-100 transition-colors">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
             </button>
         </div>
     </header>
@@ -153,6 +155,19 @@
                 <div class="hero-slider-wrapper">
                     <div id="hero-slider-track" class="slider-track h-full"></div>
                     <div id="slider-indicators" class="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5"></div>
+                </div>
+            </section>
+
+            <section class="mt-6 px-4">
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer active:scale-95 transition-transform" onclick="switchTab('todo')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-xl">⏰</div>
+                        <div>
+                            <h3 class="font-bold text-gray-800">오늘의 할 일</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">강호령 체크리스트 확인하기</p>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
             </section>
 
@@ -267,7 +282,7 @@
         <button id="nav-quiz" onclick="switchTab('quiz')" class="nav-btn flex flex-col items-center gap-1 w-16 py-1"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span class="text-[10px]">스무고개</span></button>
     </nav>
 
-    <div id="timer-sheet-modal">
+    <div id="timer-sheet-modal" class="bottom-sheet-modal">
         <div class="bottom-sheet-overlay absolute inset-0" onclick="closeTimerSheet()"></div>
         <div class="sheet-container">
             <div class="sheet-handle"></div>
@@ -279,35 +294,7 @@
         </div>
     </div>
 
-    <aside id="main-sidebar">
-        <div class="p-6 relative">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-xl font-bold mt-2">전체 메뉴</h2>
-                <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">✕</button>
-            </div>
-            
-            <ul class="space-y-6">
-                <li><a onclick="switchTab('home'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🏠 홈</a></li>
-                <li><a onclick="switchTab('quest'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">📜 무림록</a></li>
-                <li><a onclick="switchTab('archive'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🏆 업적 도감</a></li>
-                <li><a onclick="switchTab('quiz'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">❓ 퀴즈 족보</a></li>
-                <li><a onclick="openGuideDirect('code.html'); closeSidebar();" class="text-[17px] font-medium flex items-center gap-3 cursor-pointer">🎫 교환 코드</a></li>
-            </ul>
-        </div>
-    </aside>
-
-    <div id="info-modal" class="hidden fixed inset-0 bg-black/50 z-[2000] flex items-center justify-center p-4" onclick="closeInfoModal()">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-sm" onclick="event.stopPropagation()">
-            <div class="flex items-center gap-4 mb-4">
-                <img id="modal-img" src="" class="w-16 h-16 object-contain border rounded-lg">
-                <h3 id="modal-name" class="text-lg font-bold"></h3>
-            </div>
-            <p id="modal-desc" class="text-sm text-gray-600 leading-relaxed"></p>
-            <button onclick="closeInfoModal()" class="w-full mt-4 bg-gray-100 py-3 rounded-xl font-bold text-gray-700">닫기</button>
-        </div>
-    </div>
-    
-    <div id="person-bottom-sheet">
+    <div id="person-bottom-sheet" class="bottom-sheet-modal">
         <div class="bottom-sheet-overlay absolute inset-0" onclick="closePersonDetail()"></div>
         <div class="bottom-sheet-content">
             <div id="person-detail-body"></div>
@@ -335,8 +322,16 @@
                 switchTab('guide');
             }
         }
-        function closeTimerSheet() { document.getElementById('timer-sheet-modal').classList.remove('show'); }
-        function closePersonDetail() { document.getElementById('person-bottom-sheet').classList.remove('active'); }
+        
+        // ★★★ 스크롤 문제 해결: 닫을 때 overflow 해제 추가 ★★★
+        function closeTimerSheet() { 
+            document.getElementById('timer-sheet-modal').classList.remove('show'); 
+            document.body.style.overflow = ''; 
+        }
+        function closePersonDetail() { 
+            document.getElementById('person-bottom-sheet').classList.remove('active'); 
+            document.body.style.overflow = ''; 
+        }
 
         window.switchTab = function(tabName) {
             const header = document.getElementById('main-header');
@@ -349,7 +344,6 @@
                 }
             }
             
-            /* [중요] 오타 수정됨: 'view-quiz'"" -> 'view-quiz' */
             const views = ['view-home', 'view-quest', 'view-chunji', 'view-quiz', 'view-archive', 'view-news', 'view-guide', 'view-builder', 'view-map-detail', 'view-todo'];
             views.forEach(v => { 
                 const el = document.getElementById(v);

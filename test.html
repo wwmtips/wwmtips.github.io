@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>연운: 한국 위키</title>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5SMVDZTDST"></script>
+    
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -43,6 +44,21 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="fav/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              500: '#D4AF37', // 위키 테마에 맞춘 골드 색상 커스텀
+            }
+          }
+        }
+      }
+    }
+</script>
+
     <script>
         // ★★★ 구글 앱스 스크립트 배포 URL (이벤트 페이지와 동일한 주소) ★★★
         const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbzSYkfFvOnpuL9MUWpHJk-wFa6_u8pAJW5OOVy0oYY8JK36E5n7oq7wxlMnU-vGKqBr/exec";
@@ -178,71 +194,95 @@
                 </div>
                 <div id="slider-indicators" class="slider-indicators"></div>
             </div>
-<!--
-            <section class="mansarok-section" style="margin-top: 0px; margin-bottom: 10px;">
-                <div class="section-header-clickable">
-                    <h3><span class="deco-bar"></span>기본 가이드</h3>
-                </div>
-                <div class="common-slim-grid">
-                    <a class="slim-btn" onclick="openGuideDirect('moon.html')">
-                        <span>모든 문파 입문법</span>
-                    </a>
-                    <a class="slim-btn" onclick="openGuideDirect('guide2.html')">
-                        <span>전투 시스템</span>
-                    </a>
-                    <a href="#" class="slim-btn" onclick="openGuideDirect('guide3.html')">
-                        <span>장비 강화</span>
-                    </a>
-                    <a href="#" class="slim-btn" onclick="openGuideDirect('guide3.html')">
-                        <span>장비 강화</span>
-                    </a>
-                    <a href="#" class="slim-btn" onclick="openGuideDirect('guide3.html')">
-                        <span>장비 강화</span>
-                    </a>
-                    <a href="#" class="slim-btn" onclick="openGuideDirect('guide3.html')">
-                        <span>장비 강화</span>
-                    </a>
-                </div>
-            </section>-->
-            <section id="mansarok-container" class="mansarok-section" style="margin-top: 0px;margin-bottom: 10px;">
+<section class="mt-6 px-3">
+    <div class="flex items-center mb-3">
+        <span class="w-1 h-5 bg-red-800 mr-2"></span>
+        <h3 class="text-base font-bold text-gray-800">기본 가이드</h3>
+    </div>
+    
+    <div class="grid grid-cols-3 gap-2">
+        
+        <a onclick="openGuideDirect('newb.html')" class="group cursor-pointer bg-white rounded-lg py-2 px-1 shadow-sm border border-gray-100 hover:border-red-200 transition-all text-center">
+            <div class="text-lg mb-0.5">📜</div>
+            <span class="block text-[11px] font-bold text-gray-700 leading-tight group-hover:text-red-700">강호 입문서</span>
+        </a>
+
+        <a onclick="openGuideDirect('guide/up.html')" class="group cursor-pointer bg-white rounded-lg py-2 px-1 shadow-sm border border-gray-100 hover:border-red-200 transition-all text-center">
+            <div class="text-lg mb-0.5">📈</div>
+            <span class="block text-[11px] font-bold text-gray-700 leading-tight group-hover:text-red-700">육성 가이드</span>
+        </a>
+
+        <a onclick="openGuideDirect('moon.html')" class="group cursor-pointer bg-white rounded-lg py-2 px-1 shadow-sm border border-gray-100 hover:border-red-200 transition-all text-center">
+            <div class="text-lg mb-0.5">🏛️</div>
+            <span class="block text-[11px] font-bold text-gray-700 leading-tight group-hover:text-red-700">문파 입문</span>
+        </a>
+
+        <a onclick="openGuideDirect('guide/weapon.html')" class="group cursor-pointer bg-white rounded-lg py-2 px-1 shadow-sm border border-gray-100 hover:border-red-200 transition-all text-center">
+            <div class="text-lg mb-0.5">⚔️</div>
+            <span class="block text-[11px] font-bold text-gray-700 leading-tight group-hover:text-red-700">장비 도감</span>
+        </a>
+
+        <a onclick="openGuideDirect('tier_weapon.html')" class="group cursor-pointer bg-white rounded-lg py-2 px-1 shadow-sm border border-gray-100 hover:border-red-200 transition-all text-center">
+            <div class="text-lg mb-0.5">🌀</div>
+            <span class="block text-[11px] font-bold text-gray-700 leading-tight group-hover:text-red-700">무공 도감</span>
+        </a>
+
+        <a onclick="openGuideDirect('majang.html')" class="group cursor-pointer bg-white rounded-lg py-2 px-1 shadow-sm border border-gray-100 hover:border-red-200 transition-all text-center">
+            <div class="text-lg mb-0.5">🀄</div>
+            <span class="block text-[11px] font-bold text-gray-700 leading-tight group-hover:text-red-700">마작 가이드</span>
+        </a>
+
+    </div>
+</section>
+
+
+
+            <section id="mansarok-container" class="mansarok-section" style="margin-top: 0px;margin-bottom: 5px;">
                 <div class="section-header-clickable" onclick="switchTab('quest')">
                     <h3><span class="deco-bar"></span>무림록</h3>
-                    <span style="font-size:0.8em; color:#999; margin-right:5px;">전체보기 ></span>
+                    <span style="font-size:0.8em; color:#999;">전체보기 ></span>
                 </div>
                 <div id="mansarok-list" class="mansarok-grid">
                 </div>
             </section>
-<section class="chunji-section">
-    <div class="section-header-clickable" onclick="showView('chunji')">
-        <h3><span class="deco-bar"></span>천지록</h3>
-                    <span style="font-size:0.8em; color:#999; margin-right:5px;">전체보기 ></span>
-    </div>
-    <div id="home-chunji-list" class="chunji-list-main">
-        </div>
-</section>
+
             <section class="timer-section">
                 <div class="section-header-clickable" onclick="openGuideDirect('npc.html')" ;>
                     <h3><span class="deco-bar"></span>강호령</h3>
-                    <span style="font-size:0.8em; color:#999; margin-right:5px;">전체보기 ></span>
+                    <span style="font-size:0.8em; color:#999;">전체보기 ></span>
                 </div>
                 <div id="gangho-timer-list" class="map-grid">
                 </div>
             </section>
+
+            <section class="chunji-section">
+                <div class="section-header-clickable" onclick="showView('chunji')">
+                    <h3><span class="deco-bar"></span>천지록</h3>
+                    <span style="font-size:0.8em; color:#999;">전체보기 ></span>
+                </div>
+                <div id="home-chunji-list" class="chunji-list-main">
+                </div>
+            </section>
+
             <section class="section-header-clickable">
                 <h3><span class="deco-bar"></span>인물</h3>
             </section>
             <div id="home-char-list">
             </div>
 
-
-            <section class="static-info-section" style="margin-top: 20px;">
+            <section class="boss-section">
                 <div class="section-header-clickable">
                     <h3><span class="deco-bar"></span>적수</h3>
                 </div>
-
-                <div class="common-grid-container"
-                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(0px, 1fr)); gap: 10px; padding: 10px 5px;">
-
+          
+                <div id="home-boss-list" class="swipe-track">
+                          <div class="mini-card" onclick="location.href='https://wwm.tips/?q=193'">
+                        <img src=" images/em/10.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">망령 공자</span>
+                            <span class="mini-sub">협경</span>
+                        </div>
+                    </div>
                     <div class="mini-card" onclick="openGuideDirect('boss/b2.html')">
                         <img src="images/em/2.png" class="mini-card-img" alt="아이템">
                         <div class="mini-card-txt">
@@ -251,31 +291,40 @@
                         </div>
                     </div>
 
-                    <div class="mini-card" onclick="openGuideDirect('boss/b1.html')">
+                    <div class="mini-card" onclick="location.href='https://wwm.tips/?q=195'">
                         <img src="images/em/3.png" class="mini-card-img" alt="아이템">
                         <div class="mini-card-txt">
                             <span class="mini-name">사자춤 형제</span>
                             <span class="mini-sub">협경</span>
                         </div>
                     </div>
-                    <div class="mini-card" onclick="openGuideDirect('boss/b3.html')">
+                    <div class="mini-card" onclick="location.href='https://wwm.tips/?q=198'">
                         <img src="images/em/4.png" class="mini-card-img" alt="아이템">
                         <div class="mini-card-txt">
                             <span class="mini-name">연심</span>
                             <span class="mini-sub">진수전</span>
                         </div>
                     </div>
-                    <div class="mini-card">
-                        <img src="images/em/5.png" class="mini-card-img" alt="아이템">
+
+                    <div class="mini-card" onclick="location.href='https://wwm.tips/?q=197'">
+                        <img src="images/em/9.png" class="mini-card-img" alt="아이템">
                         <div class="mini-card-txt">
-                            <span class="mini-name">백랑주</span>
+                            <span class="mini-name">하백</span>
+                            <span class="mini-sub">진수전</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mini-card" onclick="location.href='https://wwm.tips/?q=196'">
+                        <img src=" images/em/7.png" class="mini-card-img" alt="아이템">
+                        <div class="mini-card-txt">
+                            <span class="mini-name">봉여지</span>
                             <span class="mini-sub">야외 보스</span>
                         </div>
                     </div>
                     <div class="mini-card">
-                        <img src="images/em/7.png" class="mini-card-img" alt="아이템">
+                        <img src="images/em/5.png" class="mini-card-img" alt="아이템">
                         <div class="mini-card-txt">
-                            <span class="mini-name">봉여지</span>
+                            <span class="mini-name">백랑주</span>
                             <span class="mini-sub">야외 보스</span>
                         </div>
                     </div>
@@ -293,14 +342,6 @@
                             <span class="mini-sub">진수전</span>
                         </div>
                     </div>
-                    <div class="mini-card">
-                        <img src="images/em/9.png" class="mini-card-img" alt="아이템">
-                        <div class="mini-card-txt">
-                            <span class="mini-name">하백</span>
-                            <span class="mini-sub">진수전</span>
-                        </div>
-                    </div>
-
                 </div>
             </section>
 
@@ -312,6 +353,118 @@
                 <div id="home-map-list"></div>
             </section>
 
+            
+
+            <section id="pvp-container" class="mansarok-section" style="margin-top: 0px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>지과</h3>
+                </div>
+                <div class="common-slim-grid"></div>
+            </section>
+
+            <section class="chunji-section">
+                <div class="section-header-clickable">
+                    <div class="title-group">
+                        <h3><span class="deco-bar"></span>고수록</h3>
+                    </div>
+                    <span id="pvp-page-indicator" style="font-size:0.65em; color:#999;">26-01-03 T22:03 기준</span>
+                </div>
+                <div id="pvp-list" class="ranking-list-wrapper">
+                </div>
+            </section>
+
+   
+
+            
+            <section class="mansarok-section" style="margin-top: 0px; margin-bottom: 00px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>세계관</h3>
+                </div>
+                <div class="common-slim-grid">
+                    <a class="slim-btn" onclick="openGuideDirect('world1.html')">
+                        <span>서막</span>
+                    </a>
+                    <a class="slim-btn" onclick="window.location.href = 'https://wwm.tips/?q=21'">
+                        <span>왕청 전</span>
+                    </a>
+                    <a class="slim-btn" onclick="window.location.href = 'https://wwm.tips/?q=11'">
+                        <span>청하 요약</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('world2.html')">
+                        <span>개봉 요약</span>
+                    </a>
+                </div>
+            </section>
+            <section class="mansarok-section" style="margin-top: 0px; margin-bottom: 10px;">
+                <div class="section-header-clickable">
+                    <h3><span class="deco-bar"></span>의상 쇼케이스</h3>
+                </div>
+                <div class="common-slim-grid">
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit1.html')">
+                        <span>쇼케이스 #1</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit2.html')">
+                        <span>쇼케이스 #2</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit3.html')">
+                        <span>쇼케이스 #3</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit4.html')">
+                        <span>쇼케이스 #4</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit5.html')">
+                        <span>쇼케이스 #5</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit6.html')">
+                        <span>쇼케이스 #6</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit7.html')">
+                        <span>쇼케이스 #7</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit8.html')">
+                        <span>쇼케이스 #8</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit9.html')">
+                        <span>쇼케이스 #9</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit10.html')">
+                        <span>쇼케이스 #10</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit11.html')">
+                        <span>쇼케이스 #11</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit12.html')">
+                        <span>쇼케이스 #12</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit13.html')">
+                        <span>쇼케이스 #13</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit14.html')">
+                        <span>쇼케이스 #14</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit15.html')">
+                        <span>쇼케이스 #15</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit16.html')">
+                        <span>쇼케이스 #16</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit17.html')">
+                        <span>쇼케이스 #17</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit18.html')">
+                        <span>쇼케이스 #18</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit19.html')">
+                        <span>쇼케이스 #19</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit20.html')">
+                        <span>쇼케이스 #20</span>
+                    </a>
+                    <a class="slim-btn" onclick="openGuideDirect('outfit/outfit21.html')">
+                        <span>쇼케이스 #21</span>
+                    </a>
+                </div>
+            </section>
             <section class="achievement-section">
                 <div class="section-header-clickable" onclick="switchTab('archive')">
                     <h3><span class="deco-bar"></span>업적</h3>
@@ -334,6 +487,8 @@
                 </div>
             </div>
 
+
+
             <section class="recent-updates-section">
                 <div class="section-header-clickable">
                     <h3><span class="deco-bar"></span>커뮤니티 업데이트</h3>
@@ -341,10 +496,9 @@
                 <div id="home-recent-news" class="quest-grid"></div>
             </section>
 
+            <!--
 
-
-
-            <!--<section class="profile-section" style="margin-top: 0; margin-bottom: 0;">
+            <section class="profile-section" style="margin-top: 0; margin-bottom: 0;">
     <div class="section-header-clickable">
         <h3><span class="deco-bar"></span>인게임 제보</h3>
     </div>
@@ -458,6 +612,8 @@
                         <option value="만사록">만사록</option>
                         <option value="탐색">탐색</option>
                         <option value="화간집">화간집</option>
+                        <option value="지과">지과</option>
+                        <option value="보스 공략">보스 공략</option>
                         <option value="가이드">가이드</option>
                         <option value="이벤트">이벤트</option>
                         <option value="기타">기타</option>
@@ -845,6 +1001,10 @@
                 sidebar.classList.remove('active');
                 overlay.classList.remove('active');
                 document.body.style.overflow = '';
+                // [추가] 사이드바가 닫힐 때 뮤직 리스트 드롭다운도 함께 제거
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
             }
 
             // 사이드바 내부 서브메뉴 토글 (아코디언 효과)
@@ -871,14 +1031,14 @@
             「연운」 한국 위키 <span style="font-size: 0.8em; font-weight: normal; color: #666;">v1.0</span>
         </div>
 
-        <p class="copyright-disclaimer" style="margin-bottom: 10px; font-size: 0.75em;">
+        <p class="copyright-disclaimer" style="margin-bottom: 10px; font-size: 0.75em; text-align: center;">
             본 위키는 팬에 의해 제작/운영되며 공식 위키가 아닙니다.<br>
             데이터의 저작권은 원저작권자에게 있습니다.
         </p>
 
         <div style="margin-top: 10px;">
             <a href="https://wwm.tips/qna" target="_blank"
-                style="color: #555; font-size: 0.85em; text-decoration: none;">
+                style="color: #555; font-size: 0.85em; text-decoration: none; text-align: center;">
                 문의 및 제보
             </a>
             <span style="color: #ccc; margin: 0 8px; font-size: 0.8em;">|</span>
@@ -887,11 +1047,29 @@
                 맨 위로
             </a>
         </div>
-        <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
         <aside id="main-sidebar">
             <div class="sidebar-header">
-                <h3></h3>
-                <button class="close-sidebar-btn" onclick="closeSidebar()">✕</button>
+
+                <div class="sidebar-audio-player-container">
+                    <div class="sidebar-audio-player" onclick="togglePlaylist()">
+                        <div class="audio-info">
+                            <span class="audio-title" id="player-title">곡 목록을 불러오는 중...</span>
+                        </div>
+                        <button id="audio-toggle-btn" class="audio-ctrl-btn" onclick="handlePlayPause(event)">▶</button>
+                    </div>
+
+                    <div id="playlist-dropdown" class="playlist-dropdown">
+                        <div class="playlist-header">
+                            <span id="playlist-status">Playlist (0/0)</span>
+                        </div>
+                        <ul id="playlist-items" class="playlist-ul"></ul>
+                    </div>
+                </div>
+
+                <button class="close-sidebar-btn" onclick="closeSidebar()">×</button>
+
+                <audio id="main-audio" preload="auto"></audio>
             </div>
 
             <div class="sidebar-content">
@@ -910,8 +1088,8 @@
                         <button onclick="closeSidebar(); openGuideDirect('harts.html');">심법</button>
                         <button onclick="closeSidebar(); openGuideDirect('marts.html');">비결</button>
                         <button onclick="closeSidebar(); switchTab('archive');">업적</button>
-
-                        <button onclick="closeSidebar(); openGuideDirect('code.html');">교환 코드</button>
+                        <button onclick="closeSidebar(); openGuideDirect('code.html');">교환 코드</button>                        
+                        <button onclick="closeSidebar(); openGuideDirect('sim.html');">심력 계산기</button>
                     </div>
                 </div>
 
@@ -921,12 +1099,15 @@
                         <span class="arrow"></span>
                     </div>
                     <div class="sidebar-sub-list" id="nav-quest">
-                        <button onclick="closeSidebar(); switchTab('quest');">
-                            무림록</button>
-
+                        <button onclick="closeSidebar(); location.href='https://wwm.tips/?tab=quest&id=m'">
+                            만사록</button>
+                        <button onclick="closeSidebar(); location.href='https://wwm.tips/?tab=quest&id=t'">
+                            탐색</button>                            
+                        <button onclick="closeSidebar(); location.href='https://wwm.tips/?tab=quest&id=in'">
+                            인연의 궤적</button>
                         <button id="nav-chunji" onclick="closeSidebar(); switchTab('chunji');">
                             천지록</button>
-                        <button onclick="closeSidebar(); openGuideDirect('boss.html');">협경/진수전</button>
+                        <button onclick="closeSidebar(); location.href='https://wwm.tips/?tab=quest&id=boss'">협경/진수전</button>
                     </div>
                 </div>
                 <div class="sidebar-item" id="nav-quiz" onclick="closeSidebar(); switchTab('quiz');">
@@ -935,17 +1116,15 @@
                 <div class="sidebar-item" id="nav-quiz" onclick="location.href='map/'">
                     지도
                 </div>
-                <div class="sidebar-group">
+                <!--<div class="sidebar-group">
                     <div class="sidebar-item has-sub" id="nav-tool" onclick="toggleSidebarSub(this)">
                         <span>도구</span>
                         <span class="arrow"></span>
                     </div>
                     <div class="sidebar-sub-list">
-
                         <button id="nav-builder" onclick="closeSidebar(); switchTab('builder');">빌드 제작</button>
-                        <button onclick="closeSidebar(); openGuideDirect('sim.html');">심력 계산기</button>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div id="install-container" style="display: none;">
                 <button id="btn-install-app" class="pwa-install-card">
@@ -982,7 +1161,7 @@
         </aside>
 
         <script src="hw.js"></script>
-        <script src="script_test.js"></script>
+        <script src="script.js"></script>
         <script src="calc.js"></script>
         <script src="timer.js"></script>
 

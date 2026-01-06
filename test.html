@@ -4,141 +4,208 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>연운: 한국 위키</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f2f4f6; color: #191f28; -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        /* 토스 특유의 부드러운 배경색 */
-        .bg-toss { background-color: #f2f4f6; }
-        /* 데코바를 토스 스타일 헤더에 맞게 조정 */
-        .deco-bar { display: inline-block; width: 4px; height: 18px; background-color: #3182f6; border-radius: 2px; margin-right: 10px; vertical-align: middle; }
+        
+        /* 토스 포인트 블루 데코바 */
+        .deco-bar {
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background-color: #3182f6;
+            border-radius: 2px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* 슬라이더 트랙 애니메이션 */
+        .slider-track { display: flex; transition: transform 0.5s ease-in-out; }
+        
+        /* 사이드바 스타일 (기존 로직 유지) */
+        #main-sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            transition: right 0.3s ease;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        #main-sidebar.active { right: 0; }
+        #sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+        #sidebar-overlay.active { display: block; }
+
+        .toss-active:active { transform: scale(0.97); transition: transform 0.1s; }
     </style>
 </head>
-<body class="bg-toss text-[#191f28]">
 
-    <header class="sticky top-0 z-50 bg-white px-5 py-3 flex items-center gap-3 border-b border-gray-100">
-        <div class="flex-1 bg-gray-100 rounded-xl px-4 py-2.5 flex items-center gap-2">
+<body>
+
+    <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md px-4 py-3 flex items-center gap-3 border-b border-gray-100">
+        <div class="flex-1 bg-gray-100 rounded-xl px-4 py-2 flex items-center gap-2">
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" placeholder="무림의 지식을 검색해보세요" class="bg-transparent outline-none text-[15px] w-full placeholder-gray-400">
+            <input type="text" id="header-search-input" placeholder="무림의 정보를 검색해보세요" 
+                class="bg-transparent outline-none text-[15px] w-full placeholder-gray-400">
         </div>
-        <div class="flex gap-4">
-            <button class="text-gray-500"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></button>
-            <button class="text-gray-500"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
-        </div>
+        <button onclick="toggleSidebar()" class="text-gray-500 p-1">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
     </header>
 
-    <main class="pb-24 max-w-lg mx-auto">
+    <main id="main-content" class="pb-28 max-w-lg mx-auto">
         
-        <section class="mt-4 px-5">
-            <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-6 text-white relative overflow-hidden shadow-sm">
-                <div class="relative z-10">
-                    <h2 class="text-xl font-bold leading-tight">강호의 고수가 되는 법<br>전용 가이드 확인하기</h2>
-                    <p class="mt-2 text-white/80 text-sm">100% 당첨 보상 받기 ></p>
+        <div id="view-home">
+            <section class="mt-4 px-4">
+                <div class="hero-slider-wrapper relative w-full aspect-[21/10] bg-gray-200 rounded-3xl overflow-hidden shadow-sm">
+                    <div id="hero-slider-track" class="slider-track h-full"></div>
+                    <div id="slider-indicators" class="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5"></div>
                 </div>
-                <div class="absolute right-[-10px] bottom-[-10px] opacity-20 transform rotate-12">
-                    <svg class="w-32 h-32" fill="white" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2z"></path></svg>
+            </section>
+
+            <section class="mt-8 px-4">
+                <div class="mb-3 flex items-center">
+                    <span class="deco-bar"></span>
+                    <h3 class="text-lg font-bold">기본 가이드</h3>
                 </div>
-            </div>
-        </section>
+                <div class="grid grid-cols-3 gap-2">
+                    <script>
+                        const guides = [
+                            { name: '강호 입문서', link: 'newb.html', icon: '📜' },
+                            { name: '육성 가이드', link: 'guide/up.html', icon: '📈' },
+                            { name: '문파 입문', link: 'moon.html', icon: '🏛️' },
+                            { name: '장비 도감', link: 'guide/weapon.html', icon: '⚔️' },
+                            { name: '무공 도감', link: 'tier_weapon.html', icon: '🌀' },
+                            { name: '마작 가이드', link: 'majang.html', icon: '🀄' }
+                        ];
+                        guides.forEach(g => {
+                            document.write(`
+                                <a onclick="openGuideDirect('${g.link}')" class="toss-active group cursor-pointer bg-white rounded-2xl border border-gray-50 shadow-sm overflow-hidden flex flex-col items-center p-2 pt-4">
+                                    <div class="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-2xl mb-2 group-hover:scale-110 transition-transform">${g.icon}</div>
+                                    <span class="text-[11px] font-bold text-gray-700 text-center mb-2">${g.name}</span>
+                                </a>
+                            `);
+                        });
+                    </script>
+                </div>
+            </section>
 
-        <section class="mt-8">
-            <div class="px-5 mb-4 flex items-center justify-between">
-                <h3 class="text-lg font-bold">기본 가이드</h3>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3 px-5">
-                <script>
-                    const guides = [
-                        { name: '강호 입문서', sub: '초보자 필수 지침', icon: '📜' },
-                        { name: '육성 가이드', sub: '빠른 레벨업 루트', icon: '📈' },
-                        { name: '문파 입문', sub: '최적의 문파 선택', icon: '🏛️' },
-                        { name: '장비 도감', sub: '전설 무기 획득처', icon: '⚔️' }
-                    ];
-                    guides.forEach(g => {
-                        document.write(`
-                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-50 flex flex-col gap-3 active:scale-95 transition-transform">
-                                <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center text-3xl">
-                                    ${g.icon}
-                                </div>
-                                <div>
-                                    <h4 class="text-[15px] font-bold leading-tight">${g.name}</h4>
-                                    <p class="text-[12px] text-gray-400 mt-1">${g.sub}</p>
-                                </div>
-                            </div>
-                        `);
-                    });
-                </script>
-            </div>
-        </section>
+            <section class="mt-10">
+                <div class="px-4 mb-3 flex items-center justify-between">
+                    <div class="flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">인기 적수</h3></div>
+                    <span class="text-xs text-gray-400">전체보기 ></span>
+                </div>
+                <div class="flex overflow-x-auto gap-3 px-4 no-scrollbar">
+                    <a onclick="location.href='https://wwm.tips/?q=193'" class="toss-active flex-none w-28 bg-white rounded-2xl border border-gray-50 shadow-sm p-3 flex flex-col items-center">
+                        <div class="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center mb-2">
+                            <img src="images/em/10.png" onerror="this.src='images/logo.png'" class="h-12 object-contain">
+                        </div>
+                        <span class="text-[12px] font-bold text-gray-700 truncate w-full text-center">망령 공자</span>
+                        <span class="text-[10px] text-blue-500 font-medium mt-0.5">협경</span>
+                    </a>
+                </div>
+            </section>
 
-        <section class="mt-10">
-            <div class="px-5 mb-4 flex items-center justify-between">
-                <h3 class="text-lg font-bold">인기 적수 공략</h3>
-                <span class="text-sm text-gray-400">전체보기</span>
-            </div>
-            
-            <div class="flex overflow-x-auto gap-3 px-5 no-scrollbar">
-                <script>
-                    const bosses = [
-                        { name: '망령 공자', cate: '협경', rate: '★4.8' },
-                        { name: '몽유도인', cate: '협경', rate: '★4.7' },
-                        { name: '사자춤 형제', cate: '협경', rate: '★4.9' }
-                    ];
-                    bosses.forEach(b => {
-                        document.write(`
-                            <div class="flex-none w-36 bg-white rounded-2xl p-3 shadow-sm border border-gray-50">
-                                <div class="w-full aspect-square bg-gray-50 rounded-xl mb-3 flex items-center justify-center text-2xl font-bold text-blue-500">
-                                    Boss
-                                </div>
-                                <div class="flex flex-col gap-1">
-                                    <span class="text-[14px] font-bold truncate">${b.name}</span>
-                                    <div class="flex items-center gap-1">
-                                        <span class="text-[11px] text-blue-600 font-medium">${b.cate}</span>
-                                        <span class="text-[11px] text-gray-400">${b.rate}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                    });
-                </script>
-            </div>
-        </section>
+            <section id="mansarok-container" class="mt-10 px-4">
+                <div class="mb-4 flex items-center"><span class="deco-bar"></span><h3 class="text-lg font-bold">새로운 무림록</h3></div>
+                <div id="mansarok-list" class="flex flex-col gap-2"></div>
+            </section>
+        </div>
+
+        <div id="view-quest" style="display: none;" class="px-4 mt-4">퀘스트 목록 뷰</div>
+        <div id="view-archive" style="display: none;" class="px-4 mt-4">업적 뷰</div>
+        <div id="view-chunji" style="display: none;" class="px-4 mt-4">천지록 뷰</div>
 
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-100 px-6 py-3 flex justify-between items-center z-50">
-        <button onclick="switchTab('home')" class="flex flex-col items-center gap-1 group">
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-gray-100 px-6 py-3 flex justify-between items-center z-50">
+        <button onclick="switchTab('home')" class="flex flex-col items-center gap-1">
             <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
             <span class="text-[11px] font-bold text-blue-600">홈</span>
         </button>
         <button onclick="switchTab('quest')" class="flex flex-col items-center gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
             <span class="text-[11px] font-medium">무림록</span>
         </button>
         <button onclick="location.href='map/'" class="flex flex-col items-center gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A2 2 0 013 15.487V6.513a2 2 0 011.553-1.943L9 2l6 3 5.447-2.724A2 2 0 0121 4.236v8.974a2 2 0 01-1.553 1.943L15 18l-6 2z"></path></svg>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 20l-5.447-2.724A2 2 0 013 15.487V6.513a2 2 0 011.553-1.943L9 2l6 3 5.447-2.724A2 2 0 0121 4.236v8.974a2 2 0 01-1.553 1.943L15 18l-6 2z"></path></svg>
             <span class="text-[11px] font-medium">지도</span>
         </button>
         <button onclick="switchTab('chunji')" class="flex flex-col items-center gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
             <span class="text-[11px] font-medium">천지록</span>
-        </button>
-        <button onclick="toggleSidebar()" class="flex flex-col items-center gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
-            <span class="text-[11px] font-medium">전체</span>
         </button>
     </nav>
 
+    <aside id="main-sidebar">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold">전체 메뉴</h2>
+                <button onclick="closeSidebar()" class="text-2xl text-gray-400">&times;</button>
+            </div>
+            <ul class="space-y-6">
+                <li><a href="#" onclick="switchTab('home'); closeSidebar();" class="text-lg font-medium">🏠 홈</a></li>
+                <li><a href="#" onclick="switchTab('quest'); closeSidebar();" class="text-lg font-medium">📜 무림록</a></li>
+                <li><a href="#" onclick="switchTab('archive'); closeSidebar();" class="text-lg font-medium">🏆 업적 도감</a></li>
+                <li><a href="#" onclick="switchTab('chunji'); closeSidebar();" class="text-lg font-medium">📚 천지록</a></li>
+            </ul>
+        </div>
+    </aside>
+
     <script>
-        function switchTab(tabId) {
-            console.log(tabId + " 탭으로 이동");
-            // 기존 Index.html의 switchTab 로직과 연결
-        }
+        // 사이드바 토글 함수
         function toggleSidebar() {
-            // 사이드바 토글 로직
+            document.getElementById('main-sidebar').classList.add('active');
+            document.getElementById('sidebar-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 사이드바 닫기 함수
+        function closeSidebar() {
+            document.getElementById('main-sidebar').classList.remove('active');
+            document.getElementById('sidebar-overlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // 탭 전환 함수 (SPA 방식)
+        function switchTab(tabId) {
+            const views = ['view-home', 'view-quest', 'view-archive', 'view-chunji'];
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if(el) el.style.display = (v === 'view-' + tabId) ? 'block' : 'none';
+            });
+            window.scrollTo(0, 0);
+        }
+
+        // 가이드 링크 열기 함수
+        function openGuideDirect(url) {
+            console.log("가이드 이동:", url);
+            // location.href = url; // 실제 연결 시 주석 해제
         }
     </script>
+
+    <script src="hw.js"></script>
+    <script src="script.js"></script>
+    <script src="timer.js"></script>
+
 </body>
 </html>

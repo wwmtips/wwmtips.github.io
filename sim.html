@@ -1,146 +1,33 @@
-<style>
-    /* 1. 제목 영역 스타일 (박스 밖) */
-    .page-header-area {
-        text-align: left;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        padding-left: 5px; /* 약간의 여백 */
-    }
-
-    .header-badge {
-        background-color: #b08d55; /* 금색 */
-        color: #fff;
-        padding: 3px 8px;
-        border-radius: 2px;
-        font-weight: bold;
-        font-size: 0.85em;
-        vertical-align: middle;
-    }
-
-    .header-title {
-        color: #b08d55; /* 금색 */
-        font-size: 1.6rem;
-        font-weight: bold;
-        vertical-align: middle;
-        margin-left: 8px;
-        font-family: 'Noto Serif KR', serif; /* 명조체 느낌 */
-    }
-
-    .header-subtitle {
-        color: #888;
-        font-size: 0.95rem;
-        margin-top: 8px;
-        margin-left: 2px;
-    }
-
-    /* 2. 빨간색 구분선 */
-    .red-divider {
-        border-top: 2px solid #c92a2a; /* 짙은 적색 */
-        margin-bottom: 25px;
-        width: 100%;
-    }
-
-    /* 3. 내용 박스 스타일 (흰색 배경) */
-    .calc-content-box {
-        background-color: #fff;
-        padding: 30px 25px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.03); /* 부드러운 그림자 */
-        text-align: center;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-
-    /* 입력창 및 버튼 스타일 */
-    .calc-label {
-        display: block;
-        text-align: left;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 12px;
-        font-size: 1.1rem;
-    }
-
-    .calc-input {
-        width: 100%;
-        padding: 15px;
-        font-size: 1.2rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
-        outline: none;
-        transition: border-color 0.2s;
-        margin-bottom: 20px;
-    }
-
-    .calc-input:focus {
-        border-color: #b08d55;
-    }
-
-    .calc-btn {
-        width: 100%;
-        padding: 16px;
-        background-color: #c92a2a;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    
-    .calc-btn:hover { background-color: #a01d1d; }
-
-    .calc-btn.reset {
-        background-color: #666;
-        margin-top: 15px;
-    }
-
-    /* 결과 텍스트 */
-    .result-text-big {
-        font-size: 2rem;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 8px;
-        word-break: keep-all;
-    }
-    .result-text-small {
-        font-size: 1rem;
-        color: #777;
-    }
-    
-    /* 결과 박스 강조 (선택사항) */
-    .result-highlight {
-        background-color: #fffcf5;
-        border: 1px solid #b08d55;
-        padding: 20px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-    }
-</style>
-
-<div class="page-header-area">
-    <span class="header-badge">도구</span>
-    <span class="header-title">운기조식</span>
-    <div class="header-subtitle">심력이 가득 찰 때까지 남은 시간을 계산합니다.</div>
+<div class="text-left mt-[10px] mb-[10px] pl-[5px]">
+    <span class="bg-[#b08d55] text-white px-2 py-[3px] rounded-[2px] font-bold text-[0.85em] align-middle">도구</span>
+    <span class="text-[#b08d55] text-[1.6rem] font-bold align-middle ml-2 font-serif">운기조식</span>
+    <div class="text-[#888] text-[0.95rem] mt-2 ml-[2px]">심력이 가득 찰 때까지 남은 시간을 계산합니다.</div>
 </div>
 
-<div class="red-divider"></div>
+<div class="border-t-2 border-[#c92a2a] mb-[25px] w-full"></div>
 
-<div class="calc-content-box">
+<div class="bg-white p-[30px_25px] rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.03)] text-center max-w-full box-border">
     
     <div id="input-screen">
-        <label for="currentPoint" class="calc-label">현재 수치 (0 ~ 499)</label>
-        <input type="number" id="currentPoint" class="calc-input" placeholder="숫자를 입력하시오" min="0" max="499">
-        <button class="calc-btn" onclick="calculateTime()">계산하기</button>
+        <label for="currentPoint" class="block text-left font-bold text-[#333] mb-3 text-[1.1rem]">현재 수치 (0 ~ 499)</label>
+        <input type="number" id="currentPoint" 
+               class="w-full p-[15px] text-[1.2rem] border border-gray-300 rounded box-border outline-none transition-colors mb-5 focus:border-[#b08d55]" 
+               placeholder="숫자를 입력하시오" min="0" max="499">
+        <button class="w-full p-[16px] bg-[#c92a2a] text-white border-none rounded text-[1.1rem] font-bold cursor-pointer hover:bg-[#a01d1d]" 
+                onclick="calculateTime()">계산하기</button>
     </div>
 
     <div id="result-screen" style="display: none; animation: fadeIn 0.3s;">
-        <div class="result-highlight">
-            <div id="remainText" class="result-text-big"></div>
-            <div id="dateText" class="result-text-small"></div>
+        <div class="bg-[#fffcf5] border border-[#b08d55] p-5 rounded mb-5">
+            <div id="remainText" class="text-[2rem] font-bold text-[#333] mb-2 break-keep"></div>
+            <div id="dateText" class="text-base text-[#777]"></div>
         </div>
-        <button class="calc-btn reset" onclick="resetCalculator()">다시 계산하기</button>
+        <button class="w-full p-[16px] bg-gray-600 text-white border-none rounded text-[1.1rem] font-bold cursor-pointer hover:bg-gray-700 mt-[15px]" 
+                onclick="resetCalculator()">다시 계산하기</button>
     </div>
 
 </div>
+
+<style>
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>

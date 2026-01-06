@@ -1184,6 +1184,7 @@ function selectQuestResult(filepath, id) {
 // 8. 렌더링 서브 함수들
 // =========================================
 // [수정] 스무고개 테이블 렌더링 (Tailwind CSS 디자인 적용)
+// [수정] 스무고개 테이블 렌더링 (모바일 이름 가림 방지 및 줄바꿈 적용)
 function renderQuizTable(data, keyword = '') {
     const tbody = document.getElementById('quiz-table-body');
     if (!tbody) return;
@@ -1192,36 +1193,40 @@ function renderQuizTable(data, keyword = '') {
     if (data && data.length > 0) {
         data.forEach(item => {
             const tr = document.createElement('tr');
-
-            // 행 스타일: 하단 테두리, 마우스 오버 시 연한 회색 배경
             tr.className = 'border-b border-gray-100 last:border-none hover:bg-gray-50 transition-colors';
 
             let hint = item.hint, answer = item.answer;
-
-            // 검색어 하이라이팅 (노란 배경 + 굵은 글씨)
+            
+            // 검색어 하이라이팅 로직 (기존 유지)
             if (keyword) {
                 const regex = new RegExp(`(${keyword})`, 'gi');
                 const highlight = '<span class="bg-yellow-200 text-yellow-900 font-bold px-0.5 rounded">$1</span>';
                 hint = hint.replace(regex, highlight);
                 answer = answer.replace(regex, highlight);
             }
-
-            // 셀 스타일 적용: 패딩, 폰트 굵기 조절
+            
+            // [핵심 변경] break-words 적용 및 너비 재배정
+            // 힌트: 35%, 정답: 45%, 이름: 20%
             tr.innerHTML = `
-                <td class="px-4 py-3 text-gray-500 font-medium w-[40%] align-middle break-keep">${hint}</td>
-                <td class="px-4 py-3 text-gray-900 font-bold w-[40%] align-middle break-keep">${answer}</td>
-                <td class="px-4 py-3 text-right text-xs text-gray-400 w-[20%] align-middle whitespace-nowrap">${item.user || '-'}</td>
+                <td class="px-2 py-3 text-gray-500 font-medium w-[35%] align-top break-words text-[12px] lg:text-sm">
+                    ${hint}
+                </td>
+                <td class="px-2 py-3 text-gray-900 font-bold w-[45%] align-top break-words text-[13px] lg:text-sm">
+                    ${answer}
+                </td>
+                <td class="px-2 py-3 text-right text-[10px] lg:text-xs text-gray-400 w-[20%] align-top break-words">
+                    ${item.user || '-'}
+                </td>
             `;
             tbody.appendChild(tr);
         });
     } else {
-        // 결과 없음 표시
         const noResultTr = document.createElement('tr');
         noResultTr.innerHTML = `<td colspan="3" class="py-12 text-center text-gray-400 text-sm">일치하는 족보가 없습니다.</td>`;
         tbody.appendChild(noResultTr);
     }
 
-    // 제보하기 버튼 행 (하단 고정)
+    // 제보하기 행 (기존 디자인 유지)
     const reportTr = document.createElement('tr');
     reportTr.className = 'cursor-pointer bg-amber-50 hover:bg-amber-100 transition-colors border-t border-amber-100';
     reportTr.onclick = () => { window.open('report/', '_blank'); };

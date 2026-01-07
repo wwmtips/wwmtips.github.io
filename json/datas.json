@@ -2,1791 +2,5000 @@
   "items": [],
   "quests": [],
   "quiz": [
-    { "hint": "이동수단", "answer": "가마", "user": "한아름꽃" },
-{ "hint": "밴드", "answer": "베이스기타", "user": "오현기" },
-{ "hint": "7월 7일", "answer": "직녀", "user": "w" },
-{ "hint": "독침", "answer": "꿀벌", "user": "약초" },
-{ "hint": "지식", "answer": "책", "user": "Provi" },
-
-{ "hint": "가죽", "answer": "채찍", "user": "니꺼내꺼" },
-{ "hint": "독서", "answer": "책", "user": "독고구패황" },
-{ "hint": "씨앗", "answer": "정향", "user": "연갤러" },
-{ "hint": "물개", "answer": "바다사자", "user": "으아악윽" },
-{ "hint": "생선", "answer": "고양이", "user": "" },
-{ "hint": "동물", "answer": "판다", "user": "독고구패황" },
-{ "hint": "검은 깃털", "answer": "까마귀", "user": "촉음사야" },
-{ "hint": "사막", "answer": "전갈", "user": "호팬" },
-{ "hint": "가시", "answer": "찔레꽃", "user": "쓔" },
-{ "hint": "거대함", "answer": "고래", "user": "쓔" },
-{ "hint": "끈기", "answer": "포풀루스 유프라티카", "user": "" },
-{ "hint": "생선", "answer": "꽁치", "user": "" },
-
-    
-{ "hint": "검은 반점 무늬", "answer": "표범", "user": "" },
-{ "hint": "뿌리채소", "answer": "렌즈콩", "user": "ㅇㅇ" },
-{ "hint": "초원", "answer": "양", "user": "짭짭이" },
-{ "hint": "노란 깃털", "answer": "꾀꼬리", "user": "유환성" },
-{ "hint": "파란색", "answer": "파랑새", "user": "봉팔컴" },
-{ "hint": "긴팔", "answer": "오랑우탄", "user": "라혼" },
-{ "hint": "발굽", "answer": "말", "user": "천마°" },
-{ "hint": "낚싯줄", "answer": "낚시대", "user": "낚시대" },
-
-    
-    { "hint": "나무", "answer": "딱따구리", "user": "안녕로봇" },
-{ "hint": "식칼", "answer": "도마", "user": "설현아" },
-{ "hint": "뒤뚱뒤뚱", "answer": "펭귄", "user": "설현아" },
-{ "hint": "붉은빛 과실", "answer": "자두", "user": "" },
-    { "hint": "새", "answer": "파랑새", "user": "꽂" },
-{ "hint": "시계", "answer": "뻐꾸기", "user": "환환고" },
-{ "hint": "바다", "answer": "낚시", "user": "다함" },
-{ "hint": "목", "answer": "목걸이", "user": "설현아" },
-{ "hint": "채소", "answer": "가지", "user": "수녀" },
-    { "hint": "영양 공급", "answer": "구기자", "user": "하이빵까루" },
-{ "hint": "서명", "answer": "도장", "user": "" },
-{ "hint": "가시", "answer": "찔레꽃", "user": "" },
-{ "hint": "질주", "answer": "말", "user": "" },
-{ "hint": "동물", "answer": "판다", "user": "" },
-{ "hint": "말린 과일", "answer": "살구 꽃", "user": "설월비" },
-{ "hint": "수납", "answer": "상자", "user": "" },
-{ "hint": "방향", "answer": "나침반", "user": "" },
-    { "hint": "향신료", "answer": "로즈마리", "user": "Dexter" },
-{ "hint": "수분 보충", "answer": "오이", "user": "ㅇㅇ" },
-{ "hint": "거대함", "answer": "고래", "user": "제므" },
-
-    { "hint": "바다의 포식자", "answer": "상어", "user": "깜선생" },
-{ "hint": "꼬리", "answer": "전갈", "user": "izell" },
-{ "hint": "향신료", "answer": "로즈마리", "user": "핑주왘" },
-{ "hint": "보라색", "answer": "가지", "user": "셔니" },
-{ "hint": "기침", "answer": "비파", "user": "경교" },
-{ "hint": "꼬리", "answer": "올챙이", "user": "제갈청하" },
-{ "hint": "나트륨", "answer": "소금", "user": "Raku라쿠" },
-{ "hint": "흰 줄무늬", "answer": "스컹크", "user": "설리화" },
-
-    { "hint": "날렵함", "answer": "표범", "user": "월흔향" },
-{ "hint": "강한 향기", "answer": "히아신스", "user": "" },
-{ "hint": "여름", "answer": "백일초", "user": "Raku라쿠" },
-{ "hint": "목 돌리기", "answer": "올빼미", "user": "풍사향" },
-
-    { "hint": "Medicinal", "answer": "polygonum multiflorum", "user": "" },
-    { "hint": "날개", "answer": "나비", "user": "임호택" },
-{ "hint": "반찬", "answer": "마늘종", "user": "ㅇㅇ" },
-{ "hint": "과일", "answer": "탕후루", "user": "당마란" },
-{ "hint": "겨울잠", "answer": "곰", "user": "하복" },
-{ "hint": "해변", "answer": "불가사리", "user": "이론적주사위" },
-{ "hint": "매실", "answer": "매실", "user": "매실" },
-
-    { "hint": "큰귀", "answer": "비글", "user": "버물리" },
-{ "hint": "관상용 식물", "answer": "담쟁이덩굴", "user": "빛객" },
-{ "hint": "장수", "answer": "느릅나무", "user": "" },
-{ "hint": "등껍질", "answer": "거북이", "user": "죽기빵" },
-{ "hint": "까악까악", "answer": "까마귀", "user": "죽기빵" },
-{ "hint": "꽃꽃이", "answer": "꽃병", "user": "KimuHan" },
-{ "hint": "겨울잠", "answer": "곰", "user": "name..." },
-
-    { "hint": "손씻기", "answer": "너구리", "user": "가진" },
-{ "hint": "아삭아삭", "answer": "사과", "user": "전략" },
-{ "hint": "파란색", "answer": "백로", "user": "바람風" },
-
-    
-    { "hint": "영양", "answer": "표고버섯", "user": "" },
-{ "hint": "고정", "answer": "못", "user": "라키아타" },
-{ "hint": "중독성", "answer": "담배", "user": "익명" },
-{ "hint": "물고기", "answer": "메기", "user": "천세은" },
-{ "hint": "거대한", "answer": "코끼리", "user": "팽세지" },
-{ "hint": "과일", "answer": "귤", "user": "용오" },
-{ "hint": "관목", "answer": "협죽도", "user": "팅코" },
-{ "hint": "볶음요리", "answer": "양파", "user": "가진" },
-{ "hint": "해변", "answer": "불가사리", "user": "그림비" },
-{ "hint": "기다란 꼭지", "answer": "체리", "user": "최소휘" },
-{ "hint": "바다의포시작", "answer": "상어", "user": "우생마" },
-
-    { "hint": "작은 말", "answer": "당나귀", "user": "마드린느/확신" },
-    { "hint": "니코틴", "answer": "담배", "user": "Eleithd" },
-{ "hint": "구멍", "answer": "샐러리", "user": "안녕동맹-라이너스" },
-{ "hint": "피자 토핑", "answer": "올리브", "user": "조연이" },
-{ "hint": "여름밤", "answer": "반딧불이", "user": "세아린" },
-{ "hint": "날개", "answer": "나비", "user": "홍재" },
-{ "hint": "붉은색", "answer": "중국 매듭", "user": "비운검" },
-{ "hint": "기다란 꼭지", "answer": "체리", "user": "SnowBall" },
-{ "hint": "벼슬", "answer": "닭", "user": "ㅇㅇ" },
-{ "hint": "건축", "answer": "못", "user": "연붕이" },
-{ "hint": "낚싯줄", "answer": "낚싯대", "user": null },
-{ "hint": "남자", "answer": "최도", "user": null },
-{ "hint": "아마릴리스", "answer": "주정홍", "user": "죽기빵" },
-{ "hint": "동남아", "answer": "두리안", "user": "김팔식" },
-{ "hint": "냉채", "answer": "오이", "user": "운륜" },
-{ "hint": "도교", "answer": "음양", "user": "Futter" },
-{ "hint": "벼슬", "answer": "닭", "user": "아이시떼루" },
-{ "hint": "개구리", "answer": "올챙이", "user": "취화량" },
-{ "hint": "흰 꽃", "answer": "카라꽃", "user": "ㅇㅇ" },
-{ "hint": "등 푸른 생선", "answer": "참치", "user": "포지" },
-{ "hint": "썰매", "answer": "허스키", "user": "여수남자" },
-{ "hint": "흰 꽃", "answer": "카라꽃", "user": "한유연" },
-{ "hint": "무기", "answer": "무명", "user": "운코" },
-{ "hint": "수생식물", "answer": "카라꽃", "user": "탕이" },
-{ "hint": "아시아", "answer": "두리안", "user": "탕이" },
-
-  { "hint": "건축재", "answer": "측백나무", "user": "카리기누" },
-  { "hint": "물고기", "answer": "메기", "user": "당마란" },
-  { "hint": "상록수", "answer": "만년청", "user": "" },
-  { "hint": "촛대", "answer": "양초", "user": "RUNGRUNG" },
-  { "hint": "건축", "answer": "못", "user": "성꺼비" },
-  { "hint": "남장", "answer": "뮬란", "user": "Saooa" },
-  { "hint": "불꽃", "answer": "불꽃놀이", "user": "가진" },
-  { "hint": "바다", "answer": "참치", "user": "litss" },
-  { "hint": "설탕", "answer": "탕후루", "user": "선유리" },
-  { "hint": "뿌리줄기", "answer": "연근", "user": "" },
-  { "hint": "핑크색 꽃잎", "answer": "베고니아", "user": "쏘냑" },
-  { "hint": "해변", "answer": "불가사리", "user": "ESCARNA" },
-    { "hint": "십이간지", "answer": "쥐", "user": "연신" },
-{ "hint": "식이섬유", "answer": "고구마", "user": "마도림" },
-{ "hint": "큰 울음소리", "answer": "황소개구리", "user": "이용복" },
-{ "hint": "알록달록", "answer": "튤립", "user": "마이클조던" },
-{ "hint": "촛대", "answer": "양초", "user": "시예" },
-{ "hint": "쌀밥", "answer": "벼", "user": "ㅇㅇ" },
-{ "hint": "눈물", "answer": "양파", "user": "설화띠띠" },
-{ "hint": "수염", "answer": "메기", "user": "그림비" },
-{ "hint": "바다", "answer": "바다거북", "user": "천시윤" },
-{ "hint": "사료", "answer": "옥수수", "user": "zaeun" },
-{ "hint": "무기", "answer": "창", "user": "비공개" },
-
-    { "hint": "꼬리", "answer": "원숭이", "user": "마소" },
-{ "hint": "시체 먹는 새", "answer": "독수리", "user": "" },
-{ "hint": "과일", "answer": "귤", "user": "litss" },
-    { "hint": "저항", "answer": "협죽도", "user": "ㅇㅇ" },
-
-    { "hint": "당근", "answer": "토끼", "user": "무럭무럭" },
-{ "hint": "날렵함", "answer": "표범", "user": "SAOOA" },
-{ "hint": "생선", "answer": "흰동가리", "user": "구구아띠" },
-{ "hint": "독", "answer": "해파리", "user": "ㅇㅇ" },
-{ "hint": "폴짝폴짝", "answer": "개구리", "user": "뽕이" },
-{ "hint": "주름제거", "answer": "다리미", "user": "김춘룡" },
-{ "hint": "독", "answer": "해파리", "user": "SnowBall" },
-{ "hint": "물갈퀴", "answer": "오리", "user": "" },
-{ "hint": "장신구", "answer": "팔찌", "user": "양광" },
-
-    
-{ "hint": "중독성", "answer": "담배", "user": "ㅇㅇ" },
-{ "hint": "폴짝폴짝", "answer": "개구리", "user": "가무언" },
-{ "hint": "세계문화유산", "answer": "만리장성", "user": "HighTower" },
-{ "hint": "작은 곡물", "answer": "녹두", "user": "GamTan" },
-{ "hint": "독성", "answer": "협죽도", "user": "채옥" },
-{ "hint": "침실", "answer": "침대", "user": "" },
-    { "hint": "해표", "answer": "물범", "user": "유사림" },
-{ "hint": "봄", "answer": "자두", "user": "JHJH" },
-{ "hint": "모래", "answer": "모래시계", "user": "푸짐이비버" },
-{ "hint": "볶음 요리", "answer": "양파", "user": "연귀" },
-{ "hint": "나무", "answer": "벵갈보리수", "user": "고기먹는돌쇠" },
-{ "hint": "꼬리", "answer": "너구리", "user": "영수리" },
-{ "hint": "씨앗", "answer": "살구", "user": "" },
-{ "hint": "영양", "answer": "표고버섯", "user": "" },
-
-    { "hint": "인연", "answer": "자등", "user": "풀무" },
-{ "hint": "우아함", "answer": "석곡", "user": "평택제일검" },
-{ "hint": "은색 비늘", "answer": "꽁치", "user": "구밀" },
-{ "hint": "설탕", "answer": "솜사탕", "user": "무럭무럭" },
-{ "hint": "새", "answer": "가마우지", "user": "번덴보레" },
-{ "hint": "전기 충격", "answer": "전기뱀장어", "user": "ㅇㅅㅇ" },
-{ "hint": "물개", "answer": "바다사자", "user": "에엑따" },
-{ "hint": "채소", "answer": "시금치", "user": "에엑따" },
-{ "hint": "약용", "answer": "장춘화", "user": "견칫돌" },
-{ "hint": "은색 비늘", "answer": "꽁치", "user": "RyeoHui" },
-{ "hint": "얼굴", "answer": "가면", "user": "꽃섬" },
-{ "hint": "수납", "answer": "상자", "user": "파솔라시" },
-{ "hint": "물 저장", "answer": "수조", "user": "peehae" },
-{ "hint": "미국의 상징", "answer": "흰머리수리", "user": "이론적주사위" },
-{ "hint": "브로콜리", "answer": "콜리블라워", "user": "ㅂㅂ" },
-{ "hint": "물저장", "answer": "수조", "user": "시리우" },
-{ "hint": "발효", "answer": "간장", "user": "요바" },
-{ "hint": "귀중한", "answer": "영지버섯", "user": "jhjh" },
-{ "hint": "별명", "answer": "돼지", "user": "ㅇㅇ" },
-{ "hint": "캐나다", "answer": "단풍나무", "user": "asiyah" },
-{ "hint": "사막", "answer": "낙타", "user": "륙" },
-{ "hint": "수납", "answer": "상자", "user": "륙" },
-{ "hint": "부리부리한 눈매", "answer": "흰머리수리", "user": "오감녕" },
-{ "hint": "말 머리", "answer": "해마", "user": "률" },
-{ "hint": "스무디", "answer": "블루베리", "user": "빙월영" },
-{ "hint": "구근 식물", "answer": "히아신스", "user": "당림" },
-{ "hint": "바람과 모래", "answer": "포풀루스 유프라티카", "user": "냥인" },
-{ "hint": "미용", "answer": "푸들", "user": "하늘" },
-{ "hint": "작은 당나귀", "answer": "노새", "user": "한건우" },
-{ "hint": "은색 비늘", "answer": "꽁치", "user": "꼴치" },
-{ "hint": "칠석", "answer": "견우", "user": "ㅇㅇ" },
-{ "hint": "쥐", "answer": "땃쥐", "user": "이설윤" },
-{ "hint": "철새", "answer": "홍학", "user": "고양이" },
-{ "hint": "해충", "answer": "모기", "user": "흑에" },
-{ "hint": "화목란", "answer": "뮬란", "user": "매화청명" },
-{ "hint": "게임", "answer": "두더지", "user": "석문리" },
-{ "hint": "목제", "answer": "침대", "user": "석문리" },
-{ "hint": "의약품 및 식품", "answer": "구기자", "user": "석문리" },
-{ "hint": "보안", "answer": "자물쇠", "user": "임하연" },
-
-    { "hint": "약초", "answer": "로즈마리", "user": "츠란" },
-{ "hint": "냉혈동물", "answer": "악어", "user": "Sampler" },
-{ "hint": "봄", "answer": "자두", "user": "무명" },
-{ "hint": "따라쟁이", "answer": "앵무새", "user": "진령옥" },
-{ "hint": "뿌리채소", "answer": "토란", "user": "ㅍㅍ" },
-{ "hint": "다육 식물", "answer": "용설란", "user": "" },
-{ "hint": "빨간색", "answer": "중국매듭", "user": "한임" },
-{ "hint": "컵 모양", "answer": "튤립", "user": "" },
-{ "hint": "큰 입자", "answer": "잠두", "user": "류도화" },
-{ "hint": "열렬한", "answer": "잭프루트", "user": "" },
-{ "hint": "건물", "answer": "우체국", "user": "ㅇㅇ" },
-{ "hint": "머리 보호", "answer": "헬멧", "user": "요바" },
-
-    { "hint": "매운 맛", "answer": "고추", "user": "바람風" },
-{ "hint": "봄 분홍색 복숭아", "answer": "복숭아꽃", "user": "ㅇㅇ" },
-{ "hint": "비 오는 날", "answer": "지렁이", "user": "" },
-
-    { "hint": "밭갈이 도구", "answer": "갈퀴", "user": "무삥" },
-{ "hint": "말", "answer": "승마", "user": "흑공" },
-{ "hint": "밭갈이도구", "answer": "갈퀴", "user": "oor" },
-{ "hint": "단오", "answer": "투호", "user": "견칫돌" },
-{ "hint": "모래판", "answer": "씨름", "user": "염공" },
-{ "hint": "다육 식물", "answer": "알로에", "user": "" },
-{ "hint": "케첩", "answer": "토마토", "user": "천마즉사대마왕" },
-{ "hint": "동물", "answer": "개", "user": "천마즉사대마왕" },
-{ "hint": "꽃가루", "answer": "벌", "user": "천마즉사대마왕" },
-{ "hint": "뿌리줄기", "answer": "연근", "user": "" },
-{ "hint": "새", "answer": "까치", "user": "" },
-{ "hint": "은하수", "answer": "직녀", "user": "즉사천마대마왕" },
-{ "hint": "헌집", "answer": "두꺼비", "user": "" },
-
-    { "hint": "밭갈이 도구", "answer": "갈퀴", "user": "무삥" },
-{ "hint": "말", "answer": "승마", "user": "흑공" },
-{ "hint": "밭갈이도구", "answer": "갈퀴", "user": "oor" },
-{ "hint": "단오", "answer": "투호", "user": "견칫돌" },
-{ "hint": "모래판", "answer": "씨름", "user": "염공" },
-{ "hint": "다육 식물", "answer": "알로에", "user": "" },
-{ "hint": "케첩", "answer": "토마토", "user": "천마즉사대마왕" },
-{ "hint": "동물", "answer": "개", "user": "천마즉사대마왕" },
-{ "hint": "꽃가루", "answer": "벌", "user": "천마즉사대마왕" },
-{ "hint": "뿌리줄기", "answer": "연근", "user": "" },
-{ "hint": "새", "answer": "까치", "user": "" },
-{ "hint": "은하수", "answer": "직녀", "user": "즉사천마대마왕" },
-{ "hint": "헌집", "answer": "두꺼비", "user": "" },
-
-    { "hint": "넙치", "answer": "광어", "user": "oor" },
-{ "hint": "안전", "answer": "헬멧", "user": "ㅇㅇ" },
-{ "hint": "꼬리", "answer": "전갈", "user": "광풍검호" },
-{ "hint": "북극", "answer": "바다코끼리", "user": "" },
-{ "hint": "과일", "answer": "무화과", "user": "광풍검호" },
-{ "hint": "안전", "answer": "헬멧", "user": "StorM" },
-{ "hint": "바다표범", "answer": "물범", "user": "Haomoon" },
-
-    { "hint": "활달함", "answer": "비글", "user": "카구야" },
-
-    { "hint": "필드", "answer": "쑥갓", "user": "숭커벨" },
-
-    { "hint": "인주", "answer": "도장", "user": "유태월" },
-{ "hint": "시계", "answer": "뻐꾸기", "user": "만휘" },
-
-    { "hint": "인연", "answer": "자등", "user": "풀무" },
-{ "hint": "우아함", "answer": "석곡", "user": "평택제일검" },
-{ "hint": "은색 비늘", "answer": "꽁치", "user": "구밀" },
-{ "hint": "설탕", "answer": "솜사탕", "user": "무럭무럭" },
-{ "hint": "새", "answer": "가마우지", "user": "번덴보레" },
-{ "hint": "전기 충격", "answer": "전기뱀장어", "user": "ㅇㅅㅇ" },
-{ "hint": "물개", "answer": "바다사자", "user": "에엑따" },
-{ "hint": "채소", "answer": "시금치", "user": "에엑따" },
-{ "hint": "약용", "answer": "장춘화", "user": "견칫돌" },
-{ "hint": "은색 비늘", "answer": "꽁치", "user": "RyeoHui" },
-{ "hint": "얼굴", "answer": "가면", "user": "꽃섬" },
-{ "hint": "수납", "answer": "상자", "user": "파솔라시" },
-{ "hint": "물 저장", "answer": "수조", "user": "peehae" },
-{ "hint": "미국의 상징", "answer": "흰머리수리", "user": "이론적주사위" },
-{ "hint": "미국의 상징", "answer": "흰머리수리", "user": "이론적주사위" },
-{ "hint": "브로콜리", "answer": "콜리블라워", "user": "ㅂㅂ" },
-{ "hint": "물저장", "answer": "수조", "user": "시리우" },
-{ "hint": "발효", "answer": "간장", "user": "요바" },
-{ "hint": "귀중한", "answer": "영지버섯", "user": "jhjh" },
-{ "hint": "별명", "answer": "돼지", "user": "ㅇㅇ" },
-{ "hint": "캐나다", "answer": "단풍나무", "user": "asiyah" },
-{ "hint": "사막", "answer": "낙타", "user": "륙" },
-{ "hint": "수납", "answer": "상자", "user": "륙" },
-{ "hint": "부리부리한 눈매", "answer": "흰머리수리", "user": "오감녕" },
-{ "hint": "말 머리", "answer": "해마", "user": "률" },
-{ "hint": "스무디", "answer": "블루베리", "user": "빙월영" },
-{ "hint": "구근 식물", "answer": "히아신스", "user": "당림" },
-{ "hint": "바람과 모래", "answer": "포풀루스 유프라티카", "user": "냥인" },
-{ "hint": "미용", "answer": "푸들", "user": "하늘" },
-{ "hint": "작은 당나귀", "answer": "노새", "user": "한건우" },
-{ "hint": "은색 비늘", "answer": "꽁치", "user": "꼴치" },
-{ "hint": "칠석", "answer": "견우", "user": "ㅇㅇ" },
-{ "hint": "쥐", "answer": "땃쥐", "user": "이설윤" },
-{ "hint": "철새", "answer": "홍학", "user": "고양이" },
-{ "hint": "해충", "answer": "모기", "user": "흑에" },
-{ "hint": "화목란", "answer": "뮬란", "user": "매화청명" },
-{ "hint": "게임", "answer": "두더지", "user": "석문리" },
-{ "hint": "목제", "answer": "침대", "user": "석문리" },
-{ "hint": "의약품 및 식품", "answer": "구기자", "user": "석문리" },
-{ "hint": "보안", "answer": "자물쇠", "user": "임하연" },
-{ "hint": "검집", "answer": "검", "user": "ㅇㅇ" },
-    
-    { "hint": "수경재배", "answer": "행운목", "user": "밥먹공자" },
-{ "hint": "무도회", "answer": "가면", "user": "NowMad" },
-{ "hint": "향신료", "answer": "고수", "user": "월화" },
-
-    { "hint": "강한 부리", "answer": "딱따구리", "user": "NowMad" },
-
-    { "hint": "기력 보강", "answer": "인삼", "user": "" },
-{ "hint": "양념", "answer": "마늘", "user": "관백" },
-{ "hint": "정화", "answer": "호피란", "user": "소은이" },
-{ "hint": "도구", "answer": "가위", "user": "화웅선생" },
-
-    { "hint": "가죽", "answer": "부츠", "user": "EllaHolic" },
-{ "hint": "길다란 꼭지", "answer": "체리", "user": "연강호" },
-{ "hint": "칠석", "answer": "견우", "user": "관백" },
-{ "hint": "피", "answer": "모기", "user": "돼지박" },
-{ "hint": "인테리어 소품", "answer": "꽃병", "user": "" },
-{ "hint": "어부", "answer": "낚싯대", "user": "꽃병" },
-
-    { "hint": "군자의 상징", "answer": "봉황", "user": "공명의함정" },
-{ "hint": "바다", "answer": "인어", "user": "ㅇㅇ" },
-{ "hint": "공예품", "answer": "도자기", "user": "화웅선생" },
-
-    { "hint": "신발류", "answer": "부츠", "user": "-" },
-    { "hint": "관상용", "answer": "베고니아", "user": "ㅇㅇ" },
-{ "hint": "엉덩이", "answer": "복숭아", "user": "ㅇㅇ" },
-
-    { "hint": "여름철", "answer": "오이", "user": "본좌" },
-{ "hint": "가을", "answer": "잠자리", "user": "CubePapa" },
-{ "hint": "저항", "answer": "협죽도", "user": "휘문령" },
-{ "hint": "쌀", "answer": "쌀 항아리", "user": "문휘령" },
-{ "hint": "채소밭", "answer": "상추", "user": "" },
-{ "hint": "보라색 꽃", "answer": "자등", "user": "" },
-{ "hint": "꽃꽂이", "answer": "꽃병", "user": "" },
-{ "hint": "씨앗", "answer": "해바라기", "user": "란드그리스" },
-{ "hint": "느림", "answer": "나무늘보", "user": "이정룡" },
-{ "hint": "채소", "answer": "토마토", "user": "이정룡" },
-{ "hint": "관상용", "answer": "베고니아", "user": "갱장" },
-{ "hint": "바람과모레", "answer": "포풀루스 유프라티카", "user": "당조연" },
-{ "hint": "전통 중의학", "answer": "감초", "user": "이정룡" },
-{ "hint": "날카로운 이빨", "answer": "피라냐", "user": "ㅇㅇㅇ" },
-{ "hint": "심해", "answer": "오징어", "user": "" },
-{ "hint": "흰색", "answer": "자스민", "user": "한호떡" },
-{ "hint": "장난감", "answer": "오뚝이", "user": "" },
-{ "hint": "향긋한", "answer": "정향", "user": "" },
-{ "hint": "천연기념물", "answer": "수달", "user": "" },
-{ "hint": "출세", "answer": "능소화", "user": "전정원" },
-{ "hint": "흰 살", "answer": "고등어", "user": "전정원" },
-{ "hint": "초식 동물", "answer": "사슴", "user": "원료" },
-{ "hint": "약재", "answer": "장춘화", "user": "SkeletonL" },
-{ "hint": "음료", "answer": "차", "user": "SkeletonL" },
-{ "hint": "신발류", "answer": "부츠", "user": "발경" },
-{ "hint": "봄", "answer": "복숭아꽃", "user": "후헵" },
-
-    { "hint": "위장", "answer": "카멜레온", "user": "백지연" },
-{ "hint": "친구", "answer": "숨바꼭질", "user": "백지연" },
-{ "hint": "장난감", "answer": "오뚝이", "user": "MrGoo" },
-{ "hint": "장수", "answer": "구기자", "user": "?" },
-{ "hint": "푸른 죽순", "answer": "상추", "user": "잭맨" },
-{ "hint": "공예품", "answer": "도자기", "user": "" },
-{ "hint": "화상", "answer": "알로에", "user": "정체불명" },
-{ "hint": "공격", "answer": "상어", "user": "바람風" },
-{ "hint": "왜소함", "answer": "땃쥐", "user": "바람風" },
-{ "hint": "약용", "answer": "영지버섯", "user": "Dall" },
-{ "hint": "강력한 앞니", "answer": "비버", "user": "고궁진" },
-
-    { "hint": "툰드라", "answer": "순록", "user": "한예리" },
-{ "hint": "느린 성장", "answer": "회양목", "user": "주우지" },
-{ "hint": "늪", "answer": "악어", "user": "익명" },
-{ "hint": "침실", "answer": "화장대", "user": "주우지" },
-{ "hint": "단맛", "answer": "설탕", "user": "주우지" },
-{ "hint": "개울가", "answer": "올챙이", "user": "ㅇㅇ" },
-{ "hint": "정글", "answer": "고릴라", "user": "Dall" },
-{ "hint": "거문고", "answer": "오동나무", "user": "갤러" },
-{ "hint": "향기", "answer": "곽향", "user": "연선화" },
-{ "hint": "툰드라", "answer": "순록", "user": "연선화" },
-
-    { "hint": "엉덩이", "answer": "원숭이" },
-    { "hint": "솔방울", "answer": "소나무", "user": "블커" },
-{ "hint": "향신료", "answer": "계피", "user": "블커" },
-{ "hint": "매실", "answer": "매화", "user": "블커" },
-{ "hint": "기도", "answer": "부적", "user": "블커" },
-{ "hint": "손목", "answer": "팔찌", "user": "블커" },
-{ "hint": "버섯류", "answer": "표고버섯", "user": "블커" },
-{ "hint": "강치", "answer": "바다사자", "user": "블커" },
-    { "hint": "큰 눈", 
-      "answer": "올빼미", 
-      "user": "ㅇㅇ" 
+    {
+      "hint": "남극",
+      "answer": "펭귄",
+      "user": "정병사"
     },
-    { "hint": "기침", 
-      "answer": "비파", 
-      "user": "ㅇㅇ" 
+    {
+      "hint": "사바나",
+      "answer": "기린",
+      "user": ""
     },
-    { "hint": "완전변태", 
-      "answer": "나비", 
-      "user": "맹글" 
+    {
+      "hint": "날지 못하는 새",
+      "answer": "타조",
+      "user": "무리"
     },
-    { "hint": "대나무 새싹", 
-      "answer": "죽순", 
-      "user": "맹글" 
+    {
+      "hint": "이동수단",
+      "answer": "가마",
+      "user": "한아름꽃"
     },
-    { "hint": "애완동물", 
-      "answer": "앵무새", 
-      "user": "ㅇㅇ" 
+    {
+      "hint": "밴드",
+      "answer": "베이스기타",
+      "user": "오현기"
     },
-    { "hint": "히말라야", 
-      "answer": "야크", 
-      "user": "ㅇㅇ" 
+    {
+      "hint": "7월 7일",
+      "answer": "직녀",
+      "user": "w"
     },
-    { "hint": "쌀 밥", 
-      "answer": "벼", 
-      "user": "ㅇㅇ" 
+    {
+      "hint": "독침",
+      "answer": "꿀벌",
+      "user": "약초"
     },
-    { "hint": "여자 장군", 
-      "answer": "뮬란", 
-      "user": "ㅇㅇ" 
-    },
-    { "hint": "비오는날", 
-      "answer": "지렁이", 
-      "user": "ㅇㅇ" 
-    },
-    { "hint": "장마철", 
-      "answer": "수국", 
-      "user": "ㅇㅇ" 
-    },
-
-    { "hint": "손바닥 모양", "answer": "단풍나무", "user": "ㅇㄱㅆㄷ" },
-{ "hint": "은은한 향", "answer": "찔레꽃", "user": "ㅇㄱㅆㄷ" },
-{ "hint": "긴 주둥이", "answer": "해마", "user": "ㅇㄱㅆㄷ" },
-{ "hint": "다홍색", "answer": "봉선화", "user": "ㅇㄱㅆㄷ" },
-
-    { "hint": "시간의 흐름", "answer": "모래시계", "user": "ㅇㅇ" },
-{ "hint": "음주", "answer": "술주전자", "user": "ㅇㅇ" },
-{ "hint": "반얀나무", "answer": "벵골보리수", "user": "ㅇㅇ" },
-{ "hint": "독침", "answer": "전갈", "user": "ㅇㅇ" },
-{ "hint": "나무 구멍", "answer": "딱따구리", "user": "ㅇㅇ" },
-{ "hint": "훈련", "answer": "채찍", "user": "ㅇㅇ" },
-{ "hint": "우산 모양의", "answer": "영지버섯", "user": "ㅇㅇ" },
-{ "hint": "밀랍", "answer": "양초", "user": "ㅇㅇ" },
-{ "hint": "늘어진 가지", "answer": "버드나무", "user": "ㅇㅇ" },
-{ "hint": "연초", "answer": "담배", "user": "ㅇㅇ" },
-{ "hint": "캡사이신", "answer": "고추", "user": "ㅇㅇ" },
-{ "hint": "개구리", "answer": "황소개구리", "user": "ㅇㅇ" },
-{ "hint": "가장 큰 설치류", "answer": "카피바라", "user": "ㅇㅇ" },
-{ "hint": "치약", "answer": "박하", "user": "ㅇㅇ" },
-{ "hint": "손톱 같은 새싹", "answer": "정향", "user": "ㅇㅇ" },
-{ "hint": "잠금", "answer": "자물쇠", "user": "ㅇㅇ" },
-{ "hint": "알을 낳는 포유류", "answer": "오리너구리", "user": "ㅇㅇ" },
-{ "hint": "대나무", "answer": "판다", "user": "ㅇㅇ" },
-{ "hint": "낚싯바늘", "answer": "낚싯대", "user": "ㅇㅇ" },
-{ "hint": "크레센트 빈", "answer": "렌즈콩", "user": "ㅇㅇ" },
-{ "hint": "등푸른 생선", "answer": "꽁치", "user": "ㅇㅇ" },
-{ "hint": "덩굴", "answer": "찔레꽃", "user": "ㅇㅇ" },
-{ "hint": "오작교", "answer": "견우", "user": "ㅇㅇ" },
-{ "hint": "진시황", "answer": "만리장성", "user": "ㅇㅇ" },
-    { "hint": "푸른 잎", "answer": "시금치", "user": "무명" },
-{ "hint": "여성 장군", "answer": "뮬란", "user": "3성갈리오" },
-  { "hint": "초밥", "answer": "참치", "user": "ㅇㅇ" },
-  { "hint": "늑대", "answer": "허스키", "user": "ㅇㅇ" },
-  { "hint": "검은 머리카락", "answer": "폴리고눔 멀티플로룸", "user": "ㅇㅇ" },
-  { "hint": "대나무 생선 용기", "answer": "생선 바구니", "user": "ㅇㅇ" },
-  { "hint": "질긴 생명력", "answer": "차전초", "user": "ㅇㅇ" },
-    { 
-      "hint": "활동", 
-      "answer": "비글",
-      "user":"윤곰"
-    },
-    { 
-      "hint": "왜소한", 
-      "answer": "땃쥐",
-      "user":"네로씨"
-    },
-  { "hint": "흰색 과육", "answer": "배", "user": "Los" },
-  { "hint": "튀김", "answer": "감자", "user": "Los" },
-  { "hint": "유인원", "answer": "고릴라", "user": "Los" },
-  { "hint": "제사", "answer": "부적", "user": "Los" },
-  { "hint": "촉수", "answer": "해파리", "user": "Los" },
-  { "hint": "중국 간식", "answer": "탕후루", "user": "Los" },
-  { "hint": "빨간색", "answer": "사과", "user": "Los" },
-  { "hint": "먹물", "answer": "오징어", "user": "Los" },
-  { "hint": "권법", "answer": "태극권", "user": "Los" },
-  { "hint": "균형", "answer": "오뚝이", "user": "Los" },
-  { "hint": "전설의 동물", "answer": "봉황", "user": "Los" },
-  { "hint": "식기", "answer": "그릇", "user": "Los" },
-  { "hint": "가시", "answer": "고슴도치", "user": "Los" },
-  { "hint": "짠맛", "answer": "간장", "user": "Los" },
-  { "hint": "흐르는 강물을 거슬러", "answer": "연어", "user": "Los" },
-  { "hint": "전투", "answer": "창", "user": "Los" },
-  { "hint": "붉은 과일", "answer": "구기자", "user": "Los" },
-  { "hint": "독서", "answer": "책", "user": "Los" },
-  { "hint": "많은 다리", "answer": "지네", "user": "Los" },
-  { "hint": "맹독", "answer": "복어", "user": "Los" },
-  { "hint": "버찌", "answer": "체리", "user": "Los" },
-  { "hint": "농기구", "answer": "낫", "user": "Los" },
-  { "hint": "산세베리아", "answer": "호피란", "user": "Los" },
-  { "hint": "평화", "answer": "비둘기", "user": "Los" },
-{ 
-      "hint": "복숭아", 
-      "answer": "복숭아 꽃",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "놀이터", 
-      "answer": "그네",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "야행성", 
-      "answer": "올빼미",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "싹", 
-      "answer": "정향",
-      "user":"ㅇㅇ"
-    },
-  { 
-      "hint": "공부", 
-      "answer": "탁자",
-      "user":"네로씨"
-    },
-  {
-    "hint": "먹을 수 있는",
-    "answer": "잠두",
-    "user": "Los"
-  },
-  {
-    "hint": "양몰이",
-    "answer": "웰시코기",
-    "user": "Los"
-  },
-  {
-    "hint": "무기",
-    "answer": "채찍",
-    "user": "Los"
-  },
-  {
-    "hint": "바늘",
-    "answer": "나침반",
-    "user": "Los"
-  },
-  {
-    "hint": "향기",
-    "answer": "녹나무",
-    "user": "Los"
-  },
-  {
-    "hint": "땅의 달걀",
-    "answer": "토란",
-    "user": "Los"
-  },
-  {
-    "hint": "라이딩",
-    "answer": "헬멧",
-    "user": "Los"
-  },
-  {
-    "hint": "녹색",
-    "answer": "군자란",
-    "user": "Los"
-  },
-  {
-    "hint": "약재",
-    "answer": "계피",
-    "user": "Los"
-  },
-  {
-    "hint": "초원",
-    "answer": "얼룩말",
-    "user": "Los"
-  },
-  {
-    "hint": "바다 포유류",
-    "answer": "물범",
-    "user": "Los"
-  },
-  {
-    "hint": "여러해살이",
-    "answer": "만년청",
-    "user": "Los"
-  },
-  {
-    "hint": "무늬",
-    "answer": "치타",
-    "user": "Los"
-  },
-  {
-    "hint": "미용",
-    "answer": "빗",
-    "user": "Los"
-  },
-  {
-    "hint": "여름",
-    "answer": "수국",
-    "user": "Los"
-  },
-  {
-    "hint": "보석",
-    "answer": "진주",
-    "user": "Los"
-  },
-  {
-    "hint": "한쪽으로 몰린 눈",
-    "answer": "광어",
-    "user": "Los"
-  },
-  {
-    "hint": "건강",
-    "answer": "마늘",
-    "user": "Los"
-  },
-  {
-    "hint": "스포츠",
-    "answer": "승마",
-    "user": "Los"
-  },
-  {
-    "hint": "스팀",
-    "answer": "다리미",
-    "user": "Los"
-  },
-  {
-    "hint": "가을에 피는 꽃",
-    "answer": "국화",
-    "user": "Los"
-  },
-  {
-    "hint": "괴력",
-    "answer": "고릴라",
-    "user": "Los"
-  },
-  {
-    "hint": "여름",
-    "answer": "풍경",
-    "user": "Los"
-  },
-  {
-    "hint": "Y자 손잡이",
-    "answer": "새총",
-    "user": "Los"
-  },
-  {
-    "hint": "점프",
-    "answer": "귀뚜라미",
-    "user": "Los"
-  },
-  {
-    "hint": "태극",
-    "answer": "음양",
-    "user": "Los"
-  },
-  {
-    "hint": "흑백 줄무늬",
-    "answer": "얼룩말",
-    "user": "Los"
-  },
-  {
-    "hint": "꽃의 왕",
-    "answer": "모란",
-    "user": "Los"
-  },
-  {
-    "hint": "탈피",
-    "answer": "뱀",
-    "user": "Los"
-  },
-  {
-    "hint": "검은 씨앗",
-    "answer": "수박 씨앗",
-    "user": "Los"
-  },
-    { 
-      "hint": "둥근 꽃", 
-      "answer": "수국",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "붉은 살", 
-      "answer": "연어",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "목제", 
-      "answer": "상자",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "달콤한 향기", 
-      "answer": "자스민",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "해양 생물", 
-      "answer": "바다사자",
-      "user":"풍사향"
-    },
-    { 
-      "hint": "약용", 
-      "answer": "작약꽃",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "매운맛", 
-      "answer": "마늘",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "오각형", 
-      "answer": "불가사리",
-      "user":"당유련"
-    },
-    { 
-      "hint": "무술", 
-      "answer": "태극권",
-      "user":"당유련"
-    },
-    { 
-      "hint": "동서남북", 
-      "answer": "나침반",
-      "user":"슴치고도"
-    },
-    { 
-      "hint": "넓은 잎", 
-      "answer": "군자란",
-      "user":"슴치고도"
-    },
-    { 
-      "hint": "혀", 
-      "answer": "뱀",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "설치류", 
-      "answer": "기니피그",
-      "user":"피스"
-    },
-    { 
-      "hint": "끈기", 
-      "answer": "포풀루스 유프라티카",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "철제", 
-      "answer": "낫",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "죽림", 
-      "answer": "죽순",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "가득", 
-      "answer": "쌀 항아리",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "안전", 
-      "answer": "부적",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "불꽃", 
-      "answer": "봉황",
-      "user":"ㅇㅇ"
-    },
-    { 
-      "hint": "거대한 뿌리", 
-      "answer": "벵골보리수",
-      "user":"풍사향"
-    },
-    { 
-      "hint": "고기", 
-      "answer": "소",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "러시아", 
-      "answer": "곰",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "붉고 긴 다리", 
-      "answer": "홍학",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "큰입자", 
-      "answer": "잠두",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "오형제", 
-      "answer": "독수리",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "노란색", 
-      "answer": "레몬",
-      "user":"연갤러"
-    },
-    { 
-      "hint": "공부", 
+    {
+      "hint": "지식",
       "answer": "책",
-      "user":"연갤러"
+      "user": "Provi"
     },
-    { 
-      "hint": "부자", 
-      "answer": "잭프루트",
-      "user":"연갤러"
+    {
+      "hint": "가죽",
+      "answer": "채찍",
+      "user": "니꺼내꺼"
     },
-    { 
-      "hint": "달콤", 
-      "answer": "복숭아",
-      "user":"연갤러"
+    {
+      "hint": "독서",
+      "answer": "책",
+      "user": "독고구패황"
     },
-    { 
-      "hint": "암살", 
-      "answer": "단검",
-      "user":"단목아아"
+    {
+      "hint": "씨앗",
+      "answer": "정향",
+      "user": "연갤러"
     },
-    { 
-      "hint": "최강의 초식동물", 
-      "answer": "코끼리",
-      "user":"ㅇㅇ"
+    {
+      "hint": "물개",
+      "answer": "바다사자",
+      "user": "으아악윽"
     },
-    { 
-      "hint": "설날", 
-      "answer": "까치",
-      "user":"ㅇㅇ"
+    {
+      "hint": "생선",
+      "answer": "고양이",
+      "user": ""
     },
-    { 
-      "hint": "플라밍고", 
-      "answer": "홍학",
-      "user":"ㅇㅇ"
+    {
+      "hint": "동물",
+      "answer": "판다",
+      "user": "독고구패황"
     },
-    { 
-      "hint": "개울가", 
-      "answer": "개구리",
-      "user":"연갤러"
+    {
+      "hint": "검은 깃털",
+      "answer": "까마귀",
+      "user": "촉음사야"
     },
-    { 
-      "hint": "분홍색", 
-      "answer": "살구꽃",
-      "user":"연갤러"
+    {
+      "hint": "사막",
+      "answer": "전갈",
+      "user": "호팬"
     },
-    { 
-      "hint": "굵고 긴 다리", 
-      "answer": "홍학",
-      "user":"연갤러"
+    {
+      "hint": "가시",
+      "answer": "찔레꽃",
+      "user": "쓔"
     },
-    { 
-      "hint": "요리", 
-      "answer": "설탕",
-      "user":"ㅇㅇ"
+    {
+      "hint": "거대함",
+      "answer": "고래",
+      "user": "쓔"
     },
-    { 
-      "hint": "꿀", 
-      "answer": "벌",
-      "user":"ㅇㅇ"
+    {
+      "hint": "끈기",
+      "answer": "포풀루스 유프라티카",
+      "user": ""
     },
-    { 
-      "hint": "악취", 
+    {
+      "hint": "생선",
+      "answer": "꽁치",
+      "user": ""
+    },
+    {
+      "hint": "검은 반점 무늬",
+      "answer": "표범",
+      "user": ""
+    },
+    {
+      "hint": "뿌리채소",
+      "answer": "렌즈콩",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "초원",
+      "answer": "양",
+      "user": "짭짭이"
+    },
+    {
+      "hint": "노란 깃털",
+      "answer": "꾀꼬리",
+      "user": "유환성"
+    },
+    {
+      "hint": "파란색",
+      "answer": "파랑새",
+      "user": "봉팔컴"
+    },
+    {
+      "hint": "긴팔",
+      "answer": "오랑우탄",
+      "user": "라혼"
+    },
+    {
+      "hint": "발굽",
+      "answer": "말",
+      "user": "천마°"
+    },
+    {
+      "hint": "낚싯줄",
+      "answer": "낚시대",
+      "user": "낚시대"
+    },
+    {
+      "hint": "나무",
+      "answer": "딱따구리",
+      "user": "안녕로봇"
+    },
+    {
+      "hint": "식칼",
+      "answer": "도마",
+      "user": "설현아"
+    },
+    {
+      "hint": "뒤뚱뒤뚱",
+      "answer": "펭귄",
+      "user": "설현아"
+    },
+    {
+      "hint": "붉은빛 과실",
+      "answer": "자두",
+      "user": ""
+    },
+    {
+      "hint": "새",
+      "answer": "파랑새",
+      "user": "꽂"
+    },
+    {
+      "hint": "시계",
+      "answer": "뻐꾸기",
+      "user": "환환고"
+    },
+    {
+      "hint": "바다",
+      "answer": "낚시",
+      "user": "다함"
+    },
+    {
+      "hint": "목",
+      "answer": "목걸이",
+      "user": "설현아"
+    },
+    {
+      "hint": "채소",
+      "answer": "가지",
+      "user": "수녀"
+    },
+    {
+      "hint": "영양 공급",
+      "answer": "구기자",
+      "user": "하이빵까루"
+    },
+    {
+      "hint": "서명",
+      "answer": "도장",
+      "user": ""
+    },
+    {
+      "hint": "가시",
+      "answer": "찔레꽃",
+      "user": ""
+    },
+    {
+      "hint": "질주",
+      "answer": "말",
+      "user": ""
+    },
+    {
+      "hint": "동물",
+      "answer": "판다",
+      "user": ""
+    },
+    {
+      "hint": "말린 과일",
+      "answer": "살구 꽃",
+      "user": "설월비"
+    },
+    {
+      "hint": "수납",
+      "answer": "상자",
+      "user": ""
+    },
+    {
+      "hint": "방향",
+      "answer": "나침반",
+      "user": ""
+    },
+    {
+      "hint": "향신료",
+      "answer": "로즈마리",
+      "user": "Dexter"
+    },
+    {
+      "hint": "수분 보충",
+      "answer": "오이",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "거대함",
+      "answer": "고래",
+      "user": "제므"
+    },
+    {
+      "hint": "바다의 포식자",
+      "answer": "상어",
+      "user": "깜선생"
+    },
+    {
+      "hint": "꼬리",
+      "answer": "전갈",
+      "user": "izell"
+    },
+    {
+      "hint": "향신료",
+      "answer": "로즈마리",
+      "user": "핑주왘"
+    },
+    {
+      "hint": "보라색",
+      "answer": "가지",
+      "user": "셔니"
+    },
+    {
+      "hint": "기침",
+      "answer": "비파",
+      "user": "경교"
+    },
+    {
+      "hint": "꼬리",
+      "answer": "올챙이",
+      "user": "제갈청하"
+    },
+    {
+      "hint": "나트륨",
+      "answer": "소금",
+      "user": "Raku라쿠"
+    },
+    {
+      "hint": "흰 줄무늬",
       "answer": "스컹크",
-      "user":"ㅇㅇ"
+      "user": "설리화"
     },
-    { 
-      "hint": "가을", 
+    {
+      "hint": "날렵함",
+      "answer": "표범",
+      "user": "월흔향"
+    },
+    {
+      "hint": "강한 향기",
+      "answer": "히아신스",
+      "user": ""
+    },
+    {
+      "hint": "여름",
+      "answer": "백일초",
+      "user": "Raku라쿠"
+    },
+    {
+      "hint": "목 돌리기",
+      "answer": "올빼미",
+      "user": "풍사향"
+    },
+    {
+      "hint": "Medicinal",
+      "answer": "polygonum multiflorum",
+      "user": ""
+    },
+    {
+      "hint": "날개",
+      "answer": "나비",
+      "user": "임호택"
+    },
+    {
+      "hint": "반찬",
+      "answer": "마늘종",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "과일",
+      "answer": "탕후루",
+      "user": "당마란"
+    },
+    {
+      "hint": "겨울잠",
+      "answer": "곰",
+      "user": "하복"
+    },
+    {
+      "hint": "해변",
+      "answer": "불가사리",
+      "user": "이론적주사위"
+    },
+    {
+      "hint": "매실",
+      "answer": "매실",
+      "user": "매실"
+    },
+    {
+      "hint": "큰귀",
+      "answer": "비글",
+      "user": "버물리"
+    },
+    {
+      "hint": "관상용 식물",
+      "answer": "담쟁이덩굴",
+      "user": "빛객"
+    },
+    {
+      "hint": "장수",
+      "answer": "느릅나무",
+      "user": ""
+    },
+    {
+      "hint": "등껍질",
+      "answer": "거북이",
+      "user": "죽기빵"
+    },
+    {
+      "hint": "까악까악",
+      "answer": "까마귀",
+      "user": "죽기빵"
+    },
+    {
+      "hint": "꽃꽃이",
+      "answer": "꽃병",
+      "user": "KimuHan"
+    },
+    {
+      "hint": "겨울잠",
+      "answer": "곰",
+      "user": "name..."
+    },
+    {
+      "hint": "손씻기",
+      "answer": "너구리",
+      "user": "가진"
+    },
+    {
+      "hint": "아삭아삭",
+      "answer": "사과",
+      "user": "전략"
+    },
+    {
+      "hint": "파란색",
+      "answer": "백로",
+      "user": "바람風"
+    },
+    {
+      "hint": "영양",
+      "answer": "표고버섯",
+      "user": ""
+    },
+    {
+      "hint": "고정",
+      "answer": "못",
+      "user": "라키아타"
+    },
+    {
+      "hint": "중독성",
+      "answer": "담배",
+      "user": "익명"
+    },
+    {
+      "hint": "물고기",
+      "answer": "메기",
+      "user": "천세은"
+    },
+    {
+      "hint": "거대한",
+      "answer": "코끼리",
+      "user": "팽세지"
+    },
+    {
+      "hint": "과일",
+      "answer": "귤",
+      "user": "용오"
+    },
+    {
+      "hint": "관목",
+      "answer": "협죽도",
+      "user": "팅코"
+    },
+    {
+      "hint": "볶음요리",
+      "answer": "양파",
+      "user": "가진"
+    },
+    {
+      "hint": "해변",
+      "answer": "불가사리",
+      "user": "그림비"
+    },
+    {
+      "hint": "기다란 꼭지",
+      "answer": "체리",
+      "user": "최소휘"
+    },
+    {
+      "hint": "바다의포시작",
+      "answer": "상어",
+      "user": "우생마"
+    },
+    {
+      "hint": "작은 말",
+      "answer": "당나귀",
+      "user": "마드린느/확신"
+    },
+    {
+      "hint": "니코틴",
+      "answer": "담배",
+      "user": "Eleithd"
+    },
+    {
+      "hint": "구멍",
+      "answer": "샐러리",
+      "user": "안녕동맹-라이너스"
+    },
+    {
+      "hint": "피자 토핑",
+      "answer": "올리브",
+      "user": "조연이"
+    },
+    {
+      "hint": "여름밤",
+      "answer": "반딧불이",
+      "user": "세아린"
+    },
+    {
+      "hint": "날개",
+      "answer": "나비",
+      "user": "홍재"
+    },
+    {
+      "hint": "붉은색",
+      "answer": "중국 매듭",
+      "user": "비운검"
+    },
+    {
+      "hint": "기다란 꼭지",
+      "answer": "체리",
+      "user": "SnowBall"
+    },
+    {
+      "hint": "벼슬",
+      "answer": "닭",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "건축",
+      "answer": "못",
+      "user": "연붕이"
+    },
+    {
+      "hint": "낚싯줄",
+      "answer": "낚싯대",
+      "user": null
+    },
+    {
+      "hint": "남자",
+      "answer": "최도",
+      "user": null
+    },
+    {
+      "hint": "아마릴리스",
+      "answer": "주정홍",
+      "user": "죽기빵"
+    },
+    {
+      "hint": "동남아",
+      "answer": "두리안",
+      "user": "김팔식"
+    },
+    {
+      "hint": "냉채",
+      "answer": "오이",
+      "user": "운륜"
+    },
+    {
+      "hint": "도교",
+      "answer": "음양",
+      "user": "Futter"
+    },
+    {
+      "hint": "벼슬",
+      "answer": "닭",
+      "user": "아이시떼루"
+    },
+    {
+      "hint": "개구리",
+      "answer": "올챙이",
+      "user": "취화량"
+    },
+    {
+      "hint": "흰 꽃",
+      "answer": "카라꽃",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "등 푸른 생선",
+      "answer": "참치",
+      "user": "포지"
+    },
+    {
+      "hint": "썰매",
+      "answer": "허스키",
+      "user": "여수남자"
+    },
+    {
+      "hint": "흰 꽃",
+      "answer": "카라꽃",
+      "user": "한유연"
+    },
+    {
+      "hint": "무기",
+      "answer": "무명",
+      "user": "운코"
+    },
+    {
+      "hint": "수생식물",
+      "answer": "카라꽃",
+      "user": "탕이"
+    },
+    {
+      "hint": "아시아",
+      "answer": "두리안",
+      "user": "탕이"
+    },
+    {
+      "hint": "건축재",
+      "answer": "측백나무",
+      "user": "카리기누"
+    },
+    {
+      "hint": "물고기",
+      "answer": "메기",
+      "user": "당마란"
+    },
+    {
+      "hint": "상록수",
+      "answer": "만년청",
+      "user": ""
+    },
+    {
+      "hint": "촛대",
+      "answer": "양초",
+      "user": "RUNGRUNG"
+    },
+    {
+      "hint": "건축",
+      "answer": "못",
+      "user": "성꺼비"
+    },
+    {
+      "hint": "남장",
+      "answer": "뮬란",
+      "user": "Saooa"
+    },
+    {
+      "hint": "불꽃",
+      "answer": "불꽃놀이",
+      "user": "가진"
+    },
+    {
+      "hint": "바다",
+      "answer": "참치",
+      "user": "litss"
+    },
+    {
+      "hint": "설탕",
+      "answer": "탕후루",
+      "user": "선유리"
+    },
+    {
+      "hint": "뿌리줄기",
+      "answer": "연근",
+      "user": ""
+    },
+    {
+      "hint": "핑크색 꽃잎",
+      "answer": "베고니아",
+      "user": "쏘냑"
+    },
+    {
+      "hint": "해변",
+      "answer": "불가사리",
+      "user": "ESCARNA"
+    },
+    {
+      "hint": "십이간지",
+      "answer": "쥐",
+      "user": "연신"
+    },
+    {
+      "hint": "식이섬유",
+      "answer": "고구마",
+      "user": "마도림"
+    },
+    {
+      "hint": "큰 울음소리",
+      "answer": "황소개구리",
+      "user": "이용복"
+    },
+    {
+      "hint": "알록달록",
+      "answer": "튤립",
+      "user": "마이클조던"
+    },
+    {
+      "hint": "촛대",
+      "answer": "양초",
+      "user": "시예"
+    },
+    {
+      "hint": "쌀밥",
       "answer": "벼",
-      "user":"ㅇㅇ"
+      "user": "ㅇㅇ"
     },
-    { 
-      "hint": "짧은 다리", 
+    {
+      "hint": "눈물",
+      "answer": "양파",
+      "user": "설화띠띠"
+    },
+    {
+      "hint": "수염",
+      "answer": "메기",
+      "user": "그림비"
+    },
+    {
+      "hint": "바다",
+      "answer": "바다거북",
+      "user": "천시윤"
+    },
+    {
+      "hint": "사료",
+      "answer": "옥수수",
+      "user": "zaeun"
+    },
+    {
+      "hint": "무기",
+      "answer": "창",
+      "user": "비공개"
+    },
+    {
+      "hint": "꼬리",
+      "answer": "원숭이",
+      "user": "마소"
+    },
+    {
+      "hint": "시체 먹는 새",
+      "answer": "독수리",
+      "user": ""
+    },
+    {
+      "hint": "과일",
+      "answer": "귤",
+      "user": "litss"
+    },
+    {
+      "hint": "저항",
+      "answer": "협죽도",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "당근",
+      "answer": "토끼",
+      "user": "무럭무럭"
+    },
+    {
+      "hint": "날렵함",
+      "answer": "표범",
+      "user": "SAOOA"
+    },
+    {
+      "hint": "생선",
+      "answer": "흰동가리",
+      "user": "구구아띠"
+    },
+    {
+      "hint": "독",
+      "answer": "해파리",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "폴짝폴짝",
+      "answer": "개구리",
+      "user": "뽕이"
+    },
+    {
+      "hint": "주름제거",
+      "answer": "다리미",
+      "user": "김춘룡"
+    },
+    {
+      "hint": "독",
+      "answer": "해파리",
+      "user": "SnowBall"
+    },
+    {
+      "hint": "물갈퀴",
+      "answer": "오리",
+      "user": ""
+    },
+    {
+      "hint": "장신구",
+      "answer": "팔찌",
+      "user": "양광"
+    },
+    {
+      "hint": "중독성",
+      "answer": "담배",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "폴짝폴짝",
+      "answer": "개구리",
+      "user": "가무언"
+    },
+    {
+      "hint": "세계문화유산",
+      "answer": "만리장성",
+      "user": "HighTower"
+    },
+    {
+      "hint": "작은 곡물",
+      "answer": "녹두",
+      "user": "GamTan"
+    },
+    {
+      "hint": "독성",
+      "answer": "협죽도",
+      "user": "채옥"
+    },
+    {
+      "hint": "침실",
+      "answer": "침대",
+      "user": ""
+    },
+    {
+      "hint": "해표",
+      "answer": "물범",
+      "user": "유사림"
+    },
+    {
+      "hint": "봄",
+      "answer": "자두",
+      "user": "JHJH"
+    },
+    {
+      "hint": "모래",
+      "answer": "모래시계",
+      "user": "푸짐이비버"
+    },
+    {
+      "hint": "볶음 요리",
+      "answer": "양파",
+      "user": "연귀"
+    },
+    {
+      "hint": "나무",
+      "answer": "벵갈보리수",
+      "user": "고기먹는돌쇠"
+    },
+    {
+      "hint": "꼬리",
+      "answer": "너구리",
+      "user": "영수리"
+    },
+    {
+      "hint": "씨앗",
+      "answer": "살구",
+      "user": ""
+    },
+    {
+      "hint": "영양",
+      "answer": "표고버섯",
+      "user": ""
+    },
+    {
+      "hint": "인연",
+      "answer": "자등",
+      "user": "풀무"
+    },
+    {
+      "hint": "우아함",
+      "answer": "석곡",
+      "user": "평택제일검"
+    },
+    {
+      "hint": "은색 비늘",
+      "answer": "꽁치",
+      "user": "구밀"
+    },
+    {
+      "hint": "설탕",
+      "answer": "솜사탕",
+      "user": "무럭무럭"
+    },
+    {
+      "hint": "새",
+      "answer": "가마우지",
+      "user": "번덴보레"
+    },
+    {
+      "hint": "전기 충격",
+      "answer": "전기뱀장어",
+      "user": "ㅇㅅㅇ"
+    },
+    {
+      "hint": "물개",
+      "answer": "바다사자",
+      "user": "에엑따"
+    },
+    {
+      "hint": "채소",
+      "answer": "시금치",
+      "user": "에엑따"
+    },
+    {
+      "hint": "약용",
+      "answer": "장춘화",
+      "user": "견칫돌"
+    },
+    {
+      "hint": "은색 비늘",
+      "answer": "꽁치",
+      "user": "RyeoHui"
+    },
+    {
+      "hint": "얼굴",
+      "answer": "가면",
+      "user": "꽃섬"
+    },
+    {
+      "hint": "수납",
+      "answer": "상자",
+      "user": "파솔라시"
+    },
+    {
+      "hint": "물 저장",
+      "answer": "수조",
+      "user": "peehae"
+    },
+    {
+      "hint": "미국의 상징",
+      "answer": "흰머리수리",
+      "user": "이론적주사위"
+    },
+    {
+      "hint": "브로콜리",
+      "answer": "콜리블라워",
+      "user": "ㅂㅂ"
+    },
+    {
+      "hint": "물저장",
+      "answer": "수조",
+      "user": "시리우"
+    },
+    {
+      "hint": "발효",
+      "answer": "간장",
+      "user": "요바"
+    },
+    {
+      "hint": "귀중한",
+      "answer": "영지버섯",
+      "user": "jhjh"
+    },
+    {
+      "hint": "별명",
+      "answer": "돼지",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "캐나다",
+      "answer": "단풍나무",
+      "user": "asiyah"
+    },
+    {
+      "hint": "사막",
+      "answer": "낙타",
+      "user": "륙"
+    },
+    {
+      "hint": "수납",
+      "answer": "상자",
+      "user": "륙"
+    },
+    {
+      "hint": "부리부리한 눈매",
+      "answer": "흰머리수리",
+      "user": "오감녕"
+    },
+    {
+      "hint": "말 머리",
+      "answer": "해마",
+      "user": "률"
+    },
+    {
+      "hint": "스무디",
+      "answer": "블루베리",
+      "user": "빙월영"
+    },
+    {
+      "hint": "구근 식물",
+      "answer": "히아신스",
+      "user": "당림"
+    },
+    {
+      "hint": "바람과 모래",
+      "answer": "포풀루스 유프라티카",
+      "user": "냥인"
+    },
+    {
+      "hint": "미용",
+      "answer": "푸들",
+      "user": "하늘"
+    },
+    {
+      "hint": "작은 당나귀",
+      "answer": "노새",
+      "user": "한건우"
+    },
+    {
+      "hint": "은색 비늘",
+      "answer": "꽁치",
+      "user": "꼴치"
+    },
+    {
+      "hint": "칠석",
+      "answer": "견우",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "쥐",
+      "answer": "땃쥐",
+      "user": "이설윤"
+    },
+    {
+      "hint": "철새",
+      "answer": "홍학",
+      "user": "고양이"
+    },
+    {
+      "hint": "해충",
+      "answer": "모기",
+      "user": "흑에"
+    },
+    {
+      "hint": "화목란",
+      "answer": "뮬란",
+      "user": "매화청명"
+    },
+    {
+      "hint": "게임",
+      "answer": "두더지",
+      "user": "석문리"
+    },
+    {
+      "hint": "목제",
+      "answer": "침대",
+      "user": "석문리"
+    },
+    {
+      "hint": "의약품 및 식품",
+      "answer": "구기자",
+      "user": "석문리"
+    },
+    {
+      "hint": "보안",
+      "answer": "자물쇠",
+      "user": "임하연"
+    },
+    {
+      "hint": "약초",
+      "answer": "로즈마리",
+      "user": "츠란"
+    },
+    {
+      "hint": "냉혈동물",
+      "answer": "악어",
+      "user": "Sampler"
+    },
+    {
+      "hint": "봄",
+      "answer": "자두",
+      "user": "무명"
+    },
+    {
+      "hint": "따라쟁이",
+      "answer": "앵무새",
+      "user": "진령옥"
+    },
+    {
+      "hint": "뿌리채소",
+      "answer": "토란",
+      "user": "ㅍㅍ"
+    },
+    {
+      "hint": "다육 식물",
+      "answer": "용설란",
+      "user": ""
+    },
+    {
+      "hint": "빨간색",
+      "answer": "중국매듭",
+      "user": "한임"
+    },
+    {
+      "hint": "컵 모양",
+      "answer": "튤립",
+      "user": ""
+    },
+    {
+      "hint": "큰 입자",
+      "answer": "잠두",
+      "user": "류도화"
+    },
+    {
+      "hint": "열렬한",
+      "answer": "잭프루트",
+      "user": ""
+    },
+    {
+      "hint": "건물",
+      "answer": "우체국",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "머리 보호",
+      "answer": "헬멧",
+      "user": "요바"
+    },
+    {
+      "hint": "매운 맛",
+      "answer": "고추",
+      "user": "바람風"
+    },
+    {
+      "hint": "봄 분홍색 복숭아",
+      "answer": "복숭아꽃",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "비 오는 날",
+      "answer": "지렁이",
+      "user": ""
+    },
+    {
+      "hint": "밭갈이 도구",
+      "answer": "갈퀴",
+      "user": "무삥"
+    },
+    {
+      "hint": "말",
+      "answer": "승마",
+      "user": "흑공"
+    },
+    {
+      "hint": "밭갈이도구",
+      "answer": "갈퀴",
+      "user": "oor"
+    },
+    {
+      "hint": "단오",
+      "answer": "투호",
+      "user": "견칫돌"
+    },
+    {
+      "hint": "모래판",
+      "answer": "씨름",
+      "user": "염공"
+    },
+    {
+      "hint": "다육 식물",
+      "answer": "알로에",
+      "user": ""
+    },
+    {
+      "hint": "케첩",
+      "answer": "토마토",
+      "user": "천마즉사대마왕"
+    },
+    {
+      "hint": "동물",
+      "answer": "개",
+      "user": "천마즉사대마왕"
+    },
+    {
+      "hint": "꽃가루",
+      "answer": "벌",
+      "user": "천마즉사대마왕"
+    },
+    {
+      "hint": "뿌리줄기",
+      "answer": "연근",
+      "user": ""
+    },
+    {
+      "hint": "새",
+      "answer": "까치",
+      "user": ""
+    },
+    {
+      "hint": "은하수",
+      "answer": "직녀",
+      "user": "즉사천마대마왕"
+    },
+    {
+      "hint": "헌집",
+      "answer": "두꺼비",
+      "user": ""
+    },
+    {
+      "hint": "밭갈이 도구",
+      "answer": "갈퀴",
+      "user": "무삥"
+    },
+    {
+      "hint": "말",
+      "answer": "승마",
+      "user": "흑공"
+    },
+    {
+      "hint": "밭갈이도구",
+      "answer": "갈퀴",
+      "user": "oor"
+    },
+    {
+      "hint": "단오",
+      "answer": "투호",
+      "user": "견칫돌"
+    },
+    {
+      "hint": "모래판",
+      "answer": "씨름",
+      "user": "염공"
+    },
+    {
+      "hint": "다육 식물",
+      "answer": "알로에",
+      "user": ""
+    },
+    {
+      "hint": "케첩",
+      "answer": "토마토",
+      "user": "천마즉사대마왕"
+    },
+    {
+      "hint": "동물",
+      "answer": "개",
+      "user": "천마즉사대마왕"
+    },
+    {
+      "hint": "꽃가루",
+      "answer": "벌",
+      "user": "천마즉사대마왕"
+    },
+    {
+      "hint": "뿌리줄기",
+      "answer": "연근",
+      "user": ""
+    },
+    {
+      "hint": "새",
+      "answer": "까치",
+      "user": ""
+    },
+    {
+      "hint": "은하수",
+      "answer": "직녀",
+      "user": "즉사천마대마왕"
+    },
+    {
+      "hint": "헌집",
+      "answer": "두꺼비",
+      "user": ""
+    },
+    {
+      "hint": "넙치",
+      "answer": "광어",
+      "user": "oor"
+    },
+    {
+      "hint": "안전",
+      "answer": "헬멧",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "꼬리",
+      "answer": "전갈",
+      "user": "광풍검호"
+    },
+    {
+      "hint": "북극",
+      "answer": "바다코끼리",
+      "user": ""
+    },
+    {
+      "hint": "과일",
+      "answer": "무화과",
+      "user": "광풍검호"
+    },
+    {
+      "hint": "안전",
+      "answer": "헬멧",
+      "user": "StorM"
+    },
+    {
+      "hint": "바다표범",
+      "answer": "물범",
+      "user": "Haomoon"
+    },
+    {
+      "hint": "활달함",
+      "answer": "비글",
+      "user": "카구야"
+    },
+    {
+      "hint": "필드",
+      "answer": "쑥갓",
+      "user": "숭커벨"
+    },
+    {
+      "hint": "인주",
+      "answer": "도장",
+      "user": "유태월"
+    },
+    {
+      "hint": "시계",
+      "answer": "뻐꾸기",
+      "user": "만휘"
+    },
+    {
+      "hint": "인연",
+      "answer": "자등",
+      "user": "풀무"
+    },
+    {
+      "hint": "우아함",
+      "answer": "석곡",
+      "user": "평택제일검"
+    },
+    {
+      "hint": "은색 비늘",
+      "answer": "꽁치",
+      "user": "구밀"
+    },
+    {
+      "hint": "설탕",
+      "answer": "솜사탕",
+      "user": "무럭무럭"
+    },
+    {
+      "hint": "새",
+      "answer": "가마우지",
+      "user": "번덴보레"
+    },
+    {
+      "hint": "전기 충격",
+      "answer": "전기뱀장어",
+      "user": "ㅇㅅㅇ"
+    },
+    {
+      "hint": "물개",
+      "answer": "바다사자",
+      "user": "에엑따"
+    },
+    {
+      "hint": "채소",
+      "answer": "시금치",
+      "user": "에엑따"
+    },
+    {
+      "hint": "약용",
+      "answer": "장춘화",
+      "user": "견칫돌"
+    },
+    {
+      "hint": "은색 비늘",
+      "answer": "꽁치",
+      "user": "RyeoHui"
+    },
+    {
+      "hint": "얼굴",
+      "answer": "가면",
+      "user": "꽃섬"
+    },
+    {
+      "hint": "수납",
+      "answer": "상자",
+      "user": "파솔라시"
+    },
+    {
+      "hint": "물 저장",
+      "answer": "수조",
+      "user": "peehae"
+    },
+    {
+      "hint": "미국의 상징",
+      "answer": "흰머리수리",
+      "user": "이론적주사위"
+    },
+    {
+      "hint": "미국의 상징",
+      "answer": "흰머리수리",
+      "user": "이론적주사위"
+    },
+    {
+      "hint": "브로콜리",
+      "answer": "콜리블라워",
+      "user": "ㅂㅂ"
+    },
+    {
+      "hint": "물저장",
+      "answer": "수조",
+      "user": "시리우"
+    },
+    {
+      "hint": "발효",
+      "answer": "간장",
+      "user": "요바"
+    },
+    {
+      "hint": "귀중한",
+      "answer": "영지버섯",
+      "user": "jhjh"
+    },
+    {
+      "hint": "별명",
+      "answer": "돼지",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "캐나다",
+      "answer": "단풍나무",
+      "user": "asiyah"
+    },
+    {
+      "hint": "사막",
+      "answer": "낙타",
+      "user": "륙"
+    },
+    {
+      "hint": "수납",
+      "answer": "상자",
+      "user": "륙"
+    },
+    {
+      "hint": "부리부리한 눈매",
+      "answer": "흰머리수리",
+      "user": "오감녕"
+    },
+    {
+      "hint": "말 머리",
+      "answer": "해마",
+      "user": "률"
+    },
+    {
+      "hint": "스무디",
+      "answer": "블루베리",
+      "user": "빙월영"
+    },
+    {
+      "hint": "구근 식물",
+      "answer": "히아신스",
+      "user": "당림"
+    },
+    {
+      "hint": "바람과 모래",
+      "answer": "포풀루스 유프라티카",
+      "user": "냥인"
+    },
+    {
+      "hint": "미용",
+      "answer": "푸들",
+      "user": "하늘"
+    },
+    {
+      "hint": "작은 당나귀",
+      "answer": "노새",
+      "user": "한건우"
+    },
+    {
+      "hint": "은색 비늘",
+      "answer": "꽁치",
+      "user": "꼴치"
+    },
+    {
+      "hint": "칠석",
+      "answer": "견우",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "쥐",
+      "answer": "땃쥐",
+      "user": "이설윤"
+    },
+    {
+      "hint": "철새",
+      "answer": "홍학",
+      "user": "고양이"
+    },
+    {
+      "hint": "해충",
+      "answer": "모기",
+      "user": "흑에"
+    },
+    {
+      "hint": "화목란",
+      "answer": "뮬란",
+      "user": "매화청명"
+    },
+    {
+      "hint": "게임",
+      "answer": "두더지",
+      "user": "석문리"
+    },
+    {
+      "hint": "목제",
+      "answer": "침대",
+      "user": "석문리"
+    },
+    {
+      "hint": "의약품 및 식품",
+      "answer": "구기자",
+      "user": "석문리"
+    },
+    {
+      "hint": "보안",
+      "answer": "자물쇠",
+      "user": "임하연"
+    },
+    {
+      "hint": "검집",
+      "answer": "검",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "수경재배",
+      "answer": "행운목",
+      "user": "밥먹공자"
+    },
+    {
+      "hint": "무도회",
+      "answer": "가면",
+      "user": "NowMad"
+    },
+    {
+      "hint": "향신료",
+      "answer": "고수",
+      "user": "월화"
+    },
+    {
+      "hint": "강한 부리",
+      "answer": "딱따구리",
+      "user": "NowMad"
+    },
+    {
+      "hint": "기력 보강",
+      "answer": "인삼",
+      "user": ""
+    },
+    {
+      "hint": "양념",
+      "answer": "마늘",
+      "user": "관백"
+    },
+    {
+      "hint": "정화",
+      "answer": "호피란",
+      "user": "소은이"
+    },
+    {
+      "hint": "도구",
+      "answer": "가위",
+      "user": "화웅선생"
+    },
+    {
+      "hint": "가죽",
+      "answer": "부츠",
+      "user": "EllaHolic"
+    },
+    {
+      "hint": "길다란 꼭지",
+      "answer": "체리",
+      "user": "연강호"
+    },
+    {
+      "hint": "칠석",
+      "answer": "견우",
+      "user": "관백"
+    },
+    {
+      "hint": "피",
+      "answer": "모기",
+      "user": "돼지박"
+    },
+    {
+      "hint": "인테리어 소품",
+      "answer": "꽃병",
+      "user": ""
+    },
+    {
+      "hint": "어부",
+      "answer": "낚싯대",
+      "user": "꽃병"
+    },
+    {
+      "hint": "군자의 상징",
+      "answer": "봉황",
+      "user": "공명의함정"
+    },
+    {
+      "hint": "바다",
+      "answer": "인어",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "공예품",
+      "answer": "도자기",
+      "user": "화웅선생"
+    },
+    {
+      "hint": "신발류",
+      "answer": "부츠",
+      "user": "-"
+    },
+    {
+      "hint": "관상용",
+      "answer": "베고니아",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "엉덩이",
+      "answer": "복숭아",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "여름철",
+      "answer": "오이",
+      "user": "본좌"
+    },
+    {
+      "hint": "가을",
+      "answer": "잠자리",
+      "user": "CubePapa"
+    },
+    {
+      "hint": "저항",
+      "answer": "협죽도",
+      "user": "휘문령"
+    },
+    {
+      "hint": "쌀",
+      "answer": "쌀 항아리",
+      "user": "문휘령"
+    },
+    {
+      "hint": "채소밭",
+      "answer": "상추",
+      "user": ""
+    },
+    {
+      "hint": "보라색 꽃",
+      "answer": "자등",
+      "user": ""
+    },
+    {
+      "hint": "꽃꽂이",
+      "answer": "꽃병",
+      "user": ""
+    },
+    {
+      "hint": "씨앗",
+      "answer": "해바라기",
+      "user": "란드그리스"
+    },
+    {
+      "hint": "느림",
+      "answer": "나무늘보",
+      "user": "이정룡"
+    },
+    {
+      "hint": "채소",
+      "answer": "토마토",
+      "user": "이정룡"
+    },
+    {
+      "hint": "관상용",
+      "answer": "베고니아",
+      "user": "갱장"
+    },
+    {
+      "hint": "바람과모레",
+      "answer": "포풀루스 유프라티카",
+      "user": "당조연"
+    },
+    {
+      "hint": "전통 중의학",
+      "answer": "감초",
+      "user": "이정룡"
+    },
+    {
+      "hint": "날카로운 이빨",
+      "answer": "피라냐",
+      "user": "ㅇㅇㅇ"
+    },
+    {
+      "hint": "심해",
+      "answer": "오징어",
+      "user": ""
+    },
+    {
+      "hint": "흰색",
+      "answer": "자스민",
+      "user": "한호떡"
+    },
+    {
+      "hint": "장난감",
+      "answer": "오뚝이",
+      "user": ""
+    },
+    {
+      "hint": "향긋한",
+      "answer": "정향",
+      "user": ""
+    },
+    {
+      "hint": "천연기념물",
+      "answer": "수달",
+      "user": ""
+    },
+    {
+      "hint": "출세",
+      "answer": "능소화",
+      "user": "전정원"
+    },
+    {
+      "hint": "흰 살",
+      "answer": "고등어",
+      "user": "전정원"
+    },
+    {
+      "hint": "초식 동물",
+      "answer": "사슴",
+      "user": "원료"
+    },
+    {
+      "hint": "약재",
+      "answer": "장춘화",
+      "user": "SkeletonL"
+    },
+    {
+      "hint": "음료",
+      "answer": "차",
+      "user": "SkeletonL"
+    },
+    {
+      "hint": "신발류",
+      "answer": "부츠",
+      "user": "발경"
+    },
+    {
+      "hint": "봄",
+      "answer": "복숭아꽃",
+      "user": "후헵"
+    },
+    {
+      "hint": "위장",
+      "answer": "카멜레온",
+      "user": "백지연"
+    },
+    {
+      "hint": "친구",
+      "answer": "숨바꼭질",
+      "user": "백지연"
+    },
+    {
+      "hint": "장난감",
+      "answer": "오뚝이",
+      "user": "MrGoo"
+    },
+    {
+      "hint": "장수",
+      "answer": "구기자",
+      "user": "?"
+    },
+    {
+      "hint": "푸른 죽순",
+      "answer": "상추",
+      "user": "잭맨"
+    },
+    {
+      "hint": "공예품",
+      "answer": "도자기",
+      "user": ""
+    },
+    {
+      "hint": "화상",
+      "answer": "알로에",
+      "user": "정체불명"
+    },
+    {
+      "hint": "공격",
+      "answer": "상어",
+      "user": "바람風"
+    },
+    {
+      "hint": "왜소함",
+      "answer": "땃쥐",
+      "user": "바람風"
+    },
+    {
+      "hint": "약용",
+      "answer": "영지버섯",
+      "user": "Dall"
+    },
+    {
+      "hint": "강력한 앞니",
+      "answer": "비버",
+      "user": "고궁진"
+    },
+    {
+      "hint": "툰드라",
+      "answer": "순록",
+      "user": "한예리"
+    },
+    {
+      "hint": "느린 성장",
+      "answer": "회양목",
+      "user": "주우지"
+    },
+    {
+      "hint": "늪",
+      "answer": "악어",
+      "user": "익명"
+    },
+    {
+      "hint": "침실",
+      "answer": "화장대",
+      "user": "주우지"
+    },
+    {
+      "hint": "단맛",
+      "answer": "설탕",
+      "user": "주우지"
+    },
+    {
+      "hint": "개울가",
+      "answer": "올챙이",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "정글",
+      "answer": "고릴라",
+      "user": "Dall"
+    },
+    {
+      "hint": "거문고",
+      "answer": "오동나무",
+      "user": "갤러"
+    },
+    {
+      "hint": "향기",
+      "answer": "곽향",
+      "user": "연선화"
+    },
+    {
+      "hint": "툰드라",
+      "answer": "순록",
+      "user": "연선화"
+    },
+    {
+      "hint": "엉덩이",
+      "answer": "원숭이"
+    },
+    {
+      "hint": "솔방울",
+      "answer": "소나무",
+      "user": "블커"
+    },
+    {
+      "hint": "향신료",
+      "answer": "계피",
+      "user": "블커"
+    },
+    {
+      "hint": "매실",
+      "answer": "매화",
+      "user": "블커"
+    },
+    {
+      "hint": "기도",
+      "answer": "부적",
+      "user": "블커"
+    },
+    {
+      "hint": "손목",
+      "answer": "팔찌",
+      "user": "블커"
+    },
+    {
+      "hint": "버섯류",
+      "answer": "표고버섯",
+      "user": "블커"
+    },
+    {
+      "hint": "강치",
+      "answer": "바다사자",
+      "user": "블커"
+    },
+    {
+      "hint": "큰 눈",
+      "answer": "올빼미",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "기침",
+      "answer": "비파",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "완전변태",
+      "answer": "나비",
+      "user": "맹글"
+    },
+    {
+      "hint": "대나무 새싹",
+      "answer": "죽순",
+      "user": "맹글"
+    },
+    {
+      "hint": "애완동물",
+      "answer": "앵무새",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "히말라야",
+      "answer": "야크",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "쌀 밥",
+      "answer": "벼",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "여자 장군",
+      "answer": "뮬란",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "비오는날",
+      "answer": "지렁이",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "장마철",
+      "answer": "수국",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "손바닥 모양",
+      "answer": "단풍나무",
+      "user": "ㅇㄱㅆㄷ"
+    },
+    {
+      "hint": "은은한 향",
+      "answer": "찔레꽃",
+      "user": "ㅇㄱㅆㄷ"
+    },
+    {
+      "hint": "긴 주둥이",
+      "answer": "해마",
+      "user": "ㅇㄱㅆㄷ"
+    },
+    {
+      "hint": "다홍색",
+      "answer": "봉선화",
+      "user": "ㅇㄱㅆㄷ"
+    },
+    {
+      "hint": "시간의 흐름",
+      "answer": "모래시계",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "음주",
+      "answer": "술주전자",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "반얀나무",
+      "answer": "벵골보리수",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "독침",
+      "answer": "전갈",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "나무 구멍",
+      "answer": "딱따구리",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "훈련",
+      "answer": "채찍",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "우산 모양의",
+      "answer": "영지버섯",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "밀랍",
+      "answer": "양초",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "늘어진 가지",
+      "answer": "버드나무",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "연초",
+      "answer": "담배",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "캡사이신",
+      "answer": "고추",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "개구리",
+      "answer": "황소개구리",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "가장 큰 설치류",
+      "answer": "카피바라",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "치약",
+      "answer": "박하",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "손톱 같은 새싹",
+      "answer": "정향",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "잠금",
+      "answer": "자물쇠",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "알을 낳는 포유류",
+      "answer": "오리너구리",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "대나무",
+      "answer": "판다",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "낚싯바늘",
+      "answer": "낚싯대",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "크레센트 빈",
+      "answer": "렌즈콩",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "등푸른 생선",
+      "answer": "꽁치",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "덩굴",
+      "answer": "찔레꽃",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "오작교",
+      "answer": "견우",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "진시황",
+      "answer": "만리장성",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "푸른 잎",
+      "answer": "시금치",
+      "user": "무명"
+    },
+    {
+      "hint": "여성 장군",
+      "answer": "뮬란",
+      "user": "3성갈리오"
+    },
+    {
+      "hint": "초밥",
+      "answer": "참치",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "늑대",
+      "answer": "허스키",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "검은 머리카락",
+      "answer": "폴리고눔 멀티플로룸",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "대나무 생선 용기",
+      "answer": "생선 바구니",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "질긴 생명력",
+      "answer": "차전초",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "활동",
+      "answer": "비글",
+      "user": "윤곰"
+    },
+    {
+      "hint": "왜소한",
+      "answer": "땃쥐",
+      "user": "네로씨"
+    },
+    {
+      "hint": "흰색 과육",
+      "answer": "배",
+      "user": "Los"
+    },
+    {
+      "hint": "튀김",
+      "answer": "감자",
+      "user": "Los"
+    },
+    {
+      "hint": "유인원",
+      "answer": "고릴라",
+      "user": "Los"
+    },
+    {
+      "hint": "제사",
+      "answer": "부적",
+      "user": "Los"
+    },
+    {
+      "hint": "촉수",
+      "answer": "해파리",
+      "user": "Los"
+    },
+    {
+      "hint": "중국 간식",
+      "answer": "탕후루",
+      "user": "Los"
+    },
+    {
+      "hint": "빨간색",
+      "answer": "사과",
+      "user": "Los"
+    },
+    {
+      "hint": "먹물",
+      "answer": "오징어",
+      "user": "Los"
+    },
+    {
+      "hint": "권법",
+      "answer": "태극권",
+      "user": "Los"
+    },
+    {
+      "hint": "균형",
+      "answer": "오뚝이",
+      "user": "Los"
+    },
+    {
+      "hint": "전설의 동물",
+      "answer": "봉황",
+      "user": "Los"
+    },
+    {
+      "hint": "식기",
+      "answer": "그릇",
+      "user": "Los"
+    },
+    {
+      "hint": "가시",
+      "answer": "고슴도치",
+      "user": "Los"
+    },
+    {
+      "hint": "짠맛",
+      "answer": "간장",
+      "user": "Los"
+    },
+    {
+      "hint": "흐르는 강물을 거슬러",
+      "answer": "연어",
+      "user": "Los"
+    },
+    {
+      "hint": "전투",
+      "answer": "창",
+      "user": "Los"
+    },
+    {
+      "hint": "붉은 과일",
+      "answer": "구기자",
+      "user": "Los"
+    },
+    {
+      "hint": "독서",
+      "answer": "책",
+      "user": "Los"
+    },
+    {
+      "hint": "많은 다리",
+      "answer": "지네",
+      "user": "Los"
+    },
+    {
+      "hint": "맹독",
+      "answer": "복어",
+      "user": "Los"
+    },
+    {
+      "hint": "버찌",
+      "answer": "체리",
+      "user": "Los"
+    },
+    {
+      "hint": "농기구",
+      "answer": "낫",
+      "user": "Los"
+    },
+    {
+      "hint": "산세베리아",
+      "answer": "호피란",
+      "user": "Los"
+    },
+    {
+      "hint": "평화",
+      "answer": "비둘기",
+      "user": "Los"
+    },
+    {
+      "hint": "복숭아",
+      "answer": "복숭아 꽃",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "놀이터",
+      "answer": "그네",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "야행성",
+      "answer": "올빼미",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "싹",
+      "answer": "정향",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "공부",
+      "answer": "탁자",
+      "user": "네로씨"
+    },
+    {
+      "hint": "먹을 수 있는",
+      "answer": "잠두",
+      "user": "Los"
+    },
+    {
+      "hint": "양몰이",
+      "answer": "웰시코기",
+      "user": "Los"
+    },
+    {
+      "hint": "무기",
+      "answer": "채찍",
+      "user": "Los"
+    },
+    {
+      "hint": "바늘",
+      "answer": "나침반",
+      "user": "Los"
+    },
+    {
+      "hint": "향기",
+      "answer": "녹나무",
+      "user": "Los"
+    },
+    {
+      "hint": "땅의 달걀",
+      "answer": "토란",
+      "user": "Los"
+    },
+    {
+      "hint": "라이딩",
+      "answer": "헬멧",
+      "user": "Los"
+    },
+    {
+      "hint": "녹색",
+      "answer": "군자란",
+      "user": "Los"
+    },
+    {
+      "hint": "약재",
+      "answer": "계피",
+      "user": "Los"
+    },
+    {
+      "hint": "초원",
+      "answer": "얼룩말",
+      "user": "Los"
+    },
+    {
+      "hint": "바다 포유류",
+      "answer": "물범",
+      "user": "Los"
+    },
+    {
+      "hint": "여러해살이",
+      "answer": "만년청",
+      "user": "Los"
+    },
+    {
+      "hint": "무늬",
+      "answer": "치타",
+      "user": "Los"
+    },
+    {
+      "hint": "미용",
+      "answer": "빗",
+      "user": "Los"
+    },
+    {
+      "hint": "여름",
+      "answer": "수국",
+      "user": "Los"
+    },
+    {
+      "hint": "보석",
+      "answer": "진주",
+      "user": "Los"
+    },
+    {
+      "hint": "한쪽으로 몰린 눈",
+      "answer": "광어",
+      "user": "Los"
+    },
+    {
+      "hint": "건강",
+      "answer": "마늘",
+      "user": "Los"
+    },
+    {
+      "hint": "스포츠",
+      "answer": "승마",
+      "user": "Los"
+    },
+    {
+      "hint": "스팀",
+      "answer": "다리미",
+      "user": "Los"
+    },
+    {
+      "hint": "가을에 피는 꽃",
+      "answer": "국화",
+      "user": "Los"
+    },
+    {
+      "hint": "괴력",
+      "answer": "고릴라",
+      "user": "Los"
+    },
+    {
+      "hint": "여름",
+      "answer": "풍경",
+      "user": "Los"
+    },
+    {
+      "hint": "Y자 손잡이",
+      "answer": "새총",
+      "user": "Los"
+    },
+    {
+      "hint": "점프",
+      "answer": "귀뚜라미",
+      "user": "Los"
+    },
+    {
+      "hint": "태극",
+      "answer": "음양",
+      "user": "Los"
+    },
+    {
+      "hint": "흑백 줄무늬",
+      "answer": "얼룩말",
+      "user": "Los"
+    },
+    {
+      "hint": "꽃의 왕",
+      "answer": "모란",
+      "user": "Los"
+    },
+    {
+      "hint": "탈피",
+      "answer": "뱀",
+      "user": "Los"
+    },
+    {
+      "hint": "검은 씨앗",
+      "answer": "수박 씨앗",
+      "user": "Los"
+    },
+    {
+      "hint": "둥근 꽃",
+      "answer": "수국",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "붉은 살",
+      "answer": "연어",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "목제",
+      "answer": "상자",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "달콤한 향기",
+      "answer": "자스민",
+      "user": "연갤러"
+    },
+    {
+      "hint": "해양 생물",
+      "answer": "바다사자",
+      "user": "풍사향"
+    },
+    {
+      "hint": "약용",
+      "answer": "작약꽃",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "매운맛",
+      "answer": "마늘",
+      "user": "연갤러"
+    },
+    {
+      "hint": "오각형",
+      "answer": "불가사리",
+      "user": "당유련"
+    },
+    {
+      "hint": "무술",
+      "answer": "태극권",
+      "user": "당유련"
+    },
+    {
+      "hint": "동서남북",
+      "answer": "나침반",
+      "user": "슴치고도"
+    },
+    {
+      "hint": "넓은 잎",
+      "answer": "군자란",
+      "user": "슴치고도"
+    },
+    {
+      "hint": "혀",
+      "answer": "뱀",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "설치류",
+      "answer": "기니피그",
+      "user": "피스"
+    },
+    {
+      "hint": "끈기",
+      "answer": "포풀루스 유프라티카",
+      "user": "연갤러"
+    },
+    {
+      "hint": "철제",
+      "answer": "낫",
+      "user": "연갤러"
+    },
+    {
+      "hint": "죽림",
+      "answer": "죽순",
+      "user": "연갤러"
+    },
+    {
+      "hint": "가득",
+      "answer": "쌀 항아리",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "안전",
+      "answer": "부적",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "불꽃",
+      "answer": "봉황",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "거대한 뿌리",
+      "answer": "벵골보리수",
+      "user": "풍사향"
+    },
+    {
+      "hint": "고기",
+      "answer": "소",
+      "user": "연갤러"
+    },
+    {
+      "hint": "러시아",
+      "answer": "곰",
+      "user": "연갤러"
+    },
+    {
+      "hint": "붉고 긴 다리",
+      "answer": "홍학",
+      "user": "연갤러"
+    },
+    {
+      "hint": "큰입자",
+      "answer": "잠두",
+      "user": "연갤러"
+    },
+    {
+      "hint": "오형제",
+      "answer": "독수리",
+      "user": "연갤러"
+    },
+    {
+      "hint": "노란색",
+      "answer": "레몬",
+      "user": "연갤러"
+    },
+    {
+      "hint": "공부",
+      "answer": "책",
+      "user": "연갤러"
+    },
+    {
+      "hint": "부자",
+      "answer": "잭프루트",
+      "user": "연갤러"
+    },
+    {
+      "hint": "달콤",
+      "answer": "복숭아",
+      "user": "연갤러"
+    },
+    {
+      "hint": "암살",
+      "answer": "단검",
+      "user": "단목아아"
+    },
+    {
+      "hint": "최강의 초식동물",
+      "answer": "코끼리",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "설날",
+      "answer": "까치",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "플라밍고",
+      "answer": "홍학",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "개울가",
+      "answer": "개구리",
+      "user": "연갤러"
+    },
+    {
+      "hint": "분홍색",
+      "answer": "살구꽃",
+      "user": "연갤러"
+    },
+    {
+      "hint": "굵고 긴 다리",
+      "answer": "홍학",
+      "user": "연갤러"
+    },
+    {
+      "hint": "요리",
+      "answer": "설탕",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "꿀",
+      "answer": "벌",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "악취",
+      "answer": "스컹크",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "가을",
+      "answer": "벼",
+      "user": "ㅇㅇ"
+    },
+    {
+      "hint": "짧은 다리",
       "answer": "웰시코기"
     },
-    { 
-      "hint": "낚시 바늘", 
+    {
+      "hint": "낚시 바늘",
       "answer": "낚시대"
     },
-    { 
-      "hint": "검은 깃털", 
+    {
+      "hint": "검은 깃털",
       "answer": "까마귀"
     },
-    { 
-      "hint": "컵 모양", 
+    {
+      "hint": "컵 모양",
       "answer": "튤림"
     },
-    { 
-      "hint": "음주", 
+    {
+      "hint": "음주",
       "answer": "술 주전자"
     },
-    { 
-      "hint": "투명", 
+    {
+      "hint": "투명",
       "answer": "해파리"
     },
-    { 
-      "hint": "거대함", 
+    {
+      "hint": "거대함",
       "answer": "고래"
     },
-    { 
-      "hint": "부귀영화의 상징", 
+    {
+      "hint": "부귀영화의 상징",
       "answer": "모란"
     },
-    { 
-      "hint": "도원결의", 
+    {
+      "hint": "도원결의",
       "answer": "복숭아꽃",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "수생식물", 
+    {
+      "hint": "수생식물",
       "answer": "카라꽃",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "온순함", 
+    {
+      "hint": "온순함",
       "answer": "카피바라",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "난초", 
+    {
+      "hint": "난초",
       "answer": "석곡",
-      "user":"ㅇㅇ"
+      "user": "ㅇㅇ"
     },
-    { 
-      "hint": "시간", 
+    {
+      "hint": "시간",
       "answer": "모래시계",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "호주", 
+    {
+      "hint": "호주",
       "answer": "오리너구리",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "공원", 
+    {
+      "hint": "공원",
       "answer": "비둘기",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "아마존", 
+    {
+      "hint": "아마존",
       "answer": "피라냐",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "던지기", 
+    {
+      "hint": "던지기",
       "answer": "투호",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "버터", 
+    {
+      "hint": "버터",
       "answer": "야크",
-      "user":"단목아아"
+      "user": "단목아아"
     },
-    { 
-      "hint": "녹색 눈", 
+    {
+      "hint": "녹색 눈",
       "answer": "파리",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "수분 가득", 
+    {
+      "hint": "수분 가득",
       "answer": "배",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "털 깎기", 
+    {
+      "hint": "털 깎기",
       "answer": "양"
     },
-    { 
-      "hint": "장수하는 동물", 
+    {
+      "hint": "장수하는 동물",
       "answer": "바다거북"
     },
-    { 
-      "hint": "조미료", 
+    {
+      "hint": "조미료",
       "answer": "소금"
     },
-    { 
-      "hint": "길고 뾰족한 잎", 
+    {
+      "hint": "길고 뾰족한 잎",
       "answer": "호피란"
     },
-    { 
-      "hint": "등푸른 생선", 
+    {
+      "hint": "등푸른 생선",
       "answer": "고등어"
     },
-    { 
-      "hint": "등푸른 생선", 
+    {
+      "hint": "등푸른 생선",
       "answer": "참치"
     },
-    { 
-      "hint": "말린 과일", 
+    {
+      "hint": "말린 과일",
       "answer": "살구꽃"
     },
-    { 
-      "hint": "다이어트", 
+    {
+      "hint": "다이어트",
       "answer": "오트밀"
     },
-    { 
-      "hint": "먹보", 
+    {
+      "hint": "먹보",
       "answer": "돼지",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "식이섬유", 
+    {
+      "hint": "식이섬유",
       "answer": "오트밀"
     },
-    { 
-      "hint": "반야나무", 
+    {
+      "hint": "반야나무",
       "answer": "벵골보리수"
     },
-    { 
-      "hint": "충성심", 
+    {
+      "hint": "충성심",
       "answer": "진돗개"
     },
-    { 
-      "hint": "구이", 
+    {
+      "hint": "구이",
       "answer": "고등어"
     },
-    { 
-      "hint": "초록색 과일", 
+    {
+      "hint": "초록색 과일",
       "answer": "멜론",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "검은색", 
+    {
+      "hint": "검은색",
       "answer": "수박 씨앗",
-      "user":"ddad"
+      "user": "ddad"
     },
-    { 
-      "hint": "거대한 과일", 
+    {
+      "hint": "거대한 과일",
       "answer": "잭 프루트",
-      "user":"활잽이"
+      "user": "활잽이"
     },
-    { 
-      "hint": "목제", 
+    {
+      "hint": "목제",
       "answer": "침대",
-      "user":"활잽이"
+      "user": "활잽이"
     },
-    { 
-      "hint": "지중해", 
+    {
+      "hint": "지중해",
       "answer": "올리브",
-      "user":"그걸사네"
+      "user": "그걸사네"
     },
-    { 
-      "hint": "바다", 
+    {
+      "hint": "바다",
       "answer": "돌고래",
-      "user":"미나링"
+      "user": "미나링"
     },
-    { 
-      "hint": "비타민 A", 
+    {
+      "hint": "비타민 A",
       "answer": "당근",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "가구", 
+    {
+      "hint": "가구",
       "answer": "탁자",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "거울", 
+    {
+      "hint": "거울",
       "answer": "화장대",
-      "user":"도우드"
+      "user": "도우드"
     },
-    { 
-      "hint": "담벼락 덩굴", 
+    {
+      "hint": "담벼락 덩굴",
       "answer": "능소화",
-      "user":"세라핀"
+      "user": "세라핀"
     },
-    { 
-      "hint": "엄니", 
+    {
+      "hint": "엄니",
       "answer": "바다코끼리",
-      "user":"세라핀"
+      "user": "세라핀"
     },
-    { 
-      "hint": "사막", 
+    {
+      "hint": "사막",
       "answer": "포풀루스 유프라티카",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "식물", 
+    {
+      "hint": "식물",
       "answer": "포풀루스 유프라티카",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "덩이줄기 식물", 
+    {
+      "hint": "덩이줄기 식물",
       "answer": "고구마",
-      "user":"훈자"
+      "user": "훈자"
     },
-    { 
-      "hint": "그늘", 
+    {
+      "hint": "그늘",
       "answer": "이끼",
-      "user":"namaste"
+      "user": "namaste"
     },
-    { 
-      "hint": "단단한 등", 
+    {
+      "hint": "단단한 등",
       "answer": "바다거북",
-      "user":"볼테일"
+      "user": "볼테일"
     },
-    { 
-      "hint": "질긴 생명력", 
+    {
+      "hint": "질긴 생명력",
       "answer": "질경이",
-      "user":"짐빔"
+      "user": "짐빔"
     },
-    { 
-      "hint": "부채 모양", 
+    {
+      "hint": "부채 모양",
       "answer": "군자란",
-      "user":"짐빔"
+      "user": "짐빔"
     },
-    { 
-      "hint": "마라탕", 
+    {
+      "hint": "마라탕",
       "answer": "청경채",
-      "user":"푸하하"
+      "user": "푸하하"
     },
-    { 
-      "hint": "여름", 
+    {
+      "hint": "여름",
       "answer": "무궁화"
     },
-    { 
-      "hint": "찌릿찌릿", 
+    {
+      "hint": "찌릿찌릿",
       "answer": "전기 뱀장어",
-      "user":"닉닉네임"
+      "user": "닉닉네임"
     },
-    { 
-      "hint": "바삭바삭하고 부드럽다", 
-      "answer":"상추"
+    {
+      "hint": "바삭바삭하고 부드럽다",
+      "answer": "상추"
     },
-    { 
-      "hint": "바다", 
+    {
+      "hint": "바다",
       "answer": "바다거북",
-      "user":"ggg555"
+      "user": "ggg555"
     },
-    { 
-      "hint": "동물", 
+    {
+      "hint": "동물",
       "answer": "판다"
     },
-    { 
-      "hint": "낚시 미끼", 
+    {
+      "hint": "낚시 미끼",
       "answer": "지렁이",
-      "user":"강현민_"
+      "user": "강현민_"
     },
-    { 
-      "hint": "망치", 
+    {
+      "hint": "망치",
       "answer": "못",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "화려한 새", 
+    {
+      "hint": "화려한 새",
       "answer": "공작",
-      "user":"ㅇㅇ"
+      "user": "ㅇㅇ"
     },
-    { 
-      "hint": "맹수", 
+    {
+      "hint": "맹수",
       "answer": "하이에나",
-      "user":"춘봉"
+      "user": "춘봉"
     },
-    { 
-      "hint": "힘", 
+    {
+      "hint": "힘",
       "answer": "씨름",
-      "user":"춘봉"
+      "user": "춘봉"
     },
-    { 
-      "hint": "장난감", 
+    {
+      "hint": "장난감",
       "answer": "새총",
-      "user":"amdj"
+      "user": "amdj"
     },
-    { 
-      "hint": "수확고", 
+    {
+      "hint": "수확고",
       "answer": "녹두"
     },
-    { 
-      "hint": "파란색", 
+    {
+      "hint": "파란색",
       "answer": "파란새"
     },
-    { 
-      "hint": "곧은 의지와 기개", 
+    {
+      "hint": "곧은 의지와 기개",
       "answer": "소나무"
     },
-    { 
-      "hint": "초록색", 
+    {
+      "hint": "초록색",
       "answer": "개구리"
     },
-    { 
-      "hint": "목제", 
+    {
+      "hint": "목제",
       "answer": "탁자"
     },
-    { 
-      "hint": "초원", 
+    {
+      "hint": "초원",
       "answer": "양"
     },
-    { 
-      "hint": "붉은 색", 
+    {
+      "hint": "붉은 색",
       "answer": "중국 매듭"
     },
-
-    { 
-      "hint": "장신구", 
+    {
+      "hint": "장신구",
       "answer": "허리띠"
     },
-    { 
-      "hint": "조미료", 
+    {
+      "hint": "조미료",
       "answer": "소금",
-      "user":"푸하하"
+      "user": "푸하하"
     },
-    { 
-      "hint": "수분 보습", 
+    {
+      "hint": "수분 보습",
       "answer": "알로에",
-      "user":"단목아아"
+      "user": "단목아아"
     },
-    { 
-      "hint": "라면", 
+    {
+      "hint": "라면",
       "answer": "너구리",
-      "user":"단목아아"
+      "user": "단목아아"
     },
-    { 
-      "hint": "치약", 
+    {
+      "hint": "치약",
       "answer": "멘톨",
-      "user":"단목아아"
+      "user": "단목아아"
     },
-      { 
-      "hint": "긴 팔", 
+    {
+      "hint": "긴 팔",
       "answer": "오랑우탄",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "뒤뚱뒤뚱", 
+    {
+      "hint": "뒤뚱뒤뚱",
       "answer": "펭귄",
-      "user":"Los"
+      "user": "Los"
     },
-    { 
-      "hint": "은색비늘", 
+    {
+      "hint": "은색비늘",
       "answer": "갈치",
-      "user":"Los"
+      "user": "Los"
     },
-    { 
-      "hint": "주몽", 
+    {
+      "hint": "주몽",
       "answer": "활",
-      "user":"Demmmop"
+      "user": "Demmmop"
     },
-   { 
-      "hint": "질주", 
+    {
+      "hint": "질주",
       "answer": "말",
-      "user":"Demmmop"
+      "user": "Demmmop"
     },
-    { 
-      "hint": "바람과 모래", 
+    {
+      "hint": "바람과 모래",
       "answer": "포플러 유프라티카",
-      "user":"연갤러"
+      "user": "연갤러"
     },
-    { 
-      "hint": "뿔", 
+    {
+      "hint": "뿔",
       "answer": "사슴",
-      "user":"연갤러" 
+      "user": "연갤러"
     },
-    { "hint": "등", 
+    {
+      "hint": "등",
       "answer": "낙타",
-      "user":"연갤러"
-      
+      "user": "연갤러"
     },
-    { "hint": "네덜란드", "answer": "튤립" },
-    { "hint": "티베트", "answer": "야크" },
-    { "hint": "가려움", "answer": "모기" },
-   { "hint": "콩쥐", "answer": "두꺼비" },
-   { "hint": "북극", "answer": "바다 코끼리" },
-   { "hint": "경솔한", "answer": "물 시금치" },
- 
-    { "hint": "물의", "answer": "물 시금치" },
-  { "hint": "약재", "answer": "영지 버섯" },
-    { "hint": "말린 과일", "answer": "살구꽃" },
-    { "hint": "서랍", "answer": "화장대" },
-    { "hint": "투명", "answer": "해파리" },
-    { "hint": "하리코 베르", "answer": "녹두" },
-    { "hint": "여름", "answer": "나팔꽃" },
-    { "hint": "상징", "answer": "무궁화" },
-    { "hint": "빛과 그림자", "answer": "칸델라" },
-    { "hint": "채소", "answer": "멜론" },
-    { "hint": "방향", "answer": "나침반" },
-    { "hint": "초음파", "answer": "돌고래" },
-    { "hint": "불길함", "answer": "까마귀" },
-    { "hint": "장례식,숫자0", "answer": "국화" },
-    { "hint": "음양오행", "answer": "태극권" },
-    { "hint": "짠맛", "answer": "소금" },
-    { "hint": "감기", "answer": "배" },
-    { "hint": "장수", "answer": "만년청" },
-    { "hint": "과일", "answer": "탕후루" },
-    { "hint": "여물", "answer": "소" },
-    { "hint": "기름,피자토핑", "answer": "올리브" },
-    { "hint": "반려동물,목줄", "answer": "개" },
-    { "hint": "청명한 소리", "answer": "풍경" },
-    { "hint": "100일", "answer": "백일초" },
-    { "hint": "5월에 피는 꽃", "answer": "모란" },
-    { "hint": "7월7일, 오작교", "answer": "직녀" },
-    { "hint": "가금류", "answer": "수탉" },
-    { "hint": "가금류", "answer": "수탉, 오리" },
-    { "hint": "가금류", "answer": "오리" },
-    { "hint": "가마", "answer": "도자기" },
-    { "hint": "가마꾼", "answer": "가마" },
-    { "hint": "가시", "answer": "복어" },
-    { "hint": "가시", "answer": "장미" },
-    { "hint": "가시", "answer": "찔레꽃" },
-    { "hint": "가전제품", "answer": "다리미" },
-    { "hint": "가죽", "answer": "채찍" },
-    { "hint": "간식", "answer": "땅콩" },
-    { "hint": "감전", "answer": "전기뱀장어" },
-    { "hint": "강", "answer": "하마" },
-    { "hint": "강과 하천", "answer": "메기" },
-    { "hint": "강한부리", "answer": "딱따구리" },
-    { "hint": "강한향기", "answer": "히아신스" },
-    { "hint": "개구리", "answer": "올챙이" },
-    { "hint": "개똥벌레", "answer": "반딧불이" },
-    { "hint": "거대한 활엽수", "answer": "느릅나무" },
-    { "hint": "거대함", "answer": "코끼리" },
-    { "hint": "건강", "answer": "인삼" },
-    { "hint": "검은 깃털", "answer": "칠면조" },
-    { "hint": "검은반점무늬", "answer": "표범" },
-    { "hint": "겨울간식", "answer": "고구마" },
-    { "hint": "겨울에피는꽃", "answer": "매화" },
-    { "hint": "견과류", "answer": "땅콩" },
-    { "hint": "고독", "answer": "파초" },
-    { "hint": "고래", "answer": "참치" },
-    { "hint": "고무줄", "answer": "새총" },
-    { "hint": "고삐", "answer": "승마" },
-    { "hint": "고양이", "answer": "삵" },
-    { "hint": "고추", "answer": "잠자리" },
-    { "hint": "고흐", "answer": "해바라기" },
-    { "hint": "곡물", "answer": "밀" },
-    { "hint": "곤충채집", "answer": "잠자리" },
-    { "hint": "곰", "answer": "판다" },
-    { "hint": "곱슬털", "answer": "푸들" },
-    { "hint": "공", "answer": "축구" },
-    { "hint": "공기 정화", "answer": "행운목" },
-    { "hint": "공주", "answer": "인어" },
-    { "hint": "과녁", "answer": "양궁" },
-    { "hint": "관상용", "answer": "분재" },
-    { "hint": "관상용 꽃", "answer": "작약꽃" },
-    { "hint": "교통수단", "answer": "가마" },
-    { "hint": "교활함", "answer": "여우" },
-    { "hint": "교활함,야행성", "answer": "여우" },
-    { "hint": "구름", "answer": "솜사탕" },
-    { "hint": "구멍,채소,녹색줄기", "answer": "샐러리" },
-    { "hint": "구미호", "answer": "여우" },
-    { "hint": "구슬", "answer": "진주" },
-    { "hint": "구애", "answer": "공작" },
-    { "hint": "굽은 날", "answer": "낫" },
-    { "hint": "귀", "answer": "토끼" },
-    { "hint": "귀한 약재", "answer": "석곡" },
-    { "hint": "그늘", "answer": "오동나무" },
-    { "hint": "그물모양 무늬", "answer": "멜론" },
-    { "hint": "그물모양무늬", "answer": "멜론" },
-    { "hint": "작은곡물", "answer": "녹두" },
-    { "hint": "또아리", "answer": "뱀" },
-    { "hint": "근육", "answer": "캥거루" },
-    { "hint": "근접무기", "answer": "단검" },
-    { "hint": "금속", "answer": "자물쇠" },
-    { "hint": "기도", "answer": "양초" },
-    { "hint": "기름", "answer": "올리브" },
-    { "hint": "긴 귀", "answer": "당나귀" },
-    { "hint": "긴 꼬리", "answer": "쥐" },
-    { "hint": "긴 다리, 달리기, 날지 못하는", "answer": "타조" },
-    { "hint": "긴 송곳니", "answer": "바다코끼리" },
-    { "hint": "긴 주둥이", "answer": "땃쥐" },
-    { "hint": "긴 혀", "answer": "기린" },
-    { "hint": "긴다리", "answer": "타조" },
-    { "hint": "목돌리기", "answer": "올빼미" },
-    { "hint": "성벽", "answer": "만리장성" },
-    { "hint": "긴주둥이", "answer": "땃쥐" },
-    { "hint": "길조", "answer": "까치" },
-    { "hint": "깔때기", "answer": "카라꽃" },
-    { "hint": "씨앗", "answer": "수박 씨앗" },
-    { "hint": "동화", "answer": "파랑새" },
-    { "hint": "꼬리", "answer": "돼지" },
-    { "hint": "꼬리비늘", "answer": "인어" },
-    { "hint": "꼬리-영장류", "answer": "원숭이" },
-    { "hint": "꽃", "answer": "수선화" },
-    { "hint": "꽃", "answer": "수선화, 나비" },
-    { "hint": "꽃가루", "answer": "꿀벌" },
-    { "hint": "꽃가루", "answer": "포플러" },
-    { "hint": "꽃이 없음", "answer": "무화과" },
-    { "hint": "꽃차", "answer": "자스민" },
-    { "hint": "나르키소스", "answer": "수선화" },
-    { "hint": "나무", "answer": "벵골보리수" },
-    { "hint": "나무구멍", "answer": "딱딱구리" },
-    { "hint": "나무껍질", "answer": "계피" },
-    { "hint": "나무", "answer": "딱따구리" },
-    { "hint": "나뭇잎", "answer": "단풍나무" },
-    { "hint": "나팔 모양", "answer": "주정홍" },
-    { "hint": "나팔모양", "answer": "주정홍" },
-    { "hint": "낚시줄", "answer": "낚싯대" },
-    { "hint": "날카로운 이빨", "answer": "상어" },
-    { "hint": "날카로움", "answer": "검" },
-    { "hint": "남극, 무리생활", "answer": "팽귄" },
-    { "hint": "남장", "answer": "뮬란" },
-    { "hint": "냄새", "answer": "은행" },
-    { "hint": "냄새먹는", "answer": "하마" },
-    { "hint": "넓은 잎", "answer": "파초" },
-    { "hint": "원예", "answer": "분재" },
-    { "hint": "방귀", "answer": "스컹크" },
-    { "hint": "넓적한 부리", "answer": "오리너구리" },
-    { "hint": "노란 종이", "answer": "부적" },
-    { "hint": "노란깃털", "answer": "꾀꼬리" },
-    { "hint": "노란색", "answer": "옥수수" },
-    { "hint": "노란색 과실", "answer": "비파" },
-    { "hint": "노란색 과일", "answer": "살구" },
-    { "hint": "노래 소리", "answer": "꾀꼬리" },
-    { "hint": "녹색 눈", "answer": "파리" },
-    { "hint": "녹색잎", "answer": "회양목" },
-    { "hint": "녹색줄기", "answer": "샐러리" },
-    { "hint": "놀이공원", "answer": "솜사탕" },
-    { "hint": "놀이터", "answer": "숨바꼭질" },
-    { "hint": "농기구", "answer": "갈퀴" },
-    { "hint": "높은 지능", "answer": "돌고래" },
-    { "hint": "눈동자", "answer": "공작" },
-    { "hint": "눈망울", "answer": "꽃사슴" },
-    { "hint": "눈망울", "answer": "사슴" },
-    { "hint": "눈사람", "answer": "오뚝이" },
-    { "hint": "뉴턴", "answer": "사과" },
-    { "hint": "느림", "answer": "거북이" },
-    { "hint": "다도", "answer": "차" },
-    { "hint": "다이어트", "answer": "토마토" },
-    { "hint": "단단함", "answer": "느릅나무" },
-    { "hint": "단맛 약재, 귀한 약재", "answer": "석곡" },
-    { "hint": "단맛나는약재", "answer": "감초" },
-    { "hint": "쌀로만든 제과", "answer": "송편" },
-    { "hint": "단풍", "answer": "은행" },
-    { "hint": "달리기", "answer": "타조" },
-    { "hint": "달콤함", "answer": "멜론" },
-    { "hint": "담벼락,빨판같은 뿌리", "answer": "담쟁이덩굴" },
-    { "hint": "대머리", "answer": "흰머리수리" },
-    { "hint": "댐 건설", "answer": "비버" },
-    { "hint": "덩굴", "answer": "자등" },
-    { "hint": "덩굴식물", "answer": "나팔꽃" },
-    { "hint": "덩굴식물", "answer": "장춘화" },
-    { "hint": "데낄라", "answer": "용설란" },
-    { "hint": "데킬라", "answer": "용설란" },
-    { "hint": "도자기", "answer": "그릇" },
-    { "hint": "독성", "answer": "협죽도" },
-    { "hint": "독침", "answer": "벌" },
-    { "hint": "동물", "answer": "낙타" },
-    { "hint": "동틀 무렵", "answer": "수탉" },
-    { "hint": "동화", "answer": "파란색" },
-    { "hint": "되새김질", "answer": "소" },
-    { "hint": "둥근 뿔", "answer": "양" },
-    { "hint": "들판", "answer": "차전초" },
-    { "hint": "등 푸른 생선", "answer": "꽁치" },
-    { "hint": "딜레마", "answer": "고슴도치" },
-    { "hint": "딱딱 vs 말랑", "answer": "복숭아" },
-    { "hint": "땅굴", "answer": "두더지" },
-    { "hint": "땅굴, 퇴화한", "answer": "두더지" },
-    { "hint": "떡", "answer": "송편" },
-    { "hint": "라따뚜이", "answer": "가지" },
-    { "hint": "말,고삐", "answer": "승마" },
-    { "hint": "말린 과일", "answer": "쌀" },
-    { "hint": "말미잘", "answer": "흰동가리" },
-    { "hint": "매듭", "answer": "중국 매듭" },
-    { "hint": "매복", "answer": "악어" },
-    { "hint": "매운 향", "answer": "마늘종" },
-    { "hint": "매운맛", "answer": "양파" },
-    { "hint": "맥주", "answer": "밀" },
-    { "hint": "맹금류", "answer": "독수리" },
-    { "hint": "머리를 검게함 한약재", "answer": "폴리고눔 멀티플로룸" },
-    { "hint": "머리카락", "answer": "빗" },
-    { "hint": "멸종위기", "answer": "삵" },
-    { "hint": "명중", "answer": "양궁" },
-    { "hint": "모내기", "answer": "벼" },
-    { "hint": "모르모트", "answer": "기니피그" },
-    { "hint": "모르모트,앞니", "answer": "기니피그" },
-    { "hint": "모이", "answer": "닭" },
-    { "hint": "목", "answer": "기린" },
-    { "hint": "목재", "answer": "탁자" },
-    { "hint": "목", "answer": "목걸이" },
-    { "hint": "무기", "answer": "검" },
-    { "hint": "무기", "answer": "활" },
-    { "hint": "무리생활", "answer": "펭귄" },
-    { "hint": "물가, 나르키소스, 꽃", "answer": "수선화" },
-    { "hint": "물고기 떼", "answer": "낚시 그물" },
-    { "hint": "물고기", "answer": "복어" },
-    { "hint": "물돼지", "answer": "카피바라" },
-    { "hint": "미끌미끌", "answer": "미꾸라지" },
-    { "hint": "미끼", "answer": "낚시" },
-    { "hint": "민물고기", "answer": "미꾸라지" },
-    { "hint": "민속놀이", "answer": "투호" },
-    { "hint": "밀림의 청소부", "answer": "하이에나" },
-    { "hint": "밀크티", "answer": "토란" },
-    { "hint": "바다", "answer": "고래" },
-    { "hint": "바다", "answer": "낚시 그물" },
-    { "hint": "바다", "answer": "진주" },
-    { "hint": "바람", "answer": "풍경" },
-    { "hint": "바위", "answer": "이끼" },
-    { "hint": "바지", "answer": "허리띠" },
-    { "hint": "바지, 혁띠", "answer": "허리띠" },
-    { "hint": "반려동물", "answer": "개" },
-    { "hint": "발굽", "answer": "말" },
-    { "hint": "발톱", "answer": "나무늘보" },
-    { "hint": "밤송이, 딜레마", "answer": "고슴도치" },
-    { "hint": "방어", "answer": "갑옷" },
-    { "hint": "방어구", "answer": "부적" },
-    { "hint": "방충 효과", "answer": "녹나무" },
-    { "hint": "방충 효과", "answer": "곽향" },
-    { "hint": "배달", "answer": "우체국" },
-    { "hint": "버드나무", "answer": "포플러" },
-    { "hint": "변색", "answer": "카멜레온" },
-    { "hint": "변치 않은 사랑", "answer": "백일초" },
-    { "hint": "병사", "answer": "창" },
-    { "hint": "보류", "answer": "칸델라" },
-    { "hint": "보름달", "answer": "토끼" },
-    { "hint": "보석", "answer": "팔찌,목걸이" },
-    { "hint": "보양", "answer": "인삼" },
-    { "hint": "보온", "answer": "부츠" },
-    { "hint": "보일러", "answer": "귀뚜라미" },
-    { "hint": "보호", "answer": "갑옷" },
-    { "hint": "복숭아", "answer": "복숭아꽃" },
-    { "hint": "복슬복슬 털", "answer": "알파카" },
-    { "hint": "볶음", "answer": "표고버섯" },
-    { "hint": "봄", "answer": "벚꽃" },
-    { "hint": "봄", "answer": "베고니아" },
-    { "hint": "봄", "answer": "비파" },
-    { "hint": "봄에 피는 하얀 꽃", "answer": "살구" },
-    { "hint": "부귀영화", "answer": "두꺼비" },
-    { "hint": "부채꼴", "answer": "은행" },
-    { "hint": "분수", "answer": "고래" },
-    { "hint": "분홍색", "answer": "작약꽃" },
-    { "hint": "붉은살", "answer": "연어" },
-    { "hint": "붉은색 과실", "answer": "자두" },
-    { "hint": "붉은색 과일", "answer": "체리" },
-    { "hint": "붉은색 꽃", "answer": "주정홍" },
-    { "hint": "붉은색 벼슬", "answer": "수탉" },
-    { "hint": "붉은색과일", "answer": "체리" },
-    { "hint": "비수", "answer": "단검" },
-    { "hint": "비타민C", "answer": "귤" },
-    { "hint": "비타민C", "answer": "레몬" },
-    { "hint": "빛나는 벌레", "answer": "반딧불이" },
-    { "hint": "빠른 속도", "answer": "지네" },
-    { "hint": "빠름", "answer": "치타" },
-    { "hint": "빨간 과육", "answer": "수박" },
-    { "hint": "빨간색", "answer": "도장" },
-    { "hint": "빨간색", "answer": "원숭이, 도장" },
-    { "hint": "빨판", "answer": "오징어" },
-    { "hint": "빨판같은 뿌리", "answer": "담쟁이덩굴" },
-    { "hint": "뻐꾹뻐꾹", "answer": "뻐꾸기" },
-    { "hint": "뽀빠이", "answer": "시금치" },
-    { "hint": "뿌리", "answer": "감초" },
-    { "hint": "뿌리", "answer": "뱅골보리수" },
-    { "hint": "뿌리채소", "answer": "감자" },
-    { "hint": "뿌리채소", "answer": "토란" },
-    { "hint": "사각형", "answer": "상자" },
-    { "hint": "사격", "answer": "활" },
-    { "hint": "사계절,여름,꽃", "answer": "장춘화" },
-    { "hint": "사군자", "answer": "매화" },
-    { "hint": "사냥", "answer": "활" },
-    { "hint": "사람을 찢어", "answer": "곰" },
-    { "hint": "사랑", "answer": "장미" },
-    { "hint": "사막", "answer": "전갈" },
-    { "hint": "사바나", "answer": "기린" },
-    { "hint": "사슴", "answer": "꽃사슴" },
-    { "hint": "산타클로스", "answer": "순록" },
-    { "hint": "살구", "answer": "살구꽃" },
-    { "hint": "상록수", "answer": "소나무" },
-    { "hint": "상록수", "answer": "회양목" },
-    { "hint": "새", "answer": "파랑새" },
-    { "hint": "새벽", "answer": "닭" },
-    { "hint": "새콤달콤", "answer": "자두" },
-    { "hint": "생선", "answer": "고양이" },
-    { "hint": "생태계교란", "answer": "황소개구리" },
-    { "hint": "서명", "answer": "도장" },
-    { "hint": "세균 전파", "answer": "파리" },
-    { "hint": "손 씻기", "answer": "너구리" },
-    
-    { "hint": "손톱 같은 새싹", "answer": "정향" },
-    { "hint": "손톱 물들이기, 여름에 피는 꽃", "answer": "봉선화" },
-    { "hint": "수면", "answer": "침대" },
-    { "hint": "수분가득", "answer": "배" },
-    { "hint": "수분보충", "answer": "오이" },
-    { "hint": "수생식물", "answer": "연근" },
-    { "hint": "수중생활", "answer": "수달" },
-    { "hint": "수컷 임신", "answer": "해마" },
-    { "hint": "수확", "answer": "밀" },
-    { "hint": "술", "answer": "술주전자" },
-    { "hint": "술래", "answer": "숨바꼭질" },
-    { "hint": "스포츠", "answer": "축구" },
-    { "hint": "습기", "answer": "이끼" },
-    { "hint": "습지", "answer": "버드나무" },
-    { "hint": "습한곳", "answer": "지네" },
-    { "hint": "시끄러움", "answer": "귀뚜라미" },
-    { "hint": "시력 보호", "answer": "블루베리" },
-    { "hint": "시베리아", "answer": "허스키" },
-    { "hint": "매달림", "answer": "나무늘보" },
-    { "hint": "가을", "answer": "오동나무" },
-    { "hint": "여름 철새", "answer": "꾀꼬리" },
-    { "hint": "영리함", "answer": "푸들" },
-    { "hint": "시원한", "answer": "수조" },
-    { "hint": "시원함", "answer": "수박" },
-    { "hint": "시체먹는새", "answer": "독수리" },
-    { "hint": "식물", "answer": "분재" },
-    { "hint": "식이섬유", "answer": "고구마" },
-    { "hint": "식칼", "answer": "도마" },
-    { "hint": "신거", "answer": "레몬" },
-    { "hint": "신맛", "answer": "레몬" },
-    { "hint": "신선한향기", "answer": "쑥갓" },
-    { "hint": "실내장식", "answer": "꽃병" },
-    { "hint": "쌀 저장", "answer": "쌀 항아리" },
-    { "hint": "썰매", "answer": "순록" },
-    { "hint": "쑥", "answer": "쑥갓" },
-    { "hint": "쓰레기통", "answer": "파리" },
-    { "hint": "아침식사", "answer": "오트밀" },
-    { "hint": "알", "answer": "거북이" },
-    { "hint": "앞니", "answer": "기니피그" },
-    { "hint": "야생동물", "answer": "삵" },
-    { "hint": "야행성", "answer": "여우" },
-    { "hint": "약용", "answer": "감초" },
-    { "hint": "약재", "answer": "곽향" },
-    { "hint": "약재", "answer": "작약꽃" },
-    { "hint": "양 몰이", "answer": "웰시코기" },
-    { "hint": "양념", "answer": "고추" },
-    { "hint": "양서류", "answer": "개구리" },
-    { "hint": "어업", "answer": "가마우지" },
-    { "hint": "어업", "answer": "생선 바구니" },
-    { "hint": "어획", "answer": "낚시 그물" },
-    { "hint": "엉덩이", "answer": "웰시코기" },
-    { "hint": "에메랄드 그린", "answer": "물 시금치" },
-    { "hint": "여름", "answer": "나팔꽃, 풍경" },
-    { "hint": "여름", "answer": "무궁화" },
-    { "hint": "여름 과일", "answer": "수박" },
-    { "hint": "여름 상큼함 차가움 과일", "answer": "상추" },
-    { "hint": "여름밤", "answer": "불꽃놀이" },
-    { "hint": "여름", "answer": "백일초" },
-    { "hint": "여름철새", "answer": "꾀꼬리" },
-    { "hint": "연꽃", "answer": "연근" },
-    { "hint": "연회", "answer": "술주전자" },
-    { "hint": "열대", "answer": "파초" },
-    { "hint": "열대우림", "answer": "오랑우탄" },
-    { "hint": "열렬한", "answer": "잭프루프" },
-    { "hint": "영양 풍부", "answer": "콜리플라" },
-    { "hint": "영양공급", "answer": "구기자" },
-    { "hint": "영화", "answer": "흰동가리" },
-    { "hint": "영화 캐릭터", "answer": "흰동가리" },
-    { "hint": "영화의 제목", "answer": "피라냐" },
-    { "hint": "온라인 모임", "answer": "생선 바구니" },
-    { "hint": "올림픽", "answer": "양궁" },
-    { "hint": "요리", "answer": "도마" },
-    { "hint": "용맹함", "answer": "진돗개" },
-    { "hint": "우산모양의", "answer": "영지버섯" },
-    { "hint": "울타리", "answer": "나팔꽃" },
-    { "hint": "월드컵", "answer": "축구" },
-    { "hint": "유인원", "answer": "오랑우탄" },
-    { "hint": "육상동물", "answer": "치타" },
-    { "hint": "은하수", "answer": "견우" },
-    { "hint": "의자", "answer": "그네" },
-    { "hint": "이종 교배", "answer": "노새" },
-    { "hint": "인내", "answer": "용설란" },
-    { "hint": "일꾼 이미지", "answer": "비버" },
-    { "hint": "일꾼, 여왕, 부지런함", "answer": "개미" },
-    { "hint": "일본", "answer": "벚꽃" },
-    { "hint": "일본 나라", "answer": "꽃사슴" },
-    { "hint": "자르기", "answer": "가위" },
-    { "hint": "작은 배추", "answer": "청경채" },
-    { "hint": "잡초", "answer": "자전초" },
-    { "hint": "장마철", "answer": "수련" },
-    { "hint": "장식", "answer": "중국 매듭" },
-    { "hint": "재생", "answer": "불가사리" },
-    { "hint": "전분", "answer": "감자" },
-    { "hint": "전통음식", "answer": "송편" },
-    { "hint": "전투복", "answer": "갑옷" },
-    { "hint": "점프", "answer": "캥거루" },
-    { "hint": "정돈", "answer": "빗" },
-    { "hint": "제주도", "answer": "귤" },
-    { "hint": "젤리", "answer": "고양이" },
-    { "hint": "조명", "answer": "칸델라" },
-    { "hint": "조미료", "answer": "간장" },
-    { "hint": "조미료", "answer": "설탕" },
-    { "hint": "조화", "answer": "음양" },
-    { "hint": "종이", "answer": "가위" },
-    { "hint": "주름제거", "answer": "다리미" },
-    { "hint": "주머니", "answer": "캥거루" },
-    { "hint": "라마", "answer": "알파카" },
-    { "hint": "주방", "answer": "도마" },
-    { "hint": "주방용품", "answer": "그릇" },
-    { "hint": "주황색", "answer": "당근" },
-    { "hint": "주황색/붉은 어쩌구 꽃", "answer": "능소화" },
-    { "hint": "줄기채소", "answer": "마늘종" },
-    { "hint": "중국, 영국", "answer": "차" },
-    { "hint": "중독", "answer": "담배" },
-    { "hint": "지독한 냄새", "answer": "두리안" },
-    { "hint": "지식", "answer": "책" },
-    { "hint": "짐꾼", "answer": "당나귀" },
-    { "hint": "짐꾼", "answer": "노새" },
-    { "hint": "집사", "answer": "고양이" },
-    { "hint": "차가운", "answer": "수조" },
-    { "hint": "채소", "answer": "렌즈콩" },
-    { "hint": "채소", "answer": "청경채" },
-    { "hint": "채소 (자주빛 검은색)", "answer": "가지" },
-    { "hint": "채소밭", "answer": "샐러리" },
-    { "hint": "천하장사", "answer": "씨름" },
-    { "hint": "청량함", "answer": "박하" },
-    { "hint": "청수", "answer": "수조" },
-    { "hint": "청혼", "answer": "장미" },
-    { "hint": "초밥", "answer": "연어" },
-    { "hint": "초식동물", "answer": "얼룩말" },
-    { "hint": "초원", "answer": "말" },
-    { "hint": "추석", "answer": "송편" },
-    { "hint": "추수감사절,터키", "answer": "칠면조" },
-    { "hint": "추어탕", "answer": "미꾸라지" },
-    { "hint": "축제", "answer": "벚꽃" },
-    { "hint": "축제", "answer": "불꽃놀이" },
-    { "hint": "취미", "answer": "낚시" },
-    { "hint": "취미, 미끼", "answer": "낚시" },
-    { "hint": "치즈", "answer": "쥐" },
-    { "hint": "침 뱉기", "answer": "알파카" },
-    { "hint": "침엽수", "answer": "측백나무" },
-    { "hint": "커다란 고양이", "answer": "표범" },
-    { "hint": "커다란 나무", "answer": "버드나무" },
-    { "hint": "코", "answer": "코끼리" },
-    { "hint": "콩과", "answer": "잠두" },
-    { "hint": "큰 귀", "answer": "비글" },
-    { "hint": "큰 입", "answer": "하마" },
-    { "hint": "큰 입자", "answer": "콩" },
-    { "hint": "클레오 파트라", "answer": "무화과" },
-    { "hint": "탁란", "answer": "뻐꾸기" },
-    { "hint": "탈", "answer": "가면" },
-    { "hint": "탐욕의 상징", "answer": "하이에나" },
-    { "hint": "태양", "answer": "해바라기" },
-    { "hint": "터키", "answer": "칠면조" },
-    { "hint": "털 깍기", "answer": "양" },
-    { "hint": "토끼", "answer": "당근" },
-    { "hint": "토양", "answer": "지렁이" },
-    { "hint": "토종", "answer": "진돗개" },
-    { "hint": "퇴화한 눈", "answer": "두더지" },
-    { "hint": "파충류", "answer": "카멜레온" },
-    { "hint": "판다", "answer": "죽순" },
-    { "hint": "팝콘", "answer": "옥수수" },
-    { "hint": "패션", "answer": "목걸이" },
-    { "hint": "편지 배달", "answer": "비둘기" },
-    { "hint": "편지", "answer": "우체국" },
-    { "hint": "푸른 꽃", "answer": "로즈마리" },
-    { "hint": "푸른 등", "answer": "고등어" },
-    { "hint": "푸른 잎", "answer": "고수" },
-    { "hint": "푸른 잎", "answer": "박하" },
-    { "hint": "푸른 잎", "answer": "박하, 고수" },
-    { "hint": "푸른 활엽수", "answer": "녹나무" },
-    { "hint": "피넛버터", "answer": "땅콩" },
-    { "hint": "필드", "answer": "쑥갓" },
-    { "hint": "핑크색 꽃잎", "answer": "베고니아" },
-    { "hint": "하얀 꽃", "answer": "살구" },
-    { "hint": "한국", "answer": "무궁화" },
-    { "hint": "항산화", "answer": "블루베리" },
-    { "hint": "해달", "answer": "수달" },
-    { "hint": "해안", "answer": "가마우지" },
-    { "hint": "해열, 해독", "answer": "차전초" },
-    { "hint": "행운", "answer": "행운목" },
-    { "hint": "향기", "answer": "측백나무" },
-    { "hint": "헌 집", "answer": "두꺼비" },
-    { "hint": "현물 상환 지급", "answer": "렌즈콩" },
-    { "hint": "현물 상환 지불", "answer": "렌즈콩" },
-    { "hint": "호불호", "answer": "고수" },
-    { "hint": "호수공원, 가금류", "answer": "오리" },
-    { "hint": "호수공원", "answer": "오리" },
-    { "hint": "혼례", "answer": "가마" },
-    { "hint": "화려한깃털", "answer": "앵무새" },
-    { "hint": "화려함", "answer": "불꽃놀이" },
-    { "hint": "활발함", "answer": "비글" },
-    { "hint": "회", "answer": "광어" },
-    { "hint": "휘아킨토스", "answer": "히아신스" },
-    { "hint": "흔들흔들", "answer": "그네" },
-    { "hint": "흙을 풀어주다", "answer": "갈퀴" },
-    { "hint": "과일의 왕", "answer": "두리안" },
-    { "hint": "흰 꽃 모양, 영양 풍부", "answer": "콜리플라워" },
-    { "hint": "흰 꽃 모양", "answer": "콜리플라워" },
-    { "hint": "흰색 꽃", "answer": "카라꽃" },
-    { "hint": "흰색 솜털", "answer": "포플러" },
-    { "hint": "힘", "answer": "씨름" }
+    {
+      "hint": "네덜란드",
+      "answer": "튤립"
+    },
+    {
+      "hint": "티베트",
+      "answer": "야크"
+    },
+    {
+      "hint": "가려움",
+      "answer": "모기"
+    },
+    {
+      "hint": "콩쥐",
+      "answer": "두꺼비"
+    },
+    {
+      "hint": "북극",
+      "answer": "바다 코끼리"
+    },
+    {
+      "hint": "경솔한",
+      "answer": "물 시금치"
+    },
+    {
+      "hint": "물의",
+      "answer": "물 시금치"
+    },
+    {
+      "hint": "약재",
+      "answer": "영지 버섯"
+    },
+    {
+      "hint": "말린 과일",
+      "answer": "살구꽃"
+    },
+    {
+      "hint": "서랍",
+      "answer": "화장대"
+    },
+    {
+      "hint": "투명",
+      "answer": "해파리"
+    },
+    {
+      "hint": "하리코 베르",
+      "answer": "녹두"
+    },
+    {
+      "hint": "여름",
+      "answer": "나팔꽃"
+    },
+    {
+      "hint": "상징",
+      "answer": "무궁화"
+    },
+    {
+      "hint": "빛과 그림자",
+      "answer": "칸델라"
+    },
+    {
+      "hint": "채소",
+      "answer": "멜론"
+    },
+    {
+      "hint": "방향",
+      "answer": "나침반"
+    },
+    {
+      "hint": "초음파",
+      "answer": "돌고래"
+    },
+    {
+      "hint": "불길함",
+      "answer": "까마귀"
+    },
+    {
+      "hint": "장례식,숫자0",
+      "answer": "국화"
+    },
+    {
+      "hint": "음양오행",
+      "answer": "태극권"
+    },
+    {
+      "hint": "짠맛",
+      "answer": "소금"
+    },
+    {
+      "hint": "감기",
+      "answer": "배"
+    },
+    {
+      "hint": "장수",
+      "answer": "만년청"
+    },
+    {
+      "hint": "과일",
+      "answer": "탕후루"
+    },
+    {
+      "hint": "여물",
+      "answer": "소"
+    },
+    {
+      "hint": "기름,피자토핑",
+      "answer": "올리브"
+    },
+    {
+      "hint": "반려동물,목줄",
+      "answer": "개"
+    },
+    {
+      "hint": "청명한 소리",
+      "answer": "풍경"
+    },
+    {
+      "hint": "100일",
+      "answer": "백일초"
+    },
+    {
+      "hint": "5월에 피는 꽃",
+      "answer": "모란"
+    },
+    {
+      "hint": "7월7일, 오작교",
+      "answer": "직녀"
+    },
+    {
+      "hint": "가금류",
+      "answer": "수탉"
+    },
+    {
+      "hint": "가금류",
+      "answer": "수탉, 오리"
+    },
+    {
+      "hint": "가금류",
+      "answer": "오리"
+    },
+    {
+      "hint": "가마",
+      "answer": "도자기"
+    },
+    {
+      "hint": "가마꾼",
+      "answer": "가마"
+    },
+    {
+      "hint": "가시",
+      "answer": "복어"
+    },
+    {
+      "hint": "가시",
+      "answer": "장미"
+    },
+    {
+      "hint": "가시",
+      "answer": "찔레꽃"
+    },
+    {
+      "hint": "가전제품",
+      "answer": "다리미"
+    },
+    {
+      "hint": "가죽",
+      "answer": "채찍"
+    },
+    {
+      "hint": "간식",
+      "answer": "땅콩"
+    },
+    {
+      "hint": "감전",
+      "answer": "전기뱀장어"
+    },
+    {
+      "hint": "강",
+      "answer": "하마"
+    },
+    {
+      "hint": "강과 하천",
+      "answer": "메기"
+    },
+    {
+      "hint": "강한부리",
+      "answer": "딱따구리"
+    },
+    {
+      "hint": "강한향기",
+      "answer": "히아신스"
+    },
+    {
+      "hint": "개구리",
+      "answer": "올챙이"
+    },
+    {
+      "hint": "개똥벌레",
+      "answer": "반딧불이"
+    },
+    {
+      "hint": "거대한 활엽수",
+      "answer": "느릅나무"
+    },
+    {
+      "hint": "거대함",
+      "answer": "코끼리"
+    },
+    {
+      "hint": "건강",
+      "answer": "인삼"
+    },
+    {
+      "hint": "검은 깃털",
+      "answer": "칠면조"
+    },
+    {
+      "hint": "검은반점무늬",
+      "answer": "표범"
+    },
+    {
+      "hint": "겨울간식",
+      "answer": "고구마"
+    },
+    {
+      "hint": "겨울에피는꽃",
+      "answer": "매화"
+    },
+    {
+      "hint": "견과류",
+      "answer": "땅콩"
+    },
+    {
+      "hint": "고독",
+      "answer": "파초"
+    },
+    {
+      "hint": "고래",
+      "answer": "참치"
+    },
+    {
+      "hint": "고무줄",
+      "answer": "새총"
+    },
+    {
+      "hint": "고삐",
+      "answer": "승마"
+    },
+    {
+      "hint": "고양이",
+      "answer": "삵"
+    },
+    {
+      "hint": "고추",
+      "answer": "잠자리"
+    },
+    {
+      "hint": "고흐",
+      "answer": "해바라기"
+    },
+    {
+      "hint": "곡물",
+      "answer": "밀"
+    },
+    {
+      "hint": "곤충채집",
+      "answer": "잠자리"
+    },
+    {
+      "hint": "곰",
+      "answer": "판다"
+    },
+    {
+      "hint": "곱슬털",
+      "answer": "푸들"
+    },
+    {
+      "hint": "공",
+      "answer": "축구"
+    },
+    {
+      "hint": "공기 정화",
+      "answer": "행운목"
+    },
+    {
+      "hint": "공주",
+      "answer": "인어"
+    },
+    {
+      "hint": "과녁",
+      "answer": "양궁"
+    },
+    {
+      "hint": "관상용",
+      "answer": "분재"
+    },
+    {
+      "hint": "관상용 꽃",
+      "answer": "작약꽃"
+    },
+    {
+      "hint": "교통수단",
+      "answer": "가마"
+    },
+    {
+      "hint": "교활함",
+      "answer": "여우"
+    },
+    {
+      "hint": "교활함,야행성",
+      "answer": "여우"
+    },
+    {
+      "hint": "구름",
+      "answer": "솜사탕"
+    },
+    {
+      "hint": "구멍,채소,녹색줄기",
+      "answer": "샐러리"
+    },
+    {
+      "hint": "구미호",
+      "answer": "여우"
+    },
+    {
+      "hint": "구슬",
+      "answer": "진주"
+    },
+    {
+      "hint": "구애",
+      "answer": "공작"
+    },
+    {
+      "hint": "굽은 날",
+      "answer": "낫"
+    },
+    {
+      "hint": "귀",
+      "answer": "토끼"
+    },
+    {
+      "hint": "귀한 약재",
+      "answer": "석곡"
+    },
+    {
+      "hint": "그늘",
+      "answer": "오동나무"
+    },
+    {
+      "hint": "그물모양 무늬",
+      "answer": "멜론"
+    },
+    {
+      "hint": "그물모양무늬",
+      "answer": "멜론"
+    },
+    {
+      "hint": "작은곡물",
+      "answer": "녹두"
+    },
+    {
+      "hint": "또아리",
+      "answer": "뱀"
+    },
+    {
+      "hint": "근육",
+      "answer": "캥거루"
+    },
+    {
+      "hint": "근접무기",
+      "answer": "단검"
+    },
+    {
+      "hint": "금속",
+      "answer": "자물쇠"
+    },
+    {
+      "hint": "기도",
+      "answer": "양초"
+    },
+    {
+      "hint": "기름",
+      "answer": "올리브"
+    },
+    {
+      "hint": "긴 귀",
+      "answer": "당나귀"
+    },
+    {
+      "hint": "긴 꼬리",
+      "answer": "쥐"
+    },
+    {
+      "hint": "긴 다리, 달리기, 날지 못하는",
+      "answer": "타조"
+    },
+    {
+      "hint": "긴 송곳니",
+      "answer": "바다코끼리"
+    },
+    {
+      "hint": "긴 주둥이",
+      "answer": "땃쥐"
+    },
+    {
+      "hint": "긴 혀",
+      "answer": "기린"
+    },
+    {
+      "hint": "긴다리",
+      "answer": "타조"
+    },
+    {
+      "hint": "목돌리기",
+      "answer": "올빼미"
+    },
+    {
+      "hint": "성벽",
+      "answer": "만리장성"
+    },
+    {
+      "hint": "긴주둥이",
+      "answer": "땃쥐"
+    },
+    {
+      "hint": "길조",
+      "answer": "까치"
+    },
+    {
+      "hint": "깔때기",
+      "answer": "카라꽃"
+    },
+    {
+      "hint": "씨앗",
+      "answer": "수박 씨앗"
+    },
+    {
+      "hint": "동화",
+      "answer": "파랑새"
+    },
+    {
+      "hint": "꼬리",
+      "answer": "돼지"
+    },
+    {
+      "hint": "꼬리비늘",
+      "answer": "인어"
+    },
+    {
+      "hint": "꼬리-영장류",
+      "answer": "원숭이"
+    },
+    {
+      "hint": "꽃",
+      "answer": "수선화"
+    },
+    {
+      "hint": "꽃",
+      "answer": "수선화, 나비"
+    },
+    {
+      "hint": "꽃가루",
+      "answer": "꿀벌"
+    },
+    {
+      "hint": "꽃가루",
+      "answer": "포플러"
+    },
+    {
+      "hint": "꽃이 없음",
+      "answer": "무화과"
+    },
+    {
+      "hint": "꽃차",
+      "answer": "자스민"
+    },
+    {
+      "hint": "나르키소스",
+      "answer": "수선화"
+    },
+    {
+      "hint": "나무",
+      "answer": "벵골보리수"
+    },
+    {
+      "hint": "나무구멍",
+      "answer": "딱딱구리"
+    },
+    {
+      "hint": "나무껍질",
+      "answer": "계피"
+    },
+    {
+      "hint": "나무",
+      "answer": "딱따구리"
+    },
+    {
+      "hint": "나뭇잎",
+      "answer": "단풍나무"
+    },
+    {
+      "hint": "나팔 모양",
+      "answer": "주정홍"
+    },
+    {
+      "hint": "나팔모양",
+      "answer": "주정홍"
+    },
+    {
+      "hint": "낚시줄",
+      "answer": "낚싯대"
+    },
+    {
+      "hint": "날카로운 이빨",
+      "answer": "상어"
+    },
+    {
+      "hint": "날카로움",
+      "answer": "검"
+    },
+    {
+      "hint": "남극, 무리생활",
+      "answer": "팽귄"
+    },
+    {
+      "hint": "남장",
+      "answer": "뮬란"
+    },
+    {
+      "hint": "냄새",
+      "answer": "은행"
+    },
+    {
+      "hint": "냄새먹는",
+      "answer": "하마"
+    },
+    {
+      "hint": "넓은 잎",
+      "answer": "파초"
+    },
+    {
+      "hint": "원예",
+      "answer": "분재"
+    },
+    {
+      "hint": "방귀",
+      "answer": "스컹크"
+    },
+    {
+      "hint": "넓적한 부리",
+      "answer": "오리너구리"
+    },
+    {
+      "hint": "노란 종이",
+      "answer": "부적"
+    },
+    {
+      "hint": "노란깃털",
+      "answer": "꾀꼬리"
+    },
+    {
+      "hint": "노란색",
+      "answer": "옥수수"
+    },
+    {
+      "hint": "노란색 과실",
+      "answer": "비파"
+    },
+    {
+      "hint": "노란색 과일",
+      "answer": "살구"
+    },
+    {
+      "hint": "노래 소리",
+      "answer": "꾀꼬리"
+    },
+    {
+      "hint": "녹색 눈",
+      "answer": "파리"
+    },
+    {
+      "hint": "녹색잎",
+      "answer": "회양목"
+    },
+    {
+      "hint": "녹색줄기",
+      "answer": "샐러리"
+    },
+    {
+      "hint": "놀이공원",
+      "answer": "솜사탕"
+    },
+    {
+      "hint": "놀이터",
+      "answer": "숨바꼭질"
+    },
+    {
+      "hint": "농기구",
+      "answer": "갈퀴"
+    },
+    {
+      "hint": "높은 지능",
+      "answer": "돌고래"
+    },
+    {
+      "hint": "눈동자",
+      "answer": "공작"
+    },
+    {
+      "hint": "눈망울",
+      "answer": "꽃사슴"
+    },
+    {
+      "hint": "눈망울",
+      "answer": "사슴"
+    },
+    {
+      "hint": "눈사람",
+      "answer": "오뚝이"
+    },
+    {
+      "hint": "뉴턴",
+      "answer": "사과"
+    },
+    {
+      "hint": "느림",
+      "answer": "거북이"
+    },
+    {
+      "hint": "다도",
+      "answer": "차"
+    },
+    {
+      "hint": "다이어트",
+      "answer": "토마토"
+    },
+    {
+      "hint": "단단함",
+      "answer": "느릅나무"
+    },
+    {
+      "hint": "단맛 약재, 귀한 약재",
+      "answer": "석곡"
+    },
+    {
+      "hint": "단맛나는약재",
+      "answer": "감초"
+    },
+    {
+      "hint": "쌀로만든 제과",
+      "answer": "송편"
+    },
+    {
+      "hint": "단풍",
+      "answer": "은행"
+    },
+    {
+      "hint": "달리기",
+      "answer": "타조"
+    },
+    {
+      "hint": "달콤함",
+      "answer": "멜론"
+    },
+    {
+      "hint": "담벼락,빨판같은 뿌리",
+      "answer": "담쟁이덩굴"
+    },
+    {
+      "hint": "대머리",
+      "answer": "흰머리수리"
+    },
+    {
+      "hint": "댐 건설",
+      "answer": "비버"
+    },
+    {
+      "hint": "덩굴",
+      "answer": "자등"
+    },
+    {
+      "hint": "덩굴식물",
+      "answer": "나팔꽃"
+    },
+    {
+      "hint": "덩굴식물",
+      "answer": "장춘화"
+    },
+    {
+      "hint": "데낄라",
+      "answer": "용설란"
+    },
+    {
+      "hint": "데킬라",
+      "answer": "용설란"
+    },
+    {
+      "hint": "도자기",
+      "answer": "그릇"
+    },
+    {
+      "hint": "독성",
+      "answer": "협죽도"
+    },
+    {
+      "hint": "독침",
+      "answer": "벌"
+    },
+    {
+      "hint": "동물",
+      "answer": "낙타"
+    },
+    {
+      "hint": "동틀 무렵",
+      "answer": "수탉"
+    },
+    {
+      "hint": "동화",
+      "answer": "파란색"
+    },
+    {
+      "hint": "되새김질",
+      "answer": "소"
+    },
+    {
+      "hint": "둥근 뿔",
+      "answer": "양"
+    },
+    {
+      "hint": "들판",
+      "answer": "차전초"
+    },
+    {
+      "hint": "등 푸른 생선",
+      "answer": "꽁치"
+    },
+    {
+      "hint": "딜레마",
+      "answer": "고슴도치"
+    },
+    {
+      "hint": "딱딱 vs 말랑",
+      "answer": "복숭아"
+    },
+    {
+      "hint": "땅굴",
+      "answer": "두더지"
+    },
+    {
+      "hint": "땅굴, 퇴화한",
+      "answer": "두더지"
+    },
+    {
+      "hint": "떡",
+      "answer": "송편"
+    },
+    {
+      "hint": "라따뚜이",
+      "answer": "가지"
+    },
+    {
+      "hint": "말,고삐",
+      "answer": "승마"
+    },
+    {
+      "hint": "말린 과일",
+      "answer": "쌀"
+    },
+    {
+      "hint": "말미잘",
+      "answer": "흰동가리"
+    },
+    {
+      "hint": "매듭",
+      "answer": "중국 매듭"
+    },
+    {
+      "hint": "매복",
+      "answer": "악어"
+    },
+    {
+      "hint": "매운 향",
+      "answer": "마늘종"
+    },
+    {
+      "hint": "매운맛",
+      "answer": "양파"
+    },
+    {
+      "hint": "맥주",
+      "answer": "밀"
+    },
+    {
+      "hint": "맹금류",
+      "answer": "독수리"
+    },
+    {
+      "hint": "머리를 검게함 한약재",
+      "answer": "폴리고눔 멀티플로룸"
+    },
+    {
+      "hint": "머리카락",
+      "answer": "빗"
+    },
+    {
+      "hint": "멸종위기",
+      "answer": "삵"
+    },
+    {
+      "hint": "명중",
+      "answer": "양궁"
+    },
+    {
+      "hint": "모내기",
+      "answer": "벼"
+    },
+    {
+      "hint": "모르모트",
+      "answer": "기니피그"
+    },
+    {
+      "hint": "모르모트,앞니",
+      "answer": "기니피그"
+    },
+    {
+      "hint": "모이",
+      "answer": "닭"
+    },
+    {
+      "hint": "목",
+      "answer": "기린"
+    },
+    {
+      "hint": "목재",
+      "answer": "탁자"
+    },
+    {
+      "hint": "목",
+      "answer": "목걸이"
+    },
+    {
+      "hint": "무기",
+      "answer": "검"
+    },
+    {
+      "hint": "무기",
+      "answer": "활"
+    },
+    {
+      "hint": "무리생활",
+      "answer": "펭귄"
+    },
+    {
+      "hint": "물가, 나르키소스, 꽃",
+      "answer": "수선화"
+    },
+    {
+      "hint": "물고기 떼",
+      "answer": "낚시 그물"
+    },
+    {
+      "hint": "물고기",
+      "answer": "복어"
+    },
+    {
+      "hint": "물돼지",
+      "answer": "카피바라"
+    },
+    {
+      "hint": "미끌미끌",
+      "answer": "미꾸라지"
+    },
+    {
+      "hint": "미끼",
+      "answer": "낚시"
+    },
+    {
+      "hint": "민물고기",
+      "answer": "미꾸라지"
+    },
+    {
+      "hint": "민속놀이",
+      "answer": "투호"
+    },
+    {
+      "hint": "밀림의 청소부",
+      "answer": "하이에나"
+    },
+    {
+      "hint": "밀크티",
+      "answer": "토란"
+    },
+    {
+      "hint": "바다",
+      "answer": "고래"
+    },
+    {
+      "hint": "바다",
+      "answer": "낚시 그물"
+    },
+    {
+      "hint": "바다",
+      "answer": "진주"
+    },
+    {
+      "hint": "바람",
+      "answer": "풍경"
+    },
+    {
+      "hint": "바위",
+      "answer": "이끼"
+    },
+    {
+      "hint": "바지",
+      "answer": "허리띠"
+    },
+    {
+      "hint": "바지, 혁띠",
+      "answer": "허리띠"
+    },
+    {
+      "hint": "반려동물",
+      "answer": "개"
+    },
+    {
+      "hint": "발굽",
+      "answer": "말"
+    },
+    {
+      "hint": "발톱",
+      "answer": "나무늘보"
+    },
+    {
+      "hint": "밤송이, 딜레마",
+      "answer": "고슴도치"
+    },
+    {
+      "hint": "방어",
+      "answer": "갑옷"
+    },
+    {
+      "hint": "방어구",
+      "answer": "부적"
+    },
+    {
+      "hint": "방충 효과",
+      "answer": "녹나무"
+    },
+    {
+      "hint": "방충 효과",
+      "answer": "곽향"
+    },
+    {
+      "hint": "배달",
+      "answer": "우체국"
+    },
+    {
+      "hint": "버드나무",
+      "answer": "포플러"
+    },
+    {
+      "hint": "변색",
+      "answer": "카멜레온"
+    },
+    {
+      "hint": "변치 않은 사랑",
+      "answer": "백일초"
+    },
+    {
+      "hint": "병사",
+      "answer": "창"
+    },
+    {
+      "hint": "보류",
+      "answer": "칸델라"
+    },
+    {
+      "hint": "보름달",
+      "answer": "토끼"
+    },
+    {
+      "hint": "보석",
+      "answer": "팔찌,목걸이"
+    },
+    {
+      "hint": "보양",
+      "answer": "인삼"
+    },
+    {
+      "hint": "보온",
+      "answer": "부츠"
+    },
+    {
+      "hint": "보일러",
+      "answer": "귀뚜라미"
+    },
+    {
+      "hint": "보호",
+      "answer": "갑옷"
+    },
+    {
+      "hint": "복숭아",
+      "answer": "복숭아꽃"
+    },
+    {
+      "hint": "복슬복슬 털",
+      "answer": "알파카"
+    },
+    {
+      "hint": "볶음",
+      "answer": "표고버섯"
+    },
+    {
+      "hint": "봄",
+      "answer": "벚꽃"
+    },
+    {
+      "hint": "봄",
+      "answer": "베고니아"
+    },
+    {
+      "hint": "봄",
+      "answer": "비파"
+    },
+    {
+      "hint": "봄에 피는 하얀 꽃",
+      "answer": "살구"
+    },
+    {
+      "hint": "부귀영화",
+      "answer": "두꺼비"
+    },
+    {
+      "hint": "부채꼴",
+      "answer": "은행"
+    },
+    {
+      "hint": "분수",
+      "answer": "고래"
+    },
+    {
+      "hint": "분홍색",
+      "answer": "작약꽃"
+    },
+    {
+      "hint": "붉은살",
+      "answer": "연어"
+    },
+    {
+      "hint": "붉은색 과실",
+      "answer": "자두"
+    },
+    {
+      "hint": "붉은색 과일",
+      "answer": "체리"
+    },
+    {
+      "hint": "붉은색 꽃",
+      "answer": "주정홍"
+    },
+    {
+      "hint": "붉은색 벼슬",
+      "answer": "수탉"
+    },
+    {
+      "hint": "붉은색과일",
+      "answer": "체리"
+    },
+    {
+      "hint": "비수",
+      "answer": "단검"
+    },
+    {
+      "hint": "비타민C",
+      "answer": "귤"
+    },
+    {
+      "hint": "비타민C",
+      "answer": "레몬"
+    },
+    {
+      "hint": "빛나는 벌레",
+      "answer": "반딧불이"
+    },
+    {
+      "hint": "빠른 속도",
+      "answer": "지네"
+    },
+    {
+      "hint": "빠름",
+      "answer": "치타"
+    },
+    {
+      "hint": "빨간 과육",
+      "answer": "수박"
+    },
+    {
+      "hint": "빨간색",
+      "answer": "도장"
+    },
+    {
+      "hint": "빨간색",
+      "answer": "원숭이, 도장"
+    },
+    {
+      "hint": "빨판",
+      "answer": "오징어"
+    },
+    {
+      "hint": "빨판같은 뿌리",
+      "answer": "담쟁이덩굴"
+    },
+    {
+      "hint": "뻐꾹뻐꾹",
+      "answer": "뻐꾸기"
+    },
+    {
+      "hint": "뽀빠이",
+      "answer": "시금치"
+    },
+    {
+      "hint": "뿌리",
+      "answer": "감초"
+    },
+    {
+      "hint": "뿌리",
+      "answer": "뱅골보리수"
+    },
+    {
+      "hint": "뿌리채소",
+      "answer": "감자"
+    },
+    {
+      "hint": "뿌리채소",
+      "answer": "토란"
+    },
+    {
+      "hint": "사각형",
+      "answer": "상자"
+    },
+    {
+      "hint": "사격",
+      "answer": "활"
+    },
+    {
+      "hint": "사계절,여름,꽃",
+      "answer": "장춘화"
+    },
+    {
+      "hint": "사군자",
+      "answer": "매화"
+    },
+    {
+      "hint": "사냥",
+      "answer": "활"
+    },
+    {
+      "hint": "사람을 찢어",
+      "answer": "곰"
+    },
+    {
+      "hint": "사랑",
+      "answer": "장미"
+    },
+    {
+      "hint": "사막",
+      "answer": "전갈"
+    },
+    {
+      "hint": "사바나",
+      "answer": "기린"
+    },
+    {
+      "hint": "사슴",
+      "answer": "꽃사슴"
+    },
+    {
+      "hint": "산타클로스",
+      "answer": "순록"
+    },
+    {
+      "hint": "살구",
+      "answer": "살구꽃"
+    },
+    {
+      "hint": "상록수",
+      "answer": "소나무"
+    },
+    {
+      "hint": "상록수",
+      "answer": "회양목"
+    },
+    {
+      "hint": "새",
+      "answer": "파랑새"
+    },
+    {
+      "hint": "새벽",
+      "answer": "닭"
+    },
+    {
+      "hint": "새콤달콤",
+      "answer": "자두"
+    },
+    {
+      "hint": "생선",
+      "answer": "고양이"
+    },
+    {
+      "hint": "생태계교란",
+      "answer": "황소개구리"
+    },
+    {
+      "hint": "서명",
+      "answer": "도장"
+    },
+    {
+      "hint": "세균 전파",
+      "answer": "파리"
+    },
+    {
+      "hint": "손 씻기",
+      "answer": "너구리"
+    },
+    {
+      "hint": "손톱 같은 새싹",
+      "answer": "정향"
+    },
+    {
+      "hint": "손톱 물들이기, 여름에 피는 꽃",
+      "answer": "봉선화"
+    },
+    {
+      "hint": "수면",
+      "answer": "침대"
+    },
+    {
+      "hint": "수분가득",
+      "answer": "배"
+    },
+    {
+      "hint": "수분보충",
+      "answer": "오이"
+    },
+    {
+      "hint": "수생식물",
+      "answer": "연근"
+    },
+    {
+      "hint": "수중생활",
+      "answer": "수달"
+    },
+    {
+      "hint": "수컷 임신",
+      "answer": "해마"
+    },
+    {
+      "hint": "수확",
+      "answer": "밀"
+    },
+    {
+      "hint": "술",
+      "answer": "술주전자"
+    },
+    {
+      "hint": "술래",
+      "answer": "숨바꼭질"
+    },
+    {
+      "hint": "스포츠",
+      "answer": "축구"
+    },
+    {
+      "hint": "습기",
+      "answer": "이끼"
+    },
+    {
+      "hint": "습지",
+      "answer": "버드나무"
+    },
+    {
+      "hint": "습한곳",
+      "answer": "지네"
+    },
+    {
+      "hint": "시끄러움",
+      "answer": "귀뚜라미"
+    },
+    {
+      "hint": "시력 보호",
+      "answer": "블루베리"
+    },
+    {
+      "hint": "시베리아",
+      "answer": "허스키"
+    },
+    {
+      "hint": "매달림",
+      "answer": "나무늘보"
+    },
+    {
+      "hint": "가을",
+      "answer": "오동나무"
+    },
+    {
+      "hint": "여름 철새",
+      "answer": "꾀꼬리"
+    },
+    {
+      "hint": "영리함",
+      "answer": "푸들"
+    },
+    {
+      "hint": "시원한",
+      "answer": "수조"
+    },
+    {
+      "hint": "시원함",
+      "answer": "수박"
+    },
+    {
+      "hint": "시체먹는새",
+      "answer": "독수리"
+    },
+    {
+      "hint": "식물",
+      "answer": "분재"
+    },
+    {
+      "hint": "식이섬유",
+      "answer": "고구마"
+    },
+    {
+      "hint": "식칼",
+      "answer": "도마"
+    },
+    {
+      "hint": "신거",
+      "answer": "레몬"
+    },
+    {
+      "hint": "신맛",
+      "answer": "레몬"
+    },
+    {
+      "hint": "신선한향기",
+      "answer": "쑥갓"
+    },
+    {
+      "hint": "실내장식",
+      "answer": "꽃병"
+    },
+    {
+      "hint": "쌀 저장",
+      "answer": "쌀 항아리"
+    },
+    {
+      "hint": "썰매",
+      "answer": "순록"
+    },
+    {
+      "hint": "쑥",
+      "answer": "쑥갓"
+    },
+    {
+      "hint": "쓰레기통",
+      "answer": "파리"
+    },
+    {
+      "hint": "아침식사",
+      "answer": "오트밀"
+    },
+    {
+      "hint": "알",
+      "answer": "거북이"
+    },
+    {
+      "hint": "앞니",
+      "answer": "기니피그"
+    },
+    {
+      "hint": "야생동물",
+      "answer": "삵"
+    },
+    {
+      "hint": "야행성",
+      "answer": "여우"
+    },
+    {
+      "hint": "약용",
+      "answer": "감초"
+    },
+    {
+      "hint": "약재",
+      "answer": "곽향"
+    },
+    {
+      "hint": "약재",
+      "answer": "작약꽃"
+    },
+    {
+      "hint": "양 몰이",
+      "answer": "웰시코기"
+    },
+    {
+      "hint": "양념",
+      "answer": "고추"
+    },
+    {
+      "hint": "양서류",
+      "answer": "개구리"
+    },
+    {
+      "hint": "어업",
+      "answer": "가마우지"
+    },
+    {
+      "hint": "어업",
+      "answer": "생선 바구니"
+    },
+    {
+      "hint": "어획",
+      "answer": "낚시 그물"
+    },
+    {
+      "hint": "엉덩이",
+      "answer": "웰시코기"
+    },
+    {
+      "hint": "에메랄드 그린",
+      "answer": "물 시금치"
+    },
+    {
+      "hint": "여름",
+      "answer": "나팔꽃, 풍경"
+    },
+    {
+      "hint": "여름",
+      "answer": "무궁화"
+    },
+    {
+      "hint": "여름 과일",
+      "answer": "수박"
+    },
+    {
+      "hint": "여름 상큼함 차가움 과일",
+      "answer": "상추"
+    },
+    {
+      "hint": "여름밤",
+      "answer": "불꽃놀이"
+    },
+    {
+      "hint": "여름",
+      "answer": "백일초"
+    },
+    {
+      "hint": "여름철새",
+      "answer": "꾀꼬리"
+    },
+    {
+      "hint": "연꽃",
+      "answer": "연근"
+    },
+    {
+      "hint": "연회",
+      "answer": "술주전자"
+    },
+    {
+      "hint": "열대",
+      "answer": "파초"
+    },
+    {
+      "hint": "열대우림",
+      "answer": "오랑우탄"
+    },
+    {
+      "hint": "열렬한",
+      "answer": "잭프루프"
+    },
+    {
+      "hint": "영양 풍부",
+      "answer": "콜리플라"
+    },
+    {
+      "hint": "영양공급",
+      "answer": "구기자"
+    },
+    {
+      "hint": "영화",
+      "answer": "흰동가리"
+    },
+    {
+      "hint": "영화 캐릭터",
+      "answer": "흰동가리"
+    },
+    {
+      "hint": "영화의 제목",
+      "answer": "피라냐"
+    },
+    {
+      "hint": "온라인 모임",
+      "answer": "생선 바구니"
+    },
+    {
+      "hint": "올림픽",
+      "answer": "양궁"
+    },
+    {
+      "hint": "요리",
+      "answer": "도마"
+    },
+    {
+      "hint": "용맹함",
+      "answer": "진돗개"
+    },
+    {
+      "hint": "우산모양의",
+      "answer": "영지버섯"
+    },
+    {
+      "hint": "울타리",
+      "answer": "나팔꽃"
+    },
+    {
+      "hint": "월드컵",
+      "answer": "축구"
+    },
+    {
+      "hint": "유인원",
+      "answer": "오랑우탄"
+    },
+    {
+      "hint": "육상동물",
+      "answer": "치타"
+    },
+    {
+      "hint": "은하수",
+      "answer": "견우"
+    },
+    {
+      "hint": "의자",
+      "answer": "그네"
+    },
+    {
+      "hint": "이종 교배",
+      "answer": "노새"
+    },
+    {
+      "hint": "인내",
+      "answer": "용설란"
+    },
+    {
+      "hint": "일꾼 이미지",
+      "answer": "비버"
+    },
+    {
+      "hint": "일꾼, 여왕, 부지런함",
+      "answer": "개미"
+    },
+    {
+      "hint": "일본",
+      "answer": "벚꽃"
+    },
+    {
+      "hint": "일본 나라",
+      "answer": "꽃사슴"
+    },
+    {
+      "hint": "자르기",
+      "answer": "가위"
+    },
+    {
+      "hint": "작은 배추",
+      "answer": "청경채"
+    },
+    {
+      "hint": "잡초",
+      "answer": "자전초"
+    },
+    {
+      "hint": "장마철",
+      "answer": "수련"
+    },
+    {
+      "hint": "장식",
+      "answer": "중국 매듭"
+    },
+    {
+      "hint": "재생",
+      "answer": "불가사리"
+    },
+    {
+      "hint": "전분",
+      "answer": "감자"
+    },
+    {
+      "hint": "전통음식",
+      "answer": "송편"
+    },
+    {
+      "hint": "전투복",
+      "answer": "갑옷"
+    },
+    {
+      "hint": "점프",
+      "answer": "캥거루"
+    },
+    {
+      "hint": "정돈",
+      "answer": "빗"
+    },
+    {
+      "hint": "제주도",
+      "answer": "귤"
+    },
+    {
+      "hint": "젤리",
+      "answer": "고양이"
+    },
+    {
+      "hint": "조명",
+      "answer": "칸델라"
+    },
+    {
+      "hint": "조미료",
+      "answer": "간장"
+    },
+    {
+      "hint": "조미료",
+      "answer": "설탕"
+    },
+    {
+      "hint": "조화",
+      "answer": "음양"
+    },
+    {
+      "hint": "종이",
+      "answer": "가위"
+    },
+    {
+      "hint": "주름제거",
+      "answer": "다리미"
+    },
+    {
+      "hint": "주머니",
+      "answer": "캥거루"
+    },
+    {
+      "hint": "라마",
+      "answer": "알파카"
+    },
+    {
+      "hint": "주방",
+      "answer": "도마"
+    },
+    {
+      "hint": "주방용품",
+      "answer": "그릇"
+    },
+    {
+      "hint": "주황색",
+      "answer": "당근"
+    },
+    {
+      "hint": "주황색/붉은 어쩌구 꽃",
+      "answer": "능소화"
+    },
+    {
+      "hint": "줄기채소",
+      "answer": "마늘종"
+    },
+    {
+      "hint": "중국, 영국",
+      "answer": "차"
+    },
+    {
+      "hint": "중독",
+      "answer": "담배"
+    },
+    {
+      "hint": "지독한 냄새",
+      "answer": "두리안"
+    },
+    {
+      "hint": "지식",
+      "answer": "책"
+    },
+    {
+      "hint": "짐꾼",
+      "answer": "당나귀"
+    },
+    {
+      "hint": "짐꾼",
+      "answer": "노새"
+    },
+    {
+      "hint": "집사",
+      "answer": "고양이"
+    },
+    {
+      "hint": "차가운",
+      "answer": "수조"
+    },
+    {
+      "hint": "채소",
+      "answer": "렌즈콩"
+    },
+    {
+      "hint": "채소",
+      "answer": "청경채"
+    },
+    {
+      "hint": "채소 (자주빛 검은색)",
+      "answer": "가지"
+    },
+    {
+      "hint": "채소밭",
+      "answer": "샐러리"
+    },
+    {
+      "hint": "천하장사",
+      "answer": "씨름"
+    },
+    {
+      "hint": "청량함",
+      "answer": "박하"
+    },
+    {
+      "hint": "청수",
+      "answer": "수조"
+    },
+    {
+      "hint": "청혼",
+      "answer": "장미"
+    },
+    {
+      "hint": "초밥",
+      "answer": "연어"
+    },
+    {
+      "hint": "초식동물",
+      "answer": "얼룩말"
+    },
+    {
+      "hint": "초원",
+      "answer": "말"
+    },
+    {
+      "hint": "추석",
+      "answer": "송편"
+    },
+    {
+      "hint": "추수감사절,터키",
+      "answer": "칠면조"
+    },
+    {
+      "hint": "추어탕",
+      "answer": "미꾸라지"
+    },
+    {
+      "hint": "축제",
+      "answer": "벚꽃"
+    },
+    {
+      "hint": "축제",
+      "answer": "불꽃놀이"
+    },
+    {
+      "hint": "취미",
+      "answer": "낚시"
+    },
+    {
+      "hint": "취미, 미끼",
+      "answer": "낚시"
+    },
+    {
+      "hint": "치즈",
+      "answer": "쥐"
+    },
+    {
+      "hint": "침 뱉기",
+      "answer": "알파카"
+    },
+    {
+      "hint": "침엽수",
+      "answer": "측백나무"
+    },
+    {
+      "hint": "커다란 고양이",
+      "answer": "표범"
+    },
+    {
+      "hint": "커다란 나무",
+      "answer": "버드나무"
+    },
+    {
+      "hint": "코",
+      "answer": "코끼리"
+    },
+    {
+      "hint": "콩과",
+      "answer": "잠두"
+    },
+    {
+      "hint": "큰 귀",
+      "answer": "비글"
+    },
+    {
+      "hint": "큰 입",
+      "answer": "하마"
+    },
+    {
+      "hint": "큰 입자",
+      "answer": "콩"
+    },
+    {
+      "hint": "클레오 파트라",
+      "answer": "무화과"
+    },
+    {
+      "hint": "탁란",
+      "answer": "뻐꾸기"
+    },
+    {
+      "hint": "탈",
+      "answer": "가면"
+    },
+    {
+      "hint": "탐욕의 상징",
+      "answer": "하이에나"
+    },
+    {
+      "hint": "태양",
+      "answer": "해바라기"
+    },
+    {
+      "hint": "터키",
+      "answer": "칠면조"
+    },
+    {
+      "hint": "털 깍기",
+      "answer": "양"
+    },
+    {
+      "hint": "토끼",
+      "answer": "당근"
+    },
+    {
+      "hint": "토양",
+      "answer": "지렁이"
+    },
+    {
+      "hint": "토종",
+      "answer": "진돗개"
+    },
+    {
+      "hint": "퇴화한 눈",
+      "answer": "두더지"
+    },
+    {
+      "hint": "파충류",
+      "answer": "카멜레온"
+    },
+    {
+      "hint": "판다",
+      "answer": "죽순"
+    },
+    {
+      "hint": "팝콘",
+      "answer": "옥수수"
+    },
+    {
+      "hint": "패션",
+      "answer": "목걸이"
+    },
+    {
+      "hint": "편지 배달",
+      "answer": "비둘기"
+    },
+    {
+      "hint": "편지",
+      "answer": "우체국"
+    },
+    {
+      "hint": "푸른 꽃",
+      "answer": "로즈마리"
+    },
+    {
+      "hint": "푸른 등",
+      "answer": "고등어"
+    },
+    {
+      "hint": "푸른 잎",
+      "answer": "고수"
+    },
+    {
+      "hint": "푸른 잎",
+      "answer": "박하"
+    },
+    {
+      "hint": "푸른 잎",
+      "answer": "박하, 고수"
+    },
+    {
+      "hint": "푸른 활엽수",
+      "answer": "녹나무"
+    },
+    {
+      "hint": "피넛버터",
+      "answer": "땅콩"
+    },
+    {
+      "hint": "필드",
+      "answer": "쑥갓"
+    },
+    {
+      "hint": "핑크색 꽃잎",
+      "answer": "베고니아"
+    },
+    {
+      "hint": "하얀 꽃",
+      "answer": "살구"
+    },
+    {
+      "hint": "한국",
+      "answer": "무궁화"
+    },
+    {
+      "hint": "항산화",
+      "answer": "블루베리"
+    },
+    {
+      "hint": "해달",
+      "answer": "수달"
+    },
+    {
+      "hint": "해안",
+      "answer": "가마우지"
+    },
+    {
+      "hint": "해열, 해독",
+      "answer": "차전초"
+    },
+    {
+      "hint": "행운",
+      "answer": "행운목"
+    },
+    {
+      "hint": "향기",
+      "answer": "측백나무"
+    },
+    {
+      "hint": "헌 집",
+      "answer": "두꺼비"
+    },
+    {
+      "hint": "현물 상환 지급",
+      "answer": "렌즈콩"
+    },
+    {
+      "hint": "현물 상환 지불",
+      "answer": "렌즈콩"
+    },
+    {
+      "hint": "호불호",
+      "answer": "고수"
+    },
+    {
+      "hint": "호수공원, 가금류",
+      "answer": "오리"
+    },
+    {
+      "hint": "호수공원",
+      "answer": "오리"
+    },
+    {
+      "hint": "혼례",
+      "answer": "가마"
+    },
+    {
+      "hint": "화려한깃털",
+      "answer": "앵무새"
+    },
+    {
+      "hint": "화려함",
+      "answer": "불꽃놀이"
+    },
+    {
+      "hint": "활발함",
+      "answer": "비글"
+    },
+    {
+      "hint": "회",
+      "answer": "광어"
+    },
+    {
+      "hint": "휘아킨토스",
+      "answer": "히아신스"
+    },
+    {
+      "hint": "흔들흔들",
+      "answer": "그네"
+    },
+    {
+      "hint": "흙을 풀어주다",
+      "answer": "갈퀴"
+    },
+    {
+      "hint": "과일의 왕",
+      "answer": "두리안"
+    },
+    {
+      "hint": "흰 꽃 모양, 영양 풍부",
+      "answer": "콜리플라워"
+    },
+    {
+      "hint": "흰 꽃 모양",
+      "answer": "콜리플라워"
+    },
+    {
+      "hint": "흰색 꽃",
+      "answer": "카라꽃"
+    },
+    {
+      "hint": "흰색 솜털",
+      "answer": "포플러"
+    },
+    {
+      "hint": "힘",
+      "answer": "씨름"
+    }
   ]
 }

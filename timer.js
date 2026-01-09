@@ -58,9 +58,7 @@ const TIMERS = [
             { day: 6, hour: 21, min: 30, duration: 30 },
             { day: 0, hour: 9, min: 30, duration: 30 }
         ]
-    },
-
-    { id: 'event_winter', type: 'event', name: '겨울의 선율', desc: '한정 미니 패스', startTime: '2024-12-25T00:00:00', endTime: '2026-01-09T06:00:00', badgeClass: 'status-event' }
+    }
 ];
 
 const STORAGE_KEY = 'wwm_checklist_v3';

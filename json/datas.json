@@ -2,6 +2,9 @@
   "items": [],
   "quests": [],
   "quiz": [
+    { "hint": "습한 곳", "answer": "지네", "user": "노보배" },
+{ "hint": "횟감생선", "answer": "광어", "user": "헨리" },
+{ "hint": "상록수", "answer": "만년청", "user": "ㅇㅇ" },
     {
       "hint": "남극",
       "answer": "펭귄",

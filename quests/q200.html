@@ -1,11 +1,14 @@
-<div class="quest-detail-container max-w-4xl mx-auto space-y-10 p-4 lg:p-0 text-left" id="q191-container">
+<div class="quest-detail-container max-w-4xl mx-auto space-y-10 p-4 lg:p-0 text-left" id="policy-update-container">
     
     <div class="border-b border-gray-200 pb-5 mb-6">
         <div class="flex items-center gap-2 mb-2 text-left">
-            <span class="bg-blue-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded uppercase">업데이트</span>
-            <span class="text-gray-400 text-xs font-medium">사이트 정책 변경 안내</span>
+            <span class="bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded uppercase">Notice</span>
+            <span class="text-gray-400 text-xs font-medium">사이트 운영 정책</span>
         </div>
-        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 mb-4 leading-tight">오픈 API 전환 안내</h2>
+        <h2 class="text-2xl lg:text-3xl font-black text-gray-900 mb-4 leading-tight">
+            업데이트 사이트 정책 변경<br>
+            <span class="text-blue-600 text-lg lg:text-xl font-bold">(오픈 API 전환 및 운영 방향 안내)</span>
+        </h2>
         
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-2">
@@ -27,17 +30,67 @@
         
         <div class="space-y-4">
             <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5">
-                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>상자 파밍 경로
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>운영 방향 변경 안내
+            </h3>
+            <div class="text-[15px] text-gray-600 leading-relaxed pl-3.5 space-y-4">
+                <p>
+                    최근 연운 업데이트로 편의성이 상당히 증가해 탐색, 만사록 등 부가적인 정보의 이용률이 많이 떨어진 상태입니다. 이에 해당 내용을 지속적으로 업데이트 하는 것은 불필요하다고 판단해 <strong>1.2 버전 이후로는 기존 목적과 같이 스무고개, 할일 등 도구의 역할만 진행할 예정</strong>이며 만사록 등의 업데이트는 다른 커뮤니티에 없는 경우만 직접 업데이트 할 예정입니다.
+                </p>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>지도 정보 안내
+            </h3>
+            <div class="text-[15px] text-gray-600 leading-relaxed pl-3.5 space-y-4">
+                <p>
+                    지도 정보의 경우는 <strong>한국 맵스</strong>가 지속적으로 업데이트 되고 있으니 이용에 참고 부탁 드립니다.
+                </p>
+                <div class="pt-2">
+                    <a href="https://wwmmap.kr" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-blue-600 font-bold hover:bg-blue-50 transition-all shadow-sm">
+                        <span>🌐 wwmmap.kr 바로가기</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>Open API (JSON) 제공 안내
             </h3>
             <p class="text-[15px] text-gray-600 leading-relaxed pl-3.5">
-                해당 지역의 모든 상자 위치를 포함한 영상 가이드입니다. 순서대로 진행하시면 100% 달성이 가능합니다.
+                여러 유저분께서 제안 주신 것과 같이 디스코드 봇 등으로 사용하실 수 있도록 아래와 같이 json파일을 제공하오니 <strong>출처만 남긴다면 어떤 웹사이트에서도 활용 하실 수 있습니다.</strong>
             </p>
             
+            <div class="w-full p-6 rounded-xl border border-gray-100 shadow-inner bg-gray-900 group relative">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-mono text-blue-400">스무고개 DB</span>
+                    <button class="text-xs text-gray-400 hover:text-white transition-colors" onclick="navigator.clipboard.writeText('https://wwm.tips/json/datas.json')">복사하기</button>
+                </div>
+                <code class="text-blue-100 break-all font-mono text-sm lg:text-base">
+                    https://wwm.tips/json/datas.json
+                </code>
+            </div>
         </div>
+
+        <div class="space-y-4 pb-10">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2.5">
+                <span class="w-1.5 h-5 bg-blue-600 rounded-full"></span>데이터 업데이트 정보
+            </h3>
+            <div class="pl-3.5 border-l-2 border-blue-50 ml-1">
+                <p class="text-[15px] text-gray-600 leading-relaxed">
+                    스무고개의 경우 매일 <span class="text-blue-600 font-bold">오전 10시</span>에 신규 제보를 확인하고 업데이트 중 입니다. 현재 여행 중인데 차주에 복귀 예정으로 추가적인 데이터들은 차주 이후 Open API로 전환할 수 있도록 하겠습니다.
+                </p>
+                <p>홈 화면의 경우 차주 이후에 추가적으로 개편하여 스무고개와 할 일 등 툴의 정보가 메인으로 표시되도록 업데이트 할 계획입니다.</p>
+            </div>
+        </div>
+
+    </div>
 
     <div class="flex justify-center pt-10 pb-16 border-t border-dashed border-gray-200">
         <button onclick="showQuestList()" 
-                class="px-10 py-3.5 bg-white border border-gray-200 text-gray-600 rounded-xl text-sm font-bold shadow-sm active:scale-95 transition-all">
+                class="px-10 py-3.5 bg-white border border-gray-200 text-gray-600 rounded-xl text-sm font-bold shadow-sm active:scale-95 transition-all hover:bg-gray-50">
             목록으로 돌아가기
         </button>
     </div>

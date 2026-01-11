@@ -1,4 +1,13 @@
-[  
+[ 
+    {
+    "id": "q200",
+    "name": "사이트 정책 변경 안내",
+    "location": "개봉부",
+    "type": "기타",
+    "bgimg": "q185_9.jpg",
+    "iconpath": "images/masa.jpg",
+    "filepath": "/quests/q200.html"
+  }, 
   {
     "id": "q199",
     "name": "개봉부 탐색",

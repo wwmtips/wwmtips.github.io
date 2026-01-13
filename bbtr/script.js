@@ -24,8 +24,8 @@ async function init() {
         if (!siteData.i18n.ko.nav_heroes) siteData.i18n.ko.nav_heroes = "영웅들";
 
         // ★ [추가] 빌더 가이드 문구 번역 등록
-        siteData.i18n.en.builder_guide = "Drag & Drop to move items";
-        siteData.i18n.ko.builder_guide = "아이템을 드래그하여 배치하거나 이동하세요";
+        siteData.i18n.en.builder_guide = "Drag & Drop to move items. Tap an item in the list to rotate it.";
+        siteData.i18n.ko.builder_guide = "아이템을 드래그하여 배치하거나 이동하세요. 리스트에서 탭을 하면 아이템이 회전합니다.";
 
         updateLangButtons();
         setupFilters();
@@ -624,9 +624,8 @@ function openItemDetail(itemId) {
     void sheet.offsetWidth; // Force Reflow
     sheet.classList.add('show');
 }
-
 // =========================================
-// [Builder Logic] 빌더 (모바일 회전 지원 최종판)
+// [Builder Logic] 빌더 (안정성 강화 + 3 빈칸 무시 + 회전 기능)
 // =========================================
 
 const GRID_COLS = 9;
@@ -634,22 +633,30 @@ const GRID_ROWS = 6;
 const CELL_SIZE = 40; 
 let gridState = []; 
 let placedItems = []; 
-let draggedItemInfo = null; 
-// ★ [신규] 리스트 아이템의 회전 상태 저장 { itemId: 각도(0,90,180,270) }
-let listRotations = {}; 
+let draggedItemInfo = null;
+let lastDragOverCell = null;
+let listRotations = {}; // 리스트 아이템 회전 상태
+let isRotationKeySetup = false; // 키보드 이벤트 중복 방지
 
 /**
  * 빌더 초기화
  */
 function initBuilder() {
     const gridEl = document.getElementById('builder-grid');
+    const layerEl = document.getElementById('builder-layer');
+    
+    // DB 데이터나 그리드 요소가 없으면 중단 (에러 방지)
+    if (!gridEl || !layerEl || !dbData) {
+        console.warn("Builder init failed: Elements or DB missing");
+        return;
+    }
+
     gridEl.innerHTML = '';
+    layerEl.innerHTML = '';
     
     gridState = Array.from({ length: GRID_ROWS }, () => Array(GRID_COLS).fill(null));
     placedItems = [];
-    listRotations = {}; // 회전 상태 초기화
-
-    document.getElementById('builder-layer').innerHTML = '';
+    listRotations = {}; 
 
     gridEl.style.display = 'grid';
     gridEl.style.gridTemplateColumns = `repeat(${GRID_COLS}, ${CELL_SIZE}px)`;
@@ -666,38 +673,138 @@ function initBuilder() {
             
             cell.ondragover = (e) => handleDragOver(e, r, c);
             cell.ondrop = (e) => handleDrop(e, r, c);
-            cell.ondragleave = () => clearHighlights(); 
+            cell.ondragleave = () => handleDragLeave(); 
 
             gridEl.appendChild(cell);
         }
     }
     
     setupBuilderFilters();
-    filterBuilderItems();
+    filterBuilderItems(); // 리스트 렌더링 시작
+    setupRotationHotkey(); // 단축키 등록
 }
 
 /**
- * ★ [신규] 리스트 아이템 회전 처리
+ * 드래그 중 'R'키 회전 (중복 등록 방지)
  */
-function rotateListItem(itemId, btnElement) {
-    // 현재 각도 가져오기 (없으면 0)
-    let currentRot = listRotations[itemId] || 0;
+function setupRotationHotkey() {
+    if (isRotationKeySetup) return;
     
-    // 90도 증가
-    currentRot = (currentRot + 90) % 360;
-    listRotations[itemId] = currentRot;
+    document.addEventListener('keydown', (e) => {
+        if ((e.key === 'r' || e.key === 'R') && draggedItemInfo) {
+            rotateDraggedItem();
+        }
+    });
+    isRotationKeySetup = true;
+}
 
-    // DOM 업데이트 (이미지 회전)
-    // 버튼의 부모(카드)에서 이미지를 찾아 회전시킴
-    const cardEl = btnElement.closest('.group');
-    const imgEl = cardEl.querySelector('.item-main-img');
-    if (imgEl) {
-        imgEl.style.transform = `rotate(${currentRot}deg)`;
+/**
+ * 드래그 아이템 회전 처리
+ */
+function rotateDraggedItem() {
+    if (!draggedItemInfo) return;
+    
+    // Shape 회전
+    draggedItemInfo.shape = rotateMatrixCW(draggedItemInfo.shape);
+    draggedItemInfo.rotation = (draggedItemInfo.rotation + 90) % 360;
+    
+    // 중심점 재계산
+    draggedItemInfo.offset = getShapeCenterOffset(draggedItemInfo.shape);
+
+    // 현재 마우스 위치에서 하이라이트 즉시 갱신
+    if (lastDragOverCell) {
+        const { r, c } = lastDragOverCell;
+        const startR = r - draggedItemInfo.offset.rOff;
+        const startC = c - draggedItemInfo.offset.cOff;
+        
+        const isValid = canPlaceItem(startR, startC, draggedItemInfo.shape, draggedItemInfo.uniqueId);
+        highlightCells(startR, startC, draggedItemInfo.shape, isValid);
     }
 }
 
 /**
- * 빌더 아이템 리스트 렌더링
+ * 리스트 아이템 회전 토글
+ */
+function toggleListRotation(itemId, imgElement) {
+    let currentRot = listRotations[itemId] || 0;
+    currentRot = (currentRot + 90) % 360;
+    listRotations[itemId] = currentRot;
+    
+    if (imgElement) {
+        imgElement.style.transform = `rotate(${currentRot}deg)`;
+    }
+}
+
+/**
+ * 빌더 필터 설정 (안전한 접근)
+ */
+function setupBuilderFilters() {
+    const heroSelect = document.getElementById('builder-filter-hero');
+    const raritySelect = document.getElementById('builder-filter-rarity');
+    const typeSelect = document.getElementById('builder-filter-type');
+    const craftedSelect = document.getElementById('builder-filter-crafted');
+
+    if (!heroSelect || !dbData || !heroData) return;
+
+    heroSelect.innerHTML = `<option value="">${currentLang === 'ko' ? '영웅' : 'Hero'}</option>` +
+        heroData.heroes.map(h => `<option value="${h.id}">${h.name[currentLang]}</option>`).join('');
+
+    const rarities = { en: ["Rank", "Common", "Rare", "Epic", "Legendary", "Mythic", "Unique", "Relic"], ko: ["등급", "일반", "희귀", "에픽", "전설", "신화", "고유", "유물"] };
+    raritySelect.innerHTML = rarities[currentLang].map((r, i) => `<option value="${i === 0 ? '' : rarities.en[i]}">${r}</option>`).join('');
+
+    const typeMap = new Map();
+    dbData.items.forEach(item => {
+        if (!item.type) return;
+        const enTypes = item.type.en.split(',').map(t => t.trim());
+        const langTypes = item.type[currentLang].split(',').map(t => t.trim());
+        enTypes.forEach((enT, index) => {
+            if (!typeMap.has(enT)) {
+                typeMap.set(enT, langTypes[index] || enT);
+            }
+        });
+    });
+    const sortedTypes = Array.from(typeMap.keys()).sort();
+    let typeOptions = `<option value="">${currentLang === 'ko' ? '종류' : 'Type'}</option>`;
+    sortedTypes.forEach(enKey => { typeOptions += `<option value="${enKey}">${typeMap.get(enKey)}</option>`; });
+    typeSelect.innerHTML = typeOptions;
+
+    const crafted = { en: ["Craft", "Yes", "No"], ko: ["조합", "예", "아니오"] };
+    craftedSelect.innerHTML = crafted[currentLang].map((c, i) => `<option value="${i === 0 ? '' : (i === 1 ? 'true' : 'false')}">${c}</option>`).join('');
+}
+
+/**
+ * 필터링 (옵셔널 체이닝으로 안전하게 값 가져오기)
+ */
+function filterBuilderItems() {
+    // 요소가 없을 경우 빈 문자열 처리하여 에러 방지
+    const searchTerm = document.getElementById('builder-search')?.value.toLowerCase() || '';
+    const heroFilter = document.getElementById('builder-filter-hero')?.value || '';
+    const rarityFilter = document.getElementById('builder-filter-rarity')?.value || '';
+    const typeFilter = document.getElementById('builder-filter-type')?.value || '';
+    const craftedFilter = document.getElementById('builder-filter-crafted')?.value || '';
+
+    if (!dbData) return;
+
+    const filtered = dbData.items.filter(item => {
+        const matchesSearch = item.name[currentLang].toLowerCase().includes(searchTerm) ||
+            item.name.en.toLowerCase().includes(searchTerm);
+        const matchesHero = !heroFilter || item.hero === heroFilter;
+        const matchesRarity = !rarityFilter || item.rarity === rarityFilter;
+        let matchesType = true;
+        if (typeFilter) {
+            const itemTypes = item.type.en.split(',').map(t => t.trim());
+            matchesType = itemTypes.includes(typeFilter);
+        }
+        const matchesCrafted = !craftedFilter || String(item.isCrafted) === craftedFilter;
+        
+        return matchesSearch && matchesHero && matchesRarity && matchesType && matchesCrafted;
+    });
+
+    renderBuilderItems(filtered);
+}
+
+/**
+ * 리스트 렌더링
  */
 function renderBuilderItems(items) {
     const listEl = document.getElementById('builder-item-list');
@@ -706,87 +813,74 @@ function renderBuilderItems(items) {
 
     items.forEach(item => {
         const el = document.createElement('div');
-        el.className = 'relative bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col items-center justify-center transition-all active:scale-95 cursor-grab group h-36';
+        el.className = 'relative bg-white rounded-2xl p-3 shadow-sm border border-gray-100 flex flex-col items-center justify-center transition-all active:scale-95 cursor-grab group h-36 select-none';
         el.draggable = true;
         
         const imgFileName = item.name.en.replace(/ /g, '_');
         const rarityText = item.rarity.charAt(0).toUpperCase() + item.rarity.slice(1);
-        
-        // 현재 저장된 회전값 가져오기
         const rotation = listRotations[item.id] || 0;
 
         el.innerHTML = `
             <div class="absolute top-2 left-2 w-6 h-6 rounded-full overflow-hidden border border-gray-100 bg-gray-50 pointer-events-none">
                 <img src="heroes/${item.hero}.png" class="w-full h-full object-cover" onerror="this.src='logo.png';">
             </div>
-
             <button class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center text-gray-300 hover:text-blue-500 transition-colors z-30 pointer-events-auto"
                     onclick="event.stopPropagation(); openItemDetail('${item.id}')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="12" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="12" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
             </button>
-
-            <button class="absolute bottom-2 left-2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-600 bg-gray-50 hover:bg-blue-50 rounded-full border border-gray-200 transition-colors z-30 pointer-events-auto shadow-sm"
-                    onclick="event.stopPropagation(); rotateListItem('${item.id}', this)" title="Rotate before dragging">
-                <i class="fas fa-redo text-[10px]"></i>
-            </button>
-
-            <div class="w-16 h-16 flex items-center justify-center pointer-events-none mt-2">
+            <div class="w-16 h-16 flex items-center justify-center mt-2 pointer-events-none">
                 <img src="items/${imgFileName}.webp" 
                      class="item-main-img max-w-full max-h-full object-contain filter drop-shadow-sm transition-transform duration-200" 
                      style="transform: rotate(${rotation}deg)"
                      onerror="this.src='logo.png'">
             </div>
-
             <div class="mt-2 text-center pointer-events-none w-full">
                 <div class="text-[10px] font-bold text-gray-700 leading-tight truncate px-1 mx-auto w-24">${item.name[currentLang]}</div>
-                <div class="text-[9px] text-gray-400 mt-0.5 font-medium">${rarityText} <span class="mx-0.5 text-gray-200">|</span> 💰 ${item.cost}</div>
+                <div class="text-[9px] text-gray-400 mt-0.5 font-medium">${rarityText} <span class="mx-0.5 text-gray-200"></div>
             </div>
         `;
         
-        // ★ [핵심] 드래그 시작 시 회전된 상태 계산
-        el.ondragstart = (e) => {
-            // 1. 현재 회전 각도 확인
-            const currentRot = listRotations[item.id] || 0;
-            
-            // 2. Shape 회전시키기
-            let rotatedShape = item.layout.shape;
-            const rotateCount = (currentRot / 90) % 4;
-            
-            for(let i=0; i<rotateCount; i++) {
-                rotatedShape = rotateMatrixCW(rotatedShape);
+        // 더블클릭/더블탭 회전 (PC/Mobile)
+        el.onclick = () => toggleListRotation(item.id, el.querySelector('.item-main-img'));
+        let lastTap = 0;
+        el.ontouchend = (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                e.preventDefault();
+                toggleListRotation(item.id, el.querySelector('.item-main-img'));
             }
+            lastTap = currentTime;
+        };
 
-            // 3. 회전된 Shape 기준으로 중심점(offset) 재계산
+        el.ondragstart = (e) => {
+            const currentRot = listRotations[item.id] || 0;
+            let rotatedShape = item.layout.shape;
+            
+            // 리스트 상태에 맞춰 Shape 회전
+            const rotateCount = (currentRot / 90) % 4;
+            for(let i=0; i<rotateCount; i++) rotatedShape = rotateMatrixCW(rotatedShape);
+
             const offset = getShapeCenterOffset(rotatedShape);
-
+            
             draggedItemInfo = { 
                 source: 'list', 
                 itemId: item.id, 
-                offset: offset,
-                shape: rotatedShape, // 회전된 shape 전달
-                rotation: currentRot // 회전 각도 전달
+                offset: offset, 
+                shape: rotatedShape, 
+                rotation: currentRot 
             };
             
             e.dataTransfer.effectAllowed = 'copy';
             clearHighlights();
 
-            // 드래그 이미지 설정 (현재 회전된 상태 그대로)
-            const img = el.querySelector('.item-main-img'); 
-            if (img) {
-                e.dataTransfer.setDragImage(img, img.offsetWidth / 2, img.offsetHeight / 2);
-            }
+            const img = el.querySelector('.item-main-img');
+            if (img) e.dataTransfer.setDragImage(img, img.offsetWidth / 2, img.offsetHeight / 2);
         };
 
-        el.ondragend = () => {
-            draggedItemInfo = null;
-            clearHighlights();
-        };
-
+        el.ondragend = () => { draggedItemInfo = null; clearHighlights(); };
         listEl.appendChild(el);
     });
 }
@@ -796,97 +890,62 @@ function renderBuilderItems(items) {
  */
 function handleDragOver(e, r, c) {
     e.preventDefault();
+    lastDragOverCell = { r, c };
     if (!draggedItemInfo) return;
 
-    // 드래그 정보에 이미 회전된 shape가 들어있음
-    const shape = draggedItemInfo.shape;
-    const ignoreId = draggedItemInfo.source === 'grid' ? draggedItemInfo.uniqueId : null;
-    
     const startR = r - draggedItemInfo.offset.rOff;
     const startC = c - draggedItemInfo.offset.cOff;
+    const isValid = canPlaceItem(startR, startC, draggedItemInfo.shape, 
+                                 draggedItemInfo.source === 'grid' ? draggedItemInfo.uniqueId : null);
+    
+    highlightCells(startR, startC, draggedItemInfo.shape, isValid);
+}
 
-    const isValid = canPlaceItem(startR, startC, shape, ignoreId);
-    highlightCells(startR, startC, shape, isValid);
+function handleDragLeave() {
+    lastDragOverCell = null;
+    clearHighlights();
 }
 
 /**
- * 드롭 처리
+ * 드롭
  */
 function handleDrop(e, r, c) {
     e.preventDefault();
     clearHighlights();
+    lastDragOverCell = null;
     if (!draggedItemInfo) return;
 
     const item = dbData.items.find(i => i.id === draggedItemInfo.itemId);
-    const shape = draggedItemInfo.shape; 
-    const rotation = draggedItemInfo.rotation; 
-    const ignoreId = draggedItemInfo.source === 'grid' ? draggedItemInfo.uniqueId : null;
-
     const startR = r - draggedItemInfo.offset.rOff;
     const startC = c - draggedItemInfo.offset.cOff;
 
-    if (canPlaceItem(startR, startC, shape, ignoreId)) {
-        if (draggedItemInfo.source === 'grid') {
-            removeItem(draggedItemInfo.uniqueId);
-        }
-        placeItemOnGrid(item, startR, startC, shape, rotation);
+    if (canPlaceItem(startR, startC, draggedItemInfo.shape, draggedItemInfo.source === 'grid' ? draggedItemInfo.uniqueId : null)) {
+        if (draggedItemInfo.source === 'grid') removeItem(draggedItemInfo.uniqueId);
+        placeItemOnGrid(item, startR, startC, draggedItemInfo.shape, draggedItemInfo.rotation);
     }
     draggedItemInfo = null;
 }
 
-// ... (이하 rotateMatrixCW, canPlaceItem, placeItemOnGrid, removeItem 등 기존 로직 동일) ...
-
-// [기존 유틸리티 함수들 유지]
-function rotateMatrixCW(matrix) {
-    const rows = matrix.length;
-    const cols = matrix[0].length;
-    const newMatrix = Array.from({ length: cols }, () => Array(rows).fill(0));
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            newMatrix[c][rows - 1 - r] = matrix[r][c];
-        }
-    }
-    return newMatrix;
-}
-
-function rotateMatrixCCW(matrix) {
-    const rows = matrix.length;
-    const cols = matrix[0].length;
-    const newMatrix = Array.from({ length: cols }, () => Array(rows).fill(0));
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            newMatrix[cols - 1 - c][r] = matrix[r][c];
-        }
-    }
-    return newMatrix;
-}
-
-function getShapeCenterOffset(shape) {
-    const rows = shape.length;
-    const cols = shape[0].length;
-    let minR = rows, maxR = -1, minC = cols, maxC = -1, hasOne = false;
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-            if (shape[i][j] == 1) { 
-                hasOne = true;
-                minR = Math.min(minR, i); maxR = Math.max(maxR, i);
-                minC = Math.min(minC, j); maxC = Math.max(maxC, j);
-            }
-        }
-    }
-    if (!hasOne) return { rOff: 0, cOff: 0 };
-    return { rOff: Math.round((minR + maxR) / 2), cOff: Math.round((minC + maxC) / 2) };
-}
-
+/**
+ * 충돌 검사 (★ '3'은 무시)
+ */
 function canPlaceItem(r, c, shape, ignoreId = null) {
     const rows = shape.length;
     const cols = shape[0].length;
+
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            if (shape[i][j] == 1) { 
-                const targetR = r + i;
-                const targetC = c + j;
-                if (targetR < 0 || targetR >= GRID_ROWS || targetC < 0 || targetC >= GRID_COLS) return false;
+            const cellType = shape[i][j];
+            if (cellType === 3) continue; // 3은 무시
+
+            const targetR = r + i;
+            const targetC = c + j;
+
+            // 격자 범위 검사 (1과 0만)
+            if (targetR < 0 || targetR >= GRID_ROWS || targetC < 0 || targetC >= GRID_COLS) return false;
+
+            // 충돌 검사 (1만)
+            if (cellType === 1) {
                 const occupant = gridState[targetR][targetC];
                 if (occupant !== null && occupant !== ignoreId) return false;
             }
@@ -895,6 +954,9 @@ function canPlaceItem(r, c, shape, ignoreId = null) {
     return true;
 }
 
+/**
+ * 하이라이트 ('3'은 무시)
+ */
 function highlightCells(startR, startC, shape, isValid) {
     clearHighlights(); 
     const rows = shape.length;
@@ -905,47 +967,78 @@ function highlightCells(startR, startC, shape, isValid) {
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             const cellType = shape[i][j];
-            if (cellType !== 3) { 
-                const r = startR + i;
-                const c = startC + j;
-                const cell = document.getElementById(`cell-${r}-${c}`);
-                if (cell) {
-                    if (cellType == 1) {
-                        cell.classList.add('ring-2', bodyRingClass, 'z-10');
-                        cell.style.backgroundColor = isValid ? 'rgba(74, 222, 128, 0.6)' : 'rgba(248, 113, 113, 0.6)';
-                    } else if (cellType == 0) {
-                        cell.classList.add('ring-2', buffRingClass, 'z-0');
-                        cell.style.backgroundColor = 'rgba(253, 224, 71, 0.4)';
-                    }
+            if (cellType === 3) continue;
+
+            const r = startR + i;
+            const c = startC + j;
+            const cell = document.getElementById(`cell-${r}-${c}`);
+            
+            if (cell) {
+                if (cellType == 1) {
+                    cell.classList.add('ring-2', bodyRingClass, 'z-10');
+                    cell.style.backgroundColor = isValid ? 'rgba(74, 222, 128, 0.6)' : 'rgba(248, 113, 113, 0.6)';
+                } else if (cellType == 0) {
+                    cell.classList.add('ring-2', buffRingClass, 'z-0');
+                    cell.style.backgroundColor = 'rgba(253, 224, 71, 0.4)';
                 }
             }
         }
     }
 }
 
-function clearHighlights() {
-    document.querySelectorAll('[id^="cell-"]').forEach(cell => {
-        cell.classList.remove('ring-2', 'ring-green-400', 'ring-red-400', 'ring-yellow-300', 'z-10', 'z-0');
-        cell.style.backgroundColor = '';
-    });
+/**
+ * 아이템 배치 (휠/더블탭 회전 포함)
+ */
+// =========================================
+// [Fix] 이미지 회전 시 축소 문제 해결을 위한 스타일 생성 함수
+// =========================================
+function getImageStyle(w, h, rotation) {
+    const deg = rotation % 360;
+    const isSideways = Math.abs(deg) === 90 || Math.abs(deg) === 270;
+
+    // 90도나 270도 회전 시:
+    // 이미지가 담길 '그릇'은 가로가 길지만, 이미지 자체는 세로로 길게 잡아야
+    // 회전했을 때 딱 맞게 들어갑니다. 따라서 w와 h를 바꿔서 적용합니다.
+    if (isSideways) {
+        return `
+            width: ${h}px; 
+            height: ${w}px; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%) rotate(${deg}deg);
+        `;
+    } else {
+        // 0도나 180도 (정방향): 그냥 꽉 채우면 됩니다.
+        return `
+            width: ${w}px; 
+            height: ${h}px; 
+            transform: rotate(${deg}deg);
+        `;
+    }
 }
 
+/**
+ * 아이템 배치 (CSS 수정됨)
+ */
 function placeItemOnGrid(item, r, c, shape = null, rotation = 0) {
     const currentShape = shape || item.layout.shape;
-    const rows = currentShape.length;
-    const cols = currentShape[0].length;
     const uniqueId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
 
+    // 격자 점유 (3 제외)
+    const rows = currentShape.length;
+    const cols = currentShape[0].length;
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             if (currentShape[i][j] == 1) gridState[r + i][c + j] = uniqueId;
         }
     }
 
+    // Bounding Box 계산
     let minR = rows, maxR = -1, minC = cols, maxC = -1, hasOne = false;
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            if (currentShape[i][j] == 1) { 
+            if (currentShape[i][j] !== 3) { 
                 hasOne = true;
                 minR = Math.min(minR, i); maxR = Math.max(maxR, i);
                 minC = Math.min(minC, j); maxC = Math.max(maxC, j);
@@ -953,26 +1046,38 @@ function placeItemOnGrid(item, r, c, shape = null, rotation = 0) {
         }
     }
     if (!hasOne) { minR = 0; maxR = rows - 1; minC = 0; maxC = cols - 1; }
+    
     const realRows = maxR - minR + 1;
     const realCols = maxC - minC + 1;
+
+    // 컨테이너의 실제 픽셀 크기
+    const containerW = realCols * (CELL_SIZE + 1) - 1;
+    const containerH = realRows * (CELL_SIZE + 1) - 1;
 
     const layer = document.getElementById('builder-layer');
     const imgFileName = item.name.en.replace(/ /g, '_');
     
+    // ★ [수정] 이미지 스타일 계산 (회전 시 w, h 스왑 적용)
+    const imgStyle = getImageStyle(containerW, containerH, rotation);
+
     const el = document.createElement('div');
     el.className = 'absolute cursor-grab active:cursor-grabbing group hover:z-20 transition-all duration-200 pointer-events-auto flex items-center justify-center'; 
     el.style.top = `${(r + minR) * (CELL_SIZE + 1)}px`;
     el.style.left = `${(c + minC) * (CELL_SIZE + 1)}px`;
-    el.style.width = `${realCols * (CELL_SIZE + 1) - 1}px`;
-    el.style.height = `${realRows * (CELL_SIZE + 1) - 1}px`;
+    el.style.width = `${containerW}px`;
+    el.style.height = `${containerH}px`;
 
+    // ★ [수정] img 태그에 w-full h-full 제거하고 계산된 style 적용
     el.innerHTML = `
-        <img src="items/${imgFileName}.webp" style="transform: rotate(${rotation}deg)" class="w-full h-full object-contain filter drop-shadow-md select-none pointer-events-none transition-transform duration-200" onerror="this.src='logo.png'">
-        <div class="absolute -top-3 right-0 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-50">
-            <button onmousedown="event.stopPropagation()" onclick="rotateItem('${uniqueId}', 'ccw')" class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm cursor-pointer hover:bg-blue-600 hover:scale-110 border border-white/30"><i class="fas fa-undo text-[10px] pointer-events-none"></i></button>
-            <button onmousedown="event.stopPropagation()" onclick="rotateItem('${uniqueId}', 'cw')" class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm cursor-pointer hover:bg-blue-600 hover:scale-110 border border-white/30"><i class="fas fa-redo text-[10px] pointer-events-none"></i></button>
-            <button onmousedown="event.stopPropagation()" onclick="removeItem('${uniqueId}')" class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-sm cursor-pointer hover:bg-red-600 hover:scale-110 border border-white/30"><span class="font-bold text-[10px] leading-none pointer-events-none">X</span></button>
-        </div>
+        <img src="items/${imgFileName}.webp" 
+             style="${imgStyle}" 
+             class="object-contain filter drop-shadow-md select-none pointer-events-none transition-transform duration-200" 
+             onerror="this.src='logo.png'">
+             
+        <button onmousedown="event.stopPropagation()" onclick="removeItem('${uniqueId}')" 
+                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-50 cursor-pointer hover:scale-110 border border-white/30">
+            <span class="font-bold text-[10px] leading-none pointer-events-none">X</span>
+        </button>
     `;
     
     el.draggable = true;
@@ -984,7 +1089,6 @@ function placeItemOnGrid(item, r, c, shape = null, rotation = 0) {
         if (img) e.dataTransfer.setDragImage(img, img.offsetWidth / 2, img.offsetHeight / 2);
         setTimeout(() => el.classList.add('opacity-50'), 0);
     };
-
     el.ondragend = () => {
         el.classList.remove('opacity-50');
         if (draggedItemInfo && draggedItemInfo.source === 'grid') removeItem(draggedItemInfo.uniqueId);
@@ -992,9 +1096,61 @@ function placeItemOnGrid(item, r, c, shape = null, rotation = 0) {
         clearHighlights();
     };
 
+    // 휠/더블탭 이벤트
+    el.onwheel = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const dir = e.deltaY > 0 ? 'cw' : 'ccw';
+        rotateItem(uniqueId, dir);
+    };
+    let lastTap = 0;
+    el.ontouchend = (e) => {
+        const currentTime = new Date().getTime();
+        if (currentTime - lastTap < 300) { e.preventDefault(); rotateItem(uniqueId, 'cw'); }
+        lastTap = currentTime;
+    };
+    el.onclick = (e) => { rotateItem(uniqueId, 'cw'); }; // 원클릭 회전
+
     el.id = `item-${uniqueId}`;
     layer.appendChild(el);
     placedItems.push({ id: uniqueId, itemId: item.id, r, c, shape: currentShape, rotation: rotation });
+}
+
+/**
+ * 아이템 DOM 업데이트 (회전 시 스타일 재계산)
+ */
+function updateItemDOM(uniqueId, r, c, shape, rotation) {
+    const el = document.getElementById(`item-${uniqueId}`);
+    const imgEl = el.querySelector('img');
+    if (!el || !imgEl) return;
+    
+    // Bounding Box 재계산
+    const rows = shape.length;
+    const cols = shape[0].length;
+    let minR = rows, maxR = -1, minC = cols, maxC = -1, hasOne = false;
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (shape[i][j] !== 3) { 
+                hasOne = true;
+                minR = Math.min(minR, i); maxR = Math.max(maxR, i);
+                minC = Math.min(minC, j); maxC = Math.max(maxC, j);
+            }
+        }
+    }
+    if (!hasOne) { minR = 0; maxR = rows - 1; minC = 0; maxC = cols - 1; }
+    
+    const containerW = (maxC - minC + 1) * (CELL_SIZE + 1) - 1;
+    const containerH = (maxR - minR + 1) * (CELL_SIZE + 1) - 1;
+
+    // 컨테이너 위치/크기 업데이트
+    el.style.width = `${containerW}px`;
+    el.style.height = `${containerH}px`;
+    el.style.top = `${(r + minR) * (CELL_SIZE + 1)}px`;
+    el.style.left = `${(c + minC) * (CELL_SIZE + 1)}px`;
+    
+    // ★ [수정] 이미지 스타일 재계산 (Swap 적용)
+    // 기존 transform만 바꾸는 방식에서 style 전체를 덮어쓰는 방식으로 변경
+    imgEl.style.cssText = getImageStyle(containerW, containerH, rotation);
 }
 
 function rotateItem(uniqueId, dir) {
@@ -1003,8 +1159,9 @@ function rotateItem(uniqueId, dir) {
     const newShape = dir === 'cw' ? rotateMatrixCW(itemData.shape) : rotateMatrixCCW(itemData.shape);
     const newRotation = itemData.rotation + (dir === 'cw' ? 90 : -90);
 
-    for(let i=0; i<GRID_ROWS; i++){
-        for(let j=0; j<GRID_COLS; j++){
+    // 기존 점유 해제
+    for(let i=0; i<GRID_ROWS; i++) {
+        for(let j=0; j<GRID_COLS; j++) {
             if(gridState[i][j] === uniqueId) gridState[i][j] = null;
         }
     }
@@ -1012,6 +1169,7 @@ function rotateItem(uniqueId, dir) {
     if (canPlaceItem(itemData.r, itemData.c, newShape)) {
         itemData.shape = newShape;
         itemData.rotation = newRotation;
+        
         const rows = newShape.length;
         const cols = newShape[0].length;
         for (let i = 0; i < rows; i++) {
@@ -1021,6 +1179,7 @@ function rotateItem(uniqueId, dir) {
         }
         updateItemDOM(uniqueId, itemData.r, itemData.c, newShape, newRotation);
     } else {
+        // 복구
         const oldShape = itemData.shape;
         for (let i = 0; i < oldShape.length; i++) {
             for (let j = 0; j < oldShape[0].length; j++) {
@@ -1028,81 +1187,6 @@ function rotateItem(uniqueId, dir) {
             }
         }
     }
-}
-
-function updateItemDOM(uniqueId, r, c, shape, rotation) {
-    const el = document.getElementById(`item-${uniqueId}`);
-    const imgEl = el.querySelector('img');
-    if (!el || !imgEl) return;
-    const rows = shape.length;
-    const cols = shape[0].length;
-    let minR = rows, maxR = -1, minC = cols, maxC = -1, hasOne = false;
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-            if (shape[i][j] == 1) { 
-                hasOne = true;
-                minR = Math.min(minR, i); maxR = Math.max(maxR, i);
-                minC = Math.min(minC, j); maxC = Math.max(maxC, j);
-            }
-        }
-    }
-    if (!hasOne) { minR = 0; maxR = rows - 1; minC = 0; maxC = cols - 1; }
-    
-    el.style.width = `${(maxC - minC + 1) * (CELL_SIZE + 1) - 1}px`;
-    el.style.height = `${(maxR - minR + 1) * (CELL_SIZE + 1) - 1}px`;
-    el.style.top = `${(r + minR) * (CELL_SIZE + 1)}px`;
-    el.style.left = `${(c + minC) * (CELL_SIZE + 1)}px`;
-    imgEl.style.transform = `rotate(${rotation}deg)`;
-}
-
-function setupBuilderFilters() {
-    const heroSelect = document.getElementById('builder-filter-hero');
-    const raritySelect = document.getElementById('builder-filter-rarity');
-    const typeSelect = document.getElementById('builder-filter-type');
-    const craftedSelect = document.getElementById('builder-filter-crafted');
-    if (!heroSelect || !dbData) return;
-    heroSelect.innerHTML = `<option value="">${currentLang === 'ko' ? '영웅' : 'Hero'}</option>` + heroData.heroes.map(h => `<option value="${h.id}">${h.name[currentLang]}</option>`).join('');
-    const rarities = { en: ["Rank", "Common", "Rare", "Epic", "Legendary", "Mythic", "Unique", "Relic"], ko: ["등급", "일반", "희귀", "에픽", "전설", "신화", "고유", "유물"] };
-    raritySelect.innerHTML = rarities[currentLang].map((r, i) => `<option value="${i === 0 ? '' : rarities.en[i]}">${r}</option>`).join('');
-    const typeMap = new Map();
-    dbData.items.forEach(item => {
-        if (!item.type) return;
-        const enTypes = item.type.en.split(',').map(t => t.trim());
-        const langTypes = item.type[currentLang].split(',').map(t => t.trim());
-        enTypes.forEach((enT, index) => {
-            if (!typeMap.has(enT)) {
-                const label = langTypes[index] || enT; 
-                typeMap.set(enT, label);
-            }
-        });
-    });
-    const sortedTypes = Array.from(typeMap.keys()).sort();
-    let typeOptions = `<option value="">${currentLang === 'ko' ? '종류' : 'Type'}</option>`;
-    sortedTypes.forEach(enKey => { typeOptions += `<option value="${enKey}">${typeMap.get(enKey)}</option>`; });
-    typeSelect.innerHTML = typeOptions;
-    const crafted = { en: ["Craft", "Yes", "No"], ko: ["조합", "예", "아니오"] };
-    craftedSelect.innerHTML = crafted[currentLang].map((c, i) => `<option value="${i === 0 ? '' : (i === 1 ? 'true' : 'false')}">${c}</option>`).join('');
-}
-
-function filterBuilderItems() {
-    const searchTerm = document.getElementById('builder-search').value.toLowerCase();
-    const heroFilter = document.getElementById('builder-filter-hero').value;
-    const rarityFilter = document.getElementById('builder-filter-rarity').value;
-    const typeFilter = document.getElementById('builder-filter-type').value;
-    const craftedFilter = document.getElementById('builder-filter-crafted').value;
-    const filtered = dbData.items.filter(item => {
-        const matchesSearch = item.name[currentLang].toLowerCase().includes(searchTerm) || item.name.en.toLowerCase().includes(searchTerm);
-        const matchesHero = !heroFilter || item.hero === heroFilter;
-        const matchesRarity = !rarityFilter || item.rarity === rarityFilter;
-        let matchesType = true;
-        if (typeFilter) {
-            const itemTypes = item.type.en.split(',').map(t => t.trim());
-            matchesType = itemTypes.includes(typeFilter);
-        }
-        const matchesCrafted = !craftedFilter || String(item.isCrafted) === craftedFilter;
-        return matchesSearch && matchesHero && matchesRarity && matchesType && matchesCrafted;
-    });
-    renderBuilderItems(filtered);
 }
 
 function removeItem(uniqueId) {
@@ -1116,6 +1200,43 @@ function removeItem(uniqueId) {
     placedItems = placedItems.filter(p => p.id !== uniqueId);
 }
 
-function resetBuilder() {
-    if(confirm(currentLang === 'ko' ? '초기화하시겠습니까?' : 'Reset everything?')) initBuilder();
+function clearHighlights() {
+    document.querySelectorAll('[id^="cell-"]').forEach(cell => {
+        cell.classList.remove('ring-2', 'ring-green-400', 'ring-red-400', 'ring-yellow-300', 'z-10', 'z-0');
+        cell.style.backgroundColor = '';
+    });
 }
+
+function getShapeCenterOffset(shape) {
+    const rows = shape.length;
+    const cols = shape[0].length;
+    let minR = rows, maxR = -1, minC = cols, maxC = -1, hasOne = false;
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (shape[i][j] !== 3) { 
+                hasOne = true;
+                minR = Math.min(minR, i); maxR = Math.max(maxR, i);
+                minC = Math.min(minC, j); maxC = Math.max(maxC, j);
+            }
+        }
+    }
+    if (!hasOne) return { rOff: 0, cOff: 0 };
+    return { rOff: Math.round((minR + maxR) / 2), cOff: Math.round((minC + maxC) / 2) };
+}
+
+function rotateMatrixCW(matrix) {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+    const newMatrix = Array.from({ length: cols }, () => Array(rows).fill(0));
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) newMatrix[c][rows - 1 - r] = matrix[r][c];
+    return newMatrix;
+}
+
+function rotateMatrixCCW(matrix) {
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+    const newMatrix = Array.from({ length: cols }, () => Array(rows).fill(0));
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) newMatrix[cols - 1 - c][r] = matrix[r][c];
+    return newMatrix;
+}
+

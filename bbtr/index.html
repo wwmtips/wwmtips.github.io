@@ -45,13 +45,19 @@
         scrollbar-width: thin;
         scrollbar-color: #e2e8f0 transparent;
     }
+    /* PC 화면에서 내용물의 최대 폭을 잡아주는 클래스 */
+.content-container {
+  width: 100%;             /* 모바일에서는 꽉 차게 */
+  max-width: 1000px;       /* PC에서 이 이상 안 커짐 (빨간 선에 맞춰 숫자 조절: 800px ~ 1200px 추천) */
+  margin: 0 auto;          /* 화면 정중앙 배치 */
+}
     </style>
 
 </head>
 
-<body class="pb-24">
+<body class="bg-slate-100 font-sans select-none overflow-x-hidden text-gray-800">
 
-    <div id="page-home">
+    <div id="page-home" class="pb-24 w-full max-w-full">
         <header
             class="sticky top-0 z-50 bg-white h-[64px] flex items-center px-4 gap-4 border-b border-gray-100 shadow-sm">
             <div data-i18n-key="logo" class="font-black text-xl text-blue-600 flex-none cursor-pointer"
@@ -75,18 +81,17 @@
                 <button onclick="changeLang('ko')" id="lang-ko" class="hover:text-gray-900">KO</button>
             </div>
         </header>
-
+<div class="content-container">
         <main class="mx-auto lg:max-w-screen-xl mt-6 px-4">
-            <section class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-6">
+            <section class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-2">
                 <h3 class="text-lg font-black text-gray-900 mb-5">
                     <span data-i18n-key="nav_heroes">Heroes / 영웅들</span>
                 </h3>
                 <div id="hero-container" class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-y-6 gap-x-2">
                 </div>
-            </section>
-
-            <div class="grid lg:grid-cols-2 gap-6">
-                <section class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            </section>  
+            
+            <section class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm mb-2">
                     <div class="flex justify-between items-center mb-5">
                         <h3 data-i18n-key="build_title" class="text-lg font-black text-gray-900"></h3>
                         <button data-i18n-key="more" class="text-xs font-bold text-blue-600"></button>
@@ -100,7 +105,7 @@
                     </div>
                     <div id="patch-container" class="flex flex-col"></div>
                 </section>
-            </div>
+
         </main>
     </div>
 
@@ -115,6 +120,7 @@
             </button>
         </header>
 
+</div>
         <main class="p-4 max-w-2xl mx-auto">
             <div
                 class="bg-[#f2f4f6] rounded-3xl p-6 flex items-center justify-between gap-4 shadow-sm border border-gray-100">
@@ -182,7 +188,6 @@
             </div>
         </main>
     </div>
-
 
     <div id="sheet-overlay" onclick="closeSheet()" class="fixed inset-0 bg-black/40 z-[60] hidden backdrop-blur-sm">
     </div>

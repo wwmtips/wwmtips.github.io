@@ -59,6 +59,11 @@
         margin-bottom: -30px;         /* 축소된 만큼 아래 여백 당기기 */
     }
 }
+/* 드래그 중일 때 배치된 아이템들이 마우스 이벤트를 가로채지 않게 함 (겹치기 허용의 핵심) */
+body.dragging-mode #builder-layer img {
+    pointer-events: none !important;
+    opacity: 0.7; /* (선택사항) 드래그 중엔 기존 아이템이 살짝 투명해져서 겹치기 편해짐 */
+}
     </style>
 
 </head>

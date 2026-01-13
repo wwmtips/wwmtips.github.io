@@ -856,6 +856,8 @@ function renderBuilderItems(items) {
         };
 
         el.ondragstart = (e) => {
+            document.body.classList.add('dragging-mode');
+
             const currentRot = listRotations[item.id] || 0;
             let rotatedShape = item.layout.shape;
             
@@ -880,7 +882,7 @@ function renderBuilderItems(items) {
             if (img) e.dataTransfer.setDragImage(img, img.offsetWidth / 2, img.offsetHeight / 2);
         };
 
-        el.ondragend = () => { draggedItemInfo = null; clearHighlights(); };
+        el.ondragend = () => { draggedItemInfo = null; clearHighlights(); document.body.classList.remove('dragging-mode');};
         listEl.appendChild(el);
     });
 }
@@ -926,9 +928,9 @@ function handleDrop(e, r, c) {
     draggedItemInfo = null;
 }
 
-/**
- * 충돌 검사 (★ '3'은 무시)
- */
+// =========================================
+// [Fix] 충돌 검사 함수 (0은 격자 밖 허용)
+// =========================================
 function canPlaceItem(r, c, shape, ignoreId = null) {
     const rows = shape.length;
     const cols = shape[0].length;
@@ -936,15 +938,24 @@ function canPlaceItem(r, c, shape, ignoreId = null) {
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
             const cellType = shape[i][j];
-            if (cellType === 3) continue; // 3은 무시
+            if (cellType === 3) continue; // 3은 완전 무시
 
             const targetR = r + i;
             const targetC = c + j;
 
-            // 격자 범위 검사 (1과 0만)
-            if (targetR < 0 || targetR >= GRID_ROWS || targetC < 0 || targetC >= GRID_COLS) return false;
+            // 격자 범위 확인
+            const isOutOfBounds = targetR < 0 || targetR >= GRID_ROWS || targetC < 0 || targetC >= GRID_COLS;
 
-            // 충돌 검사 (1만)
+            if (isOutOfBounds) {
+                // ★ 핵심 수정: 1(아이템 본체)이 밖으로 나가면 안 됨 -> 실패
+                if (cellType === 1) return false;
+                
+                // 0(버프칸)이 밖으로 나가는 건 허용 -> 검사 건너뜀
+                continue;
+            }
+
+            // 격자 내부일 때만 충돌 검사 (1인 경우에만)
+            // 0인 칸은 다른 아이템이 있어도 겹칠 수 있으므로 검사 안 함 (원한다면 0도 비워야 하는지 결정 필요)
             if (cellType === 1) {
                 const occupant = gridState[targetR][targetC];
                 if (occupant !== null && occupant !== ignoreId) return false;
@@ -986,46 +997,32 @@ function highlightCells(startR, startC, shape, isValid) {
     }
 }
 
-/**
- * 아이템 배치 (휠/더블탭 회전 포함)
- */
 // =========================================
-// [Fix] 이미지 회전 시 축소 문제 해결을 위한 스타일 생성 함수
+// [Fix] 이미지 스타일 생성 함수 (중앙 좌표 기준 배치)
 // =========================================
-function getImageStyle(w, h, rotation) {
+function getImageStyle(w, h, rotation, centerX, centerY) {
     const deg = rotation % 360;
     const isSideways = Math.abs(deg) === 90 || Math.abs(deg) === 270;
 
-    // 90도나 270도 회전 시:
-    // 이미지가 담길 '그릇'은 가로가 길지만, 이미지 자체는 세로로 길게 잡아야
-    // 회전했을 때 딱 맞게 들어갑니다. 따라서 w와 h를 바꿔서 적용합니다.
-    if (isSideways) {
-        return `
-            width: ${h}px; 
-            height: ${w}px; 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%) rotate(${deg}deg);
-        `;
-    } else {
-        // 0도나 180도 (정방향): 그냥 꽉 채우면 됩니다.
-        return `
-            width: ${w}px; 
-            height: ${h}px; 
-            transform: rotate(${deg}deg);
-        `;
-    }
+    // 회전 시 가로/세로가 바뀌는 것을 고려하여 크기 설정
+    // 위치는 계산된 중심점(centerX, centerY)에 고정하고 translate로 보정
+    return `
+        width: ${isSideways ? h : w}px; 
+        height: ${isSideways ? w : h}px; 
+        position: absolute; 
+        top: ${centerY}px; 
+        left: ${centerX}px; 
+        transform: translate(-50%, -50%) rotate(${deg}deg);
+    `;
 }
-
-/**
- * 아이템 배치 (CSS 수정됨)
- */
+// =========================================
+// [Fix] 아이템 배치 함수 (Pointer Events 수정 포함)
+// =========================================
 function placeItemOnGrid(item, r, c, shape = null, rotation = 0) {
     const currentShape = shape || item.layout.shape;
     const uniqueId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
 
-    // 격자 점유 (3 제외)
+    // 1. 그리드 점유 (1인 칸만 점유 -> 0인 칸은 비워둠)
     const rows = currentShape.length;
     const cols = currentShape[0].length;
     for (let i = 0; i < rows; i++) {
@@ -1034,53 +1031,73 @@ function placeItemOnGrid(item, r, c, shape = null, rotation = 0) {
         }
     }
 
-    // Bounding Box 계산
+    // 2. 전체 컨테이너 범위 및 이미지 범위 계산
     let minR = rows, maxR = -1, minC = cols, maxC = -1, hasOne = false;
+    let imgMinR = rows, imgMaxR = -1, imgMinC = cols, imgMaxC = -1;
+
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            if (currentShape[i][j] !== 3) { 
+            const cell = currentShape[i][j];
+            if (cell !== 3) {
                 hasOne = true;
                 minR = Math.min(minR, i); maxR = Math.max(maxR, i);
                 minC = Math.min(minC, j); maxC = Math.max(maxC, j);
             }
+            if (cell === 1) {
+                imgMinR = Math.min(imgMinR, i); imgMaxR = Math.max(imgMaxR, i);
+                imgMinC = Math.min(imgMinC, j); imgMaxC = Math.max(imgMaxC, j);
+            }
         }
     }
-    if (!hasOne) { minR = 0; maxR = rows - 1; minC = 0; maxC = cols - 1; }
     
-    const realRows = maxR - minR + 1;
-    const realCols = maxC - minC + 1;
+    if (!hasOne) { minR=0; maxR=rows-1; minC=0; maxC=cols-1; }
+    if (imgMinR > imgMaxR) { imgMinR = minR; imgMaxR = maxR; imgMinC = minC; imgMaxC = maxC; }
 
-    // 컨테이너의 실제 픽셀 크기
-    const containerW = realCols * (CELL_SIZE + 1) - 1;
-    const containerH = realRows * (CELL_SIZE + 1) - 1;
+    const containerW = (maxC - minC + 1) * (CELL_SIZE + 1) - 1;
+    const containerH = (maxR - minR + 1) * (CELL_SIZE + 1) - 1;
+    const imgBodyW = (imgMaxC - imgMinC + 1) * (CELL_SIZE + 1) - 1;
+    const imgBodyH = (imgMaxR - imgMinR + 1) * (CELL_SIZE + 1) - 1;
+
+    const imgOffsetX = (imgMinC - minC) * (CELL_SIZE + 1);
+    const imgOffsetY = (imgMinR - minR) * (CELL_SIZE + 1);
+    const centerX = imgOffsetX + (imgBodyW / 2);
+    const centerY = imgOffsetY + (imgBodyH / 2);
 
     const layer = document.getElementById('builder-layer');
     const imgFileName = item.name.en.replace(/ /g, '_');
     
-    // ★ [수정] 이미지 스타일 계산 (회전 시 w, h 스왑 적용)
-    const imgStyle = getImageStyle(containerW, containerH, rotation);
+    // 스타일 적용
+    const imgStyle = getImageStyle(imgBodyW, imgBodyH, rotation, centerX, centerY);
 
     const el = document.createElement('div');
-    el.className = 'absolute cursor-grab active:cursor-grabbing group hover:z-20 transition-all duration-200 pointer-events-auto flex items-center justify-center'; 
+    
+    // ★★★ [핵심 수정 1] 컨테이너(el)에 'pointer-events-none' 추가
+    // 이렇게 하면 빈 공간(0)은 마우스가 통과하여 아래쪽 그리드를 감지할 수 있습니다.
+    el.className = 'absolute group hover:z-20 transition-all duration-200 pointer-events-none select-none'; 
+    
     el.style.top = `${(r + minR) * (CELL_SIZE + 1)}px`;
     el.style.left = `${(c + minC) * (CELL_SIZE + 1)}px`;
     el.style.width = `${containerW}px`;
     el.style.height = `${containerH}px`;
 
-    // ★ [수정] img 태그에 w-full h-full 제거하고 계산된 style 적용
     el.innerHTML = `
         <img src="items/${imgFileName}.webp" 
              style="${imgStyle}" 
-             class="object-contain filter drop-shadow-md select-none pointer-events-none transition-transform duration-200" 
+             /* ★★★ [핵심 수정 2] 이미지에는 'pointer-events-auto' 추가 */
+             /* 컨테이너는 투명해도 이미지는 클릭/드래그가 되어야 합니다. */
+             class="object-contain filter drop-shadow-md select-none pointer-events-auto cursor-grab active:cursor-grabbing transition-transform duration-200" 
              onerror="this.src='logo.png'">
              
         <button onmousedown="event.stopPropagation()" onclick="removeItem('${uniqueId}')" 
-                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-50 cursor-pointer hover:scale-110 border border-white/30">
+                /* 버튼도 클릭 되어야 하므로 pointer-events-auto */
+                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-50 cursor-pointer hover:scale-110 border border-white/30 pointer-events-auto">
             <span class="font-bold text-[10px] leading-none pointer-events-none">X</span>
         </button>
     `;
     
     el.draggable = true;
+    
+    // 드래그 이벤트는 그대로 유지 (이미지를 클릭해서 드래그하면 이벤트가 버블링되어 여기서 잡힙니다)
     el.ondragstart = (e) => {
         const offset = getShapeCenterOffset(currentShape);
         draggedItemInfo = { source: 'grid', itemId: item.id, uniqueId: uniqueId, r: r, c: c, offset: offset, shape: currentShape, rotation: rotation };
@@ -1096,61 +1113,79 @@ function placeItemOnGrid(item, r, c, shape = null, rotation = 0) {
         clearHighlights();
     };
 
-    // 휠/더블탭 이벤트
+    // 휠/탭 회전 이벤트
     el.onwheel = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         const dir = e.deltaY > 0 ? 'cw' : 'ccw';
         rotateItem(uniqueId, dir);
     };
     let lastTap = 0;
     el.ontouchend = (e) => {
         const currentTime = new Date().getTime();
-        if (currentTime - lastTap < 300) { e.preventDefault(); rotateItem(uniqueId, 'cw'); }
+        // 이미지 위에서 탭했을 때만 반응하도록 수정
+        if (e.target.tagName === 'IMG' && currentTime - lastTap < 300) { 
+            e.preventDefault(); rotateItem(uniqueId, 'cw'); 
+        }
         lastTap = currentTime;
     };
-    el.onclick = (e) => { rotateItem(uniqueId, 'cw'); }; // 원클릭 회전
+    el.onclick = (e) => { 
+        // 이미지 클릭 시에만 회전
+        if(e.target.tagName === 'IMG') rotateItem(uniqueId, 'cw'); 
+    }; 
 
     el.id = `item-${uniqueId}`;
     layer.appendChild(el);
     placedItems.push({ id: uniqueId, itemId: item.id, r, c, shape: currentShape, rotation: rotation });
 }
-
-/**
- * 아이템 DOM 업데이트 (회전 시 스타일 재계산)
- */
+// =========================================
+// [Fix] 아이템 DOM 업데이트 함수 (회전 시 재계산 반영)
+// =========================================
 function updateItemDOM(uniqueId, r, c, shape, rotation) {
     const el = document.getElementById(`item-${uniqueId}`);
     const imgEl = el.querySelector('img');
     if (!el || !imgEl) return;
     
-    // Bounding Box 재계산
     const rows = shape.length;
     const cols = shape[0].length;
+    
+    // 범위 재계산 (placeItemOnGrid와 동일 로직)
     let minR = rows, maxR = -1, minC = cols, maxC = -1, hasOne = false;
+    let imgMinR = rows, imgMaxR = -1, imgMinC = cols, imgMaxC = -1;
+
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            if (shape[i][j] !== 3) { 
+            const cell = shape[i][j];
+            if (cell !== 3) {
                 hasOne = true;
                 minR = Math.min(minR, i); maxR = Math.max(maxR, i);
                 minC = Math.min(minC, j); maxC = Math.max(maxC, j);
             }
+            if (cell === 1) {
+                imgMinR = Math.min(imgMinR, i); imgMaxR = Math.max(imgMaxR, i);
+                imgMinC = Math.min(imgMinC, j); imgMaxC = Math.max(imgMaxC, j);
+            }
         }
     }
-    if (!hasOne) { minR = 0; maxR = rows - 1; minC = 0; maxC = cols - 1; }
-    
+    if (!hasOne) { minR=0; maxR=rows-1; minC=0; maxC=cols-1; }
+    if (imgMinR > imgMaxR) { imgMinR = minR; imgMaxR = maxR; imgMinC = minC; imgMaxC = maxC; }
+
     const containerW = (maxC - minC + 1) * (CELL_SIZE + 1) - 1;
     const containerH = (maxR - minR + 1) * (CELL_SIZE + 1) - 1;
+    const imgBodyW = (imgMaxC - imgMinC + 1) * (CELL_SIZE + 1) - 1;
+    const imgBodyH = (imgMaxR - imgMinR + 1) * (CELL_SIZE + 1) - 1;
 
-    // 컨테이너 위치/크기 업데이트
+    const imgOffsetX = (imgMinC - minC) * (CELL_SIZE + 1);
+    const imgOffsetY = (imgMinR - minR) * (CELL_SIZE + 1);
+    const centerX = imgOffsetX + (imgBodyW / 2);
+    const centerY = imgOffsetY + (imgBodyH / 2);
+
+    // DOM 업데이트
     el.style.width = `${containerW}px`;
     el.style.height = `${containerH}px`;
     el.style.top = `${(r + minR) * (CELL_SIZE + 1)}px`;
     el.style.left = `${(c + minC) * (CELL_SIZE + 1)}px`;
     
-    // ★ [수정] 이미지 스타일 재계산 (Swap 적용)
-    // 기존 transform만 바꾸는 방식에서 style 전체를 덮어쓰는 방식으로 변경
-    imgEl.style.cssText = getImageStyle(containerW, containerH, rotation);
+    imgEl.style.cssText = getImageStyle(imgBodyW, imgBodyH, rotation, centerX, centerY);
 }
 
 function rotateItem(uniqueId, dir) {

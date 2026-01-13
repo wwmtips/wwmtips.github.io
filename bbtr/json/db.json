@@ -660,45 +660,33 @@
                 ]
             }
         },
-        {
-            "id": "spectral_sweet",
-            "name": {
-                "en": "Spectral Sweet",
-                "ko": "Spectral Sweet"
-            },
-            "cost": 0,
-            "hero": "enoch",
-            "rarity": "Common",
-            "type": {
-                "en": "Food",
-                "ko": "음식"
-            },
-            "layout": {
-                "rows": 1,
-                "cols": 1,
-                "shape": [
-                    [
-                        1
-                    ]
-                ]
-            },
-            "stats": {
-                "base": [
-                    {
-                        "label": {
-                            "en": "Cooldown",
-                            "ko": "재사용 대기시간"
-                        },
-                        "value": "3.9s"
-                    }
-                ],
-                "bonus": {
-                    "en": "",
-                    "ko": ""
-                },
-                "levels": []
-            }
-        },
+      {
+  "id": "spectral_sweet",
+  "name": { "en": "Spectral Sweet", "ko": "Spectral Sweet" },
+  "cost": 0,
+  "hero": "enoch",
+  "rarity": "Common",
+  "type": { "en": "Ingredient, Food", "ko": "재료, 음식" },
+  "layout": {
+    "rows": 3,
+    "cols": 3,
+    "shape": [
+      [3, 0, 3],
+      [0, 1, 0],
+      [3, 0, 3]
+    ]
+  },
+  "stats": {
+    "base": [
+      { "label": { "en": "Cooldown", "ko": "재사용 대기시간" }, "value": "3.9s" }
+    ],
+    "bonus": {
+      "en": "",
+      "ko": ""
+    },
+    "levels": []
+  }
+},
         {
             "id": "spark",
             "name": {
@@ -714,10 +702,12 @@
             },
             "layout": {
                 "rows": 1,
-                "cols": 1,
+                "cols": 3,
                 "shape": [
                     [
-                        1
+                        0,
+                        1,
+                        0
                     ]
                 ]
             },

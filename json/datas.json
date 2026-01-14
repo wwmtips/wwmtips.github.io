@@ -2,6 +2,13 @@
   "items": [],
   "quests": [],
   "quiz": [
+
+{ "hint": "식칼", "answer": "도마", "user": "흑절" },
+{ "hint": "나무", "answer": "반얀나무", "user": "루연" },
+{ "hint": "덩굴", "answer": "자등", "user": "ㅇㅇ" },
+{ "hint": "손 씻기", "answer": "너구리", "user": "너구리" },
+{ "hint": "상징", "answer": "무궁화", "user": "로낙헌" },
+{ "hint": "브로콜리", "answer": "콜리플라워", "user": "구량" },
     {
       "hint": "습한 곳",
       "answer": "지네",

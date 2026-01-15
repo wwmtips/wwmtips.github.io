@@ -1,5 +1,5 @@
 /* =========================================
-   script.js (스무고개 중심 개편 - 랭킹 기능 추가)
+   script.js (스무고개 모바일 최적화 수정)
    ========================================= */
 
 // 전역 변수
@@ -52,16 +52,13 @@ function loadData() {
         currentQuestData = globalData.quests;
         currentChunjiData = globalData.chunji;
 
-        // ★ 스무고개 랭킹 및 테이블 렌더링
         renderQuizRanking();
         renderQuizTable(globalData.quiz);
         updateQuizCounter();
 
-        // 필터 옵션 초기화
         if (typeof updateLocationOptions === 'function') updateLocationOptions();
         if (typeof updateChunjiSubtypeOptions === 'function') updateChunjiSubtypeOptions();
 
-        // 탭별 리스트 렌더링
         renderQuestList();
         renderChunjiList();
 
@@ -143,7 +140,6 @@ function renderQuizRanking() {
     const container = document.getElementById('quiz-ranking-container');
     if (!container || !globalData.quiz) return;
 
-    // 1. 유저별 기여도 카운트
     const userCounts = {};
     globalData.quiz.forEach(item => {
         const u = item.user ? item.user.trim() : '-';
@@ -152,7 +148,6 @@ function renderQuizRanking() {
         }
     });
 
-    // 2. 내림차순 정렬 후 상위 5명
     const sortedUsers = Object.entries(userCounts)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5);
@@ -162,7 +157,6 @@ function renderQuizRanking() {
         return;
     }
 
-    // 3. HTML 생성
     let html = `
     <div class="flex items-center gap-3 py-2 px-1">
         <span class="text-xs font-bold text-gray-500 flex-none mr-2">🏆 명예의 전당</span>
@@ -234,13 +228,13 @@ function renderQuizTable(data, keyword = '') {
             }
             
             tr.innerHTML = `
-                <td class="px-4 py-3 text-gray-600 font-medium break-keep leading-snug">
+                <td class="px-2 lg:px-4 py-3 text-gray-600 font-medium break-keep leading-snug">
                     ${hint}
                 </td>
-                <td class="px-4 py-3 text-blue-600 font-bold break-keep leading-snug">
+                <td class="px-2 lg:px-4 py-3 text-blue-600 font-bold break-keep leading-snug">
                     ${answer}
                 </td>
-                <td class="px-4 py-3 text-right text-xs text-gray-400 break-keep">
+                <td class="px-2 lg:px-4 py-3 text-right text-xs text-gray-400 whitespace-nowrap">
                     ${item.user || '-'}
                 </td>
             `;

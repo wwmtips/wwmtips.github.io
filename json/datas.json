@@ -2,6 +2,9 @@
   "items": [],
   "quests": [],
   "quiz": [
+{ "hint": "플라밍고", "answer": "홍학", "user": "" },
+{ "hint": "수염", "answer": "메기", "user": "김아서" },
+{ "hint": "장수", "answer": "바다거북", "user": "김아서" },
 
 { "hint": "식칼", "answer": "도마", "user": "흑절" },
 { "hint": "나무", "answer": "반얀나무", "user": "루연" },

@@ -50,10 +50,7 @@
     <header class="sticky top-0 z-50 bg-white h-[60px] lg:h-[72px] flex items-center px-6 lg:px-8 gap-4 border-b border-gray-100 shadow-sm">
         <div class="font-black text-xl text-blue-600 cursor-pointer" onclick="switchTab('home')">연운팁스</div>
 
-        <nav class="hidden lg:flex items-center gap-6 text-sm font-bold text-gray-500 ml-auto">
-            <button onclick="switchTab('home')" id="pc-nav-home" class="hover:text-blue-600 transition-colors nav-item active">스무고개</button>
-            <button onclick="switchTab('todo')" id="pc-nav-todo" class="hover:text-blue-600 transition-colors nav-item">할 일</button>
-        </nav>
+
     </header>
 
     <main id="main-content" class="mx-auto lg:max-w-screen-xl lg:px-6 transition-all duration-300">
@@ -123,20 +120,6 @@
 
     </main>
 
-    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 h-[60px] flex justify-center items-center px-6 gap-20 z-50">
-        <button id="nav-home" onclick="switchTab('home')" class="nav-item active flex flex-col items-center justify-center w-14 gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-            <span class="text-[10px] font-bold">스무고개</span>
-        </button>
-        <button id="nav-todo" onclick="switchTab('todo')" class="nav-item flex flex-col items-center justify-center w-14 gap-1 text-gray-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-            </svg>
-            <span class="text-[10px] font-bold">할 일</span>
-        </button>
-    </nav>
 
     <script>
         // [1] 탭 전환 (무림록, 천지록 관련 로직 제거 및 대응)

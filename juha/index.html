@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나놀 (nanOOl) - 미니 로그라이크</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --panel-bg: #ffffff;
+            --border-color: #333333;
+            --player-color: #3498db;
+            --monster-color: #e74c3c;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { margin: 5px 0; font-size: 24px; text-align: center; }
+        
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--panel-bg);
+            border: 3px solid var(--border-color);
+            box-shadow: 4px 4px 0px #aaa;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        /* 배틀 스테이지 (플레이어 vs 몬스터) */
+        .battle-stage {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .entity-box {
+            border: 2px solid var(--border-color);
+            padding: 10px;
+            border-radius: 5px;
+            background: #fafafa;
+            position: relative;
+        }
+        .entity-box.player { border-color: var(--player-color); }
+        .entity-box.monster { border-color: var(--monster-color); }
+
+        .name { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+        .stat { font-size: 14px; margin: 4px 0; }
+        .status-effects {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #7f8c8d;
+            min-height: 18px;
+        }
+        .badge {
+            background: #e67e22; color: white; padding: 2px 5px; 
+            border-radius: 3px; margin-right: 3px; font-size: 11px;
+        }
+
+        /* 전투 로그 */
+        .log-box {
+            height: 100px;
+            border: 1px solid #ccc;
+            background: #1e1e1e;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 12px;
+            padding: 8px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        /* 상태창 (MP, 덱 카운트 등) */
+        .turn-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eee;
+            padding: 8px 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        /* 손패 (Hand) */
+        .hand-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 5px;
+            min-height: 130px;
+            background: #f9f9f9;
+            border: 1px dashed #bbb;
+            margin-bottom: 15px;
+        }
+
+        .card {
+            width: 110px;
+            min-width: 110px;
+            height: 140px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 6px;
+            padding: 8px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.1s;
+            user-select: none;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card.공격 { background: #ffe9e9; border-color: #c0392b; }
+        .card.방어 { background: #e9f5ff; border-color: #2980b9; }
+        
+        .card-title { font-size: 12px; font-weight: bold; text-align: center; }
+        .card-type { font-size: 10px; color: #7f8c8d; text-align: center; margin-top: 2px;}
+        .card-desc { font-size: 11px; color: #333; margin-top: 5px; flex-grow: 1; text-align: center;}
+        .card-cost { font-size: 11px; font-weight: bold; color: #d35400; text-align: right; }
+
+        /* 제어 버튼 */
+        .controls {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .btn {
+            background: var(--border-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .btn:hover { background: #555; }
+        
+        /* 모달 (결과창) */
+        .overlay {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center; align-items: center;
+            z-index: 100;
+        }
+        .modal {
+            background: white; padding: 30px; border-radius: 8px; text-align: center;
+            max-width: 400px; width: 80%; border: 3px solid #333;
+        }
+        .modal h2 { margin-top: 0; }
+        .modal button { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>나놀 (nanOOl) - 보스전 빌더</h1>
+    
+    <div class="game-container">
+        <div class="battle-stage">
+            <div class="entity-box player">
+                <div class="name">나놀 (플레이어)</div>
+                <div class="stat"><strong>HP:</strong> <span id="p-hp">100</span> / 100</div>
+                <div class="stat"><strong>MP:</strong> <span id="p-mp">5</span></div>
+                <div class="stat"><strong>방어도:</strong> <span id="p-shield">0</span></div>
+                <div class="status-effects" id="p-status"></div>
+            </div>
+            
+            <div class="entity-box monster">
+                <div class="name" id="m-name">레전드 몬스터</div>
+                <div class="stat"><strong>HP:</strong> <span id="m-hp">120</span> / 120</div>
+                <div class="stat"><strong>의도:</strong> <span id="m-intent" style="color:red; font-weight:bold;">대기중</span></div>
+                <div class="status-effects" id="m-status"></div>
+            </div>
+        </div>
+
+        <div class="turn-info">
+            <div>턴: <span id="turn-count">1</span> (플레이어 턴)</div>
+            <div>남은 카드: <span id="deck-count">0</span>장 | 버린 카드: <span id="grave-count">0</span>장</div>
+        </div>
+
+        <div class="log-box" id="log">게임이 시작되었습니다. 카드를 사용하여 몬스터를 처치하세요!</div>
+
+        <div class="hand-container" id="hand"></div>
+
+        <div class="controls">
+            <button class="btn" onclick="endPlayerTurn()">턴 종료</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="modal-overlay">
+        <div class="modal">
+            <h2 id="modal-title">게임 종료</h2>
+            <p id="modal-desc">결과 메시지</p>
+            <button class="btn" onclick="initGame()">다시 시작하기</button>
+        </div>
+    </div>
+
+<script>
+    // 기획서 기반 카드 데이터 데이터베이스 (일부 엄선 및 구현)
+    const CARD_DB = [
+        // 공격 카드 (이름, 타입, MP, 대미지/효과)
+        { id: 1, name: "커터칼", type: "공격", mp: 2, damage: 3, effect: null },
+        { id: 4, name: "바게트빵", type: "공격", mp: 3, damage: 5, effect: null },
+        { id: 8, name: "야구배트", type: "공격", mp: 4, damage: 8, effect: null },
+        { id: 12, name: "대화수단(총)", type: "공격", mp: 5, damage: 10, effect: null },
+        { id: 14, name: "유한락스", type: "공격", mp: 10, damage: 20, effect: null },
+        { id: 20, name: "라이터", type: "공격", mp: 5, damage: 0, effect: { type: "화염", value: 3 } }, // 3턴간 화염
+        { id: 22, name: "드라이아이스", type: "공격", mp: 5, damage: 0, effect: { type: "냉동", value: 2 } }, // 2장 봉인(여기선 기절로 소폭 치환)
+        { id: 24, name: "충전기", type: "공격", mp: 5, damage: 0, effect: { type: "감전", value: 2 } }, 
+        { id: 32, name: "글러브", type: "공격", mp: 4, damage: 0, effect: { type: "기절", value: 1 } },
+        { id: 33, name: "등짝스매싱", type: "공격", mp: 10, damage: 10, effect: { type: "기절", value: 1 } },
+
+        // 방어 카드 (이름, 타입, MP, 방어수치/효과)
+        { id: 51, name: "손", type: "방어", mp: 0, shield: 3, effect: null },
+        { id: 54, name: "사전", type: "방어", mp: 0, shield: 5, effect: null },
+        { id: 58, name: "방패", type: "방어", mp: 0, shield: 8, effect: null },
+        { id: 62, name: "집", type: "방어", mp: 0, shield: 40, effect: null },
+        { id: 63, name: "소화기", type: "방어", mp: 0, shield: 0, effect: { type: "화염제거" } },
+        { id: 65, name: "핸드폰", type: "방어", mp: 0, shield: 0, effect: { type: "감전제거" } },
+        { id: 70, name: "벙커", type: "방어", mp: 0, shield: 100, effect: null },
+        { id: 72, name: "UNO! 반사", type: "방어", mp: 0, shield: 0, effect: { type: "반사" } }
+    ];
+
+    // 게임 상태 변수
+    let player, monster, deck, hand, grave, turn, isPlayerTurn;
+
+    // 게임 초기화
+    function initGame() {
+        document.getElementById('modal-overlay').style.display = 'none';
+        
+        player = {
+            hp: 100, maxHp: 100, mp: 5, shield: 0,
+            status: { 화염: 0, 감전: 0, 기절: 0 }
+        };
+
+        monster = {
+            name: "악랄한 부장님", hp: 120, maxHp: 120,
+            status: { 화염: 0, 감전: 0, 기절: 0 },
+            intent: { type: '공격', value: 8 } // 첫턴 의도
+        };
+
+        turn = 1;
+        isPlayerTurn = true;
+        hand = [];
+        grave = [];
+        
+        // 덱 구성 (카드 DB 기반으로 복사본 생성)
+        deck = [];
+        // 기본 플레이 스타일에 맞춰 적절히 덱 빌딩 (공격 위주 + 방어 일부)
+        for(let i=0; i<3; i++) deck.push({...CARD_DB[0]}); // 커터칼
+        deck.push({...CARD_DB[1]}); // 바게트
+        deck.push({...CARD_DB[2]}); // 야구배트
+        deck.push({...CARD_DB[3]}); // 총
+        deck.push({...CARD_DB[5]}); // 라이터
+        deck.push({...CARD_DB[8]}); // 글러브
+        for(let i=0; i<3; i++) deck.push({...CARD_DB[10]}); // 손
+        deck.push({...CARD_DB[11]}); // 사전
+        deck.push({...CARD_DB[12]}); // 방패
+        deck.push({...CARD_DB[14]}); // 소화기
+        deck.push({...CARD_DB[16]}); // UNO 반사
+
+        shuffle(deck);
+        
+        // 첫 턴 드로우 (시작 시에는 3장 드로우로 편의 제공)
+        drawCard(3);
+        
+        logMessage("전투 시작! 당신의 턴입니다.");
+        updateUI();
+    }
+
+    // 배열 셔플
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // 카드 드로우 
+    function drawCard(count) {
+        for(let i=0; i<count; i++) {
+            if(deck.length === 0) {
+                if(grave.length === 0) {
+                    logMessage("덱과 무덤에 더 이상 카드가 없습니다!");
+                    break;
+                }
+                deck = [...grave];
+                grave = [];
+                shuffle(deck);
+                logMessage("무덤의 카드를 덱으로 다시 섞었습니다.");
+            }
+            hand.push(deck.pop());
+        }
+    }
+
+    // 로그 출력
+    function logMessage(msg) {
+        const logBox = document.getElementById('log');
+        logBox.innerHTML += `<br>> ${msg}`;
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    // UI 업데이트
+    function updateUI() {
+        // 플레이어 스탯
+        document.getElementById('p-hp').innerText = player.hp;
+        document.getElementById('p-mp').innerText = player.mp;
+        document.getElementById('p-shield').innerText = player.shield;
+        
+        // 플레이어 상태이상
+        let pStatusHtml = '';
+        if(player.status.화염 > 0) pStatusHtml += `<span class="badge">화염 (${player.status.화염}턴)</span>`;
+        if(player.status.감전 > 0) pStatusHtml += `<span class="badge">감전 (${player.status.감전}턴)</span>`;
+        if(player.status.기절 > 0) pStatusHtml += `<span class="badge">기절 (${player.status.기절}턴)</span>`;
+        document.getElementById('p-status').innerHTML = pStatusHtml;
+
+        // 몬스터 스탯
+        document.getElementById('m-name').innerText = monster.name;
+        document.getElementById('m-hp').innerText = monster.hp;
+        
+        let mStatusHtml = '';
+        if(monster.status.화염 > 0) mStatusHtml += `<span class="badge">화염 (${monster.status.화염}턴)</span>`;
+        if(monster.status.감전 > 0) mStatusHtml += `<span class="badge">감전 (${monster.status.감전}턴)</span>`;
+        if(monster.status.기절 > 0) mStatusHtml += `<span class="badge">기절 (${monster.status.기절}턴)</span>`;
+        document.getElementById('m-status').innerHTML = mStatusHtml;
+
+        // 몬스터 의도 표시
+        const intentBox = document.getElementById('m-intent');
+        if(monster.status.기절 > 0) {
+            intentBox.innerText = "기절함 (행동 불가)";
+        } else if(monster.intent.type === '공격') {
+            intentBox.innerText = `공격 예정 (대미지 ${monster.intent.value})`;
+        } else if(monster.intent.type === '디버프') {
+            intentBox.innerText = `상태이상 유도 (${monster.intent.value})`;
+        }
+
+        // 판 정보
+        document.getElementById('turn-count').innerText = turn + (isPlayerTurn ? " (플레이어 턴)" : " (몬스터 턴)");
+        document.getElementById('deck-count').innerText = deck.length;
+        document.getElementById('grave-count').innerText = grave.length;
+
+        // 손패 렌더링
+        const handContainer = document.getElementById('hand');
+        handContainer.innerHTML = '';
+        hand.forEach((card, index) => {
+            const cardEl = document.createElement('div');
+            cardEl.className = `card ${card.type}`;
+            cardEl.onclick = () => useCard(index);
+            
+            let desc = '';
+            if(card.damage) desc += `대미지 ${card.damage}<br>`;
+            if(card.shield) desc += `방어수치 ${card.shield}<br>`;
+            if(card.effect) {
+                if(card.effect.type === '화염제거') desc += `화염 제거`;
+                else if(card.effect.type === '감전제거') desc += `감전 제거`;
+                else if(card.effect.type === '반사') desc += `대미지 반사 태세`;
+                else desc += `${card.effect.type} (${card.effect.value}턴)`;
+            }
+
+            cardEl.innerHTML = `
+                <div class="card-title">${card.name}</div>
+                <div class="card-type">[${card.type}]</div>
+                <div class="card-desc">${desc}</div>
+                <div class="card-cost">${card.type==='공격' ? 'MP '+card.mp : '비용 0'}</div>
+            `;
+            handContainer.appendChild(cardEl);
+        });
+    }
+
+    // 카드 사용 시스템
+    function useCard(index) {
+        if(!isPlayerTurn) return;
+        if(player.status.기절 > 0) {
+            logMessage("기절 상태여서 카드를 사용할 수 없습니다!");
+            return;
+        }
+
+        const card = hand[index];
+
+        // MP 검증 (공격 카드만 필요)
+        if(card.type === '공격' && player.mp < card.mp) {
+            logMessage(`MP가 부족합니다! (필요 MP: ${card.mp})`);
+            return;
+        }
+
+        // 감전 패널티 체크 (기획서: 감전 시 50% 확률로 공격/방어 실패)
+        if(player.status.감전 > 0 && Math.random() < 0.5) {
+            logMessage(`[감전 패널티] 찌릿해서 ${card.name} 사용에 실패했습니다!`);
+            // 카드는 소모됨
+            if(card.type === '공격') player.mp -= card.mp;
+            hand.splice(index, 1);
+            grave.push(card);
+            updateUI();
+            return;
+        }
+
+        // 효과 처리
+        if(card.type === '공격') {
+            player.mp -= card.mp;
+            logMessage(`[${card.name}] 발동!`);
+            if(card.damage > 0) {
+                monster.hp -= card.damage;
+                logMessage(`몬스터에게 ${card.damage}의 대미지를 입혔습니다.`);
+            }
+            if(card.effect) {
+                monster.status[card.effect.type] += card.effect.value;
+                logMessage(`몬스터에게 [${card.effect.type}] 효과를 ${card.effect.value}턴 부여했습니다.`);
+            }
+        } 
+        else if(card.type === '방어') {
+            logMessage(`[${card.name}] 발동!`);
+            if(card.shield > 0) {
+                player.shield += card.shield;
+                logMessage(`방어 수치가 ${card.shield}만큼 상승했습니다.`);
+            }
+            if(card.effect) {
+                if(card.effect.type === '화염제거') {
+                    player.status.화염 = 0;
+                    logMessage("내 몸의 화염 상태이상을 제거했습니다.");
+                } else if(card.effect.type === '감전제거') {
+                    player.status.감전 = 0;
+                    logMessage("내 몸의 감전 상태이상을 제거했습니다.");
+                } else if(card.effect.type === '반사') {
+                    player.reflect = true;
+                    logMessage("이번 턴 몬스터의 공격을 반사할 준비를 합니다.");
+                }
+            }
+        }
+
+        // 핸드에서 제거 후 무덤으로
+        hand.splice(index, 1);
+        grave.push(card);
+
+        checkGameOver();
+        updateUI();
+    }
+
+    // 플레이어 턴 종료 프로세스
+    function endPlayerTurn() {
+        if(!isPlayerTurn) return;
+        isPlayerTurn = false;
+        
+        logMessage("플레이어가 턴을 종료했습니다.");
+        setTimeout(monsterTurn, 800);
+    }
+
+    // 몬스터 턴 행동 프로세스
+    function monsterTurn() {
+        // 1. 몬스터 턴 시작 시 디버프(화염) 체크
+        if(monster.status.화염 > 0) {
+            monster.hp -= 2; // 기획서: 화염 턴마다 2대미지
+            monster.status.화염--;
+            logMessage(`[화염 패널티] 몬스터가 화염으로 인해 2 대미지를 입었습니다.`);
+        }
+
+        if(checkGameOver()) return;
+
+        // 2. 행동 처리
+        if(monster.status.기절 > 0) {
+            logMessage("몬스터가 기절하여 이번 턴을 건너뜁니다.");
+            monster.status.기절--;
+        } else {
+            // 정상 행동
+            if(monster.intent.type === '공격') {
+                let damage = monster.intent.value;
+                logMessage(`몬스터의 공격! (위력: ${damage})`);
+
+                // 플레이어 반사기 체크 (UNO 반사 카드 등)
+                if(player.reflect) {
+                    monster.hp -= damage;
+                    logMessage(`[반사!] 몬스터의 공격을 그대로 반사하여 몬스터가 ${damage} 대미지를 입었습니다!`);
+                    player.reflect = false;
+                } else {
+                    // 방어구 연산
+                    if(player.shield > 0) {
+                        if(player.shield >= damage) {
+                            player.shield -= damage;
+                            logMessage(`방어벽이 공격을 모두 막아냈습니다.`);
+                            damage = 0;
+                        } else {
+                            damage -= player.shield;
+                            player.shield = 0;
+                            logMessage(`방어벽이 파괴되고 남은 ${damage} 대미지가 들어옵니다.`);
+                        }
+                    }
+                    if(damage > 0) {
+                        player.hp -= damage;
+                        logMessage(`플레이어가 ${damage}의 대미지를 입었습니다.`);
+                    }
+                }
+            } else if(monster.intent.type === '디버프') {
+                player.status[monster.intent.value] += 2;
+                logMessage(`몬스터가 괴상한 연기를 뿜어 플레이어에게 [${monster.intent.value}]를 2턴간 부여했습니다.`);
+            }
+        }
+
+        // 3. 몬스터 감전 상태 감소
+        if(monster.status.감전 > 0) monster.status.감전--;
+
+        if(checkGameOver()) return;
+
+        // 4. 새 플레이어 턴 준비 (기획서 사양 적용)
+        turn++;
+        isPlayerTurn = true;
+        player.shield = 0; // 턴 넘어가면 방어 수치 초기화 슬스 국룰
+        player.reflect = false;
+        
+        // 기획서: (필수) MP 5 충전 및 카드 1장 뽑기
+        player.mp += 5;
+        drawCard(1); 
+        logMessage(`--- 턴 ${turn} 시작 ---`);
+        logMessage("MP가 5 충전되었고 카드 1장을 뽑았습니다.");
+
+        // 플레이어 화염 체크
+        if(player.status.화염 > 0) {
+            player.hp -= 2;
+            player.status.화염--;
+            logMessage(`[화염 패널티] 몸에 불이 붙어 2 대미지를 입었습니다.`);
+        }
+        // 플레이어 기절 차감
+        if(player.status.기절 > 0) {
+            player.status.기절--;
+            logMessage("당신은 기절 상태입니다! 카드 사용 불가. 바로 턴을 종료해야 합니다.");
+        }
+
+        // 다음 몬스터 패턴 빌드
+        setMonsterNextIntent();
+        
+        checkGameOver();
+        updateUI();
+    }
+
+    // 몬스터 AI 다음 의도 결정
+    function setMonsterNextIntent() {
+        const patterns = [
+            { type: '공격', value: 6 },
+            { type: '공격', value: 12 },
+            { type: '디버프', value: '화염' },
+            { type: '공격', value: 8 },
+            { type: '디버프', value: '감전' }
+        ];
+        // 무작위 패턴 초이스
+        monster.intent = patterns[Math.floor(Math.random() * patterns.length)];
+    }
+
+    // 게임 종료 조건 판단
+    function checkGameOver() {
+        if(monster.hp <= 0) {
+            showModal("승리!", "몬스터를 쓰러뜨리고 나놀 마스터가 되었습니다!");
+            return true;
+        }
+        if(player.hp <= 0) {
+            showModal("패배..", "HP가 0이 되어 쓰러졌습니다. 덱을 정비해 다시 도전하세요!");
+            return true;
+        }
+        return false;
+    }
+
+    function showModal(title, desc) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-desc').innerText = desc;
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    // 시작 호출
+    window.onload = initGame;
+</script>
+</body>
+</html>

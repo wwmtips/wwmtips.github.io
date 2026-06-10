@@ -14,8 +14,7 @@
           --bg-panel: #1f2228;        /* 인풋 및 2차 배경색 */
           --point-green: #00ffa3;     /* 치지직 시그니처 네온 그린 */
           --point-blue: #00bcff;      /* 치지직 그라디언트 서브 블루 */
-          --point-pink: #ff3a76;      /* 경고 및 연장방송 포인트 핑크 */
-          --text-primary: #ffffff;    /* 주 텍스트 */
+          --point-pink: #ff3a76;      --text-primary: #ffffff;    /* 주 텍스트 */
           --text-secondary: #929aa5;  /* 부 텍스트 */
           --bg-tag: #25282e;          /* 알약형 태그 배경색 */
           --border-color: #262930;    /* 세련된 경계선 색상 */
@@ -38,19 +37,20 @@
             box-shadow: 0 0 40px rgba(0,0,0,0.7);
         }
 
-        /* 최상단 메뉴 바 */
+        /* 최상단 메뉴 바 (높이 및 패딩 축소) */
         #top-bar {
-            background-color: var(--bg-main); padding: 12px 16px;
+            background-color: var(--bg-main); padding: 8px 12px;
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border-color); font-size: 13px;
+            border-bottom: 1px solid var(--border-color); font-size: 12px;
+            flex-shrink: 0;
         }
-        #clock-display { font-weight: 700; color: var(--text-primary); display: flex; flex-direction: column; gap: 2px; }
-        .date-text { font-size: 11px; color: var(--text-secondary); font-weight: 400; }
+        #clock-display { font-weight: 700; color: var(--text-primary); display: flex; flex-direction: column; gap: 1px; }
+        .date-text { font-size: 10px; color: var(--text-secondary); font-weight: 400; }
         
-        .top-btn-group { display: flex; gap: 8px; }
+        .top-btn-group { display: flex; gap: 6px; }
         .top-btn {
             background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); 
-            padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px;
+            padding: 4px 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 11px;
             transition: all 0.2s ease;
         }
         .top-btn:hover { background-color: var(--bg-panel); border-color: var(--text-secondary); }
@@ -58,40 +58,43 @@
         #overtime-btn { color: var(--point-pink); border-color: rgba(255, 58, 118, 0.3); background-color: rgba(255, 58, 118, 0.05);}
         #overtime-btn.on { background-color: var(--point-pink); color: #fff; border-color: var(--point-pink); box-shadow: 0 0 10px rgba(255, 58, 118, 0.4); }
 
-        /* 자산 현황 판넬 */
+        /* 자산 현황 판넬 (세로 폭 컴팩트하게 전면 수정) */
         #header-panel {
-            padding: 20px 16px; background-color: var(--bg-card); border-bottom: 1px solid var(--border-color);
-            display: flex; justify-content: space-between; align-items: flex-end;
+            padding: 10px 14px; background-color: var(--bg-card); border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-shrink: 0;
         }
-        .asset-info { text-align: left; }
-        .asset-title { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
-        .asset-total { font-size: 24px; font-weight: 800; margin: 4px 0; color: var(--text-primary); }
-        .roi { font-size: 13px; font-weight: 600; }
+        .asset-info { text-align: left; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .asset-title { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+        .asset-total { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+        .roi { font-size: 11px; font-weight: 600; text-align: right; }
         .roi.up { color: var(--point-green); } 
         .roi.down { color: var(--point-pink); }
 
-        /* 방송 상태 배너 */
+        /* 방송 상태 배너 (상단 컴팩트화 연동) */
         #market-banner {
             background-color: #131518; color: var(--text-secondary);
-            text-align: center; padding: 8px; font-weight: 700; font-size: 12px;
+            text-align: center; padding: 5px; font-weight: 700; font-size: 11px;
             border-bottom: 1px solid var(--border-color); letter-spacing: -0.3px;
+            flex-shrink: 0;
         }
         #market-banner.open { background-color: rgba(0, 255, 163, 0.08); color: var(--point-green); border-bottom: 1px solid rgba(0, 255, 163, 0.2); }
 
-        /* 트렌드 전광판 티커 */
+        /* 트렌드 전광판 티커 (패딩 축소) */
         #ticker-container {
             width: 100%; overflow-x: auto; background-color: var(--bg-main);
             border-bottom: 1px solid var(--border-color); scrollbar-width: none; 
+            flex-shrink: 0;
         }
         #ticker-container::-webkit-scrollbar { display: none; }
         #ticker-panel {
-            display: flex; gap: 24px; padding: 12px 16px; width: max-content;
+            display: flex; gap: 20px; padding: 6px 14px; width: max-content;
         }
-        .stock-item { display: flex; flex-direction: column; align-items: flex-start; min-width: 85px; }
-        .stock-name { font-weight: 600; color: var(--text-secondary); font-size: 11px; margin-bottom: 3px;}
-        .stock-price { font-weight: 700; color: var(--text-primary); font-size: 13px; transition: color 0.3s;}
-        .trend-up { color: var(--point-green); font-size: 10px; font-weight: 600; margin-top: 2px; }
-        .trend-down { color: var(--point-pink); font-size: 10px; font-weight: 600; margin-top: 2px; }
+        .stock-item { display: flex; flex-direction: column; align-items: flex-start; min-width: 80px; }
+        .stock-name { font-weight: 600; color: var(--text-secondary); font-size: 10px; margin-bottom: 1px;}
+        .stock-price { font-weight: 700; color: var(--text-primary); font-size: 12px; transition: color 0.3s;}
+        .trend-up { color: var(--point-green); font-size: 9px; font-weight: 600; }
+        .trend-down { color: var(--point-pink); font-size: 9px; font-weight: 600; }
 
         /* 인게임 스튜디오 스크린(Canvas) */
         #canvas-container {
@@ -104,24 +107,24 @@
         .expand-btn {
             position: absolute; top: 12px; right: 12px; background-color: var(--bg-panel); color: var(--point-green);
             border: 1px solid rgba(0, 255, 163, 0.3); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer;
-            backdrop-filter: blur(4px); transition: all 0.2s ease;
+            backdrop-filter: blur(4px); transition: all 0.2s ease; z-index: 10;
         }
         .expand-btn:hover { background-color: var(--point-green); color: #000; }
 
-        /* 실시간 방송/수금 로그 패널 */
+        /* [하단 고정 및 가시성 보장] 실시간 방송/수금 로그 패널 구조 개편 */
         #log-panel {
-            flex: 1; padding: 12px; background-color: var(--bg-main);
-            overflow-y: auto; display: flex; flex-direction: column; gap: 6px;
+            flex: 1; min-height: 140px; padding: 10px; background-color: var(--bg-main);
+            overflow-y: auto; display: flex; flex-direction: column; gap: 5px;
         }
         .log-item {
-            font-size: 12px; color: var(--text-primary); background-color: var(--bg-card);
-            padding: 10px 12px; border-radius: 8px; border-left: 3px solid var(--border-color); word-break: keep-all; line-height: 1.4;
-            display: flex; gap: 10px; align-items: center;
+            font-size: 11px; color: var(--text-primary); background-color: var(--bg-card);
+            padding: 8px 10px; border-radius: 8px; border-left: 3px solid var(--border-color); word-break: keep-all; line-height: 1.4;
+            display: flex; gap: 8px; align-items: center; flex-shrink: 0;
         }
-        .log-time { color: var(--text-secondary); font-size: 11px; min-width: 50px; font-family: monospace; }
+        .log-time { color: var(--text-secondary); font-size: 10px; min-width: 46px; font-family: monospace; }
         .log-content { flex: 1; font-weight: 500; }
         
-        /* 치지직 테마에 맞춘 로그 아이템 강조 보더 */
+        /* 로그 아이템 강조 보더 */
         .log-item.superchat { border-left-color: var(--point-green); background-color: rgba(0, 255, 163, 0.02); }
         .log-item.superchat .log-content { color: var(--point-green); }
         .log-item.superchat .log-msg { color: var(--text-primary); font-weight: 400; margin-left: 4px; }
@@ -132,7 +135,7 @@
         .log-item.upgrade { border-left-color: #a855f7; }
         .log-item.upgrade .log-content { color: #c084fc; font-weight: 700; }
 
-        /* 모달 시스템 공통 (치지직 오버레이 팝업 스타일) */
+        /* 모달 시스템 공통 */
         .modal-overlay {
             display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(5, 5, 7, 0.85); z-index: 100; backdrop-filter: blur(4px);
@@ -156,8 +159,6 @@
 
         /* 스트리머 인포 프로필 & 스탯 그리드 */
         .profile-container { display: flex; gap: 16px; margin-bottom: 16px; align-items: center; }
-        
-        /* 모달 내부 초상화 치지직 링 장식 */
         .portrait-box {
             width: 64px; height: 64px; background-color: var(--bg-main); border-radius: 50%;
             display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
@@ -229,8 +230,10 @@
 
         <div id="header-panel">
             <div class="asset-info">
-                <div class="asset-title">MCN 법인 자금</div>
-                <div class="asset-total" id="cash-display">10,000,000원</div>
+                <div>
+                    <div class="asset-title">MCN 법인 자금</div>
+                    <div class="asset-total" id="cash-display">10,000,000원</div>
+                </div>
                 <div class="roi" id="roi-display">누적 소속사 수익: 0원</div>
             </div>
         </div>
@@ -373,7 +376,6 @@
             streamers: [], idCounter: 1
         };
 
-        /* 치지직 브랜드 정체성에 맞춘 티어 색상 변경 */
         const TIERS = {
             'Rookie': { roleName: '🌱하꼬방', color: '#929aa5', speed: 1.0, streamCooldown: 8, baseDrain: 0.15, superchatPower: 5000 },
             'Pro':    { roleName: '🌟중견방', color: '#00bcff', speed: 1.2, streamCooldown: 5, baseDrain: 0.1, superchatPower: 30000 },
@@ -517,36 +519,30 @@
                 }
             }
 
-            /* 🎨 인게임 캐릭터 및 치지직 그라디언트 초상화 보더 디자인 수정 */
             draw() {
                 if (this.state === 'off_work') return; 
 
-                // 그림자 효과
                 ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.beginPath(); ctx.arc(this.x, this.y + 12, 11, 0, Math.PI * 2); ctx.fill();
                 
-                // 몸체 그리기 (세련된 스퀘어 디자인)
                 ctx.fillStyle = this.color; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(this.x - 8, this.y - 4, 16, 16, 5) : ctx.fillRect(this.x - 8, this.y - 4, 16, 16); ctx.fill();
                 
-                // 치지직 특유의 링 장식 (방송 상태에 따른 실시간 그라디언트 테두리화)
                 if (this.state === 'streaming_continuous') {
                     let grad = ctx.createLinearGradient(this.x - 9, this.y - 19, this.x + 9, this.y - 1);
-                    grad.addColorStop(0, '#00ffa3'); // 네온 그린
-                    grad.addColorStop(1, '#00bcff'); // 서브 블루
+                    grad.addColorStop(0, '#00ffa3'); 
+                    grad.addColorStop(1, '#00bcff'); 
                     ctx.fillStyle = grad;
                     ctx.beginPath(); ctx.arc(this.x, this.y - 10, 9, 0, Math.PI * 2); ctx.fill();
                 } else if (this.state === 'resting_continuous') {
-                    ctx.fillStyle = '#1f2228'; // 휴식 중 회색 보더
+                    ctx.fillStyle = '#1f2228'; 
                     ctx.beginPath(); ctx.arc(this.x, this.y - 10, 9, 0, Math.PI * 2); ctx.fill();
                 }
 
-                // 캐릭터 내부 얼굴 (링 두께 공백 확보 후 채우기)
                 let faceColor = this.makeupLevel > 0 ? '#ffccd5' : '#fbe5d6';
-                ctx.fillStyle = this.state !== 'idle' ? '#181a1e' : '#0c0d0f'; // 외곽 구분 투명 대체용 선처리
+                ctx.fillStyle = this.state !== 'idle' ? '#181a1e' : '#0c0d0f'; 
                 ctx.beginPath(); ctx.arc(this.x, this.y - 10, 8, 0, Math.PI * 2); ctx.fill();
                 ctx.fillStyle = faceColor;
                 ctx.beginPath(); ctx.arc(this.x, this.y - 10, 6.5, 0, Math.PI * 2); ctx.fill();
 
-                // 하단 메타 데이터 네임택 디자인 개편
                 let boxW = 58; let boxH = 28; let boxX = this.x - boxW/2; let boxY = this.y + 16;
                 ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 3;
                 ctx.fillStyle = '#181a1e'; ctx.strokeStyle = '#262930'; ctx.lineWidth = 1; ctx.beginPath();
@@ -952,7 +948,6 @@
         let lastSimTime = 0;
         let lastSaveTime = Date.now();
 
-        /* 🎨 인게임 캔버스 그래픽 요소 전면 리스타일링 */
         function gameLoop() {
             if (!isPaused) {
                 let isBroadcastTime = updateClockAndBanner();
@@ -970,35 +965,29 @@
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // 메인 오피스 배경 스타일링 (방송 시간 여부에 따라 유기적 전환)
                 if(!isBroadcastTime) {
                     ctx.fillStyle = '#0a0b0d'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.fillStyle = '#131518'; ctx.fillRect(16, 16, 308, 184); // 데스크 존
-                    ctx.fillStyle = '#131518'; ctx.fillRect(16, 216, 308, 108); // 휴게실 존
+                    ctx.fillStyle = '#131518'; ctx.fillRect(16, 16, 308, 184); 
+                    ctx.fillStyle = '#131518'; ctx.fillRect(16, 216, 308, 108); 
                 } else {
                     ctx.fillStyle = '#0c0d0f'; ctx.fillRect(0, 0, canvas.width, canvas.height);
                     ctx.fillStyle = '#181a1e'; ctx.fillRect(16, 16, 308, 184);
                     ctx.fillStyle = '#181a1e'; ctx.fillRect(16, 216, 308, 108);
                 }
                 
-                // 구역 텍스트 라벨링
                 ctx.fillStyle = '#262930'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'left';
                 ctx.fillText('STUDIO AREA', 28, 40); ctx.fillText('LOUNGE AREA', 28, 238);
 
-                // 방송 책상 및 모니터 장비 그래픽 처리
                 world.desks.forEach(desk => {
                     if(!desk.active) {
                         ctx.fillStyle = '#0a0b0d'; ctx.fillRect(desk.x - 20, desk.y - 12, 40, 18);
                         ctx.fillStyle = '#262930'; ctx.font = '12px sans-serif'; ctx.fillText('🔒', desk.x - 6, desk.y + 4);
                         return;
                     }
-                    // 책상 본체
                     ctx.fillStyle = '#25282e'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(desk.x - 20, desk.y - 12, 40, 18, 3) : ctx.fillRect(desk.x - 20, desk.y - 12, 40, 18); ctx.fill();
-                    // 모니터 본체
                     ctx.fillStyle = '#050507'; ctx.fillRect(desk.x - 14, desk.y - 16, 28, 12);
                     
                     if(desk.occupant && isBroadcastTime) {
-                        // 방송 송출 중 모니터 불빛 장식 (네온 그린 하이라이팅)
                         ctx.fillStyle = 'rgba(0, 255, 163, 0.25)'; ctx.fillRect(desk.x - 12, desk.y - 14, 24, 8); 
                         ctx.fillStyle = 'var(--point-green)'; ctx.beginPath(); ctx.arc(desk.x + 16, desk.y - 18, 3, 0, Math.PI*2); ctx.fill(); 
                     } else {
@@ -1006,7 +995,6 @@
                     }
                 });
 
-                // 휴게존 소파 안락의자 그래픽 처리
                 world.restAreas.forEach(cm => {
                     if(!cm.active) return;
                     ctx.fillStyle = '#25282e'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(cm.x - 15, cm.y - 10, 30, 20, 5) : ctx.fillRect(cm.x - 15, cm.y - 10, 30, 20); ctx.fill();

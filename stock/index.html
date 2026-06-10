@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>리얼타임 오피스월드 v10 (여의도 한국장 에디션)</title>
+    <title>리얼타임 오피스월드 v12 (데이터 로딩 패치)</title>
     <style>
         body {
             background-color: #f4f5f7; color: #333333;
@@ -68,9 +68,9 @@
             display: flex; gap: 20px; padding: 10px 15px; width: max-content;
             font-family: 'Malgun Gothic', sans-serif; font-size: 13px;
         }
-        .stock-item { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
+        .stock-item { display: flex; flex-direction: column; align-items: center; min-width: 65px; }
         .stock-name { font-weight: bold; color: #555; font-size: 11px; margin-bottom: 2px;}
-        .stock-price { font-weight: bold; color: #24292e; transition: color 0.3s;}
+        .stock-price { font-weight: bold; color: #24292e; transition: color 0.3s, transform 0.3s;}
 
         /* 게임 화면 */
         #canvas-container {
@@ -181,21 +181,20 @@
         let lastMonth = new Date().getMonth(); 
         let lastApiTime = 0;
 
-        // 한국장 10종목 (종목명, 야후파이낸스 심볼, KST 기준 초기 임시가)
+        // 실제 주가에 맞춘 초기 데이터 (API가 끊겨도 최소 이 가격으로 화면에 뿌려짐)
         let market = {
-            '005930.KS': { name: '삼성전자', price: 75000, trend: 0 },
-            '000660.KS': { name: 'SK하이닉스', price: 200000, trend: 0 },
+            '005930.KS': { name: '삼성전자', price: 306500, trend: 0 },
+            '000660.KS': { name: 'SK하이닉스', price: 2215000, trend: 0 },
             '373220.KS': { name: 'LG엔솔', price: 350000, trend: 0 },
             '207940.KS': { name: '삼바', price: 750000, trend: 0 },
             '005380.KS': { name: '현대차', price: 260000, trend: 0 },
             '068270.KS': { name: '셀트리온', price: 180000, trend: 0 },
-            '035420.KS': { name: 'NAVER', price: 170000, trend: 0 },
+            '035420.KS': { name: 'NAVER', price: 257000, trend: 0 },
             '035720.KS': { name: '카카오', price: 42000, trend: 0 },
             '247540.KQ': { name: '에코프로비엠', price: 190000, trend: 0 },
             '086520.KQ': { name: '에코프로', price: 90000, trend: 0 }
         };
 
-        // 초기 자본금 1억 원
         let portfolio = { initialCash: 100000000, cash: 100000000, stocks: {} };
         for (let symbol in market) portfolio.stocks[symbol] = { amount: 0, avgPrice: 0 };
 
@@ -205,7 +204,6 @@
             pawns: [], pawnIdCounter: 1
         };
 
-        // 한국장 맞춤 월급 (단위: 원)
         const ROLES = {
             'Junior': { roleName: '주니어', color: '#0366d6', speed: 1.0, tradeCooldown: 8, mentalDrain: 0.1, volume: 10, hireFee: 500000, salary: 2500000 },
             'Senior': { roleName: '시니어', color: '#6f42c1', speed: 1.5, tradeCooldown: 5, mentalDrain: 0.15, volume: 50, hireFee: 3000000, salary: 6000000 },
@@ -232,12 +230,9 @@
 
             update(isMarketOpen) {
                 if (!isMarketOpen && this.state !== 'off_work' && this.state !== 'going_home') {
-                    this.state = 'going_home';
-                    this.targetX = 170; this.targetY = 350; 
+                    this.state = 'going_home'; this.targetX = 170; this.targetY = 350; 
                 } else if (isMarketOpen && this.state === 'off_work') {
-                    this.state = 'arriving';
-                    this.x = 170; this.y = 350;
-                    this.targetX = 170; this.targetY = 260; 
+                    this.state = 'arriving'; this.x = 170; this.y = 350; this.targetX = 170; this.targetY = 260; 
                 }
 
                 if (this.state === 'going_home' || this.state === 'arriving' || this.state === 'moving') {
@@ -247,7 +242,6 @@
                         this.x += (dx / dist) * this.speed; this.y += (dy / dist) * this.speed; 
                     } else { 
                         this.x = this.targetX; this.y = this.targetY;
-                        
                         if (this.state === 'going_home') this.state = 'off_work';
                         else if (this.state === 'arriving') this.state = 'idle';
                         else this.state = this.nextState; 
@@ -346,18 +340,14 @@
                 let index = world.pawns.indexOf(selectedPawn);
                 if (index > -1) {
                     world.pawns.splice(index, 1);
-                    addLog(`[해고] ${selectedPawn.name} (${selectedPawn.roleName}) 직원을 해고했습니다.`, 'hr');
+                    addLog(`[해고] ${selectedPawn.name} 직원을 해고했습니다.`, 'hr');
                 }
                 closePawnModal(); updateUI();
             }
         }
 
-        // ==========================================
-        // 시스템 코어: 시간 확인 및 매매 로직
-        // ==========================================
         function checkMarketOpen() {
             if(forceOvertime) return true;
-
             let now = new Date();
             let h = now.getHours(); let m = now.getMinutes();
             // 한국 장 시간: 09:00 ~ 15:30
@@ -370,7 +360,7 @@
             const btn = document.getElementById('overtime-btn');
             if(forceOvertime) {
                 btn.style.backgroundColor = '#fce8e6'; btn.style.color = '#d93025'; btn.innerText = '🌙 야근 취소';
-                addLog('⚠️ 강제 야근 지시가 내려졌습니다. 직원들이 곧 출근합니다.', 'event');
+                addLog('⚠️ 강제 야근 지시가 내려졌습니다. 직원들이 출근합니다.', 'event');
             } else {
                 btn.style.backgroundColor = '#ffffff'; btn.style.color = '#333'; btn.innerText = '🌙 야근 지시';
                 addLog('✅ 강제 야근이 해제되었습니다. 정규 장시간이 아니면 퇴근합니다.', 'event');
@@ -387,44 +377,70 @@
             let isBuying = Math.random() > 0.5;
             if (pawn.roleType === 'Senior') isBuying = stock.trend > 0 ? (Math.random() > 0.3) : (Math.random() > 0.7);
 
+            // 주가가 NaN으로 오염되는 것을 방지
+            if(!price || isNaN(price)) return; 
+
             let totalCost = price * vol;
 
             if (isBuying && portfolio.cash >= totalCost) {
                 let totalValue = (portStock.amount * portStock.avgPrice) + totalCost;
                 portStock.amount += vol; portStock.avgPrice = totalValue / portStock.amount;
                 portfolio.cash -= totalCost;
-                addLog(`[매수] ${pawn.name}: ${stock.name} ${vol}주 (${totalCost.toLocaleString()}원)`, 'buy');
+                addLog(`[매수] ${pawn.name}: ${stock.name} ${vol}주 (${Math.floor(totalCost).toLocaleString()}원)`, 'buy');
             } else if (!isBuying && portStock.amount >= vol) {
                 let realizedProfit = (price - portStock.avgPrice) * vol;
                 pawn.totalProfit += realizedProfit; portfolio.cash += totalCost; portStock.amount -= vol;
-                let profitStr = realizedProfit >= 0 ? `+${realizedProfit.toLocaleString()}` : `${realizedProfit.toLocaleString()}`;
+                let profitStr = realizedProfit >= 0 ? `+${Math.floor(realizedProfit).toLocaleString()}` : `${Math.floor(realizedProfit).toLocaleString()}`;
                 addLog(`[매도] ${pawn.name}: ${stock.name} ${vol}주 (손익: ${profitStr}원)`, realizedProfit >= 0 ? 'buy' : 'sell');
             }
             updateUI();
         }
 
+        // ==========================================
+        // 🌐 데이터 패치 함수 (Safeguard 강화)
+        // ==========================================
         async function fetchRealMarketData() {
             if (!isApiMode) return;
+            addLog(`📡 [데이터 갱신 중...] 주가 데이터를 읽어옵니다.`, 'api');
             try {
                 const symbols = Object.keys(market).join(',');
                 const targetUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`;
+                
+                // 브라우저 환경에서 자주 막히는 것을 방지하기 위해 여러 프록시를 둬야 하지만, 
+                // 가장 무난한 allorigins를 우선 사용합니다.
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
                 
                 const response = await fetch(proxyUrl);
                 const data = await response.json();
+                
+                if (!data || !data.contents) throw new Error("API 응답이 비어있습니다.");
+                
                 const parsedData = JSON.parse(data.contents);
                 const quotes = parsedData.quoteResponse.result;
 
+                let isUpdated = false;
                 quotes.forEach(quote => {
                     const symbol = quote.symbol;
                     if (market[symbol]) {
-                        market[symbol].price = quote.regularMarketPrice || market[symbol].price;
-                        market[symbol].trend = quote.regularMarketChangePercent || 0; 
+                        const newPrice = quote.regularMarketPrice;
+                        // NaN 방어 로직: 정상적인 숫자 데이터만 받음
+                        if (newPrice && !isNaN(newPrice)) {
+                            if(market[symbol].price !== newPrice) {
+                                blinkTicker(symbol, newPrice > market[symbol].price);
+                                isUpdated = true;
+                            }
+                            market[symbol].price = newPrice;
+                            market[symbol].trend = quote.regularMarketChangePercent || 0; 
+                        }
                     }
                 });
+                
+                if(isUpdated) addLog(`✅ [데이터 완료] 실시간 주가를 화면에 뿌렸습니다.`, 'api');
                 updateUI();
             } catch (error) {
                 console.error("API Fetch Error:", error);
+                addLog(`⚠️ [서버 지연] 데이터를 읽지 못해 가상 데이터로 대체합니다.`, 'error');
+                simulateMarket(); 
             }
         }
 
@@ -433,27 +449,55 @@
             const btn = document.getElementById('api-toggle-btn');
             if(isApiMode) {
                 btn.innerText = '🟢 실시간 API'; btn.className = 'top-btn';
-                addLog('📡 실시간 API 연동 (한국 주식 실시간 가격 동기화)', 'api');
+                addLog('📡 실시간 API 모드 활성화', 'api');
                 fetchRealMarketData();
             } else {
                 btn.innerText = '🔴 시뮬레이션'; btn.className = 'top-btn off';
-                addLog('🎲 가상 시뮬레이션 모드 (주가가 랜덤하게 계속 움직입니다)', 'event');
+                addLog('🎲 가상 시뮬레이션 모드 활성화', 'event');
             }
+        }
+
+        function simulateMarket() {
+            for (let symbol in market) {
+                let changePercent = (Math.random() - 0.5) * 0.02;
+                let newPrice = market[symbol].price + (market[symbol].price * changePercent);
+                if (newPrice > 0 && !isNaN(newPrice)) {
+                    market[symbol].price = newPrice;
+                    market[symbol].trend = changePercent;
+                }
+            }
+            updateUI();
         }
 
         function getCurrentTotalAssets() {
             let stockValue = 0;
-            for (let symbol in portfolio.stocks) { stockValue += portfolio.stocks[symbol].amount * market[symbol].price; }
+            for (let symbol in portfolio.stocks) { 
+                let p = market[symbol].price;
+                if(!isNaN(p)) { stockValue += portfolio.stocks[symbol].amount * p; }
+            }
             return portfolio.cash + stockValue;
         }
 
+        // 초기 전광판을 빈칸이 아니라 기본 가격으로 바로 채워넣음
         function initTicker() {
             let tickerPanel = document.getElementById('ticker-panel');
             tickerPanel.innerHTML = '';
             for (let symbol in market) {
                 let div = document.createElement('div'); div.className = 'stock-item';
-                div.innerHTML = `<span class="stock-name">${market[symbol].name}</span><span class="stock-price" id="price-${symbol.replace('.', '-')}"></span>`;
+                div.innerHTML = `<span class="stock-name">${market[symbol].name}</span><span class="stock-price" id="price-${symbol.replace('.', '-')}">${Math.floor(market[symbol].price).toLocaleString()}</span>`;
                 tickerPanel.appendChild(div);
+            }
+        }
+
+        function blinkTicker(symbol, isUp) {
+            let el = document.getElementById(`price-${symbol.replace('.', '-')}`);
+            if(el) {
+                el.style.color = isUp ? '#d73a49' : '#0366d6';
+                el.style.transform = 'scale(1.15)';
+                setTimeout(() => { 
+                    el.style.color = '#24292e'; 
+                    el.style.transform = 'scale(1)';
+                }, 1000);
             }
         }
 
@@ -496,7 +540,7 @@
             let totalAssets = getCurrentTotalAssets();
             let roi = ((totalAssets - portfolio.initialCash) / portfolio.initialCash) * 100;
 
-            document.getElementById('total-assets').innerText = `${totalAssets.toLocaleString()}원`;
+            document.getElementById('total-assets').innerText = `${Math.floor(totalAssets).toLocaleString()}원`;
             document.getElementById('cash-display').innerText = `${Math.floor(portfolio.cash).toLocaleString()}원`;
             
             let roiEl = document.getElementById('roi-display');
@@ -504,12 +548,11 @@
             roiEl.className = `roi ${roi >= 0 ? 'up' : 'down'}`;
 
             for (let symbol in market) {
-                // querySelector 호환을 위해 id의 특수문자 치환
                 let safeSymbol = symbol.replace('.', '-');
                 let priceEl = document.getElementById(`price-${safeSymbol}`);
-                if (priceEl) {
+                if (priceEl && !isNaN(market[symbol].price)) {
                     priceEl.innerText = `${Math.floor(market[symbol].price).toLocaleString()}`;
-                    priceEl.style.color = market[symbol].trend >= 0 ? '#d73a49' : '#0366d6';
+                    // API 호출 시의 색상 반짝임 애니메이션을 위해 평상시 색상은 초기화하지 않음
                 }
             }
         }
@@ -541,19 +584,13 @@
             if (!isPaused) {
                 let isMarketOpen = updateClockAndBanner();
 
-                // 10초마다 API 데이터 또는 시뮬레이션 데이터 갱신
+                // 15초마다 데이터 갱신 (API 서버 부하 방지 및 UI 쾌적화)
                 let nowTs = Date.now();
-                if (nowTs - lastApiTime > 10000) {
+                if (nowTs - lastApiTime > 15000) {
                     lastApiTime = nowTs;
-                    if (isApiMode && isMarketOpen) fetchRealMarketData(); // 장이 열려있을 때만 API 콜
-                    else if (!isApiMode && isMarketOpen) { // 시뮬모드 + 장열림
-                        for (let symbol in market) {
-                            let changePercent = (Math.random() - 0.5) * 0.02;
-                            market[symbol].price += market[symbol].price * changePercent;
-                            if (market[symbol].price < 1) market[symbol].price = 1;
-                            market[symbol].trend = changePercent;
-                        }
-                        updateUI();
+                    if (isApiMode && isMarketOpen) fetchRealMarketData(); 
+                    else if (!isApiMode && isMarketOpen) { 
+                        simulateMarket();
                     }
                 }
 
@@ -590,10 +627,11 @@
             requestAnimationFrame(gameLoop);
         }
 
+        // 가장 먼저 화면에 가격을 뿌림
         initTicker();
         world.pawns.push(new Pawn(world.pawnIdCounter++, 'Junior'));
         
-        // KST 기준 현재 날짜 출력 (시스템에서 불러온 날짜)
+        // 첫 번째 데이터 호출
         fetchRealMarketData();
         const startNow = new Date();
         addLog(`여의도 오피스월드 개장 (${startNow.getFullYear()}년 ${startNow.getMonth() + 1}월 ${startNow.getDate()}일 기준)`, 'event');

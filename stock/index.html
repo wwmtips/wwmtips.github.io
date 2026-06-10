@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>리얼타임 오피스월드 v12 (데이터 로딩 패치)</title>
+    <title>리얼타임 오피스월드 v13 (프록시 자동우회 패치)</title>
     <style>
         body {
             background-color: #f4f5f7; color: #333333;
@@ -34,6 +34,617 @@
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
         .top-btn:hover { background-color: #f3f4f6; }
+        
+        #api-toggle-btn { background-color: #e6f4ea; color: #1e8e3e; border-color: #1e8e3e; }
+        #api-toggle-btn.off { background-color: #fce8e6; color: #d93025; border-color: #d93025; }
+
+        /* 자산 현황 */
+        #header-panel {
+            padding: 15px; background-color: #fafbfc; border-bottom: 1px solid #e1e4e8;
+            display: flex; justify-content: space-between; align-items: flex-end;
+        }
+        .asset-info { text-align: left; }
+        .asset-title { font-size: 13px; color: #6a737d; }
+        .asset-total { font-size: 22px; font-weight: bold; margin: 3px 0; color: #24292e; }
+        .roi { font-size: 14px; font-weight: bold; }
+        .roi.up { color: #d73a49; } 
+        .roi.down { color: #0366d6; }
+
+        /* 상태 배너 (출퇴근) */
+        #market-banner {
+            background-color: #e1e4e8; color: #444;
+            text-align: center; padding: 6px; font-weight: bold; font-size: 12px;
+            border-bottom: 1px solid #d1d5da;
+        }
+        #market-banner.open { background-color: #e6f4ea; color: #1e8e3e; border-color: #c3e6cb; }
+
+        /* 주식 전광판 */
+        #ticker-container {
+            width: 100%; overflow-x: auto; background-color: #ffffff;
+            border-bottom: 1px solid #e1e4e8; scrollbar-width: none; 
+        }
+        #ticker-container::-webkit-scrollbar { display: none; }
+        #ticker-panel {
+            display: flex; gap: 20px; padding: 10px 15px; width: max-content;
+            font-family: 'Malgun Gothic', sans-serif; font-size: 13px;
+        }
+        .stock-item { display: flex; flex-direction: column; align-items: center; min-width: 65px; }
+        .stock-name { font-weight: bold; color: #555; font-size: 11px; margin-bottom: 2px;}
+        .stock-price { font-weight: bold; color: #24292e; transition: color 0.3s, transform 0.3s;}
+
+        /* 게임 화면 */
+        #canvas-container {
+            flex: none; display: flex; justify-content: center;
+            background-color: #f4f5f7; padding: 0; border-bottom: 1px solid #e1e4e8;
+        }
+        #game-canvas { background-color: #ebd5c1; cursor: pointer; }
+
+        /* 매매 로그 */
+        #log-panel {
+            flex: 1; padding: 10px; background-color: #ffffff;
+            overflow-y: auto; display: flex; flex-direction: column; gap: 4px;
+        }
+        .log-item {
+            font-size: 12px; color: #444; background-color: #ffffff;
+            padding: 6px; border-bottom: 1px solid #f0f0f0; word-break: keep-all; line-height: 1.4;
+            display: flex; gap: 8px; align-items: center;
+        }
+        .log-time { color: #888; font-size: 11px; min-width: 55px; }
+        .log-content { flex: 1; }
+        .log-item.buy .log-content { color: #d73a49; }
+        .log-item.sell .log-content { color: #0366d6; }
+        .log-item.event .log-content { color: #e36209; font-weight: bold;}
+        .log-item.api .log-content { color: #28a745; font-weight: bold;}
+        .log-item.hr .log-content { color: #6f42c1; }
+        .log-item.error .log-content { color: #cb2431; font-weight: bold; }
+
+        /* 모달 디자인 */
+        .modal-overlay {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5); z-index: 100;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: #ffffff; width: 85%; border-radius: 12px;
+            padding: 20px; box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; color: #24292e; border-bottom: 2px solid #f6f8fa; padding-bottom: 10px;}
+        .close-btn { width: 100%; padding: 12px; margin-top: 10px; background-color: #24292e; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="mobile-container">
+        <div id="top-bar">
+            <div id="clock-display">
+                <span id="real-time-clock">00:00:00</span>
+                <span id="real-date-text" class="date-text">2026. 6. 10</span>
+            </div>
+            <div class="top-btn-group">
+                <button id="overtime-btn" class="top-btn" onclick="toggleOvertime()">🌙 야근 지시</button>
+                <button id="api-toggle-btn" class="top-btn" onclick="toggleApiMode()">🟢 실시간 API</button>
+                <button class="top-btn" onclick="openHrModal()">신규채용</button>
+            </div>
+        </div>
+
+        <div id="market-banner">💤 한국 주식 장 마감 (직원 퇴근 상태)</div>
+
+        <div id="header-panel">
+            <div class="asset-info">
+                <div class="asset-title">총 자산 (현금: <span id="cash-display">100,000,000원</span>)</div>
+                <div class="asset-total" id="total-assets">100,000,000원</div>
+                <div class="roi" id="roi-display">수익률: 0.00%</div>
+            </div>
+        </div>
+
+        <div id="ticker-container">
+            <div id="ticker-panel"></div>
+        </div>
+
+        <div id="canvas-container">
+            <canvas id="game-canvas" width="340" height="340"></canvas>
+        </div>
+
+        <div id="log-panel" id="log-list"></div>
+
+        <div id="hr-modal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-title">신규 직원 채용 (최대 6명)</div>
+                <button class="close-btn" style="background-color: #0366d6; margin-top:0; margin-bottom:10px;" onclick="hireEmployee('Junior')">📘 주니어 (월급 250만 / 채용비 50만)</button>
+                <button class="close-btn" style="background-color: #6f42c1; margin-top:0; margin-bottom:10px;" onclick="hireEmployee('Senior')">🟪 시니어 (월급 600만 / 채용비 300만)</button>
+                <button class="close-btn" style="background-color: #e36209; margin-top:0; margin-bottom:10px;" onclick="hireEmployee('Quant')">🟧 퀀트 개발자 (월급 1,200만 / 채용비 500만)</button>
+                <button class="close-btn" style="background-color: #6a737d;" onclick="closeHrModal()">취소 및 닫기</button>
+            </div>
+        </div>
+
+        <div id="pawn-modal" class="modal-overlay">
+            <div class="modal-content" style="text-align: center;">
+                <div class="modal-title" id="pawn-modal-name">이름 (직급)</div>
+                <div style="font-size: 13px; color: #6a737d; margin-bottom: 5px;">현재까지 누적 실현손익</div>
+                <div id="pawn-modal-profit" style="font-size: 26px; font-weight: bold; margin-bottom: 20px;">+0원</div>
+                <button class="close-btn" style="background-color: #d73a49; margin-top: 0;" onclick="fireSelectedPawn()">이 직원 해고하기</button>
+                <button class="close-btn" style="background-color: #e1e4e8; color: #24292e;" onclick="closePawnModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const logPanel = document.getElementById('log-panel');
+
+        const KOR_NAMES = ['김지훈', '이서연', '박민수', '최수아', '정지우', '강현우', '윤서아', '임도현', '한지민', '오유진', '권은우', '송예리'];
+
+        let isPaused = false;
+        let isApiMode = true;
+        let forceOvertime = false; 
+        let lastMonth = new Date().getMonth(); 
+        let lastApiTime = 0;
+
+        let market = {
+            '005930.KS': { name: '삼성전자', price: 306500, trend: 0 },
+            '000660.KS': { name: 'SK하이닉스', price: 2215000, trend: 0 },
+            '373220.KS': { name: 'LG엔솔', price: 350000, trend: 0 },
+            '207940.KS': { name: '삼바', price: 750000, trend: 0 },
+            '005380.KS': { name: '현대차', price: 260000, trend: 0 },
+            '068270.KS': { name: '셀트리온', price: 180000, trend: 0 },
+            '035420.KS': { name: 'NAVER', price: 257000, trend: 0 },
+            '035720.KS': { name: '카카오', price: 42000, trend: 0 },
+            '247540.KQ': { name: '에코프로비엠', price: 190000, trend: 0 },
+            '086520.KQ': { name: '에코프로', price: 90000, trend: 0 }
+        };
+
+        let portfolio = { initialCash: 100000000, cash: 100000000, stocks: {} };
+        for (let symbol in market) portfolio.stocks[symbol] = { amount: 0, avgPrice: 0 };
+
+        let world = {
+            desks: [{x:80,y:60}, {x:170,y:60}, {x:260,y:60}, {x:80,y:140}, {x:170,y:140}, {x:260,y:140}],
+            coffeeMachines: [{x:100,y:260}, {x:240,y:260}],
+            pawns: [], pawnIdCounter: 1
+        };
+
+        const ROLES = {
+            'Junior': { roleName: '주니어', color: '#0366d6', speed: 1.0, tradeCooldown: 8, mentalDrain: 0.1, volume: 10, hireFee: 500000, salary: 2500000 },
+            'Senior': { roleName: '시니어', color: '#6f42c1', speed: 1.5, tradeCooldown: 5, mentalDrain: 0.15, volume: 50, hireFee: 3000000, salary: 6000000 },
+            'Quant':  { roleName: '퀀트', color: '#e36209', speed: 0.7, tradeCooldown: 12, mentalDrain: 0.02, volume: 200, hireFee: 5000000, salary: 12000000 }
+        };
+
+        class Pawn {
+            constructor(id, roleType) {
+                this.id = id; this.roleType = roleType;
+                let stats = ROLES[roleType];
+                this.roleName = stats.roleName; this.color = stats.color; this.speed = stats.speed;
+                this.tradeCooldown = stats.tradeCooldown; 
+                this.mentalDrain = stats.mentalDrain;
+                this.volume = stats.volume; this.salary = stats.salary;
+                this.name = KOR_NAMES[Math.floor(Math.random() * KOR_NAMES.length)];
+                
+                this.x = 170; this.y = 350; 
+                this.targetX = this.x; this.targetY = this.y;
+                
+                this.mental = 100; this.state = 'off_work'; 
+                this.lastTradeTime = Date.now();
+                this.totalProfit = 0;
+            }
+
+            update(isMarketOpen) {
+                if (!isMarketOpen && this.state !== 'off_work' && this.state !== 'going_home') {
+                    this.state = 'going_home'; this.targetX = 170; this.targetY = 350; 
+                } else if (isMarketOpen && this.state === 'off_work') {
+                    this.state = 'arriving'; this.x = 170; this.y = 350; this.targetX = 170; this.targetY = 260; 
+                }
+
+                if (this.state === 'going_home' || this.state === 'arriving' || this.state === 'moving') {
+                    let dx = this.targetX - this.x; let dy = this.targetY - this.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist > this.speed) { 
+                        this.x += (dx / dist) * this.speed; this.y += (dy / dist) * this.speed; 
+                    } else { 
+                        this.x = this.targetX; this.y = this.targetY;
+                        if (this.state === 'going_home') this.state = 'off_work';
+                        else if (this.state === 'arriving') this.state = 'idle';
+                        else this.state = this.nextState; 
+                    }
+                    return; 
+                }
+
+                if (this.state === 'off_work') return; 
+
+                if (this.mental <= 0) { this.mental = 100; this.state = 'idle'; }
+                this.mental -= this.mentalDrain;
+
+                let now = Date.now();
+                switch (this.state) {
+                    case 'idle':
+                        if (this.mental < 30) {
+                            let target = world.coffeeMachines[Math.floor(Math.random() * world.coffeeMachines.length)];
+                            this.targetX = target.x; this.targetY = target.y;
+                            this.state = 'moving'; this.nextState = 'resting';
+                        } else {
+                            let target = world.desks[Math.floor(Math.random() * world.desks.length)];
+                            this.targetX = target.x; this.targetY = target.y;
+                            this.state = 'moving'; this.nextState = 'trading';
+                        }
+                        break;
+                    case 'trading':
+                        if (now - this.lastTradeTime > this.tradeCooldown * 1000) {
+                            executeTrade(this); 
+                            this.mental -= 15; 
+                            this.lastTradeTime = now;
+                            this.state = 'idle'; 
+                        }
+                        break;
+                    case 'resting':
+                        this.mental += 0.8;
+                        if (this.mental > 100) { this.mental = 100; this.state = 'idle'; }
+                        break;
+                }
+            }
+
+            draw() {
+                if (this.state === 'off_work') return; 
+
+                ctx.fillStyle = 'rgba(0,0,0,0.1)'; ctx.beginPath(); ctx.arc(this.x, this.y + 12, 10, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = this.color; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(this.x - 8, this.y - 5, 16, 16, 4) : ctx.fillRect(this.x - 8, this.y - 5, 16, 16); ctx.fill();
+                ctx.fillStyle = '#fce5cd'; ctx.beginPath(); ctx.arc(this.x, this.y - 10, 7, 0, Math.PI * 2); ctx.fill();
+
+                let boxW = 56; let boxH = 26; let boxX = this.x - boxW/2; let boxY = this.y + 15;
+                ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 4; ctx.shadowOffsetY = 2;
+                ctx.fillStyle = '#ffffff'; ctx.beginPath();
+                if(ctx.roundRect) ctx.roundRect(boxX, boxY, boxW, boxH, 4); else ctx.fillRect(boxX, boxY, boxW, boxH);
+                ctx.fill(); ctx.restore();
+
+                ctx.textAlign = 'center'; ctx.fillStyle = '#24292e'; ctx.font = 'bold 10px sans-serif';
+                ctx.fillText(this.name, this.x, boxY + 11);
+                
+                let stateText = '대기중'; let stateColor = '#6a737d';
+                if(this.state === 'trading') { stateText = '💻분석중'; stateColor = '#e36209'; }
+                else if(this.state === 'resting') { stateText = '☕휴식중'; stateColor = '#28a745'; }
+                else if(this.state === 'going_home') { stateText = '🏃퇴근중'; stateColor = '#cb2431'; }
+                
+                ctx.fillStyle = stateColor; ctx.font = '10px sans-serif'; ctx.fillText(stateText, this.x, boxY + 21);
+            }
+        }
+
+        let selectedPawn = null;
+        canvas.addEventListener('click', function(e) {
+            if (isPaused) return;
+            const rect = canvas.getBoundingClientRect();
+            const clickX = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const clickY = (e.clientY - rect.top) * (canvas.height / rect.height);
+            
+            let clicked = null;
+            for (let i = 0; i < world.pawns.length; i++) {
+                let p = world.pawns[i];
+                if(p.state === 'off_work') continue; 
+                if (Math.sqrt(Math.pow(clickX - p.x, 2) + Math.pow(clickY - p.y, 2)) < 25) {
+                    clicked = p; break;
+                }
+            }
+            if (clicked) openPawnModal(clicked);
+        });
+
+        function openPawnModal(pawn) {
+            isPaused = true; selectedPawn = pawn;
+            document.getElementById('pawn-modal-name').innerText = `${pawn.name} 직원의 상세 정보`;
+            let profitEl = document.getElementById('pawn-modal-profit');
+            let isProfit = pawn.totalProfit >= 0;
+            profitEl.innerText = isProfit ? `+${pawn.totalProfit.toLocaleString()}원` : `-${Math.abs(pawn.totalProfit).toLocaleString()}원`;
+            profitEl.style.color = isProfit ? '#d73a49' : '#0366d6';
+            document.getElementById('pawn-modal').style.display = 'flex';
+        }
+        function closePawnModal() { document.getElementById('pawn-modal').style.display = 'none'; selectedPawn = null; isPaused = false; }
+        function fireSelectedPawn() {
+            if (selectedPawn) {
+                let index = world.pawns.indexOf(selectedPawn);
+                if (index > -1) {
+                    world.pawns.splice(index, 1);
+                    addLog(`[해고] ${selectedPawn.name} 직원을 해고했습니다.`, 'hr');
+                }
+                closePawnModal(); updateUI();
+            }
+        }
+
+        function checkMarketOpen() {
+            if(forceOvertime) return true;
+            let now = new Date();
+            let h = now.getHours(); let m = now.getMinutes();
+            if ((h > 9 || (h === 9 && m >= 0)) && (h < 15 || (h === 15 && m <= 30))) return true;
+            return false;
+        }
+
+        function toggleOvertime() {
+            forceOvertime = !forceOvertime;
+            const btn = document.getElementById('overtime-btn');
+            if(forceOvertime) {
+                btn.style.backgroundColor = '#fce8e6'; btn.style.color = '#d93025'; btn.innerText = '🌙 야근 취소';
+                addLog('⚠️ 강제 야근 지시가 내려졌습니다. 직원들이 출근합니다.', 'event');
+            } else {
+                btn.style.backgroundColor = '#ffffff'; btn.style.color = '#333'; btn.innerText = '🌙 야근 지시';
+                addLog('✅ 강제 야근이 해제되었습니다. 정규 장시간이 아니면 퇴근합니다.', 'event');
+            }
+            updateClockAndBanner();
+        }
+
+        function executeTrade(pawn) {
+            let symbols = Object.keys(market);
+            let symbol = symbols[Math.floor(Math.random() * symbols.length)];
+            let stock = market[symbol]; let price = stock.price; let vol = pawn.volume;
+            let portStock = portfolio.stocks[symbol];
+
+            let isBuying = Math.random() > 0.5;
+            if (pawn.roleType === 'Senior') isBuying = stock.trend > 0 ? (Math.random() > 0.3) : (Math.random() > 0.7);
+
+            if(!price || isNaN(price)) return; 
+
+            let totalCost = price * vol;
+
+            if (isBuying && portfolio.cash >= totalCost) {
+                let totalValue = (portStock.amount * portStock.avgPrice) + totalCost;
+                portStock.amount += vol; portStock.avgPrice = totalValue / portStock.amount;
+                portfolio.cash -= totalCost;
+                addLog(`[매수] ${pawn.name}: ${stock.name} ${vol}주 (${Math.floor(totalCost).toLocaleString()}원)`, 'buy');
+            } else if (!isBuying && portStock.amount >= vol) {
+                let realizedProfit = (price - portStock.avgPrice) * vol;
+                pawn.totalProfit += realizedProfit; portfolio.cash += totalCost; portStock.amount -= vol;
+                let profitStr = realizedProfit >= 0 ? `+${Math.floor(realizedProfit).toLocaleString()}` : `${Math.floor(realizedProfit).toLocaleString()}`;
+                addLog(`[매도] ${pawn.name}: ${stock.name} ${vol}주 (손익: ${profitStr}원)`, realizedProfit >= 0 ? 'buy' : 'sell');
+            }
+            updateUI();
+        }
+
+        // ==========================================
+        // 🛡️ 다중 프록시 자동 우회 시스템 (Safeguard)
+        // ==========================================
+        const PROXIES = [
+            url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+            url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+        ];
+        let currentProxyIndex = 0;
+
+        async function fetchRealMarketData() {
+            if (!isApiMode) return;
+            addLog(`📡 [데이터 통신 중...] 실시간 주가를 읽어옵니다.`, 'api');
+            
+            try {
+                const symbols = Object.keys(market).join(',');
+                const targetUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`;
+                
+                // 현재 설정된 프록시 주소로 요청 생성
+                const proxyUrl = PROXIES[currentProxyIndex](targetUrl);
+                
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error("프록시 응답 오류");
+                
+                // allorigins raw와 corsproxy.io는 json 형태를 바로 반환합니다.
+                const data = await response.json();
+                
+                // allorigins의 경우 contents 안에 들어있을 수도 있고 그대로 올 수도 있음 대응
+                const parsedData = data.quoteResponse ? data : JSON.parse(data.contents);
+                const quotes = parsedData.quoteResponse.result;
+
+                let isUpdated = false;
+                quotes.forEach(quote => {
+                    const symbol = quote.symbol;
+                    if (market[symbol]) {
+                        const newPrice = quote.regularMarketPrice;
+                        if (newPrice && !isNaN(newPrice)) {
+                            if(market[symbol].price !== newPrice) {
+                                blinkTicker(symbol, newPrice > market[symbol].price);
+                                isUpdated = true;
+                            }
+                            market[symbol].price = newPrice;
+                            market[symbol].trend = quote.regularMarketChangePercent || 0; 
+                        }
+                    }
+                });
+                
+                if(isUpdated) addLog(`✅ [동기화 완료] 실시간 주가가 적용되었습니다.`, 'api');
+                updateUI();
+
+            } catch (error) {
+                console.error("API Fetch Error:", error);
+                // ⚠️ 에러 발생 시: 다음 프록시로 인덱스를 넘김
+                currentProxyIndex = (currentProxyIndex + 1) % PROXIES.length;
+                
+                addLog(`⚠️ [서버 지연] 프록시 연결을 우회 시도합니다. (임시 시뮬레이션 가동)`, 'error');
+                simulateMarket(); 
+            }
+        }
+
+        function toggleApiMode() {
+            isApiMode = !isApiMode;
+            const btn = document.getElementById('api-toggle-btn');
+            if(isApiMode) {
+                btn.innerText = '🟢 실시간 API'; btn.className = 'top-btn';
+                addLog('📡 실시간 API 모드 활성화', 'api');
+                fetchRealMarketData();
+            } else {
+                btn.innerText = '🔴 시뮬레이션'; btn.className = 'top-btn off';
+                addLog('🎲 가상 시뮬레이션 모드 활성화', 'event');
+            }
+        }
+
+        function simulateMarket() {
+            for (let symbol in market) {
+                let changePercent = (Math.random() - 0.5) * 0.02;
+                let newPrice = market[symbol].price + (market[symbol].price * changePercent);
+                if (newPrice > 0 && !isNaN(newPrice)) {
+                    market[symbol].price = newPrice;
+                    market[symbol].trend = changePercent;
+                }
+            }
+            updateUI();
+        }
+
+        function getCurrentTotalAssets() {
+            let stockValue = 0;
+            for (let symbol in portfolio.stocks) { 
+                let p = market[symbol].price;
+                if(!isNaN(p)) { stockValue += portfolio.stocks[symbol].amount * p; }
+            }
+            return portfolio.cash + stockValue;
+        }
+
+        function initTicker() {
+            let tickerPanel = document.getElementById('ticker-panel');
+            tickerPanel.innerHTML = '';
+            for (let symbol in market) {
+                let div = document.createElement('div'); div.className = 'stock-item';
+                div.innerHTML = `<span class="stock-name">${market[symbol].name}</span><span class="stock-price" id="price-${symbol.replace('.', '-')}">${Math.floor(market[symbol].price).toLocaleString()}</span>`;
+                tickerPanel.appendChild(div);
+            }
+        }
+
+        function blinkTicker(symbol, isUp) {
+            let el = document.getElementById(`price-${symbol.replace('.', '-')}`);
+            if(el) {
+                el.style.color = isUp ? '#d73a49' : '#0366d6';
+                el.style.transform = 'scale(1.15)';
+                setTimeout(() => { 
+                    el.style.color = '#24292e'; 
+                    el.style.transform = 'scale(1)';
+                }, 1000);
+            }
+        }
+
+        function checkSalaryDay(now) {
+            let currentMonth = now.getMonth();
+            if (currentMonth !== lastMonth) {
+                lastMonth = currentMonth;
+                let totalSalary = 0;
+                world.pawns.forEach(p => totalSalary += p.salary);
+                portfolio.cash -= totalSalary;
+                addLog(`💸 1일이 되어 직원들의 월급 총 ${totalSalary.toLocaleString()}원 이 지급되었습니다.`, 'error');
+                updateUI();
+            }
+        }
+
+        function updateClockAndBanner() {
+            let now = new Date();
+            let h = now.getHours().toString().padStart(2, '0');
+            let m = now.getMinutes().toString().padStart(2, '0');
+            let s = now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('real-time-clock').innerText = `${h}:${m}:${s}`;
+            document.getElementById('real-date-text').innerText = `${now.getFullYear()}. ${now.getMonth() + 1}. ${now.getDate()}`;
+
+            let banner = document.getElementById('market-banner');
+            let isOpen = checkMarketOpen();
+            if (isOpen) {
+                banner.className = 'open';
+                banner.innerText = forceOvertime ? '🌙 야근 중 (강제 출근 상태)' : '📈 한국 주식 장 진행중 (직원 업무 중)';
+            } else {
+                banner.className = '';
+                banner.innerText = '💤 한국 주식 장 마감 (직원 퇴근 상태)';
+            }
+
+            checkSalaryDay(now);
+            return isOpen;
+        }
+
+        function updateUI() {
+            let totalAssets = getCurrentTotalAssets();
+            let roi = ((totalAssets - portfolio.initialCash) / portfolio.initialCash) * 100;
+
+            document.getElementById('total-assets').innerText = `${Math.floor(totalAssets).toLocaleString()}원`;
+            document.getElementById('cash-display').innerText = `${Math.floor(portfolio.cash).toLocaleString()}원`;
+            
+            let roiEl = document.getElementById('roi-display');
+            roiEl.innerText = `총 수익률: ${roi > 0 ? '+' : ''}${roi.toFixed(2)}%`;
+            roiEl.className = `roi ${roi >= 0 ? 'up' : 'down'}`;
+
+            for (let symbol in market) {
+                let safeSymbol = symbol.replace('.', '-');
+                let priceEl = document.getElementById(`price-${safeSymbol}`);
+                if (priceEl && !isNaN(market[symbol].price)) {
+                    priceEl.innerText = `${Math.floor(market[symbol].price).toLocaleString()}`;
+                }
+            }
+        }
+
+        function addLog(message, type = '') {
+            let logItem = document.createElement('div'); logItem.className = `log-item ${type}`;
+            let now = new Date();
+            let timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            logItem.innerHTML = `<span class="log-time">${timeStr}</span><span class="log-content">${message}</span>`;
+            logPanel.prepend(logItem);
+            if (logPanel.children.length > 50) logPanel.removeChild(logPanel.lastChild);
+        }
+
+        function openHrModal() { isPaused = true; document.getElementById('hr-modal').style.display = 'flex'; }
+        function closeHrModal() { isPaused = false; document.getElementById('hr-modal').style.display = 'none'; }
+
+        function hireEmployee(roleType) {
+            if (world.pawns.length >= 6) { alert("사무실 자리가 없습니다! 기존 직원을 눌러 해고하세요."); return; }
+            let fee = ROLES[roleType].hireFee;
+            if (portfolio.cash < fee) { alert("자본금이 부족합니다!"); return; }
+            portfolio.cash -= fee;
+            let newPawn = new Pawn(world.pawnIdCounter++, roleType);
+            world.pawns.push(newPawn);
+            addLog(`[채용] ${newPawn.name} (${newPawn.roleName}) 입사 완료`, 'hr');
+            updateUI(); closeHrModal();
+        }
+
+        function gameLoop() {
+            if (!isPaused) {
+                let isMarketOpen = updateClockAndBanner();
+
+                // 🌟 서버 부하 방지를 위해 30초마다 API 호출
+                let nowTs = Date.now();
+                if (nowTs - lastApiTime > 30000) {
+                    lastApiTime = nowTs;
+                    if (isApiMode && isMarketOpen) fetchRealMarketData(); 
+                    else if (!isApiMode && isMarketOpen) { 
+                        simulateMarket();
+                    }
+                }
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                if(!isMarketOpen) {
+                    ctx.fillStyle = '#dcd3cc'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = 'rgba(0,0,0,0.1)'; ctx.fillRect(20, 20, 300, 180);
+                    ctx.fillStyle = 'rgba(0,0,0,0.1)'; ctx.fillRect(20, 210, 300, 110);
+                } else {
+                    ctx.fillStyle = 'rgba(0,0,0,0.03)'; ctx.fillRect(20, 20, 300, 180);
+                    ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(20, 210, 300, 110);
+                }
+                
+                ctx.fillStyle = '#bfa58a'; ctx.font = 'bold 16px Malgun Gothic'; ctx.textAlign = 'left';
+                ctx.fillText('트레이딩 플로어', 30, 45); ctx.fillText('휴게실', 30, 235);
+
+                world.desks.forEach(desk => {
+                    ctx.fillStyle = '#cda47b'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(desk.x - 20, desk.y - 12, 40, 18, 2) : ctx.fillRect(desk.x - 20, desk.y - 12, 40, 18); ctx.fill();
+                    ctx.fillStyle = '#444'; ctx.fillRect(desk.x - 12, desk.y - 15, 24, 12);
+                    ctx.fillStyle = isMarketOpen ? (Math.random() > 0.5 ? '#ffeb3b' : '#a0c4ff') : '#222'; 
+                    ctx.fillRect(desk.x - 10, desk.y - 13, 20, 8);
+                });
+                world.coffeeMachines.forEach(cm => {
+                    ctx.fillStyle = '#e1e4e8'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(cm.x - 12, cm.y - 15, 24, 30, 4) : ctx.fillRect(cm.x - 12, cm.y - 15, 24, 30); ctx.fill();
+                    ctx.fillStyle = '#6f4e37'; ctx.fillRect(cm.x - 6, cm.y, 12, 10);
+                });
+
+                world.pawns.forEach(pawn => {
+                    pawn.update(isMarketOpen);
+                    pawn.draw();
+                });
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        initTicker();
+        world.pawns.push(new Pawn(world.pawnIdCounter++, 'Junior'));
+        
+        // 첫 번째 데이터 호출
+        fetchRealMarketData();
+        const startNow = new Date();
+        addLog(`여의도 오피스월드 안정화 버전 가동 (${startNow.getFullYear()}년 ${startNow.getMonth() + 1}월 ${startNow.getDate()}일)`, 'event');
+        updateUI();
+        gameLoop();
+    </script>
+</body>
+</html>
         
         #api-toggle-btn { background-color: #e6f4ea; color: #1e8e3e; border-color: #1e8e3e; }
         #api-toggle-btn.off { background-color: #fce8e6; color: #d93025; border-color: #d93025; }
